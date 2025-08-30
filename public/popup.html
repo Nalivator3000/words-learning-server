@@ -1,0 +1,103 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <style>
+        body {
+            width: 300px;
+            padding: 20px;
+            font-family: Arial, sans-serif;
+        }
+        
+        .container {
+            text-align: center;
+        }
+        
+        .title {
+            font-size: 18px;
+            font-weight: bold;
+            margin-bottom: 20px;
+            color: #1877f2;
+        }
+        
+        .expense-display {
+            font-size: 24px;
+            font-weight: bold;
+            margin: 20px 0;
+            padding: 15px;
+            background: #f0f2f5;
+            border-radius: 8px;
+            border: 2px solid #e4e6ea;
+        }
+        
+        .loading {
+            color: #65676b;
+        }
+        
+        .error {
+            color: #e41e3f;
+        }
+        
+        .success {
+            color: #42b883;
+        }
+        
+        button {
+            background: #1877f2;
+            color: white;
+            border: none;
+            padding: 12px 20px;
+            border-radius: 6px;
+            cursor: pointer;
+            font-size: 14px;
+            margin: 5px;
+            min-width: 100px;
+        }
+        
+        button:hover {
+            background: #166fe5;
+        }
+        
+        button:disabled {
+            background: #8a8d91;
+            cursor: not-allowed;
+        }
+        
+        .instructions {
+            font-size: 12px;
+            color: #65676b;
+            margin-top: 15px;
+            text-align: left;
+        }
+        
+        .status {
+            margin-top: 10px;
+            font-size: 12px;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="title">Meta Ads Expense Tracker</div>
+        
+        <div id="expense-display" class="expense-display loading">
+            Click "Get Expenses" to start
+        </div>
+        
+        <button id="get-expenses">Get Expenses</button>
+        <button id="copy-expenses" disabled>Copy to Clipboard</button>
+        
+        <div id="status" class="status"></div>
+        
+        <div class="instructions">
+            <strong>Instructions:</strong><br>
+            1. Open Facebook Ads Manager<br>
+            2. Navigate to the main dashboard<br>
+            3. Click "Get Expenses" to extract yesterday's spend<br>
+            4. Click "Copy to Clipboard" to copy the amount
+        </div>
+    </div>
+    
+    <script src="popup.js"></script>
+</body>
+</html>

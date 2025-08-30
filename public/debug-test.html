@@ -1,0 +1,183 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <title>Extension Debug Test</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            padding: 20px;
+            max-width: 800px;
+            margin: 0 auto;
+        }
+        .section {
+            margin: 20px 0;
+            padding: 15px;
+            border: 1px solid #ddd;
+            border-radius: 5px;
+        }
+        .debug-info {
+            background: #f5f5f5;
+            padding: 10px;
+            border-radius: 3px;
+            margin: 10px 0;
+            font-family: monospace;
+            white-space: pre-wrap;
+        }
+        button {
+            background: #1877f2;
+            color: white;
+            border: none;
+            padding: 10px 20px;
+            border-radius: 5px;
+            cursor: pointer;
+            margin: 5px;
+        }
+        button:hover {
+            background: #166fe5;
+        }
+        .error {
+            color: red;
+        }
+        .success {
+            color: green;
+        }
+    </style>
+</head>
+<body>
+    <h1>Meta Ads Expense Tracker - Debug Test</h1>
+    
+    <div class="section">
+        <h2>Extension Status Check</h2>
+        <button onclick="checkExtension()">Check Extension</button>
+        <div id="extension-status" class="debug-info"></div>
+    </div>
+    
+    <div class="section">
+        <h2>Permissions Check</h2>
+        <button onclick="checkPermissions()">Check Permissions</button>
+        <div id="permissions-status" class="debug-info"></div>
+    </div>
+    
+    <div class="section">
+        <h2>URL Check</h2>
+        <button onclick="checkURL()">Check Current URL</button>
+        <div id="url-status" class="debug-info"></div>
+    </div>
+    
+    <div class="section">
+        <h2>Console Logs</h2>
+        <p>Open Chrome DevTools (F12) and check the Console tab for detailed logs when you click "Get Expenses" in the extension popup.</p>
+        <div class="debug-info">
+Look for logs with these prefixes:
+🔵 - Popup script logs
+🟡 - Content script logs
+❌ - Error logs
+✅ - Success logs
+        </div>
+    </div>
+    
+    <div class="section">
+        <h2>Test Data Extraction</h2>
+        <button onclick="testDataExtraction()">Test Data Extraction on This Page</button>
+        <div id="extraction-result" class="debug-info"></div>
+        
+        <!-- Test data -->
+        <table style="margin-top: 20px; border-collapse: collapse; width: 100%;">
+            <tr>
+                <th style="border: 1px solid #ddd; padding: 8px;">Date</th>
+                <th style="border: 1px solid #ddd; padding: 8px;">Campaign</th>
+                <th style="border: 1px solid #ddd; padding: 8px;">Amount Spent</th>
+            </tr>
+            <tr>
+                <td style="border: 1px solid #ddd; padding: 8px;">Aug 26, 2025</td>
+                <td style="border: 1px solid #ddd; padding: 8px;">Test Campaign</td>
+                <td style="border: 1px solid #ddd; padding: 8px;">$45.67</td>
+            </tr>
+        </table>
+    </div>
+    
+    <script>
+        function checkExtension() {
+            const statusDiv = document.getElementById('extension-status');
+            
+            if (typeof chrome !== 'undefined' && chrome.runtime) {
+                statusDiv.innerHTML = '✅ Chrome extension APIs are available\nExtension ID: ' + chrome.runtime.id;
+                statusDiv.className = 'debug-info success';
+            } else {
+                statusDiv.innerHTML = '❌ Chrome extension APIs not available\nThis page needs to be accessed through the extension';
+                statusDiv.className = 'debug-info error';
+            }
+        }
+        
+        function checkPermissions() {
+            const statusDiv = document.getElementById('permissions-status');
+            
+            if (typeof chrome !== 'undefined' && chrome.permissions) {
+                chrome.permissions.getAll((permissions) => {
+                    statusDiv.innerHTML = 'Permissions: ' + JSON.stringify(permissions, null, 2);
+                });
+            } else {
+                statusDiv.innerHTML = '❌ Cannot check permissions - Chrome APIs not available';
+                statusDiv.className = 'debug-info error';
+            }
+        }
+        
+        function checkURL() {
+            const statusDiv = document.getElementById('url-status');
+            const currentURL = window.location.href;
+            
+            statusDiv.innerHTML = 'Current URL: ' + currentURL + '\n';
+            
+            if (currentURL.includes('adsmanager.facebook.com') || currentURL.includes('business.facebook.com')) {
+                statusDiv.innerHTML += '✅ URL matches Facebook Ads Manager domains';
+                statusDiv.className = 'debug-info success';
+            } else {
+                statusDiv.innerHTML += '❌ URL does not match Facebook Ads Manager domains';
+                statusDiv.className = 'debug-info error';
+            }
+        }
+        
+        function testDataExtraction() {
+            const resultDiv = document.getElementById('extraction-result');
+            
+            try {
+                // Simulate the extraction function
+                const yesterday = new Date();
+                yesterday.setDate(yesterday.getDate() - 1);
+                
+                const yesterdayFormats = [
+                    yesterday.toLocaleDateString('en-US'),
+                    yesterday.toLocaleDateString('en-GB'),
+                    yesterday.toISOString().split('T')[0],
+                    yesterday.toLocaleDateString(),
+                    'Aug 26, 2025' // Test format
+                ];
+                
+                resultDiv.innerHTML = 'Yesterday formats being searched for:\n' + yesterdayFormats.join('\n') + '\n\n';
+                
+                const tables = document.querySelectorAll('table');
+                resultDiv.innerHTML += 'Tables found: ' + tables.length + '\n\n';
+                
+                // Look for money patterns
+                const allText = document.body.innerText;
+                const moneyMatches = allText.match(/\$[\d,]+\.?\d*/g) || [];
+                
+                resultDiv.innerHTML += 'Money values found: ' + moneyMatches.join(', ') + '\n\n';
+                
+                if (moneyMatches.length > 0) {
+                    resultDiv.innerHTML += '✅ Test data extraction found money values';
+                    resultDiv.className = 'debug-info success';
+                } else {
+                    resultDiv.innerHTML += '❌ No money values found in test extraction';
+                    resultDiv.className = 'debug-info error';
+                }
+                
+            } catch (error) {
+                resultDiv.innerHTML = '❌ Error in test extraction: ' + error.message;
+                resultDiv.className = 'debug-info error';
+            }
+        }
+    </script>
+</body>
+</html>

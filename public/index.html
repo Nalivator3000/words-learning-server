@@ -1,0 +1,162 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Language Learning App</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <div class="container">
+        <header>
+            <h1>Изучение слов</h1>
+            <nav>
+                <button id="homeBtn" class="nav-btn active">Главная</button>
+                <button id="importBtn" class="nav-btn">Импорт</button>
+                <button id="studyBtn" class="nav-btn">Изучение</button>
+                <button id="reviewBtn" class="nav-btn">Повторение</button>
+                <button id="statsBtn" class="nav-btn">Статистика</button>
+            </nav>
+        </header>
+
+        <main>
+            <!-- Home Section -->
+            <section id="homeSection" class="section active">
+                <h2>Добро пожаловать!</h2>
+                <div class="stats-grid">
+                    <div class="stat-card">
+                        <h3>Изучаемые слова</h3>
+                        <p id="studyingCount">0</p>
+                    </div>
+                    <div class="stat-card">
+                        <h3>На повторении</h3>
+                        <p id="reviewCount">0</p>
+                    </div>
+                    <div class="stat-card">
+                        <h3>Изучено</h3>
+                        <p id="learnedCount">0</p>
+                    </div>
+                </div>
+                <div class="quick-actions">
+                    <button id="quickStudyBtn" class="action-btn">Быстрое изучение</button>
+                    <button id="quickReviewBtn" class="action-btn">Быстрое повторение</button>
+                </div>
+            </section>
+
+            <!-- Import Section -->
+            <section id="importSection" class="section">
+                <h2>Импорт слов</h2>
+                <div class="import-options">
+                    <div class="import-card">
+                        <h3>Из CSV файла</h3>
+                        <p>Загрузите CSV файл с колонками: Слово, Пример, Перевод, Перевод примера</p>
+                        <input type="file" id="csvInput" accept=".csv" style="display: none;">
+                        <button id="csvImportBtn" class="action-btn">Выбрать файл</button>
+                    </div>
+                    <div class="import-card">
+                        <h3>Импорт прогресса</h3>
+                        <p>Загрузите JSON файл с прогрессом из браузерной версии</p>
+                        <input type="file" id="progressInput" accept=".json" style="display: none;">
+                        <button id="progressImportBtn" class="action-btn" style="background: linear-gradient(135deg, #e67e22, #d35400);">Импорт прогресса</button>
+                    </div>
+                    <div class="import-card">
+                        <h3>Из Google Таблиц</h3>
+                        <p>Вставьте ссылку на публичную Google таблицу</p>
+                        <input type="text" id="googleSheetsUrl" placeholder="https://docs.google.com/spreadsheets/...">
+                        <button id="googleImportBtn" class="action-btn">Импорт</button>
+                    </div>
+                </div>
+                <div id="importStatus" class="status-message"></div>
+            </section>
+
+            <!-- Study Section -->
+            <section id="studySection" class="section">
+                <h2>Изучение</h2>
+                <div class="quiz-container">
+                    <div id="studyModeSelect" class="mode-select">
+                        <h3>Выберите режим изучения:</h3>
+                        <div class="mode-grid">
+                            <button id="multipleChoiceBtn" class="mode-btn">Выбор из вариантов<br><small>(родной → изучаемый)</small></button>
+                            <button id="reverseMultipleChoiceBtn" class="mode-btn">Обратный выбор<br><small>(изучаемый → родной)</small></button>
+                            <button id="wordBuildingBtn" class="mode-btn">Составление слова<br><small>из букв</small></button>
+                            <button id="typingBtn" class="mode-btn">Ввод с клавиатуры<br><small>(родной → изучаемый)</small></button>
+                            <button id="complexModeBtn" class="mode-btn complex-mode">Комплексный режим<br><small>все типы подряд</small></button>
+                        </div>
+                    </div>
+                    <div id="quizArea" class="quiz-area hidden">
+                        <div class="progress-bar">
+                            <div id="progressFill" class="progress-fill"></div>
+                        </div>
+                        <div id="questionCounter" class="counter">Вопрос 1 из 10</div>
+                        <div id="questionText" class="question"></div>
+                        <div id="answerArea" class="answer-area"></div>
+                        <div id="feedback" class="feedback"></div>
+                        <button id="nextBtn" class="action-btn hidden">Далее</button>
+                        <button id="finishStudyBtn" class="action-btn hidden">Завершить</button>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Review Section -->
+            <section id="reviewSection" class="section">
+                <h2>Повторение</h2>
+                <div class="review-info">
+                    <p>Слова на повторение:</p>
+                    <div class="review-stats">
+                        <span>7 дней: <span id="review7Count">0</span></span>
+                        <span>30 дней: <span id="review30Count">0</span></span>
+                    </div>
+                </div>
+                <div class="quiz-container">
+                    <div id="reviewModeSelect" class="mode-select">
+                        <button id="startReviewBtn" class="action-btn">Начать повторение</button>
+                    </div>
+                    <div id="reviewQuizArea" class="quiz-area hidden">
+                        <div class="progress-bar">
+                            <div id="reviewProgressFill" class="progress-fill"></div>
+                        </div>
+                        <div id="reviewQuestionCounter" class="counter">Вопрос 1 из 10</div>
+                        <div id="reviewQuestionText" class="question"></div>
+                        <div id="reviewAnswerArea" class="answer-area"></div>
+                        <div id="reviewFeedback" class="feedback"></div>
+                        <button id="reviewNextBtn" class="action-btn hidden">Далее</button>
+                        <button id="finishReviewBtn" class="action-btn hidden">Завершить</button>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Statistics Section -->
+            <section id="statsSection" class="section">
+                <h2>Статистика</h2>
+                <div class="stats-detailed">
+                    <div class="export-section">
+                        <h3>Экспорт данных</h3>
+                        <button id="exportStudyingBtn" class="export-btn">Экспорт изучаемых слов</button>
+                        <button id="exportReviewBtn" class="export-btn">Экспорт слов на повторении</button>
+                        <button id="exportLearnedBtn" class="export-btn">Экспорт изученных слов</button>
+                        <button id="exportAllBtn" class="export-btn">Экспорт всех слов</button>
+                    </div>
+                    <div class="word-lists">
+                        <div class="list-section">
+                            <h3>Изучаемые слова (<span id="studyingListCount">0</span>)</h3>
+                            <div id="studyingList" class="word-list"></div>
+                        </div>
+                        <div class="list-section">
+                            <h3>На повторении (<span id="reviewListCount">0</span>)</h3>
+                            <div id="reviewList" class="word-list"></div>
+                        </div>
+                        <div class="list-section">
+                            <h3>Изучено (<span id="learnedListCount">0</span>)</h3>
+                            <div id="learnedList" class="word-list"></div>
+                        </div>
+                    </div>
+                </div>
+            </section>
+        </main>
+    </div>
+
+    <script src="database.js"></script>
+    <script src="quiz.js"></script>
+    <script src="app.js"></script>
+</body>
+</html>
