@@ -209,7 +209,8 @@ class LanguageLearningApp {
         // Auth form submissions
         document.getElementById('loginBtn').addEventListener('click', () => this.handleLogin());
         document.getElementById('registerBtn').addEventListener('click', () => this.handleRegister());
-        document.getElementById('googleLoginBtn').addEventListener('click', () => this.handleGoogleLogin());
+        // Google login disabled for now
+        // document.getElementById('googleLoginBtn').addEventListener('click', () => this.handleGoogleLogin());
         
         // Enter key support for auth forms
         document.getElementById('loginPassword').addEventListener('keypress', (e) => {
