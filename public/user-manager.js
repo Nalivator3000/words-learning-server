@@ -120,22 +120,20 @@ class UserManager {
 
     async loginWithGoogle() {
         try {
-            // Check if we have a real Google Client ID configured
-            const GOOGLE_CLIENT_ID = 'YOUR_GOOGLE_CLIENT_ID'; // Replace with actual client ID when available
-            const hasRealGoogleAuth = GOOGLE_CLIENT_ID !== 'YOUR_GOOGLE_CLIENT_ID' && 
-                                     typeof google !== 'undefined' && 
-                                     google.accounts;
-
-            if (!hasRealGoogleAuth) {
+            // Initialize Google OAuth configuration
+            const isConfigured = await oauthConfig.initializeGoogleOAuth();
+            
+            if (!isConfigured) {
                 // Use demo version since Google OAuth is not properly configured
                 console.log('Google OAuth not configured, using demo login');
+                console.log('Debug info:', oauthConfig.getDebugInfo());
                 return this.loginWithGoogleDemo();
             }
 
             // Real Google OAuth implementation (only when properly configured)
             return new Promise((resolve, reject) => {
                 google.accounts.id.initialize({
-                    client_id: GOOGLE_CLIENT_ID,
+                    client_id: oauthConfig.GOOGLE_CLIENT_ID,
                     callback: async (response) => {
                         try {
                             // Decode JWT token to get user info
