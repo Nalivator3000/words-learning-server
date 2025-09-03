@@ -122,7 +122,6 @@ class LanguageLearningApp {
             this.setupEventListeners();
             this.setupAuthListeners();
             this.setupLanguageListeners();
-            this.survivalMode.setupEventListeners();
             
             if (isLoggedIn) {
                 this.showSection('home');

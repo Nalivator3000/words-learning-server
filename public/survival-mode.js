@@ -46,16 +46,43 @@ class SurvivalMode {
         document.getElementById('studyModeSelect').style.display = 'none';
         document.getElementById('quizArea').classList.add('hidden');
         
+        // Create survival interface HTML
+        document.getElementById('survivalArea').innerHTML = `
+            <div class="survival-stats">
+                <div class="survival-stat">
+                    <span class="stat-label">Счёт:</span>
+                    <span id="survivalScore" class="stat-value">0</span>
+                </div>
+                <div class="survival-stat">
+                    <span class="stat-label">Ошибки:</span>
+                    <span id="survivalErrors" class="stat-value">0/3</span>
+                </div>
+                <div class="survival-stat">
+                    <span class="stat-label">Время:</span>
+                    <span id="survivalTime" class="stat-value">5</span>
+                </div>
+            </div>
+            
+            <div class="survival-timer">
+                <div id="timerBarLeft" class="timer-bar left"></div>
+                <div id="timerBarRight" class="timer-bar right"></div>
+            </div>
+            
+            <div id="survivalQuestion" class="survival-question"></div>
+            
+            <div id="survivalChoices" class="survival-choices">
+                <button id="choice1" class="survival-choice">Слово 1</button>
+                <button id="choice2" class="survival-choice">Слово 2</button>
+            </div>
+            
+            <div id="survivalFeedback" class="survival-feedback"></div>
+        `;
+        
         // Show survival interface
         document.getElementById('survivalArea').classList.remove('hidden');
         
-        // Hide end game buttons
-        document.getElementById('survivalRestart').classList.add('hidden');
-        document.getElementById('survivalExit').classList.add('hidden');
-        
-        // Clear feedback
-        document.getElementById('survivalFeedback').textContent = '';
-        document.getElementById('survivalFeedback').className = 'survival-feedback';
+        // Set up event listeners for buttons
+        this.setupEventListeners();
     }
 
     updateStats() {

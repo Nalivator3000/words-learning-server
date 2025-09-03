@@ -21,6 +21,9 @@ class LanguageManager {
         
         this.translations = {
             'ru': {
+                // App
+                'appTitle': 'Rememberizor',
+                
                 // Navigation
                 'home': 'Главная',
                 'import': 'Импорт',
@@ -96,6 +99,9 @@ class LanguageManager {
             },
             
             'en': {
+                // App
+                'appTitle': 'Rememberizor',
+                
                 // Navigation
                 'home': 'Home',
                 'import': 'Import',
@@ -171,6 +177,9 @@ class LanguageManager {
             },
             
             'de': {
+                // App
+                'appTitle': 'Rememberizor',
+                
                 // Navigation
                 'home': 'Startseite',
                 'import': 'Importieren',
