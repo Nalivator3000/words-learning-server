@@ -1,0 +1,279 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Language Learning App</title>
+    <link rel="stylesheet" href="style.css">
+    <!-- Google Sign-In API (optional, for real OAuth) -->
+    <script src="https://accounts.google.com/gsi/client" async defer></script>
+</head>
+<body>
+    <!-- Authentication Modal -->
+    <div id="authModal" class="auth-modal">
+        <div class="auth-content">
+            <h2 data-translate="welcome">Добро пожаловать!</h2>
+            <div id="authTabs" class="auth-tabs">
+                <button id="loginTab" class="auth-tab active" data-translate="login">Войти</button>
+                <button id="registerTab" class="auth-tab" data-translate="register">Регистрация</button>
+            </div>
+            
+            <div id="loginForm" class="auth-form active">
+                <input type="email" id="loginEmail" data-translate="email" placeholder="Email" required>
+                <input type="password" id="loginPassword" data-translate="password" placeholder="Пароль" required>
+                <button id="loginBtn" class="auth-btn" data-translate="login">Войти</button>
+                <div class="auth-divider">или</div>
+                <button id="googleLoginBtn" class="auth-btn google-btn" data-translate="loginWithGoogle">Войти через Google</button>
+            </div>
+            
+            <div id="registerForm" class="auth-form">
+                <input type="text" id="registerName" data-translate="name" placeholder="Имя" required>
+                <input type="email" id="registerEmail" data-translate="email" placeholder="Email" required>
+                <input type="password" id="registerPassword" data-translate="password" placeholder="Пароль" required>
+                <input type="password" id="registerPasswordConfirm" data-translate="confirmPassword" placeholder="Подтвердите пароль" required>
+                <button id="registerBtn" class="auth-btn" data-translate="register">Регистрация</button>
+            </div>
+            
+            <div id="authError" class="auth-error"></div>
+        </div>
+    </div>
+
+    <div class="container">
+        <header>
+            <h1 data-translate="appTitle">Изучение слов</h1>
+            <div class="header-user">
+                <span id="userInfo" class="user-info"></span>
+                <button id="userMenuBtn" class="user-menu-btn">⚙️</button>
+                <div id="userMenu" class="user-menu hidden">
+                    <button id="settingsBtn" data-translate="settings">Настройки</button>
+                    <button id="logoutBtn" data-translate="logout">Выйти</button>
+                </div>
+            </div>
+            <nav>
+                <button id="homeBtn" class="nav-btn active" data-translate="home">Главная</button>
+                <button id="importBtn" class="nav-btn" data-translate="import">Импорт</button>
+                <button id="studyBtn" class="nav-btn" data-translate="study">Изучение</button>
+                <button id="reviewBtn" class="nav-btn" data-translate="review">Повторение</button>
+                <button id="statsBtn" class="nav-btn" data-translate="statistics">Статистика</button>
+            </nav>
+        </header>
+
+        <main>
+            <!-- Home Section -->
+            <section id="homeSection" class="section active">
+                <h2>Добро пожаловать!</h2>
+                <div class="stats-grid">
+                    <div class="stat-card">
+                        <h3>Изучаемые слова</h3>
+                        <p id="studyingCount">0</p>
+                    </div>
+                    <div class="stat-card">
+                        <h3>На повторении</h3>
+                        <p id="reviewCount">0</p>
+                    </div>
+                    <div class="stat-card">
+                        <h3>Изучено</h3>
+                        <p id="learnedCount">0</p>
+                    </div>
+                </div>
+                <div class="quick-actions">
+                    <button id="quickStudyBtn" class="action-btn">Быстрое изучение</button>
+                    <button id="quickReviewBtn" class="action-btn">Быстрое повторение</button>
+                </div>
+            </section>
+
+            <!-- Import Section -->
+            <section id="importSection" class="section">
+                <h2>Импорт слов</h2>
+                <div class="import-options">
+                    <div class="import-card">
+                        <h3>Из CSV файла</h3>
+                        <p>Загрузите CSV файл с колонками: Слово, Пример, Перевод, Перевод примера</p>
+                        <input type="file" id="csvInput" accept=".csv" style="display: none;">
+                        <button id="csvImportBtn" class="action-btn">Выбрать файл</button>
+                    </div>
+                    <div class="import-card">
+                        <h3>Из Google Таблиц</h3>
+                        <p>Вставьте ссылку на публичную Google таблицу</p>
+                        <input type="text" id="googleSheetsUrl" placeholder="https://docs.google.com/spreadsheets/...">
+                        <button id="googleImportBtn" class="action-btn">Импорт</button>
+                    </div>
+                </div>
+                <div id="importStatus" class="status-message"></div>
+            </section>
+
+            <!-- Study Section -->
+            <section id="studySection" class="section">
+                <h2>Изучение</h2>
+                <div class="quiz-container">
+                    <div id="studyModeSelect" class="mode-select">
+                        <h3>Выберите режим изучения:</h3>
+                        <div class="mode-grid">
+                            <button id="multipleChoiceBtn" class="mode-btn">Выбор из вариантов<br><small>(родной → изучаемый)</small></button>
+                            <button id="reverseMultipleChoiceBtn" class="mode-btn">Обратный выбор<br><small>(изучаемый → родной)</small></button>
+                            <button id="wordBuildingBtn" class="mode-btn">Составление слова<br><small>из букв</small></button>
+                            <button id="typingBtn" class="mode-btn">Ввод с клавиатуры<br><small>(родной → изучаемый)</small></button>
+                            <button id="survivalBtn" class="mode-btn survival-mode">Режим выживания<br><small>5 сек на ответ, до 3 ошибок</small></button>
+                            <button id="complexModeBtn" class="mode-btn complex-mode">Комплексный режим<br><small>все типы подряд</small></button>
+                        </div>
+                    </div>
+                    <div id="quizArea" class="quiz-area hidden">
+                        <div class="progress-bar">
+                            <div id="progressFill" class="progress-fill"></div>
+                        </div>
+                        <div id="questionCounter" class="counter">Вопрос 1 из 10</div>
+                        <div id="questionText" class="question"></div>
+                        <div id="answerArea" class="answer-area"></div>
+                        <div id="feedback" class="feedback"></div>
+                        <button id="nextBtn" class="action-btn hidden">Далее</button>
+                        <button id="finishStudyBtn" class="action-btn hidden">Завершить</button>
+                    </div>
+                    
+                    <!-- Survival Mode Area -->
+                    <div id="survivalArea" class="survival-area hidden">
+                        <div class="survival-stats">
+                            <div class="survival-stat">
+                                <span class="stat-label">Счёт:</span>
+                                <span id="survivalScore" class="stat-value">0</span>
+                            </div>
+                            <div class="survival-stat">
+                                <span class="stat-label">Ошибки:</span>
+                                <span id="survivalErrors" class="stat-value">0/3</span>
+                            </div>
+                            <div class="survival-stat">
+                                <span class="stat-label">Время:</span>
+                                <span id="survivalTime" class="stat-value">5</span>
+                            </div>
+                        </div>
+                        
+                        <div class="survival-timer">
+                            <div id="timerBarLeft" class="timer-bar left"></div>
+                            <div id="timerBarRight" class="timer-bar right"></div>
+                        </div>
+                        
+                        <div id="survivalQuestion" class="survival-question"></div>
+                        
+                        <div id="survivalChoices" class="survival-choices">
+                            <button id="choice1" class="survival-choice">Слово 1</button>
+                            <button id="choice2" class="survival-choice">Слово 2</button>
+                        </div>
+                        
+                        <div id="survivalFeedback" class="survival-feedback"></div>
+                        
+                        <div class="survival-controls">
+                            <small style="opacity: 0.7;">
+                                Управление: <kbd>←</kbd><kbd>→</kbd> или <kbd>↑</kbd><kbd>↓</kbd> для мгновенного ответа, 
+                                <kbd>1</kbd><kbd>2</kbd> для быстрого выбора, 
+                                <kbd>Enter</kbd> или <kbd>Пробел</kbd> для подтверждения выделенного
+                            </small>
+                        </div>
+                        
+                        <button id="survivalRestart" class="action-btn hidden">Начать заново</button>
+                        <button id="survivalExit" class="action-btn hidden">Выйти</button>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Review Section -->
+            <section id="reviewSection" class="section">
+                <h2>Повторение</h2>
+                <div class="review-info">
+                    <p>Слова на повторение:</p>
+                    <div class="review-stats">
+                        <span>7 дней: <span id="review7Count">0</span></span>
+                        <span>30 дней: <span id="review30Count">0</span></span>
+                    </div>
+                </div>
+                <div class="quiz-container">
+                    <div id="reviewModeSelect" class="mode-select">
+                        <button id="startReviewBtn" class="action-btn">Начать повторение</button>
+                    </div>
+                    <div id="reviewQuizArea" class="quiz-area hidden">
+                        <div class="progress-bar">
+                            <div id="reviewProgressFill" class="progress-fill"></div>
+                        </div>
+                        <div id="reviewQuestionCounter" class="counter">Вопрос 1 из 10</div>
+                        <div id="reviewQuestionText" class="question"></div>
+                        <div id="reviewAnswerArea" class="answer-area"></div>
+                        <div id="reviewFeedback" class="feedback"></div>
+                        <button id="reviewNextBtn" class="action-btn hidden">Далее</button>
+                        <button id="finishReviewBtn" class="action-btn hidden">Завершить</button>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Statistics Section -->
+            <section id="statsSection" class="section">
+                <h2>Статистика</h2>
+                <div class="stats-detailed">
+                    <div class="export-section">
+                        <h3>Экспорт данных</h3>
+                        <button id="exportStudyingBtn" class="export-btn">Экспорт изучаемых слов</button>
+                        <button id="exportReviewBtn" class="export-btn">Экспорт слов на повторении</button>
+                        <button id="exportLearnedBtn" class="export-btn">Экспорт изученных слов</button>
+                        <button id="exportAllBtn" class="export-btn">Экспорт всех слов</button>
+                    </div>
+                    <div class="word-lists">
+                        <div class="list-section">
+                            <h3>Изучаемые слова (<span id="studyingListCount">0</span>)</h3>
+                            <div id="studyingList" class="word-list"></div>
+                        </div>
+                        <div class="list-section">
+                            <h3>На повторении (<span id="reviewListCount">0</span>)</h3>
+                            <div id="reviewList" class="word-list"></div>
+                        </div>
+                        <div class="list-section">
+                            <h3>Изучено (<span id="learnedListCount">0</span>)</h3>
+                            <div id="learnedList" class="word-list"></div>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Settings Section -->
+            <section id="settingsSection" class="section">
+                <h2 data-translate="settings">Настройки</h2>
+                <div class="settings-content">
+                    <div class="settings-group">
+                        <h3>Язык интерфейса</h3>
+                        <select id="uiLanguageSelect" class="language-select">
+                            <option value="ru">Русский</option>
+                            <option value="en">English</option>
+                            <option value="de">Deutsch</option>
+                        </select>
+                    </div>
+
+                    <div class="settings-group">
+                        <h3 data-translate="languagePairs">Языковые пары</h3>
+                        <div class="language-pairs">
+                            <div id="languagePairsList" class="language-pairs-list"></div>
+                            <button id="addLanguagePairBtn" class="action-btn" data-translate="addLanguagePair">Добавить языковую пару</button>
+                        </div>
+                    </div>
+                    
+                    <div class="settings-group">
+                        <h3 data-translate="studySettings">Настройки обучения</h3>
+                        <label>
+                            <span data-translate="wordsPerLesson">Количество слов в уроке:</span>
+                            <input type="number" id="lessonSizeInput" min="5" max="50" value="10">
+                        </label>
+                    </div>
+
+                    <div class="settings-group">
+                        <h3>Синхронизация</h3>
+                        <button id="syncBtn" class="action-btn" data-translate="sync">Синхронизировать с сервером</button>
+                        <div id="syncStatus" class="sync-status"></div>
+                    </div>
+                </div>
+            </section>
+        </main>
+    </div>
+
+    <script src="database.js"></script>
+    <script src="quiz.js"></script>
+    <script src="language-manager.js"></script>
+    <script src="user-manager.js"></script>
+    <script src="survival-mode.js"></script>
+    <script src="app.js"></script>
+</body>
+</html>

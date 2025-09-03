@@ -1,0 +1,41 @@
+# Dependencies
+node_modules/
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+
+# Production builds
+dist/
+build/
+
+# Development files
+debug-test.html
+test.html
+*.log
+*.tmp
+*.temp
+
+# User data
+userdata/
+uploads/
+*.db
+
+# IDE and system files
+.DS_Store
+.vscode/
+*.swp
+*.swo
+*~
+
+# Environment files
+.env
+.env.local
+.env.development.local
+.env.test.local
+.env.production.local
+
+# Railway
+.railway/
+
+# Claude Code
+.claude/
