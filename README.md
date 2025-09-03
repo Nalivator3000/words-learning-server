@@ -154,6 +154,7 @@ MIT License - feel free to use and modify
 ---
 
 **Current Version**: 2.0.0  
+**Last Updated**: $(date)  
 **Compatibility**: Chrome 90+, Firefox 88+, Safari 14+, Edge 90+  
 **Size**: ~200KB (uncompressed)
 
