@@ -1,0 +1,32 @@
+{
+  "permissions": {
+    "allow": [
+      "Read(C:\\Users\\Nalivator3000\\Downloads/**)",
+      "Read(C:\\Users\\Nalivator3000\\Pictures/**)",
+      "Read(C:\\Users\\Nalivator3000\\Downloads/**)",
+      "Read(C:\\Users\\Nalivator3000/**)",
+      "Read(C:\\Users\\Nalivator3000/**)",
+      "Bash(explorer .)",
+      "Bash(rename:*)",
+      "Bash(ren:*)",
+      "Bash(node:*)",
+      "Bash(start:*)",
+      "Bash(dir:*)",
+      "Bash(\"start-full.bat\")",
+      "Bash(curl:*)",
+      "Bash(cmd /c:*)",
+      "Bash(timeout:*)",
+      "Bash(taskkill:*)",
+      "Bash(mkdir:*)",
+      "Bash(move:*)",
+      "Bash(powershell:*)",
+      "Bash(git init:*)",
+      "Bash(git add:*)"
+    ],
+    "deny": [],
+    "ask": [],
+    "additionalDirectories": [
+      "C:\\Users\\Nalivator3000"
+    ]
+  }
+}

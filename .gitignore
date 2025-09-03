@@ -1,0 +1,25 @@
+# Development files
+debug-test.html
+test.html
+export-progress.js
+export-to-server.js
+
+# Extension files (not needed for web app)
+background.js
+content-script.js
+popup.html
+popup.js
+manifest.json
+icon.svg
+
+# IDE and system files
+.DS_Store
+.vscode/
+*.log
+node_modules/
+*.tmp
+*.temp
+
+# User data (if any)
+userdata/
+*.db
