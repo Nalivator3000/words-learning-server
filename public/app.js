@@ -1,22 +1,28 @@
 class AudioManager {
     constructor() {
         this.synth = window.speechSynthesis;
-        this.germanVoice = null;
+        this.voices = {};
         this.initVoices();
     }
 
     initVoices() {
         const loadVoices = () => {
-            const voices = this.synth.getVoices();
+            const allVoices = this.synth.getVoices();
             
-            // Prefer German voices
-            this.germanVoice = voices.find(voice => 
-                voice.lang.startsWith('de') && voice.name.includes('Google')
-            ) || voices.find(voice => 
-                voice.lang.startsWith('de')
-            ) || voices.find(voice => 
-                voice.lang.startsWith('en') // fallback to English
-            ) || voices[0]; // ultimate fallback
+            // Group voices by language
+            this.voices = {
+                'ru-RU': allVoices.find(v => v.lang.startsWith('ru')),
+                'en-US': allVoices.find(v => v.lang.startsWith('en')),
+                'de-DE': allVoices.find(v => v.lang.startsWith('de')),
+                'es-ES': allVoices.find(v => v.lang.startsWith('es')),
+                'fr-FR': allVoices.find(v => v.lang.startsWith('fr')),
+                'it-IT': allVoices.find(v => v.lang.startsWith('it'))
+            };
+            
+            // Fallback to first available voice if specific language not found
+            if (!this.voices['ru-RU'] && allVoices.length > 0) this.voices['ru-RU'] = allVoices[0];
+            if (!this.voices['en-US'] && allVoices.length > 0) this.voices['en-US'] = allVoices[0];
+            if (!this.voices['de-DE'] && allVoices.length > 0) this.voices['de-DE'] = allVoices[0];
         };
 
         loadVoices();
@@ -27,27 +33,70 @@ class AudioManager {
         }
     }
 
-    speak(text, lang = 'de-DE') {
-        if (!text.trim()) return;
+    speak(text, languageCode = null) {
+        if (!text.trim()) {
+            console.log('AudioManager: Empty text, skipping TTS');
+            return;
+        }
+        
+        // Auto-detect language if not provided
+        if (!languageCode) {
+            const currentPair = userManager ? userManager.getCurrentLanguagePair() : null;
+            if (currentPair && languageManager) {
+                languageCode = languageManager.getAudioLanguageCode(text, currentPair);
+            } else {
+                languageCode = 'de-DE'; // Default fallback
+            }
+        }
+        
+        console.log(`AudioManager: Speaking "${text}" in ${languageCode}`);
         
         // Stop any current speech
         this.synth.cancel();
         
         const utterance = new SpeechSynthesisUtterance(text);
-        utterance.lang = lang;
+        utterance.lang = languageCode;
         utterance.rate = 0.8; // Slightly slower for learning
         utterance.pitch = 1;
         utterance.volume = 1;
         
-        if (this.germanVoice) {
-            utterance.voice = this.germanVoice;
+        // Use appropriate voice for language
+        const voice = this.voices[languageCode];
+        if (voice) {
+            utterance.voice = voice;
+            console.log(`AudioManager: Using voice "${voice.name}" for ${languageCode}`);
+        } else {
+            console.warn(`AudioManager: No voice found for ${languageCode}, using default`);
         }
+        
+        // Add error handling
+        utterance.onerror = (event) => {
+            console.error('Speech synthesis error:', event.error);
+        };
+        
+        utterance.onend = () => {
+            console.log('AudioManager: Speech finished');
+        };
         
         this.synth.speak(utterance);
     }
 
     stop() {
         this.synth.cancel();
+    }
+    
+    // Check if TTS is available
+    isAvailable() {
+        return 'speechSynthesis' in window;
+    }
+    
+    // Get available voices for debugging
+    getAvailableVoices() {
+        return this.synth.getVoices().map(voice => ({
+            name: voice.name,
+            lang: voice.lang,
+            localService: voice.localService
+        }));
     }
 }
 
@@ -56,15 +105,29 @@ class LanguageLearningApp {
         this.currentSection = 'home';
         this.currentQuizData = null;
         this.audioManager = new AudioManager();
+        this.survivalMode = new SurvivalMode(this);
         this.init();
     }
 
     async init() {
         try {
             await database.init();
+            
+            // Initialize language management
+            languageManager.init();
+            
+            // Initialize user management
+            const isLoggedIn = await userManager.init();
+            
             this.setupEventListeners();
-            this.showSection('home');
-            await this.updateStats();
+            this.setupAuthListeners();
+            this.setupLanguageListeners();
+            this.survivalMode.setupEventListeners();
+            
+            if (isLoggedIn) {
+                this.showSection('home');
+                await this.updateStats();
+            }
         } catch (error) {
             console.error('Failed to initialize app:', error);
             this.showError('Ошибка инициализации приложения');
@@ -72,10 +135,12 @@ class LanguageLearningApp {
     }
 
     setupEventListeners() {
-        // Global Enter key handler for quiz navigation
+        // Global keydown handler for quiz navigation and shortcuts
         document.addEventListener('keydown', (e) => {
             if (e.key === 'Enter' && (this.currentSection === 'study' || this.currentSection === 'review')) {
                 this.handleGlobalEnterPress(e);
+            } else if (['1', '2', '3', '4'].includes(e.key) && (this.currentSection === 'study' || this.currentSection === 'review')) {
+                this.handleNumberKeyPress(e);
             }
         });
 
@@ -85,6 +150,17 @@ class LanguageLearningApp {
         document.getElementById('studyBtn').addEventListener('click', () => this.showSection('study'));
         document.getElementById('reviewBtn').addEventListener('click', () => this.showSection('review'));
         document.getElementById('statsBtn').addEventListener('click', () => this.showSection('stats'));
+        
+        // User menu
+        document.getElementById('userMenuBtn').addEventListener('click', () => this.toggleUserMenu());
+        document.getElementById('settingsBtn').addEventListener('click', () => {
+            this.showSection('settings');
+            this.hideUserMenu();
+        });
+        document.getElementById('logoutBtn').addEventListener('click', () => {
+            userManager.logout();
+            this.hideUserMenu();
+        });
 
         // Quick actions
         document.getElementById('quickStudyBtn').addEventListener('click', () => this.quickStart('study'));
@@ -95,12 +171,6 @@ class LanguageLearningApp {
             document.getElementById('csvInput').click();
         });
         document.getElementById('csvInput').addEventListener('change', (e) => this.handleCSVImport(e));
-        
-        document.getElementById('progressImportBtn').addEventListener('click', () => {
-            document.getElementById('progressInput').click();
-        });
-        document.getElementById('progressInput').addEventListener('change', (e) => this.handleProgressImport(e));
-        
         document.getElementById('googleImportBtn').addEventListener('click', () => this.handleGoogleSheetsImport());
 
         // Study mode
@@ -108,6 +178,7 @@ class LanguageLearningApp {
         document.getElementById('reverseMultipleChoiceBtn').addEventListener('click', () => this.startStudyQuiz('reverse_multiple'));
         document.getElementById('wordBuildingBtn').addEventListener('click', () => this.startStudyQuiz('word_building'));
         document.getElementById('typingBtn').addEventListener('click', () => this.startStudyQuiz('typing'));
+        document.getElementById('survivalBtn').addEventListener('click', () => this.startSurvivalMode());
         document.getElementById('complexModeBtn').addEventListener('click', () => this.startStudyQuiz('complex'));
 
         // Review mode
@@ -124,6 +195,122 @@ class LanguageLearningApp {
         document.getElementById('exportReviewBtn').addEventListener('click', () => this.exportWords('review'));
         document.getElementById('exportLearnedBtn').addEventListener('click', () => this.exportWords('learned'));
         document.getElementById('exportAllBtn').addEventListener('click', () => this.exportWords());
+        
+        // Settings functionality
+        document.getElementById('addLanguagePairBtn').addEventListener('click', () => this.showLanguagePairDialog());
+        document.getElementById('lessonSizeInput').addEventListener('change', (e) => this.updateLessonSize(e.target.value));
+        document.getElementById('syncBtn').addEventListener('click', () => this.syncWithServer());
+    }
+
+    setupAuthListeners() {
+        // Auth tab switching
+        document.getElementById('loginTab').addEventListener('click', () => this.switchAuthTab('login'));
+        document.getElementById('registerTab').addEventListener('click', () => this.switchAuthTab('register'));
+        
+        // Auth form submissions
+        document.getElementById('loginBtn').addEventListener('click', () => this.handleLogin());
+        document.getElementById('registerBtn').addEventListener('click', () => this.handleRegister());
+        document.getElementById('googleLoginBtn').addEventListener('click', () => this.handleGoogleLogin());
+        
+        // Enter key support for auth forms
+        document.getElementById('loginPassword').addEventListener('keypress', (e) => {
+            if (e.key === 'Enter') this.handleLogin();
+        });
+        document.getElementById('registerPasswordConfirm').addEventListener('keypress', (e) => {
+            if (e.key === 'Enter') this.handleRegister();
+        });
+    }
+
+    switchAuthTab(tab) {
+        document.querySelectorAll('.auth-tab').forEach(t => t.classList.remove('active'));
+        document.querySelectorAll('.auth-form').forEach(f => f.classList.remove('active'));
+        
+        document.getElementById(`${tab}Tab`).classList.add('active');
+        document.getElementById(`${tab}Form`).classList.add('active');
+        
+        // Clear error message
+        document.getElementById('authError').textContent = '';
+    }
+
+    async handleLogin() {
+        const email = document.getElementById('loginEmail').value;
+        const password = document.getElementById('loginPassword').value;
+        
+        if (!email || !password) {
+            this.showAuthError('Пожалуйста, заполните все поля');
+            return;
+        }
+        
+        try {
+            await userManager.login(email, password);
+            this.showSection('home');
+            await this.updateStats();
+        } catch (error) {
+            this.showAuthError(error.message);
+        }
+    }
+
+    async handleRegister() {
+        const name = document.getElementById('registerName').value;
+        const email = document.getElementById('registerEmail').value;
+        const password = document.getElementById('registerPassword').value;
+        const confirmPassword = document.getElementById('registerPasswordConfirm').value;
+        
+        if (!name || !email || !password || !confirmPassword) {
+            this.showAuthError('Пожалуйста, заполните все поля');
+            return;
+        }
+        
+        if (password !== confirmPassword) {
+            this.showAuthError('Пароли не совпадают');
+            return;
+        }
+        
+        if (password.length < 6) {
+            this.showAuthError('Пароль должен быть не менее 6 символов');
+            return;
+        }
+        
+        try {
+            await userManager.register(name, email, password);
+            this.showSection('home');
+            await this.updateStats();
+        } catch (error) {
+            this.showAuthError(error.message);
+        }
+    }
+
+    async handleGoogleLogin() {
+        try {
+            await userManager.loginWithGoogle();
+            this.showSection('home');
+            await this.updateStats();
+        } catch (error) {
+            this.showAuthError(error.message);
+        }
+    }
+
+    showAuthError(message) {
+        document.getElementById('authError').textContent = message;
+    }
+
+    setupLanguageListeners() {
+        // UI Language selector
+        document.getElementById('uiLanguageSelect').addEventListener('change', (e) => {
+            languageManager.setUILanguage(e.target.value);
+        });
+        
+        // Set current UI language in selector
+        document.getElementById('uiLanguageSelect').value = languageManager.getUILanguage();
+    }
+
+    toggleUserMenu() {
+        const menu = document.getElementById('userMenu');
+        menu.classList.toggle('hidden');
+    }
+
+    hideUserMenu() {
+        document.getElementById('userMenu').classList.add('hidden');
     }
 
     async showSection(sectionName) {
@@ -144,6 +331,8 @@ class LanguageLearningApp {
             await this.updateReviewStats();
         } else if (sectionName === 'stats') {
             await this.updateStatsPage();
+        } else if (sectionName === 'settings') {
+            await this.updateSettingsPage();
         }
 
         // Reset quiz states
@@ -230,7 +419,7 @@ class LanguageLearningApp {
             wordDiv.style.alignItems = 'center';
             wordDiv.style.gap = '10px';
             wordDiv.innerHTML = `<span>${word.word}</span>`;
-            if (this.isGermanText(word.word)) {
+            if (this.shouldShowAudioButton(word.word)) {
                 wordDiv.appendChild(this.createAudioButton(word.word, 'audio-btn-small'));
             }
             
@@ -246,7 +435,7 @@ class LanguageLearningApp {
             exampleDiv.style.alignItems = 'center';
             exampleDiv.style.gap = '10px';
             exampleDiv.innerHTML = `<span>${word.example}</span>`;
-            if (word.example && this.isGermanText(word.example)) {
+            if (word.example && this.shouldShowAudioButton(word.example)) {
                 exampleDiv.appendChild(this.createAudioButton(word.example, 'audio-btn-small'));
             }
             exampleDiv.innerHTML += ` <span style="color: #999;"> - ${word.exampleTranslation}</span>`;
@@ -337,7 +526,8 @@ class LanguageLearningApp {
 
     async startStudyQuiz(quizType) {
         try {
-            this.currentQuizData = await quizManager.startQuiz('study', quizType);
+            const lessonSize = userManager.getLessonSize();
+            this.currentQuizData = await quizManager.startQuiz('study', quizType, lessonSize);
             this.showQuizInterface();
             this.renderQuestion(this.currentQuizData);
         } catch (error) {
@@ -350,7 +540,8 @@ class LanguageLearningApp {
         try {
             // Alternate between multiple choice and typing for review
             const quizType = Math.random() > 0.5 ? 'multiple' : 'typing';
-            this.currentQuizData = await quizManager.startQuiz('review', quizType);
+            const lessonSize = userManager.getLessonSize();
+            this.currentQuizData = await quizManager.startQuiz('review', quizType, lessonSize);
             this.showReviewInterface();
             this.renderReviewQuestion(this.currentQuizData);
         } catch (error) {
@@ -385,14 +576,14 @@ class LanguageLearningApp {
             </div>
         `;
         
-        // Add audio buttons only for German text using language detection
-        // But NOT for multiple choice questions where user needs to pick from German options
-        if (this.isGermanText(question.questionText) && question.type !== 'multiple') {
+        // Add audio buttons only for foreign text using language detection
+        // But NOT for multiple choice questions where user needs to pick from options
+        if (this.shouldShowAudioButton(question.questionText) && question.type !== 'multiple') {
             const questionAudioBtn = this.createAudioButton(question.questionText);
             questionTextEl.querySelector('div:first-child').appendChild(questionAudioBtn);
         }
         
-        if (question.example && this.isGermanText(question.example)) {
+        if (question.example && this.shouldShowAudioButton(question.example)) {
             const exampleAudioBtn = this.createAudioButton(question.example);
             questionTextEl.querySelector('div:last-child').appendChild(exampleAudioBtn);
         }
@@ -404,7 +595,8 @@ class LanguageLearningApp {
             question.choices.forEach((choice, index) => {
                 const button = document.createElement('button');
                 button.className = 'choice-btn';
-                button.textContent = choice.text;
+                button.dataset.choiceIndex = index;
+                button.innerHTML = `<span class="choice-number">${index + 1}</span> ${choice.text}`;
                 button.onclick = () => this.handleMultipleChoice(choice.text, button);
                 answerArea.appendChild(button);
             });
@@ -488,7 +680,8 @@ class LanguageLearningApp {
             question.choices.forEach((choice, index) => {
                 const button = document.createElement('button');
                 button.className = 'choice-btn';
-                button.textContent = choice.text;
+                button.dataset.choiceIndex = index;
+                button.innerHTML = `<span class="choice-number">${index + 1}</span> ${choice.text}`;
                 button.onclick = () => this.handleReviewMultipleChoice(choice.text, button);
                 answerArea.appendChild(button);
             });
@@ -542,17 +735,17 @@ class LanguageLearningApp {
         
         if (result.correct) {
             buttonEl.classList.add('correct');
-            // Add audio button to correct answer if it's German
-            if (this.isGermanText(buttonEl.textContent)) {
+            // Add audio button to correct answer if it's foreign language
+            if (this.shouldShowAudioButton(buttonEl.textContent)) {
                 this.addAudioToButton(buttonEl, buttonEl.textContent);
             }
         } else {
             buttonEl.classList.add('incorrect');
-            // Highlight correct answer and add audio if German
+            // Highlight correct answer and add audio if foreign language
             document.querySelectorAll('.choice-btn').forEach(btn => {
                 if (btn.textContent === result.correctAnswer) {
                     btn.classList.add('correct');
-                    if (this.isGermanText(btn.textContent)) {
+                    if (this.shouldShowAudioButton(btn.textContent)) {
                         this.addAudioToButton(btn, btn.textContent);
                     }
                 }
@@ -594,8 +787,8 @@ class LanguageLearningApp {
         
         if (result.correct) {
             buttonEl.classList.add('correct');
-            // Add audio button to correct answer if it's German
-            if (this.isGermanText(buttonEl.textContent)) {
+            // Add audio button to correct answer if it's foreign language
+            if (this.shouldShowAudioButton(buttonEl.textContent)) {
                 this.addAudioToButton(buttonEl, buttonEl.textContent);
             }
         } else {
@@ -603,7 +796,7 @@ class LanguageLearningApp {
             document.querySelectorAll('#reviewAnswerArea .choice-btn').forEach(btn => {
                 if (btn.textContent === result.correctAnswer) {
                     btn.classList.add('correct');
-                    if (this.isGermanText(btn.textContent)) {
+                    if (this.shouldShowAudioButton(btn.textContent)) {
                         this.addAudioToButton(btn, btn.textContent);
                     }
                 }
@@ -650,21 +843,21 @@ class LanguageLearningApp {
         // Add audio button only if we have German correct answer
         let textToSpeak = null;
         
-        // Only add audio if we have correctAnswer and it's German
-        // Do NOT add audio for Russian feedback messages like "Правильно!", "Неправильно!" etc.
-        if (result.correctAnswer && this.isGermanText(result.correctAnswer)) {
+        // Only add audio if we have correctAnswer and it's foreign language
+        // Do NOT add audio for native language feedback messages
+        if (result.correctAnswer && this.shouldShowAudioButton(result.correctAnswer)) {
             textToSpeak = result.correctAnswer;
         }
         
-        // Special case: extract German word from "Правильный ответ: [german word]" pattern
+        // Special case: extract foreign word from "Правильный ответ: [foreign word]" pattern
         if (!textToSpeak && result.feedback && result.feedback.includes('Правильный ответ:')) {
             const match = result.feedback.match(/Правильный ответ:\s*(.+?)$/);
             if (match) {
                 const extractedText = match[1].trim();
                 console.log('Extracted text from feedback:', extractedText);
-                if (this.isGermanText(extractedText)) {
+                if (this.shouldShowAudioButton(extractedText)) {
                     textToSpeak = extractedText;
-                    console.log('Using extracted German text:', textToSpeak);
+                    console.log('Using extracted foreign text:', textToSpeak);
                 }
             }
         }
@@ -755,9 +948,19 @@ class LanguageLearningApp {
         this.updateReviewStats();
     }
 
+    async startSurvivalMode() {
+        try {
+            await this.survivalMode.start();
+        } catch (error) {
+            console.error('Error starting survival mode:', error);
+            alert(error.message);
+        }
+    }
+
     resetQuizInterface() {
         document.getElementById('studyModeSelect').style.display = 'block';
         document.getElementById('quizArea').classList.add('hidden');
+        document.getElementById('survivalArea').classList.add('hidden');
     }
 
     resetReviewInterface() {
@@ -1060,37 +1263,25 @@ class LanguageLearningApp {
         this.showReviewNextButton();
     }
 
-    isGermanText(text) {
+    shouldShowAudioButton(text) {
         if (!text || !text.trim()) return false;
         
-        // Check for common German characteristics
-        const germanChars = /[äöüßÄÖÜ]/;
-        const germanWords = /\b(der|die|das|und|ist|sind|haben|sein|mit|von|zu|auf|für|eine|ein|nicht|sich|auch|wenn|werden|kann|nach|wie|über|nur|noch|sehr|mehr|aber|oder|als|bei|durch|ohne|gegen|zwischen|unter|während|dessen|deren|schaffen|machen|arbeiten|spielen|lernen|gehen|kommen|sehen|wissen|nehmen|geben|tun|sagen|wollen|müssen|können|sollen|dürfen|mögen)\b/gi;
-        const cyrillicChars = /[а-яё]/i;
-        
-        // If contains Cyrillic, definitely not German
-        if (cyrillicChars.test(text)) {
+        // Check if TTS is available
+        if (!this.audioManager.isAvailable()) {
             return false;
         }
         
-        // If contains German umlauts or common German words, likely German
-        if (germanChars.test(text) || germanWords.test(text)) {
-            return true;
-        }
+        // Get current language pair
+        const currentPair = userManager ? userManager.getCurrentLanguagePair() : null;
+        if (!currentPair) return false;
         
-        // Check for typical German word patterns
-        const germanPatterns = /\b\w+(ung|heit|keit|schaft|tät|chen|lein|lich|isch|bar|sam)\b/gi;
-        if (germanPatterns.test(text)) {
-            return true;
-        }
+        // Use language manager to detect if this text should have audio
+        const isNativeLanguage = languageManager ? 
+            languageManager.detectNativeLanguage(text, currentPair.toLanguage) : false;
         
-        // Check for German sentence structure indicators
-        const hasGermanStructure = /\b(ich|du|er|sie|es|wir|ihr|sie|Sie)\s+(bin|bist|ist|sind|war|warst|waren|habe|hast|hat|haben|hatte|hatten|werde|wirst|wird|werden)\b/gi;
-        if (hasGermanStructure.test(text)) {
-            return true;
-        }
-        
-        return false;
+        // Show audio button for studying language (foreign language)
+        // Don't show for native language translations
+        return !isNativeLanguage;
     }
 
     createAudioButton(text, className = 'audio-btn') {
@@ -1172,9 +1363,289 @@ class LanguageLearningApp {
             }
         }
     }
+
+    handleNumberKeyPress(e) {
+        // Only handle number keys if we're in a multiple choice quiz
+        const isInQuiz = !document.getElementById('quizArea').classList.contains('hidden') || 
+                        !document.getElementById('reviewQuizArea').classList.contains('hidden');
+        
+        if (!isInQuiz) return;
+
+        // Check if we have multiple choice buttons
+        const choiceButtons = document.querySelectorAll('.choice-btn:not([disabled])');
+        if (choiceButtons.length === 0) return;
+
+        const choiceIndex = parseInt(e.key) - 1; // Convert 1-4 to 0-3
+        if (choiceIndex < 0 || choiceIndex >= choiceButtons.length) return;
+
+        const button = choiceButtons[choiceIndex];
+        if (button && !button.disabled) {
+            e.preventDefault();
+            button.click();
+        }
+    }
+
+    async updateSettingsPage() {
+        if (!userManager.isLoggedIn()) return;
+        
+        // Update language pairs list
+        this.renderLanguagePairs();
+        
+        // Update lesson size input
+        const lessonSize = userManager.getLessonSize();
+        document.getElementById('lessonSizeInput').value = lessonSize;
+    }
+
+    renderLanguagePairs() {
+        const container = document.getElementById('languagePairsList');
+        container.innerHTML = '';
+        
+        const user = userManager.getCurrentUser();
+        if (!user || !user.languagePairs) return;
+        
+        user.languagePairs.forEach(pair => {
+            const item = document.createElement('div');
+            item.className = `language-pair-item ${pair.active ? 'active' : ''}`;
+            
+            item.innerHTML = `
+                <div class="language-pair-info">
+                    <div class="language-pair-name">${pair.name}</div>
+                    <div class="language-pair-stats">${pair.fromLanguage} → ${pair.toLanguage}</div>
+                </div>
+                <div class="language-pair-controls">
+                    ${!pair.active ? `<button class="select-btn" onclick="app.selectLanguagePair('${pair.id}')">Выбрать</button>` : ''}
+                    ${user.languagePairs.length > 1 ? `<button class="delete-btn" onclick="app.deleteLanguagePair('${pair.id}')">Удалить</button>` : ''}
+                </div>
+            `;
+            
+            container.appendChild(item);
+        });
+    }
+
+    async selectLanguagePair(pairId) {
+        try {
+            await userManager.setActiveLanguagePair(pairId);
+            this.renderLanguagePairs();
+            await this.updateStats();
+        } catch (error) {
+            console.error('Error selecting language pair:', error);
+            alert('Ошибка при выборе языковой пары');
+        }
+    }
+
+    async deleteLanguagePair(pairId) {
+        if (!confirm('Вы уверены, что хотите удалить эту языковую пару? Все связанные с ней данные будут потеряны.')) {
+            return;
+        }
+        
+        try {
+            await userManager.deleteLanguagePair(pairId);
+            this.renderLanguagePairs();
+            await this.updateStats();
+        } catch (error) {
+            console.error('Error deleting language pair:', error);
+            alert(error.message || 'Ошибка при удалении языковой пары');
+        }
+    }
+
+    showLanguagePairDialog() {
+        // Get supported languages from language manager
+        const supportedLangs = languageManager.getSupportedLanguages();
+        const langOptions = Object.entries(supportedLangs).map(([code, name]) => name);
+        
+        // Create a better dialog for language selection
+        const dialogHtml = `
+            <div id="languagePairDialog" class="auth-modal">
+                <div class="auth-content">
+                    <h2>Создать языковую пару</h2>
+                    <div class="auth-form active">
+                        <label>
+                            <span>Изучаемый язык:</span>
+                            <select id="fromLanguageSelect" class="language-select">
+                                ${langOptions.map(lang => `<option value="${lang}">${lang}</option>`).join('')}
+                            </select>
+                        </label>
+                        
+                        <label>
+                            <span>Родной язык:</span>
+                            <select id="toLanguageSelect" class="language-select">
+                                ${langOptions.map(lang => `<option value="${lang}" ${lang === 'Russian' ? 'selected' : ''}>${lang}</option>`).join('')}
+                            </select>
+                        </label>
+                        
+                        <input type="text" id="pairNameInput" placeholder="Название пары (автоматически)" class="auth-form input">
+                        
+                        <div style="display: flex; gap: 1rem; margin-top: 1rem;">
+                            <button id="createPairBtn" class="auth-btn">Создать</button>
+                            <button id="cancelPairBtn" class="auth-btn" style="background: #95a5a6;">Отмена</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        `;
+        
+        document.body.insertAdjacentHTML('beforeend', dialogHtml);
+        
+        // Set up event listeners
+        const updateName = () => {
+            const from = document.getElementById('fromLanguageSelect').value;
+            const to = document.getElementById('toLanguageSelect').value;
+            document.getElementById('pairNameInput').placeholder = `${from} - ${to}`;
+        };
+        
+        document.getElementById('fromLanguageSelect').addEventListener('change', updateName);
+        document.getElementById('toLanguageSelect').addEventListener('change', updateName);
+        
+        document.getElementById('createPairBtn').addEventListener('click', () => {
+            const fromLang = document.getElementById('fromLanguageSelect').value;
+            const toLang = document.getElementById('toLanguageSelect').value;
+            const name = document.getElementById('pairNameInput').value || `${fromLang} - ${toLang}`;
+            
+            if (fromLang === toLang) {
+                alert('Изучаемый и родной язык не могут быть одинаковыми');
+                return;
+            }
+            
+            this.createLanguagePair(fromLang, toLang, name);
+            document.getElementById('languagePairDialog').remove();
+        });
+        
+        document.getElementById('cancelPairBtn').addEventListener('click', () => {
+            document.getElementById('languagePairDialog').remove();
+        });
+        
+        updateName(); // Set initial name
+    }
+
+    async createLanguagePair(fromLang, toLang, name) {
+        try {
+            await userManager.createLanguagePair(fromLang, toLang, name);
+            this.renderLanguagePairs();
+        } catch (error) {
+            console.error('Error creating language pair:', error);
+            alert('Ошибка при создании языковой пары');
+        }
+    }
+
+    async updateLessonSize(size) {
+        try {
+            await userManager.setLessonSize(parseInt(size));
+        } catch (error) {
+            console.error('Error updating lesson size:', error);
+        }
+    }
+
+    async syncWithServer() {
+        const statusEl = document.getElementById('syncStatus');
+        statusEl.textContent = 'Экспорт данных...';
+        statusEl.className = 'sync-status info';
+        statusEl.style.display = 'block';
+        
+        try {
+            // Export all words from current user's language pair
+            const words = await database.getAllWords();
+            
+            if (words.length === 0) {
+                statusEl.textContent = 'Нет данных для синхронизации';
+                statusEl.className = 'sync-status error';
+                setTimeout(() => {
+                    statusEl.style.display = 'none';
+                }, 3000);
+                return;
+            }
+            
+            // Transform data for server
+            const exportData = words.map(word => ({
+                word: word.word,
+                translation: word.translation,
+                example: word.example || '',
+                exampleTranslation: word.exampleTranslation || '',
+                status: word.status,
+                correctCount: word.correctCount || 0,
+                totalCount: (word.correctCount || 0) + (word.incorrectCount || 0),
+                createdAt: word.dateAdded || new Date().toISOString(),
+                updatedAt: word.lastStudied || new Date().toISOString(),
+                languagePair: userManager.getCurrentLanguagePair()?.name || 'Default',
+                userId: userManager.getCurrentUser()?.id || 'anonymous'
+            }));
+            
+            statusEl.textContent = `Отправка ${exportData.length} слов на сервер...`;
+            
+            // Create FormData for upload
+            const jsonBlob = new Blob([JSON.stringify(exportData, null, 2)], { 
+                type: 'application/json' 
+            });
+            
+            const formData = new FormData();
+            formData.append('progressFile', jsonBlob, 'progress-export.json');
+            
+            // Try to send to server
+            const response = await fetch('https://words-learning-server-production.up.railway.app/api/words/import-progress', {
+                method: 'POST',
+                body: formData
+            });
+            
+            if (response.ok) {
+                const result = await response.json();
+                statusEl.textContent = `Синхронизация завершена! Импортировано: ${result.imported || exportData.length} слов`;
+                statusEl.className = 'sync-status success';
+            } else {
+                throw new Error(`Server error: ${response.status}`);
+            }
+            
+            setTimeout(() => {
+                statusEl.style.display = 'none';
+            }, 3000);
+            
+        } catch (networkError) {
+            console.error('Sync error:', networkError);
+            
+            // Fallback: download file for manual import
+            try {
+                const words = await database.getAllWords();
+                const exportData = words.map(word => ({
+                    word: word.word,
+                    translation: word.translation,
+                    example: word.example || '',
+                    exampleTranslation: word.exampleTranslation || '',
+                    status: word.status,
+                    correctCount: word.correctCount || 0,
+                    totalCount: (word.correctCount || 0) + (word.incorrectCount || 0),
+                    createdAt: word.dateAdded || new Date().toISOString(),
+                    updatedAt: word.lastStudied || new Date().toISOString(),
+                    languagePair: userManager.getCurrentLanguagePair()?.name || 'Default',
+                    userId: userManager.getCurrentUser()?.id || 'anonymous'
+                }));
+                
+                const jsonBlob = new Blob([JSON.stringify(exportData, null, 2)], { 
+                    type: 'application/json' 
+                });
+                
+                const url = URL.createObjectURL(jsonBlob);
+                const link = document.createElement('a');
+                link.href = url;
+                link.download = `words-progress-${new Date().toISOString().split('T')[0]}.json`;
+                document.body.appendChild(link);
+                link.click();
+                document.body.removeChild(link);
+                URL.revokeObjectURL(url);
+                
+                statusEl.textContent = 'Ошибка связи с сервером. Файл скачан для ручного импорта.';
+                statusEl.className = 'sync-status error';
+                
+            } catch (fallbackError) {
+                statusEl.textContent = 'Ошибка синхронизации и создания файла';
+                statusEl.className = 'sync-status error';
+            }
+            
+            setTimeout(() => {
+                statusEl.style.display = 'none';
+            }, 5000);
+        }
+    }
 }
 
 // Initialize app when DOM is loaded
 document.addEventListener('DOMContentLoaded', () => {
-    new LanguageLearningApp();
+    window.app = new LanguageLearningApp();
 });
