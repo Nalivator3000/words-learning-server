@@ -120,16 +120,22 @@ class UserManager {
 
     async loginWithGoogle() {
         try {
-            // Check if Google API is loaded
-            if (typeof google === 'undefined' || !google.accounts) {
-                // Fallback to demo version if Google API not available
+            // Check if we have a real Google Client ID configured
+            const GOOGLE_CLIENT_ID = 'YOUR_GOOGLE_CLIENT_ID'; // Replace with actual client ID when available
+            const hasRealGoogleAuth = GOOGLE_CLIENT_ID !== 'YOUR_GOOGLE_CLIENT_ID' && 
+                                     typeof google !== 'undefined' && 
+                                     google.accounts;
+
+            if (!hasRealGoogleAuth) {
+                // Use demo version since Google OAuth is not properly configured
+                console.log('Google OAuth not configured, using demo login');
                 return this.loginWithGoogleDemo();
             }
 
-            // Real Google OAuth implementation
+            // Real Google OAuth implementation (only when properly configured)
             return new Promise((resolve, reject) => {
                 google.accounts.id.initialize({
-                    client_id: 'YOUR_GOOGLE_CLIENT_ID', // Replace with actual client ID
+                    client_id: GOOGLE_CLIENT_ID,
                     callback: async (response) => {
                         try {
                             // Decode JWT token to get user info
@@ -179,11 +185,22 @@ class UserManager {
 
     async loginWithGoogleDemo() {
         try {
-            // Demo version for local testing
+            // Demo version for testing (Google OAuth not configured)
+            // Show a brief message to user
+            const confirmDemo = confirm(
+                '🔧 Google OAuth ещё не настроен для этого домена.\n\n' +
+                '✅ Будет использован демо-режим авторизации.\n\n' +
+                'Продолжить с демо-аккаунтом?'
+            );
+            
+            if (!confirmDemo) {
+                return false;
+            }
+            
             const googleUser = {
                 id: 'google_demo_' + Date.now(),
-                name: 'Google Demo User',
-                email: 'demo@gmail.com',
+                name: '👤 Demo Google User',
+                email: 'demo@google.com',
                 provider: 'google_demo',
                 createdAt: new Date().toISOString(),
                 languagePairs: []
