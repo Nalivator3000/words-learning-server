@@ -61,12 +61,12 @@ class ImageBatchProcessor {
     // Получение всех слов из IndexedDB
     async getAllWordsFromDatabase() {
         return new Promise((resolve, reject) => {
-            if (!window.db) {
+            if (!window.database || !window.database.db) {
                 reject(new Error('Database not initialized'));
                 return;
             }
 
-            const transaction = db.transaction(['words'], 'readonly');
+            const transaction = window.database.db.transaction(['words'], 'readonly');
             const store = transaction.objectStore('words');
             const request = store.getAll();
 
@@ -133,7 +133,7 @@ class ImageBatchProcessor {
         console.log('💾 Saving updated word data to database...');
         
         const words = await this.getAllWordsFromDatabase();
-        const transaction = db.transaction(['words'], 'readwrite');
+        const transaction = window.database.db.transaction(['words'], 'readwrite');
         const store = transaction.objectStore('words');
 
         const promises = words.map(word => {

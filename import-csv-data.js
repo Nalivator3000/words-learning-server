@@ -226,7 +226,71 @@ function setupRootUser() {
     }
 }
 
-// Export function for console use
-window.importGermanVocab = importGermanVocabForRoot;
+// Check how many words are in database
+async function checkWordCount() {
+    if (!window.database) {
+        console.log('❌ Database not available');
+        return;
+    }
+    
+    try {
+        const studyingWords = await window.database.getWordsByStatus('studying');
+        const reviewWords = await window.database.getWordsByStatus('review');
+        const learnedWords = await window.database.getWordsByStatus('learned');
+        
+        const total = studyingWords.length + reviewWords.length + learnedWords.length;
+        
+        console.log(`📊 Words in database:`);
+        console.log(`   📚 Studying: ${studyingWords.length}`);
+        console.log(`   🔄 Review: ${reviewWords.length}`);
+        console.log(`   ✅ Learned: ${learnedWords.length}`);
+        console.log(`   📈 Total: ${total}`);
+        
+        return { studying: studyingWords.length, review: reviewWords.length, learned: learnedWords.length, total };
+    } catch (error) {
+        console.error('❌ Error checking word count:', error);
+    }
+}
 
-console.log('📥 German vocabulary importer loaded. Use importGermanVocab() to import words.');
+// Clear all words from database
+async function clearAllWords() {
+    if (!window.database) {
+        console.log('❌ Database not available');
+        return;
+    }
+    
+    const confirmed = confirm('⚠️ Удалить ВСЕ слова из базы данных? Это действие нельзя отменить!');
+    if (!confirmed) return;
+    
+    try {
+        const transaction = window.database.db.transaction(['words'], 'readwrite');
+        const store = transaction.objectStore('words');
+        
+        await new Promise((resolve, reject) => {
+            const request = store.clear();
+            request.onsuccess = () => resolve();
+            request.onerror = () => reject(request.error);
+        });
+        
+        console.log('🗑️ All words cleared from database');
+        
+        // Update UI if router is available
+        if (window.router) {
+            window.router.navigateTo('/');
+        }
+        
+    } catch (error) {
+        console.error('❌ Error clearing words:', error);
+    }
+}
+
+// Export functions for console use
+window.importGermanVocab = importGermanVocabForRoot;
+window.checkWordCount = checkWordCount;
+window.clearAllWords = clearAllWords;
+
+console.log('📥 German vocabulary importer loaded.');
+console.log('💡 Available functions:');
+console.log('   importGermanVocab() - Import 118 German words');
+console.log('   checkWordCount() - Check current word count');
+console.log('   clearAllWords() - Clear all words from database');
