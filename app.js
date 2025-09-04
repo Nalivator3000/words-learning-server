@@ -208,21 +208,35 @@ class LanguageLearningApp {
 
     setupAuthListeners() {
         // Auth tab switching
-        document.getElementById('loginTab').addEventListener('click', () => this.switchAuthTab('login'));
-        document.getElementById('registerTab').addEventListener('click', () => this.switchAuthTab('register'));
+        const loginTab = document.getElementById('loginTab');
+        const registerTab = document.getElementById('registerTab');
+        if (loginTab) loginTab.addEventListener('click', () => this.switchAuthTab('login'));
+        if (registerTab) registerTab.addEventListener('click', () => this.switchAuthTab('register'));
         
         // Auth form submissions
-        document.getElementById('loginBtn').addEventListener('click', () => this.handleLogin());
-        document.getElementById('registerBtn').addEventListener('click', () => this.handleRegister());
-        document.getElementById('googleLoginBtn').addEventListener('click', () => this.handleGoogleLogin());
+        const loginBtn = document.getElementById('loginBtn');
+        const registerBtn = document.getElementById('registerBtn');
+        const googleLoginBtn = document.getElementById('googleLoginBtn');
+        
+        if (loginBtn) loginBtn.addEventListener('click', () => this.handleLogin());
+        if (registerBtn) registerBtn.addEventListener('click', () => this.handleRegister());
+        if (googleLoginBtn) googleLoginBtn.addEventListener('click', () => this.handleGoogleLogin());
         
         // Enter key support for auth forms
-        document.getElementById('loginPassword').addEventListener('keypress', (e) => {
-            if (e.key === 'Enter') this.handleLogin();
-        });
-        document.getElementById('registerPasswordConfirm').addEventListener('keypress', (e) => {
-            if (e.key === 'Enter') this.handleRegister();
-        });
+        const loginPassword = document.getElementById('loginPassword');
+        const registerPasswordConfirm = document.getElementById('registerPasswordConfirm');
+        
+        if (loginPassword) {
+            loginPassword.addEventListener('keypress', (e) => {
+                if (e.key === 'Enter') this.handleLogin();
+            });
+        }
+        
+        if (registerPasswordConfirm) {
+            registerPasswordConfirm.addEventListener('keypress', (e) => {
+                if (e.key === 'Enter') this.handleRegister();
+            });
+        }
     }
 
     switchAuthTab(tab) {
@@ -237,19 +251,36 @@ class LanguageLearningApp {
     }
 
     async handleLogin() {
-        const email = document.getElementById('loginEmail').value;
-        const password = document.getElementById('loginPassword').value;
+        console.log('🔐 Login button clicked!');
+        
+        const emailEl = document.getElementById('loginEmail');
+        const passwordEl = document.getElementById('loginPassword');
+        
+        if (!emailEl || !passwordEl) {
+            console.error('Login elements not found!');
+            this.showAuthError('Ошибка интерфейса. Перезагрузите страницу.');
+            return;
+        }
+        
+        const email = emailEl.value;
+        const password = passwordEl.value;
+        
+        console.log(`Attempting login with email: ${email}`);
         
         if (!email || !password) {
+            console.log('Empty email or password');
             this.showAuthError('Пожалуйста, заполните все поля');
             return;
         }
         
         try {
+            console.log('Calling userManager.login...');
             await userManager.login(email, password);
+            console.log('Login successful!');
             this.showSection('home');
             await this.updateStats();
         } catch (error) {
+            console.error('Login error:', error);
             this.showAuthError(error.message);
         }
     }
