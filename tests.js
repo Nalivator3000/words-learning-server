@@ -9,7 +9,15 @@ document.addEventListener('DOMContentLoaded', () => {
 });
 
 function runAllTests() {
-    const { describe, expect, expectElement } = window.testFramework;
+    if (!window.testFramework) {
+        console.error('Test framework not loaded');
+        return;
+    }
+    
+    const testFramework = window.testFramework;
+    const describe = testFramework.describe.bind(testFramework);
+    const expect = testFramework.expect.bind(testFramework);
+    const expectElement = testFramework.expectElement.bind(testFramework);
 
     // ===========================================
     // DATABASE TESTS

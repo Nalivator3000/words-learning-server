@@ -130,11 +130,11 @@ class SurvivalMode {
 
         // Display question with image if available (native language)
         const questionEl = document.getElementById('survivalQuestion');
-        const correctWord = this.words.find(w => w.id === this.currentQuestion.correctId);
+        const wordWithImage = this.words.find(w => w.id === this.currentQuestion.correctId);
         
-        const imageHtml = correctWord?.imageUrl ? 
+        const imageHtml = wordWithImage?.imageUrl ? 
             `<div class="survival-image-container" style="text-align: center; margin-bottom: 15px;">
-                <img src="${correctWord.imageUrl}" alt="${this.currentQuestion.nativeText}" 
+                <img src="${wordWithImage.imageUrl}" alt="${this.currentQuestion.nativeText}" 
                      style="max-width: 150px; max-height: 120px; border-radius: 8px; box-shadow: 0 2px 8px rgba(0,0,0,0.3);"
                      onerror="this.style.display='none'">
             </div>` : '';
