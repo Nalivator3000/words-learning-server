@@ -38,9 +38,14 @@ function runQuickDiagnostics() {
     const loginBtn = document.getElementById('loginBtn');
     if (loginBtn) {
         console.log('  ✅ Login button exists');
-        console.log(`  📎 Event listeners: ${getEventListeners ? getEventListeners(loginBtn).length : 'unknown'}`);
+        console.log(`  📎 Event listeners: ${typeof getEventListeners !== 'undefined' ? 'detected' : 'not available (normal)'}`);
         console.log(`  🎯 Button type: ${loginBtn.type}`);
         console.log(`  🎨 Button classes: ${loginBtn.className}`);
+        
+        // Check if button is properly bound
+        console.log('  🔗 Checking event binding...');
+        console.log(`  📋 Button disabled: ${loginBtn.disabled}`);
+        console.log(`  👆 Button onclick: ${loginBtn.onclick ? 'exists' : 'null'}`);
         
         // Try to trigger click manually
         console.log('  🖱️ Attempting manual click...');
