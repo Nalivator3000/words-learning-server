@@ -159,7 +159,12 @@ function initializeMainApp(userData) {
                 userInfo.textContent = `👤 ${userData.name}`;
             }
             
-            // Show main app sections
+            // Show main app sections and ensure container is visible
+            const container = document.querySelector('.container');
+            if (container) {
+                container.style.display = 'block';
+            }
+            
             const sections = ['homeSection', 'importSection', 'studySection', 'reviewSection', 'statsSection'];
             sections.forEach(sectionId => {
                 const section = document.getElementById(sectionId);
@@ -189,14 +194,83 @@ function initializeMainApp(userData) {
         
         // Load and show home section by default
         const homeBtn = document.getElementById('homeBtn');
-        if (homeBtn && homeBtn.onclick) {
-            homeBtn.onclick();
+        if (homeBtn) {
+            // Simulate home button click to activate navigation
+            if (homeBtn.onclick) {
+                homeBtn.onclick();
+            } else {
+                // Manual activation if no click handler
+                homeBtn.classList.add('active');
+                const homeSection = document.getElementById('homeSection');
+                if (homeSection) {
+                    homeSection.classList.add('active');
+                    homeSection.style.display = 'block';
+                }
+                // Hide other sections
+                ['importSection', 'studySection', 'reviewSection', 'statsSection', 'settingsSection'].forEach(id => {
+                    const section = document.getElementById(id);
+                    if (section) {
+                        section.classList.remove('active');
+                        section.style.display = 'none';
+                    }
+                });
+            }
         }
+        
+        // Add basic navigation handlers if main app handlers aren't working
+        this.setupBasicNavigation();
         
     } catch (error) {
         console.error('❌ Error initializing main app:', error);
         showBasicEmergencyInterface();
     }
+}
+
+// Setup basic navigation if main app navigation isn't working
+function setupBasicNavigation() {
+    const navButtons = [
+        { id: 'homeBtn', section: 'homeSection' },
+        { id: 'importBtn', section: 'importSection' },
+        { id: 'studyBtn', section: 'studySection' },
+        { id: 'reviewBtn', section: 'reviewSection' },
+        { id: 'statsBtn', section: 'statsSection' }
+    ];
+    
+    navButtons.forEach(({ id, section }) => {
+        const button = document.getElementById(id);
+        if (button && !button.onclick) {
+            button.onclick = () => {
+                // Remove active class from all nav buttons
+                navButtons.forEach(({ id: otherId }) => {
+                    const otherBtn = document.getElementById(otherId);
+                    if (otherBtn) otherBtn.classList.remove('active');
+                });
+                
+                // Add active class to clicked button
+                button.classList.add('active');
+                
+                // Hide all sections
+                navButtons.forEach(({ section: otherSection }) => {
+                    const otherSec = document.getElementById(otherSection);
+                    if (otherSec) {
+                        otherSec.classList.remove('active');
+                        otherSec.style.display = 'none';
+                    }
+                });
+                
+                // Show target section
+                const targetSection = document.getElementById(section);
+                if (targetSection) {
+                    targetSection.classList.add('active');
+                    targetSection.style.display = 'block';
+                }
+                
+                console.log(`📍 Emergency navigation: switched to ${section}`);
+            };
+        }
+    });
+    
+    console.log('🧭 Basic navigation handlers attached');
 }
 
 // Fallback basic interface if main app fails
