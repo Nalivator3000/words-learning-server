@@ -82,6 +82,21 @@ class TestFramework {
                 if (!(actual instanceof expectedClass)) {
                     throw new Error(`Expected ${actual} to be instance of ${expectedClass.name}`);
                 }
+            },
+            toBeLessThan: (expected) => {
+                if (actual >= expected) {
+                    throw new Error(`Expected ${actual} to be less than ${expected}`);
+                }
+            },
+            toBeGreaterThan: (expected) => {
+                if (actual <= expected) {
+                    throw new Error(`Expected ${actual} to be greater than ${expected}`);
+                }
+            },
+            toMatch: (regex) => {
+                if (!regex.test(actual)) {
+                    throw new Error(`Expected ${actual} to match ${regex}`);
+                }
             }
         };
     }
