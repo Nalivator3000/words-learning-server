@@ -62,9 +62,7 @@ function handleEmergencyLogin() {
     
     // Simple hardcoded login for testing
     const validCredentials = [
-        { email: 'root', password: 'root' },
-        { email: 'nalivator3000@gmail.com', password: '1' },
-        { email: 'test@test.com', password: 'test123' }
+        { email: 'root', password: 'root' }
     ];
     
     const isValid = validCredentials.some(cred => 
