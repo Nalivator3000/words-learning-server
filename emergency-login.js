@@ -62,8 +62,8 @@ function handleEmergencyLogin() {
     
     // Simple hardcoded login for testing
     const validCredentials = [
+        { email: 'root', password: 'root' },
         { email: 'nalivator3000@gmail.com', password: '1' },
-        { email: 'nalivator3000@gmail.com', password: 'qwerty123' },
         { email: 'test@test.com', password: 'test123' }
     ];
     
@@ -111,8 +111,8 @@ waitForDOM();
 // Export for manual testing
 window.emergencyLogin = handleEmergencyLogin;
 window.testLogin = function() {
-    document.getElementById('loginEmail').value = 'nalivator3000@gmail.com';
-    document.getElementById('loginPassword').value = '1';
+    document.getElementById('loginEmail').value = 'root';
+    document.getElementById('loginPassword').value = 'root';
     handleEmergencyLogin();
 };
 
