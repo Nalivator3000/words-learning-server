@@ -214,6 +214,23 @@ function runAllTests() {
                 expect(window.app.survivalMode.currentQuestion.correctAnswer).toBeTruthy();
             }
         });
+
+        test('Should handle survival mode button click', () => {
+            const survivalBtn = document.getElementById('survivalBtn');
+            if (survivalBtn) {
+                expect(survivalBtn).toBeTruthy();
+                expect(survivalBtn.textContent).toContain('Режим выживания');
+            }
+        });
+
+        test('Should have proper survival UI elements', () => {
+            expectElement('#survivalArea').toExist();
+            expectElement('#survivalQuestion').toExist();
+            expectElement('#choice1').toExist();
+            expectElement('#choice2').toExist();
+            expectElement('#survivalScore').toExist();
+            expectElement('#survivalErrors').toExist();
+        });
     });
 
     // ===========================================

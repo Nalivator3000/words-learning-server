@@ -18,11 +18,15 @@ class SurvivalMode {
 
     async start() {
         try {
+            console.log('🏆 Starting Survival Mode...');
+            
             // Get all studying words for current language pair
             this.words = await database.getWordsByStatus('studying');
             
+            console.log(`📚 Found ${this.words.length} words for survival mode`);
+            
             if (this.words.length < 4) {
-                throw new Error('Нужно минимум 4 слова для режима выживания');
+                throw new Error('Нужно минимум 4 слова для режима выживания. Добавьте больше слов для изучения.');
             }
 
             this.isActive = true;
@@ -31,13 +35,16 @@ class SurvivalMode {
             this.errors = 0;
             this.usedWords = [];
 
+            console.log('🎮 Initializing survival interface...');
             this.showSurvivalInterface();
             this.updateStats();
             this.nextQuestion();
+            
+            console.log('✅ Survival mode started successfully!');
 
         } catch (error) {
-            console.error('Error starting survival mode:', error);
-            alert(error.message);
+            console.error('❌ Error starting survival mode:', error);
+            alert(`Ошибка запуска режима выживания: ${error.message}`);
         }
     }
 
