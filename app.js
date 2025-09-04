@@ -220,6 +220,11 @@ class LanguageLearningApp {
         document.getElementById('csvInput').addEventListener('change', (e) => this.handleCSVImport(e));
         document.getElementById('googleImportBtn').addEventListener('click', () => this.handleGoogleSheetsImport());
 
+        // Database management functionality
+        document.getElementById('importGermanBtn').addEventListener('click', () => this.handleImportGerman());
+        document.getElementById('checkWordCountBtn').addEventListener('click', () => this.handleCheckWordCount());
+        document.getElementById('clearDatabaseBtn').addEventListener('click', () => this.handleClearDatabase());
+
         // Study mode
         document.getElementById('multipleChoiceBtn').addEventListener('click', () => this.startStudyQuiz('multiple'));
         document.getElementById('reverseMultipleChoiceBtn').addEventListener('click', () => this.startStudyQuiz('reverse_multiple'));
@@ -1765,6 +1770,112 @@ class LanguageLearningApp {
                   `Покрытие: ${stats.percentage}%`);
         } else {
             alert('Модуль статистики изображений не доступен.');
+        }
+    }
+
+    // Database management methods
+    async handleImportGerman() {
+        console.log('🇩🇪 Importing German vocabulary...');
+        
+        const importStatus = document.getElementById('importStatus');
+        if (importStatus) {
+            importStatus.innerHTML = '<div style="color: #2196F3;">🔄 Импортирование немецких слов...</div>';
+        }
+
+        try {
+            if (typeof window.importGermanVocab === 'function') {
+                await window.importGermanVocab();
+                
+                if (importStatus) {
+                    importStatus.innerHTML = '<div style="color: #4CAF50;">✅ Успешно импортировано 118 немецких слов!</div>';
+                }
+                
+                // Update home page statistics if we're on home page
+                if (window.router && window.router.currentRoute && window.router.currentRoute.name === 'home') {
+                    window.router.navigateTo('/');
+                }
+                
+            } else {
+                throw new Error('Import function not available');
+            }
+        } catch (error) {
+            console.error('❌ Import failed:', error);
+            if (importStatus) {
+                importStatus.innerHTML = `<div style="color: #f44336;">❌ Ошибка импорта: ${error.message}</div>`;
+            }
+        }
+    }
+
+    async handleCheckWordCount() {
+        console.log('📊 Checking word count...');
+        
+        const importStatus = document.getElementById('importStatus');
+        if (importStatus) {
+            importStatus.innerHTML = '<div style="color: #2196F3;">🔄 Подсчёт слов...</div>';
+        }
+
+        try {
+            if (typeof window.checkWordCount === 'function') {
+                const stats = await window.checkWordCount();
+                
+                if (stats && importStatus) {
+                    importStatus.innerHTML = `
+                        <div style="color: #4CAF50;">
+                            📊 <strong>Слова в базе данных:</strong><br>
+                            📚 Изучаемые: ${stats.studying}<br>
+                            🔄 На повторении: ${stats.review}<br>
+                            ✅ Изученные: ${stats.learned}<br>
+                            📈 <strong>Всего: ${stats.total}</strong>
+                        </div>
+                    `;
+                }
+            } else {
+                throw new Error('Check word count function not available');
+            }
+        } catch (error) {
+            console.error('❌ Word count check failed:', error);
+            if (importStatus) {
+                importStatus.innerHTML = `<div style="color: #f44336;">❌ Ошибка подсчёта: ${error.message}</div>`;
+            }
+        }
+    }
+
+    async handleClearDatabase() {
+        console.log('🗑️ Clearing database...');
+        
+        // Double confirmation for safety
+        const confirmed1 = confirm('⚠️ Вы уверены, что хотите удалить ВСЕ слова из базы данных?\n\nЭто действие НЕЛЬЗЯ отменить!');
+        if (!confirmed1) return;
+        
+        const confirmed2 = confirm('🚨 ПОСЛЕДНЕЕ ПРЕДУПРЕЖДЕНИЕ!\n\nВы действительно хотите БЕЗВОЗВРАТНО удалить все слова?\n\nНажмите "OK" только если вы полностью уверены.');
+        if (!confirmed2) return;
+
+        const importStatus = document.getElementById('importStatus');
+        if (importStatus) {
+            importStatus.innerHTML = '<div style="color: #f44336;">🗑️ Очистка базы данных...</div>';
+        }
+
+        try {
+            if (typeof window.clearAllWords === 'function') {
+                await window.clearAllWords();
+                
+                if (importStatus) {
+                    importStatus.innerHTML = '<div style="color: #4CAF50;">✅ База данных очищена. Все слова удалены.</div>';
+                }
+                
+                // Update home page statistics
+                if (window.router && window.router.currentRoute && window.router.currentRoute.name === 'home') {
+                    window.router.navigateTo('/');
+                }
+                
+            } else {
+                throw new Error('Clear database function not available');
+            }
+        } catch (error) {
+            console.error('❌ Database clear failed:', error);
+            if (importStatus) {
+                importStatus.innerHTML = `<div style="color: #f44336;">❌ Ошибка очистки: ${error.message}</div>`;
+            }
         }
     }
 }

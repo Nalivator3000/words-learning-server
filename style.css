@@ -1286,3 +1286,44 @@ main {
     font-style: italic;
     font-size: 0.8rem;
 }
+
+/* Database Management Section */
+.database-management {
+    background: #f8f9fa;
+    border: 1px solid #e9ecef;
+    border-radius: 8px;
+    padding: 20px;
+    margin: 20px 0;
+}
+
+.database-management h3 {
+    margin-top: 0;
+    color: #495057;
+}
+
+.database-management .action-btn {
+    margin-bottom: 10px;
+    font-weight: 500;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    transition: all 0.3s ease;
+}
+
+.database-management .action-btn:hover {
+    transform: translateY(-1px);
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.15);
+}
+
+/* Word Image in Exercises */
+.word-image {
+    max-width: 200px;
+    max-height: 150px;
+    border-radius: 8px;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.2);
+    margin-bottom: 15px;
+    object-fit: cover;
+}
+
+.word-image-container {
+    text-align: center;
+    margin-bottom: 20px;
+}
