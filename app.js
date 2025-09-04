@@ -102,11 +102,29 @@ class AudioManager {
 
 class LanguageLearningApp {
     constructor() {
-        this.currentSection = 'home';
-        this.currentQuizData = null;
-        this.audioManager = new AudioManager();
-        this.survivalMode = new SurvivalMode(this);
-        this.init();
+        console.log('🏗️ Initializing LanguageLearningApp...');
+        
+        try {
+            this.currentSection = 'home';
+            this.currentQuizData = null;
+            this.audioManager = new AudioManager();
+            
+            // Initialize survival mode safely
+            if (typeof SurvivalMode !== 'undefined') {
+                this.survivalMode = new SurvivalMode(this);
+                console.log('✅ Survival mode initialized');
+            } else {
+                console.warn('⚠️ SurvivalMode class not available');
+                this.survivalMode = null;
+            }
+            
+            this.init();
+            console.log('✅ LanguageLearningApp initialized successfully');
+            
+        } catch (error) {
+            console.error('❌ Error initializing LanguageLearningApp:', error);
+            throw error; // Re-throw so emergency login can catch it
+        }
     }
 
     verifyDOMElements() {

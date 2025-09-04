@@ -119,13 +119,21 @@ function initializeMainApp(userData) {
         
         // Try to initialize main app components
         if (typeof window.LanguageLearningApp !== 'undefined') {
-            console.log('🚀 Found main app class, initializing...');
+            console.log('🚀 Found main app class, attempting initialization...');
             
-            // Create main app instance
-            window.app = new window.LanguageLearningApp();
-            console.log('✅ Main app initialized successfully!');
-            
-        } else if (typeof window.database !== 'undefined' && typeof window.userManager !== 'undefined') {
+            try {
+                // Create main app instance carefully
+                window.app = new window.LanguageLearningApp();
+                console.log('✅ Main app initialized successfully!');
+                return; // Success, exit early
+            } catch (appError) {
+                console.error('❌ Main app initialization failed:', appError);
+                console.log('🔧 Falling back to manual component initialization...');
+            }
+        }
+        
+        // Manual initialization fallback
+        if (typeof window.database !== 'undefined' && typeof window.userManager !== 'undefined') {
             console.log('🔧 Main app class not found, trying individual components...');
             
             // Set up user manager with emergency user

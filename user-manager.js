@@ -386,3 +386,6 @@ class UserManager {
 }
 
 const userManager = new UserManager();
+
+// Export for global access
+window.userManager = userManager;

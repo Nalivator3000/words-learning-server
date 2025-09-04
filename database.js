@@ -319,3 +319,6 @@ class Database {
 }
 
 const database = new Database();
+
+// Export for global access
+window.database = database;

@@ -355,3 +355,6 @@ class LanguageManager {
 }
 
 const languageManager = new LanguageManager();
+
+// Export for global access
+window.languageManager = languageManager;

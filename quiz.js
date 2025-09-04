@@ -480,3 +480,6 @@ class ImportManager {
 }
 
 const quizManager = new QuizManager();
+
+// Export for global access
+window.quizManager = quizManager;

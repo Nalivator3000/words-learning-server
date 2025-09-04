@@ -473,3 +473,6 @@ class SurvivalMode {
         });
     }
 }
+
+// Export for global access
+window.SurvivalMode = SurvivalMode;
