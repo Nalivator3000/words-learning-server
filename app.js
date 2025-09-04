@@ -196,6 +196,10 @@ class LanguageLearningApp {
         document.getElementById('exportLearnedBtn').addEventListener('click', () => this.exportWords('learned'));
         document.getElementById('exportAllBtn').addEventListener('click', () => this.exportWords());
         
+        // Image functionality
+        document.getElementById('fetchImagesBtn').addEventListener('click', () => this.startImageFetching());
+        document.getElementById('imageStatsBtn').addEventListener('click', () => this.showImageStats());
+        
         // Settings functionality
         document.getElementById('addLanguagePairBtn').addEventListener('click', () => this.showLanguagePairDialog());
         document.getElementById('lessonSizeInput').addEventListener('change', (e) => this.updateLessonSize(e.target.value));
@@ -567,7 +571,17 @@ class LanguageLearningApp {
         document.getElementById('progressFill').style.width = `${progress}%`;
         
         const questionTextEl = document.getElementById('questionText');
+        
+        // Create image element if available
+        const imageHtml = question.imageUrl ? 
+            `<div class="question-image-container" style="text-align: center; margin-bottom: 15px;">
+                <img src="${question.imageUrl}" alt="${question.questionText}" 
+                     style="max-width: 200px; max-height: 150px; border-radius: 8px; box-shadow: 0 2px 8px rgba(0,0,0,0.15);"
+                     onerror="this.style.display='none'">
+            </div>` : '';
+        
         questionTextEl.innerHTML = `
+            ${imageHtml}
             <div style="display: flex; align-items: center; gap: 10px; margin-bottom: 10px;">
                 <strong>${question.questionText}</strong>
             </div>
@@ -652,7 +666,17 @@ class LanguageLearningApp {
         document.getElementById('reviewProgressFill').style.width = `${progress}%`;
         
         const questionTextEl = document.getElementById('reviewQuestionText');
+        
+        // Create image element if available
+        const imageHtml = question.imageUrl ? 
+            `<div class="question-image-container" style="text-align: center; margin-bottom: 15px;">
+                <img src="${question.imageUrl}" alt="${question.questionText}" 
+                     style="max-width: 200px; max-height: 150px; border-radius: 8px; box-shadow: 0 2px 8px rgba(0,0,0,0.15);"
+                     onerror="this.style.display='none'">
+            </div>` : '';
+        
         questionTextEl.innerHTML = `
+            ${imageHtml}
             <div style="display: flex; align-items: center; gap: 10px; margin-bottom: 10px;">
                 <strong>${question.questionText}</strong>
             </div>
@@ -1641,6 +1665,28 @@ class LanguageLearningApp {
             setTimeout(() => {
                 statusEl.style.display = 'none';
             }, 5000);
+        }
+    }
+
+    // Image management methods
+    async startImageFetching() {
+        if (window.imageBatchProcessor) {
+            await window.imageBatchProcessor.startProcessing();
+        } else {
+            alert('Модуль загрузки изображений не доступен. Убедитесь, что скрипты загружены правильно.');
+        }
+    }
+
+    async showImageStats() {
+        if (window.imageBatchProcessor) {
+            const stats = await window.imageBatchProcessor.getImageStats();
+            alert(`📊 Статистика изображений:\n\n` +
+                  `Всего слов: ${stats.total}\n` +
+                  `С изображениями: ${stats.withImages}\n` +
+                  `Без изображений: ${stats.withoutImages}\n` +
+                  `Покрытие: ${stats.percentage}%`);
+        } else {
+            alert('Модуль статистики изображений не доступен.');
         }
     }
 }

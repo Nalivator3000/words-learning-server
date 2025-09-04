@@ -213,6 +213,18 @@
                         <button id="exportLearnedBtn" class="export-btn">Экспорт изученных слов</button>
                         <button id="exportAllBtn" class="export-btn">Экспорт всех слов</button>
                     </div>
+                    <div class="image-section">
+                        <h3>🖼️ Изображения для слов</h3>
+                        <p style="font-size: 0.9em; color: #666; margin-bottom: 15px;">
+                            Загрузите изображения для всех слов в базе данных для улучшения запоминания
+                        </p>
+                        <button id="fetchImagesBtn" class="action-btn" style="background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);">
+                            🚀 Загрузить изображения
+                        </button>
+                        <button id="imageStatsBtn" class="action-btn" style="background: #6c757d; margin-left: 10px;">
+                            📊 Статистика изображений
+                        </button>
+                    </div>
                     <div class="word-lists">
                         <div class="list-section">
                             <h3>Изучаемые слова (<span id="studyingListCount">0</span>)</h3>
@@ -274,6 +286,8 @@
     <script src="language-manager.js"></script>
     <script src="user-manager.js"></script>
     <script src="survival-mode.js"></script>
+    <script src="image-fetcher.js"></script>
+    <script src="fetch-images.js"></script>
     <script src="app.js"></script>
 </body>
 </html>

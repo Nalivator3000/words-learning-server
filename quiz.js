@@ -80,6 +80,7 @@ class QuizManager {
             type: 'multiple',
             questionText: correctWord.translation,
             example: correctWord.exampleTranslation,
+            imageUrl: correctWord.imageUrl, // Add image support
             choices: choices,
             correctAnswer: correctWord.word,
             wordId: correctWord.id
@@ -105,6 +106,7 @@ class QuizManager {
             type: 'reverse_multiple',
             questionText: correctWord.word,
             example: correctWord.example,
+            imageUrl: correctWord.imageUrl, // Add image support
             choices: choices,
             correctAnswer: correctWord.translation,
             wordId: correctWord.id
@@ -128,6 +130,7 @@ class QuizManager {
             type: 'word_building',
             questionText: word.translation,
             example: word.exampleTranslation,
+            imageUrl: word.imageUrl, // Add image support
             letters: allLetters,
             correctAnswer: word.word,
             wordId: word.id
@@ -139,6 +142,7 @@ class QuizManager {
             type: 'typing',
             questionText: word.translation,
             example: word.exampleTranslation,
+            imageUrl: word.imageUrl, // Add image support
             correctAnswer: word.word,
             wordId: word.id
         };
