@@ -50,25 +50,43 @@ class SurvivalMode {
 
     showSurvivalInterface() {
         // Hide other interfaces
-        document.getElementById('studyModeSelect').style.display = 'none';
-        document.getElementById('quizArea').classList.add('hidden');
+        const studyModeSelect = document.getElementById('studyModeSelect');
+        const quizArea = document.getElementById('quizArea');
+        
+        if (studyModeSelect) studyModeSelect.style.display = 'none';
+        if (quizArea) quizArea.classList.add('hidden');
         
         // Show survival interface
-        document.getElementById('survivalArea').classList.remove('hidden');
+        const survivalArea = document.getElementById('survivalArea');
+        if (survivalArea) {
+            survivalArea.classList.remove('hidden');
+        } else {
+            throw new Error('Survival area not found in DOM');
+        }
         
-        // Hide end game buttons
-        document.getElementById('survivalRestart').classList.add('hidden');
-        document.getElementById('survivalExit').classList.add('hidden');
+        // Hide end game buttons if they exist
+        const survivalRestart = document.getElementById('survivalRestart');
+        const survivalExit = document.getElementById('survivalExit');
         
-        // Clear feedback
-        document.getElementById('survivalFeedback').textContent = '';
-        document.getElementById('survivalFeedback').className = 'survival-feedback';
+        if (survivalRestart) survivalRestart.classList.add('hidden');
+        if (survivalExit) survivalExit.classList.add('hidden');
+        
+        // Clear feedback if element exists
+        const survivalFeedback = document.getElementById('survivalFeedback');
+        if (survivalFeedback) {
+            survivalFeedback.textContent = '';
+            survivalFeedback.className = 'survival-feedback';
+        }
     }
 
     updateStats() {
-        document.getElementById('survivalScore').textContent = this.score;
-        document.getElementById('survivalErrors').textContent = `${this.errors}/${this.maxErrors}`;
-        document.getElementById('survivalTime').textContent = this.currentTime;
+        const survivalScore = document.getElementById('survivalScore');
+        const survivalErrors = document.getElementById('survivalErrors');
+        const survivalTime = document.getElementById('survivalTime');
+        
+        if (survivalScore) survivalScore.textContent = this.score;
+        if (survivalErrors) survivalErrors.textContent = `${this.errors}/${this.maxErrors}`;
+        if (survivalTime) survivalTime.textContent = this.currentTime;
     }
 
     nextQuestion() {
@@ -79,18 +97,28 @@ class SurvivalMode {
         this.updateStats();
         
         // Clear previous feedback and styles
-        document.getElementById('survivalFeedback').textContent = '';
-        document.getElementById('survivalFeedback').className = 'survival-feedback';
+        const survivalFeedback = document.getElementById('survivalFeedback');
+        if (survivalFeedback) {
+            survivalFeedback.textContent = '';
+            survivalFeedback.className = 'survival-feedback';
+        }
 
         // Generate question
         this.generateQuestion();
         
         // Enable choices and reset selection
         this.selectedChoice = 1;
-        document.getElementById('choice1').disabled = false;
-        document.getElementById('choice2').disabled = false;
-        document.getElementById('choice1').className = 'survival-choice selected';
-        document.getElementById('choice2').className = 'survival-choice';
+        const choice1 = document.getElementById('choice1');
+        const choice2 = document.getElementById('choice2');
+        
+        if (choice1) {
+            choice1.disabled = false;
+            choice1.className = 'survival-choice selected';
+        }
+        if (choice2) {
+            choice2.disabled = false;
+            choice2.className = 'survival-choice';
+        }
 
         // Start timer
         this.startTimer();
@@ -232,10 +260,17 @@ class SurvivalMode {
         const isCorrect = choice.dataset.correct === 'true';
         
         // Disable both choices and remove selection
-        document.getElementById('choice1').disabled = true;
-        document.getElementById('choice2').disabled = true;
-        document.getElementById('choice1').classList.remove('selected');
-        document.getElementById('choice2').classList.remove('selected');
+        const choice1 = document.getElementById('choice1');
+        const choice2 = document.getElementById('choice2');
+        
+        if (choice1) {
+            choice1.disabled = true;
+            choice1.classList.remove('selected');
+        }
+        if (choice2) {
+            choice2.disabled = true;
+            choice2.classList.remove('selected');
+        }
 
         if (isCorrect) {
             this.handleCorrectAnswer(choice);
@@ -273,8 +308,11 @@ class SurvivalMode {
 
         // Visual feedback
         choice.classList.add('correct');
-        document.getElementById('survivalFeedback').textContent = 'Правильно! +1 очко';
-        document.getElementById('survivalFeedback').className = 'survival-feedback correct';
+        const survivalFeedback = document.getElementById('survivalFeedback');
+        if (survivalFeedback) {
+            survivalFeedback.textContent = 'Правильно! +1 очко';
+            survivalFeedback.className = 'survival-feedback correct';
+        }
 
         // Update word progress
         if (this.currentQuestion && this.currentQuestion.correctId) {
@@ -308,8 +346,11 @@ class SurvivalMode {
             });
         }
 
-        document.getElementById('survivalFeedback').textContent = `${message} Правильный ответ: ${this.currentQuestion.correctAnswer}`;
-        document.getElementById('survivalFeedback').className = `survival-feedback ${type}`;
+        const survivalFeedback = document.getElementById('survivalFeedback');
+        if (survivalFeedback) {
+            survivalFeedback.textContent = `${message} Правильный ответ: ${this.currentQuestion.correctAnswer}`;
+            survivalFeedback.className = `survival-feedback ${type}`;
+        }
 
         // Update word progress (mark as incorrect)
         if (this.currentQuestion && this.currentQuestion.correctId) {
