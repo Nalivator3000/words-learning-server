@@ -1772,7 +1772,22 @@ class LanguageLearningApp {
 // Initialize app when DOM is loaded
 document.addEventListener('DOMContentLoaded', () => {
     console.log('🚀 DOM loaded, initializing app...');
-    window.app = new LanguageLearningApp();
+    try {
+        window.app = new LanguageLearningApp();
+        
+        // Initialize router if available and user is logged in
+        setTimeout(() => {
+            const isLoggedIn = localStorage.getItem('currentUser') || localStorage.getItem('emergencyUser');
+            if (isLoggedIn && typeof Router !== 'undefined' && !window.router) {
+                window.router = new Router();
+                window.router.init();
+            }
+        }, 500);
+        
+    } catch (error) {
+        console.error('❌ Main app initialization failed:', error);
+        // Emergency login will handle fallback
+    }
 });
 
 // Fallback initialization if DOMContentLoaded already fired
@@ -1780,5 +1795,20 @@ if (document.readyState === 'loading') {
     console.log('📄 Document still loading, waiting for DOMContentLoaded...');
 } else {
     console.log('📄 Document already loaded, initializing app immediately...');
-    window.app = new LanguageLearningApp();
+    try {
+        window.app = new LanguageLearningApp();
+        
+        // Initialize router if available and user is logged in
+        setTimeout(() => {
+            const isLoggedIn = localStorage.getItem('currentUser') || localStorage.getItem('emergencyUser');
+            if (isLoggedIn && typeof Router !== 'undefined' && !window.router) {
+                window.router = new Router();
+                window.router.init();
+            }
+        }, 500);
+        
+    } catch (error) {
+        console.error('❌ Main app initialization failed:', error);
+        // Emergency login will handle fallback
+    }
 }

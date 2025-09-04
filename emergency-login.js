@@ -217,12 +217,32 @@ function initializeMainApp(userData) {
             }
         }
         
-        // Add basic navigation handlers if main app handlers aren't working
-        this.setupBasicNavigation();
+        // Initialize router for multi-page navigation
+        this.initializeRouter();
         
     } catch (error) {
         console.error('❌ Error initializing main app:', error);
         showBasicEmergencyInterface();
+    }
+}
+
+// Initialize router for URL-based navigation
+function initializeRouter() {
+    console.log('🧭 Initializing router...');
+    
+    if (typeof Router !== 'undefined') {
+        // Create router instance
+        window.router = new Router();
+        
+        // Initialize router after small delay to ensure DOM is ready
+        setTimeout(() => {
+            window.router.init();
+        }, 300);
+        
+        console.log('✅ Router initialized');
+    } else {
+        console.warn('⚠️ Router class not available, falling back to basic navigation');
+        setupBasicNavigation();
     }
 }
 

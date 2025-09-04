@@ -147,27 +147,32 @@ class AutoUITester {
         }
     }
 
-    // Test navigation buttons
+    // Test navigation buttons and routing
     async testNavigationButtons() {
         this.currentTest = 'Navigation';
-        this.log('🧭 Testing navigation buttons...');
+        this.log('🧭 Testing navigation buttons and routing...');
 
         const navButtons = [
-            { id: '#homeBtn', name: 'Home' },
-            { id: '#importBtn', name: 'Import' },
-            { id: '#studyBtn', name: 'Study' },
-            { id: '#reviewBtn', name: 'Review' },
-            { id: '#statsBtn', name: 'Stats' }
+            { id: '#homeBtn', name: 'Home', path: '/' },
+            { id: '#importBtn', name: 'Import', path: '/import' },
+            { id: '#studyBtn', name: 'Study', path: '/study' },
+            { id: '#reviewBtn', name: 'Review', path: '/review' },
+            { id: '#statsBtn', name: 'Stats', path: '/stats' }
         ];
 
         for (const button of navButtons) {
             await this.safeClick(button.id, `Navigation-${button.name}`);
-            await this.wait(300);
+            await this.wait(500);
             
             // Check if button becomes active
             const element = document.querySelector(button.id);
             if (element && element.classList.contains('active')) {
                 this.log(`✅ Navigation to ${button.name} successful`);
+            }
+            
+            // Check URL routing
+            if (window.router && window.location.pathname === button.path) {
+                this.log(`✅ URL routing to ${button.path} successful`);
             }
         }
     }
