@@ -109,8 +109,36 @@ class LanguageLearningApp {
         this.init();
     }
 
+    verifyDOMElements() {
+        const criticalElements = [
+            'loginBtn', 'registerBtn', 'loginEmail', 'loginPassword',
+            'homeBtn', 'studyBtn', 'reviewBtn', 'statsBtn'
+        ];
+
+        const missing = [];
+        for (const id of criticalElements) {
+            if (!document.getElementById(id)) {
+                missing.push(id);
+            }
+        }
+
+        if (missing.length > 0) {
+            console.error('❌ Missing critical DOM elements:', missing);
+            alert('Ошибка загрузки интерфейса. Перезагрузите страницу.');
+            return false;
+        }
+
+        console.log('✅ All critical DOM elements found');
+        return true;
+    }
+
     async init() {
         try {
+            console.log('🔧 Initializing app components...');
+            
+            // Verify DOM elements exist
+            this.verifyDOMElements();
+            
             await database.init();
             
             // Initialize language management
@@ -119,6 +147,7 @@ class LanguageLearningApp {
             // Initialize user management
             const isLoggedIn = await userManager.init();
             
+            console.log('🔌 Setting up event listeners...');
             this.setupEventListeners();
             this.setupAuthListeners();
             this.setupLanguageListeners();
@@ -1724,5 +1753,14 @@ class LanguageLearningApp {
 
 // Initialize app when DOM is loaded
 document.addEventListener('DOMContentLoaded', () => {
+    console.log('🚀 DOM loaded, initializing app...');
     window.app = new LanguageLearningApp();
 });
+
+// Fallback initialization if DOMContentLoaded already fired
+if (document.readyState === 'loading') {
+    console.log('📄 Document still loading, waiting for DOMContentLoaded...');
+} else {
+    console.log('📄 Document already loaded, initializing app immediately...');
+    window.app = new LanguageLearningApp();
+}
