@@ -1171,6 +1171,14 @@ class LanguageLearningApp {
                 this.handleWordBuildingEnter(wordInput, question);
             }
         };
+        
+        // Handle backspace to return letters to tile pool
+        wordInput.onkeydown = (e) => {
+            if (e.key === 'Backspace' && wordInput.value.length > 0 && !wordInput.disabled) {
+                e.preventDefault(); // Prevent default backspace
+                this.handleLetterDelete(wordInput, letterTiles);
+            }
+        };
         wordBuildingArea.appendChild(wordInput);
         
         // Letter tiles
@@ -1231,6 +1239,27 @@ class LanguageLearningApp {
         letterTiles.querySelectorAll('.letter-tile').forEach(tile => {
             tile.disabled = false;
         });
+        wordInput.focus();
+    }
+    
+    handleLetterDelete(wordInput, letterTiles) {
+        if (wordInput.disabled || wordInput.value.length === 0) return;
+        
+        // Get the last letter from input
+        const lastLetter = wordInput.value.slice(-1);
+        
+        // Remove last letter from input
+        wordInput.value = wordInput.value.slice(0, -1);
+        
+        // Find the first disabled tile with this letter and re-enable it
+        const disabledTiles = letterTiles.querySelectorAll('.letter-tile:disabled');
+        for (const tile of disabledTiles) {
+            if (tile.dataset.letter === lastLetter) {
+                tile.disabled = false;
+                break; // Only re-enable the first matching tile
+            }
+        }
+        
         wordInput.focus();
     }
     

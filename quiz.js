@@ -114,17 +114,11 @@ class QuizManager {
     }
 
     createWordBuildingQuestion(word) {
-        // Create shuffled letters for the word
+        // Create shuffled letters for the word - only letters actually needed
         const letters = word.word.toLowerCase().split('');
         
-        // Add some extra random letters to make it more challenging
-        const extraLetters = 'abcdefghijklmnopqrstuvwxyzäöüß'.split('');
-        const randomLetters = extraLetters
-            .filter(l => !letters.includes(l))
-            .sort(() => 0.5 - Math.random())
-            .slice(0, Math.min(4, 10 - letters.length));
-        
-        const allLetters = [...letters, ...randomLetters].sort(() => 0.5 - Math.random());
+        // Shuffle only the letters from the word (no extra letters)
+        const allLetters = [...letters].sort(() => 0.5 - Math.random());
 
         return {
             type: 'word_building',
