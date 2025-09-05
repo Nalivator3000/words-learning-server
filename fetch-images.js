@@ -256,14 +256,23 @@ class ImageBatchProcessor {
     // Статистика изображений
     async getImageStats() {
         const words = await this.getAllWordsFromDatabase();
-        const withImages = words.filter(word => word.imageUrl).length;
+        const withImages = words.filter(word => word.imageUrl && word.imageUrl.trim() !== '').length;
         const withoutImages = words.length - withImages;
+        
+        // Debug info
+        console.log('📊 Image statistics debug:');
+        console.log('Total words:', words.length);
+        const wordsWithImages = words.filter(word => word.imageUrl && word.imageUrl.trim() !== '');
+        console.log('Words with images:', wordsWithImages.length);
+        if (wordsWithImages.length > 0) {
+            console.log('Sample imageUrl:', wordsWithImages[0].imageUrl);
+        }
         
         const stats = {
             total: words.length,
             withImages,
             withoutImages,
-            percentage: Math.round((withImages / words.length) * 100)
+            percentage: words.length > 0 ? Math.round((withImages / words.length) * 100) : 0
         };
 
         console.table(stats);

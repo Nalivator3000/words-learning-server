@@ -255,6 +255,8 @@ class LanguageLearningApp {
         // Settings functionality
         document.getElementById('addLanguagePairBtn').addEventListener('click', () => this.showLanguagePairDialog());
         document.getElementById('lessonSizeInput').addEventListener('change', (e) => this.updateLessonSize(e.target.value));
+        document.getElementById('saveLessonSizeBtn').addEventListener('click', () => this.saveLessonSize());
+        document.getElementById('editWordsBtn').addEventListener('click', () => this.toggleWordEditor());
         document.getElementById('syncBtn').addEventListener('click', () => this.syncWithServer());
     }
 
@@ -845,17 +847,18 @@ class LanguageLearningApp {
         if (result.correct) {
             buttonEl.classList.add('correct');
             // Add audio button to correct answer if it's foreign language
-            if (this.shouldShowAudioButton(buttonEl.textContent)) {
-                this.addAudioToButton(buttonEl, buttonEl.textContent);
+            if (this.shouldShowAudioButton(answer)) {
+                this.addAudioToButton(buttonEl, answer);
             }
         } else {
             buttonEl.classList.add('incorrect');
             // Highlight correct answer and add audio if foreign language
             document.querySelectorAll('.choice-btn').forEach(btn => {
-                if (btn.textContent === result.correctAnswer) {
+                const btnText = btn.textContent.replace(/^\d+\.\s*/, ''); // Remove number prefix
+                if (btnText === result.correctAnswer) {
                     btn.classList.add('correct');
-                    if (this.shouldShowAudioButton(btn.textContent)) {
-                        this.addAudioToButton(btn, btn.textContent);
+                    if (this.shouldShowAudioButton(result.correctAnswer)) {
+                        this.addAudioToButton(btn, result.correctAnswer);
                     }
                 }
             });
@@ -897,16 +900,17 @@ class LanguageLearningApp {
         if (result.correct) {
             buttonEl.classList.add('correct');
             // Add audio button to correct answer if it's foreign language
-            if (this.shouldShowAudioButton(buttonEl.textContent)) {
-                this.addAudioToButton(buttonEl, buttonEl.textContent);
+            if (this.shouldShowAudioButton(answer)) {
+                this.addAudioToButton(buttonEl, answer);
             }
         } else {
             buttonEl.classList.add('incorrect');
             document.querySelectorAll('#reviewAnswerArea .choice-btn').forEach(btn => {
-                if (btn.textContent === result.correctAnswer) {
+                const btnText = btn.textContent.replace(/^\d+\.\s*/, ''); // Remove number prefix
+                if (btnText === result.correctAnswer) {
                     btn.classList.add('correct');
-                    if (this.shouldShowAudioButton(btn.textContent)) {
-                        this.addAudioToButton(btn, btn.textContent);
+                    if (this.shouldShowAudioButton(result.correctAnswer)) {
+                        this.addAudioToButton(btn, result.correctAnswer);
                     }
                 }
             });
@@ -1673,6 +1677,36 @@ class LanguageLearningApp {
         }
     }
 
+    async saveLessonSize() {
+        const input = document.getElementById('lessonSizeInput');
+        const size = parseInt(input.value);
+        
+        if (size < 5 || size > 50) {
+            alert('Размер урока должен быть от 5 до 50 слов');
+            return;
+        }
+        
+        try {
+            await userManager.setLessonSize(size);
+            
+            // Visual feedback
+            const button = document.getElementById('saveLessonSizeBtn');
+            const originalText = button.textContent;
+            button.textContent = '✅ Сохранено!';
+            button.style.background = '#4CAF50';
+            
+            setTimeout(() => {
+                button.textContent = originalText;
+                button.style.background = '';
+            }, 2000);
+            
+            console.log(`💾 Lesson size saved: ${size} words per lesson`);
+        } catch (error) {
+            console.error('Error saving lesson size:', error);
+            alert('Ошибка при сохранении настройки');
+        }
+    }
+
     async syncWithServer() {
         const statusEl = document.getElementById('syncStatus');
         statusEl.textContent = 'Экспорт данных...';
@@ -1908,6 +1942,135 @@ class LanguageLearningApp {
                 importStatus.innerHTML = `<div style="color: #f44336;">❌ Ошибка очистки: ${error.message}</div>`;
             }
         }
+    }
+    
+    // Word Editor functionality
+    async toggleWordEditor() {
+        const editor = document.getElementById('wordEditor');
+        const btn = document.getElementById('editWordsBtn');
+        
+        if (editor.classList.contains('hidden')) {
+            btn.textContent = '⌛ Загрузка...';
+            btn.disabled = true;
+            
+            await this.loadWordEditor();
+            editor.classList.remove('hidden');
+            
+            btn.textContent = '✕ Закрыть редактор';
+            btn.disabled = false;
+        } else {
+            editor.classList.add('hidden');
+            btn.textContent = '📝 Редактировать слова';
+        }
+    }
+    
+    async loadWordEditor() {
+        try {
+            const words = await database.getAllWords();
+            const editorContent = document.getElementById('wordEditorContent');
+            
+            if (words.length === 0) {
+                editorContent.innerHTML = '<p style="text-align: center; color: #666;">Нет слов для редактирования</p>';
+                return;
+            }
+            
+            const studyingWords = words.filter(w => w.status === 'studying');
+            const reviewWords = words.filter(w => w.status === 'review');
+            const learnedWords = words.filter(w => w.status === 'learned');
+            
+            editorContent.innerHTML = `
+                <div class="word-editor-header">
+                    <div class="word-editor-stats">
+                        <strong>Всего слов: ${words.length}</strong> | 
+                        📚 Изучаемые: ${studyingWords.length} | 
+                        🔄 Повторение: ${reviewWords.length} | 
+                        ✅ Изучено: ${learnedWords.length}
+                    </div>
+                    <button class="close-editor-btn" onclick="window.app.toggleWordEditor()">✕ Закрыть</button>
+                </div>
+                <div class="word-list">
+                    ${words.map(word => this.createWordItem(word)).join('')}
+                </div>
+            `;
+            
+        } catch (error) {
+            console.error('Error loading word editor:', error);
+            document.getElementById('wordEditorContent').innerHTML = '<p style="color: #f44336;">Ошибка загрузки редактора слов</p>';
+        }
+    }
+    
+    createWordItem(word) {
+        const statusLabels = {
+            'studying': 'Изучается',
+            'review': 'Повторение', 
+            'learned': 'Изучено'
+        };
+        
+        return `
+            <div class="word-item" data-word-id="${word.id}">
+                <div class="word-details">
+                    <div class="word-text">${word.word}</div>
+                    <div class="word-translation">${word.translation}</div>
+                    <span class="word-status ${word.status}">${statusLabels[word.status] || word.status}</span>
+                </div>
+                <div class="word-actions">
+                    ${word.status !== 'studying' ? '<button class="word-action-btn move-studying" onclick="window.app.moveWord(' + word.id + ', \'studying\')">📚 В изучение</button>' : ''}
+                    ${word.status !== 'review' ? '<button class="word-action-btn move-review" onclick="window.app.moveWord(' + word.id + ', \'review\')">🔄 В повторение</button>' : ''}
+                    ${word.status !== 'learned' ? '<button class="word-action-btn move-learned" onclick="window.app.moveWord(' + word.id + ', \'learned\')">✅ В изученные</button>' : ''}
+                    <button class="word-action-btn delete" onclick="window.app.deleteWord(${word.id})">🗑️ Удалить</button>
+                </div>
+            </div>
+        `;
+    }
+    
+    async moveWord(wordId, newStatus) {
+        try {
+            await database.updateWordStatus(wordId, newStatus);
+            console.log(`✅ Word ${wordId} moved to ${newStatus}`);
+            
+            // Reload editor to show changes
+            await this.loadWordEditor();
+            
+            // Show feedback
+            this.showWordActionFeedback(`Слово перемещено в "${newStatus === 'studying' ? 'Изучение' : newStatus === 'review' ? 'Повторение' : 'Изучено'}"`);
+            
+        } catch (error) {
+            console.error('Error moving word:', error);
+            alert('Ошибка при перемещении слова');
+        }
+    }
+    
+    async deleteWord(wordId) {
+        if (!confirm('Вы уверены, что хотите удалить это слово?')) return;
+        
+        try {
+            await database.deleteWord(wordId);
+            console.log(`✅ Word ${wordId} deleted`);
+            
+            // Reload editor to show changes
+            await this.loadWordEditor();
+            
+            // Show feedback
+            this.showWordActionFeedback('Слово удалено');
+            
+        } catch (error) {
+            console.error('Error deleting word:', error);
+            alert('Ошибка при удалении слова');
+        }
+    }
+    
+    showWordActionFeedback(message) {
+        const editorHeader = document.querySelector('.word-editor-header');
+        if (!editorHeader) return;
+        
+        const feedback = document.createElement('div');
+        feedback.style.cssText = 'position: absolute; top: -30px; left: 50%; transform: translateX(-50%); background: #4CAF50; color: white; padding: 8px 15px; border-radius: 5px; font-size: 0.9em; z-index: 1000;';
+        feedback.textContent = message;
+        
+        editorHeader.style.position = 'relative';
+        editorHeader.appendChild(feedback);
+        
+        setTimeout(() => feedback.remove(), 2000);
     }
     
     // Mobile exercise mode management

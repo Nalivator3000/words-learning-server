@@ -1403,6 +1403,159 @@ main {
     }
 }
 
+/* Word Editor Styles */
+.word-editor {
+    margin-top: 20px;
+    border: 1px solid #ddd;
+    border-radius: 10px;
+    padding: 20px;
+    background: #f8f9fa;
+}
+
+.word-editor-content {
+    max-height: 400px;
+    overflow-y: auto;
+}
+
+.word-item {
+    background: white;
+    border: 1px solid #e9ecef;
+    border-radius: 8px;
+    padding: 15px;
+    margin-bottom: 10px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    transition: all 0.3s ease;
+}
+
+.word-item:hover {
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+    border-color: #3498db;
+}
+
+.word-details {
+    flex: 1;
+    margin-right: 15px;
+}
+
+.word-text {
+    font-weight: bold;
+    color: #2c3e50;
+    font-size: 1.1em;
+    margin-bottom: 5px;
+}
+
+.word-translation {
+    color: #7f8c8d;
+    font-size: 0.95em;
+    margin-bottom: 3px;
+}
+
+.word-status {
+    font-size: 0.85em;
+    padding: 2px 8px;
+    border-radius: 12px;
+    font-weight: 500;
+}
+
+.word-status.studying {
+    background: #e3f2fd;
+    color: #1565c0;
+}
+
+.word-status.review {
+    background: #fff3e0;
+    color: #ef6c00;
+}
+
+.word-status.learned {
+    background: #e8f5e8;
+    color: #2e7d32;
+}
+
+.word-actions {
+    display: flex;
+    gap: 8px;
+    flex-wrap: wrap;
+}
+
+.word-action-btn {
+    padding: 5px 10px;
+    border: 1px solid #ddd;
+    background: white;
+    border-radius: 5px;
+    cursor: pointer;
+    font-size: 0.8em;
+    transition: all 0.2s ease;
+}
+
+.word-action-btn:hover {
+    background: #f8f9fa;
+    border-color: #3498db;
+}
+
+.word-action-btn.move-studying {
+    border-color: #2196F3;
+    color: #2196F3;
+}
+
+.word-action-btn.move-review {
+    border-color: #FF9800;
+    color: #FF9800;
+}
+
+.word-action-btn.move-learned {
+    border-color: #4CAF50;
+    color: #4CAF50;
+}
+
+.word-action-btn.delete {
+    border-color: #f44336;
+    color: #f44336;
+}
+
+.word-editor-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 20px;
+    padding-bottom: 15px;
+    border-bottom: 2px solid #e9ecef;
+}
+
+.word-editor-stats {
+    font-size: 0.9em;
+    color: #6c757d;
+}
+
+.close-editor-btn {
+    background: #6c757d;
+    color: white;
+    border: none;
+    padding: 8px 15px;
+    border-radius: 5px;
+    cursor: pointer;
+    font-size: 0.9em;
+}
+
+.close-editor-btn:hover {
+    background: #5a6268;
+}
+
+@media (max-width: 768px) {
+    .word-item {
+        flex-direction: column;
+        align-items: flex-start;
+        gap: 10px;
+    }
+    
+    .word-actions {
+        width: 100%;
+        justify-content: flex-start;
+    }
+}
+
 .survival-choice {
     background: rgba(255, 255, 255, 0.1);
     color: white;

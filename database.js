@@ -318,6 +318,50 @@ class Database {
             request.onerror = () => reject(request.error);
         });
     }
+    
+    // Word management methods for editor
+    async updateWordStatus(wordId, newStatus) {
+        return new Promise((resolve, reject) => {
+            const transaction = this.db.transaction(['words'], 'readwrite');
+            const store = transaction.objectStore('words');
+            
+            const getRequest = store.get(wordId);
+            getRequest.onsuccess = () => {
+                const word = getRequest.result;
+                if (!word) {
+                    reject(new Error('Word not found'));
+                    return;
+                }
+                
+                word.status = newStatus;
+                word.lastStudied = new Date().toISOString();
+                
+                // Reset progress when moving to studying
+                if (newStatus === 'studying') {
+                    word.correctCount = 0;
+                    word.incorrectCount = 0;
+                    word.nextReview = null;
+                }
+                
+                const putRequest = store.put(word);
+                putRequest.onsuccess = () => resolve(word);
+                putRequest.onerror = () => reject(putRequest.error);
+            };
+            
+            getRequest.onerror = () => reject(getRequest.error);
+        });
+    }
+    
+    async deleteWord(wordId) {
+        return new Promise((resolve, reject) => {
+            const transaction = this.db.transaction(['words'], 'readwrite');
+            const store = transaction.objectStore('words');
+            
+            const deleteRequest = store.delete(wordId);
+            deleteRequest.onsuccess = () => resolve();
+            deleteRequest.onerror = () => reject(deleteRequest.error);
+        });
+    }
 }
 
 const database = new Database();

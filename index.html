@@ -17,7 +17,7 @@
     <div id="authModal" class="auth-modal">
         <div class="auth-content">
             <div style="position: absolute; top: 10px; right: 15px; font-size: 10px; color: #888; font-family: monospace;">
-                Build: MEMPRIZATOR-2025.01.09-19:30 📱 MOBILE READY
+                Build: MEMPRIZATOR-2025.01.09-20:15 🎯 FEATURE COMPLETE
             </div>
             <h2 data-translate="welcome">Добро пожаловать!</h2>
             <div id="authTabs" class="auth-tabs">
@@ -52,7 +52,7 @@
         <header>
             <h1 data-translate="appTitle">Memprizator</h1>
             <div style="position: absolute; top: 5px; right: 10px; font-size: 9px; color: #666; font-family: monospace; background: rgba(255,255,255,0.8); padding: 2px 6px; border-radius: 3px;">
-                Build: MEMPRIZATOR-2025.01.09-19:30 📱 MOBILE READY
+                Build: MEMPRIZATOR-2025.01.09-20:15 🎯 FEATURE COMPLETE
             </div>
             <div class="header-user">
                 <span id="userInfo" class="user-info"></span>
@@ -162,7 +162,7 @@
                     <!-- Survival Mode Area -->
                     <div id="survivalArea" class="survival-area hidden">
                         <div style="position: absolute; top: 5px; right: 10px; font-size: 8px; color: rgba(255,255,255,0.6); font-family: monospace;">
-                            Build: MEMPRIZATOR-2025.01.09-19:30 📱 MOBILE READY
+                            Build: MEMPRIZATOR-2025.01.09-20:15 🎯 FEATURE COMPLETE
                         </div>
                         <div class="survival-stats">
                             <div class="survival-stat">
@@ -302,6 +302,22 @@
                             <span data-translate="wordsPerLesson">Количество слов в уроке:</span>
                             <input type="number" id="lessonSizeInput" min="5" max="50" value="10">
                         </label>
+                        <button id="saveLessonSizeBtn" class="action-btn" style="margin-top: 10px;">Сохранить настройку</button>
+                    </div>
+
+                    <div class="settings-group">
+                        <h3>📝 Редактирование списков слов</h3>
+                        <p style="font-size: 0.9em; color: #666; margin-bottom: 15px;">
+                            Управляйте своими словами: перемещайте между списками, удаляйте или редактируйте
+                        </p>
+                        <div style="display: flex; gap: 10px; flex-wrap: wrap; margin-bottom: 15px;">
+                            <button id="editWordsBtn" class="action-btn" style="background: #3498db;">
+                                📝 Редактировать слова
+                            </button>
+                        </div>
+                        <div id="wordEditor" class="word-editor hidden">
+                            <div id="wordEditorContent" class="word-editor-content"></div>
+                        </div>
                     </div>
 
                     <div class="settings-group">
