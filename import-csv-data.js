@@ -211,7 +211,7 @@ function setupRootUser() {
     if (!window.userManager.currentUser) {
         window.userManager.currentUser = {
             id: 'root-user',
-            name: 'Root User', 
+            name: 'root', 
             email: 'root',
             languagePairs: [{
                 id: 'german-russian',

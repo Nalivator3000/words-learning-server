@@ -1,4 +1,4 @@
-// Simple Router System for Rememberizor
+// Simple Router System for Memorizator
 // Enables each section to have its own URL
 
 class Router {
@@ -24,7 +24,7 @@ class Router {
             name: 'home',
             section: 'homeSection',
             button: 'homeBtn',
-            title: 'Главная - Rememberizor v2.0',
+            title: 'Главная - Memorizator v2.0',
             init: () => this.initHomePage()
         });
         
@@ -32,7 +32,7 @@ class Router {
             name: 'import',
             section: 'importSection', 
             button: 'importBtn',
-            title: 'Импорт - Rememberizor v2.0',
+            title: 'Импорт - Memorizator v2.0',
             init: () => this.initImportPage()
         });
         
@@ -40,7 +40,7 @@ class Router {
             name: 'study',
             section: 'studySection',
             button: 'studyBtn', 
-            title: 'Изучение - Rememberizor v2.0',
+            title: 'Изучение - Memorizator v2.0',
             init: () => this.initStudyPage()
         });
         
@@ -48,7 +48,7 @@ class Router {
             name: 'review',
             section: 'reviewSection',
             button: 'reviewBtn',
-            title: 'Повторение - Rememberizor v2.0', 
+            title: 'Повторение - Memorizator v2.0', 
             init: () => this.initReviewPage()
         });
         
@@ -56,7 +56,7 @@ class Router {
             name: 'stats',
             section: 'statsSection',
             button: 'statsBtn',
-            title: 'Статистика - Rememberizor v2.0',
+            title: 'Статистика - Memorizator v2.0',
             init: () => this.initStatsPage()
         });
         
@@ -64,7 +64,7 @@ class Router {
             name: 'settings',
             section: 'settingsSection',
             button: 'settingsBtn',
-            title: 'Настройки - Rememberizor v2.0',
+            title: 'Настройки - Memorizator v2.0',
             init: () => this.initSettingsPage()
         });
         

@@ -83,7 +83,7 @@ function handleEmergencyLogin() {
         // Create simple user session
         const userData = {
             id: 'root-user',
-            name: 'Root User',
+            name: email, // Use actual username instead of 'Root User'
             email: email,
             loginTime: new Date().toISOString()
         };
@@ -303,9 +303,9 @@ function showBasicEmergencyInterface() {
     if (container) {
         container.innerHTML = `
             <header>
-                <h1>Rememberizor v2.0 - Emergency Mode</h1>
+                <h1>Memorizator v2.0 - Emergency Mode</h1>
                 <div class="header-user">
-                    <span class="user-info">👤 Root User (Emergency)</span>
+                    <span class="user-info" id="emergencyUserInfo">👤 Emergency Mode</span>
                     <button onclick="location.reload()" class="user-menu-btn">🔄</button>
                 </div>
             </header>
@@ -328,6 +328,12 @@ function showBasicEmergencyInterface() {
                 </section>
             </main>
         `;
+        
+        // Update emergency user info with actual username
+        const emergencyUserInfo = document.getElementById('emergencyUserInfo');
+        if (emergencyUserInfo && userData) {
+            emergencyUserInfo.textContent = `👤 ${userData.name} (Emergency)`;
+        }
     }
 }
 
