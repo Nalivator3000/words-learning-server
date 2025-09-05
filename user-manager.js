@@ -383,9 +383,58 @@ class UserManager {
     isLoggedIn() {
         return !!this.currentUser;
     }
+
+    // Initialize default users if they don't exist
+    initializeDefaultUsers() {
+        const users = this.getStoredUsers();
+        const defaultUsers = [
+            {
+                id: 'user_root',
+                name: 'Root',
+                email: 'root',
+                password: this.hashPassword('root'),
+                createdAt: new Date().toISOString(),
+                languagePairs: []
+            },
+            {
+                id: 'user_kate',
+                name: 'Kate',
+                email: 'Kate',
+                password: this.hashPassword('1'),
+                createdAt: new Date().toISOString(),
+                languagePairs: []
+            },
+            {
+                id: 'user_mike',
+                name: 'Mike',
+                email: 'Mike',
+                password: this.hashPassword('1'),
+                createdAt: new Date().toISOString(),
+                languagePairs: []
+            }
+        ];
+
+        let updated = false;
+        for (const defaultUser of defaultUsers) {
+            const existingUser = users.find(u => u.email === defaultUser.email);
+            if (!existingUser) {
+                users.push(defaultUser);
+                updated = true;
+                console.log(`✅ Created default user: ${defaultUser.name} (${defaultUser.email})`);
+            }
+        }
+
+        if (updated) {
+            localStorage.setItem('users', JSON.stringify(users));
+            console.log(`👥 Initialized ${defaultUsers.length} default users`);
+        }
+    }
 }
 
 const userManager = new UserManager();
+
+// Initialize default users on load
+userManager.initializeDefaultUsers();
 
 // Export for global access
 window.userManager = userManager;

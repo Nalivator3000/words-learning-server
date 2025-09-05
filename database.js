@@ -2,6 +2,8 @@ class Database {
     constructor() {
         this.db = null;
         this.version = 1;
+        // ВАЖНО: НЕ ОБНОВЛЯЙ версию базы данных при апдейтах - это сохранит пользовательские данные
+        // Database version should remain stable to preserve user data across updates
     }
 
     async init() {
