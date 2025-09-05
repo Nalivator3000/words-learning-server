@@ -24,7 +24,7 @@ class Router {
             name: 'home',
             section: 'homeSection',
             button: 'homeBtn',
-            title: 'Главная - Memorizator v2.0',
+            title: 'Memorizator v2.0',
             init: () => this.initHomePage()
         });
         

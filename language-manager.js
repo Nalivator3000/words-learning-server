@@ -21,6 +21,9 @@ class LanguageManager {
         
         this.translations = {
             'ru': {
+                // App title
+                'appTitle': 'Memprizator',
+                
                 // Navigation
                 'home': 'Главная',
                 'import': 'Импорт',
@@ -96,6 +99,9 @@ class LanguageManager {
             },
             
             'en': {
+                // App title
+                'appTitle': 'Memprizator',
+                
                 // Navigation
                 'home': 'Home',
                 'import': 'Import',
