@@ -542,15 +542,34 @@ main {
 }
 
 .choice-btn.correct {
-    background: #d4edda;
-    border-color: #2ecc71;
+    background: linear-gradient(135deg, #d4edda 0%, #c3e6cb 100%);
+    border: 2px solid #2ecc71;
     color: #155724;
+    font-weight: bold;
+    box-shadow: 0 3px 10px rgba(46, 204, 113, 0.3);
+    transform: scale(1.02);
+    animation: correctPulse 0.6s ease-in-out;
 }
 
 .choice-btn.incorrect {
-    background: #f8d7da;
-    border-color: #e74c3c;
+    background: linear-gradient(135deg, #f8d7da 0%, #f5c6cb 100%);
+    border: 2px solid #e74c3c;
     color: #721c24;
+    font-weight: bold;
+    box-shadow: 0 3px 10px rgba(231, 76, 60, 0.3);
+    animation: incorrectShake 0.5s ease-in-out;
+}
+
+@keyframes correctPulse {
+    0% { transform: scale(1); }
+    50% { transform: scale(1.05); box-shadow: 0 5px 15px rgba(46, 204, 113, 0.5); }
+    100% { transform: scale(1.02); }
+}
+
+@keyframes incorrectShake {
+    0%, 100% { transform: translateX(0); }
+    25% { transform: translateX(-5px); }
+    75% { transform: translateX(5px); }
 }
 
 .choice-btn:disabled {
