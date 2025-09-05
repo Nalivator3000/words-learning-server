@@ -64,6 +64,11 @@ class SurvivalMode {
             throw new Error('Survival area not found in DOM');
         }
         
+        // Activate mobile exercise mode
+        if (window.app && typeof window.app.activateMobileExerciseMode === 'function') {
+            window.app.activateMobileExerciseMode();
+        }
+        
         // Hide end game buttons if they exist
         const survivalRestart = document.getElementById('survivalRestart');
         const survivalExit = document.getElementById('survivalExit');
@@ -106,14 +111,14 @@ class SurvivalMode {
         // Generate question
         this.generateQuestion();
         
-        // Enable choices and reset selection
-        this.selectedChoice = 1;
+        // Enable choices and reset selection (no default selection)
+        this.selectedChoice = 0; // No default selection
         const choice1 = document.getElementById('choice1');
         const choice2 = document.getElementById('choice2');
         
         if (choice1) {
             choice1.disabled = false;
-            choice1.className = 'survival-choice selected';
+            choice1.className = 'survival-choice'; // Remove default 'selected'
         }
         if (choice2) {
             choice2.disabled = false;
@@ -283,7 +288,9 @@ class SurvivalMode {
         // Update visual selection
         document.getElementById('choice1').classList.remove('selected');
         document.getElementById('choice2').classList.remove('selected');
-        document.getElementById(`choice${this.selectedChoice}`).classList.add('selected');
+        if (this.selectedChoice > 0) {
+            document.getElementById(`choice${this.selectedChoice}`).classList.add('selected');
+        }
     }
 
     selectChoice(choiceNumber) {
@@ -294,7 +301,7 @@ class SurvivalMode {
     }
 
     confirmSelection() {
-        if (this.gameEnded) return;
+        if (this.gameEnded || this.selectedChoice === 0) return;
         
         const choiceElement = document.getElementById(`choice${this.selectedChoice}`);
         if (choiceElement && !choiceElement.disabled) {

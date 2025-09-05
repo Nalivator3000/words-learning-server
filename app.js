@@ -640,11 +640,13 @@ class LanguageLearningApp {
     showQuizInterface() {
         document.getElementById('studyModeSelect').style.display = 'none';
         document.getElementById('quizArea').classList.remove('hidden');
+        this.activateMobileExerciseMode();
     }
 
     showReviewInterface() {
         document.getElementById('reviewModeSelect').style.display = 'none';
         document.getElementById('reviewQuizArea').classList.remove('hidden');
+        this.activateMobileExerciseMode();
     }
 
     renderQuestion(quizData) {
@@ -1904,6 +1906,60 @@ class LanguageLearningApp {
             console.error('❌ Database clear failed:', error);
             if (importStatus) {
                 importStatus.innerHTML = `<div style="color: #f44336;">❌ Ошибка очистки: ${error.message}</div>`;
+            }
+        }
+    }
+    
+    // Mobile exercise mode management
+    activateMobileExerciseMode() {
+        // Check if we're on mobile
+        if (window.innerWidth <= 768) {
+            document.body.classList.add('mobile-exercise-mode');
+            console.log('📱 Mobile exercise mode activated');
+        }
+    }
+    
+    exitExerciseMode() {
+        console.log('🚪 Exiting exercise mode...');
+        
+        // Remove mobile exercise mode
+        document.body.classList.remove('mobile-exercise-mode');
+        
+        // Hide all quiz areas
+        const quizArea = document.getElementById('quizArea');
+        const reviewQuizArea = document.getElementById('reviewQuizArea');
+        const survivalArea = document.getElementById('survivalArea');
+        
+        if (quizArea) quizArea.classList.add('hidden');
+        if (reviewQuizArea) reviewQuizArea.classList.add('hidden');
+        if (survivalArea) survivalArea.classList.add('hidden');
+        
+        // Show mode selection areas
+        const studyModeSelect = document.getElementById('studyModeSelect');
+        const reviewModeSelect = document.getElementById('reviewModeSelect');
+        
+        if (studyModeSelect) studyModeSelect.style.display = 'block';
+        if (reviewModeSelect) reviewModeSelect.style.display = 'block';
+        
+        // Stop survival mode if active
+        if (this.survivalMode && this.survivalMode.isActive) {
+            this.survivalMode.endGame();
+        }
+        
+        // Navigate back to appropriate section
+        if (window.router) {
+            const currentSection = document.querySelector('.section.active');
+            if (currentSection) {
+                const sectionId = currentSection.id;
+                if (sectionId === 'studySection') {
+                    window.router.navigateTo('/study');
+                } else if (sectionId === 'reviewSection') {
+                    window.router.navigateTo('/review');
+                } else {
+                    window.router.navigateTo('/');
+                }
+            } else {
+                window.router.navigateTo('/');
             }
         }
     }

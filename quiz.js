@@ -28,27 +28,40 @@ class QuizManager {
         }
 
         // Prepare questions
-        for (const word of words) {
-            let question;
-            if (quizType === 'multiple') {
-                question = await this.createMultipleChoiceQuestion(word, words);
-            } else if (quizType === 'reverse_multiple') {
-                question = await this.createReverseMultipleChoiceQuestion(word, words);
-            } else if (quizType === 'word_building') {
-                question = this.createWordBuildingQuestion(word);
-            } else if (quizType === 'typing') {
-                question = this.createTypingQuestion(word);
-            } else if (quizType === 'complex') {
-                // For complex mode, we'll create all 4 types for each word
-                const multipleQ = await this.createMultipleChoiceQuestion(word, words);
-                const reverseQ = await this.createReverseMultipleChoiceQuestion(word, words);
-                const buildingQ = this.createWordBuildingQuestion(word);
-                const typingQ = this.createTypingQuestion(word);
-                
-                this.questions.push(multipleQ, reverseQ, buildingQ, typingQ);
-                continue; // Skip the normal push below
+        if (quizType === 'complex') {
+            // For complex mode, group by question type instead of by word
+            const questionTypes = ['multiple', 'reverse_multiple', 'word_building', 'typing'];
+            
+            for (const questionType of questionTypes) {
+                for (const word of words) {
+                    let question;
+                    if (questionType === 'multiple') {
+                        question = await this.createMultipleChoiceQuestion(word, words);
+                    } else if (questionType === 'reverse_multiple') {
+                        question = await this.createReverseMultipleChoiceQuestion(word, words);
+                    } else if (questionType === 'word_building') {
+                        question = this.createWordBuildingQuestion(word);
+                    } else if (questionType === 'typing') {
+                        question = this.createTypingQuestion(word);
+                    }
+                    this.questions.push(question);
+                }
             }
-            this.questions.push(question);
+        } else {
+            // Normal mode - one question type for all words
+            for (const word of words) {
+                let question;
+                if (quizType === 'multiple') {
+                    question = await this.createMultipleChoiceQuestion(word, words);
+                } else if (quizType === 'reverse_multiple') {
+                    question = await this.createReverseMultipleChoiceQuestion(word, words);
+                } else if (quizType === 'word_building') {
+                    question = this.createWordBuildingQuestion(word);
+                } else if (quizType === 'typing') {
+                    question = this.createTypingQuestion(word);
+                }
+                this.questions.push(question);
+            }
         }
 
         this.currentQuiz = {
