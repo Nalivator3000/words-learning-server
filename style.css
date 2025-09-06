@@ -1219,7 +1219,7 @@ main {
         flex: 1;
         background: #f8f9fa;
         border-radius: 0;
-        padding: 10px 15px 140px 15px; /* More bottom padding for larger button */
+        padding: 10px 15px 180px 15px; /* Much more bottom padding to avoid overlap */
         margin: 0;
         box-shadow: none;
         display: flex;
@@ -1254,18 +1254,19 @@ main {
         justify-content: flex-start;
         min-height: 0;
         overflow-y: visible; /* Let parent handle scrolling */
+        margin-bottom: 20px; /* Space before feedback message */
     }
     
     .mobile-exercise-mode .quiz-area .feedback {
         flex: 0 0 auto;
         font-size: 1rem;
         text-align: center;
-        padding: 12px 20px;
+        padding: 10px 20px;
         background: rgba(255, 255, 255, 0.95);
         border-radius: 8px;
         font-weight: bold;
         position: fixed;
-        bottom: 110px; /* Between answer area and button */
+        bottom: 130px; /* Higher position to avoid overlap */
         left: 20px;
         right: 20px;
         z-index: 99;
