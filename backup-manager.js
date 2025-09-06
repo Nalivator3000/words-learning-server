@@ -58,6 +58,7 @@ class BackupManager {
             const backup = JSON.parse(backupData);
             console.log(`🔄 Restoring backup from ${new Date(backup.timestamp).toLocaleString()}`);
             console.log(`📊 Backup contains ${backup.wordCount || 0} words`);
+            console.log('📋 Backup data:', backup);
 
             if (!window.database || !window.database.db) {
                 console.warn('⚠️ Database not available for restore');
@@ -66,17 +67,27 @@ class BackupManager {
 
             // Восстановить слова
             if (backup.words && backup.words.length > 0) {
+                console.log(`📝 Restoring ${backup.words.length} words...`);
                 await this.restoreWords(backup.words);
+                console.log('✅ Words restored');
+            } else {
+                console.log('⚠️ No words in backup to restore');
             }
 
             // Восстановить прогресс
             if (backup.progress && backup.progress.length > 0) {
+                console.log(`📈 Restoring ${backup.progress.length} progress entries...`);
                 await this.restoreProgress(backup.progress);
+                console.log('✅ Progress restored');
+            } else {
+                console.log('ℹ️ No progress data in backup to restore');
             }
 
             // Восстановить настройки пользователя
             if (backup.userSettings) {
+                console.log('⚙️ Restoring user settings...');
                 this.restoreUserSettings(backup.userSettings);
+                console.log('✅ Settings restored');
             }
 
             console.log(`✅ Restore completed: ${backup.words?.length || 0} words restored`);
@@ -182,46 +193,52 @@ class BackupManager {
     }
 
     async restoreWords(words) {
-        const transaction = window.database.db.transaction(['words'], 'readwrite');
-        const store = transaction.objectStore('words');
-        
         // Сначала очистить существующие слова
         await new Promise((resolve, reject) => {
-            const clearRequest = store.clear();
-            clearRequest.onsuccess = () => resolve();
-            clearRequest.onerror = () => reject(clearRequest.error);
+            const clearTransaction = window.database.db.transaction(['words'], 'readwrite');
+            const clearStore = clearTransaction.objectStore('words');
+            const clearRequest = clearStore.clear();
+            
+            clearTransaction.oncomplete = () => resolve();
+            clearTransaction.onerror = () => reject(clearTransaction.error);
         });
         
         // Затем добавить слова из резервной копии
-        for (const word of words) {
-            store.put(word);
-        }
-        
         return new Promise((resolve, reject) => {
-            transaction.oncomplete = () => resolve();
-            transaction.onerror = () => reject(transaction.error);
+            const addTransaction = window.database.db.transaction(['words'], 'readwrite');
+            const addStore = addTransaction.objectStore('words');
+            
+            for (const word of words) {
+                addStore.put(word);
+            }
+            
+            addTransaction.oncomplete = () => resolve();
+            addTransaction.onerror = () => reject(addTransaction.error);
         });
     }
 
     async restoreProgress(progressData) {
-        const transaction = window.database.db.transaction(['progress'], 'readwrite');
-        const store = transaction.objectStore('progress');
-        
         // Сначала очистить существующий прогресс
         await new Promise((resolve, reject) => {
-            const clearRequest = store.clear();
-            clearRequest.onsuccess = () => resolve();
-            clearRequest.onerror = () => reject(clearRequest.error);
+            const clearTransaction = window.database.db.transaction(['progress'], 'readwrite');
+            const clearStore = clearTransaction.objectStore('progress');
+            const clearRequest = clearStore.clear();
+            
+            clearTransaction.oncomplete = () => resolve();
+            clearTransaction.onerror = () => reject(clearTransaction.error);
         });
         
         // Затем добавить прогресс из резервной копии
-        for (const progress of progressData) {
-            store.put(progress);
-        }
-        
         return new Promise((resolve, reject) => {
-            transaction.oncomplete = () => resolve();
-            transaction.onerror = () => reject(transaction.error);
+            const addTransaction = window.database.db.transaction(['progress'], 'readwrite');
+            const addStore = addTransaction.objectStore('progress');
+            
+            for (const progress of progressData) {
+                addStore.put(progress);
+            }
+            
+            addTransaction.oncomplete = () => resolve();
+            addTransaction.onerror = () => reject(addTransaction.error);
         });
     }
 
