@@ -32,7 +32,10 @@ class BuildTester {
             // 4. Run automated UI tests
             await this.runAutomatedUITests();
             
-            // 5. Test build info display
+            // 5. Test responsive design (quick test)
+            await this.testResponsiveDesign();
+            
+            // 6. Test build info display
             this.testBuildInfoDisplay();
             
             // 6. Test deployment-specific issues
@@ -96,6 +99,7 @@ class BuildTester {
             { name: 'Quiz Manager', global: 'window.quizManager' },
             { name: 'Test Framework', global: 'window.testFramework' },
             { name: 'Auto UI Tester', global: 'window.autoUITester' },
+            { name: 'Responsive Tester', global: 'window.responsiveTester' },
             { name: 'Main App Class', global: 'window.LanguageLearningApp' },
             { name: 'Survival Mode Class', global: 'window.SurvivalMode' }
         ];
@@ -430,6 +434,91 @@ class BuildTester {
         });
 
         return checks.every(check => check.check);
+    }
+    async testResponsiveDesign() {
+        console.log('📱 Testing responsive design...');
+        
+        const responsiveResults = {
+            section: 'Responsive Design',
+            tests: []
+        };
+
+        try {
+            // Проверяем наличие responsive tester
+            if (typeof window.responsiveTester === 'undefined') {
+                responsiveResults.tests.push({
+                    test: 'Responsive Tester: Availability',
+                    status: 'failed',
+                    message: 'Responsive tester not loaded'
+                });
+                this.results.push(responsiveResults);
+                return;
+            }
+
+            responsiveResults.tests.push({
+                test: 'Responsive Tester: Availability',
+                status: 'passed',
+                message: 'Responsive tester loaded successfully'
+            });
+
+            // Быстрый тест популярных устройств
+            console.log('  📱 Running quick responsive test...');
+            const quickTestResults = await window.responsiveTester.quickTest();
+            
+            if (quickTestResults) {
+                const summary = quickTestResults.summary;
+                
+                responsiveResults.tests.push({
+                    test: 'Responsive Design: Quick Test',
+                    status: summary.issues === 0 ? 'passed' : (summary.issues < 3 ? 'warning' : 'failed'),
+                    message: `Tested ${summary.totalDevices} devices, ${summary.totalScreens} screens. Issues: ${summary.issues}, Warnings: ${summary.warnings}`,
+                    details: {
+                        devices: summary.totalDevices,
+                        screens: summary.totalScreens,
+                        issues: summary.issues,
+                        warnings: summary.warnings,
+                        duration: summary.duration
+                    }
+                });
+
+                // Проверка мобильной совместимости
+                const mobileDevices = Object.entries(quickTestResults.devices).filter(
+                    ([, config]) => config.config.deviceType === 'mobile'
+                );
+                
+                let mobileIssues = 0;
+                for (const [, deviceData] of mobileDevices) {
+                    for (const screenData of Object.values(deviceData.screens)) {
+                        if (screenData.status === 'issues') {
+                            mobileIssues++;
+                        }
+                    }
+                }
+
+                responsiveResults.tests.push({
+                    test: 'Mobile Compatibility',
+                    status: mobileIssues === 0 ? 'passed' : (mobileIssues < 2 ? 'warning' : 'failed'),
+                    message: `${mobileIssues} mobile screen(s) have issues`
+                });
+
+            } else {
+                responsiveResults.tests.push({
+                    test: 'Responsive Design: Quick Test',
+                    status: 'failed',
+                    message: 'Quick test failed to run'
+                });
+            }
+
+        } catch (error) {
+            responsiveResults.tests.push({
+                test: 'Responsive Design: Error',
+                status: 'failed',
+                message: 'Responsive test failed: ' + error.message
+            });
+        }
+
+        this.results.push(responsiveResults);
+        console.log('  ✅ Responsive design test completed');
     }
 }
 

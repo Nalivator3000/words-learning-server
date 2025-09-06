@@ -1799,3 +1799,46 @@ main {
     text-align: center;
     margin-bottom: 20px;
 }
+
+/* Responsive Testing Styles */
+.mobile-test-mode {
+    position: relative;
+    margin: 0 auto;
+    box-shadow: 0 0 20px rgba(0, 0, 0, 0.3);
+    background: #fff;
+}
+
+.mobile-test-mode::before {
+    content: 'TEST MODE';
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    background: #ff6b6b;
+    color: white;
+    text-align: center;
+    font-size: 12px;
+    font-weight: bold;
+    padding: 2px 0;
+    z-index: 9999;
+    font-family: monospace;
+}
+
+#responsiveTestReport {
+    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+}
+
+#responsiveTestReport h2, #responsiveTestReport h3 {
+    margin: 0 0 10px 0;
+    color: #333;
+}
+
+#responsiveTestReport ul {
+    margin: 5px 0;
+    padding-left: 20px;
+}
+
+#responsiveTestReport li {
+    margin: 2px 0;
+    font-size: 0.9em;
+}
