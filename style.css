@@ -1219,7 +1219,7 @@ main {
         flex: 1;
         background: #f8f9fa;
         border-radius: 0;
-        padding: 10px 15px 120px 15px; /* Bottom padding for fixed button */
+        padding: 10px 15px 140px 15px; /* More bottom padding for larger button */
         margin: 0;
         box-shadow: none;
         display: flex;
@@ -1258,24 +1258,49 @@ main {
     
     .mobile-exercise-mode .quiz-area .feedback {
         flex: 0 0 auto;
-        margin: 10px 0;
-        font-size: 0.9rem;
+        font-size: 1rem;
+        text-align: center;
+        padding: 12px 20px;
+        background: rgba(255, 255, 255, 0.95);
+        border-radius: 8px;
+        font-weight: bold;
+        position: fixed;
+        bottom: 110px; /* Between answer area and button */
+        left: 20px;
+        right: 20px;
+        z-index: 99;
+        box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+        margin: 0;
+    }
+    
+    .mobile-exercise-mode .quiz-area .feedback.correct {
+        border: 2px solid #28a745;
+        color: #155724;
+        background: rgba(212, 237, 218, 0.95);
+    }
+    
+    .mobile-exercise-mode .quiz-area .feedback.incorrect {
+        border: 2px solid #dc3545;
+        color: #721c24;
+        background: rgba(248, 215, 218, 0.95);
     }
     
     .mobile-exercise-mode .quiz-area .action-btn {
         flex: 0 0 auto;
-        margin: 10px 0 15px 0;
-        padding: 12px;
-        font-size: 1rem;
+        margin: 0;
+        padding: 16px 24px;
+        font-size: 1.1rem;
+        font-weight: bold;
         position: fixed;
-        bottom: 15px;
-        left: 15px;
-        right: 15px;
+        bottom: 40px; /* Higher position */
+        left: 20px;
+        right: 20px;
         background: #3498db;
         z-index: 100;
-        border-radius: 10px;
-        box-shadow: 0 4px 15px rgba(52, 152, 219, 0.3);
+        border-radius: 12px;
+        box-shadow: 0 6px 20px rgba(52, 152, 219, 0.4);
         width: auto;
+        min-height: 56px; /* Larger button */
     }
     
     /* Survival mode mobile optimization */
