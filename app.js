@@ -159,6 +159,9 @@ class LanguageLearningApp {
             
             await database.init();
             
+            // Initialize backup system
+            await this.initBackupSystem();
+            
             // Initialize language management
             languageManager.init();
             
@@ -224,6 +227,11 @@ class LanguageLearningApp {
         document.getElementById('importGermanBtn').addEventListener('click', () => this.handleImportGerman());
         document.getElementById('checkWordCountBtn').addEventListener('click', () => this.handleCheckWordCount());
         document.getElementById('clearDatabaseBtn').addEventListener('click', () => this.handleClearDatabase());
+        
+        // Backup management functionality
+        document.getElementById('createBackupBtn').addEventListener('click', () => this.handleCreateBackup());
+        document.getElementById('restoreBackupBtn').addEventListener('click', () => this.handleRestoreBackup());
+        document.getElementById('backupStatusBtn').addEventListener('click', () => this.handleBackupStatus());
 
         // Study mode
         document.getElementById('multipleChoiceBtn').addEventListener('click', () => this.startStudyQuiz('multiple'));
@@ -2124,6 +2132,196 @@ class LanguageLearningApp {
             } else {
                 window.router.navigateTo('/');
             }
+        }
+    }
+
+    // Initialize backup system
+    async initBackupSystem() {
+        if (!window.backupManager) {
+            console.warn('⚠️ BackupManager not available');
+            return;
+        }
+
+        try {
+            console.log('💾 Initializing backup system...');
+            
+            // Check if restore is needed after update
+            const needsRestore = await window.backupManager.checkForRestoreNeeded();
+            
+            if (needsRestore) {
+                // Wait a bit for the database to fully initialize
+                setTimeout(async () => {
+                    await window.backupManager.offerRestore();
+                }, 1000);
+            }
+            
+            // Set up automatic backups
+            this.setupAutoBackups();
+            
+            // Update backup info display
+            setTimeout(() => {
+                this.updateBackupInfo();
+            }, 500);
+            
+            console.log('✅ Backup system initialized');
+            
+        } catch (error) {
+            console.error('❌ Error initializing backup system:', error);
+        }
+    }
+
+    // Setup automatic backups
+    setupAutoBackups() {
+        if (!window.backupManager) return;
+
+        // Auto backup every 30 minutes while app is active
+        setInterval(async () => {
+            if (document.visibilityState === 'visible') {
+                await window.backupManager.autoBackup();
+            }
+        }, 30 * 60 * 1000); // 30 minutes
+
+        // Backup before page unload
+        window.addEventListener('beforeunload', () => {
+            // Use synchronous backup for page unload
+            const wordsCount = database.db ? 1 : 0; // Simple check
+            if (wordsCount > 0) {
+                try {
+                    window.backupManager.createBackup();
+                } catch (error) {
+                    console.warn('⚠️ Quick backup failed:', error);
+                }
+            }
+        });
+
+        // Backup on visibility change (tab switch, minimize)
+        document.addEventListener('visibilitychange', async () => {
+            if (document.visibilityState === 'hidden') {
+                await window.backupManager.autoBackup();
+            }
+        });
+
+        console.log('🔄 Auto-backup timers set up');
+    }
+
+    // Handle manual backup creation
+    async handleCreateBackup() {
+        if (!window.backupManager) {
+            alert('❌ Система резервного копирования недоступна');
+            return;
+        }
+
+        const importStatus = document.getElementById('importStatus');
+        if (importStatus) {
+            importStatus.innerHTML = '<div style="color: #17a2b8;">💾 Создание резервной копии...</div>';
+        }
+
+        try {
+            const success = await window.backupManager.createBackup();
+            if (success) {
+                const backupInfo = window.backupManager.getBackupInfo();
+                const message = `✅ Резервная копия создана!\n\n📅 Дата: ${backupInfo.date}\n📝 Слов: ${backupInfo.wordCount}`;
+                
+                if (importStatus) {
+                    importStatus.innerHTML = `<div style="color: #28a745;">${message.replace(/\n/g, '<br>')}</div>`;
+                }
+                
+                this.updateBackupInfo();
+            } else {
+                if (importStatus) {
+                    importStatus.innerHTML = '<div style="color: #f44336;">❌ Не удалось создать резервную копию</div>';
+                }
+            }
+        } catch (error) {
+            console.error('Error creating backup:', error);
+            if (importStatus) {
+                importStatus.innerHTML = '<div style="color: #f44336;">❌ Ошибка создания резервной копии</div>';
+            }
+        }
+    }
+
+    // Handle backup restoration
+    async handleRestoreBackup() {
+        if (!window.backupManager) {
+            alert('❌ Система резервного копирования недоступна');
+            return;
+        }
+
+        const importStatus = document.getElementById('importStatus');
+        if (importStatus) {
+            importStatus.innerHTML = '<div style="color: #28a745;">🔄 Восстановление данных...</div>';
+        }
+
+        try {
+            const success = await window.backupManager.restoreFromBackup();
+            if (success) {
+                if (importStatus) {
+                    importStatus.innerHTML = '<div style="color: #28a745;">✅ Данные успешно восстановлены!</div>';
+                }
+                
+                // Refresh the interface
+                if (window.router) {
+                    window.router.navigateTo('/');
+                }
+            } else {
+                if (importStatus) {
+                    importStatus.innerHTML = '<div style="color: #f44336;">❌ Не удалось восстановить данные</div>';
+                }
+            }
+        } catch (error) {
+            console.error('Error restoring backup:', error);
+            if (importStatus) {
+                importStatus.innerHTML = '<div style="color: #f44336;">❌ Ошибка восстановления данных</div>';
+            }
+        }
+    }
+
+    // Show backup status information
+    async handleBackupStatus() {
+        if (!window.backupManager) {
+            alert('❌ Система резервного копирования недоступна');
+            return;
+        }
+
+        const backupInfo = window.backupManager.getBackupInfo();
+        const currentWords = await window.backupManager.getCurrentWordsCount();
+
+        let message = '📋 Информация о резервных копиях\n\n';
+        
+        if (backupInfo) {
+            message += `📅 Последняя копия: ${backupInfo.date}\n`;
+            message += `📝 Слов в копии: ${backupInfo.wordCount}\n`;
+            message += `🔧 Версия: ${backupInfo.version}\n\n`;
+        } else {
+            message += '❌ Резервных копий не найдено\n\n';
+        }
+        
+        message += `📊 Текущее количество слов: ${currentWords}`;
+        
+        alert(message);
+    }
+
+    // Update backup information display
+    updateBackupInfo() {
+        const backupInfoElement = document.getElementById('backupInfo');
+        if (!backupInfoElement || !window.backupManager) return;
+
+        const backupInfo = window.backupManager.getBackupInfo();
+        
+        if (backupInfo) {
+            backupInfoElement.innerHTML = `
+                <div style="background: #d1ecf1; border: 1px solid #bee5eb; border-radius: 5px; padding: 10px; font-size: 0.9em;">
+                    <strong>Последняя резервная копия:</strong><br>
+                    📅 ${backupInfo.date}<br>
+                    📝 ${backupInfo.wordCount} слов
+                </div>
+            `;
+        } else {
+            backupInfoElement.innerHTML = `
+                <div style="background: #fff3cd; border: 1px solid #ffeaa7; border-radius: 5px; padding: 10px; font-size: 0.9em;">
+                    ⚠️ Резервных копий пока нет
+                </div>
+            `;
         }
     }
 }

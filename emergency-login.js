@@ -13,17 +13,25 @@ function waitForDOM() {
 function initEmergencyLogin() {
     console.log('🔧 Initializing emergency login...');
     
+    // Check if main app is already working
+    if (window.app && window.userManager) {
+        console.log('✅ Main app already initialized, emergency login not needed');
+        return;
+    }
+    
     // Find login button and attach handler
     const loginBtn = document.getElementById('loginBtn');
     const emailField = document.getElementById('loginEmail');
     const passwordField = document.getElementById('loginPassword');
     
     if (!loginBtn || !emailField || !passwordField) {
-        console.error('❌ Login elements not found!');
+        console.log('ℹ️ Login elements not found, will retry later');
+        // Retry after a delay
+        setTimeout(initEmergencyLogin, 1000);
         return;
     }
     
-    console.log('✅ Login elements found, attaching handlers...');
+    console.log('✅ Login elements found, attaching emergency handlers...');
     
     // Remove any existing handlers
     loginBtn.replaceWith(loginBtn.cloneNode(true));
@@ -49,6 +57,13 @@ function initEmergencyLogin() {
 function handleEmergencyLogin() {
     console.log('🔐 EMERGENCY LOGIN TRIGGERED!');
     
+    // Check if user is already logged in
+    const currentUser = localStorage.getItem('currentUser');
+    if (currentUser) {
+        console.log('✅ User already logged in, skipping emergency login');
+        return;
+    }
+    
     const email = document.getElementById('loginEmail').value;
     const password = document.getElementById('loginPassword').value;
     
@@ -56,7 +71,12 @@ function handleEmergencyLogin() {
     console.log(`🔒 Password: ${password}`);
     
     if (!email || !password) {
-        alert('Пожалуйста, заполните все поля');
+        // Only show alert if this is an actual login attempt (not empty form on page load)
+        if (document.activeElement === document.getElementById('loginBtn') || 
+            document.activeElement === document.getElementById('loginEmail') || 
+            document.activeElement === document.getElementById('loginPassword')) {
+            alert('Пожалуйста, заполните все поля');
+        }
         return;
     }
     
@@ -337,8 +357,10 @@ function showBasicEmergencyInterface() {
     }
 }
 
-// Auto-initialize
-waitForDOM();
+// Auto-initialize with delay to let main app start first
+setTimeout(() => {
+    waitForDOM();
+}, 2000); // Wait 2 seconds for main app to initialize
 
 // Export for manual testing
 window.emergencyLogin = handleEmergencyLogin;

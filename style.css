@@ -1219,13 +1219,14 @@ main {
         flex: 1;
         background: #f8f9fa;
         border-radius: 0;
-        padding: 20px 15px;
+        padding: 10px 15px;
         margin: 0;
         box-shadow: none;
         display: flex;
         flex-direction: column;
         height: 100vh;
         overflow-y: auto;
+        justify-content: space-between;
     }
     
     .mobile-exercise-mode .quiz-area .progress-bar {
@@ -1240,28 +1241,36 @@ main {
     
     .mobile-exercise-mode .quiz-area .question {
         flex: 0 0 auto;
-        padding: 15px;
-        margin-bottom: 20px;
-        font-size: 1.1rem;
+        padding: 10px;
+        margin-bottom: 15px;
+        font-size: 1rem;
+        min-height: auto;
     }
     
     .mobile-exercise-mode .quiz-area .answer-area {
         flex: 1;
         display: flex;
         flex-direction: column;
-        justify-content: center;
+        justify-content: flex-start;
         min-height: 0;
+        overflow-y: auto;
     }
     
     .mobile-exercise-mode .quiz-area .feedback {
-        margin: 15px 0;
+        flex: 0 0 auto;
+        margin: 10px 0;
         font-size: 0.9rem;
     }
     
     .mobile-exercise-mode .quiz-area .action-btn {
-        margin: 10px 0 20px 0;
+        flex: 0 0 auto;
+        margin: 10px 0 15px 0;
         padding: 12px;
         font-size: 1rem;
+        position: sticky;
+        bottom: 10px;
+        background: #3498db;
+        z-index: 10;
     }
     
     /* Survival mode mobile optimization */
@@ -1269,18 +1278,20 @@ main {
         flex: 1;
         background: linear-gradient(135deg, #2c3e50, #34495e);
         border-radius: 0;
-        padding: 15px;
+        padding: 10px;
         margin: 0;
         display: flex;
         flex-direction: column;
         height: 100vh;
         overflow: hidden;
+        justify-content: space-between;
     }
     
     .mobile-exercise-mode .survival-stats {
-        margin-bottom: 15px;
-        padding: 10px;
-        font-size: 0.9rem;
+        flex: 0 0 auto;
+        margin-bottom: 10px;
+        padding: 8px;
+        font-size: 0.85rem;
     }
     
     .mobile-exercise-mode .survival-question {
@@ -1288,20 +1299,22 @@ main {
         display: flex;
         flex-direction: column;
         justify-content: center;
-        font-size: 1.1rem;
+        font-size: 1rem;
         text-align: center;
+        min-height: 0;
     }
     
     .mobile-exercise-mode .survival-choices {
+        flex: 0 0 auto;
         gap: 10px;
-        margin: 15px 0;
+        margin: 10px 0;
         flex-direction: column;
     }
     
     .mobile-exercise-mode .survival-choice {
-        padding: 15px;
-        font-size: 1rem;
-        min-height: 50px;
+        padding: 12px;
+        font-size: 0.95rem;
+        min-height: 45px;
         display: flex;
         align-items: center;
         justify-content: center;
@@ -1318,30 +1331,34 @@ main {
         display: flex;
         flex-direction: column;
         justify-content: space-between;
-        padding: 15px 0;
+        padding: 10px 0;
+        min-height: 0;
     }
     
     .mobile-exercise-mode .word-building-input {
-        font-size: 1.2rem;
-        padding: 15px;
-        margin-bottom: 20px;
+        font-size: 1.1rem;
+        padding: 12px;
+        margin-bottom: 15px;
         text-align: center;
         border: 2px solid #3498db;
         border-radius: 10px;
+        flex: 0 0 auto;
     }
     
     .mobile-exercise-mode .letter-tiles {
         display: flex;
         flex-wrap: wrap;
         justify-content: center;
-        gap: 8px;
-        margin: 20px 0;
+        gap: 6px;
+        margin: 15px 0;
+        flex: 1;
+        align-content: flex-start;
     }
     
     .mobile-exercise-mode .letter-tile {
-        width: 45px;
-        height: 45px;
-        font-size: 1.2rem;
+        width: 40px;
+        height: 40px;
+        font-size: 1.1rem;
         font-weight: bold;
         border-radius: 8px;
         border: 2px solid #3498db;
@@ -1360,7 +1377,8 @@ main {
     .mobile-exercise-mode .word-building-controls {
         display: flex;
         gap: 10px;
-        margin-top: 20px;
+        margin-top: 15px;
+        flex: 0 0 auto;
     }
     
     .mobile-exercise-mode .word-building-controls button {
@@ -1378,10 +1396,10 @@ main {
     }
     
     .mobile-exercise-mode .choice-btn {
-        padding: 15px;
-        font-size: 1rem;
+        padding: 12px;
+        font-size: 0.95rem;
         text-align: center;
-        min-height: 50px;
+        min-height: 45px;
         display: flex;
         align-items: center;
         justify-content: center;
