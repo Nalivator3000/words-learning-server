@@ -1219,14 +1219,14 @@ main {
         flex: 1;
         background: #f8f9fa;
         border-radius: 0;
-        padding: 10px 15px;
+        padding: 10px 15px 120px 15px; /* Bottom padding for fixed button */
         margin: 0;
         box-shadow: none;
         display: flex;
         flex-direction: column;
         height: 100vh;
         overflow-y: auto;
-        justify-content: space-between;
+        justify-content: flex-start;
     }
     
     .mobile-exercise-mode .quiz-area .progress-bar {
@@ -1253,8 +1253,7 @@ main {
         flex-direction: column;
         justify-content: flex-start;
         min-height: 0;
-        overflow-y: auto;
-        padding-bottom: 80px; /* Space for fixed button */
+        overflow-y: visible; /* Let parent handle scrolling */
     }
     
     .mobile-exercise-mode .quiz-area .feedback {
