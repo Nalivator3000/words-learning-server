@@ -430,6 +430,8 @@ class LanguageLearningApp {
             await this.updateStatsPage();
         } else if (sectionName === 'settings') {
             await this.updateSettingsPage();
+        } else if (sectionName === 'import') {
+            this.updateImportSection();
         }
 
         // Reset quiz states
@@ -2202,6 +2204,21 @@ class LanguageLearningApp {
         });
 
         console.log('🔄 Auto-backup timers set up');
+    }
+
+    // Update import section visibility based on user role
+    updateImportSection() {
+        const currentUser = userManager?.getCurrentUser();
+        const isRoot = currentUser && (currentUser.email === 'root' || currentUser.id === 'root');
+        
+        const databaseManagement = document.getElementById('databaseManagement');
+        if (databaseManagement) {
+            if (isRoot) {
+                databaseManagement.style.display = 'block';
+            } else {
+                databaseManagement.style.display = 'none';
+            }
+        }
     }
 
     // Handle manual backup creation

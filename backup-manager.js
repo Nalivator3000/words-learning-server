@@ -185,6 +185,14 @@ class BackupManager {
         const transaction = window.database.db.transaction(['words'], 'readwrite');
         const store = transaction.objectStore('words');
         
+        // Сначала очистить существующие слова
+        await new Promise((resolve, reject) => {
+            const clearRequest = store.clear();
+            clearRequest.onsuccess = () => resolve();
+            clearRequest.onerror = () => reject(clearRequest.error);
+        });
+        
+        // Затем добавить слова из резервной копии
         for (const word of words) {
             store.put(word);
         }
@@ -199,6 +207,14 @@ class BackupManager {
         const transaction = window.database.db.transaction(['progress'], 'readwrite');
         const store = transaction.objectStore('progress');
         
+        // Сначала очистить существующий прогресс
+        await new Promise((resolve, reject) => {
+            const clearRequest = store.clear();
+            clearRequest.onsuccess = () => resolve();
+            clearRequest.onerror = () => reject(clearRequest.error);
+        });
+        
+        // Затем добавить прогресс из резервной копии
         for (const progress of progressData) {
             store.put(progress);
         }
