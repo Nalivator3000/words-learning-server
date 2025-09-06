@@ -2206,19 +2206,10 @@ class LanguageLearningApp {
         console.log('🔄 Auto-backup timers set up');
     }
 
-    // Update import section visibility based on user role
+    // Update import section (removed user role restriction for database management)
     updateImportSection() {
-        const currentUser = userManager?.getCurrentUser();
-        const isRoot = currentUser && (currentUser.email === 'root' || currentUser.id === 'root');
-        
-        const databaseManagement = document.getElementById('databaseManagement');
-        if (databaseManagement) {
-            if (isRoot) {
-                databaseManagement.style.display = 'block';
-            } else {
-                databaseManagement.style.display = 'none';
-            }
-        }
+        // Database management is now available for all users
+        // Only test functions are restricted to root users
     }
 
     // Handle manual backup creation

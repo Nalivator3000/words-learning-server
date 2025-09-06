@@ -448,10 +448,19 @@ document.addEventListener('DOMContentLoaded', () => {
 // Create global instance
 window.buildTester = new BuildTester();
 
-// Export convenience functions
-window.runBuildTest = () => window.buildTester.testCurrentBuild();
-window.quickHealthCheck = () => window.buildTester.quickHealthCheck();
-window.getBuildTestReport = () => window.lastBuildTestReport;
+// Export convenience functions - only for root users
+function setupBuildTester() {
+    const currentUser = localStorage.getItem('currentUser');
+    const isRoot = currentUser && (currentUser.includes('"email":"root"') || currentUser.includes('"id":"root"'));
+    
+    if (isRoot) {
+        window.runBuildTest = () => window.buildTester.testCurrentBuild();
+        window.quickHealthCheck = () => window.buildTester.quickHealthCheck();
+        window.getBuildTestReport = () => window.lastBuildTestReport;
+        console.log('🏗️ Build Tester loaded! Use runBuildTest() for full test or quickHealthCheck() for quick check');
+        console.log('💡 Add ?buildtest=true to URL for automatic testing on page load');
+    }
+}
 
-console.log('🏗️ Build Tester loaded! Use runBuildTest() for full test or quickHealthCheck() for quick check');
-console.log('💡 Add ?buildtest=true to URL for automatic testing on page load');
+// Set up build tester after login
+setTimeout(setupBuildTester, 1600);

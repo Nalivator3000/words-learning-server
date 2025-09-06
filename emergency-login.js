@@ -362,14 +362,28 @@ setTimeout(() => {
     waitForDOM();
 }, 2000); // Wait 2 seconds for main app to initialize
 
-// Export for manual testing
+// Export for manual testing (only for root users)
+function setupTestFunctions() {
+    const currentUser = localStorage.getItem('currentUser');
+    const isRoot = currentUser && (currentUser.includes('"email":"root"') || currentUser.includes('"id":"root"'));
+    
+    if (isRoot) {
+        window.emergencyLogin = handleEmergencyLogin;
+        window.testLogin = function() {
+            document.getElementById('loginEmail').value = 'root';
+            document.getElementById('loginPassword').value = 'root';
+            handleEmergencyLogin();
+        };
+        console.log('🔧 Emergency login test functions available for root user');
+        console.log('💡 Use testLogin() to test with default credentials');
+    }
+}
+
+// Set up test functions after login
+setTimeout(setupTestFunctions, 1000);
+
+// Also export the emergency login function always (for emergency access)
 window.emergencyLogin = handleEmergencyLogin;
-window.testLogin = function() {
-    document.getElementById('loginEmail').value = 'root';
-    document.getElementById('loginPassword').value = 'root';
-    handleEmergencyLogin();
-};
 
 console.log('🚨 Emergency Login System Ready!');
-console.log('💡 Use testLogin() to test with default credentials');
-console.log('💡 Use emergencyLogin() to manually trigger login');
+console.log('💡 Use emergencyLogin() to manually trigger login (always available)');

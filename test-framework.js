@@ -331,8 +331,19 @@ class TestFramework {
     }
 }
 
-// Global test instance
-window.testFramework = new TestFramework();
+// Global test instance - only for root users
+function setupTestFramework() {
+    const currentUser = localStorage.getItem('currentUser');
+    const isRoot = currentUser && (currentUser.includes('"email":"root"') || currentUser.includes('"id":"root"'));
+    
+    if (isRoot) {
+        window.testFramework = new TestFramework();
+        console.log('🧪 Test Framework available for root user');
+    }
+}
+
+// Set up test framework after login
+setTimeout(setupTestFramework, 1500);
 
 // Export for use in other files
 if (typeof module !== 'undefined' && module.exports) {
