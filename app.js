@@ -2153,7 +2153,18 @@ class LanguageLearningApp {
             if (needsRestore) {
                 // Wait a bit for the database to fully initialize
                 setTimeout(async () => {
-                    await window.backupManager.offerRestore();
+                    const restored = await window.backupManager.offerRestore();
+                    
+                    // Если пользователь не восстановил данные, делаем аварийное восстановление
+                    if (!restored) {
+                        setTimeout(async () => {
+                            const wordsCount = await window.backupManager.getCurrentWordsCount();
+                            if (wordsCount === 0) {
+                                console.log('🚨 No words after restore offer - attempting emergency restore');
+                                await window.backupManager.emergencyRestore();
+                            }
+                        }, 5000); // Ждем 5 секунд после отказа
+                    }
                 }, 1000);
             }
             
@@ -2176,12 +2187,12 @@ class LanguageLearningApp {
     setupAutoBackups() {
         if (!window.backupManager) return;
 
-        // Auto backup every 30 minutes while app is active
+        // Auto backup every 5 minutes while app is active
         setInterval(async () => {
             if (document.visibilityState === 'visible') {
                 await window.backupManager.autoBackup();
             }
-        }, 30 * 60 * 1000); // 30 minutes
+        }, 5 * 60 * 1000); // 5 minutes
 
         // Backup before page unload
         window.addEventListener('beforeunload', () => {

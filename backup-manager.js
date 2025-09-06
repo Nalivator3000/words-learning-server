@@ -3,7 +3,8 @@ class BackupManager {
         this.backupKey = 'wordsLearningBackup';
         this.lastBackupKey = 'wordsLearningLastBackup';
         this.versionKey = 'wordsLearningVersion';
-        this.currentVersion = '2025.01.09-20:15';
+        // Use a stable version that doesn't change with each build
+        this.currentVersion = 'v2.0-stable';
     }
 
     // Создать резервную копию всех данных
@@ -100,21 +101,32 @@ class BackupManager {
 
     // Проверить, нужно ли восстановление после обновления
     async checkForRestoreNeeded() {
-        const lastVersion = localStorage.getItem(this.versionKey);
         const hasBackup = localStorage.getItem(this.backupKey);
         
-        // Если это первый запуск или версия изменилась
-        if (!lastVersion || lastVersion !== this.currentVersion) {
-            localStorage.setItem(this.versionKey, this.currentVersion);
-            
-            if (hasBackup) {
-                const wordsCount = await this.getCurrentWordsCount();
+        // Всегда проверяем, есть ли слова в базе
+        const wordsCount = await this.getCurrentWordsCount();
+        
+        // Если в базе нет слов, но есть резервная копия - предлагаем восстановление
+        if (wordsCount === 0 && hasBackup) {
+            console.log('🔍 No words found but backup exists - offering restore');
+            console.log(`📊 Current words in DB: ${wordsCount}`);
+            return true;
+        }
+        
+        // Если есть и слова, и резервная копия, сравниваем количество
+        if (wordsCount > 0 && hasBackup) {
+            try {
+                const backup = JSON.parse(hasBackup);
+                const backupWordCount = backup.wordCount || 0;
                 
-                // Если в базе нет слов, но есть резервная копия
-                if (wordsCount === 0) {
-                    console.log('🔍 No words found but backup exists - offering restore');
+                // Если в резервной копии значительно больше слов, предлагаем восстановление
+                if (backupWordCount > wordsCount + 10) {
+                    console.log('🔍 Backup has significantly more words - offering restore');
+                    console.log(`📊 Current: ${wordsCount}, Backup: ${backupWordCount}`);
                     return true;
                 }
+            } catch (error) {
+                console.warn('⚠️ Error parsing backup data:', error);
             }
         }
         
@@ -151,19 +163,67 @@ class BackupManager {
         return false;
     }
 
+    // Аварийное восстановление - восстанавливать автоматически без подтверждения  
+    async emergencyRestore() {
+        const backupData = localStorage.getItem(this.backupKey);
+        if (!backupData) {
+            console.log('ℹ️ No backup available for emergency restore');
+            return false;
+        }
+
+        const backup = JSON.parse(backupData);
+        const wordCount = backup.wordCount || 0;
+        
+        console.log(`🚨 EMERGENCY RESTORE: Restoring ${wordCount} words automatically`);
+        
+        const success = await this.restoreFromBackup();
+        if (success) {
+            console.log('✅ Emergency restore successful');
+            
+            // Показать пользователю уведомление
+            const notification = document.createElement('div');
+            notification.innerHTML = `
+                <div style="position: fixed; top: 20px; right: 20px; background: #28a745; color: white; padding: 15px; border-radius: 8px; z-index: 10000; box-shadow: 0 4px 12px rgba(0,0,0,0.3);">
+                    <h4 style="margin: 0 0 5px 0;">🔄 Данные восстановлены автоматически!</h4>
+                    <p style="margin: 0; font-size: 14px;">Восстановлено ${wordCount} слов из резервной копии</p>
+                    <button onclick="this.parentElement.parentElement.remove()" style="position: absolute; top: 5px; right: 8px; background: none; border: none; color: white; cursor: pointer;">✕</button>
+                </div>
+            `;
+            document.body.appendChild(notification);
+            
+            // Автоматически скрыть через 10 секунд
+            setTimeout(() => {
+                if (notification.parentNode) {
+                    notification.remove();
+                }
+            }, 10000);
+            
+            // Обновить интерфейс
+            if (window.router && window.router.navigateTo) {
+                setTimeout(() => window.router.navigateTo('/'), 1000);
+            }
+            
+            return true;
+        } else {
+            console.error('❌ Emergency restore failed');
+            return false;
+        }
+    }
+
     // Автоматическое резервное копирование
     async autoBackup() {
         const lastBackup = localStorage.getItem(this.lastBackupKey);
         const now = Date.now();
         
-        // Создавать резервную копию каждые 6 часов
-        const backupInterval = 6 * 60 * 60 * 1000; // 6 часов
+        // Создавать резервную копию каждые 10 минут (более частые бэкапы)
+        const backupInterval = 10 * 60 * 1000; // 10 минут
         
         if (!lastBackup || (now - parseInt(lastBackup)) > backupInterval) {
             const wordsCount = await this.getCurrentWordsCount();
             
             // Создавать резервную копию только если есть данные
             if (wordsCount > 0) {
+                console.log(`🔄 Creating automatic backup (${wordsCount} words)`);
                 await this.createBackup();
             }
         }
