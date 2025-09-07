@@ -4,8 +4,10 @@
   "description": "Advanced Language Learning App with Survival Mode",
   "main": "server.js",
   "scripts": {
-    "start": "node server.js",
-    "dev": "node server.js"
+    "start": "node server-postgres.js",
+    "dev": "node server-postgres.js",
+    "start-legacy": "node server-full.js",
+    "dev-local": "node server-full.js"
   },
   "dependencies": {
     "cors": "^2.8.5",

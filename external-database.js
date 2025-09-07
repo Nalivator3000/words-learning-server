@@ -3,7 +3,8 @@
 
 class ExternalDatabase {
     constructor() {
-        this.baseUrl = 'http://localhost:3000/api';
+        // Use configuration-based API URL
+        this.baseUrl = window.appConfig ? window.appConfig.apiUrl : 'http://localhost:3000/api';
         this.token = null;
         this.currentUser = null;
         this.isOnline = navigator.onLine;
