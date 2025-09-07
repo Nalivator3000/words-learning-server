@@ -9,10 +9,10 @@ const config = {
         }
     },
     production: {
-        apiUrl: 'https://your-api-server.railway.app/api', // Update with your actual Railway URL
+        apiUrl: '/api', // Use relative URL since frontend and API are on same server
         features: {
             enableTestingFunctions: false,
-            enableLogging: false,
+            enableLogging: true, // Enable logging for debugging
             enableResponsiveTesting: false
         }
     }

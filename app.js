@@ -157,6 +157,10 @@ class LanguageLearningApp {
             // Verify DOM elements exist
             this.verifyDOMElements();
             
+            // Initialize external database first
+            console.log('🌐 Initializing external database...');
+            await this.initExternalDatabase();
+            
             await database.init();
             
             // Initialize backup system
@@ -181,6 +185,35 @@ class LanguageLearningApp {
         } catch (error) {
             console.error('Failed to initialize app:', error);
             this.showError('Ошибка инициализации приложения');
+        }
+    }
+
+    async initExternalDatabase() {
+        try {
+            if (!window.externalDatabase) {
+                console.log('⚠️ External database not available');
+                return;
+            }
+
+            // Initialize external database
+            await window.externalDatabase.init();
+
+            // Try to authenticate as root user automatically
+            if (!window.externalDatabase.currentUser) {
+                console.log('🔐 Attempting automatic authentication...');
+                try {
+                    await window.externalDatabase.authenticate('root', 'root');
+                    console.log('✅ Automatic authentication successful');
+                    
+                    // Replace local database with external database
+                    window.database = window.externalDatabase;
+                    console.log('🔄 Using external database as primary database');
+                } catch (error) {
+                    console.warn('⚠️ Automatic authentication failed, using fallback:', error.message);
+                }
+            }
+        } catch (error) {
+            console.warn('⚠️ External database initialization failed:', error);
         }
     }
 
