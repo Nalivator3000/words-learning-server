@@ -2,6 +2,7 @@ const express = require('express');
 const { Pool } = require('pg');
 const cors = require('cors');
 const jwt = require('jsonwebtoken');
+const path = require('path');
 require('dotenv').config();
 
 const app = express();
@@ -13,6 +14,12 @@ app.use(cors({
     credentials: true
 }));
 app.use(express.json({ limit: '10mb' }));
+
+// Serve static files from current directory
+app.use(express.static('.', {
+    extensions: ['html'],
+    index: 'index.html'
+}));
 
 // JWT secret
 const JWT_SECRET = process.env.JWT_SECRET || 'words_learning_jwt_secret_2024';
@@ -1013,6 +1020,20 @@ process.on('SIGINT', () => {
         console.log('✅ Database connection pool closed');
         process.exit(0);
     });
+});
+
+// Root route - serve main application
+app.get('/', (req, res) => {
+    res.sendFile(path.join(__dirname, 'index.html'));
+});
+
+// Catch-all route for SPA - serve index.html for any non-API routes
+app.get('*', (req, res) => {
+    // Don't intercept API routes
+    if (req.path.startsWith('/api/')) {
+        return res.status(404).json({ error: 'API endpoint not found' });
+    }
+    res.sendFile(path.join(__dirname, 'index.html'));
 });
 
 // Start server
