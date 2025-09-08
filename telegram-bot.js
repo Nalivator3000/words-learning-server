@@ -343,22 +343,28 @@ class WordStudyBot {
         session.importStep = 'csv';
         this.userSessions.set(chatId, session);
         
+        const keyboard = {
+            inline_keyboard: [
+                [{ text: '📋 CSV текст', callback_data: 'import_csv' }],
+                [{ text: '📊 Google Таблица', callback_data: 'import_google' }],
+                [{ text: '❌ Отмена', callback_data: 'import_cancel' }]
+            ]
+        };
+
         await this.bot.sendMessage(chatId, `📥 Импорт словаря
 
-📋 Отправьте словарь в формате CSV:
-Каждая строка: слово,перевод,пример
-Например:
+Выберите способ импорта:
 
-der Hund,собака,Der Hund ist freundlich
-das Haus,дом,Das Haus ist groß
-die Katze,кошка,Die Katze schläft
+📋 **CSV текст** - вставить данные прямо в чат
+📊 **Google Таблица** - импорт по ссылке
 
-Или просто:
-Hund,собака
-Haus,дом
-Katze,кошка
-
-Отправьте текст сообщением:`);
+Формат данных:
+• CSV: \`слово,перевод,пример\`
+• Google Таблица: первая колонка - слово, вторая - перевод, третья - пример (необязательно)`, 
+        {
+            parse_mode: 'Markdown',
+            reply_markup: keyboard
+        });
     }
 
     async handleImportInput(msg) {
@@ -371,6 +377,8 @@ Katze,кошка
         try {
             if (session.importStep === 'csv') {
                 await this.processCsvImport(chatId, text, session);
+            } else if (session.importStep === 'google') {
+                await this.processGoogleSheetsImport(chatId, text, session);
             }
         } catch (error) {
             console.error('Import input error:', error);
@@ -453,6 +461,279 @@ ${errors.join('\n')}`);
         resultMessage += `\n\n🎯 Теперь можете изучать слова: /study`;
         
         await this.bot.sendMessage(chatId, resultMessage);
+    }
+
+    async processGoogleSheetsImport(chatId, googleSheetsUrl, session) {
+        // Validate Google Sheets URL
+        const sheetUrlRegex = /^https:\/\/docs\.google\.com\/spreadsheets\/d\/([a-zA-Z0-9-_]+)/;
+        const match = googleSheetsUrl.match(sheetUrlRegex);
+        
+        if (!match) {
+            await this.bot.sendMessage(chatId, '❌ Неверная ссылка на Google Таблицу. Убедитесь, что ссылка имеет формат:\nhttps://docs.google.com/spreadsheets/d/ID/edit');
+            return;
+        }
+        
+        const spreadsheetId = match[1];
+        const csvExportUrl = `https://docs.google.com/spreadsheets/d/${spreadsheetId}/export?format=csv`;
+        
+        try {
+            await this.bot.sendMessage(chatId, '⏳ Загружаю данные из Google Таблицы...');
+            
+            // Use node-fetch or similar to fetch the CSV data
+            const https = require('https');
+            const http = require('http');
+            const url = require('url');
+            
+            const csvData = await new Promise((resolve, reject) => {
+                const parsedUrl = url.parse(csvExportUrl);
+                const httpModule = parsedUrl.protocol === 'https:' ? https : http;
+                
+                const req = httpModule.get(csvExportUrl, (res) => {
+                    if (res.statusCode === 200) {
+                        let data = '';
+                        res.setEncoding('utf8');
+                        res.on('data', chunk => data += chunk);
+                        res.on('end', () => resolve(data));
+                    } else if (res.statusCode === 302 || res.statusCode === 301) {
+                        // Handle redirects
+                        const location = res.headers.location;
+                        if (location) {
+                            const redirectReq = httpModule.get(location, (redirectRes) => {
+                                if (redirectRes.statusCode === 200) {
+                                    let data = '';
+                                    redirectRes.setEncoding('utf8');
+                                    redirectRes.on('data', chunk => data += chunk);
+                                    redirectRes.on('end', () => resolve(data));
+                                } else {
+                                    reject(new Error(`HTTP ${redirectRes.statusCode}`));
+                                }
+                            });
+                            redirectReq.on('error', reject);
+                        } else {
+                            reject(new Error(`HTTP ${res.statusCode}: No redirect location`));
+                        }
+                    } else {
+                        reject(new Error(`HTTP ${res.statusCode}: Убедитесь, что таблица публично доступна`));
+                    }
+                });
+                
+                req.on('error', reject);
+                req.setTimeout(10000, () => {
+                    req.destroy();
+                    reject(new Error('Таймаут запроса. Проверьте ссылку и доступность таблицы.'));
+                });
+            });
+            
+            // Process CSV data similarly to processCsvImport
+            const lines = csvData.split('\n').filter(line => line.trim());
+            
+            if (lines.length === 0) {
+                await this.bot.sendMessage(chatId, '❌ Таблица пуста или недоступна. Убедитесь, что таблица публично доступна и содержит данные.');
+                return;
+            }
+            
+            const words = [];
+            let errors = [];
+            let successCount = 0;
+            
+            // Skip header row if it looks like a header
+            let startIndex = 0;
+            if (lines.length > 1) {
+                const firstLine = lines[0].toLowerCase();
+                if (firstLine.includes('слово') || firstLine.includes('word') || 
+                    firstLine.includes('немецк') || firstLine.includes('german') ||
+                    firstLine.includes('перевод') || firstLine.includes('translation')) {
+                    startIndex = 1;
+                }
+            }
+            
+            for (let i = startIndex; i < lines.length; i++) {
+                const line = lines[i].trim();
+                if (!line) continue;
+                
+                // Parse CSV with proper comma handling (handle quotes)
+                const parts = this.parseCSVLine(line);
+                
+                if (parts.length >= 2) {
+                    const word = parts[0]?.trim();
+                    const translation = parts[1]?.trim();
+                    const example = parts[2]?.trim() || '';
+                    
+                    if (word && translation) {
+                        words.push({
+                            word: word,
+                            translation: translation,
+                            example: example,
+                            exampleTranslation: '',
+                            status: 'studying'
+                        });
+                    } else {
+                        errors.push(`Строка ${i + 1}: пустое слово или перевод`);
+                    }
+                } else {
+                    errors.push(`Строка ${i + 1}: недостаточно данных (нужно минимум 2 колонки)`);
+                }
+            }
+            
+            if (words.length === 0) {
+                await this.bot.sendMessage(chatId, '❌ Не найдено подходящих данных для импорта. Проверьте формат таблицы.');
+                return;
+            }
+            
+            // Add words to database
+            for (const word of words) {
+                try {
+                    await this.addWordToDatabase(session.userId, session.languagePairId, word);
+                    successCount++;
+                } catch (error) {
+                    errors.push(`Ошибка добавления "${word.word}": ${error.message}`);
+                }
+            }
+            
+            let resultMessage = `📊 Импорт из Google Таблицы завершен!
+
+✅ Успешно импортировано: ${successCount} слов
+📝 Всего строк обработано: ${lines.length - startIndex}`;
+
+            if (errors.length > 0) {
+                resultMessage += `\n\n⚠️ Ошибки (${errors.length}):\n${errors.slice(0, 5).join('\n')}`;
+                if (errors.length > 5) {
+                    resultMessage += `\n... и еще ${errors.length - 5} ошибок`;
+                }
+            }
+            
+            resultMessage += `\n\n🎯 Теперь можете изучать слова: /study`;
+            
+            await this.bot.sendMessage(chatId, resultMessage);
+            
+        } catch (error) {
+            console.error('Google Sheets import error:', error);
+            await this.bot.sendMessage(chatId, `❌ Ошибка загрузки Google Таблицы: ${error.message}
+
+💡 Возможные причины:
+• Таблица не является публично доступной
+• Неверная ссылка на таблицу  
+• Проблемы с подключением к интернету
+• Таблица пуста или удалена
+
+Попробуйте еще раз с /import или используйте импорт CSV.`);
+        }
+    }
+
+    // Helper method to properly parse CSV lines with quoted values
+    parseCSVLine(line) {
+        const result = [];
+        let current = '';
+        let inQuotes = false;
+        
+        for (let i = 0; i < line.length; i++) {
+            const char = line[i];
+            
+            if (char === '"') {
+                // Handle double quotes as escape
+                if (i + 1 < line.length && line[i + 1] === '"') {
+                    current += '"';
+                    i++; // Skip next quote
+                } else {
+                    inQuotes = !inQuotes;
+                }
+            } else if (char === ',' && !inQuotes) {
+                result.push(current);
+                current = '';
+            } else {
+                current += char;
+            }
+        }
+        
+        result.push(current);
+        return result;
+    }
+
+    async handleImportCallback(query) {
+        const chatId = query.message.chat.id;
+        const session = this.userSessions.get(chatId);
+        
+        if (!session || !session.userId) {
+            await this.bot.answerCallbackQuery(query.id, '❌ Сначала войдите в систему');
+            return;
+        }
+        
+        const action = query.data.split('_')[1]; // csv, google, cancel
+        
+        try {
+            switch (action) {
+                case 'csv':
+                    session.importStep = 'csv';
+                    this.userSessions.set(chatId, session);
+                    
+                    await this.bot.answerCallbackQuery(query.id);
+                    await this.bot.editMessageText(`📋 Импорт из CSV
+
+Отправьте данные в формате:
+\`\`\`
+слово,перевод,пример
+der Hund,собака,Der Hund ist freundlich
+das Haus,дом,Das Haus ist groß
+die Katze,кошка,Die Katze schläft
+\`\`\`
+
+Или упрощенно:
+\`\`\`
+Hund,собака
+Haus,дом
+Katze,кошка
+\`\`\`
+
+Отправьте данные следующим сообщением:`, {
+                        chat_id: chatId,
+                        message_id: query.message.message_id,
+                        parse_mode: 'Markdown'
+                    });
+                    break;
+                    
+                case 'google':
+                    session.importStep = 'google';
+                    this.userSessions.set(chatId, session);
+                    
+                    await this.bot.answerCallbackQuery(query.id);
+                    await this.bot.editMessageText(`📊 Импорт из Google Таблицы
+
+Отправьте ссылку на Google Таблицу в формате:
+\`https://docs.google.com/spreadsheets/d/ID/edit\`
+
+**Важно:**
+1. Таблица должна быть **публично доступна** для просмотра
+2. Первая колонка: немецкие слова
+3. Вторая колонка: русские переводы  
+4. Третья колонка: примеры (необязательно)
+
+**Как сделать таблицу публичной:**
+1. Откройте таблицу → Файл → Доступ → Разрешить доступ всем у кого есть ссылка
+2. Выберите "Читатель"
+3. Скопируйте ссылку и отправьте её сюда
+
+Отправьте ссылку следующим сообщением:`, {
+                        chat_id: chatId,
+                        message_id: query.message.message_id,
+                        parse_mode: 'Markdown'
+                    });
+                    break;
+                    
+                case 'cancel':
+                    delete session.importStep;
+                    this.userSessions.set(chatId, session);
+                    
+                    await this.bot.answerCallbackQuery(query.id, '❌ Импорт отменен');
+                    await this.bot.editMessageText('❌ Импорт отменен', {
+                        chat_id: chatId,
+                        message_id: query.message.message_id
+                    });
+                    break;
+            }
+        } catch (error) {
+            console.error('Import callback error:', error);
+            await this.bot.answerCallbackQuery(query.id, '❌ Ошибка обработки');
+        }
     }
 
     async handleStudy(msg, quizType) {
@@ -662,6 +943,12 @@ ${currentWord.example_translation ? `\n${currentWord.example_translation}` : ''}
     async handleCallbackQuery(query) {
         const chatId = query.message.chat.id;
         const session = this.userSessions.get(chatId);
+        
+        // Handle import callbacks
+        if (query.data.startsWith('import_')) {
+            await this.handleImportCallback(query);
+            return;
+        }
         
         if (!session?.quiz) {
             await this.bot.answerCallbackQuery(query.id, 'Сессия истекла. Начните новый урок.');
