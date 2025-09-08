@@ -1,9 +1,21 @@
 const TelegramBot = require('node-telegram-bot-api');
 const { Pool } = require('pg');
 
+// Ensure UTF-8 encoding
+process.env.LANG = 'en_US.UTF-8';
+process.env.LC_ALL = 'en_US.UTF-8';
+
 class WordStudyBot {
     constructor(token, dbPool) {
-        this.bot = new TelegramBot(token, { polling: true });
+        this.bot = new TelegramBot(token, { 
+            polling: true,
+            request: {
+                agentOptions: {
+                    keepAlive: true,
+                    family: 4
+                }
+            }
+        });
         this.pool = dbPool;
         this.userSessions = new Map(); // Store active quiz sessions
         
@@ -225,11 +237,12 @@ class WordStudyBot {
         if (quizSession.type === 'multiple_choice') {
             // Generate 4 options (1 correct + 3 wrong)
             const options = await this.generateOptions(currentWord, quizSession.words);
+            const correctAnswerIndex = options.indexOf(currentWord.translation);
             
             const keyboard = {
                 inline_keyboard: options.map((option, index) => [{
                     text: option,
-                    callback_data: `answer_${index}_${option === currentWord.translation ? 'correct' : 'wrong'}`
+                    callback_data: `answer_${index}_${index === correctAnswerIndex ? 'correct' : 'wrong'}`
                 }])
             };
             
@@ -261,14 +274,19 @@ ${currentWord.example_translation ? `\n${currentWord.example_translation}` : ''}
     }
 
     async generateOptions(correctWord, allWords) {
-        const options = [correctWord.translation];
+        // Ensure text is properly encoded
+        const correctTranslation = Buffer.from(correctWord.translation, 'utf8').toString('utf8');
+        const options = [correctTranslation];
         
         // Add 3 random wrong options from other words
         const otherWords = allWords.filter(w => w.id !== correctWord.id);
         const shuffled = otherWords.sort(() => 0.5 - Math.random());
         
         for (let i = 0; i < 3 && i < shuffled.length; i++) {
-            options.push(shuffled[i].translation);
+            const translation = Buffer.from(shuffled[i].translation, 'utf8').toString('utf8');
+            if (!options.includes(translation)) {
+                options.push(translation);
+            }
         }
         
         // If we don't have enough words, add some common wrong answers
@@ -486,10 +504,23 @@ ${score >= 80 ? '🎉 Отличная работа!' :
     async getStudyWords(userId, languagePairId, limit = 20) {
         try {
             if (this.pool) {
+                // Set client encoding to UTF-8
+                await this.pool.query('SET client_encoding = UTF8');
+                
                 const result = await this.pool.query(
                     'SELECT * FROM words WHERE user_id = $1 AND language_pair_id = $2 AND status = $3 ORDER BY RANDOM() LIMIT $4',
                     [userId, languagePairId, 'studying', limit]
                 );
+                
+                // Debug: log the first word to check encoding
+                if (result.rows.length > 0) {
+                    console.log('🔍 Debug - First word from DB:', {
+                        word: result.rows[0].word,
+                        translation: result.rows[0].translation,
+                        translation_buffer: Buffer.from(result.rows[0].translation).toString('hex')
+                    });
+                }
+                
                 return result.rows;
             }
             return [];
