@@ -3,6 +3,7 @@ const { Pool } = require('pg');
 const cors = require('cors');
 const jwt = require('jsonwebtoken');
 const path = require('path');
+const WordStudyBot = require('./telegram-bot');
 require('dotenv').config();
 
 const app = express();
@@ -52,16 +53,36 @@ pool.connect((err, client, release) => {
 
 let useDatabase = false;
 let inMemoryData = null;
+let telegramBot = null;
+
+// Initialize Telegram bot
+function initTelegramBot() {
+    const botToken = process.env.TELEGRAM_BOT_TOKEN;
+    
+    if (!botToken) {
+        console.log('⚠️ No Telegram bot token found, bot disabled');
+        return;
+    }
+    
+    try {
+        telegramBot = new WordStudyBot(botToken, pool);
+        console.log('🤖 Telegram bot started successfully');
+    } catch (error) {
+        console.error('❌ Failed to start Telegram bot:', error);
+    }
+}
 
 // Initialize database mode
 function initDatabaseMode() {
     useDatabase = true;
+    initTelegramBot();
     console.log('🗄️  Using PostgreSQL database');
 }
 
 // Initialize in-memory fallback mode
 function initInMemoryMode() {
     useDatabase = false;
+    initTelegramBot(); // Bot can still work in fallback mode
     inMemoryData = {
         users: new Map([
             ['root-user', { 
@@ -1016,6 +1037,12 @@ app.use((error, req, res, next) => {
 // Graceful shutdown
 process.on('SIGINT', () => {
     console.log('\n🔄 Shutting down server...');
+    
+    // Stop Telegram bot
+    if (telegramBot) {
+        telegramBot.stop();
+    }
+    
     pool.end(() => {
         console.log('✅ Database connection pool closed');
         process.exit(0);

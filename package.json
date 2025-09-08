@@ -7,13 +7,15 @@
     "start": "node server-postgres.js",
     "dev": "node server-postgres.js",
     "start-legacy": "node server-full.js",
-    "dev-local": "node server-full.js"
+    "dev-local": "node server-full.js",
+    "bot": "node telegram-bot.js"
   },
   "dependencies": {
     "cors": "^2.8.5",
     "dotenv": "^16.6.1",
     "express": "^4.21.2",
     "jsonwebtoken": "^9.0.2",
+    "node-telegram-bot-api": "^0.66.0",
     "pg": "^8.16.3"
   },
   "engines": {
