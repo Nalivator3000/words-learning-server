@@ -13,8 +13,12 @@ class WordStudyBot {
                 agentOptions: {
                     keepAlive: true,
                     family: 4
-                }
-            }
+                },
+                encoding: 'utf8'
+            },
+            // Force UTF-8 for all requests
+            baseApiUrl: 'https://api.telegram.org',
+            filepath: true
         });
         this.pool = dbPool;
         this.userSessions = new Map(); // Store active quiz sessions
@@ -30,9 +34,11 @@ class WordStudyBot {
         this.bot.setMyCommands([
             { command: 'start', description: 'Начать изучение слов' },
             { command: 'login', description: 'Войти в аккаунт (логин пароль)' },
+            { command: 'register', description: 'Зарегистрировать новый аккаунт' },
             { command: 'study', description: 'Изучение новых слов (выбор из вариантов)' },
             { command: 'type', description: 'Изучение новых слов (ввод с клавиатуры)' },
             { command: 'review', description: 'Повторение изученных слов' },
+            { command: 'import', description: 'Импорт словаря из CSV' },
             { command: 'stats', description: 'Статистика изучения' },
             { command: 'help', description: 'Помощь' }
         ]);
@@ -47,6 +53,16 @@ class WordStudyBot {
         // Login command
         this.bot.onText(/\/login (.+)/, (msg, match) => {
             this.handleLogin(msg, match[1]);
+        });
+
+        // Register command
+        this.bot.onText(/\/register/, (msg) => {
+            this.handleRegister(msg);
+        });
+
+        // Import command
+        this.bot.onText(/\/import/, (msg) => {
+            this.handleImport(msg);
         });
 
         // Study commands
@@ -78,10 +94,24 @@ class WordStudyBot {
             this.handleCallbackQuery(query);
         });
 
-        // Handle text messages (for typing exercises)
+        // Handle text messages (for typing exercises and registration)
         this.bot.on('message', (msg) => {
             // Skip if it's a command
             if (msg.text && msg.text.startsWith('/')) return;
+            
+            // Check if user is in registration or import flow
+            const chatId = msg.chat.id;
+            const session = this.userSessions.get(chatId);
+            
+            if (session && session.registrationStep) {
+                this.handleRegistrationInput(msg);
+                return;
+            }
+            
+            if (session && session.importStep) {
+                this.handleImportInput(msg);
+                return;
+            }
             
             this.handleTextMessage(msg);
         });
@@ -101,18 +131,22 @@ class WordStudyBot {
         const chatId = msg.chat.id;
         const welcomeText = `🎓 Добро пожаловать в WordStudyBot!
 
-Я помогу вам изучать немецкие слова. Для начала войдите в свой аккаунт:
+Я помогу вам изучать немецкие слова.
 
+🆕 **Новый пользователь?**
+/register - Зарегистрировать аккаунт
+
+🔑 **Уже есть аккаунт?**
 /login логин пароль
-
 Например: /login root root
 
-После входа доступны команды:
-📚 /study - Изучение с выбором ответа
-⌨️ /type - Изучение с вводом перевода  
-🔄 /review - Повторение изученных слов
-📊 /stats - Статистика обучения
-❓ /help - Помощь`;
+📚 **После входа доступны команды:**
+/study - Изучение с выбором ответа
+/type - Изучение с вводом перевода
+/import - Импорт словаря из CSV
+/review - Повторение изученных слов
+/stats - Статистика обучения
+/help - Помощь`;
 
         await this.bot.sendMessage(chatId, welcomeText);
     }
@@ -157,6 +191,270 @@ class WordStudyBot {
         }
     }
 
+    async handleRegister(msg) {
+        const chatId = msg.chat.id;
+        
+        // Start registration process
+        this.userSessions.set(chatId, {
+            registrationStep: 'email',
+            registrationData: {}
+        });
+        
+        await this.bot.sendMessage(chatId, `👤 Регистрация нового аккаунта
+
+📧 Введите email (логин):
+Например: myemail@example.com`);
+    }
+
+    async handleRegistrationInput(msg) {
+        const chatId = msg.chat.id;
+        const session = this.userSessions.get(chatId);
+        const text = msg.text.trim();
+        
+        if (!session || !session.registrationStep) return;
+        
+        try {
+            switch (session.registrationStep) {
+                case 'email':
+                    // Validate email format
+                    if (!text.includes('@') || text.length < 3) {
+                        await this.bot.sendMessage(chatId, '❌ Неверный формат email. Попробуйте еще раз:');
+                        return;
+                    }
+                    
+                    session.registrationData.email = text;
+                    session.registrationStep = 'name';
+                    
+                    await this.bot.sendMessage(chatId, `✅ Email: ${text}
+
+👤 Введите ваше имя:
+Например: Иван Петров`);
+                    break;
+                    
+                case 'name':
+                    if (text.length < 2) {
+                        await this.bot.sendMessage(chatId, '❌ Имя слишком короткое. Попробуйте еще раз:');
+                        return;
+                    }
+                    
+                    session.registrationData.name = text;
+                    session.registrationStep = 'password';
+                    
+                    await this.bot.sendMessage(chatId, `✅ Имя: ${text}
+
+🔒 Введите пароль:
+Минимум 4 символа`);
+                    break;
+                    
+                case 'password':
+                    if (text.length < 4) {
+                        await this.bot.sendMessage(chatId, '❌ Пароль слишком короткий (минимум 4 символа). Попробуйте еще раз:');
+                        return;
+                    }
+                    
+                    session.registrationData.password = text;
+                    session.registrationStep = 'confirmPassword';
+                    
+                    await this.bot.sendMessage(chatId, `🔒 Подтвердите пароль:
+Введите пароль еще раз`);
+                    break;
+                    
+                case 'confirmPassword':
+                    if (text !== session.registrationData.password) {
+                        await this.bot.sendMessage(chatId, '❌ Пароли не совпадают. Введите пароль еще раз:');
+                        return;
+                    }
+                    
+                    // Complete registration
+                    await this.completeRegistration(chatId, session.registrationData);
+                    break;
+            }
+            
+            // Update session
+            this.userSessions.set(chatId, session);
+            
+        } catch (error) {
+            console.error('Registration input error:', error);
+            await this.bot.sendMessage(chatId, '❌ Ошибка обработки. Попробуйте /register еще раз.');
+            
+            // Clear registration session
+            const cleanSession = this.userSessions.get(chatId);
+            if (cleanSession) {
+                delete cleanSession.registrationStep;
+                delete cleanSession.registrationData;
+                this.userSessions.set(chatId, cleanSession);
+            }
+        }
+    }
+
+    async completeRegistration(chatId, data) {
+        try {
+            // Create user in database
+            const user = await this.registerUser(data.email, data.password, data.name);
+            
+            if (user) {
+                // Automatically log in the new user
+                this.userSessions.set(chatId, {
+                    userId: user.id,
+                    email: user.email,
+                    name: user.name,
+                    languagePairId: user.languagePairs?.[0]?.id || `${user.id}-default-pair`
+                });
+                
+                await this.bot.sendMessage(chatId, `🎉 Регистрация успешна!
+
+✅ Добро пожаловать, ${user.name}!
+📧 Email: ${user.email}
+🔑 Вы автоматически вошли в систему
+
+Доступные команды:
+📚 /study - Изучение новых слов
+⌨️ /type - Ввод перевода
+📥 /import - Импорт словаря
+📊 /stats - Статистика`);
+            } else {
+                await this.bot.sendMessage(chatId, '❌ Ошибка регистрации. Возможно, пользователь уже существует.');
+            }
+            
+        } catch (error) {
+            console.error('Registration completion error:', error);
+            await this.bot.sendMessage(chatId, '❌ Ошибка регистрации. Попробуйте позже или обратитесь к администратору.');
+        }
+        
+        // Clear registration session
+        const session = this.userSessions.get(chatId);
+        if (session) {
+            delete session.registrationStep;
+            delete session.registrationData;
+            this.userSessions.set(chatId, session);
+        }
+    }
+
+    async handleImport(msg) {
+        const chatId = msg.chat.id;
+        const session = this.userSessions.get(chatId);
+        
+        if (!session || !session.userId) {
+            await this.bot.sendMessage(chatId, '❌ Сначала войдите в систему: /login логин пароль или /register');
+            return;
+        }
+        
+        // Start import process
+        session.importStep = 'csv';
+        this.userSessions.set(chatId, session);
+        
+        await this.bot.sendMessage(chatId, `📥 Импорт словаря
+
+📋 Отправьте словарь в формате CSV:
+Каждая строка: слово,перевод,пример
+Например:
+
+der Hund,собака,Der Hund ist freundlich
+das Haus,дом,Das Haus ist groß
+die Katze,кошка,Die Katze schläft
+
+Или просто:
+Hund,собака
+Haus,дом
+Katze,кошка
+
+Отправьте текст сообщением:`);
+    }
+
+    async handleImportInput(msg) {
+        const chatId = msg.chat.id;
+        const session = this.userSessions.get(chatId);
+        const text = msg.text.trim();
+        
+        if (!session || !session.importStep || !session.userId) return;
+        
+        try {
+            if (session.importStep === 'csv') {
+                await this.processCsvImport(chatId, text, session);
+            }
+        } catch (error) {
+            console.error('Import input error:', error);
+            await this.bot.sendMessage(chatId, '❌ Ошибка импорта. Проверьте формат данных и попробуйте еще раз.');
+        }
+        
+        // Clear import session
+        delete session.importStep;
+        this.userSessions.set(chatId, session);
+    }
+
+    async processCsvImport(chatId, csvText, session) {
+        const lines = csvText.split('\n').filter(line => line.trim());
+        
+        if (lines.length === 0) {
+            await this.bot.sendMessage(chatId, '❌ Пустые данные. Попробуйте еще раз с /import');
+            return;
+        }
+        
+        const words = [];
+        let errors = [];
+        
+        for (let i = 0; i < lines.length; i++) {
+            const line = lines[i].trim();
+            const parts = line.split(',').map(p => p.trim());
+            
+            if (parts.length >= 2) {
+                const word = parts[0];
+                const translation = parts[1];
+                const example = parts[2] || '';
+                
+                if (word && translation) {
+                    words.push({
+                        word: word,
+                        translation: translation,
+                        example: example,
+                        exampleTranslation: '',
+                        status: 'studying'
+                    });
+                } else {
+                    errors.push(`Строка ${i + 1}: пустое слово или перевод`);
+                }
+            } else {
+                errors.push(`Строка ${i + 1}: неверный формат (нужно: слово,перевод)`);
+            }
+        }
+        
+        if (words.length === 0) {
+            await this.bot.sendMessage(chatId, `❌ Не найдено валидных слов для импорта.
+            
+Ошибки:
+${errors.join('\n')}`);
+            return;
+        }
+        
+        // Import words to database
+        let successCount = 0;
+        
+        for (const word of words) {
+            try {
+                await this.addWordToDatabase(session.userId, session.languagePairId, word);
+                successCount++;
+            } catch (error) {
+                errors.push(`Ошибка добавления "${word.word}": ${error.message}`);
+            }
+        }
+        
+        let resultMessage = `📥 Импорт завершен!
+
+✅ Успешно импортировано: ${successCount} слов
+📝 Всего строк обработано: ${lines.length}`;
+
+        if (errors.length > 0) {
+            resultMessage += `\n\n⚠️ Ошибки (${errors.length}):\n${errors.slice(0, 5).join('\n')}`;
+            if (errors.length > 5) {
+                resultMessage += `\n... и еще ${errors.length - 5} ошибок`;
+            }
+        }
+        
+        resultMessage += `\n\n🎯 Теперь можете изучать слова: /study`;
+        
+        await this.bot.sendMessage(chatId, resultMessage);
+    }
+
     async handleStudy(msg, quizType) {
         const chatId = msg.chat.id;
         const session = this.userSessions.get(chatId);
@@ -181,6 +479,8 @@ class WordStudyBot {
                 words: words.slice(0, 10), // Limit to 10 words
                 currentIndex: 0,
                 correctAnswers: 0,
+                wrongWords: [], // Track words with mistakes for repeat
+                isReviewPhase: false, // Flag to indicate if we're in the review phase
                 startTime: Date.now()
             };
 
@@ -217,6 +517,8 @@ class WordStudyBot {
                 words: words.slice(0, 10),
                 currentIndex: 0,
                 correctAnswers: 0,
+                wrongWords: [], // Track words with mistakes for repeat
+                isReviewPhase: false, // Flag to indicate if we're in the review phase
                 startTime: Date.now()
             };
 
@@ -246,7 +548,7 @@ class WordStudyBot {
                 }])
             };
             
-            const questionText = `📖 Вопрос ${questionNum}/${totalQuestions}
+            const questionText = `${quizSession.isReviewPhase ? '🔄 Повтор' : '📖 Вопрос'} ${questionNum}/${totalQuestions}
 
 🇩🇪 **${currentWord.word}**
 ${currentWord.example ? `\n_${currentWord.example}_` : ''}
@@ -265,7 +567,7 @@ ${currentWord.example ? `\n_${currentWord.example}_` : ''}
             await this.bot.sendMessage(chatId, encodedQuestionText, messageOptions);
             
         } else if (quizSession.type === 'typing') {
-            const questionText = `⌨️ Вопрос ${questionNum}/${totalQuestions}
+            const questionText = `${quizSession.isReviewPhase ? '🔄 Повтор' : '⌨️ Вопрос'} ${questionNum}/${totalQuestions}
 
 🇩🇪 **${currentWord.word}**
 ${currentWord.example ? `\n_${currentWord.example}_` : ''}
@@ -280,43 +582,81 @@ ${currentWord.example_translation ? `\n${currentWord.example_translation}` : ''}
     }
 
     async generateOptions(correctWord, allWords) {
-        // For now, use only hardcoded Russian words to test encoding
-        // This eliminates any database encoding issues
-        
-        // Map known German words to Russian for testing
-        const testTranslations = {
-            'der Hund': 'собака',
-            'das Haus': 'дом', 
-            'die Katze': 'кошка',
-            'das Auto': 'машина',
-            'der Baum': 'дерево'
-        };
-        
-        // Try to get correct translation from our test map, fallback to original
-        const correctTranslation = testTranslations[correctWord.word] || correctWord.translation;
-        
-        // Use hardcoded Russian words as options to test encoding
-        const allRussianOptions = [
-            'собака', 'дом', 'кошка', 'машина', 'дерево',
-            'время', 'человек', 'работа', 'место', 'день', 
-            'жизнь', 'вода', 'земля', 'рука', 'голова'
-        ];
-        
-        // Start with correct answer
-        const options = [correctTranslation];
-        
-        // Add 3 random wrong options
-        const wrongOptions = allRussianOptions.filter(opt => opt !== correctTranslation);
-        const shuffledWrong = wrongOptions.sort(() => 0.5 - Math.random());
-        
-        for (let i = 0; i < 3 && i < shuffledWrong.length; i++) {
-            options.push(shuffledWrong[i]);
+        try {
+            // Use the correct translation from the database
+            const correctTranslation = correctWord.translation;
+            
+            // Start with correct answer
+            const options = [correctTranslation];
+            
+            // Try to get other translations from the same user's words to use as wrong options
+            let wrongOptions = [];
+            
+            if (this.pool && allWords && allWords.length > 1) {
+                // Get wrong options from other words in the current word set
+                wrongOptions = allWords
+                    .filter(word => word.id !== correctWord.id && word.translation !== correctTranslation)
+                    .map(word => word.translation)
+                    .slice(0, 10); // Take first 10 different translations
+            }
+            
+            // If we don't have enough wrong options from user's words, 
+            // get random translations from the database
+            if (wrongOptions.length < 3 && this.pool) {
+                try {
+                    const result = await this.pool.query(`
+                        SELECT DISTINCT translation 
+                        FROM words 
+                        WHERE translation != $1 
+                        AND translation IS NOT NULL 
+                        AND translation != ''
+                        ORDER BY RANDOM() 
+                        LIMIT 10
+                    `, [correctTranslation]);
+                    
+                    const dbOptions = result.rows.map(row => row.translation);
+                    wrongOptions = [...wrongOptions, ...dbOptions];
+                } catch (error) {
+                    console.warn('Could not fetch wrong options from DB:', error.message);
+                }
+            }
+            
+            // Fallback to hardcoded Russian words if still not enough options
+            if (wrongOptions.length < 3) {
+                const fallbackWords = [
+                    'собака', 'кошка', 'машина', 'дерево', 'дом', 'вода',
+                    'время', 'человек', 'работа', 'жизнь', 'место', 'день',
+                    'школа', 'книга', 'стол', 'окно', 'рука', 'голова'
+                ];
+                const fallbackOptions = fallbackWords.filter(word => 
+                    word !== correctTranslation && !wrongOptions.includes(word)
+                );
+                wrongOptions = [...wrongOptions, ...fallbackOptions];
+            }
+            
+            // Remove duplicates and shuffle wrong options
+            wrongOptions = [...new Set(wrongOptions)];
+            wrongOptions.sort(() => 0.5 - Math.random());
+            
+            // Add 3 wrong options
+            for (let i = 0; i < 3 && i < wrongOptions.length; i++) {
+                options.push(wrongOptions[i]);
+            }
+            
+            console.log('🔍 Debug - Generated options for', correctWord.word, ':', options);
+            
+            // Shuffle all options
+            return options.sort(() => 0.5 - Math.random());
+            
+        } catch (error) {
+            console.error('Error generating options:', error);
+            
+            // Emergency fallback
+            return [
+                correctWord.translation,
+                'собака', 'дом', 'машина'
+            ].sort(() => 0.5 - Math.random());
         }
-        
-        console.log('🔍 Debug - Test options (all hardcoded Russian):', options);
-        
-        // Shuffle options
-        return options.sort(() => 0.5 - Math.random());
     }
 
     async handleCallbackQuery(query) {
@@ -333,14 +673,21 @@ ${currentWord.example_translation ? `\n${currentWord.example_translation}` : ''}
         const quizSession = session.quiz;
         const currentWord = quizSession.words[quizSession.currentIndex];
 
-        // Update progress
-        await this.updateWordProgress(currentWord.id, session.userId, isCorrect, 'multiple_choice');
+        // Update progress only if not in review phase (reviewing mistakes)
+        if (!quizSession.isReviewPhase) {
+            await this.updateWordProgress(currentWord.id, session.userId, isCorrect, 'multiple_choice');
+        }
         
         if (isCorrect) {
             quizSession.correctAnswers++;
             await this.bot.answerCallbackQuery(query.id, '✅ Правильно!');
         } else {
             await this.bot.answerCallbackQuery(query.id, `❌ Неправильно. Правильный ответ: ${currentWord.translation}`);
+            
+            // Add word to review list if not already there and not in review phase
+            if (!quizSession.isReviewPhase && !quizSession.wrongWords.some(w => w.id === currentWord.id)) {
+                quizSession.wrongWords.push(currentWord);
+            }
         }
 
         // Move to next question or finish
@@ -368,8 +715,10 @@ ${currentWord.example_translation ? `\n${currentWord.example_translation}` : ''}
         
         const isCorrect = userAnswer === correctAnswer;
         
-        // Update progress
-        await this.updateWordProgress(currentWord.id, session.userId, isCorrect, 'typing');
+        // Update progress only if not in review phase (reviewing mistakes)
+        if (!quizSession.isReviewPhase) {
+            await this.updateWordProgress(currentWord.id, session.userId, isCorrect, 'typing');
+        }
         
         let responseText;
         if (isCorrect) {
@@ -377,6 +726,11 @@ ${currentWord.example_translation ? `\n${currentWord.example_translation}` : ''}
             responseText = '✅ Правильно!';
         } else {
             responseText = `❌ Неправильно. Правильный ответ: **${currentWord.translation}**`;
+            
+            // Add word to review list if not already there and not in review phase
+            if (!quizSession.isReviewPhase && !quizSession.wrongWords.some(w => w.id === currentWord.id)) {
+                quizSession.wrongWords.push(currentWord);
+            }
         }
         
         await this.bot.sendMessage(chatId, responseText, { parse_mode: 'Markdown' });
@@ -393,15 +747,46 @@ ${currentWord.example_translation ? `\n${currentWord.example_translation}` : ''}
 
     async finishQuiz(chatId, session) {
         const quizSession = session.quiz;
-        const score = Math.round((quizSession.correctAnswers / quizSession.words.length) * 100);
+        
+        // Check if we have wrong words to repeat and we're not already in review phase
+        if (quizSession.wrongWords.length > 0 && !quizSession.isReviewPhase) {
+            // Start review phase with wrong words
+            await this.bot.sendMessage(chatId, `🔄 Повторим слова с ошибками (${quizSession.wrongWords.length}):`);
+            
+            // Save original length for final results calculation
+            quizSession.originalLength = quizSession.words.length;
+            
+            // Prepare for review phase
+            quizSession.isReviewPhase = true;
+            quizSession.words = [...quizSession.wrongWords]; // Copy wrong words for review
+            quizSession.currentIndex = 0;
+            quizSession.wrongWords = []; // Reset wrong words list for this review
+            
+            // Start reviewing wrong words
+            await this.sendQuestion(chatId, quizSession);
+            return;
+        }
+        
+        // Calculate final results
+        const originalWordsLength = quizSession.isReviewPhase ? 
+            (quizSession.originalLength || quizSession.words.length) : quizSession.words.length;
+        const score = Math.round((quizSession.correctAnswers / originalWordsLength) * 100);
         const duration = Math.round((Date.now() - quizSession.startTime) / 1000);
         
-        const resultText = `🏆 Урок завершен!
+        let resultText = `🏆 Урок завершен!
 
 📊 Результаты:
-• Правильных ответов: ${quizSession.correctAnswers}/${quizSession.words.length}
+• Правильных ответов: ${quizSession.correctAnswers}/${originalWordsLength}
 • Точность: ${score}%
-• Время: ${duration} секунд
+• Время: ${duration} секунд`;
+
+        // Add review phase completion message if applicable
+        if (quizSession.isReviewPhase) {
+            const reviewWordsCount = quizSession.originalLength - originalWordsLength + quizSession.words.length;
+            resultText += `\n🔄 Повторено слов с ошибками: ${quizSession.words.length}`;
+        }
+
+        resultText += `
 
 ${score >= 80 ? '🎉 Отличная работа!' : 
   score >= 60 ? '👍 Хорошо, но можно лучше!' : 
@@ -482,31 +867,82 @@ ${score >= 80 ? '🎉 Отличная работа!' :
             if (this.pool) {
                 const result = await this.pool.query('SELECT * FROM users WHERE email = $1', [email]);
                 if (result.rows.length > 0) {
-                    // In real app, you'd check password hash here
                     const user = result.rows[0];
+                    
+                    // Get user's language pairs from database
+                    const pairsResult = await this.pool.query(
+                        'SELECT * FROM language_pairs WHERE user_id = $1 ORDER BY is_active DESC, created_at ASC',
+                        [user.id]
+                    );
+                    
+                    const languagePairs = pairsResult.rows.map(row => ({
+                        id: row.id,
+                        name: row.name,
+                        fromLanguage: row.from_language,
+                        toLanguage: row.to_language,
+                        active: row.is_active
+                    }));
+                    
                     return {
                         id: user.id,
                         email: user.email,
                         name: user.name,
-                        languagePairs: [{ id: 'root-user-default-pair' }] // Simplified
+                        languagePairs: languagePairs
                     };
                 }
             }
 
-            // Fallback to hardcoded users
+            // Fallback to hardcoded users (same as server logic)
             const devCredentials = [
                 { email: 'root', password: 'root', userId: 'root-user', name: 'Root User' },
-                { email: 'kate', password: '1', userId: 'kate-user', name: 'Kate' },
-                { email: 'mike', password: '1', userId: 'mike-user', name: 'Mike' }
+                { email: 'Kate', password: '1', userId: 'kate-user', name: 'Kate' },
+                { email: 'Mike', password: '1', userId: 'mike-user', name: 'Mike' }
             ];
 
-            const user = devCredentials.find(u => u.email === email && u.password === password);
-            if (user) {
+            const cred = devCredentials.find(c => c.email === email && c.password === password);
+            if (cred) {
+                // Get language pairs for hardcoded users
+                let languagePairs = [];
+                if (this.pool) {
+                    try {
+                        const pairsResult = await this.pool.query(
+                            'SELECT * FROM language_pairs WHERE user_id = $1 ORDER BY is_active DESC, created_at ASC',
+                            [cred.userId]
+                        );
+                        languagePairs = pairsResult.rows.map(row => ({
+                            id: row.id,
+                            name: row.name,
+                            fromLanguage: row.from_language,
+                            toLanguage: row.to_language,
+                            active: row.is_active
+                        }));
+                    } catch (error) {
+                        console.warn('Could not fetch language pairs:', error.message);
+                        // Fallback language pair
+                        languagePairs = [{
+                            id: `${cred.userId}-default-pair`,
+                            name: 'German-Russian',
+                            fromLanguage: 'German',
+                            toLanguage: 'Russian',
+                            active: true
+                        }];
+                    }
+                } else {
+                    // Fallback for when no database connection
+                    languagePairs = [{
+                        id: `${cred.userId}-default-pair`,
+                        name: 'German-Russian',
+                        fromLanguage: 'German',
+                        toLanguage: 'Russian',
+                        active: true
+                    }];
+                }
+                
                 return {
-                    id: user.userId,
-                    email: user.email,
-                    name: user.name,
-                    languagePairs: [{ id: `${user.userId}-default-pair` }]
+                    id: cred.userId,
+                    email: cred.email,
+                    name: cred.name,
+                    languagePairs: languagePairs
                 };
             }
 
@@ -608,6 +1044,100 @@ ${score >= 80 ? '🎉 Отличная работа!' :
         } catch (error) {
             console.error('Error getting user stats:', error);
             return {};
+        }
+    }
+
+    async registerUser(email, password, name) {
+        try {
+            if (this.pool) {
+                // Generate user ID
+                const userId = `${email.split('@')[0]}-user`.toLowerCase();
+                
+                // Check if user already exists
+                const existsResult = await this.pool.query('SELECT id FROM users WHERE email = $1 OR id = $2', [email, userId]);
+                if (existsResult.rows.length > 0) {
+                    throw new Error('Пользователь с таким email уже существует');
+                }
+                
+                // Create user
+                await this.pool.query(
+                    'INSERT INTO users (id, email, name, password_hash, created_at) VALUES ($1, $2, $3, $4, NOW())',
+                    [userId, email, name, password] // In production, hash the password
+                );
+                
+                // Create default language pair
+                const languagePairId = `${userId}-default-pair`;
+                await this.pool.query(`
+                    INSERT INTO language_pairs (id, user_id, name, from_language, to_language, is_active, created_at)
+                    VALUES ($1, $2, $3, $4, $5, $6, NOW())
+                `, [languagePairId, userId, 'German-Russian', 'German', 'Russian', true]);
+                
+                console.log(`✅ User registered: ${email} (${userId})`);
+                
+                return {
+                    id: userId,
+                    email: email,
+                    name: name,
+                    languagePairs: [{
+                        id: languagePairId,
+                        name: 'German-Russian',
+                        fromLanguage: 'German',
+                        toLanguage: 'Russian',
+                        active: true
+                    }]
+                };
+            }
+            
+            throw new Error('База данных недоступна');
+            
+        } catch (error) {
+            console.error('Registration error:', error);
+            throw error;
+        }
+    }
+
+    async addWordToDatabase(userId, languagePairId, wordData) {
+        try {
+            if (this.pool) {
+                // Check if word already exists for this user
+                const existsResult = await this.pool.query(
+                    'SELECT id FROM words WHERE user_id = $1 AND word = $2',
+                    [userId, wordData.word]
+                );
+                
+                if (existsResult.rows.length > 0) {
+                    throw new Error(`Слово "${wordData.word}" уже существует`);
+                }
+                
+                // Add word to database
+                const result = await this.pool.query(`
+                    INSERT INTO words (
+                        user_id, language_pair_id, word, translation, 
+                        example, example_translation, status, correct_count, 
+                        incorrect_count, review_attempts, created_at
+                    ) VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9, $10, NOW())
+                    RETURNING id
+                `, [
+                    userId,
+                    languagePairId,
+                    wordData.word,
+                    wordData.translation,
+                    wordData.example || '',
+                    wordData.exampleTranslation || '',
+                    wordData.status || 'studying',
+                    0,
+                    0,
+                    0
+                ]);
+                
+                return result.rows[0].id;
+            }
+            
+            throw new Error('База данных недоступна');
+            
+        } catch (error) {
+            console.error('Add word error:', error);
+            throw error;
         }
     }
 

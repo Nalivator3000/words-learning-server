@@ -50,28 +50,37 @@ class UserManager {
 
     async login(email, password) {
         try {
-            // For now, use local storage authentication
-            // In real implementation, this would be server-side
-            const users = this.getStoredUsers();
-            const user = users.find(u => u.email === email);
-            
-            if (!user) {
-                throw new Error('Пользователь не найден');
+            // First try external database authentication
+            if (window.externalDatabase && await window.externalDatabase.isAvailable()) {
+                console.log('🌐 Attempting server authentication...');
+                try {
+                    const user = await window.externalDatabase.authenticate(email, password);
+                    if (user) {
+                        console.log('✅ Server authentication successful');
+                        
+                        // Switch to external database
+                        window.database = window.externalDatabase;
+                        
+                        this.currentUser = { ...user };
+                        localStorage.setItem('currentUser', JSON.stringify(this.currentUser));
+                        
+                        this.hideAuthModal();
+                        this.showUserInterface();
+                        
+                        // Show notification about database connection
+                        if (window.app && window.app.showNotification) {
+                            window.app.showNotification('✅ Подключено к серверной базе данных', 'success', 3000);
+                        }
+                        
+                        return true;
+                    }
+                } catch (serverError) {
+                    console.warn('⚠️ Server authentication failed, trying local:', serverError.message);
+                }
             }
-
-            // Simple password check (in real app, use proper hashing)
-            if (user.password !== this.hashPassword(password)) {
-                throw new Error('Неверный пароль');
-            }
-
-            this.currentUser = { ...user };
-            delete this.currentUser.password; // Don't keep password in memory
             
-            localStorage.setItem('currentUser', JSON.stringify(this.currentUser));
-            await this.loadUserLanguagePairs();
-            
-            this.hideAuthModal();
-            this.showUserInterface();
+            // No fallback - only server authentication allowed
+            throw new Error('Сервер базы данных недоступен. Проверьте подключение к интернету и состояние сервера.');
             
             return true;
         } catch (error) {

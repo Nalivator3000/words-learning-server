@@ -157,11 +157,18 @@ class LanguageLearningApp {
             // Verify DOM elements exist
             this.verifyDOMElements();
             
-            // Initialize external database first
-            console.log('🌐 Initializing external database...');
+            // Initialize PostgreSQL database connection
+            console.log('🌐 Initializing PostgreSQL database connection...');
             await this.initExternalDatabase();
             
-            await database.init();
+            // Only use external database - no IndexedDB fallback
+            if (!window.externalDatabase || !window.externalDatabase.currentUser) {
+                throw new Error('PostgreSQL database connection required. Please ensure server is running.');
+            }
+            
+            // Set external database as the primary database
+            window.database = window.externalDatabase;
+            console.log('✅ Using PostgreSQL as primary database');
             
             // Initialize backup system
             await this.initBackupSystem();
@@ -189,32 +196,25 @@ class LanguageLearningApp {
     }
 
     async initExternalDatabase() {
-        try {
-            if (!window.externalDatabase) {
-                console.log('⚠️ External database not available');
-                return;
-            }
-
-            // Initialize external database
-            await window.externalDatabase.init();
-
-            // Try to authenticate as root user automatically
-            if (!window.externalDatabase.currentUser) {
-                console.log('🔐 Attempting automatic authentication...');
-                try {
-                    await window.externalDatabase.authenticate('root', 'root');
-                    console.log('✅ Automatic authentication successful');
-                    
-                    // Replace local database with external database
-                    window.database = window.externalDatabase;
-                    console.log('🔄 Using external database as primary database');
-                } catch (error) {
-                    console.warn('⚠️ Automatic authentication failed, using fallback:', error.message);
-                }
-            }
-        } catch (error) {
-            console.warn('⚠️ External database initialization failed:', error);
+        if (!window.externalDatabase) {
+            throw new Error('External database module not loaded. Check external-database.js');
         }
+
+        console.log('🔗 Checking external database connection...');
+        
+        // Test if external database is available
+        const isAvailable = await window.externalDatabase.isAvailable();
+        if (!isAvailable) {
+            throw new Error(`PostgreSQL server not accessible at: ${window.externalDatabase.baseUrl}. Please start the server with 'npm start'`);
+        }
+
+        // Initialize external database
+        await window.externalDatabase.init();
+        console.log('✅ External database initialized successfully');
+
+        // Show login modal - no automatic authentication
+        console.log('🔐 User authentication required');
+        this.showAuthModal();
     }
 
     setupEventListeners() {
@@ -1503,6 +1503,24 @@ class LanguageLearningApp {
 
     showError(message) {
         alert(message);
+    }
+    
+    showNotification(message, type = 'info', duration = 5000) {
+        // Simple notification using alert for now
+        // In a real implementation, you'd create a toast notification
+        if (type === 'success') {
+            console.log(`✅ ${message}`);
+        } else if (type === 'error') {
+            console.error(`❌ ${message}`);
+        } else {
+            console.log(`ℹ️ ${message}`);
+        }
+        
+        // You can replace this with a proper toast notification system
+        if (type === 'success') {
+            // Show a brief alert for important success messages
+            setTimeout(() => alert(message), 500);
+        }
     }
 
     handleGlobalEnterPress(e) {

@@ -1,0 +1,425 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Миграция данных - Words Learning App</title>
+    <style>
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            max-width: 900px;
+            margin: 0 auto;
+            padding: 20px;
+            background: #f5f5f5;
+        }
+        .container {
+            background: white;
+            padding: 30px;
+            border-radius: 10px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+        }
+        h1 {
+            color: #2c3e50;
+            text-align: center;
+        }
+        .step {
+            margin: 20px 0;
+            padding: 20px;
+            border: 1px solid #ddd;
+            border-radius: 8px;
+            background: #f9f9f9;
+        }
+        .step h3 {
+            margin-top: 0;
+            color: #34495e;
+        }
+        .step.completed {
+            background: #d4edda;
+            border-color: #c3e6cb;
+        }
+        button {
+            background: #3498db;
+            color: white;
+            border: none;
+            padding: 12px 24px;
+            border-radius: 6px;
+            cursor: pointer;
+            font-size: 16px;
+            margin-right: 10px;
+        }
+        button:hover {
+            background: #2980b9;
+        }
+        button:disabled {
+            background: #bdc3c7;
+            cursor: not-allowed;
+        }
+        .success {
+            color: #27ae60;
+            font-weight: bold;
+        }
+        .error {
+            color: #e74c3c;
+            font-weight: bold;
+        }
+        .info {
+            color: #2c3e50;
+            margin: 10px 0;
+        }
+        #log {
+            background: #2c3e50;
+            color: #ecf0f1;
+            padding: 15px;
+            border-radius: 5px;
+            font-family: monospace;
+            white-space: pre-wrap;
+            max-height: 400px;
+            overflow-y: auto;
+            margin-top: 20px;
+            font-size: 14px;
+        }
+        .warning {
+            background: #fff3cd;
+            border: 1px solid #ffeaa7;
+            color: #856404;
+            padding: 15px;
+            border-radius: 5px;
+            margin: 15px 0;
+        }
+        .progress {
+            background: #ecf0f1;
+            border-radius: 10px;
+            overflow: hidden;
+            height: 20px;
+            margin: 10px 0;
+        }
+        .progress-bar {
+            background: #3498db;
+            height: 100%;
+            transition: width 0.3s ease;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-size: 12px;
+        }
+        .word-preview {
+            max-height: 200px;
+            overflow-y: auto;
+            background: #f8f9fa;
+            padding: 10px;
+            border-radius: 4px;
+            font-family: monospace;
+            font-size: 12px;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>🔄 Миграция словаря из IndexedDB в PostgreSQL</h1>
+        <p>Этот инструмент поможет перенести ваши 118 слов из локального хранилища в серверную базу данных PostgreSQL.</p>
+        
+        <div class="warning">
+            <strong>⚠️ Важно:</strong> Убедитесь, что сервер запущен (npm start) перед началом миграции.
+        </div>
+
+        <div class="step" id="step1">
+            <h3>Шаг 1: Проверка локальных данных IndexedDB</h3>
+            <div id="localDataInfo" class="info">Нажмите кнопку для сканирования локального словаря...</div>
+            <button id="checkLocalBtn" onclick="checkLocalData()">Проверить локальные данные</button>
+        </div>
+
+        <div class="step" id="step2">
+            <h3>Шаг 2: Подключение к серверу PostgreSQL</h3>
+            <div>
+                <input type="email" id="email" placeholder="Email (например: root)" style="margin-right: 10px; padding: 10px; border: 1px solid #ddd; border-radius: 4px;">
+                <input type="password" id="password" placeholder="Пароль" style="margin-right: 10px; padding: 10px; border: 1px solid #ddd; border-radius: 4px;">
+                <button id="loginBtn" onclick="loginToServer()">Подключиться</button>
+            </div>
+            <div id="loginInfo" class="info">Не подключен к серверу</div>
+        </div>
+
+        <div class="step" id="step3">
+            <h3>Шаг 3: Миграция данных</h3>
+            <div id="migrationInfo" class="info">Выполните шаги 1 и 2 для начала миграции</div>
+            <div id="migrationProgress" style="display: none;">
+                <div class="progress">
+                    <div class="progress-bar" id="progressBar">0%</div>
+                </div>
+                <div id="progressText">Подготовка...</div>
+            </div>
+            <button id="migrateBtn" onclick="migrateData()" disabled>Начать миграцию</button>
+            <button id="exportBtn" onclick="exportData()" disabled>Экспорт в CSV</button>
+        </div>
+
+        <div id="log"></div>
+    </div>
+
+    <script src="database.js"></script>
+    <script src="config.js"></script>
+    <script>
+        let localWords = [];
+        let serverToken = null;
+        let currentUser = null;
+
+        function log(message) {
+            const logEl = document.getElementById('log');
+            const timestamp = new Date().toLocaleTimeString();
+            logEl.textContent += `[${timestamp}] ${message}\n`;
+            logEl.scrollTop = logEl.scrollHeight;
+        }
+
+        function updateProgress(current, total, text) {
+            const progressEl = document.getElementById('migrationProgress');
+            const progressBar = document.getElementById('progressBar');
+            const progressText = document.getElementById('progressText');
+            
+            progressEl.style.display = 'block';
+            const percent = Math.round((current / total) * 100);
+            progressBar.style.width = `${percent}%`;
+            progressBar.textContent = `${percent}%`;
+            progressText.textContent = text || `${current} из ${total}`;
+        }
+
+        async function checkLocalData() {
+            log('🔍 Сканирование локальной базы данных IndexedDB...');
+            
+            try {
+                // Initialize IndexedDB database
+                await database.init();
+                log('✅ IndexedDB инициализирована');
+                
+                // Get all words from IndexedDB
+                localWords = await database.getAllWords();
+                log(`📚 Найдено ${localWords.length} слов в IndexedDB`);
+                
+                if (localWords.length > 0) {
+                    // Show word statistics
+                    const statusCounts = {};
+                    localWords.forEach(word => {
+                        statusCounts[word.status] = (statusCounts[word.status] || 0) + 1;
+                    });
+                    
+                    log(`📊 Статистика по статусам:`);
+                    Object.entries(statusCounts).forEach(([status, count]) => {
+                        log(`  ${status}: ${count} слов`);
+                    });
+                    
+                    // Show first 5 words as preview
+                    const preview = localWords.slice(0, 5).map(w => 
+                        `${w.word} -> ${w.translation} (${w.status})`
+                    ).join('\n');
+                    
+                    document.getElementById('localDataInfo').innerHTML = `
+                        <div class="success">✅ Найдено ${localWords.length} слов в IndexedDB</div>
+                        <div class="word-preview">${preview}${localWords.length > 5 ? '\n... и еще ' + (localWords.length - 5) + ' слов' : ''}</div>
+                        <div>Готово к миграции</div>
+                    `;
+                    
+                    document.getElementById('step1').classList.add('completed');
+                    document.getElementById('exportBtn').disabled = false;
+                    
+                } else {
+                    document.getElementById('localDataInfo').innerHTML = `
+                        <div class="error">❌ Слова в IndexedDB не найдены</div>
+                        <div>Нечего мигрировать</div>
+                    `;
+                }
+                
+            } catch (error) {
+                log(`❌ Ошибка при чтении IndexedDB: ${error.message}`);
+                document.getElementById('localDataInfo').innerHTML = `
+                    <div class="error">❌ Ошибка: ${error.message}</div>
+                    <div>Проверьте, что вы открыли эту страницу с того же домена</div>
+                `;
+            }
+        }
+
+        async function loginToServer() {
+            const email = document.getElementById('email').value.trim();
+            const password = document.getElementById('password').value.trim();
+            
+            if (!email || !password) {
+                alert('Введите email и пароль');
+                return;
+            }
+            
+            log(`🔐 Подключение к серверу как ${email}...`);
+            
+            try {
+                const apiUrl = window.appConfig ? window.appConfig.apiUrl : 'http://localhost:3000/api';
+                
+                const response = await fetch(`${apiUrl}/auth/login`, {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify({ email, password })
+                });
+                
+                if (!response.ok) {
+                    const error = await response.json();
+                    throw new Error(error.error || `HTTP ${response.status}: ${response.statusText}`);
+                }
+                
+                const data = await response.json();
+                serverToken = data.token;
+                currentUser = data.user;
+                
+                log(`✅ Успешно подключен как ${currentUser.name}`);
+                log(`📧 Email: ${currentUser.email}`);
+                log(`🌍 Языковых пар: ${currentUser.languagePairs.length}`);
+                
+                document.getElementById('loginInfo').innerHTML = `
+                    <div class="success">✅ Подключен как ${currentUser.name}</div>
+                    <div>Email: ${currentUser.email}</div>
+                    <div>Языковых пар: ${currentUser.languagePairs.length}</div>
+                `;
+                
+                document.getElementById('step2').classList.add('completed');
+                
+                // Enable migration if we have local data
+                if (localWords.length > 0) {
+                    document.getElementById('migrateBtn').disabled = false;
+                    document.getElementById('migrationInfo').innerHTML = `
+                        <div class="info">✅ Готов к миграции ${localWords.length} слов на сервер</div>
+                    `;
+                }
+                
+            } catch (error) {
+                log(`❌ Ошибка подключения: ${error.message}`);
+                document.getElementById('loginInfo').innerHTML = `
+                    <div class="error">❌ Ошибка: ${error.message}</div>
+                    <div>Убедитесь, что сервер запущен: npm start</div>
+                `;
+            }
+        }
+
+        async function migrateData() {
+            if (!serverToken || !currentUser || localWords.length === 0) {
+                alert('Выполните шаги 1 и 2 перед миграцией');
+                return;
+            }
+            
+            const confirmed = confirm(`Перенести ${localWords.length} слов на сервер для пользователя ${currentUser.name}?\n\nЭто действие нельзя отменить.`);
+            if (!confirmed) return;
+            
+            log(`🔄 Начинаю миграцию ${localWords.length} слов...`);
+            document.getElementById('migrateBtn').disabled = true;
+            
+            try {
+                const languagePairId = currentUser.languagePairs[0]?.id;
+                if (!languagePairId) {
+                    throw new Error('У пользователя нет языковых пар');
+                }
+                
+                log(`📝 Использую языковую пару: ${languagePairId}`);
+                
+                // Migrate words in batches
+                const batchSize = 10;
+                let totalMigrated = 0;
+                let errors = [];
+                
+                for (let i = 0; i < localWords.length; i += batchSize) {
+                    const batch = localWords.slice(i, i + batchSize);
+                    
+                    updateProgress(i, localWords.length, `Обработка слов ${i + 1}-${Math.min(i + batchSize, localWords.length)}`);
+                    
+                    try {
+                        const apiUrl = window.appConfig ? window.appConfig.apiUrl : 'http://localhost:3000/api';
+                        
+                        const response = await fetch(`${apiUrl}/words/bulk`, {
+                            method: 'POST',
+                            headers: {
+                                'Content-Type': 'application/json',
+                                'Authorization': `Bearer ${serverToken}`
+                            },
+                            body: JSON.stringify({
+                                words: batch,
+                                languagePairId: languagePairId
+                            })
+                        });
+                        
+                        if (!response.ok) {
+                            const error = await response.json();
+                            throw new Error(error.error || `HTTP ${response.status}`);
+                        }
+                        
+                        const result = await response.json();
+                        totalMigrated += batch.length;
+                        
+                        log(`✅ Пакет ${Math.floor(i/batchSize) + 1}: перенесено ${batch.length} слов`);
+                        
+                    } catch (error) {
+                        log(`❌ Ошибка в пакете ${Math.floor(i/batchSize) + 1}: ${error.message}`);
+                        errors.push(`Пакет ${Math.floor(i/batchSize) + 1}: ${error.message}`);
+                    }
+                    
+                    // Small delay between batches
+                    await new Promise(resolve => setTimeout(resolve, 500));
+                }
+                
+                updateProgress(localWords.length, localWords.length, 'Миграция завершена!');
+                
+                log(`🎉 Миграция завершена!`);
+                log(`✅ Перенесено: ${totalMigrated} из ${localWords.length} слов`);
+                
+                if (errors.length > 0) {
+                    log(`⚠️ Ошибки: ${errors.length}`);
+                    errors.forEach(error => log(`  ${error}`));
+                }
+                
+                document.getElementById('migrationInfo').innerHTML = `
+                    <div class="success">🎉 Миграция завершена!</div>
+                    <div>Перенесено: ${totalMigrated} из ${localWords.length} слов</div>
+                    ${errors.length > 0 ? `<div class="error">Ошибки: ${errors.length}</div>` : ''}
+                    <div>🤖 Ваш словарь теперь доступен в Telegram боте!</div>
+                `;
+                
+                document.getElementById('step3').classList.add('completed');
+                
+            } catch (error) {
+                log(`❌ Критическая ошибка миграции: ${error.message}`);
+                document.getElementById('migrationInfo').innerHTML = `
+                    <div class="error">❌ Ошибка миграции: ${error.message}</div>
+                `;
+                document.getElementById('migrateBtn').disabled = false;
+            }
+        }
+
+        async function exportData() {
+            if (localWords.length === 0) {
+                alert('Сначала загрузите локальные данные');
+                return;
+            }
+            
+            log(`📥 Экспорт ${localWords.length} слов в CSV...`);
+            
+            // Create CSV content
+            const csvContent = [
+                'word,translation,example,example_translation,status',
+                ...localWords.map(word => 
+                    `"${word.word}","${word.translation}","${word.example || ''}","${word.exampleTranslation || ''}","${word.status}"`
+                )
+            ].join('\n');
+            
+            // Create and download file
+            const blob = new Blob([csvContent], { type: 'text/csv;charset=utf-8;' });
+            const link = document.createElement('a');
+            const url = URL.createObjectURL(blob);
+            link.setAttribute('href', url);
+            link.setAttribute('download', `vocabulary_backup_${new Date().toISOString().split('T')[0]}.csv`);
+            link.style.visibility = 'hidden';
+            document.body.appendChild(link);
+            link.click();
+            document.body.removeChild(link);
+            
+            log(`✅ Файл CSV сохранен`);
+        }
+
+        // Initialize
+        log('🚀 Инструмент миграции готов');
+        log('📝 Следуйте шагам для переноса ваших слов');
+    </script>
+</body>
+</html>
