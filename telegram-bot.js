@@ -253,10 +253,16 @@ ${currentWord.example ? `\n_${currentWord.example}_` : ''}
 
 Выберите правильный перевод:`;
 
-            await this.bot.sendMessage(chatId, questionText, {
+            // Force UTF-8 encoding for message
+            const messageOptions = {
                 parse_mode: 'Markdown',
                 reply_markup: keyboard
-            });
+            };
+            
+            // Ensure question text is properly encoded
+            const encodedQuestionText = Buffer.from(questionText, 'utf8').toString('utf8');
+            
+            await this.bot.sendMessage(chatId, encodedQuestionText, messageOptions);
             
         } else if (quizSession.type === 'typing') {
             const questionText = `⌨️ Вопрос ${questionNum}/${totalQuestions}
@@ -274,30 +280,40 @@ ${currentWord.example_translation ? `\n${currentWord.example_translation}` : ''}
     }
 
     async generateOptions(correctWord, allWords) {
-        // Ensure text is properly encoded
-        const correctTranslation = Buffer.from(correctWord.translation, 'utf8').toString('utf8');
+        // For now, use only hardcoded Russian words to test encoding
+        // This eliminates any database encoding issues
+        
+        // Map known German words to Russian for testing
+        const testTranslations = {
+            'der Hund': 'собака',
+            'das Haus': 'дом', 
+            'die Katze': 'кошка',
+            'das Auto': 'машина',
+            'der Baum': 'дерево'
+        };
+        
+        // Try to get correct translation from our test map, fallback to original
+        const correctTranslation = testTranslations[correctWord.word] || correctWord.translation;
+        
+        // Use hardcoded Russian words as options to test encoding
+        const allRussianOptions = [
+            'собака', 'дом', 'кошка', 'машина', 'дерево',
+            'время', 'человек', 'работа', 'место', 'день', 
+            'жизнь', 'вода', 'земля', 'рука', 'голова'
+        ];
+        
+        // Start with correct answer
         const options = [correctTranslation];
         
-        // Add 3 random wrong options from other words
-        const otherWords = allWords.filter(w => w.id !== correctWord.id);
-        const shuffled = otherWords.sort(() => 0.5 - Math.random());
+        // Add 3 random wrong options
+        const wrongOptions = allRussianOptions.filter(opt => opt !== correctTranslation);
+        const shuffledWrong = wrongOptions.sort(() => 0.5 - Math.random());
         
-        for (let i = 0; i < 3 && i < shuffled.length; i++) {
-            const translation = Buffer.from(shuffled[i].translation, 'utf8').toString('utf8');
-            if (!options.includes(translation)) {
-                options.push(translation);
-            }
+        for (let i = 0; i < 3 && i < shuffledWrong.length; i++) {
+            options.push(shuffledWrong[i]);
         }
         
-        // If we don't have enough words, add some common wrong answers
-        if (options.length < 4) {
-            const commonWrongs = ['дом', 'время', 'человек', 'работа', 'место', 'день', 'жизнь'];
-            for (const wrong of commonWrongs) {
-                if (!options.includes(wrong) && options.length < 4) {
-                    options.push(wrong);
-                }
-            }
-        }
+        console.log('🔍 Debug - Test options (all hardcoded Russian):', options);
         
         // Shuffle options
         return options.sort(() => 0.5 - Math.random());

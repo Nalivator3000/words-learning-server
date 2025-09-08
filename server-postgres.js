@@ -25,7 +25,7 @@ app.use(express.static('.', {
 // JWT secret
 const JWT_SECRET = process.env.JWT_SECRET || 'words_learning_jwt_secret_2024';
 
-// PostgreSQL connection pool
+// PostgreSQL connection pool with UTF-8 encoding
 const pool = new Pool({
     host: process.env.DB_HOST || 'localhost',
     port: process.env.DB_PORT || 5432,
@@ -35,7 +35,10 @@ const pool = new Pool({
     max: 20, // Maximum number of clients in the pool
     idleTimeoutMillis: 30000,
     connectionTimeoutMillis: 2000,
-    ssl: process.env.DB_SSL === 'true' ? { rejectUnauthorized: false } : false
+    ssl: process.env.DB_SSL === 'true' ? { rejectUnauthorized: false } : false,
+    // Force UTF-8 encoding
+    application_name: 'words_learning_app',
+    client_encoding: 'UTF8'
 });
 
 // Test database connection on startup
