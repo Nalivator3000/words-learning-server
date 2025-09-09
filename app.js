@@ -929,12 +929,8 @@ class LanguageLearningApp {
                 button.className = 'choice-btn';
                 button.dataset.choiceIndex = index;
                 button.innerHTML = `<span class="choice-number">${index + 1}</span> ${choice.text}`;
-                button.onclick = () => {
-                    console.log('Choice button clicked:', choice.text);
-                    this.handleMultipleChoice(choice.text, button);
-                };
+                button.onclick = () => this.handleMultipleChoice(choice.text, button);
                 answerArea.appendChild(button);
-                console.log('Created choice button:', choice.text);
             });
         } else if (question.type === 'word_building') {
             this.renderWordBuildingInterface(question, answerArea);
@@ -1028,12 +1024,8 @@ class LanguageLearningApp {
                 button.className = 'choice-btn';
                 button.dataset.choiceIndex = index;
                 button.innerHTML = `<span class="choice-number">${index + 1}</span> ${choice.text}`;
-                button.onclick = () => {
-                    console.log('Review choice button clicked:', choice.text);
-                    this.handleReviewMultipleChoice(choice.text, button);
-                };
+                button.onclick = () => this.handleReviewMultipleChoice(choice.text, button);
                 answerArea.appendChild(button);
-                console.log('Created review choice button:', choice.text);
             });
         } else {
             const input = document.createElement('input');
@@ -1079,12 +1071,8 @@ class LanguageLearningApp {
     }
 
     async handleMultipleChoice(answer, buttonEl) {
-        console.log('handleMultipleChoice called with answer:', answer);
-        console.log('quizManager available:', !!quizManager);
-        
         try {
             const result = await quizManager.checkAnswer(answer);
-            console.log('checkAnswer result:', result);
             this.showAnswerFeedback(result, 'feedback');
             this.disableChoiceButtons();
         

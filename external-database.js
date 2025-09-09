@@ -177,6 +177,21 @@ class ExternalDatabase {
             const { words } = JSON.parse(options.body);
             const results = await window.database.addWords(words);
             return { message: `${words.length} words added successfully`, insertedIds: results };
+        } else if (endpoint.includes('/words/') && endpoint.includes('/progress') && options.method === 'PUT') {
+            // Extract word ID from endpoint like /words/106/progress
+            const wordIdMatch = endpoint.match(/\/words\/(\d+)\/progress/);
+            if (wordIdMatch) {
+                const wordId = parseInt(wordIdMatch[1]);
+                const { isCorrect, quizType } = JSON.parse(options.body);
+                
+                // Call local database method to update word progress
+                if (window.database && window.database.updateWordProgress) {
+                    return await window.database.updateWordProgress(wordId, isCorrect, quizType);
+                } else {
+                    console.warn('⚠️ Local database updateWordProgress not available, skipping');
+                    return { success: true, message: 'Progress update skipped in fallback mode' };
+                }
+            }
         }
         
         throw new Error(`Fallback not implemented for: ${endpoint}`);
