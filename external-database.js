@@ -220,19 +220,34 @@ class ExternalDatabase {
 
     async getWordsByStatus(status) {
         const languagePairId = this.currentUser?.languagePairs?.[0]?.id;
+        console.log(`🔍 getWordsByStatus: status="${status}", languagePairId="${languagePairId}"`);
+        console.log(`👤 Current user:`, this.currentUser);
+        
         const params = new URLSearchParams();
         
         if (status) params.append('status', status);
         if (languagePairId) params.append('languagePairId', languagePairId);
         
+        console.log(`🌐 API request: /words?${params.toString()}`);
         const words = await this.apiRequest(`/words?${params.toString()}`);
+        console.log(`📥 API response: ${Array.isArray(words) ? words.length : 'not array'} words`);
+        
         return Array.isArray(words) ? words : [];
     }
 
     async getRandomWords(status, count = 10) {
+        console.log(`🔍 getRandomWords called: status="${status}", count=${count}`);
         const words = await this.getWordsByStatus(status);
+        console.log(`📚 getWordsByStatus returned ${words.length} words`);
+        if (words.length === 0) {
+            console.log('⚠️ No words found with status:', status);
+        } else {
+            console.log('✅ Sample words:', words.slice(0, 3).map(w => `${w.word} (${w.status})`));
+        }
         const shuffled = words.sort(() => 0.5 - Math.random());
-        return shuffled.slice(0, count);
+        const result = shuffled.slice(0, count);
+        console.log(`🎯 Returning ${result.length} words for quiz`);
+        return result;
     }
 
     async getReviewWords(count = 10) {
