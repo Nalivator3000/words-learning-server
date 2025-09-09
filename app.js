@@ -929,8 +929,12 @@ class LanguageLearningApp {
                 button.className = 'choice-btn';
                 button.dataset.choiceIndex = index;
                 button.innerHTML = `<span class="choice-number">${index + 1}</span> ${choice.text}`;
-                button.onclick = () => this.handleMultipleChoice(choice.text, button);
+                button.onclick = () => {
+                    console.log('Choice button clicked:', choice.text);
+                    this.handleMultipleChoice(choice.text, button);
+                };
                 answerArea.appendChild(button);
+                console.log('Created choice button:', choice.text);
             });
         } else if (question.type === 'word_building') {
             this.renderWordBuildingInterface(question, answerArea);
@@ -1024,8 +1028,12 @@ class LanguageLearningApp {
                 button.className = 'choice-btn';
                 button.dataset.choiceIndex = index;
                 button.innerHTML = `<span class="choice-number">${index + 1}</span> ${choice.text}`;
-                button.onclick = () => this.handleReviewMultipleChoice(choice.text, button);
+                button.onclick = () => {
+                    console.log('Review choice button clicked:', choice.text);
+                    this.handleReviewMultipleChoice(choice.text, button);
+                };
                 answerArea.appendChild(button);
+                console.log('Created review choice button:', choice.text);
             });
         } else {
             const input = document.createElement('input');
@@ -1071,11 +1079,16 @@ class LanguageLearningApp {
     }
 
     async handleMultipleChoice(answer, buttonEl) {
-        const result = await quizManager.checkAnswer(answer);
-        this.showAnswerFeedback(result, 'feedback');
-        this.disableChoiceButtons();
+        console.log('handleMultipleChoice called with answer:', answer);
+        console.log('quizManager available:', !!quizManager);
         
-        if (result.correct) {
+        try {
+            const result = await quizManager.checkAnswer(answer);
+            console.log('checkAnswer result:', result);
+            this.showAnswerFeedback(result, 'feedback');
+            this.disableChoiceButtons();
+        
+            if (result.correct) {
             buttonEl.classList.add('correct');
             // Add audio button to correct answer if it's foreign language
             if (this.shouldShowAudioButton(answer)) {
@@ -1093,9 +1106,12 @@ class LanguageLearningApp {
                     }
                 }
             });
-        }
+            }
 
-        this.showNextButton();
+            this.showNextButton();
+        } catch (error) {
+            console.error('Error in handleMultipleChoice:', error);
+        }
     }
 
     async handleTypingAnswer(answer, inputEl) {
