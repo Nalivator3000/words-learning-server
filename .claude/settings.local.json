@@ -32,7 +32,8 @@
       "Bash(psql:*)",
       "Bash(gh repo create:*)",
       "Bash(git remote add:*)",
-      "Bash(winget:*)"
+      "Bash(winget:*)",
+      "Bash(echo:*)"
     ],
     "deny": [],
     "ask": [],

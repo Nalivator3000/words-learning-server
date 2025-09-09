@@ -42,8 +42,10 @@ class ExternalDatabase {
                         await this.testConnection();
                         console.log('✅ External database connection established');
                     } catch (error) {
-                        console.warn('⚠️ External database not available, using fallback mode');
-                        return this.initFallback();
+                        console.error('❌ External database not available - forcing external mode');
+                        this.fallbackMode = false;
+                        this.initialized = true;
+                        return false;
                     }
                 }
                 
@@ -57,7 +59,9 @@ class ExternalDatabase {
             
         } catch (error) {
             console.error('❌ External database initialization failed:', error);
-            return this.initFallback();
+            this.fallbackMode = false;
+            this.initialized = true;
+            return false;
         }
     }
 
@@ -133,9 +137,9 @@ class ExternalDatabase {
 
     // API request helper with fallback
     async apiRequest(endpoint, options = {}) {
-        // Use fallback if in fallback mode or offline
-        if (this.fallbackMode || !this.isOnline) {
-            return this.fallbackRequest(endpoint, options);
+        // Force external database only - no fallback
+        if (!this.isOnline) {
+            throw new Error('No internet connection - external database required');
         }
         
         try {
@@ -155,8 +159,8 @@ class ExternalDatabase {
             return await response.json();
             
         } catch (error) {
-            console.warn(`⚠️ API request failed, trying fallback: ${error.message}`);
-            return this.fallbackRequest(endpoint, options);
+            console.error(`❌ API request failed: ${error.message}`);
+            throw error;
         }
     }
 
