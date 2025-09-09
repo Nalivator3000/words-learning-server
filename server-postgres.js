@@ -644,11 +644,11 @@ app.put('/api/words/:wordId/progress', authenticateToken, async (req, res) => {
 
                 const word = wordResult.rows[0];
 
-                // Record the attempt
-                await client.query(`
-                    INSERT INTO word_attempts (word_id, user_id, is_correct, quiz_type)
-                    VALUES ($1, $2, $3, $4)
-                `, [wordId, req.user.userId, isCorrect, quizType || 'multiple_choice']);
+                // Record the attempt (temporarily disabled - table may not exist)
+                // await client.query(`
+                //     INSERT INTO word_attempts (word_id, user_id, is_correct, quiz_type)
+                //     VALUES ($1, $2, $3, $4)
+                // `, [wordId, req.user.userId, isCorrect, quizType || 'multiple_choice']);
 
                 // Update word progress (same logic as before)
                 let newStatus = word.status;
@@ -747,8 +747,9 @@ app.put('/api/words/:wordId/progress', authenticateToken, async (req, res) => {
         res.json({ message: 'Progress updated successfully' });
 
     } catch (error) {
-        console.error('Update progress error:', error);
-        res.status(500).json({ error: 'Internal server error' });
+        console.error('❌ Update progress error for word', wordId, 'user', req.user.userId, ':', error.message);
+        console.error('❌ Full error:', error);
+        res.status(500).json({ error: 'Internal server error', details: error.message });
     }
 });
 

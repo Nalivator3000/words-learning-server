@@ -929,11 +929,7 @@ class LanguageLearningApp {
                 button.className = 'choice-btn';
                 button.dataset.choiceIndex = index;
                 button.innerHTML = `<span class="choice-number">${index + 1}</span> ${choice.text}`;
-                console.log('🎲 Creating choice button:', choice.text, 'onclick assigned');
-                button.onclick = () => {
-                    console.log('🔥 Button clicked:', choice.text);
-                    this.handleMultipleChoice(choice.text, button);
-                };
+                button.onclick = () => this.handleMultipleChoice(choice.text, button);
                 answerArea.appendChild(button);
             });
         } else if (question.type === 'word_building') {
@@ -1075,11 +1071,8 @@ class LanguageLearningApp {
     }
 
     async handleMultipleChoice(answer, buttonEl) {
-        console.log('🔥 handleMultipleChoice called:', answer);
         try {
-            console.log('🎯 Calling quizManager.checkAnswer...');
             const result = await quizManager.checkAnswer(answer);
-            console.log('✅ checkAnswer result:', result);
             this.showAnswerFeedback(result, 'feedback');
             this.disableChoiceButtons();
         
