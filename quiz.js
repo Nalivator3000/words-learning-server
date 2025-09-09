@@ -18,9 +18,9 @@ class QuizManager {
         // Get words based on mode
         let words;
         if (mode === 'study') {
-            words = await database.getRandomWords('studying', questionCount);
+            words = await window.externalDatabase.getRandomWords('studying', questionCount);
         } else if (mode === 'review') {
-            words = await database.getReviewWords(questionCount);
+            words = await window.externalDatabase.getReviewWords(questionCount);
         }
 
         if (words.length === 0) {
@@ -209,7 +209,7 @@ class QuizManager {
         }
 
         // Update word progress in database (treat partial as correct for progress)
-        await database.updateWordProgress(question.wordId, isCorrect || isPartiallyCorrect, question.type);
+        await window.externalDatabase.updateWordProgress(question.wordId, isCorrect || isPartiallyCorrect, question.type);
 
         return {
             correct: isCorrect,
@@ -490,12 +490,12 @@ class ImportManager {
                 console.log('Direct fetch failed (CORS), trying through server proxy...', corsError.message);
                 
                 // Try fetching through our server as proxy
-                if (window.database && window.database.baseUrl) {
-                    const proxyResponse = await fetch(`${window.database.baseUrl}/proxy/google-sheets`, {
+                if (window.externalDatabase && window.externalDatabase.baseUrl) {
+                    const proxyResponse = await fetch(`${window.externalDatabase.baseUrl}/proxy/google-sheets`, {
                         method: 'POST',
                         headers: {
                             'Content-Type': 'application/json',
-                            ...window.database.getHeaders()
+                            ...window.externalDatabase.getHeaders()
                         },
                         body: JSON.stringify({ url: csvUrl })
                     });
