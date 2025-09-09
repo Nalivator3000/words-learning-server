@@ -563,6 +563,19 @@ class LanguageLearningApp {
         words.forEach(word => {
             const item = document.createElement('div');
             item.className = 'word-item';
+            item.style.position = 'relative';
+            item.style.padding = '10px';
+            item.style.border = '1px solid #e0e0e0';
+            item.style.borderRadius = '5px';
+            item.style.marginBottom = '5px';
+            item.style.backgroundColor = '#f9f9f9';
+            
+            // Content container
+            const contentDiv = document.createElement('div');
+            contentDiv.className = 'word-content';
+            contentDiv.style.display = 'flex';
+            contentDiv.style.flexDirection = 'column';
+            contentDiv.style.gap = '5px';
             
             // Word with audio button only if it's German
             const wordDiv = document.createElement('div');
@@ -570,7 +583,7 @@ class LanguageLearningApp {
             wordDiv.style.display = 'flex';
             wordDiv.style.alignItems = 'center';
             wordDiv.style.gap = '10px';
-            wordDiv.innerHTML = `<span>${word.word}</span>`;
+            wordDiv.innerHTML = `<strong>${word.word}</strong>`;
             if (this.shouldShowAudioButton(word.word)) {
                 wordDiv.appendChild(this.createAudioButton(word.word, 'audio-btn-small'));
             }
@@ -578,6 +591,7 @@ class LanguageLearningApp {
             // Translation (no audio)
             const translationDiv = document.createElement('div');
             translationDiv.className = 'translation';
+            translationDiv.style.color = '#333';
             translationDiv.textContent = word.translation;
             
             // Example with audio only if it's German, translation without audio
@@ -586,17 +600,155 @@ class LanguageLearningApp {
             exampleDiv.style.display = 'flex';
             exampleDiv.style.alignItems = 'center';
             exampleDiv.style.gap = '10px';
-            exampleDiv.innerHTML = `<span>${word.example}</span>`;
-            if (word.example && this.shouldShowAudioButton(word.example)) {
-                exampleDiv.appendChild(this.createAudioButton(word.example, 'audio-btn-small'));
+            exampleDiv.style.fontSize = '0.9em';
+            exampleDiv.style.color = '#666';
+            if (word.example) {
+                exampleDiv.innerHTML = `<span><em>${word.example}</em></span>`;
+                if (this.shouldShowAudioButton(word.example)) {
+                    exampleDiv.appendChild(this.createAudioButton(word.example, 'audio-btn-small'));
+                }
+                if (word.exampleTranslation) {
+                    exampleDiv.innerHTML += ` <span style="color: #999;"> - ${word.exampleTranslation}</span>`;
+                }
             }
-            exampleDiv.innerHTML += ` <span style="color: #999;"> - ${word.exampleTranslation}</span>`;
             
-            item.appendChild(wordDiv);
-            item.appendChild(translationDiv);
-            item.appendChild(exampleDiv);
+            // Actions container
+            const actionsDiv = document.createElement('div');
+            actionsDiv.className = 'word-actions';
+            actionsDiv.style.position = 'absolute';
+            actionsDiv.style.top = '5px';
+            actionsDiv.style.right = '5px';
+            actionsDiv.style.display = 'flex';
+            actionsDiv.style.gap = '3px';
+            actionsDiv.style.opacity = '0.7';
+            
+            // Move to studying button
+            if (word.status !== 'studying') {
+                const studyingBtn = document.createElement('button');
+                studyingBtn.className = 'word-action-btn';
+                studyingBtn.innerHTML = '📚';
+                studyingBtn.title = 'Перевести в изучаемые';
+                studyingBtn.style.cssText = 'background: #4CAF50; color: white; border: none; border-radius: 3px; padding: 3px 6px; font-size: 12px; cursor: pointer;';
+                studyingBtn.onclick = () => this.moveWordToStatus(word.id, 'studying');
+                actionsDiv.appendChild(studyingBtn);
+            }
+            
+            // Move to review button  
+            if (word.status !== 'review_7' && word.status !== 'review_30') {
+                const reviewBtn = document.createElement('button');
+                reviewBtn.className = 'word-action-btn';
+                reviewBtn.innerHTML = '🔄';
+                reviewBtn.title = 'Перевести на повторение';
+                reviewBtn.style.cssText = 'background: #2196F3; color: white; border: none; border-radius: 3px; padding: 3px 6px; font-size: 12px; cursor: pointer;';
+                reviewBtn.onclick = () => this.moveWordToStatus(word.id, 'review_7');
+                actionsDiv.appendChild(reviewBtn);
+            }
+            
+            // Move to learned button
+            if (word.status !== 'learned') {
+                const learnedBtn = document.createElement('button');
+                learnedBtn.className = 'word-action-btn';
+                learnedBtn.innerHTML = '✅';
+                learnedBtn.title = 'Отметить как изученное';
+                learnedBtn.style.cssText = 'background: #009688; color: white; border: none; border-radius: 3px; padding: 3px 6px; font-size: 12px; cursor: pointer;';
+                learnedBtn.onclick = () => this.moveWordToStatus(word.id, 'learned');
+                actionsDiv.appendChild(learnedBtn);
+            }
+            
+            // Delete button
+            const deleteBtn = document.createElement('button');
+            deleteBtn.className = 'word-action-btn';
+            deleteBtn.innerHTML = '🗑️';
+            deleteBtn.title = 'Удалить слово';
+            deleteBtn.style.cssText = 'background: #f44336; color: white; border: none; border-radius: 3px; padding: 3px 6px; font-size: 12px; cursor: pointer;';
+            deleteBtn.onclick = () => this.deleteWord(word.id, word.word);
+            actionsDiv.appendChild(deleteBtn);
+            
+            contentDiv.appendChild(wordDiv);
+            contentDiv.appendChild(translationDiv);
+            contentDiv.appendChild(exampleDiv);
+            
+            item.appendChild(contentDiv);
+            item.appendChild(actionsDiv);
             container.appendChild(item);
         });
+    }
+
+    async moveWordToStatus(wordId, newStatus) {
+        try {
+            if (window.externalDatabase) {
+                // Call API to update word status
+                const response = await fetch(`${window.externalDatabase.baseUrl}/words/${wordId}/status`, {
+                    method: 'PUT',
+                    headers: {
+                        'Authorization': `Bearer ${window.externalDatabase.token}`,
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify({ status: newStatus })
+                });
+                
+                if (!response.ok) {
+                    throw new Error(`HTTP ${response.status}: ${response.statusText}`);
+                }
+                
+                // Refresh word lists and stats
+                await Promise.all([
+                    this.updateWordLists(),
+                    this.updateStats()
+                ]);
+                
+                this.showNotification(`Слово переведено в категорию "${this.getStatusDisplayName(newStatus)}"`, 'success', 2000);
+            } else {
+                throw new Error('Database connection not available');
+            }
+        } catch (error) {
+            console.error('Error moving word:', error);
+            this.showNotification(`Ошибка перемещения слова: ${error.message}`, 'error', 3000);
+        }
+    }
+
+    async deleteWord(wordId, wordText) {
+        const confirmed = confirm(`Вы уверены, что хотите удалить слово "${wordText}"?\n\nЭто действие нельзя отменить.`);
+        if (!confirmed) return;
+
+        try {
+            if (window.externalDatabase) {
+                // Call API to delete word
+                const response = await fetch(`${window.externalDatabase.baseUrl}/words/${wordId}`, {
+                    method: 'DELETE',
+                    headers: {
+                        'Authorization': `Bearer ${window.externalDatabase.token}`
+                    }
+                });
+                
+                if (!response.ok) {
+                    throw new Error(`HTTP ${response.status}: ${response.statusText}`);
+                }
+                
+                // Refresh word lists and stats
+                await Promise.all([
+                    this.updateWordLists(),
+                    this.updateStats()
+                ]);
+                
+                this.showNotification(`Слово "${wordText}" удалено`, 'success', 2000);
+            } else {
+                throw new Error('Database connection not available');
+            }
+        } catch (error) {
+            console.error('Error deleting word:', error);
+            this.showNotification(`Ошибка удаления слова: ${error.message}`, 'error', 3000);
+        }
+    }
+
+    getStatusDisplayName(status) {
+        switch (status) {
+            case 'studying': return 'изучаемые';
+            case 'review_7': 
+            case 'review_30': return 'повторение';
+            case 'learned': return 'изученные';
+            default: return status;
+        }
     }
 
     async quickStart(mode) {
@@ -2073,20 +2225,29 @@ class LanguageLearningApp {
         }
 
         try {
-            if (typeof window.clearAllWords === 'function') {
-                await window.clearAllWords();
+            if (window.externalDatabase) {
+                // Call API to clear all words
+                const response = await fetch(`${window.externalDatabase.baseUrl}/words`, {
+                    method: 'DELETE',
+                    headers: {
+                        'Authorization': `Bearer ${window.externalDatabase.token}`,
+                        'Content-Type': 'application/json'
+                    }
+                });
+                
+                if (!response.ok) {
+                    throw new Error(`HTTP ${response.status}: ${response.statusText}`);
+                }
                 
                 if (importStatus) {
                     importStatus.innerHTML = '<div style="color: #4CAF50;">✅ База данных очищена. Все слова удалены.</div>';
                 }
                 
-                // Update home page statistics
-                if (window.router && window.router.currentRoute && window.router.currentRoute.name === 'home') {
-                    window.router.navigateTo('/');
-                }
+                // Update statistics
+                await this.updateStats();
                 
             } else {
-                throw new Error('Clear database function not available');
+                throw new Error('Database connection not available');
             }
         } catch (error) {
             console.error('❌ Database clear failed:', error);

@@ -507,6 +507,39 @@ app.post('/api/words/bulk', authenticateToken, async (req, res) => {
     }
 });
 
+// DELETE /api/words - Clear all user's words
+app.delete('/api/words', authenticateToken, async (req, res) => {
+    try {
+        let deletedCount = 0;
+
+        if (useDatabase) {
+            const result = await pool.query(
+                'DELETE FROM words WHERE user_id = $1 RETURNING id',
+                [req.user.userId]
+            );
+            deletedCount = result.rowCount;
+        } else {
+            // In-memory fallback
+            const user = inMemoryData.users.get(req.user.userId);
+            if (user) {
+                deletedCount = user.words.length;
+                user.words = [];
+            }
+        }
+
+        console.log(`✅ Deleted ${deletedCount} words for user ${req.user.userId}`);
+        res.json({ 
+            success: true,
+            message: `${deletedCount} words deleted successfully`,
+            deletedCount: deletedCount
+        });
+
+    } catch (error) {
+        console.error('Delete all words error:', error);
+        res.status(500).json({ error: 'Internal server error' });
+    }
+});
+
 app.get('/api/words/review', authenticateToken, async (req, res) => {
     try {
         const { languagePairId, limit = 10 } = req.query;
@@ -715,6 +748,94 @@ app.put('/api/words/:wordId/progress', authenticateToken, async (req, res) => {
 
     } catch (error) {
         console.error('Update progress error:', error);
+        res.status(500).json({ error: 'Internal server error' });
+    }
+});
+
+// PUT /api/words/:wordId/status - Update word status
+app.put('/api/words/:wordId/status', authenticateToken, async (req, res) => {
+    try {
+        const { wordId } = req.params;
+        const { status } = req.body;
+
+        // Validate status
+        const validStatuses = ['studying', 'review_7', 'review_30', 'learned'];
+        if (!validStatuses.includes(status)) {
+            return res.status(400).json({ error: 'Invalid status' });
+        }
+
+        if (useDatabase) {
+            const result = await pool.query(
+                'UPDATE words SET status = $1, updated_at = CURRENT_TIMESTAMP WHERE id = $2 AND user_id = $3 RETURNING word',
+                [status, wordId, req.user.userId]
+            );
+
+            if (result.rows.length === 0) {
+                return res.status(404).json({ error: 'Word not found' });
+            }
+
+            console.log(`📝 Updated word "${result.rows[0].word}" status to: ${status}`);
+        } else {
+            // In-memory fallback
+            const user = inMemoryData.users.get(req.user.userId);
+            if (!user) {
+                return res.status(404).json({ error: 'User not found' });
+            }
+
+            const word = user.words.find(w => w.id == wordId);
+            if (!word) {
+                return res.status(404).json({ error: 'Word not found' });
+            }
+
+            word.status = status;
+            word.updated_at = new Date().toISOString();
+            console.log(`📝 Updated word "${word.word}" status to: ${status}`);
+        }
+
+        res.json({ success: true, message: 'Word status updated successfully' });
+
+    } catch (error) {
+        console.error('Update word status error:', error);
+        res.status(500).json({ error: 'Internal server error' });
+    }
+});
+
+// DELETE /api/words/:wordId - Delete individual word
+app.delete('/api/words/:wordId', authenticateToken, async (req, res) => {
+    try {
+        const { wordId } = req.params;
+
+        if (useDatabase) {
+            const result = await pool.query(
+                'DELETE FROM words WHERE id = $1 AND user_id = $2 RETURNING word',
+                [wordId, req.user.userId]
+            );
+
+            if (result.rows.length === 0) {
+                return res.status(404).json({ error: 'Word not found' });
+            }
+
+            console.log(`🗑️ Deleted word "${result.rows[0].word}" for user ${req.user.userId}`);
+        } else {
+            // In-memory fallback
+            const user = inMemoryData.users.get(req.user.userId);
+            if (!user) {
+                return res.status(404).json({ error: 'User not found' });
+            }
+
+            const wordIndex = user.words.findIndex(w => w.id == wordId);
+            if (wordIndex === -1) {
+                return res.status(404).json({ error: 'Word not found' });
+            }
+
+            const deletedWord = user.words.splice(wordIndex, 1)[0];
+            console.log(`🗑️ Deleted word "${deletedWord.word}" for user ${req.user.userId}`);
+        }
+
+        res.json({ success: true, message: 'Word deleted successfully' });
+
+    } catch (error) {
+        console.error('Delete word error:', error);
         res.status(500).json({ error: 'Internal server error' });
     }
 });
@@ -1081,7 +1202,10 @@ app.listen(PORT, () => {
     console.log(`   GET  /api/words/study - Get words for studying`);
     console.log(`   GET  /api/words/review - Get words for review`);
     console.log(`   POST /api/words/bulk - Add multiple words`);
+    console.log(`   DELETE /api/words - Clear all user's words`);
     console.log(`   PUT  /api/words/:id/progress - Update word progress`);
+    console.log(`   PUT  /api/words/:id/status - Update word status`);
+    console.log(`   DELETE /api/words/:id - Delete individual word`);
     console.log(`   GET  /api/stats - Get learning statistics`);
     console.log(`   GET  /api/backup/export - Export user data`);
     console.log(`   POST /api/backup/restore - Restore user data`);
