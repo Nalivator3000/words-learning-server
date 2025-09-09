@@ -219,14 +219,16 @@ class ExternalDatabase {
     }
 
     async getWordsByStatus(status) {
-        const languagePairId = this.currentUser?.languagePairs?.[0]?.id;
-        console.log(`🔍 getWordsByStatus: status="${status}", languagePairId="${languagePairId}"`);
+        // TEMPORARY: Remove languagePairId filter to fix exercise loading issue
+        // const languagePairId = this.currentUser?.languagePairs?.[0]?.id;
+        console.log(`🔍 getWordsByStatus: status="${status}" (languagePairId filter TEMPORARILY DISABLED)`);
         console.log(`👤 Current user:`, this.currentUser);
         
         const params = new URLSearchParams();
         
         if (status) params.append('status', status);
-        if (languagePairId) params.append('languagePairId', languagePairId);
+        // TEMPORARY: Comment out languagePairId filter
+        // if (languagePairId) params.append('languagePairId', languagePairId);
         
         console.log(`🌐 API request: /words?${params.toString()}`);
         const words = await this.apiRequest(`/words?${params.toString()}`);
@@ -251,11 +253,13 @@ class ExternalDatabase {
     }
 
     async getReviewWords(count = 10) {
-        const languagePairId = this.currentUser?.languagePairs?.[0]?.id;
+        // TEMPORARY: Remove languagePairId filter
+        // const languagePairId = this.currentUser?.languagePairs?.[0]?.id;
         const params = new URLSearchParams();
         
         params.append('limit', count.toString());
-        if (languagePairId) params.append('languagePairId', languagePairId);
+        // TEMPORARY: Comment out languagePairId filter
+        // if (languagePairId) params.append('languagePairId', languagePairId);
         
         return await this.apiRequest(`/words/review?${params.toString()}`);
     }
@@ -271,10 +275,12 @@ class ExternalDatabase {
     }
 
     async getWordCounts() {
-        const languagePairId = this.currentUser?.languagePairs?.[0]?.id;
+        // TEMPORARY: Remove languagePairId filter
+        // const languagePairId = this.currentUser?.languagePairs?.[0]?.id;
         const params = new URLSearchParams();
         
-        if (languagePairId) params.append('languagePairId', languagePairId);
+        // TEMPORARY: Comment out languagePairId filter
+        // if (languagePairId) params.append('languagePairId', languagePairId);
         
         return await this.apiRequest(`/stats?${params.toString()}`);
     }

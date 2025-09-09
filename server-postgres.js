@@ -16,10 +16,16 @@ app.use(cors({
 }));
 app.use(express.json({ limit: '10mb' }));
 
-// Serve static files from current directory
+// Serve static files from current directory with no-cache headers
 app.use(express.static('.', {
     extensions: ['html'],
-    index: 'index.html'
+    index: 'index.html',
+    setHeaders: (res, path) => {
+        // Disable caching for all static files
+        res.set('Cache-Control', 'no-cache, no-store, must-revalidate');
+        res.set('Pragma', 'no-cache');
+        res.set('Expires', '0');
+    }
 }));
 
 // JWT secret
