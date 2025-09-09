@@ -161,9 +161,10 @@ class LanguageLearningApp {
             console.log('🌐 Initializing PostgreSQL database connection...');
             await this.initExternalDatabase();
             
-            // Only use external database - no IndexedDB fallback
-            if (!window.externalDatabase || !window.externalDatabase.currentUser) {
-                throw new Error('PostgreSQL database connection required. Please ensure server is running.');
+            // Check if we have database connection
+            if (!window.externalDatabase) {
+                this.showServerConnectionError();
+                return;
             }
             
             // Set external database as the primary database
@@ -201,11 +202,31 @@ class LanguageLearningApp {
         }
 
         console.log('🔗 Checking external database connection...');
+        console.log(`📡 API URL: ${window.externalDatabase.baseUrl}`);
         
         // Test if external database is available
-        const isAvailable = await window.externalDatabase.isAvailable();
-        if (!isAvailable) {
-            throw new Error(`PostgreSQL server not accessible at: ${window.externalDatabase.baseUrl}. Please start the server with 'npm start'`);
+        try {
+            const isAvailable = await window.externalDatabase.isAvailable();
+            console.log(`🌐 Server availability check: ${isAvailable}`);
+            
+            if (!isAvailable) {
+                // Try alternative connection methods
+                console.log('⚠️ Primary connection failed, trying direct health check...');
+                try {
+                    const response = await fetch(`${window.externalDatabase.baseUrl}/health`);
+                    if (response.ok) {
+                        console.log('✅ Direct health check successful');
+                    } else {
+                        throw new Error(`Health check returned: ${response.status} ${response.statusText}`);
+                    }
+                } catch (directError) {
+                    console.error('❌ Direct health check failed:', directError);
+                    throw new Error(`PostgreSQL server not accessible at: ${window.externalDatabase.baseUrl}. Please start the server with 'node server-postgres.js'`);
+                }
+            }
+        } catch (error) {
+            console.error('❌ Database availability check error:', error);
+            throw error;
         }
 
         // Initialize external database
@@ -214,7 +235,6 @@ class LanguageLearningApp {
 
         // Show login modal - no automatic authentication
         console.log('🔐 User authentication required');
-        this.showAuthModal();
     }
 
     setupEventListeners() {
@@ -1521,6 +1541,77 @@ class LanguageLearningApp {
             // Show a brief alert for important success messages
             setTimeout(() => alert(message), 500);
         }
+    }
+
+    showServerConnectionError() {
+        // Hide all content and show connection error
+        document.body.innerHTML = `
+            <div style="
+                display: flex; 
+                flex-direction: column; 
+                justify-content: center; 
+                align-items: center; 
+                min-height: 100vh; 
+                padding: 20px; 
+                text-align: center;
+                font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+                background: #f8f9fa;
+            ">
+                <div style="
+                    max-width: 600px;
+                    background: white;
+                    padding: 40px;
+                    border-radius: 10px;
+                    box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+                ">
+                    <h1 style="color: #e74c3c; margin-bottom: 20px;">
+                        🚫 Нет подключения к серверу
+                    </h1>
+                    
+                    <p style="color: #34495e; font-size: 18px; line-height: 1.6; margin-bottom: 30px;">
+                        Приложение не может подключиться к серверу базы данных PostgreSQL.
+                    </p>
+                    
+                    <div style="text-align: left; background: #f8f9fa; padding: 20px; border-radius: 5px; margin-bottom: 20px;">
+                        <h3 style="color: #2c3e50; margin-bottom: 15px;">Для исправления:</h3>
+                        <ol style="color: #34495e; line-height: 1.8;">
+                            <li><strong>Откройте командную строку</strong> в папке приложения</li>
+                            <li><strong>Запустите сервер:</strong> <code style="background: #e8f4fd; padding: 2px 6px; border-radius: 3px;">npm start</code></li>
+                            <li><strong>Обновите эту страницу</strong> после запуска сервера</li>
+                        </ol>
+                    </div>
+                    
+                    <button onclick="window.location.reload()" style="
+                        background: #3498db;
+                        color: white;
+                        border: none;
+                        padding: 12px 24px;
+                        border-radius: 6px;
+                        font-size: 16px;
+                        cursor: pointer;
+                        margin-right: 10px;
+                    ">
+                        🔄 Обновить страницу
+                    </button>
+                    
+                    <a href="/migrate-indexeddb-to-postgres.html" style="
+                        display: inline-block;
+                        background: #27ae60;
+                        color: white;
+                        text-decoration: none;
+                        padding: 12px 24px;
+                        border-radius: 6px;
+                        font-size: 16px;
+                    ">
+                        📥 Миграция данных
+                    </a>
+                    
+                    <p style="color: #7f8c8d; font-size: 14px; margin-top: 30px;">
+                        Приложение теперь использует только PostgreSQL базу данных для синхронизации с Telegram ботом.
+                    </p>
+                </div>
+            </div>
+        `;
     }
 
     handleGlobalEnterPress(e) {
