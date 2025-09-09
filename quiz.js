@@ -467,21 +467,55 @@ class ImportManager {
                 }
             }
 
-            const response = await fetch(csvUrl, {
-                mode: 'cors',
-                headers: {
-                    'Accept': 'text/csv,text/plain,*/*'
+            console.log('Trying to fetch Google Sheets:', csvUrl);
+
+            try {
+                // First try direct fetch (may fail due to CORS)
+                const response = await fetch(csvUrl, {
+                    mode: 'cors',
+                    headers: {
+                        'Accept': 'text/csv,text/plain,*/*'
+                    }
+                });
+
+                if (!response.ok) {
+                    throw new Error(`HTTP error! status: ${response.status}`);
                 }
-            });
 
-            if (!response.ok) {
-                throw new Error(`HTTP error! status: ${response.status}`);
+                const csvText = await response.text();
+                console.log('Direct fetch successful, CSV length:', csvText.length);
+                return this.parseCSV(csvText);
+                
+            } catch (corsError) {
+                console.log('Direct fetch failed (CORS), trying through server proxy...', corsError.message);
+                
+                // Try fetching through our server as proxy
+                if (window.database && window.database.baseUrl) {
+                    const proxyResponse = await fetch(`${window.database.baseUrl}/proxy/google-sheets`, {
+                        method: 'POST',
+                        headers: {
+                            'Content-Type': 'application/json',
+                            ...window.database.getHeaders()
+                        },
+                        body: JSON.stringify({ url: csvUrl })
+                    });
+
+                    if (!proxyResponse.ok) {
+                        throw new Error(`Server proxy error! status: ${proxyResponse.status}`);
+                    }
+
+                    const csvText = await proxyResponse.text();
+                    console.log('Server proxy successful, CSV length:', csvText.length);
+                    return this.parseCSV(csvText);
+                } else {
+                    throw corsError;
+                }
             }
-
-            const csvText = await response.text();
-            return this.parseCSV(csvText);
+            
         } catch (error) {
-            throw new Error(`Ошибка при загрузке Google Таблиц: ${error.message}`);
+            console.error('Google Sheets fetch error:', error);
+            throw new Error(`Ошибка при загрузке Google Таблиц: ${error.message}. 
+                Убедитесь, что таблица публично доступна (настройки доступа -> "Доступ по ссылке" -> "Просматривать могут все").`);
         }
     }
 }

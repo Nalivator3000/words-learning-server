@@ -260,39 +260,6 @@ class ExternalDatabase {
         return this.convertToCSV(words);
     }
 
-    // Backup operations
-    async createBackup() {
-        try {
-            const backupData = await this.apiRequest('/backup/export');
-            
-            // Store backup locally as well
-            localStorage.setItem('wordsLearningBackup', JSON.stringify(backupData));
-            localStorage.setItem('wordsLearningLastBackup', Date.now().toString());
-            
-            console.log(`✅ External backup created: ${backupData.wordCount} words`);
-            return true;
-            
-        } catch (error) {
-            console.error('❌ External backup creation failed:', error);
-            return false;
-        }
-    }
-
-    async restoreFromBackup(backupData) {
-        try {
-            await this.apiRequest('/backup/restore', {
-                method: 'POST',
-                body: JSON.stringify({ backupData })
-            });
-            
-            console.log(`✅ External backup restored: ${backupData.wordCount} words`);
-            return true;
-            
-        } catch (error) {
-            console.error('❌ External backup restore failed:', error);
-            return false;
-        }
-    }
 
     // Utility methods (same as original Database class)
     convertToCSV(words) {
@@ -396,5 +363,4 @@ console.log('💡 Available functions:');
 console.log('   externalDatabase.authenticate(email, password) - Authenticate with server');
 console.log('   externalDatabase.migrateFromLocalDatabase() - Migrate local data to server');
 console.log('   externalDatabase.addWords(words) - Add words to server');
-console.log('   externalDatabase.createBackup() - Create server backup');
 console.log('   externalDatabase.isAvailable() - Check server availability');

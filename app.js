@@ -171,8 +171,6 @@ class LanguageLearningApp {
             window.database = window.externalDatabase;
             console.log('✅ Using PostgreSQL as primary database');
             
-            // Initialize backup system
-            await this.initBackupSystem();
             
             // Initialize language management
             languageManager.init();
@@ -281,10 +279,6 @@ class LanguageLearningApp {
         document.getElementById('checkWordCountBtn').addEventListener('click', () => this.handleCheckWordCount());
         document.getElementById('clearDatabaseBtn').addEventListener('click', () => this.handleClearDatabase());
         
-        // Backup management functionality
-        document.getElementById('createBackupBtn').addEventListener('click', () => this.handleCreateBackup());
-        document.getElementById('restoreBackupBtn').addEventListener('click', () => this.handleRestoreBackup());
-        document.getElementById('backupStatusBtn').addEventListener('click', () => this.handleBackupStatus());
 
         // Study mode
         document.getElementById('multipleChoiceBtn').addEventListener('click', () => this.startStudyQuiz('multiple'));
@@ -765,21 +759,32 @@ class LanguageLearningApp {
         if (!file) return;
 
         try {
-            const text = await file.text();
-            const words = ImportManager.parseCSV(text);
+            this.showImportStatus('Читаем CSV файл...', 'info');
             
-            if (words.length === 0) {
-                this.showImportStatus('Файл не содержит корректных данных', 'error');
+            if (!window.database) {
+                this.showImportStatus('❌ База данных недоступна. Пожалуйста, войдите в систему.', 'error');
                 return;
             }
 
-            await database.addWords(words);
-            this.showImportStatus(`Успешно импортировано ${words.length} слов`, 'success');
+            const text = await file.text();
+            console.log('CSV file content length:', text.length);
+            
+            const words = ImportManager.parseCSV(text);
+            console.log('Parsed words:', words.length);
+            
+            if (words.length === 0) {
+                this.showImportStatus('Файл не содержит корректных данных. Убедитесь, что файл имеет колонки: Слово, Пример, Перевод, Перевод примера', 'error');
+                return;
+            }
+
+            this.showImportStatus(`Добавляем ${words.length} слов в базу данных...`, 'info');
+            await window.database.addWords(words);
+            this.showImportStatus(`✅ Успешно импортировано ${words.length} слов`, 'success');
             await this.updateStats();
             
         } catch (error) {
             console.error('CSV Import Error:', error);
-            this.showImportStatus('Ошибка при импорте CSV файла', 'error');
+            this.showImportStatus(`❌ Ошибка при импорте CSV файла: ${error.message}`, 'error');
         }
 
         // Reset file input
@@ -794,16 +799,27 @@ class LanguageLearningApp {
         }
 
         try {
-            this.showImportStatus('Загрузка данных...', 'info');
-            const words = await ImportManager.fetchGoogleSheets(url);
+            this.showImportStatus('Проверяем подключение к базе данных...', 'info');
             
-            if (words.length === 0) {
-                this.showImportStatus('Таблица не содержит корректных данных', 'error');
+            if (!window.database) {
+                this.showImportStatus('❌ База данных недоступна. Пожалуйста, войдите в систему.', 'error');
                 return;
             }
 
-            await database.addWords(words);
-            this.showImportStatus(`Успешно импортировано ${words.length} слов`, 'success');
+            this.showImportStatus('Загружаем данные из Google Таблиц...', 'info');
+            console.log('Fetching Google Sheets:', url);
+            
+            const words = await ImportManager.fetchGoogleSheets(url);
+            console.log('Google Sheets words parsed:', words.length);
+            
+            if (words.length === 0) {
+                this.showImportStatus('Таблица не содержит корректных данных. Убедитесь, что таблица публично доступна и имеет колонки: Слово, Пример, Перевод, Перевод примера', 'error');
+                return;
+            }
+
+            this.showImportStatus(`Добавляем ${words.length} слов в базу данных...`, 'info');
+            await window.database.addWords(words);
+            this.showImportStatus(`✅ Успешно импортировано ${words.length} слов из Google Таблиц`, 'success');
             await this.updateStats();
             
             // Clear input
@@ -811,7 +827,7 @@ class LanguageLearningApp {
             
         } catch (error) {
             console.error('Google Sheets Import Error:', error);
-            this.showImportStatus(error.message, 'error');
+            this.showImportStatus(`❌ ${error.message}`, 'error');
         }
     }
 
@@ -2440,85 +2456,7 @@ class LanguageLearningApp {
         }
     }
 
-    // Initialize backup system
-    async initBackupSystem() {
-        if (!window.backupManager) {
-            console.warn('⚠️ BackupManager not available');
-            return;
-        }
 
-        try {
-            console.log('💾 Initializing backup system...');
-            
-            // Check if restore is needed after update
-            const needsRestore = await window.backupManager.checkForRestoreNeeded();
-            
-            if (needsRestore) {
-                // Wait a bit for the database to fully initialize
-                setTimeout(async () => {
-                    const restored = await window.backupManager.offerRestore();
-                    
-                    // Если пользователь не восстановил данные, делаем аварийное восстановление
-                    if (!restored) {
-                        setTimeout(async () => {
-                            const wordsCount = await window.backupManager.getCurrentWordsCount();
-                            if (wordsCount === 0) {
-                                console.log('🚨 No words after restore offer - attempting emergency restore');
-                                await window.backupManager.emergencyRestore();
-                            }
-                        }, 5000); // Ждем 5 секунд после отказа
-                    }
-                }, 1000);
-            }
-            
-            // Set up automatic backups
-            this.setupAutoBackups();
-            
-            // Update backup info display
-            setTimeout(() => {
-                this.updateBackupInfo();
-            }, 500);
-            
-            console.log('✅ Backup system initialized');
-            
-        } catch (error) {
-            console.error('❌ Error initializing backup system:', error);
-        }
-    }
-
-    // Setup automatic backups
-    setupAutoBackups() {
-        if (!window.backupManager) return;
-
-        // Auto backup every 5 minutes while app is active
-        setInterval(async () => {
-            if (document.visibilityState === 'visible') {
-                await window.backupManager.autoBackup();
-            }
-        }, 5 * 60 * 1000); // 5 minutes
-
-        // Backup before page unload
-        window.addEventListener('beforeunload', () => {
-            // Use synchronous backup for page unload
-            const wordsCount = database.db ? 1 : 0; // Simple check
-            if (wordsCount > 0) {
-                try {
-                    window.backupManager.createBackup();
-                } catch (error) {
-                    console.warn('⚠️ Quick backup failed:', error);
-                }
-            }
-        });
-
-        // Backup on visibility change (tab switch, minimize)
-        document.addEventListener('visibilitychange', async () => {
-            if (document.visibilityState === 'hidden') {
-                await window.backupManager.autoBackup();
-            }
-        });
-
-        console.log('🔄 Auto-backup timers set up');
-    }
 
     // Update import section (removed user role restriction for database management)
     updateImportSection() {
@@ -2526,126 +2464,6 @@ class LanguageLearningApp {
         // Only test functions are restricted to root users
     }
 
-    // Handle manual backup creation
-    async handleCreateBackup() {
-        if (!window.backupManager) {
-            alert('❌ Система резервного копирования недоступна');
-            return;
-        }
-
-        const importStatus = document.getElementById('importStatus');
-        if (importStatus) {
-            importStatus.innerHTML = '<div style="color: #17a2b8;">💾 Создание резервной копии...</div>';
-        }
-
-        try {
-            const success = await window.backupManager.createBackup();
-            if (success) {
-                const backupInfo = window.backupManager.getBackupInfo();
-                const message = `✅ Резервная копия создана!\n\n📅 Дата: ${backupInfo.date}\n📝 Слов: ${backupInfo.wordCount}`;
-                
-                if (importStatus) {
-                    importStatus.innerHTML = `<div style="color: #28a745;">${message.replace(/\n/g, '<br>')}</div>`;
-                }
-                
-                this.updateBackupInfo();
-            } else {
-                if (importStatus) {
-                    importStatus.innerHTML = '<div style="color: #f44336;">❌ Не удалось создать резервную копию</div>';
-                }
-            }
-        } catch (error) {
-            console.error('Error creating backup:', error);
-            if (importStatus) {
-                importStatus.innerHTML = '<div style="color: #f44336;">❌ Ошибка создания резервной копии</div>';
-            }
-        }
-    }
-
-    // Handle backup restoration
-    async handleRestoreBackup() {
-        if (!window.backupManager) {
-            alert('❌ Система резервного копирования недоступна');
-            return;
-        }
-
-        const importStatus = document.getElementById('importStatus');
-        if (importStatus) {
-            importStatus.innerHTML = '<div style="color: #28a745;">🔄 Восстановление данных...</div>';
-        }
-
-        try {
-            const success = await window.backupManager.restoreFromBackup();
-            if (success) {
-                if (importStatus) {
-                    importStatus.innerHTML = '<div style="color: #28a745;">✅ Данные успешно восстановлены!</div>';
-                }
-                
-                // Refresh the interface
-                if (window.router) {
-                    window.router.navigateTo('/');
-                }
-            } else {
-                if (importStatus) {
-                    importStatus.innerHTML = '<div style="color: #f44336;">❌ Не удалось восстановить данные</div>';
-                }
-            }
-        } catch (error) {
-            console.error('Error restoring backup:', error);
-            if (importStatus) {
-                importStatus.innerHTML = '<div style="color: #f44336;">❌ Ошибка восстановления данных</div>';
-            }
-        }
-    }
-
-    // Show backup status information
-    async handleBackupStatus() {
-        if (!window.backupManager) {
-            alert('❌ Система резервного копирования недоступна');
-            return;
-        }
-
-        const backupInfo = window.backupManager.getBackupInfo();
-        const currentWords = await window.backupManager.getCurrentWordsCount();
-
-        let message = '📋 Информация о резервных копиях\n\n';
-        
-        if (backupInfo) {
-            message += `📅 Последняя копия: ${backupInfo.date}\n`;
-            message += `📝 Слов в копии: ${backupInfo.wordCount}\n`;
-            message += `🔧 Версия: ${backupInfo.version}\n\n`;
-        } else {
-            message += '❌ Резервных копий не найдено\n\n';
-        }
-        
-        message += `📊 Текущее количество слов: ${currentWords}`;
-        
-        alert(message);
-    }
-
-    // Update backup information display
-    updateBackupInfo() {
-        const backupInfoElement = document.getElementById('backupInfo');
-        if (!backupInfoElement || !window.backupManager) return;
-
-        const backupInfo = window.backupManager.getBackupInfo();
-        
-        if (backupInfo) {
-            backupInfoElement.innerHTML = `
-                <div style="background: #d1ecf1; border: 1px solid #bee5eb; border-radius: 5px; padding: 10px; font-size: 0.9em;">
-                    <strong>Последняя резервная копия:</strong><br>
-                    📅 ${backupInfo.date}<br>
-                    📝 ${backupInfo.wordCount} слов
-                </div>
-            `;
-        } else {
-            backupInfoElement.innerHTML = `
-                <div style="background: #fff3cd; border: 1px solid #ffeaa7; border-radius: 5px; padding: 10px; font-size: 0.9em;">
-                    ⚠️ Резервных копий пока нет
-                </div>
-            `;
-        }
-    }
 }
 
 // Initialize app when DOM is loaded

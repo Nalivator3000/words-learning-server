@@ -892,164 +892,6 @@ app.get('/api/stats', authenticateToken, async (req, res) => {
     }
 });
 
-// Backup endpoints
-app.get('/api/backup/export', authenticateToken, async (req, res) => {
-    try {
-        let backupData = {};
-
-        if (useDatabase) {
-            const userResult = await pool.query(
-                'SELECT id, email, name FROM users WHERE id = $1',
-                [req.user.userId]
-            );
-            
-            const wordsResult = await pool.query(`
-                SELECT w.*, lp.name as language_pair_name, lp.from_language, lp.to_language
-                FROM words w
-                JOIN language_pairs lp ON w.language_pair_id = lp.id
-                WHERE w.user_id = $1
-                ORDER BY w.created_at DESC
-            `, [req.user.userId]);
-
-            const pairsResult = await pool.query(
-                'SELECT * FROM language_pairs WHERE user_id = $1',
-                [req.user.userId]
-            );
-
-            backupData = {
-                version: '2.0-postgres-db',
-                timestamp: Date.now(),
-                user: userResult.rows[0],
-                words: wordsResult.rows,
-                wordCount: wordsResult.rows.length,
-                languagePairs: pairsResult.rows
-            };
-        } else {
-            // In-memory fallback
-            const user = inMemoryData.users.get(req.user.userId);
-            if (!user) {
-                return res.status(404).json({ error: 'User not found' });
-            }
-
-            backupData = {
-                version: '2.0-in-memory',
-                timestamp: Date.now(),
-                user: { id: user.id, email: user.email, name: user.name },
-                words: user.words.map(word => ({
-                    ...word,
-                    language_pair_name: 'German-Russian',
-                    from_language: 'German',
-                    to_language: 'Russian'
-                })),
-                wordCount: user.words.length,
-                languagePairs: user.languagePairs || []
-            };
-        }
-
-        res.json(backupData);
-    } catch (error) {
-        console.error('Export backup error:', error);
-        res.status(500).json({ error: 'Internal server error' });
-    }
-});
-
-app.post('/api/backup/restore', authenticateToken, async (req, res) => {
-    try {
-        const { backupData } = req.body;
-        
-        if (!backupData || !backupData.words) {
-            return res.status(400).json({ error: 'Invalid backup data' });
-        }
-
-        if (useDatabase) {
-            const client = await pool.connect();
-            
-            try {
-                await client.query('BEGIN');
-
-                // Clear existing words
-                await client.query('DELETE FROM words WHERE user_id = $1', [req.user.userId]);
-
-                // Restore words
-                for (const word of backupData.words) {
-                    await client.query(`
-                        INSERT INTO words (
-                            user_id, language_pair_id, word, translation, 
-                            example, example_translation, status, correct_count, 
-                            incorrect_count, review_attempts, date_added, last_studied, next_review
-                        ) VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9, $10, $11, $12, $13)
-                    `, [
-                        req.user.userId,
-                        word.language_pair_id || `${req.user.userId}-default-pair`,
-                        word.word,
-                        word.translation,
-                        word.example || null,
-                        word.example_translation || word.exampleTranslation || null,
-                        word.status || 'studying',
-                        word.correct_count || word.correctCount || 0,
-                        word.incorrect_count || word.incorrectCount || 0,
-                        word.review_attempts || word.reviewAttempts || 0,
-                        word.date_added || word.dateAdded || new Date(),
-                        word.last_studied || word.lastStudied || null,
-                        word.next_review || word.nextReview || null
-                    ]);
-                }
-
-                await client.query('COMMIT');
-                
-            } catch (error) {
-                await client.query('ROLLBACK');
-                throw error;
-            } finally {
-                client.release();
-            }
-        } else {
-            // In-memory fallback
-            const user = inMemoryData.users.get(req.user.userId);
-            if (!user) {
-                return res.status(404).json({ error: 'User not found' });
-            }
-
-            user.words = [];
-
-            for (const word of backupData.words) {
-                const wordData = {
-                    id: inMemoryData.nextWordId++,
-                    user_id: req.user.userId,
-                    language_pair_id: word.language_pair_id || word.languagePairId || `${req.user.userId}-default-pair`,
-                    word: word.word,
-                    translation: word.translation,
-                    example: word.example || null,
-                    example_translation: word.example_translation || word.exampleTranslation || null,
-                    status: word.status || 'studying',
-                    correct_count: word.correct_count || word.correctCount || 0,
-                    incorrect_count: word.incorrect_count || word.incorrectCount || 0,
-                    review_attempts: word.review_attempts || word.reviewAttempts || 0,
-                    date_added: word.date_added || word.dateAdded || new Date().toISOString(),
-                    last_studied: word.last_studied || word.lastStudied || null,
-                    next_review: word.next_review || word.nextReview || null,
-                    created_at: word.created_at || new Date().toISOString(),
-                    updated_at: new Date().toISOString()
-                };
-                
-                user.words.push(wordData);
-            }
-
-            updateInMemoryStats(user);
-        }
-
-        console.log(`✅ Restored ${backupData.words.length} words for user ${req.user.userId}`);
-
-        res.json({ 
-            message: `Successfully restored ${backupData.words.length} words`,
-            wordCount: backupData.words.length
-        });
-
-    } catch (error) {
-        console.error('Restore backup error:', error);
-        res.status(500).json({ error: 'Internal server error' });
-    }
-});
 
 // Helper function for in-memory stats
 function updateInMemoryStats(user) {
@@ -1173,6 +1015,45 @@ process.on('SIGINT', () => {
     });
 });
 
+// Google Sheets proxy for CORS bypass
+app.post('/api/proxy/google-sheets', authenticateToken, async (req, res) => {
+    try {
+        const { url } = req.body;
+        
+        if (!url || !url.includes('docs.google.com/spreadsheets')) {
+            return res.status(400).json({ error: 'Invalid Google Sheets URL' });
+        }
+
+        console.log(`📊 Proxying Google Sheets request: ${url}`);
+        
+        // Fetch the CSV data from Google Sheets (using built-in fetch in Node.js 18+)
+        const response = await fetch(url, {
+            headers: {
+                'Accept': 'text/csv,text/plain,*/*',
+                'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36'
+            }
+        });
+
+        if (!response.ok) {
+            throw new Error(`Google Sheets request failed: ${response.status} ${response.statusText}`);
+        }
+
+        const csvData = await response.text();
+        console.log(`✅ Google Sheets CSV fetched: ${csvData.length} characters`);
+
+        // Return the CSV data as plain text
+        res.setHeader('Content-Type', 'text/csv; charset=utf-8');
+        res.send(csvData);
+        
+    } catch (error) {
+        console.error('Google Sheets proxy error:', error);
+        res.status(500).json({ 
+            error: 'Failed to fetch Google Sheets data',
+            details: error.message 
+        });
+    }
+});
+
 // Root route - serve main application
 app.get('/', (req, res) => {
     res.sendFile(path.join(__dirname, 'index.html'));
@@ -1207,6 +1088,5 @@ app.listen(PORT, () => {
     console.log(`   PUT  /api/words/:id/status - Update word status`);
     console.log(`   DELETE /api/words/:id - Delete individual word`);
     console.log(`   GET  /api/stats - Get learning statistics`);
-    console.log(`   GET  /api/backup/export - Export user data`);
-    console.log(`   POST /api/backup/restore - Restore user data`);
+    console.log(`   POST /api/proxy/google-sheets - Proxy for Google Sheets CSV export`);
 });
