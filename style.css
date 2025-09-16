@@ -867,16 +867,36 @@ main {
 }
 
 @media (max-width: 768px) {
+    /* Hide less important elements on mobile */
+    .header-user .user-info {
+        display: none;
+    }
+    
+    /* Simplify header */
+    header h1 {
+        font-size: 1.5rem;
+        margin-bottom: 0.5rem;
+    }
+    
+    /* Hide build info on mobile for cleaner look */
+    header div[style*="monospace"],
+    .auth-content div[style*="monospace"],
+    .survival-area div[style*="monospace"] {
+        display: none !important;
+    }
+    
     main {
-        padding: 1rem;
+        padding: 0.8rem;
     }
     
     .section h2 {
-        font-size: 1.5rem;
+        font-size: 1.3rem;
+        margin-bottom: 1rem;
     }
     
     .stats-grid {
         grid-template-columns: 1fr;
+        gap: 1rem;
     }
     
     .import-options {
@@ -886,20 +906,54 @@ main {
     .quick-actions {
         flex-direction: column;
         align-items: center;
+        gap: 0.8rem;
     }
     
     .action-btn {
         width: 100%;
         max-width: 300px;
+        padding: 0.9rem 1.5rem;
+        font-size: 0.95rem;
     }
     
     nav {
-        padding: 0 1rem;
+        padding: 0 0.5rem;
+        gap: 0.5rem;
     }
     
     .nav-btn {
-        font-size: 0.8rem;
-        padding: 0.4rem 0.8rem;
+        font-size: 0.75rem;
+        padding: 0.35rem 0.7rem;
+        flex: 1;
+        min-width: 0;
+        white-space: nowrap;
+        overflow: hidden;
+        text-overflow: ellipsis;
+    }
+    
+    /* Simplify import section on mobile */
+    .database-management {
+        padding: 15px;
+    }
+    
+    .database-management .action-btn {
+        font-size: 0.85rem;
+        margin-bottom: 8px;
+    }
+    
+    /* Optimize mode selection */
+    .mode-grid {
+        grid-template-columns: 1fr;
+        gap: 0.8rem;
+    }
+    
+    .mode-btn {
+        padding: 1rem;
+        font-size: 0.85rem;
+    }
+    
+    .mode-btn small {
+        font-size: 0.7rem;
     }
 }
 
@@ -1448,6 +1502,70 @@ main {
         display: none;
     }
     
+    /* Simplify stat cards on mobile */
+    .stat-card {
+        padding: 1.2rem;
+    }
+    
+    .stat-card h3 {
+        font-size: 0.95rem;
+        margin-bottom: 0.8rem;
+    }
+    
+    .stat-card p {
+        font-size: 2rem;
+    }
+    
+    /* Optimize quiz interface */
+    .quiz-container {
+        max-width: 100%;
+    }
+    
+    .question {
+        padding: 1.2rem;
+        font-size: 1.1rem;
+        margin-bottom: 1.5rem;
+    }
+    
+    .choice-btn {
+        padding: 0.9rem;
+        font-size: 0.9rem;
+        margin-bottom: 0.6rem;
+    }
+    
+    .choice-number {
+        min-width: 20px;
+        height: 20px;
+        line-height: 20px;
+        font-size: 0.8rem;
+    }
+    
+    /* Optimize settings on mobile */
+    .settings-group {
+        padding: 1.2rem;
+        margin-bottom: 1.2rem;
+    }
+    
+    .settings-group h3 {
+        font-size: 1.1rem;
+        margin-bottom: 1rem;
+    }
+    
+    /* Simplify word lists */
+    .word-lists {
+        grid-template-columns: 1fr;
+        gap: 1rem;
+    }
+    
+    .list-section {
+        padding: 1rem;
+    }
+    
+    .word-item {
+        padding: 0.8rem;
+        font-size: 0.85rem;
+    }
+    
     /* Word image mobile optimization */
     .mobile-exercise-mode .word-image {
         max-width: 150px;
@@ -1841,4 +1959,87 @@ main {
 #responsiveTestReport li {
     margin: 2px 0;
     font-size: 0.9em;
+}
+/* Extra small screens (iPhone SE and smaller) */
+@media (max-width: 375px) {
+    .container {
+        max-width: 100%;
+    }
+    
+    header h1 {
+        font-size: 1.3rem;
+    }
+    
+    main {
+        padding: 0.5rem;
+    }
+    
+    .nav-btn {
+        font-size: 0.7rem;
+        padding: 0.3rem 0.5rem;
+    }
+    
+    .section h2 {
+        font-size: 1.2rem;
+    }
+    
+    .action-btn {
+        padding: 0.8rem 1.2rem;
+        font-size: 0.9rem;
+    }
+    
+    .stat-card {
+        padding: 1rem;
+    }
+    
+    .stat-card p {
+        font-size: 1.8rem;
+    }
+    
+    .mode-btn {
+        padding: 0.8rem;
+        font-size: 0.8rem;
+    }
+}
+
+/* Touch improvements for all mobile */
+@media (hover: none) and (pointer: coarse) {
+    /* Increase touch targets */
+    .nav-btn,
+    .action-btn,
+    .choice-btn,
+    .mode-btn,
+    .auth-btn {
+        min-height: 44px;
+        touch-action: manipulation;
+    }
+    
+    /* Remove hover effects that don't work on touch */
+    .nav-btn:hover,
+    .action-btn:hover,
+    .choice-btn:hover,
+    .mode-btn:hover,
+    .auth-btn:hover {
+        transform: none;
+    }
+    
+    /* Add active states for better touch feedback */
+    .nav-btn:active,
+    .action-btn:active,
+    .choice-btn:active,
+    .mode-btn:active,
+    .auth-btn:active {
+        transform: scale(0.98);
+        opacity: 0.8;
+    }
+    
+    /* Improve survival mode touch controls */
+    .survival-choice {
+        min-height: 50px;
+        padding: 1rem;
+    }
+    
+    .survival-choice:active {
+        transform: scale(0.95);
+    }
 }
