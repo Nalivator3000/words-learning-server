@@ -14,6 +14,7 @@ class SurvivalMode {
         this.usedWords = [];
         this.gameEnded = false;
         this.selectedChoice = 1; // Track selected choice for keyboard navigation
+        this.gameStartTime = null; // Track game start time for leaderboard
     }
 
     async start() {
@@ -34,6 +35,7 @@ class SurvivalMode {
             this.score = 0;
             this.errors = 0;
             this.usedWords = [];
+            this.gameStartTime = Date.now(); // Record game start time
 
             console.log('🎮 Initializing survival interface...');
             this.showSurvivalInterface();
@@ -382,6 +384,12 @@ class SurvivalMode {
         this.isActive = false;
         this.stopTimer();
 
+        // Calculate game statistics
+        const gameEndTime = Date.now();
+        const gameDurationSeconds = Math.floor((gameEndTime - this.gameStartTime) / 1000);
+        const totalAnswers = this.score + this.errors;
+        const accuracyPercentage = totalAnswers > 0 ? Math.round((this.score / totalAnswers) * 100) : 0;
+
         // Clear timer bars
         const leftBar = document.getElementById('timerBarLeft');
         const rightBar = document.getElementById('timerBarRight');
@@ -389,6 +397,9 @@ class SurvivalMode {
         leftBar.style.left = '50%';
         rightBar.style.width = '0%';
         rightBar.style.right = '50%';
+
+        // Try to record result in leaderboard (no await to avoid blocking UI)
+        this.recordLeaderboardResult(gameDurationSeconds, totalAnswers, accuracyPercentage);
 
         // Show game over screen
         const survivalArea = document.getElementById('survivalArea');
@@ -398,7 +409,9 @@ class SurvivalMode {
                 <div class="final-stats">
                     <p><strong>Финальный счёт:</strong> ${this.score} очков</p>
                     <p><strong>Ошибки:</strong> ${this.errors}/${this.maxErrors}</p>
-                    <p><strong>Точность:</strong> ${Math.round((this.score / (this.score + this.errors)) * 100) || 0}%</p>
+                    <p><strong>Точность:</strong> ${accuracyPercentage}%</p>
+                    <p><strong>Время игры:</strong> ${Math.floor(gameDurationSeconds / 60)}:${(gameDurationSeconds % 60).toString().padStart(2, '0')}</p>
+                    <div id="leaderboardStatus" style="margin-top: 1rem; font-size: 0.9em; color: #666;"></div>
                 </div>
                 <div style="margin-top: 2rem;">
                     <button id="survivalRestart" class="action-btn" style="margin: 0.5rem;">Начать заново</button>
@@ -519,6 +532,50 @@ class SurvivalMode {
                 }
             }
         });
+    }
+
+    async recordLeaderboardResult(durationSeconds, totalAnswers, accuracyPercentage) {
+        try {
+            console.log(`🏆 Recording survival result: score=${this.score}, duration=${durationSeconds}s, accuracy=${accuracyPercentage}%`);
+            
+            const response = await fetch('/api/survival/record', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                    'Authorization': `Bearer ${localStorage.getItem('token')}`
+                },
+                body: JSON.stringify({
+                    score: this.score,
+                    duration_seconds: durationSeconds,
+                    words_answered: totalAnswers,
+                    accuracy_percentage: accuracyPercentage
+                })
+            });
+            
+            const data = await response.json();
+            const statusElement = document.getElementById('leaderboardStatus');
+            
+            if (data.success) {
+                statusElement.innerHTML = `✅ Результат записан в лидерборд! (${data.totalWords} слов в изучении)`;
+                statusElement.style.color = '#4caf50';
+            } else {
+                if (data.totalWords !== undefined && data.minRequired !== undefined) {
+                    statusElement.innerHTML = `ℹ️ ${data.message}`;
+                    statusElement.style.color = '#ff9800';
+                } else {
+                    statusElement.innerHTML = `❌ Ошибка записи результата: ${data.error || 'Неизвестная ошибка'}`;
+                    statusElement.style.color = '#f44336';
+                }
+            }
+            
+        } catch (error) {
+            console.error('Error recording leaderboard result:', error);
+            const statusElement = document.getElementById('leaderboardStatus');
+            if (statusElement) {
+                statusElement.innerHTML = `❌ Ошибка связи с сервером`;
+                statusElement.style.color = '#f44336';
+            }
+        }
     }
 }
 

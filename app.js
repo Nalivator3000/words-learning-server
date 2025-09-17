@@ -1,3 +1,180 @@
+class PushNotificationManager {
+    constructor() {
+        this.vapidPublicKey = null;
+        this.subscription = null;
+        this.isSubscribed = false;
+        this.swRegistration = null;
+    }
+
+    async init(swRegistration) {
+        if (!('PushManager' in window)) {
+            console.warn('Push messaging is not supported');
+            return false;
+        }
+
+        this.swRegistration = swRegistration;
+        
+        // Fetch VAPID public key from server
+        try {
+            const response = await fetch('/api/push/vapid-public-key');
+            const data = await response.json();
+            this.vapidPublicKey = data.publicKey;
+        } catch (error) {
+            console.error('Failed to fetch VAPID public key:', error);
+            return false;
+        }
+        
+        // Check current subscription status
+        try {
+            this.subscription = await swRegistration.pushManager.getSubscription();
+            this.isSubscribed = !(this.subscription === null);
+            
+            if (this.isSubscribed) {
+                console.log('User is subscribed to push notifications');
+                await this.sendSubscriptionToBackend(this.subscription);
+            } else {
+                console.log('User is not subscribed to push notifications');
+            }
+            
+            return true;
+        } catch (error) {
+            console.error('Error during push notification init:', error);
+            return false;
+        }
+    }
+
+    async subscribeUser() {
+        if (!this.swRegistration) {
+            console.error('Service worker not registered');
+            return false;
+        }
+
+        try {
+            const applicationServerKey = this.urlB64ToUint8Array(this.vapidPublicKey);
+            this.subscription = await this.swRegistration.pushManager.subscribe({
+                userVisibleOnly: true,
+                applicationServerKey: applicationServerKey
+            });
+
+            console.log('User subscribed to push notifications:', this.subscription);
+            this.isSubscribed = true;
+
+            await this.sendSubscriptionToBackend(this.subscription);
+            return true;
+        } catch (error) {
+            console.error('Failed to subscribe user: ', error);
+            return false;
+        }
+    }
+
+    async unsubscribeUser() {
+        if (!this.subscription) {
+            console.log('No subscription to unsubscribe');
+            return true;
+        }
+
+        try {
+            await this.subscription.unsubscribe();
+            await this.removeSubscriptionFromBackend(this.subscription);
+            
+            this.subscription = null;
+            this.isSubscribed = false;
+            console.log('User unsubscribed from push notifications');
+            return true;
+        } catch (error) {
+            console.error('Error unsubscribing: ', error);
+            return false;
+        }
+    }
+
+    async sendSubscriptionToBackend(subscription) {
+        try {
+            const response = await fetch('/api/push/subscribe', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                    'Authorization': localStorage.getItem('token') ? `Bearer ${localStorage.getItem('token')}` : ''
+                },
+                body: JSON.stringify(subscription)
+            });
+
+            if (!response.ok) {
+                throw new Error('Bad status code from server.');
+            }
+        } catch (error) {
+            console.error('Error sending subscription to backend:', error);
+        }
+    }
+
+    async removeSubscriptionFromBackend(subscription) {
+        try {
+            const response = await fetch('/api/push/unsubscribe', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                    'Authorization': localStorage.getItem('token') ? `Bearer ${localStorage.getItem('token')}` : ''
+                },
+                body: JSON.stringify(subscription)
+            });
+
+            if (!response.ok) {
+                throw new Error('Bad status code from server.');
+            }
+        } catch (error) {
+            console.error('Error removing subscription from backend:', error);
+        }
+    }
+
+    urlB64ToUint8Array(base64String) {
+        const padding = '='.repeat((4 - base64String.length % 4) % 4);
+        const base64 = (base64String + padding)
+            .replace(/-/g, '+')
+            .replace(/_/g, '/');
+
+        const rawData = window.atob(base64);
+        const outputArray = new Uint8Array(rawData.length);
+
+        for (let i = 0; i < rawData.length; ++i) {
+            outputArray[i] = rawData.charCodeAt(i);
+        }
+        return outputArray;
+    }
+
+    async requestPermission() {
+        const permission = await Notification.requestPermission();
+        if (permission === 'granted') {
+            console.log('Notification permission granted');
+            return true;
+        } else {
+            console.log('Notification permission denied');
+            return false;
+        }
+    }
+
+    async scheduleStudyReminder(hours = 24) {
+        if (!this.isSubscribed) {
+            console.log('User not subscribed to push notifications');
+            return false;
+        }
+
+        try {
+            await fetch('/api/push/schedule-reminder', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                    'Authorization': localStorage.getItem('token') ? `Bearer ${localStorage.getItem('token')}` : ''
+                },
+                body: JSON.stringify({ hours })
+            });
+            console.log(`Study reminder scheduled for ${hours} hours`);
+            return true;
+        } catch (error) {
+            console.error('Error scheduling reminder:', error);
+            return false;
+        }
+    }
+}
+
 class AudioManager {
     constructor() {
         this.synth = window.speechSynthesis;
@@ -108,6 +285,7 @@ class LanguageLearningApp {
             this.currentSection = 'home';
             this.currentQuizData = null;
             this.audioManager = new AudioManager();
+            this.pushManager = new PushNotificationManager();
             
             // Initialize survival mode safely
             if (typeof SurvivalMode !== 'undefined') {
@@ -177,6 +355,17 @@ class LanguageLearningApp {
             
             // Initialize user management
             const isLoggedIn = await userManager.init();
+
+            // Initialize push notifications if user is logged in
+            if (isLoggedIn && 'serviceWorker' in navigator) {
+                try {
+                    const registration = await navigator.serviceWorker.ready;
+                    await this.pushManager.init(registration);
+                    console.log('✅ Push notifications initialized');
+                } catch (error) {
+                    console.warn('⚠️ Push notifications initialization failed:', error);
+                }
+            }
             
             console.log('🔌 Setting up event listeners...');
             this.setupEventListeners();
@@ -313,6 +502,10 @@ class LanguageLearningApp {
         document.getElementById('saveLessonSizeBtn').addEventListener('click', () => this.saveLessonSize());
         document.getElementById('editWordsBtn').addEventListener('click', () => this.toggleWordEditor());
         document.getElementById('syncBtn').addEventListener('click', () => this.syncWithServer());
+        
+        // Leaderboard buttons
+        document.getElementById('showLeaderboardBtn').addEventListener('click', () => this.showLeaderboard());
+        document.getElementById('showMyBestBtn').addEventListener('click', () => this.showMyBestResults());
     }
 
     setupAuthListeners() {
@@ -2466,6 +2659,127 @@ class LanguageLearningApp {
     updateImportSection() {
         // Database management is now available for all users
         // Only test functions are restricted to root users
+    }
+
+    // Leaderboard functionality
+    async showLeaderboard() {
+        try {
+            console.log('📊 Fetching survival mode leaderboard...');
+            
+            const response = await fetch('/api/survival/leaderboard?limit=20');
+            const data = await response.json();
+            
+            if (!data.success) {
+                throw new Error(data.error || 'Failed to fetch leaderboard');
+            }
+            
+            const container = document.getElementById('leaderboardContainer');
+            const content = document.getElementById('leaderboardContent');
+            
+            if (data.leaderboard.length === 0) {
+                content.innerHTML = `
+                    <div class="leaderboard-empty">
+                        <p>🏆 Лидерборд пуст</p>
+                        <p style="font-size: 0.9em; color: #666;">
+                            Первыми войдут пользователи, которые пройдут режим выживания с 100+ словами в изучении
+                        </p>
+                    </div>
+                `;
+            } else {
+                content.innerHTML = `
+                    <h4>🏆 Топ-20 лидерборда режима выживания</h4>
+                    <div class="leaderboard-list">
+                        ${data.leaderboard.map((entry, index) => `
+                            <div class="leaderboard-item ${index < 3 ? 'top-' + (index + 1) : ''}">
+                                <div class="rank">${entry.rank}</div>
+                                <div class="player-info">
+                                    <div class="player-name">${this.escapeHtml(entry.user_name)}</div>
+                                    <div class="player-stats">
+                                        📊 ${entry.score} очков • 
+                                        🎯 ${entry.accuracy_percentage}% точность • 
+                                        📚 ${entry.total_words_available} слов • 
+                                        ⏱️ ${Math.floor(entry.duration_seconds / 60)}:${(entry.duration_seconds % 60).toString().padStart(2, '0')}
+                                    </div>
+                                    <div class="player-date">${new Date(entry.created_at).toLocaleDateString('ru-RU')}</div>
+                                </div>
+                            </div>
+                        `).join('')}
+                    </div>
+                `;
+            }
+            
+            container.classList.remove('hidden');
+            
+        } catch (error) {
+            console.error('Error fetching leaderboard:', error);
+            this.showError('Ошибка загрузки лидерборда');
+        }
+    }
+    
+    async showMyBestResults() {
+        try {
+            console.log('👤 Fetching user best survival results...');
+            
+            const response = await fetch('/api/survival/user-best', {
+                headers: {
+                    'Authorization': `Bearer ${localStorage.getItem('token')}`
+                }
+            });
+            const data = await response.json();
+            
+            if (!data.success) {
+                throw new Error(data.error || 'Failed to fetch user results');
+            }
+            
+            const container = document.getElementById('leaderboardContainer');
+            const content = document.getElementById('leaderboardContent');
+            
+            if (data.userBest.length === 0) {
+                content.innerHTML = `
+                    <div class="leaderboard-empty">
+                        <p>🎯 У вас пока нет результатов</p>
+                        <p style="font-size: 0.9em; color: #666;">
+                            Пройдите режим выживания с 100+ словами в изучении, чтобы попасть в лидерборд
+                        </p>
+                    </div>
+                `;
+            } else {
+                content.innerHTML = `
+                    <h4>👤 Ваши лучшие результаты в режиме выживания</h4>
+                    <div class="leaderboard-list">
+                        ${data.userBest.map((entry, index) => `
+                            <div class="leaderboard-item user-result ${index === 0 ? 'best-result' : ''}">
+                                <div class="rank">#${entry.rank}</div>
+                                <div class="player-info">
+                                    <div class="player-name">
+                                        ${index === 0 ? '🏆 ' : ''}Ваш результат ${index === 0 ? '(лучший)' : '#' + (index + 1)}
+                                    </div>
+                                    <div class="player-stats">
+                                        📊 ${entry.score} очков • 
+                                        🎯 ${entry.accuracy_percentage}% точность • 
+                                        📚 ${entry.total_words_available} слов • 
+                                        ⏱️ ${Math.floor(entry.duration_seconds / 60)}:${(entry.duration_seconds % 60).toString().padStart(2, '0')}
+                                    </div>
+                                    <div class="player-date">${new Date(entry.created_at).toLocaleDateString('ru-RU')}</div>
+                                </div>
+                            </div>
+                        `).join('')}
+                    </div>
+                `;
+            }
+            
+            container.classList.remove('hidden');
+            
+        } catch (error) {
+            console.error('Error fetching user results:', error);
+            this.showError('Ошибка загрузки ваших результатов');
+        }
+    }
+    
+    escapeHtml(text) {
+        const div = document.createElement('div');
+        div.textContent = text;
+        return div.innerHTML;
     }
 
 }

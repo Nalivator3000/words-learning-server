@@ -262,6 +262,24 @@
                             📊 Статистика изображений
                         </button>
                     </div>
+                    <div class="leaderboard-section">
+                        <h3>🏆 Лидерборд - Режим выживания</h3>
+                        <p style="font-size: 0.9em; color: #666; margin-bottom: 15px;">
+                            Лучшие результаты пользователей с количеством изучаемых слов 100+
+                        </p>
+                        <div style="display: flex; gap: 10px; flex-wrap: wrap; margin-bottom: 15px;">
+                            <button id="showLeaderboardBtn" class="action-btn" style="background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);">
+                                📊 Показать лидерборд
+                            </button>
+                            <button id="showMyBestBtn" class="action-btn" style="background: #2196F3;">
+                                👤 Мои лучшие результаты
+                            </button>
+                        </div>
+                        <div id="leaderboardContainer" class="leaderboard-container hidden">
+                            <div id="leaderboardContent" class="leaderboard-content"></div>
+                        </div>
+                    </div>
+
                     <div class="word-lists">
                         <div class="list-section">
                             <h3>Изучаемые слова (<span id="studyingListCount">0</span>)</h3>
@@ -325,6 +343,18 @@
                     </div>
 
                     <div class="settings-group">
+                        <h3>🔔 Уведомления</h3>
+                        <p style="font-size: 0.9em; color: #666; margin-bottom: 15px;">
+                            Получайте напоминания о времени изучения новых слов
+                        </p>
+                        <div style="display: flex; gap: 10px; flex-wrap: wrap; margin-bottom: 15px;">
+                            <button id="enableNotificationsBtn" class="action-btn">Включить уведомления</button>
+                            <button id="testNotificationBtn" class="action-btn secondary" disabled>Тестовое уведомление</button>
+                        </div>
+                        <div id="notificationStatus" class="sync-status"></div>
+                    </div>
+
+                    <div class="settings-group">
                         <h3>Синхронизация</h3>
                         <button id="syncBtn" class="action-btn" data-translate="sync">Синхронизировать с сервером</button>
                         <div id="syncStatus" class="sync-status"></div>
@@ -353,5 +383,113 @@
     <script src="quiz.js?v=fixed-database-refs-2025-09-09-16-15"></script>
     <script src="quick-debug.js?v=fixed-quiz"></script>
     <script src="app.js?v=quiz-fixed-2025-09-09-19-05"></script>
+    
+    <!-- Service Worker Registration -->
+    <script>
+        if ('serviceWorker' in navigator) {
+            window.addEventListener('load', async () => {
+                try {
+                    const registration = await navigator.serviceWorker.register('/sw.js');
+                    console.log('✅ Service Worker registered successfully:', registration.scope);
+                    
+                    // Listen for updates
+                    registration.addEventListener('updatefound', () => {
+                        const newWorker = registration.installing;
+                        console.log('🔄 New Service Worker installing...');
+                        
+                        newWorker.addEventListener('statechange', () => {
+                            if (newWorker.state === 'installed') {
+                                if (navigator.serviceWorker.controller) {
+                                    console.log('📱 New version available - refresh to update');
+                                    // Show update notification to user
+                                    showUpdateNotification();
+                                } else {
+                                    console.log('📱 PWA ready for offline use');
+                                    showPWAReadyNotification();
+                                }
+                            }
+                        });
+                    });
+                } catch (error) {
+                    console.error('❌ Service Worker registration failed:', error);
+                }
+            });
+            
+            // Listen for messages from Service Worker
+            navigator.serviceWorker.addEventListener('message', (event) => {
+                const { type, category, count } = event.data;
+                
+                if (type === 'SYNC_COMPLETED') {
+                    console.log(`✅ Background sync completed: ${category} (${count} items)`);
+                    // Refresh UI data after sync
+                    if (window.app) {
+                        window.app.updateStats();
+                    }
+                } else if (type === 'NOTIFICATION_CLICKED') {
+                    // Handle notification clicks
+                    if (event.data.action === 'study' && window.app) {
+                        window.app.showSection('study');
+                    }
+                }
+            });
+        } else {
+            console.warn('⚠️ Service Worker not supported in this browser');
+        }
+        
+        // Show update notification
+        function showUpdateNotification() {
+            // Create a simple update notification
+            const notification = document.createElement('div');
+            notification.style.cssText = `
+                position: fixed;
+                top: 20px;
+                right: 20px;
+                background: #3498db;
+                color: white;
+                padding: 15px 20px;
+                border-radius: 8px;
+                z-index: 10000;
+                box-shadow: 0 4px 12px rgba(0,0,0,0.2);
+                font-family: inherit;
+            `;
+            notification.innerHTML = `
+                <div style="margin-bottom: 10px;">🔄 App update available!</div>
+                <button onclick="window.location.reload()" style="
+                    background: white;
+                    color: #3498db;
+                    border: none;
+                    padding: 8px 16px;
+                    border-radius: 4px;
+                    cursor: pointer;
+                    font-weight: bold;
+                ">Update Now</button>
+                <button onclick="this.parentElement.remove()" style="
+                    background: transparent;
+                    color: white;
+                    border: 1px solid white;
+                    padding: 8px 16px;
+                    border-radius: 4px;
+                    cursor: pointer;
+                    margin-left: 10px;
+                ">Later</button>
+            `;
+            document.body.appendChild(notification);
+            
+            // Auto-remove after 10 seconds
+            setTimeout(() => {
+                if (notification.parentElement) {
+                    notification.remove();
+                }
+            }, 10000);
+        }
+        
+        // Show PWA ready notification
+        function showPWAReadyNotification() {
+            console.log('📱 PWA features now available:');
+            console.log('   • Offline access to cached content');
+            console.log('   • Background sync for study progress');
+            console.log('   • Push notifications (when enabled)');
+        }
+    </script>
 </body>
 </html>

@@ -63,6 +63,7 @@ CREATE TABLE words (
     correct_count INTEGER DEFAULT 0,
     incorrect_count INTEGER DEFAULT 0,
     review_attempts INTEGER DEFAULT 0,
+    points INTEGER DEFAULT 0, -- Баллы для перехода в повторение (требуется 50 баллов)
     
     -- Timestamps
     date_added TIMESTAMP WITH TIME ZONE DEFAULT CURRENT_TIMESTAMP,
@@ -350,6 +351,51 @@ COMMENT ON TABLE language_pairs IS 'Language learning pairs (e.g., German-Russia
 COMMENT ON TABLE words IS 'Vocabulary words with learning progress';
 COMMENT ON TABLE word_attempts IS 'Detailed history of learning attempts';
 COMMENT ON TABLE user_progress IS 'Overall learning statistics per user';
+-- Push subscriptions table - stores web push notification subscriptions
+CREATE TABLE push_subscriptions (
+    id BIGSERIAL PRIMARY KEY,
+    user_id VARCHAR(50) NOT NULL REFERENCES users(id) ON DELETE CASCADE,
+    endpoint TEXT NOT NULL,
+    p256dh_key TEXT NOT NULL,
+    auth_key TEXT NOT NULL,
+    user_agent TEXT,
+    created_at TIMESTAMP WITH TIME ZONE DEFAULT CURRENT_TIMESTAMP,
+    last_used TIMESTAMP WITH TIME ZONE DEFAULT CURRENT_TIMESTAMP,
+    UNIQUE(user_id, endpoint)
+);
+
+-- Index for push subscriptions
+CREATE INDEX idx_push_subscriptions_user ON push_subscriptions(user_id);
+CREATE INDEX idx_push_subscriptions_endpoint ON push_subscriptions(endpoint);
+
+-- Survival mode leaderboard - stores best results for users with 100+ words
+CREATE TABLE survival_leaderboard (
+    id BIGSERIAL PRIMARY KEY,
+    user_id VARCHAR(50) NOT NULL REFERENCES users(id) ON DELETE CASCADE,
+    score INTEGER NOT NULL, -- Количество правильных ответов
+    total_words_available INTEGER NOT NULL, -- Количество слов в изучении на момент игры
+    duration_seconds INTEGER NOT NULL, -- Продолжительность игры в секундах
+    words_answered INTEGER NOT NULL, -- Общее количество отвеченных слов
+    accuracy_percentage DECIMAL(5,2) NOT NULL, -- Процент правильных ответов
+    created_at TIMESTAMP WITH TIME ZONE DEFAULT CURRENT_TIMESTAMP,
+    
+    -- Только результаты с 100+ словами попадают в лидерборд
+    CONSTRAINT check_words_minimum CHECK (total_words_available >= 100)
+);
+
+-- Indexes for leaderboard
+CREATE INDEX idx_survival_leaderboard_user ON survival_leaderboard(user_id);
+CREATE INDEX idx_survival_leaderboard_score ON survival_leaderboard(score DESC);
+CREATE INDEX idx_survival_leaderboard_date ON survival_leaderboard(created_at DESC);
+CREATE INDEX idx_survival_leaderboard_score_words ON survival_leaderboard(score DESC, total_words_available DESC);
+
+COMMENT ON TABLE users IS 'User accounts and authentication data';
+COMMENT ON TABLE language_pairs IS 'Language learning pairs (e.g., German-Russian)';
+COMMENT ON TABLE words IS 'Vocabulary words with learning progress';
+COMMENT ON TABLE word_attempts IS 'Detailed history of learning attempts';
+COMMENT ON TABLE user_progress IS 'Overall learning statistics per user';
 COMMENT ON TABLE user_settings IS 'User preferences and settings';
 COMMENT ON TABLE study_sessions IS 'Individual study session tracking';
+COMMENT ON TABLE push_subscriptions IS 'Web push notification subscriptions';
+COMMENT ON TABLE survival_leaderboard IS 'Leaderboard for survival mode (users with 100+ words only)';
 COMMENT ON MATERIALIZED VIEW user_stats IS 'Cached user statistics for performance';
