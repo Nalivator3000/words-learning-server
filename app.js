@@ -605,11 +605,20 @@ class LanguageLearningApp {
         document.getElementById('imageStatsBtn').addEventListener('click', () => this.showImageStats());
         
         // Settings functionality
-        document.getElementById('addLanguagePairBtn').addEventListener('click', () => this.showLanguagePairDialog());
-        document.getElementById('lessonSizeInput').addEventListener('change', (e) => this.updateLessonSize(e.target.value));
-        document.getElementById('saveLessonSizeBtn').addEventListener('click', () => this.saveLessonSize());
-        document.getElementById('editWordsBtn').addEventListener('click', () => this.toggleWordEditor());
-        document.getElementById('syncBtn').addEventListener('click', () => this.syncWithServer());
+        const addLanguagePairBtn = document.getElementById('addLanguagePairBtn');
+        if (addLanguagePairBtn) addLanguagePairBtn.addEventListener('click', () => this.showLanguagePairDialog());
+        
+        const lessonSizeInput = document.getElementById('lessonSizeInput');
+        if (lessonSizeInput) lessonSizeInput.addEventListener('change', (e) => this.updateLessonSize(e.target.value));
+        
+        const saveLessonSizeBtn = document.getElementById('saveLessonSizeBtn');
+        if (saveLessonSizeBtn) saveLessonSizeBtn.addEventListener('click', () => this.saveLessonSize());
+        
+        const editWordsBtn = document.getElementById('editWordsBtn');
+        if (editWordsBtn) editWordsBtn.addEventListener('click', () => this.toggleWordEditor());
+        
+        const syncBtn = document.getElementById('syncBtn');
+        if (syncBtn) syncBtn.addEventListener('click', () => this.syncWithServer());
         
         // Leaderboard buttons
         document.getElementById('showLeaderboardBtn').addEventListener('click', () => this.showLeaderboard());
@@ -2187,19 +2196,24 @@ class LanguageLearningApp {
     async updateSettingsPage() {
         if (!userManager.isLoggedIn()) return;
         
-        // Initialize language pair manager if not already done
+        // Initialize language pair manager if interface elements exist
         await this.initLanguagePairManager();
         
         // Update language pairs list (legacy)
         this.renderLanguagePairs();
         
         // Update lesson size input
-        const lessonSize = userManager.getLessonSize();
-        document.getElementById('lessonSizeInput').value = lessonSize;
+        const lessonSizeInput = document.getElementById('lessonSizeInput');
+        if (lessonSizeInput) {
+            const lessonSize = userManager.getLessonSize();
+            lessonSizeInput.value = lessonSize;
+        }
     }
 
     renderLanguagePairs() {
         const container = document.getElementById('languagePairsList');
+        if (!container) return;
+        
         container.innerHTML = '';
         
         const user = userManager.getCurrentUser();
@@ -2251,6 +2265,13 @@ class LanguageLearningApp {
     }
 
     async initLanguagePairManager() {
+        // Check if language pair interface exists before initializing
+        const languagePairInterface = document.querySelector('.language-pair-tabs, #popularPairsTab');
+        if (!languagePairInterface) {
+            console.log('Language pair interface not found, skipping initialization');
+            return;
+        }
+        
         // Initialize language pair tabs
         this.setupLanguagePairEventListeners();
         
@@ -2291,32 +2312,44 @@ class LanguageLearningApp {
         
         if (fromSelect) fromSelect.addEventListener('change', () => this.updateCustomPairPreview());
         if (toSelect) toSelect.addEventListener('change', () => this.updateCustomPairPreview());
+        
+        // Update custom pair name input handler
+        const customPairNameInput = document.getElementById('customPairName');
+        if (customPairNameInput) {
+            customPairNameInput.addEventListener('input', () => this.updateCustomPairPreview());
+        }
     }
 
     showLanguagePairTab(tabName) {
-        // Update tab buttons
-        document.querySelectorAll('.language-pair-tab').forEach(tab => {
-            tab.classList.remove('active');
-        });
-        document.getElementById(`${tabName}PairsTab`)?.classList.add('active');
+        try {
+            // Update tab buttons
+            document.querySelectorAll('.language-pair-tab').forEach(tab => {
+                tab.classList.remove('active');
+            });
+            const activeTab = document.getElementById(`${tabName}PairsTab`);
+            if (activeTab) activeTab.classList.add('active');
 
-        // Update content
-        document.querySelectorAll('.language-pair-content').forEach(content => {
-            content.classList.remove('active');
-        });
-        document.getElementById(`${tabName}PairsContent`)?.classList.add('active');
+            // Update content
+            document.querySelectorAll('.language-pair-content').forEach(content => {
+                content.classList.remove('active');
+            });
+            const activeContent = document.getElementById(`${tabName}PairsContent`);
+            if (activeContent) activeContent.classList.add('active');
 
-        // Load appropriate content
-        switch (tabName) {
-            case 'popular':
-                this.renderPopularPairs();
-                break;
-            case 'custom':
-                this.renderCustomPairs();
-                break;
-            case 'manage':
-                this.renderManagePairs();
-                break;
+            // Load appropriate content
+            switch (tabName) {
+                case 'popular':
+                    this.renderPopularPairs();
+                    break;
+                case 'custom':
+                    this.renderCustomPairs();
+                    break;
+                case 'manage':
+                    this.renderManagePairs();
+                    break;
+            }
+        } catch (error) {
+            console.warn('Error showing language pair tab:', error);
         }
     }
 
