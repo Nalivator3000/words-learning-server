@@ -16,7 +16,15 @@ try {
     console.warn('⚠️ API documentation will be disabled');
 }
 
-const WordStudyBot = require('./telegram-bot');
+// Load telegram bot if available
+let WordStudyBot;
+try {
+    WordStudyBot = require('./telegram-bot');
+    console.log('✅ Telegram bot loaded');
+} catch (error) {
+    console.warn('⚠️ Telegram bot not available:', error.message);
+}
+
 require('dotenv').config();
 
 const app = express();
