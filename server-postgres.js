@@ -259,6 +259,42 @@ app.get('/api/health', (req, res) => {
     }
 });
 
+// Debug endpoint to check database schema
+app.get('/api/debug/schema', async (req, res) => {
+    if (!useDatabase) {
+        return res.json({ error: 'Database not available' });
+    }
+    
+    try {
+        const client = await pool.connect();
+        try {
+            const result = await client.query(`
+                SELECT column_name, data_type, is_nullable, column_default
+                FROM information_schema.columns 
+                WHERE table_name = 'words' 
+                ORDER BY ordinal_position
+            `);
+            
+            const sampleWord = await client.query(`
+                SELECT id, word, status, points, correct_count, incorrect_count
+                FROM words 
+                LIMIT 1
+            `);
+            
+            res.json({
+                columns: result.rows,
+                sampleRecord: sampleWord.rows[0] || null,
+                totalWords: (await client.query('SELECT COUNT(*) FROM words')).rows[0].count
+            });
+        } finally {
+            client.release();
+        }
+    } catch (error) {
+        console.error('Debug schema error:', error);
+        res.status(500).json({ error: error.message });
+    }
+});
+
 // Authentication endpoints
 // Google OAuth login endpoint
 app.post('/api/auth/google', async (req, res) => {
