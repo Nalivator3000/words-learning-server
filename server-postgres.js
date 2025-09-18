@@ -275,16 +275,31 @@ app.get('/api/debug/schema', async (req, res) => {
                 ORDER BY ordinal_position
             `);
             
-            const sampleWord = await client.query(`
-                SELECT id, word, status, points, correct_count, incorrect_count
-                FROM words 
-                LIMIT 1
-            `);
+            // Check if points column exists
+            const hasPoints = result.rows.some(col => col.column_name === 'points');
+            
+            let sampleWord = null;
+            if (hasPoints) {
+                const wordResult = await client.query(`
+                    SELECT id, word, status, points, correct_count, incorrect_count
+                    FROM words 
+                    LIMIT 1
+                `);
+                sampleWord = wordResult.rows[0] || null;
+            } else {
+                const wordResult = await client.query(`
+                    SELECT id, word, status, correct_count, incorrect_count
+                    FROM words 
+                    LIMIT 1
+                `);
+                sampleWord = wordResult.rows[0] || null;
+            }
             
             res.json({
                 columns: result.rows,
-                sampleRecord: sampleWord.rows[0] || null,
-                totalWords: (await client.query('SELECT COUNT(*) FROM words')).rows[0].count
+                sampleRecord: sampleWord,
+                totalWords: (await client.query('SELECT COUNT(*) FROM words')).rows[0].count,
+                hasPointsColumn: hasPoints
             });
         } finally {
             client.release();
@@ -292,6 +307,59 @@ app.get('/api/debug/schema', async (req, res) => {
     } catch (error) {
         console.error('Debug schema error:', error);
         res.status(500).json({ error: error.message });
+    }
+});
+
+// Force migration endpoint
+app.post('/api/debug/migrate', async (req, res) => {
+    if (!useDatabase) {
+        return res.json({ error: 'Database not available' });
+    }
+    
+    try {
+        const client = await pool.connect();
+        try {
+            console.log('🔧 Forced migration started...');
+            
+            // Check if points column exists
+            const pointsColumnCheck = await client.query(`
+                SELECT column_name 
+                FROM information_schema.columns 
+                WHERE table_name = 'words' AND column_name = 'points'
+            `);
+            
+            if (pointsColumnCheck.rows.length === 0) {
+                console.log('➕ Adding points column to words table...');
+                await client.query(`
+                    ALTER TABLE words 
+                    ADD COLUMN points INTEGER DEFAULT 0
+                `);
+                console.log('✅ Points column added successfully');
+                
+                res.json({ 
+                    success: true, 
+                    message: 'Points column added successfully',
+                    migrationPerformed: true
+                });
+            } else {
+                console.log('✅ Points column already exists');
+                res.json({ 
+                    success: true, 
+                    message: 'Points column already exists',
+                    migrationPerformed: false
+                });
+            }
+            
+        } finally {
+            client.release();
+        }
+    } catch (error) {
+        console.error('❌ Forced migration error:', error);
+        res.status(500).json({ 
+            success: false, 
+            error: error.message,
+            details: error.detail || null
+        });
     }
 });
 
