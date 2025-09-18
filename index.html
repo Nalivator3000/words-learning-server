@@ -312,10 +312,56 @@
                     </div>
 
                     <div class="settings-group">
-                        <h3 data-translate="languagePairs">Языковые пары</h3>
-                        <div class="language-pairs">
+                        <h3 data-translate="languagePairs">🌐 Языковые пары</h3>
+                        <div class="language-pairs-container">
+                            <div class="language-pair-categories">
+                                <div class="category-tabs">
+                                    <button class="category-tab active" data-category="popular">🔥 Популярные</button>
+                                    <button class="category-tab" data-category="european">🇪🇺 Европейские</button>
+                                    <button class="category-tab" data-category="asian">🌏 Азиатские</button>
+                                    <button class="category-tab" data-category="custom">⚙️ Свои</button>
+                                </div>
+                                <div class="popular-pairs-grid" id="popularPairsGrid">
+                                    <!-- Popular language pairs will be loaded here -->
+                                </div>
+                            </div>
                             <div id="languagePairsList" class="language-pairs-list"></div>
-                            <button id="addLanguagePairBtn" class="action-btn" data-translate="addLanguagePair">Добавить языковую пару</button>
+                            <div class="language-pair-actions">
+                                <button id="addPopularPairBtn" class="action-btn primary">Добавить популярную пару</button>
+                                <button id="createCustomPairBtn" class="action-btn secondary">Создать свою пару</button>
+                            </div>
+                        </div>
+                        
+                        <!-- Custom Language Pair Creator Modal -->
+                        <div id="customPairModal" class="modal hidden">
+                            <div class="modal-content">
+                                <div class="modal-header">
+                                    <h3>Создать языковую пару</h3>
+                                    <button class="modal-close" onclick="this.closest('.modal').classList.add('hidden')">✕</button>
+                                </div>
+                                <div class="modal-body">
+                                    <div class="form-group">
+                                        <label>Изучаемый язык:</label>
+                                        <select id="fromLanguageSelect" class="form-select">
+                                            <option value="">Выберите язык...</option>
+                                        </select>
+                                    </div>
+                                    <div class="form-group">
+                                        <label>Родной язык:</label>
+                                        <select id="toLanguageSelect" class="form-select">
+                                            <option value="">Выберите язык...</option>
+                                        </select>
+                                    </div>
+                                    <div class="form-group">
+                                        <label>Название пары (необязательно):</label>
+                                        <input type="text" id="customPairName" class="form-input" placeholder="Автоматически">
+                                    </div>
+                                </div>
+                                <div class="modal-footer">
+                                    <button id="createPairBtn" class="action-btn primary">Создать</button>
+                                    <button class="action-btn secondary" onclick="this.closest('.modal').classList.add('hidden')">Отмена</button>
+                                </div>
+                            </div>
                         </div>
                     </div>
                     
@@ -384,6 +430,7 @@
     </div>
 
     <script src="config.js?v=fixed-quiz"></script>
+    <script src="language-pairs-config.js?v=multilingual"></script>
     <script src="emergency-login.js?v=fixed-quiz"></script>
     <script src="quiz.js?v=fixed-quiz"></script>
     <script src="language-manager.js?v=fixed-quiz"></script>
