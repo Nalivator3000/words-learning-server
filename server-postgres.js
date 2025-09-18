@@ -767,17 +767,22 @@ app.get('/api/words/study', authenticateToken, async (req, res) => {
 });
 
 app.put('/api/words/:wordId/progress', authenticateToken, async (req, res) => {
+    console.log(`📊 Progress update request for word ${req.params.wordId}, user ${req.user.userId}, correct: ${req.body.isCorrect}, type: ${req.body.quizType}`);
+    
     try {
         const { wordId } = req.params;
         const { isCorrect, quizType } = req.body;
 
         if (useDatabase) {
+            console.log(`🔌 Connecting to database for word ${wordId}`);
             const client = await pool.connect();
             
             try {
+                console.log(`🔄 Starting transaction for word ${wordId}`);
                 await client.query('BEGIN');
 
                 // Get current word
+                console.log(`📖 Fetching word ${wordId} for user ${req.user.userId}`);
                 const wordResult = await client.query(
                     'SELECT * FROM words WHERE id = $1 AND user_id = $2',
                     [wordId, req.user.userId]
@@ -871,18 +876,23 @@ app.put('/api/words/:wordId/progress', authenticateToken, async (req, res) => {
                 }
 
                 // Update the word with points
+                console.log(`💾 Updating word ${wordId}: status=${newStatus}, correct=${newCorrectCount}, incorrect=${newIncorrectCount}, points=${newPoints}`);
                 await client.query(`
                     UPDATE words 
                     SET status = $1, correct_count = $2, incorrect_count = $3, 
                         review_attempts = $4, next_review = $5, points = $6, last_studied = CURRENT_TIMESTAMP
                     WHERE id = $7 AND user_id = $8
                 `, [newStatus, newCorrectCount, newIncorrectCount, newReviewAttempts, nextReview, newPoints, wordId, req.user.userId]);
+                console.log(`✅ Successfully updated word ${wordId}`);
 
                 await client.query('COMMIT');
                 
                 console.log(`📈 Updated progress for word "${word.word}": ${isCorrect ? '✅' : '❌'} (${quizType || 'unknown'}) - Status: ${newStatus}, Points: ${newPoints}/50${pointsAwarded > 0 ? ` (+${pointsAwarded})` : ''}`);
 
             } catch (error) {
+                console.error(`❌ Database error for word ${wordId}:`, error.message);
+                console.error(`❌ Error code:`, error.code);
+                console.error(`❌ Error detail:`, error.detail);
                 await client.query('ROLLBACK');
                 throw error;
             } finally {
