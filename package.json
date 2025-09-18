@@ -17,8 +17,10 @@
     "jsonwebtoken": "^9.0.2",
     "node-telegram-bot-api": "^0.66.0",
     "pg": "^8.16.3",
+    "web-push": "^3.6.7"
+  },
+  "optionalDependencies": {
     "swagger-ui-express": "^5.0.1",
-    "web-push": "^3.6.7",
     "yamljs": "^0.3.0"
   },
   "engines": {
