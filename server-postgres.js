@@ -53,11 +53,21 @@ app.use(express.static('.', {
 const JWT_SECRET = process.env.JWT_SECRET || 'words_learning_jwt_secret_2024';
 
 // Web Push configuration
-const VAPID_PUBLIC_KEY = process.env.VAPID_PUBLIC_KEY || 'BM7XQXJ8uOLO8qQX_-4lB4XJGn7K_zW0V3r8HLvLcB2j4O3lQ8T_KN-LmR4UQeN6Kz8V8-OJn_qW3r6HLvLcB2j4';
-const VAPID_PRIVATE_KEY = process.env.VAPID_PRIVATE_KEY || 'mGcUaT7tQP3zqY7sDHw5N3r2K1vX8zT9pR4uE6wF8qC3vB5nM7lP9sA2dF4gH6jK';
+const VAPID_PUBLIC_KEY = process.env.VAPID_PUBLIC_KEY;
+const VAPID_PRIVATE_KEY = process.env.VAPID_PRIVATE_KEY;
 const VAPID_EMAIL = process.env.VAPID_EMAIL || 'mailto:admin@memprizator.com';
 
-webpush.setVapidDetails(VAPID_EMAIL, VAPID_PUBLIC_KEY, VAPID_PRIVATE_KEY);
+// Only initialize web push if VAPID keys are properly set
+if (VAPID_PUBLIC_KEY && VAPID_PRIVATE_KEY) {
+    try {
+        webpush.setVapidDetails(VAPID_EMAIL, VAPID_PUBLIC_KEY, VAPID_PRIVATE_KEY);
+        console.log('✅ Web Push VAPID configured');
+    } catch (error) {
+        console.warn('⚠️ Invalid VAPID keys, web push disabled:', error.message);
+    }
+} else {
+    console.warn('⚠️ VAPID keys not found, web push notifications disabled');
+}
 
 // Create API v1 router
 const v1Router = express.Router();
@@ -1224,6 +1234,13 @@ app.post('/api/proxy/google-sheets', authenticateToken, async (req, res) => {
 // Push notification endpoints
 app.post('/api/push/subscribe', authenticateToken, async (req, res) => {
     try {
+        if (!VAPID_PUBLIC_KEY || !VAPID_PRIVATE_KEY) {
+            return res.status(503).json({ 
+                error: 'Push notifications not available',
+                message: 'VAPID keys not configured'
+            });
+        }
+
         const { endpoint, keys } = req.body;
         const userId = req.user.userId;
 
@@ -1263,6 +1280,13 @@ app.post('/api/push/subscribe', authenticateToken, async (req, res) => {
 
 app.post('/api/push/unsubscribe', authenticateToken, async (req, res) => {
     try {
+        if (!VAPID_PUBLIC_KEY || !VAPID_PRIVATE_KEY) {
+            return res.status(503).json({ 
+                error: 'Push notifications not available',
+                message: 'VAPID keys not configured'
+            });
+        }
+
         const { endpoint } = req.body;
         const userId = req.user.userId;
 
@@ -1293,6 +1317,13 @@ app.post('/api/push/unsubscribe', authenticateToken, async (req, res) => {
 
 app.post('/api/push/schedule-reminder', authenticateToken, async (req, res) => {
     try {
+        if (!VAPID_PUBLIC_KEY || !VAPID_PRIVATE_KEY) {
+            return res.status(503).json({ 
+                error: 'Push notifications not available',
+                message: 'VAPID keys not configured'
+            });
+        }
+
         const { hours = 24 } = req.body;
         const userId = req.user.userId;
 
@@ -1362,7 +1393,14 @@ app.post('/api/push/schedule-reminder', authenticateToken, async (req, res) => {
 });
 
 app.get('/api/push/vapid-public-key', (req, res) => {
-    res.json({ publicKey: VAPID_PUBLIC_KEY });
+    if (VAPID_PUBLIC_KEY) {
+        res.json({ publicKey: VAPID_PUBLIC_KEY });
+    } else {
+        res.status(503).json({ 
+            error: 'Push notifications not available',
+            message: 'VAPID keys not configured'
+        });
+    }
 });
 
 // API Documentation with Swagger UI
