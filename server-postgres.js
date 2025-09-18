@@ -4,8 +4,18 @@ const cors = require('cors');
 const jwt = require('jsonwebtoken');
 const path = require('path');
 const webpush = require('web-push');
-const swaggerUi = require('swagger-ui-express');
-const YAML = require('yamljs');
+
+// Try to load optional dependencies
+let swaggerUi, YAML;
+try {
+    swaggerUi = require('swagger-ui-express');
+    YAML = require('yamljs');
+    console.log('✅ Swagger UI and YAML dependencies loaded');
+} catch (error) {
+    console.warn('⚠️ Optional dependencies not available:', error.message);
+    console.warn('⚠️ API documentation will be disabled');
+}
+
 const WordStudyBot = require('./telegram-bot');
 require('dotenv').config();
 
@@ -64,11 +74,23 @@ app.use('/api', (req, res, next) => {
 
 // Load API documentation
 let swaggerDocument;
-try {
-    swaggerDocument = YAML.load('./api-docs.yaml');
-    console.log('✅ API documentation loaded successfully');
-} catch (error) {
-    console.warn('⚠️ Could not load API documentation:', error.message);
+if (YAML) {
+    try {
+        const fs = require('fs');
+        const yamlPath = path.join(__dirname, 'api-docs.yaml');
+        
+        if (fs.existsSync(yamlPath)) {
+            swaggerDocument = YAML.load(yamlPath);
+            console.log('✅ API documentation loaded successfully');
+        } else {
+            console.warn('⚠️ API documentation file not found:', yamlPath);
+        }
+    } catch (error) {
+        console.warn('⚠️ Could not load API documentation:', error.message);
+        console.warn('⚠️ Continuing without API docs...');
+    }
+} else {
+    console.warn('⚠️ YAML module not available, skipping API docs');
 }
 
 // PostgreSQL connection pool with UTF-8 encoding
@@ -201,35 +223,21 @@ const authenticateToken = (req, res, next) => {
 };
 
 // Health check endpoint
-app.get('/api/health', async (req, res) => {
+app.get('/api/health', (req, res) => {
     try {
-        let dbStatus = 'disconnected';
-        let totalWords = 0;
-        let totalUsers = 0;
-
-        if (useDatabase) {
-            const result = await pool.query('SELECT COUNT(*) FROM users');
-            totalUsers = parseInt(result.rows[0].count);
-            
-            const wordsResult = await pool.query('SELECT COUNT(*) FROM words');
-            totalWords = parseInt(wordsResult.rows[0].count);
-            
-            dbStatus = 'postgresql';
-        } else {
-            totalUsers = inMemoryData.users.size;
-            totalWords = Array.from(inMemoryData.users.values()).reduce((sum, user) => sum + user.words.length, 0);
-            dbStatus = 'in-memory';
-        }
-
-        res.json({ 
-            status: 'healthy', 
-            database: dbStatus,
-            users: totalUsers,
-            totalWords: totalWords
+        res.json({
+            status: 'healthy',
+            timestamp: new Date().toISOString(),
+            version: '2.0.0',
+            database: useDatabase ? 'postgresql' : 'in-memory'
         });
     } catch (error) {
         console.error('Health check error:', error);
-        res.status(500).json({ status: 'unhealthy', error: error.message });
+        res.status(500).json({ 
+            status: 'unhealthy', 
+            error: error.message,
+            timestamp: new Date().toISOString()
+        });
     }
 });
 
@@ -1350,22 +1358,28 @@ app.get('/api/push/vapid-public-key', (req, res) => {
 });
 
 // API Documentation with Swagger UI
-if (swaggerDocument) {
-    // Update swagger document to use v1 paths
-    const v1SwaggerDocument = JSON.parse(JSON.stringify(swaggerDocument));
-    v1SwaggerDocument.servers = v1SwaggerDocument.servers.map(server => ({
-        ...server,
-        url: server.url.includes('localhost') 
-            ? server.url + '/api/v1'
-            : server.url.replace('/api', '/api/v1')
-    }));
-    
-    app.use('/api/docs', swaggerUi.serve, swaggerUi.setup(v1SwaggerDocument, {
-        customCss: '.swagger-ui .topbar { display: none }',
-        customSiteTitle: "Words Learning API v1 Documentation",
-        customfavIcon: "/icons/icon-192x192.png"
-    }));
-    console.log('📚 API documentation available at /api/docs');
+if (swaggerDocument && swaggerUi) {
+    try {
+        // Update swagger document to use v1 paths
+        const v1SwaggerDocument = JSON.parse(JSON.stringify(swaggerDocument));
+        v1SwaggerDocument.servers = v1SwaggerDocument.servers.map(server => ({
+            ...server,
+            url: server.url.includes('localhost') 
+                ? server.url + '/api/v1'
+                : server.url.replace('/api', '/api/v1')
+        }));
+        
+        app.use('/api/docs', swaggerUi.serve, swaggerUi.setup(v1SwaggerDocument, {
+            customCss: '.swagger-ui .topbar { display: none }',
+            customSiteTitle: "Words Learning API v1 Documentation",
+            customfavIcon: "/icons/icon-192x192.png"
+        }));
+        console.log('📚 API documentation available at /api/docs');
+    } catch (error) {
+        console.warn('⚠️ Failed to setup API documentation:', error.message);
+    }
+} else {
+    console.warn('⚠️ API documentation disabled (missing dependencies or swagger document)');
 }
 
 // ===================== API V1 ROUTES =====================
