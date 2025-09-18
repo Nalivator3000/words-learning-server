@@ -186,20 +186,59 @@ class AudioManager {
         const loadVoices = () => {
             const allVoices = this.synth.getVoices();
             
-            // Group voices by language
-            this.voices = {
-                'ru-RU': allVoices.find(v => v.lang.startsWith('ru')),
-                'en-US': allVoices.find(v => v.lang.startsWith('en')),
-                'de-DE': allVoices.find(v => v.lang.startsWith('de')),
-                'es-ES': allVoices.find(v => v.lang.startsWith('es')),
-                'fr-FR': allVoices.find(v => v.lang.startsWith('fr')),
-                'it-IT': allVoices.find(v => v.lang.startsWith('it'))
+            // Create dynamic voice mapping based on available voices
+            this.voices = {};
+            
+            // Language code mappings for TTS
+            const languageMapping = {
+                'en': 'en-US',
+                'ru': 'ru-RU', 
+                'de': 'de-DE',
+                'fr': 'fr-FR',
+                'es': 'es-ES',
+                'it': 'it-IT',
+                'pt': 'pt-PT',
+                'ja': 'ja-JP',
+                'ko': 'ko-KR',
+                'zh': 'zh-CN',
+                'ar': 'ar-SA',
+                'hi': 'hi-IN',
+                'tr': 'tr-TR',
+                'pl': 'pl-PL',
+                'nl': 'nl-NL',
+                'sv': 'sv-SE',
+                'no': 'no-NO',
+                'da': 'da-DK',
+                'fi': 'fi-FI',
+                'he': 'he-IL',
+                'th': 'th-TH',
+                'vi': 'vi-VN'
             };
             
-            // Fallback to first available voice if specific language not found
-            if (!this.voices['ru-RU'] && allVoices.length > 0) this.voices['ru-RU'] = allVoices[0];
-            if (!this.voices['en-US'] && allVoices.length > 0) this.voices['en-US'] = allVoices[0];
-            if (!this.voices['de-DE'] && allVoices.length > 0) this.voices['de-DE'] = allVoices[0];
+            // Map each language to its best available voice
+            Object.entries(languageMapping).forEach(([shortCode, fullCode]) => {
+                // Try to find exact match first
+                let voice = allVoices.find(v => v.lang === fullCode);
+                
+                // If not found, try language prefix match
+                if (!voice) {
+                    voice = allVoices.find(v => v.lang.startsWith(shortCode));
+                }
+                
+                // Store with both codes for compatibility
+                if (voice) {
+                    this.voices[fullCode] = voice;
+                    this.voices[shortCode] = voice;
+                }
+            });
+            
+            // Fallback to first available voice for any unmapped languages
+            const fallbackVoice = allVoices.length > 0 ? allVoices[0] : null;
+            Object.values(languageMapping).forEach(code => {
+                if (!this.voices[code] && fallbackVoice) {
+                    this.voices[code] = fallbackVoice;
+                }
+            });
         };
 
         loadVoices();
@@ -219,8 +258,14 @@ class AudioManager {
         // Auto-detect language if not provided
         if (!languageCode) {
             const currentPair = userManager ? userManager.getCurrentLanguagePair() : null;
-            if (currentPair && languageManager) {
-                languageCode = languageManager.getAudioLanguageCode(text, currentPair);
+            if (currentPair) {
+                // Try to detect language based on current language pair
+                // Default to the 'from' language (language being studied)
+                const fromCode = currentPair.fromLanguageCode;
+                const toCode = currentPair.toLanguageCode;
+                
+                // Simple text-based detection - you might want to improve this
+                languageCode = this.detectLanguage(text, fromCode, toCode) || `${fromCode}-${fromCode.toUpperCase()}`;
             } else {
                 languageCode = 'de-DE'; // Default fallback
             }
@@ -260,6 +305,68 @@ class AudioManager {
 
     stop() {
         this.synth.cancel();
+    }
+
+    // Simple language detection based on character patterns
+    detectLanguage(text, fromCode, toCode) {
+        const cleanText = text.toLowerCase().trim();
+        
+        // Character-based detection patterns
+        const patterns = {
+            'ru': /[а-яё]/,
+            'ar': /[\u0600-\u06FF]/,
+            'zh': /[\u4e00-\u9fff]/,
+            'ja': /[\u3040-\u309f\u30a0-\u30ff\u4e00-\u9fff]/,
+            'ko': /[\uac00-\ud7af]/,
+            'he': /[\u0590-\u05ff]/,
+            'th': /[\u0e00-\u0e7f]/,
+            'hi': /[\u0900-\u097f]/
+        };
+        
+        // Check patterns first (more reliable for non-Latin scripts)
+        for (const [code, pattern] of Object.entries(patterns)) {
+            if (pattern.test(cleanText)) {
+                return this.getFullLanguageCode(code);
+            }
+        }
+        
+        // For Latin-based languages, prefer the current language pair context
+        if (fromCode && toCode) {
+            // If text contains typical patterns of the 'from' language, use that
+            return this.getFullLanguageCode(fromCode);
+        }
+        
+        return null;
+    }
+    
+    // Convert short language code to full TTS language code
+    getFullLanguageCode(shortCode) {
+        const mapping = {
+            'en': 'en-US',
+            'ru': 'ru-RU',
+            'de': 'de-DE',
+            'fr': 'fr-FR',
+            'es': 'es-ES',
+            'it': 'it-IT',
+            'pt': 'pt-PT',
+            'ja': 'ja-JP',
+            'ko': 'ko-KR',
+            'zh': 'zh-CN',
+            'ar': 'ar-SA',
+            'hi': 'hi-IN',
+            'tr': 'tr-TR',
+            'pl': 'pl-PL',
+            'nl': 'nl-NL',
+            'sv': 'sv-SE',
+            'no': 'no-NO',
+            'da': 'da-DK',
+            'fi': 'fi-FI',
+            'he': 'he-IL',
+            'th': 'th-TH',
+            'vi': 'vi-VN'
+        };
+        
+        return mapping[shortCode] || shortCode;
     }
     
     // Check if TTS is available
@@ -2080,7 +2187,10 @@ class LanguageLearningApp {
     async updateSettingsPage() {
         if (!userManager.isLoggedIn()) return;
         
-        // Update language pairs list
+        // Initialize language pair manager if not already done
+        await this.initLanguagePairManager();
+        
+        // Update language pairs list (legacy)
         this.renderLanguagePairs();
         
         // Update lesson size input
@@ -2140,82 +2250,415 @@ class LanguageLearningApp {
         }
     }
 
-    showLanguagePairDialog() {
-        // Get supported languages from language manager
-        const supportedLangs = languageManager.getSupportedLanguages();
-        const langOptions = Object.entries(supportedLangs).map(([code, name]) => name);
+    async initLanguagePairManager() {
+        // Initialize language pair tabs
+        this.setupLanguagePairEventListeners();
         
-        // Create a better dialog for language selection
-        const dialogHtml = `
-            <div id="languagePairDialog" class="auth-modal">
-                <div class="auth-content">
-                    <h2>Создать языковую пару</h2>
-                    <div class="auth-form active">
-                        <label>
-                            <span>Изучаемый язык:</span>
-                            <select id="fromLanguageSelect" class="language-select">
-                                ${langOptions.map(lang => `<option value="${lang}">${lang}</option>`).join('')}
-                            </select>
-                        </label>
-                        
-                        <label>
-                            <span>Родной язык:</span>
-                            <select id="toLanguageSelect" class="language-select">
-                                ${langOptions.map(lang => `<option value="${lang}" ${lang === 'Russian' ? 'selected' : ''}>${lang}</option>`).join('')}
-                            </select>
-                        </label>
-                        
-                        <input type="text" id="pairNameInput" placeholder="Название пары (автоматически)" class="auth-form input">
-                        
-                        <div style="display: flex; gap: 1rem; margin-top: 1rem;">
-                            <button id="createPairBtn" class="auth-btn">Создать</button>
-                            <button id="cancelPairBtn" class="auth-btn" style="background: #95a5a6;">Отмена</button>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        `;
-        
-        document.body.insertAdjacentHTML('beforeend', dialogHtml);
-        
-        // Set up event listeners
-        const updateName = () => {
-            const from = document.getElementById('fromLanguageSelect').value;
-            const to = document.getElementById('toLanguageSelect').value;
-            document.getElementById('pairNameInput').placeholder = `${from} - ${to}`;
-        };
-        
-        document.getElementById('fromLanguageSelect').addEventListener('change', updateName);
-        document.getElementById('toLanguageSelect').addEventListener('change', updateName);
-        
-        document.getElementById('createPairBtn').addEventListener('click', () => {
-            const fromLang = document.getElementById('fromLanguageSelect').value;
-            const toLang = document.getElementById('toLanguageSelect').value;
-            const name = document.getElementById('pairNameInput').value || `${fromLang} - ${toLang}`;
-            
-            if (fromLang === toLang) {
-                alert('Изучаемый и родной язык не могут быть одинаковыми');
-                return;
-            }
-            
-            this.createLanguagePair(fromLang, toLang, name);
-            document.getElementById('languagePairDialog').remove();
-        });
-        
-        document.getElementById('cancelPairBtn').addEventListener('click', () => {
-            document.getElementById('languagePairDialog').remove();
-        });
-        
-        updateName(); // Set initial name
+        // Load and render popular pairs by default
+        this.showLanguagePairTab('popular');
     }
 
-    async createLanguagePair(fromLang, toLang, name) {
+    setupLanguagePairEventListeners() {
+        // Tab switching
+        const popularTab = document.getElementById('popularPairsTab');
+        const customTab = document.getElementById('customPairsTab');
+        const manageTab = document.getElementById('managePairsTab');
+        
+        if (popularTab) popularTab.addEventListener('click', () => this.showLanguagePairTab('popular'));
+        if (customTab) customTab.addEventListener('click', () => this.showLanguagePairTab('custom'));
+        if (manageTab) manageTab.addEventListener('click', () => this.showLanguagePairTab('manage'));
+
+        // Add language pair button
+        const addBtn = document.getElementById('addLanguagePairBtn');
+        if (addBtn) addBtn.addEventListener('click', () => this.showCustomPairDialog());
+
+        // Modal close
+        const modal = document.getElementById('customPairModal');
+        const closeBtn = modal?.querySelector('.close-modal');
+        if (closeBtn) closeBtn.addEventListener('click', () => this.hideCustomPairDialog());
+
+        // Custom pair creation
+        const createBtn = document.getElementById('createCustomPairBtn');
+        if (createBtn) createBtn.addEventListener('click', () => this.createCustomPair());
+
+        // Cancel button
+        const cancelBtn = document.getElementById('cancelCustomPairBtn');
+        if (cancelBtn) cancelBtn.addEventListener('click', () => this.hideCustomPairDialog());
+
+        // Language selection change handlers
+        const fromSelect = document.getElementById('fromLanguageSelect');
+        const toSelect = document.getElementById('toLanguageSelect');
+        
+        if (fromSelect) fromSelect.addEventListener('change', () => this.updateCustomPairPreview());
+        if (toSelect) toSelect.addEventListener('change', () => this.updateCustomPairPreview());
+    }
+
+    showLanguagePairTab(tabName) {
+        // Update tab buttons
+        document.querySelectorAll('.language-pair-tab').forEach(tab => {
+            tab.classList.remove('active');
+        });
+        document.getElementById(`${tabName}PairsTab`)?.classList.add('active');
+
+        // Update content
+        document.querySelectorAll('.language-pair-content').forEach(content => {
+            content.classList.remove('active');
+        });
+        document.getElementById(`${tabName}PairsContent`)?.classList.add('active');
+
+        // Load appropriate content
+        switch (tabName) {
+            case 'popular':
+                this.renderPopularPairs();
+                break;
+            case 'custom':
+                this.renderCustomPairs();
+                break;
+            case 'manage':
+                this.renderManagePairs();
+                break;
+        }
+    }
+
+    async renderPopularPairs() {
+        const container = document.getElementById('popularPairsGrid');
+        if (!container) return;
+
         try {
-            await userManager.createLanguagePair(fromLang, toLang, name);
+            // Import language pairs config dynamically
+            const { LANGUAGE_PAIRS_CONFIG } = await import('./language-pairs-config.js');
+            
+            container.innerHTML = '';
+            
+            LANGUAGE_PAIRS_CONFIG.popularPairs.forEach(pair => {
+                const pairElement = document.createElement('div');
+                pairElement.className = 'popular-pair-item';
+                pairElement.innerHTML = `
+                    <div class="pair-flag">${pair.flag}</div>
+                    <div class="pair-name">${pair.name}</div>
+                    <div class="pair-difficulty difficulty-${pair.difficulty}">${this.getDifficultyLabel(pair.difficulty)}</div>
+                    <button class="select-pair-btn" onclick="app.selectPopularPair('${pair.id}')">
+                        Выбрать
+                    </button>
+                `;
+                container.appendChild(pairElement);
+            });
+        } catch (error) {
+            console.error('Error rendering popular pairs:', error);
+            container.innerHTML = '<div class="error-message">Ошибка загрузки языковых пар</div>';
+        }
+    }
+
+    getDifficultyLabel(difficulty) {
+        const labels = {
+            'easy': 'Легкий',
+            'medium': 'Средний',
+            'hard': 'Сложный'
+        };
+        return labels[difficulty] || 'Средний';
+    }
+
+    async selectPopularPair(pairId) {
+        try {
+            const { LANGUAGE_PAIRS_CONFIG } = await import('./language-pairs-config.js');
+            const selectedPair = LANGUAGE_PAIRS_CONFIG.popularPairs.find(p => p.id === pairId);
+            
+            if (!selectedPair) {
+                throw new Error('Language pair not found');
+            }
+
+            // Create or activate this language pair for the user
+            await this.createLanguagePair(
+                selectedPair.fromLanguageCode,
+                selectedPair.toLanguageCode,
+                selectedPair.name,
+                selectedPair
+            );
+
+            // Show success message
+            this.showNotification('Языковая пара активирована!', 'success');
+            
+        } catch (error) {
+            console.error('Error selecting popular pair:', error);
+            this.showNotification('Ошибка при выборе языковой пары', 'error');
+        }
+    }
+
+    renderCustomPairs() {
+        const container = document.getElementById('customPairsGrid');
+        if (!container) return;
+
+        const user = userManager.getCurrentUser();
+        const customPairs = user?.languagePairs?.filter(p => p.category === 'custom') || [];
+
+        if (customPairs.length === 0) {
+            container.innerHTML = `
+                <div class="empty-state">
+                    <div class="empty-icon">🌍</div>
+                    <h3>Нет пользовательских пар</h3>
+                    <p>Создайте свою собственную языковую пару</p>
+                    <button class="create-pair-btn" onclick="app.showCustomPairDialog()">
+                        Создать пару
+                    </button>
+                </div>
+            `;
+            return;
+        }
+
+        container.innerHTML = '';
+        customPairs.forEach(pair => {
+            const pairElement = document.createElement('div');
+            pairElement.className = 'custom-pair-item';
+            pairElement.innerHTML = `
+                <div class="pair-info">
+                    <div class="pair-flag">${pair.flag || '🌍'}</div>
+                    <div class="pair-name">${pair.name}</div>
+                    <div class="pair-languages">${pair.fromLanguage} → ${pair.toLanguage}</div>
+                </div>
+                <div class="pair-actions">
+                    <button class="select-pair-btn" onclick="app.selectLanguagePair('${pair.id}')">
+                        ${pair.active ? 'Активна' : 'Выбрать'}
+                    </button>
+                    <button class="delete-pair-btn" onclick="app.deleteCustomPair('${pair.id}')">
+                        🗑️
+                    </button>
+                </div>
+            `;
+            container.appendChild(pairElement);
+        });
+    }
+
+    renderManagePairs() {
+        const container = document.getElementById('managePairsGrid');
+        if (!container) return;
+
+        const user = userManager.getCurrentUser();
+        const allPairs = user?.languagePairs || [];
+
+        if (allPairs.length === 0) {
+            container.innerHTML = `
+                <div class="empty-state">
+                    <div class="empty-icon">📚</div>
+                    <h3>Нет языковых пар</h3>
+                    <p>Выберите языковую пару из популярных или создайте свою</p>
+                </div>
+            `;
+            return;
+        }
+
+        container.innerHTML = '';
+        allPairs.forEach(pair => {
+            const pairElement = document.createElement('div');
+            pairElement.className = `manage-pair-item ${pair.active ? 'active' : ''}`;
+            pairElement.innerHTML = `
+                <div class="pair-header">
+                    <div class="pair-flag">${pair.flag || '🌍'}</div>
+                    <div class="pair-info">
+                        <div class="pair-name">${pair.name}</div>
+                        <div class="pair-meta">${pair.fromLanguage} → ${pair.toLanguage}</div>
+                        ${pair.active ? '<span class="active-badge">Активна</span>' : ''}
+                    </div>
+                </div>
+                <div class="pair-stats">
+                    <div class="stat-item">
+                        <span class="stat-value">${pair.studyingCount || 0}</span>
+                        <span class="stat-label">Изучается</span>
+                    </div>
+                    <div class="stat-item">
+                        <span class="stat-value">${pair.reviewCount || 0}</span>
+                        <span class="stat-label">На повторении</span>
+                    </div>
+                    <div class="stat-item">
+                        <span class="stat-value">${pair.learnedCount || 0}</span>
+                        <span class="stat-label">Изучено</span>
+                    </div>
+                </div>
+                <div class="pair-actions">
+                    ${!pair.active ? `<button class="select-pair-btn" onclick="app.selectLanguagePair('${pair.id}')">Активировать</button>` : ''}
+                    ${allPairs.length > 1 ? `<button class="delete-pair-btn" onclick="app.deleteLanguagePair('${pair.id}')">Удалить</button>` : ''}
+                </div>
+            `;
+            container.appendChild(pairElement);
+        });
+    }
+
+    showCustomPairDialog() {
+        const modal = document.getElementById('customPairModal');
+        if (!modal) return;
+
+        // Populate language selects
+        this.populateLanguageSelects();
+        
+        // Reset form
+        document.getElementById('customPairName').value = '';
+        this.updateCustomPairPreview();
+        
+        modal.classList.add('active');
+    }
+
+    hideCustomPairDialog() {
+        const modal = document.getElementById('customPairModal');
+        if (modal) {
+            modal.classList.remove('active');
+        }
+    }
+
+    async populateLanguageSelects() {
+        try {
+            const { LANGUAGE_PAIRS_CONFIG } = await import('./language-pairs-config.js');
+            
+            const fromSelect = document.getElementById('fromLanguageSelect');
+            const toSelect = document.getElementById('toLanguageSelect');
+            
+            if (!fromSelect || !toSelect) return;
+
+            const languageOptions = Object.entries(LANGUAGE_PAIRS_CONFIG.languages)
+                .map(([code, lang]) => `<option value="${code}">${lang.nativeName} (${lang.name})</option>`)
+                .join('');
+
+            fromSelect.innerHTML = languageOptions;
+            toSelect.innerHTML = languageOptions;
+            
+            // Set defaults
+            fromSelect.value = 'de'; // German
+            toSelect.value = 'ru'; // Russian
+            
+            this.updateCustomPairPreview();
+        } catch (error) {
+            console.error('Error populating language selects:', error);
+        }
+    }
+
+    async updateCustomPairPreview() {
+        try {
+            const { LANGUAGE_PAIRS_CONFIG } = await import('./language-pairs-config.js');
+            
+            const fromCode = document.getElementById('fromLanguageSelect').value;
+            const toCode = document.getElementById('toLanguageSelect').value;
+            const nameInput = document.getElementById('customPairName');
+            const preview = document.getElementById('pairPreview');
+            
+            if (!fromCode || !toCode || !preview) return;
+
+            const fromLang = LANGUAGE_PAIRS_CONFIG.languages[fromCode];
+            const toLang = LANGUAGE_PAIRS_CONFIG.languages[toCode];
+            
+            if (!fromLang || !toLang) return;
+
+            const defaultName = `${fromLang.nativeName} → ${toLang.nativeName}`;
+            const flag = `${fromLang.flag}→${toLang.flag}`;
+            
+            nameInput.placeholder = defaultName;
+            preview.innerHTML = `
+                <div class="preview-flag">${flag}</div>
+                <div class="preview-name">${nameInput.value || defaultName}</div>
+                <div class="preview-languages">${fromLang.name} → ${toLang.name}</div>
+            `;
+        } catch (error) {
+            console.error('Error updating pair preview:', error);
+        }
+    }
+
+    async createCustomPair() {
+        try {
+            const fromCode = document.getElementById('fromLanguageSelect').value;
+            const toCode = document.getElementById('toLanguageSelect').value;
+            const customName = document.getElementById('customPairName').value;
+            
+            if (fromCode === toCode) {
+                this.showNotification('Исходный и целевой язык не могут быть одинаковыми', 'error');
+                return;
+            }
+
+            const { LanguagePairHelper } = await import('./language-pairs-config.js');
+            const pairConfig = LanguagePairHelper.createCustomPair(fromCode, toCode, customName);
+            
+            await this.createLanguagePair(fromCode, toCode, pairConfig.name, pairConfig);
+            
+            this.hideCustomPairDialog();
+            this.showNotification('Языковая пара создана!', 'success');
+            
+            // Refresh the custom pairs view
+            if (document.getElementById('customPairsTab').classList.contains('active')) {
+                this.renderCustomPairs();
+            }
+        } catch (error) {
+            console.error('Error creating custom pair:', error);
+            this.showNotification('Ошибка при создании языковой пары', 'error');
+        }
+    }
+
+    showNotification(message, type = 'info') {
+        // Simple notification system
+        const notification = document.createElement('div');
+        notification.className = `notification notification-${type}`;
+        notification.textContent = message;
+        
+        notification.style.cssText = `
+            position: fixed;
+            top: 20px;
+            right: 20px;
+            padding: 12px 20px;
+            background: ${type === 'error' ? '#e74c3c' : type === 'success' ? '#27ae60' : '#3498db'};
+            color: white;
+            border-radius: 4px;
+            z-index: 10000;
+            animation: slideIn 0.3s ease;
+        `;
+        
+        document.body.appendChild(notification);
+        
+        setTimeout(() => {
+            notification.style.animation = 'slideOut 0.3s ease';
+            setTimeout(() => notification.remove(), 300);
+        }, 3000);
+    }
+
+    showLanguagePairDialog() {
+        // Redirect to the modern interface
+        this.showSection('settings');
+        setTimeout(() => {
+            this.showLanguagePairTab('popular');
+        }, 100);
+    }
+
+    async createLanguagePair(fromLangCode, toLangCode, name, pairConfig = null) {
+        try {
+            // If pairConfig is provided (from popular pairs), use it
+            if (pairConfig) {
+                await userManager.createLanguagePair(fromLangCode, toLangCode, name, pairConfig);
+            } else {
+                // Create simple language pair
+                await userManager.createLanguagePair(fromLangCode, toLangCode, name);
+            }
+            
             this.renderLanguagePairs();
+            
+            // Refresh all views
+            this.showLanguagePairTab(document.querySelector('.language-pair-tab.active')?.id?.replace('PairsTab', '') || 'popular');
         } catch (error) {
             console.error('Error creating language pair:', error);
             alert('Ошибка при создании языковой пары');
+        }
+    }
+
+    async deleteCustomPair(pairId) {
+        if (!confirm('Вы уверены, что хотите удалить эту языковую пару? Все связанные с ней данные будут потеряны.')) {
+            return;
+        }
+        
+        try {
+            await userManager.deleteLanguagePair(pairId);
+            
+            // Refresh views
+            this.renderCustomPairs();
+            this.renderManagePairs();
+            await this.updateStats();
+            
+            this.showNotification('Языковая пара удалена', 'success');
+        } catch (error) {
+            console.error('Error deleting custom pair:', error);
+            this.showNotification('Ошибка при удалении языковой пары', 'error');
         }
     }
 
