@@ -83,14 +83,15 @@ const authenticateToken = (req, res, next) => {
     });
 };
 
-// Start server
-initDatabase().then(() => {
-    app.listen(PORT, () => {
-        console.log(`🚀 Server running on port ${PORT}`);
+// Start server immediately, init DB in background
+app.listen(PORT, () => {
+    console.log(`🚀 Server running on port ${PORT}`);
+    console.log(`🌐 Health check: http://localhost:${PORT}/api/health`);
+    
+    // Initialize database in background
+    initDatabase().then(() => {
         console.log(`📊 Database: ${useDatabase ? 'PostgreSQL' : 'In-Memory'}`);
-        console.log(`🌐 Health check: http://localhost:${PORT}/api/health`);
+    }).catch(error => {
+        console.error('Database initialization failed:', error);
     });
-}).catch(error => {
-    console.error('Failed to start server:', error);
-    process.exit(1);
 });
