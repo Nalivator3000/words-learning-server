@@ -13,6 +13,8 @@ CREATE TABLE users (
     password_hash VARCHAR(255),
     google_id VARCHAR(255) UNIQUE,
     profile_picture TEXT,
+    provider VARCHAR(50) DEFAULT 'email', -- 'email', 'google', 'github', etc.
+    provider_id VARCHAR(255), -- ID from OAuth provider
     created_at TIMESTAMP WITH TIME ZONE DEFAULT CURRENT_TIMESTAMP,
     updated_at TIMESTAMP WITH TIME ZONE DEFAULT CURRENT_TIMESTAMP,
     last_login TIMESTAMP WITH TIME ZONE

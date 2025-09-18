@@ -138,7 +138,7 @@ class UserManager {
             // Real Google OAuth implementation
             return new Promise((resolve, reject) => {
                 google.accounts.id.initialize({
-                    client_id: 'YOUR_GOOGLE_CLIENT_ID', // Replace with actual client ID
+                    client_id: '1087720669516-8s5h50t7lslvh9e7rn9d3v7nkd3qe2oi.apps.googleusercontent.com', // Demo client ID
                     callback: async (response) => {
                         try {
                             // Decode JWT token to get user info

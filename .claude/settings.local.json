@@ -33,7 +33,8 @@
       "Bash(gh repo create:*)",
       "Bash(git remote add:*)",
       "Bash(winget:*)",
-      "Bash(echo:*)"
+      "Bash(echo:*)",
+      "Bash(cat:*)"
     ],
     "deny": [],
     "ask": [],

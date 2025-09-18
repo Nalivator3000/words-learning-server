@@ -371,6 +371,7 @@ class LanguageLearningApp {
             this.setupEventListeners();
             this.setupAuthListeners();
             this.setupLanguageListeners();
+            this.setupThemeToggle();
             this.survivalMode.setupEventListeners();
             
             if (isLoggedIn) {
@@ -639,6 +640,36 @@ class LanguageLearningApp {
         
         // Set current UI language in selector
         document.getElementById('uiLanguageSelect').value = languageManager.getUILanguage();
+    }
+
+    setupThemeToggle() {
+        const themeToggle = document.getElementById('themeToggle');
+        
+        // Load saved theme from localStorage
+        const savedTheme = localStorage.getItem('theme') || 'light';
+        this.setTheme(savedTheme);
+        themeToggle.checked = savedTheme === 'dark';
+        
+        // Listen for theme toggle changes
+        themeToggle.addEventListener('change', (e) => {
+            const newTheme = e.target.checked ? 'dark' : 'light';
+            this.setTheme(newTheme);
+        });
+    }
+
+    setTheme(theme) {
+        const html = document.documentElement;
+        
+        if (theme === 'dark') {
+            html.setAttribute('data-theme', 'dark');
+        } else {
+            html.removeAttribute('data-theme');
+        }
+        
+        // Save theme preference
+        localStorage.setItem('theme', theme);
+        
+        console.log(`🎨 Theme set to: ${theme}`);
     }
 
     toggleUserMenu() {
@@ -1095,6 +1126,8 @@ class LanguageLearningApp {
             ${imageHtml}
             <div style="display: flex; align-items: center; gap: 10px; margin-bottom: 10px;">
                 <strong>${question.questionText}</strong>
+                ${question.points !== undefined && question.status === 'studying' ? 
+                    `<span class="word-points">⭐ ${question.points || 0}/50</span>` : ''}
             </div>
             <div style="display: flex; align-items: center; gap: 10px;">
                 <small style="color: #6c757d; font-style: italic;">${question.example}</small>
@@ -2537,7 +2570,10 @@ class LanguageLearningApp {
                 <div class="word-details">
                     <div class="word-text">${word.word}</div>
                     <div class="word-translation">${word.translation}</div>
-                    <span class="word-status ${word.status}">${statusLabels[word.status] || word.status}</span>
+                    <div class="word-meta">
+                        <span class="word-status ${word.status}">${statusLabels[word.status] || word.status}</span>
+                        ${word.status === 'studying' ? `<span class="word-points">⭐ ${word.points || 0}/50</span>` : ''}
+                    </div>
                 </div>
                 <div class="word-actions">
                     ${word.status !== 'studying' ? '<button class="word-action-btn move-studying" onclick="window.app.moveWord(' + word.id + ', \'studying\')">📚 В изучение</button>' : ''}

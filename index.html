@@ -9,6 +9,7 @@
     <meta http-equiv="Pragma" content="no-cache">
     <meta http-equiv="Expires" content="0">
     <meta name="cache-buster" content="2025-09-09-19:20">
+    <link rel="stylesheet" href="design-tokens.css">
     <link rel="stylesheet" href="style.css?v=no-lang-filter">
     <!-- Google Sign-In API (optional, for real OAuth) -->
     <script src="https://accounts.google.com/gsi/client" async defer></script>
@@ -339,6 +340,24 @@
                         </div>
                         <div id="wordEditor" class="word-editor hidden">
                             <div id="wordEditorContent" class="word-editor-content"></div>
+                        </div>
+                    </div>
+
+                    <div class="settings-group">
+                        <h3>🎨 Оформление</h3>
+                        <div class="theme-toggle-container">
+                            <label for="themeToggle" class="theme-toggle-label">
+                                <span>Темная тема</span>
+                                <div class="theme-toggle">
+                                    <input type="checkbox" id="themeToggle" class="theme-toggle-input">
+                                    <span class="theme-toggle-slider">
+                                        <span class="theme-toggle-slider-inner">
+                                            <span class="theme-icon sun">☀️</span>
+                                            <span class="theme-icon moon">🌙</span>
+                                        </span>
+                                    </span>
+                                </div>
+                            </label>
                         </div>
                     </div>
 

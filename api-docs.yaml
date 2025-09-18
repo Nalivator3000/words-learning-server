@@ -1,0 +1,680 @@
+openapi: 3.0.3
+info:
+  title: Words Learning App API
+  description: |
+    API для приложения изучения языков Memprizator v2.0
+    
+    Поддерживает изучение слов с системой баллов, режим выживания,
+    лидерборды и push-уведомления.
+  version: 2.0.0
+  contact:
+    name: Words Learning API
+    url: https://github.com/your-org/words-learning
+  license:
+    name: MIT
+
+servers:
+  - url: https://words-learning-server-production.up.railway.app
+    description: Production server
+  - url: http://localhost:3000
+    description: Development server
+
+tags:
+  - name: Authentication
+    description: Авторизация и управление пользователями
+  - name: Words
+    description: Управление словарями и прогрессом изучения
+  - name: Study
+    description: Процесс изучения и повторения слов
+  - name: Survival
+    description: Режим выживания и лидерборды
+  - name: Push Notifications
+    description: Push-уведомления
+  - name: Statistics
+    description: Статистика и прогресс пользователя
+
+paths:
+  /api/health:
+    get:
+      summary: Проверка здоровья сервера
+      tags: [System]
+      responses:
+        '200':
+          description: Сервер работает
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  status:
+                    type: string
+                    example: "OK"
+                  timestamp:
+                    type: string
+                    format: date-time
+
+  /api/auth/login:
+    post:
+      summary: Вход в систему
+      tags: [Authentication]
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              required: [email, password]
+              properties:
+                email:
+                  type: string
+                  format: email
+                  example: "user@example.com"
+                password:
+                  type: string
+                  minLength: 6
+                  example: "password123"
+      responses:
+        '200':
+          description: Успешный вход
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  token:
+                    type: string
+                    description: JWT токен
+                  user:
+                    $ref: '#/components/schemas/User'
+        '401':
+          description: Неверные учетные данные
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+
+  /api/users/me:
+    get:
+      summary: Получить информацию о текущем пользователе
+      tags: [Authentication]
+      security:
+        - BearerAuth: []
+      responses:
+        '200':
+          description: Информация о пользователе
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/UserWithLanguagePairs'
+
+  /api/words:
+    get:
+      summary: Получить слова пользователя
+      tags: [Words]
+      security:
+        - BearerAuth: []
+      parameters:
+        - name: status
+          in: query
+          description: Фильтр по статусу слов
+          schema:
+            type: string
+            enum: [studying, review_7, review_30, learned]
+        - name: languagePairId
+          in: query
+          description: ID языковой пары
+          schema:
+            type: string
+        - name: limit
+          in: query
+          description: Количество слов для получения
+          schema:
+            type: integer
+            minimum: 1
+            maximum: 1000
+            default: 100
+        - name: offset
+          in: query
+          description: Смещение для пагинации
+          schema:
+            type: integer
+            minimum: 0
+            default: 0
+      responses:
+        '200':
+          description: Список слов
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Word'
+
+    post:
+      summary: Добавить слова (bulk)
+      tags: [Words]
+      security:
+        - BearerAuth: []
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                words:
+                  type: array
+                  items:
+                    $ref: '#/components/schemas/NewWord'
+                languagePairId:
+                  type: string
+      responses:
+        '201':
+          description: Слова добавлены
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                  insertedIds:
+                    type: array
+                    items:
+                      type: integer
+
+    delete:
+      summary: Удалить все слова пользователя
+      tags: [Words]
+      security:
+        - BearerAuth: []
+      responses:
+        '200':
+          description: Слова удалены
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                  deletedCount:
+                    type: integer
+
+  /api/words/{wordId}/progress:
+    put:
+      summary: Обновить прогресс изучения слова
+      tags: [Study]
+      security:
+        - BearerAuth: []
+      parameters:
+        - name: wordId
+          in: path
+          required: true
+          schema:
+            type: integer
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              required: [isCorrect, quizType]
+              properties:
+                isCorrect:
+                  type: boolean
+                  description: Правильно ли отвечен вопрос
+                quizType:
+                  type: string
+                  enum: [multiple_choice, reverse_multiple_choice, typing, word_building, survival]
+                  description: Тип викторины
+      responses:
+        '200':
+          description: Прогресс обновлен
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  success:
+                    type: boolean
+                  pointsAwarded:
+                    type: integer
+                    description: Количество начисленных баллов
+                  newStatus:
+                    type: string
+                    enum: [studying, review_7, review_30, learned]
+                  totalPoints:
+                    type: integer
+                    description: Общее количество баллов слова
+
+  /api/words/{wordId}/status:
+    put:
+      summary: Изменить статус слова
+      tags: [Words]
+      security:
+        - BearerAuth: []
+      parameters:
+        - name: wordId
+          in: path
+          required: true
+          schema:
+            type: integer
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              required: [status]
+              properties:
+                status:
+                  type: string
+                  enum: [studying, review_7, review_30, learned]
+      responses:
+        '200':
+          description: Статус обновлен
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  success:
+                    type: boolean
+
+  /api/words/study:
+    get:
+      summary: Получить слова для изучения
+      tags: [Study]
+      security:
+        - BearerAuth: []
+      parameters:
+        - name: limit
+          in: query
+          schema:
+            type: integer
+            default: 10
+            minimum: 1
+            maximum: 50
+      responses:
+        '200':
+          description: Слова для изучения
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/StudyWord'
+
+  /api/words/review:
+    get:
+      summary: Получить слова для повторения
+      tags: [Study]
+      security:
+        - BearerAuth: []
+      parameters:
+        - name: limit
+          in: query
+          schema:
+            type: integer
+            default: 10
+            minimum: 1
+            maximum: 50
+      responses:
+        '200':
+          description: Слова для повторения
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/StudyWord'
+
+  /api/stats:
+    get:
+      summary: Получить статистику пользователя
+      tags: [Statistics]
+      security:
+        - BearerAuth: []
+      responses:
+        '200':
+          description: Статистика пользователя
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/UserStats'
+
+  /api/survival/record:
+    post:
+      summary: Записать результат режима выживания
+      tags: [Survival]
+      security:
+        - BearerAuth: []
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              required: [score, duration_seconds, words_answered, accuracy_percentage]
+              properties:
+                score:
+                  type: integer
+                  minimum: 0
+                  description: Количество правильных ответов
+                duration_seconds:
+                  type: integer
+                  minimum: 1
+                  description: Продолжительность игры в секундах
+                words_answered:
+                  type: integer
+                  minimum: 1
+                  description: Общее количество отвеченных слов
+                accuracy_percentage:
+                  type: number
+                  minimum: 0
+                  maximum: 100
+                  description: Процент правильных ответов
+      responses:
+        '200':
+          description: Результат записан или не записан
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  success:
+                    type: boolean
+                  message:
+                    type: string
+                  totalWords:
+                    type: integer
+                    description: Количество слов в изучении у пользователя
+                  leaderboardId:
+                    type: integer
+                    description: ID записи в лидерборде (если записано)
+
+  /api/survival/leaderboard:
+    get:
+      summary: Получить лидерборд режима выживания
+      tags: [Survival]
+      parameters:
+        - name: limit
+          in: query
+          schema:
+            type: integer
+            default: 20
+            minimum: 1
+            maximum: 100
+      responses:
+        '200':
+          description: Лидерборд
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  success:
+                    type: boolean
+                  leaderboard:
+                    type: array
+                    items:
+                      $ref: '#/components/schemas/LeaderboardEntry'
+                  total:
+                    type: integer
+
+  /api/survival/user-best:
+    get:
+      summary: Получить лучшие результаты пользователя
+      tags: [Survival]
+      security:
+        - BearerAuth: []
+      responses:
+        '200':
+          description: Лучшие результаты пользователя
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  success:
+                    type: boolean
+                  userBest:
+                    type: array
+                    items:
+                      $ref: '#/components/schemas/UserBestResult'
+
+  /api/push/subscribe:
+    post:
+      summary: Подписаться на push-уведомления
+      tags: [Push Notifications]
+      security:
+        - BearerAuth: []
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              required: [endpoint, keys]
+              properties:
+                endpoint:
+                  type: string
+                  format: uri
+                  description: Push endpoint
+                keys:
+                  type: object
+                  required: [p256dh, auth]
+                  properties:
+                    p256dh:
+                      type: string
+                      description: P256DH ключ
+                    auth:
+                      type: string
+                      description: Auth ключ
+      responses:
+        '200':
+          description: Подписка сохранена
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  success:
+                    type: boolean
+                  subscriptionId:
+                    type: integer
+                  message:
+                    type: string
+
+  /api/push/vapid-public-key:
+    get:
+      summary: Получить публичный VAPID ключ
+      tags: [Push Notifications]
+      responses:
+        '200':
+          description: Публичный ключ
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  publicKey:
+                    type: string
+
+components:
+  securitySchemes:
+    BearerAuth:
+      type: http
+      scheme: bearer
+      bearerFormat: JWT
+
+  schemas:
+    Error:
+      type: object
+      properties:
+        error:
+          type: string
+        details:
+          type: string
+
+    User:
+      type: object
+      properties:
+        id:
+          type: string
+        email:
+          type: string
+          format: email
+        name:
+          type: string
+        created_at:
+          type: string
+          format: date-time
+
+    UserWithLanguagePairs:
+      allOf:
+        - $ref: '#/components/schemas/User'
+        - type: object
+          properties:
+            languagePairs:
+              type: array
+              items:
+                $ref: '#/components/schemas/LanguagePair'
+
+    LanguagePair:
+      type: object
+      properties:
+        id:
+          type: string
+        user_id:
+          type: string
+        name:
+          type: string
+        from_language:
+          type: string
+        to_language:
+          type: string
+        is_active:
+          type: boolean
+        created_at:
+          type: string
+          format: date-time
+
+    Word:
+      type: object
+      properties:
+        id:
+          type: integer
+        user_id:
+          type: string
+        language_pair_id:
+          type: string
+        word:
+          type: string
+        translation:
+          type: string
+        example:
+          type: string
+          nullable: true
+        example_translation:
+          type: string
+          nullable: true
+        status:
+          type: string
+          enum: [studying, review_7, review_30, learned]
+        correct_count:
+          type: integer
+        incorrect_count:
+          type: integer
+        review_attempts:
+          type: integer
+        points:
+          type: integer
+          description: Баллы для перехода в повторение (50 баллов = переход)
+        date_added:
+          type: string
+          format: date-time
+        last_studied:
+          type: string
+          format: date-time
+          nullable: true
+        next_review:
+          type: string
+          format: date-time
+          nullable: true
+        language_pair_name:
+          type: string
+
+    NewWord:
+      type: object
+      required: [word, translation]
+      properties:
+        word:
+          type: string
+        translation:
+          type: string
+        example:
+          type: string
+        example_translation:
+          type: string
+
+    StudyWord:
+      allOf:
+        - $ref: '#/components/schemas/Word'
+        - type: object
+          description: Слово для изучения с дополнительной информацией
+
+    UserStats:
+      type: object
+      properties:
+        totalWords:
+          type: integer
+        studyingWords:
+          type: integer
+        reviewWords:
+          type: integer
+        learnedWords:
+          type: integer
+        todayStudied:
+          type: integer
+        weeklyProgress:
+          type: array
+          items:
+            type: object
+            properties:
+              date:
+                type: string
+                format: date
+              studied:
+                type: integer
+
+    LeaderboardEntry:
+      type: object
+      properties:
+        rank:
+          type: integer
+        user_name:
+          type: string
+        score:
+          type: integer
+        total_words_available:
+          type: integer
+        duration_seconds:
+          type: integer
+        words_answered:
+          type: integer
+        accuracy_percentage:
+          type: number
+        created_at:
+          type: string
+          format: date-time
+
+    UserBestResult:
+      allOf:
+        - $ref: '#/components/schemas/LeaderboardEntry'
+        - type: object
+          properties:
+            rank:
+              type: integer
+              description: Позиция в общем лидерборде

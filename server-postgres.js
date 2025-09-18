@@ -4,6 +4,8 @@ const cors = require('cors');
 const jwt = require('jsonwebtoken');
 const path = require('path');
 const webpush = require('web-push');
+const swaggerUi = require('swagger-ui-express');
+const YAML = require('yamljs');
 const WordStudyBot = require('./telegram-bot');
 require('dotenv').config();
 
@@ -38,6 +40,36 @@ const VAPID_PRIVATE_KEY = process.env.VAPID_PRIVATE_KEY || 'mGcUaT7tQP3zqY7sDHw5
 const VAPID_EMAIL = process.env.VAPID_EMAIL || 'mailto:admin@memprizator.com';
 
 webpush.setVapidDetails(VAPID_EMAIL, VAPID_PUBLIC_KEY, VAPID_PRIVATE_KEY);
+
+// Create API v1 router
+const v1Router = express.Router();
+
+// API versioning middleware
+app.use('/api/v1', v1Router);
+
+// Redirect /api/* to /api/v1/* for backward compatibility
+app.use('/api', (req, res, next) => {
+    // Skip if it's already versioned, docs, or health check
+    if (req.path.startsWith('/v1') || req.path === '/docs' || req.path === '/health') {
+        return next();
+    }
+    
+    // Add deprecation warning header
+    res.set('X-API-Deprecation', 'This API version is deprecated. Use /api/v1/ instead.');
+    res.set('X-API-Deprecation-Date', '2024-12-31');
+    
+    // Continue to unversioned routes for now
+    next();
+});
+
+// Load API documentation
+let swaggerDocument;
+try {
+    swaggerDocument = YAML.load('./api-docs.yaml');
+    console.log('✅ API documentation loaded successfully');
+} catch (error) {
+    console.warn('⚠️ Could not load API documentation:', error.message);
+}
 
 // PostgreSQL connection pool with UTF-8 encoding
 const pool = new Pool({
@@ -202,6 +234,79 @@ app.get('/api/health', async (req, res) => {
 });
 
 // Authentication endpoints
+// Google OAuth login endpoint
+app.post('/api/auth/google', async (req, res) => {
+    try {
+        const { googleToken, userInfo } = req.body;
+        
+        if (!googleToken || !userInfo) {
+            return res.status(400).json({ error: 'Google token and user info are required' });
+        }
+
+        console.log(`🔐 Google OAuth attempt for: ${userInfo.email}`);
+
+        let user = null;
+
+        if (useDatabase) {
+            // Try to find existing user by email
+            const userQuery = await pool.query('SELECT * FROM users WHERE email = $1', [userInfo.email]);
+            
+            if (userQuery.rows.length > 0) {
+                user = userQuery.rows[0];
+                console.log(`✅ Existing Google user found: ${user.email}`);
+            } else {
+                // Create new user
+                const insertQuery = await pool.query(
+                    'INSERT INTO users (id, email, name, provider, created_at) VALUES ($1, $2, $3, $4, $5) RETURNING *',
+                    [userInfo.id, userInfo.email, userInfo.name, 'google', new Date()]
+                );
+                user = insertQuery.rows[0];
+                console.log(`✅ New Google user created: ${user.email}`);
+            }
+        } else {
+            // Local storage fallback
+            console.log('📁 Using local storage for Google OAuth (development mode)');
+            user = {
+                id: userInfo.id,
+                email: userInfo.email,
+                name: userInfo.name,
+                provider: 'google'
+            };
+        }
+
+        // Generate JWT token
+        const token = jwt.sign(
+            { 
+                userId: user.id, 
+                email: user.email,
+                provider: user.provider || 'google'
+            }, 
+            JWT_SECRET, 
+            { expiresIn: '7d' }
+        );
+
+        console.log(`✅ Google OAuth successful for: ${user.email}`);
+
+        res.json({
+            success: true,
+            token,
+            user: {
+                id: user.id,
+                email: user.email,
+                name: user.name,
+                provider: user.provider || 'google'
+            }
+        });
+
+    } catch (error) {
+        console.error('❌ Google OAuth error:', error);
+        res.status(500).json({ 
+            error: 'Internal server error during Google authentication',
+            details: error.message 
+        });
+    }
+});
+
 app.post('/api/auth/login', async (req, res) => {
     try {
         const { email, password } = req.body;
@@ -1244,6 +1349,191 @@ app.get('/api/push/vapid-public-key', (req, res) => {
     res.json({ publicKey: VAPID_PUBLIC_KEY });
 });
 
+// API Documentation with Swagger UI
+if (swaggerDocument) {
+    // Update swagger document to use v1 paths
+    const v1SwaggerDocument = JSON.parse(JSON.stringify(swaggerDocument));
+    v1SwaggerDocument.servers = v1SwaggerDocument.servers.map(server => ({
+        ...server,
+        url: server.url.includes('localhost') 
+            ? server.url + '/api/v1'
+            : server.url.replace('/api', '/api/v1')
+    }));
+    
+    app.use('/api/docs', swaggerUi.serve, swaggerUi.setup(v1SwaggerDocument, {
+        customCss: '.swagger-ui .topbar { display: none }',
+        customSiteTitle: "Words Learning API v1 Documentation",
+        customfavIcon: "/icons/icon-192x192.png"
+    }));
+    console.log('📚 API documentation available at /api/docs');
+}
+
+// ===================== API V1 ROUTES =====================
+
+// Health check (v1)
+v1Router.get('/health', async (req, res) => {
+    try {
+        // Test database connection
+        const dbTest = useDatabase ? await pool.query('SELECT 1') : { rows: [{ '?column?': 1 }] };
+        
+        res.json({
+            status: 'OK',
+            version: '1.0.0',
+            timestamp: new Date().toISOString(),
+            database: useDatabase ? 'PostgreSQL' : 'In-Memory',
+            healthy: dbTest.rows.length > 0
+        });
+    } catch (error) {
+        res.status(500).json({
+            status: 'ERROR',
+            version: '1.0.0',
+            timestamp: new Date().toISOString(),
+            error: error.message
+        });
+    }
+});
+
+// Auth endpoints (v1)
+v1Router.post('/auth/login', async (req, res) => {
+    // Copy existing login logic
+    try {
+        const { email, password } = req.body;
+
+        if (!email || !password) {
+            return res.status(400).json({ error: 'Email and password required' });
+        }
+
+        console.log(`🔐 Login attempt for: ${email}`);
+
+        // Check credentials (same logic as unversioned)
+        let cred = null;
+        let useDatabase = false;
+
+        // Try external database first
+        if (window.externalDatabase || (global && global.externalDatabase)) {
+            const db = window.externalDatabase || global.externalDatabase;
+            try {
+                const result = await pool.query(
+                    'SELECT id, email, name FROM users WHERE email = $1 AND (password_hash = crypt($2, password_hash) OR password_hash IS NULL)',
+                    [email, password]
+                );
+
+                if (result.rows.length > 0) {
+                    cred = {
+                        userId: result.rows[0].id,
+                        email: result.rows[0].email,
+                        name: result.rows[0].name
+                    };
+                    useDatabase = true;
+                    console.log(`✅ Database authentication successful for ${email}`);
+                }
+            } catch (error) {
+                console.warn('Database auth failed, trying fallback:', error.message);
+            }
+        }
+
+        // Fallback to hardcoded users if database fails
+        if (!cred) {
+            const users = [
+                { userId: 'root-user', email: 'root', password: 'root', name: 'Root User' },
+                { userId: 'kate-user', email: 'Kate', password: '1', name: 'Kate' },
+                { userId: 'mike-user', email: 'Mike', password: '1', name: 'Mike' }
+            ];
+
+            const user = users.find(u => 
+                (u.email.toLowerCase() === email.toLowerCase() || u.email === email) && 
+                u.password === password
+            );
+
+            if (user) {
+                cred = {
+                    userId: user.userId,
+                    email: user.email,
+                    name: user.name
+                };
+                console.log(`✅ Fallback authentication successful for ${email}`);
+            }
+        }
+
+        if (!cred) {
+            console.log(`❌ Authentication failed for ${email}`);
+            return res.status(401).json({ error: 'Invalid credentials' });
+        }
+
+        // Generate JWT token
+        const token = jwt.sign(
+            { userId: cred.userId, email: cred.email },
+            JWT_SECRET,
+            { expiresIn: '30d' }
+        );
+
+        res.json({
+            token,
+            user: {
+                id: cred.userId,
+                email: cred.email,
+                name: cred.name
+            }
+        });
+
+    } catch (error) {
+        console.error('Login error:', error);
+        res.status(500).json({ error: 'Internal server error' });
+    }
+});
+
+// Users endpoints (v1)
+v1Router.get('/users/me', authenticateToken, async (req, res) => {
+    // Copy existing logic but use v1 response format
+    try {
+        let user = null;
+        let languagePairs = [];
+
+        if (useDatabase) {
+            const result = await pool.query(
+                'SELECT id, email, name, created_at FROM users WHERE id = $1',
+                [req.user.userId]
+            );
+            
+            if (result.rows.length === 0) {
+                return res.status(404).json({ error: 'User not found' });
+            }
+            
+            user = result.rows[0];
+            
+            const pairsResult = await pool.query(
+                'SELECT * FROM language_pairs WHERE user_id = $1',
+                [req.user.userId]
+            );
+            
+            languagePairs = pairsResult.rows;
+        } else {
+            const memUser = inMemoryData.users.get(req.user.userId);
+            if (!memUser) {
+                return res.status(404).json({ error: 'User not found' });
+            }
+            
+            user = {
+                id: memUser.id,
+                email: memUser.email,
+                name: memUser.name,
+                created_at: new Date().toISOString()
+            };
+            
+            languagePairs = memUser.languagePairs || [];
+        }
+
+        res.json({
+            ...user,
+            languagePairs: languagePairs,
+            apiVersion: '1.0.0'
+        });
+    } catch (error) {
+        console.error('Get user error:', error);
+        res.status(500).json({ error: 'Internal server error' });
+    }
+});
+
 // Survival mode leaderboard endpoints
 app.post('/api/survival/record', authenticateToken, async (req, res) => {
     try {
@@ -1419,4 +1709,8 @@ app.listen(PORT, () => {
     console.log(`   POST /api/survival/record - Record survival mode result`);
     console.log(`   GET  /api/survival/leaderboard - Get survival mode leaderboard`);
     console.log(`   GET  /api/survival/user-best - Get user's best survival results`);
+    if (swaggerDocument) {
+        console.log(`📚 API Documentation: http://localhost:${PORT}/api/docs`);
+    }
+    console.log(`🔢 API Versioning: /api/v1/* (current), /api/* (deprecated)`);
 });
