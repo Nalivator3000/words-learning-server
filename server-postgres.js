@@ -1741,8 +1741,55 @@ app.get('*', (req, res) => {
     res.sendFile(path.join(__dirname, 'index.html'));
 });
 
+// Database migration function
+async function runMigrations() {
+    if (!useDatabase) {
+        console.log('📝 Skipping database migrations (in-memory mode)');
+        return;
+    }
+
+    try {
+        const client = await pool.connect();
+        
+        try {
+            console.log('📝 Running database migrations...');
+            
+            // Check if points column exists in words table
+            const pointsColumnCheck = await client.query(`
+                SELECT column_name 
+                FROM information_schema.columns 
+                WHERE table_name = 'words' AND column_name = 'points'
+            `);
+            
+            if (pointsColumnCheck.rows.length === 0) {
+                console.log('➕ Adding points column to words table...');
+                await client.query(`
+                    ALTER TABLE words 
+                    ADD COLUMN points INTEGER DEFAULT 0
+                `);
+                console.log('✅ Points column added successfully');
+            } else {
+                console.log('✅ Points column already exists');
+            }
+            
+            console.log('✅ Database migrations completed');
+            
+        } catch (error) {
+            console.error('❌ Migration error:', error);
+            throw error;
+        } finally {
+            client.release();
+        }
+    } catch (error) {
+        console.error('❌ Failed to run migrations:', error.message);
+        // Don't crash the server if migrations fail
+    }
+}
+
 // Start server
-app.listen(PORT, () => {
+app.listen(PORT, async () => {
+    // Run migrations first
+    await runMigrations();
     console.log(`🚀 Words Learning API Server running on port ${PORT}`);
     console.log(`👥 Available users: root/root, Kate/1, Mike/1`);
     console.log(`💾 Database: ${useDatabase ? 'PostgreSQL' : 'In-Memory Storage (fallback)'}`);
