@@ -50,6 +50,12 @@ Transform the existing **Memprizator** language learning application into a comp
   - Rate limiting implementation
   - API key management for mobile clients
 
+- [x] **Points System & Progression**
+  - Points-based word progression (50 points = review)
+  - Typing mode: 10 points, Word building: 4 points, Multiple choice: 1 point
+  - Survival mode leaderboard system
+  - Database migration system for schema updates
+
 - [x] **Enhanced Authentication**
   - OAuth2 with Google implemented
   - JWT token management
@@ -89,17 +95,17 @@ Transform the existing **Memprizator** language learning application into a comp
   - Basic language pair management
   - User-specific language configurations
 
-- [ ] **Enhanced Language Support**
-  - Pre-defined language pair templates
-  - RTL (Right-to-Left) language support
+- [x] **Enhanced Language Support**
+  - Pre-defined language pair templates (20+ languages)
+  - RTL (Right-to-Left) language support (Arabic, Hebrew)
   - Language-specific typography settings
-  - Unicode and emoji support
+  - Unicode and emoji support (flags and scripts)
 
-- [ ] **Advanced Language Features**
-  - Language auto-detection for input
-  - Pronunciation guide integration
-  - Language-specific quiz types
-  - Cultural context hints
+- [x] **Advanced Language Features**
+  - Language auto-detection for input (character pattern-based)
+  - Pronunciation guide integration (TTS for 20+ languages)
+  - Language-specific quiz types (multilingual interface)
+  - Cultural context hints (flag emojis and language families)
 
 - [ ] **Interface Localization**
   - Multi-language interface (UI)
