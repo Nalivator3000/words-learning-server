@@ -109,6 +109,41 @@ class LanguageLearningApp {
         this.init();
     }
 
+    // Scoring System - Calculate word score 0-100 points
+    calculateWordScore(word) {
+        const correctCount = word.correctCount || word.correct_count || 0;
+        const incorrectCount = word.incorrectCount || word.incorrect_count || 0;
+        const totalCount = Math.max(1, correctCount + incorrectCount);
+
+        // Base score from accuracy (0-70 points)
+        const accuracy = correctCount / totalCount;
+        let score = Math.round(accuracy * 70);
+
+        // Bonus points for experience (0-30 points)
+        const correctBonus = Math.min(30, correctCount * 3);
+        score += correctBonus;
+
+        return Math.min(100, Math.max(0, score));
+    }
+
+    // Get score display with color coding
+    getScoreDisplay(score) {
+        let className, text;
+
+        if (score >= 80) {
+            className = 'score-high';
+            text = `${score} 🔥`;
+        } else if (score >= 50) {
+            className = 'score-medium';
+            text = `${score} ⚡`;
+        } else {
+            className = 'score-low';
+            text = `${score} 📚`;
+        }
+
+        return { className, text };
+    }
+
     async init() {
         try {
             await database.init();
@@ -411,10 +446,14 @@ class LanguageLearningApp {
         words.forEach(word => {
             const item = document.createElement('div');
             item.className = 'word-item';
-            
+
+            // Main word info container
+            const wordMain = document.createElement('div');
+            wordMain.className = 'word-main';
+
             // Word with audio button only if it's German
             const wordDiv = document.createElement('div');
-            wordDiv.className = 'word';
+            wordDiv.className = 'word-text';
             wordDiv.style.display = 'flex';
             wordDiv.style.alignItems = 'center';
             wordDiv.style.gap = '10px';
@@ -422,27 +461,24 @@ class LanguageLearningApp {
             if (this.shouldShowAudioButton(word.word)) {
                 wordDiv.appendChild(this.createAudioButton(word.word, 'audio-btn-small'));
             }
-            
+
             // Translation (no audio)
             const translationDiv = document.createElement('div');
-            translationDiv.className = 'translation';
+            translationDiv.className = 'word-translation';
             translationDiv.textContent = word.translation;
-            
-            // Example with audio only if it's German, translation without audio
-            const exampleDiv = document.createElement('div');
-            exampleDiv.className = 'example';
-            exampleDiv.style.display = 'flex';
-            exampleDiv.style.alignItems = 'center';
-            exampleDiv.style.gap = '10px';
-            exampleDiv.innerHTML = `<span>${word.example}</span>`;
-            if (word.example && this.shouldShowAudioButton(word.example)) {
-                exampleDiv.appendChild(this.createAudioButton(word.example, 'audio-btn-small'));
-            }
-            exampleDiv.innerHTML += ` <span style="color: #999;"> - ${word.exampleTranslation}</span>`;
-            
-            item.appendChild(wordDiv);
-            item.appendChild(translationDiv);
-            item.appendChild(exampleDiv);
+
+            wordMain.appendChild(wordDiv);
+            wordMain.appendChild(translationDiv);
+
+            // Score display
+            const score = this.calculateWordScore(word);
+            const scoreDisplay = this.getScoreDisplay(score);
+            const scoreDiv = document.createElement('div');
+            scoreDiv.className = `word-score ${scoreDisplay.className}`;
+            scoreDiv.textContent = scoreDisplay.text;
+
+            item.appendChild(wordMain);
+            item.appendChild(scoreDiv);
             container.appendChild(item);
         });
     }

@@ -236,8 +236,17 @@ class Database {
 
     async getRandomWords(status, count = 10) {
         const words = await this.getWordsByStatus(status);
-        const shuffled = words.sort(() => 0.5 - Math.random());
-        return shuffled.slice(0, count);
+
+        // Remove duplicates by ID to prevent same word appearing multiple times
+        const uniqueWords = [...new Map(words.map(w => [w.id, w])).values()];
+
+        // Ensure proper shuffling
+        const shuffled = uniqueWords.sort(() => 0.5 - Math.random());
+
+        const result = shuffled.slice(0, count);
+        console.log(`🎯 getRandomWords: returning ${result.length} unique words for quiz`);
+
+        return result;
     }
 
     async getReviewWords(count = 10) {
