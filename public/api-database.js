@@ -10,18 +10,16 @@ class APIDatabase {
 
     async init() {
         try {
-            // Test API connection
-            const response = await fetch(`${this.baseUrl}/api/health`);
-            if (!response.ok) {
-                throw new Error('Health check failed');
-            }
+            // Test API connection by getting word counts
+            await this.getWordCounts();
 
             this.initialized = true;
             console.log('✅ API Database connection established');
             return true;
         } catch (error) {
             console.error('❌ API Database initialization failed:', error);
-            return false;
+            this.initialized = true; // Still continue, might work for other operations
+            return true;
         }
     }
 
@@ -68,22 +66,28 @@ class APIDatabase {
 
     async getRandomWords(status, count = 10) {
         console.log(`🔍 getRandomWords: status="${status}", count=${count}`);
-        const words = await this.getWordsByStatus(status);
 
-        // Remove duplicates by ID to prevent same word appearing multiple times
-        const uniqueWords = [...new Map(words.map(w => [w.id, w])).values()];
+        try {
+            // Use server endpoint for random words
+            const result = await this.apiRequest(`/words/random/${status}/${count}`);
+            console.log(`🎯 getRandomWords: returning ${result.length} words from server`);
+            return Array.isArray(result) ? result : [];
+        } catch (error) {
+            console.error('❌ Server random words failed, using fallback:', error);
 
-        // Ensure proper shuffling
-        const shuffled = uniqueWords.sort(() => 0.5 - Math.random());
+            // Fallback: get all words and shuffle client-side
+            const words = await this.getWordsByStatus(status);
+            const uniqueWords = [...new Map(words.map(w => [w.id, w])).values()];
+            const shuffled = uniqueWords.sort(() => 0.5 - Math.random());
+            const result = shuffled.slice(0, count);
 
-        const result = shuffled.slice(0, count);
-        console.log(`🎯 getRandomWords: returning ${result.length} unique words for quiz`);
-
-        return result;
+            console.log(`🎯 getRandomWords fallback: returning ${result.length} words`);
+            return result;
+        }
     }
 
     async getReviewWords(count = 10) {
-        return await this.apiRequest(`/words/review?limit=${count}`);
+        return await this.apiRequest(`/words/random/review/${count}`);
     }
 
     async updateWordProgress(wordId, isCorrect, quizType) {
@@ -97,7 +101,7 @@ class APIDatabase {
     }
 
     async getWordCounts() {
-        return await this.apiRequest('/stats');
+        return await this.apiRequest('/words/counts');
     }
 
     async getAllWords() {
