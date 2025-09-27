@@ -59,8 +59,13 @@ class APIDatabase {
     }
 
     async getWordsByStatus(status) {
-        const params = status ? `?status=${status}` : '';
-        const result = await this.apiRequest(`/words${params}`);
+        const params = new URLSearchParams();
+        if (status) params.append('status', status);
+
+        // Request large limit to get all words (default server limit is 50)
+        params.append('limit', '10000');
+
+        const result = await this.apiRequest(`/words?${params.toString()}`);
         return Array.isArray(result) ? result : [];
     }
 
