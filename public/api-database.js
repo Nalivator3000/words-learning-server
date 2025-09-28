@@ -54,7 +54,7 @@ class APIDatabase {
 
         return await this.apiRequest('/words/bulk', {
             method: 'POST',
-            body: JSON.stringify({ words })
+            body: JSON.stringify(words)
         });
     }
 

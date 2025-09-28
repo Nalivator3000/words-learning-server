@@ -444,9 +444,39 @@ class ImportManager {
 
     static async fetchGoogleSheets(url) {
         try {
+            // Use server proxy to avoid CORS issues
+            const response = await fetch('/api/import/google-sheets', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify({ url })
+            });
+
+            if (!response.ok) {
+                const errorText = await response.text();
+                throw new Error(`HTTP error! status: ${response.status} - ${errorText}`);
+            }
+
+            const result = await response.json();
+
+            if (result.error) {
+                throw new Error(result.error);
+            }
+
+            return result.words || [];
+        } catch (error) {
+            // Fallback to direct access if server endpoint doesn't exist
+            console.warn('Server proxy failed, trying direct access:', error.message);
+            return await this.fetchGoogleSheetsDirect(url);
+        }
+    }
+
+    static async fetchGoogleSheetsDirect(url) {
+        try {
             // Convert Google Sheets URL to CSV export URL
             let csvUrl = url;
-            
+
             if (url.includes('docs.google.com/spreadsheets')) {
                 // Extract the spreadsheet ID
                 const match = url.match(/\/spreadsheets\/d\/([a-zA-Z0-9-_]+)/);
