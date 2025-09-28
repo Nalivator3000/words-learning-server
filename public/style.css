@@ -2,25 +2,25 @@
 @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&display=swap');
 
 :root {
-    /* Enhanced Color Palette - More Vibrant */
-    --primary-500: #7C3AED;
-    --primary-600: #6D28D9;
-    --primary-700: #5B21B6;
-    --primary-800: #4C1D95;
+    /* Enhanced Color Palette - Ultra Vibrant */
+    --primary-500: #8B5CF6;
+    --primary-600: #7C3AED;
+    --primary-700: #6D28D9;
+    --primary-800: #5B21B6;
     --primary-50: #F3E8FF;
     --primary-100: #E9D5FF;
 
-    --secondary-500: #0EA5E9;
-    --secondary-600: #0284C7;
-    --secondary-700: #0369A1;
-    --secondary-50: #F0F9FF;
-    --secondary-100: #E0F2FE;
+    --secondary-500: #06B6D4;
+    --secondary-600: #0891B2;
+    --secondary-700: #0E7490;
+    --secondary-50: #ECFEFF;
+    --secondary-100: #CFFAFE;
 
-    --accent-purple: #A855F7;
-    --accent-emerald: #06D6A0;
-    --accent-rose: #FF006E;
-    --accent-amber: #FFB627;
-    --accent-cyan: #00D9FF;
+    --accent-purple: #C084FC;
+    --accent-emerald: #34D399;
+    --accent-rose: #FB7185;
+    --accent-amber: #FBBF24;
+    --accent-cyan: #67E8F9;
 
     /* Enhanced Neutrals */
     --neutral-25: #FEFEFE;
@@ -471,7 +471,9 @@ header h1 {
 }
 
 .user-menu.hidden {
-    display: block;
+    display: none !important;
+    opacity: 0 !important;
+    pointer-events: none !important;
 }
 
 .user-menu button {
