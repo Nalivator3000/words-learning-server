@@ -40,7 +40,7 @@
 
     <div class="container">
         <header>
-            <h1 data-translate="appTitle">Изучение слов</h1>
+            <h1 data-translate="appTitle">FluentFlow</h1>
             <div class="header-user">
                 <span id="userInfo" class="user-info"></span>
                 <button id="userMenuBtn" class="user-menu-btn">⚙️</button>
@@ -49,14 +49,24 @@
                     <button id="logoutBtn" data-translate="logout">Выйти</button>
                 </div>
             </div>
-            <nav>
-                <button id="homeBtn" class="nav-btn active" data-translate="home">Главная</button>
-                <button id="importBtn" class="nav-btn" data-translate="import">Импорт</button>
-                <button id="studyBtn" class="nav-btn" data-translate="study">Изучение</button>
-                <button id="reviewBtn" class="nav-btn" data-translate="review">Повторение</button>
-                <button id="statsBtn" class="nav-btn" data-translate="statistics">Статистика</button>
-            </nav>
         </header>
+
+        <nav class="main-nav">
+            <div class="nav-container">
+                <div class="nav-buttons">
+                    <button id="homeBtn" class="nav-btn active" data-translate="home">Главная</button>
+                    <button id="importBtn" class="nav-btn" data-translate="import">Импорт</button>
+                    <button id="studyBtn" class="nav-btn" data-translate="study">Изучение</button>
+                    <button id="reviewBtn" class="nav-btn" data-translate="review">Повторение</button>
+                    <button id="statsBtn" class="nav-btn" data-translate="statistics">Статистика</button>
+                </div>
+                <button class="mobile-menu-toggle" id="mobileMenuToggle">
+                    <span></span>
+                    <span></span>
+                    <span></span>
+                </button>
+            </div>
+        </nav>
 
         <main>
             <!-- Home Section -->

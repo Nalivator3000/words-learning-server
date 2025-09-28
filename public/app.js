@@ -179,6 +179,23 @@ class LanguageLearningApp {
             }
         });
 
+        // Mobile menu toggle
+        const mobileMenuToggle = document.getElementById('mobileMenuToggle');
+        const navButtons = document.querySelector('.nav-buttons');
+
+        if (mobileMenuToggle && navButtons) {
+            mobileMenuToggle.addEventListener('click', () => {
+                navButtons.classList.toggle('mobile-open');
+            });
+
+            // Close mobile menu when clicking navigation items
+            navButtons.addEventListener('click', (e) => {
+                if (e.target.classList.contains('nav-btn')) {
+                    navButtons.classList.remove('mobile-open');
+                }
+            });
+        }
+
         // Navigation
         document.getElementById('homeBtn').addEventListener('click', () => this.showSection('home'));
         document.getElementById('importBtn').addEventListener('click', () => this.showSection('import'));
