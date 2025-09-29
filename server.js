@@ -175,29 +175,42 @@ app.post('/api/words/bulk', (req, res) => {
     }
 });
 
-// Update word progress
+// Update word progress with new points-based system
 app.put('/api/words/:id/progress', (req, res) => {
     try {
         const { id } = req.params;
         const { correct, questionType } = req.body;
         const data = readData();
-        
+
         const word = data.words.find(w => w.id == id);
         if (!word) {
             return res.status(404).json({ error: 'Word not found' });
         }
-        
+
+        // Initialize tracking fields if they don't exist
         word.totalCount = (word.totalCount || 0) + 1;
         word.correctCount = (word.correctCount || 0) + (correct ? 1 : 0);
+        word.totalPoints = word.totalPoints || 0;
         word.updatedAt = new Date().toISOString();
-        
-        // Update status based on progress
-        const accuracy = word.correctCount / word.totalCount;
+
+        // Award points for correct answers based on question type
+        if (correct) {
+            const pointsMap = {
+                'multipleChoice': 2,
+                'reverseMultipleChoice': 2,
+                'wordBuilding': 5,
+                'typing': 10
+            };
+
+            const pointsEarned = pointsMap[questionType] || 2;
+            word.totalPoints += pointsEarned;
+        }
+
+        // Update status based on points
         const now = new Date();
-        const sevenDaysAgo = new Date(now.getTime() - 7 * 24 * 60 * 60 * 1000);
-        
-        if (word.status === 'studying' && word.totalCount >= 3 && accuracy >= 0.8) {
-            // Instead of immediately moving to review_7, set a review date
+
+        if (word.status === 'studying' && word.totalPoints >= 100) {
+            // Word reaches 100 points, schedule for review in 7 days
             word.status = 'learned_waiting';
             word.reviewAfterDate = new Date(now.getTime() + 7 * 24 * 60 * 60 * 1000).toISOString();
         } else if (word.status === 'learned_waiting') {
@@ -212,11 +225,17 @@ app.put('/api/words/:id/progress', (req, res) => {
         } else if (word.status === 'review_30' && correct) {
             word.status = 'learned';
         } else if (!correct && (word.status === 'review_7' || word.status === 'review_30')) {
+            // Reset to studying and reduce points by half on wrong review answers
             word.status = 'studying';
+            word.totalPoints = Math.floor(word.totalPoints / 2);
         }
-        
+
         writeData(data);
-        res.json({ message: 'Progress updated successfully' });
+        res.json({
+            message: 'Progress updated successfully',
+            totalPoints: word.totalPoints,
+            status: word.status
+        });
     } catch (err) {
         res.status(500).json({ error: err.message });
     }

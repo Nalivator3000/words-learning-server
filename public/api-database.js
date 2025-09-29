@@ -99,8 +99,8 @@ class APIDatabase {
         return await this.apiRequest(`/words/${wordId}/progress`, {
             method: 'PUT',
             body: JSON.stringify({
-                isCorrect: isCorrect,
-                quizType: quizType
+                correct: isCorrect,
+                questionType: quizType
             })
         });
     }

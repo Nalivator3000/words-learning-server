@@ -77,7 +77,7 @@ class QuizManager {
         choices.sort(() => 0.5 - Math.random());
 
         return {
-            type: 'multiple',
+            type: 'multipleChoice',
             questionText: correctWord.translation,
             example: correctWord.exampleTranslation,
             choices: choices,
@@ -102,7 +102,7 @@ class QuizManager {
         choices.sort(() => 0.5 - Math.random());
 
         return {
-            type: 'reverse_multiple',
+            type: 'reverseMultipleChoice',
             questionText: correctWord.word,
             example: correctWord.example,
             choices: choices,
@@ -125,7 +125,7 @@ class QuizManager {
         const allLetters = [...letters, ...randomLetters].sort(() => 0.5 - Math.random());
 
         return {
-            type: 'word_building',
+            type: 'wordBuilding',
             questionText: word.translation,
             example: word.exampleTranslation,
             letters: allLetters,
@@ -162,12 +162,12 @@ class QuizManager {
         let isPartiallyCorrect = false;
         let feedback = '';
 
-        if (question.type === 'multiple' || question.type === 'reverse_multiple') {
+        if (question.type === 'multipleChoice' || question.type === 'reverseMultipleChoice') {
             isCorrect = userAnswer === question.correctAnswer;
             feedback = isCorrect ? 
                 'Правильно!' : 
                 `Неправильно. Правильный ответ: ${question.correctAnswer}`;
-        } else if (question.type === 'word_building') {
+        } else if (question.type === 'wordBuilding') {
             const result = this.checkTypingAnswerDetailed(userAnswer, question.correctAnswer);
             isCorrect = result.correct;
             isPartiallyCorrect = result.partiallyCorrect;

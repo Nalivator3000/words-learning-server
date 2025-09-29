@@ -1668,6 +1668,13 @@ input:focus, textarea:focus, select:focus {
     justify-content: center;
 }
 
+.score-complete {
+    background: linear-gradient(135deg, var(--accent-emerald), var(--accent-cyan));
+    color: white;
+    box-shadow: 0 4px 12px rgba(16, 185, 129, 0.4);
+    animation: pulse-complete 2s infinite;
+}
+
 .score-high {
     background: var(--accent-emerald);
     color: white;
@@ -1684,6 +1691,18 @@ input:focus, textarea:focus, select:focus {
     background: var(--accent-rose);
     color: white;
     box-shadow: 0 4px 12px rgba(244, 63, 94, 0.3);
+}
+
+.score-none {
+    background: var(--neutral-300);
+    color: var(--neutral-700);
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+}
+
+@keyframes pulse-complete {
+    0% { transform: scale(1); }
+    50% { transform: scale(1.05); }
+    100% { transform: scale(1); }
 }
 
 /* Desktop-specific optimizations */

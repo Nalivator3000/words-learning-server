@@ -109,46 +109,51 @@ class LanguageLearningApp {
         this.init();
     }
 
-    // Scoring System - Calculate word score 0-100 points (smoother progression)
+    // New Points-Based Scoring System
     calculateWordScore(word) {
-        const correctCount = word.correctCount || word.correct_count || 0;
-        const incorrectCount = word.incorrectCount || word.incorrect_count || 0;
-        const totalCount = Math.max(1, correctCount + incorrectCount);
+        // Get total points earned from different question types
+        const totalPoints = word.totalPoints || 0;
 
-        // If no attempts yet, show 0
-        if (totalCount === 0 || (correctCount === 0 && incorrectCount === 0)) {
-            return 0;
-        }
+        // Progress is simply the percentage toward 100 points
+        const progress = Math.min(100, Math.max(0, totalPoints));
 
-        // Base score from accuracy (0-60 points)
-        const accuracy = correctCount / totalCount;
-        let score = Math.round(accuracy * 60);
-
-        // Smooth experience bonus (0-40 points)
-        // Each correct answer adds diminishing bonus: √(correctCount) * 12
-        const experienceBonus = Math.min(40, Math.round(Math.sqrt(correctCount) * 12));
-
-        score += experienceBonus;
-
-        return Math.min(100, Math.max(0, score));
+        return progress;
     }
 
-    // Get score display with color coding
+    // Get score display with progress percentage
     getScoreDisplay(score) {
         let className, text;
 
-        if (score >= 80) {
+        if (score >= 100) {
+            className = 'score-complete';
+            text = `✅ Ready for review`;
+        } else if (score >= 75) {
             className = 'score-high';
-            text = `${score} 🔥`;
+            text = `${score}% 🔥`;
         } else if (score >= 50) {
             className = 'score-medium';
-            text = `${score} ⚡`;
-        } else {
+            text = `${score}% ⚡`;
+        } else if (score >= 25) {
             className = 'score-low';
-            text = `${score} 📚`;
+            text = `${score}% 📚`;
+        } else {
+            className = 'score-none';
+            text = `${score}% 🌱`;
         }
 
         return { className, text };
+    }
+
+    // Get points for question type
+    getPointsForQuestionType(questionType) {
+        const pointsMap = {
+            'multipleChoice': 2,
+            'reverseMultipleChoice': 2,
+            'wordBuilding': 5,
+            'typing': 10
+        };
+
+        return pointsMap[questionType] || 2; // Default to 2 points
     }
 
     async init() {
