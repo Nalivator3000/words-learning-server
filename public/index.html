@@ -40,20 +40,11 @@
     </div>
 
     <div class="container">
-        <header>
-            <h1 data-translate="appTitle">FluentFlow</h1>
-            <div class="header-user">
-                <span id="userInfo" class="user-info"></span>
-                <button id="userMenuBtn" class="user-menu-btn">⚙️</button>
-                <div id="userMenu" class="user-menu hidden">
-                    <button id="settingsBtn" data-translate="settings">Настройки</button>
-                    <button id="logoutBtn" data-translate="logout">Выйти</button>
-                </div>
+        <header class="app-header">
+            <div class="header-left">
+                <h1 data-translate="appTitle">German Words Learning</h1>
             </div>
-        </header>
-
-        <nav class="main-nav">
-            <div class="nav-container">
+            <nav class="header-nav">
                 <div class="nav-buttons">
                     <button id="homeBtn" class="nav-btn active" data-translate="home">Главная</button>
                     <button id="importBtn" class="nav-btn" data-translate="import">Импорт</button>
@@ -66,13 +57,24 @@
                     <span></span>
                     <span></span>
                 </button>
+            </nav>
+            <div class="header-right">
+                <button id="userMenuBtn" class="settings-btn">⚙️</button>
+                <div id="userMenu" class="user-menu hidden">
+                    <button id="settingsBtn" data-translate="settings">Настройки</button>
+                    <button id="logoutBtn" data-translate="logout">Выйти</button>
+                </div>
             </div>
-        </nav>
+        </header>
+
+        <div class="user-info-bar">
+            <span id="userInfo" class="user-info"></span>
+        </div>
 
         <main>
             <!-- Home Section -->
             <section id="homeSection" class="section active">
-                <h2>FluentFlow Dashboard</h2>
+                <h2>German Words Learning Dashboard</h2>
                 <div class="stats-grid">
                     <div class="stat-card">
                         <h3>Изучаемые слова</h3>
