@@ -6,11 +6,11 @@
       "translation": "Закрывать на ключ, завершать",
       "example": "Nach dem Unterricht müssen wir alle Fenster und Türen abschließen.",
       "exampleTranslation": "После занятий мы должны закрыть на ключ все окна и двери.",
-      "status": "review_7",
-      "correctCount": 3,
-      "totalCount": 3,
+      "status": "studying",
+      "correctCount": 0,
+      "totalCount": 0,
       "createdAt": "2025-08-28T08:26:38.915Z",
-      "updatedAt": "2025-08-29T13:44:39.090Z"
+      "updatedAt": "2025-09-29T20:54:27.972Z"
     },
     {
       "id": 2,
@@ -20,9 +20,9 @@
       "exampleTranslation": "Ее броское платье привлекло всеобщее внимание.",
       "status": "studying",
       "correctCount": 0,
-      "totalCount": 4,
+      "totalCount": 0,
       "createdAt": "2025-08-28T08:26:38.915Z",
-      "updatedAt": "2025-08-29T14:28:02.901Z"
+      "updatedAt": "2025-09-29T20:54:27.973Z"
     },
     {
       "id": 3,
@@ -32,9 +32,9 @@
       "exampleTranslation": "Мне нужно найти ключ, чтобы открыть дверь.",
       "status": "studying",
       "correctCount": 0,
-      "totalCount": 1,
+      "totalCount": 0,
       "createdAt": "2025-08-28T08:26:38.915Z",
-      "updatedAt": "2025-08-30T12:20:59.791Z"
+      "updatedAt": "2025-09-29T20:54:27.973Z"
     },
     {
       "id": 4,
@@ -42,11 +42,11 @@
       "translation": "Принимать, записывать, снимать (фото)",
       "example": "Der Fotograf hat ein schönes Bild von der Landschaft aufgenommen.",
       "exampleTranslation": "Фотограф снял красивый кадр пейзажа.",
-      "status": "review_7",
-      "correctCount": 3,
-      "totalCount": 4,
+      "status": "studying",
+      "correctCount": 0,
+      "totalCount": 0,
       "createdAt": "2025-08-28T08:26:38.915Z",
-      "updatedAt": "2025-08-28T09:54:12.186Z"
+      "updatedAt": "2025-09-29T20:54:27.973Z"
     },
     {
       "id": 5,
@@ -56,9 +56,9 @@
       "exampleTranslation": "Нужно осознавать опасности, прежде чем отправляться в рискованное путешествие.",
       "status": "studying",
       "correctCount": 0,
-      "totalCount": 3,
+      "totalCount": 0,
       "createdAt": "2025-08-28T08:26:38.915Z",
-      "updatedAt": "2025-08-29T14:23:04.598Z"
+      "updatedAt": "2025-09-29T20:54:27.973Z"
     },
     {
       "id": 6,
@@ -68,9 +68,9 @@
       "exampleTranslation": "Он смог очень хорошо передать содержание книги своими словами.",
       "status": "studying",
       "correctCount": 0,
-      "totalCount": 4,
+      "totalCount": 0,
       "createdAt": "2025-08-28T08:26:38.916Z",
-      "updatedAt": "2025-08-29T14:30:05.280Z"
+      "updatedAt": "2025-09-29T20:54:27.973Z"
     },
     {
       "id": 7,
@@ -80,9 +80,9 @@
       "exampleTranslation": "Армия готовилась напасть на врага.",
       "status": "studying",
       "correctCount": 0,
-      "totalCount": 2,
+      "totalCount": 0,
       "createdAt": "2025-08-28T08:26:38.916Z",
-      "updatedAt": "2025-08-28T10:07:25.212Z"
+      "updatedAt": "2025-09-29T20:54:27.973Z"
     },
     {
       "id": 8,
@@ -90,11 +90,11 @@
       "translation": "Оставлять открытым",
       "example": "Ich habe die Tür zur Terrasse auflassen, damit frische Luft hereinströmen kann.",
       "exampleTranslation": "Я оставил дверь на террасу открытой, чтобы впустить свежий воздух.",
-      "status": "review_7",
-      "correctCount": 3,
-      "totalCount": 3,
+      "status": "studying",
+      "correctCount": 0,
+      "totalCount": 0,
       "createdAt": "2025-08-28T08:26:38.916Z",
-      "updatedAt": "2025-08-28T09:46:36.256Z"
+      "updatedAt": "2025-09-29T20:54:27.973Z"
     },
     {
       "id": 9,
@@ -103,10 +103,10 @@
       "example": "Die Preise für Benzin werden im nächsten Jahr ansteigen.",
       "exampleTranslation": "Цены на бензин повысятся в следующем году.",
       "status": "studying",
-      "correctCount": 1,
-      "totalCount": 2,
+      "correctCount": 0,
+      "totalCount": 0,
       "createdAt": "2025-08-28T08:26:38.916Z",
-      "updatedAt": "2025-08-28T10:04:37.301Z"
+      "updatedAt": "2025-09-29T20:54:27.973Z"
     },
     {
       "id": 10,
@@ -115,10 +115,10 @@
       "example": "Manchmal ist es besser zu schweigen und nachzudenken, bevor man spricht.",
       "exampleTranslation": "Иногда лучше помолчать и подумать, прежде чем говорить.",
       "status": "studying",
-      "correctCount": 1,
-      "totalCount": 2,
+      "correctCount": 0,
+      "totalCount": 0,
       "createdAt": "2025-08-28T08:26:38.916Z",
-      "updatedAt": "2025-08-29T14:30:15.385Z"
+      "updatedAt": "2025-09-29T20:54:27.973Z"
     },
     {
       "id": 11,
@@ -128,9 +128,9 @@
       "exampleTranslation": "Успеваемость ученика значительно улучшилась в последнем семестре.",
       "status": "studying",
       "correctCount": 0,
-      "totalCount": 2,
+      "totalCount": 0,
       "createdAt": "2025-08-28T08:26:38.916Z",
-      "updatedAt": "2025-08-30T12:21:12.690Z"
+      "updatedAt": "2025-09-29T20:54:27.973Z"
     },
     {
       "id": 12,
@@ -142,7 +142,7 @@
       "correctCount": 0,
       "totalCount": 0,
       "createdAt": "2025-08-28T08:26:38.916Z",
-      "updatedAt": "2025-08-30T12:06:05.346Z"
+      "updatedAt": "2025-09-29T20:54:27.973Z"
     },
     {
       "id": 13,
@@ -152,9 +152,9 @@
       "exampleTranslation": "Я хочу насладиться хорошей погодой и прогуляться.",
       "status": "studying",
       "correctCount": 0,
-      "totalCount": 2,
+      "totalCount": 0,
       "createdAt": "2025-08-28T08:26:38.916Z",
-      "updatedAt": "2025-08-28T09:57:37.849Z"
+      "updatedAt": "2025-09-29T20:54:27.973Z"
     },
     {
       "id": 14,
@@ -166,7 +166,7 @@
       "correctCount": 0,
       "totalCount": 0,
       "createdAt": "2025-08-28T08:26:38.916Z",
-      "updatedAt": "2025-08-30T12:06:05.346Z"
+      "updatedAt": "2025-09-29T20:54:27.973Z"
     },
     {
       "id": 15,
@@ -175,10 +175,10 @@
       "example": "Der Musiker wird am Freitagabend in der Bar auftreten.",
       "exampleTranslation": "Музыкант будет выступать в баре в пятницу вечером.",
       "status": "studying",
-      "correctCount": 1,
-      "totalCount": 2,
+      "correctCount": 0,
+      "totalCount": 0,
       "createdAt": "2025-08-28T08:26:38.917Z",
-      "updatedAt": "2025-08-28T10:07:09.572Z"
+      "updatedAt": "2025-09-29T20:54:27.973Z"
     },
     {
       "id": 16,
@@ -186,11 +186,11 @@
       "translation": "Готовый",
       "example": "Bist du bereit für die Prüfung morgen?",
       "exampleTranslation": "Ты готов к завтрашнему экзамену?",
-      "status": "review_7",
-      "correctCount": 3,
-      "totalCount": 3,
+      "status": "studying",
+      "correctCount": 0,
+      "totalCount": 0,
       "createdAt": "2025-08-28T08:26:38.917Z",
-      "updatedAt": "2025-08-29T14:31:17.216Z"
+      "updatedAt": "2025-09-29T20:54:27.973Z"
     },
     {
       "id": 17,
@@ -199,10 +199,10 @@
       "example": "Sei vorsichtig, wenn du die Straße überquerst, es fahren viele Autos.",
       "exampleTranslation": "Будь осторожен, когда переходишь дорогу, там много машин.",
       "status": "studying",
-      "correctCount": 2,
-      "totalCount": 3,
+      "correctCount": 0,
+      "totalCount": 0,
       "createdAt": "2025-08-28T08:26:38.917Z",
-      "updatedAt": "2025-08-28T10:06:51.260Z"
+      "updatedAt": "2025-09-29T20:54:27.973Z"
     },
     {
       "id": 18,
@@ -211,10 +211,10 @@
       "example": "Ich weiß nicht, ob ich den Schmerz noch lange aushalten kann.",
       "exampleTranslation": "Я не знаю, смогу ли я терпеть эту боль еще долго.",
       "status": "studying",
-      "correctCount": 1,
-      "totalCount": 1,
+      "correctCount": 0,
+      "totalCount": 0,
       "createdAt": "2025-08-28T08:26:38.917Z",
-      "updatedAt": "2025-08-30T12:19:42.410Z"
+      "updatedAt": "2025-09-29T20:54:27.973Z"
     },
     {
       "id": 19,
@@ -223,10 +223,10 @@
       "example": "Nach dem langen Krieg sehnten sich alle nach Friede und Ruhe.",
       "exampleTranslation": "После долгой войны все жаждали мира и покоя.",
       "status": "studying",
-      "correctCount": 2,
-      "totalCount": 3,
+      "correctCount": 0,
+      "totalCount": 0,
       "createdAt": "2025-08-28T08:26:38.917Z",
-      "updatedAt": "2025-08-29T14:20:12.996Z"
+      "updatedAt": "2025-09-29T20:54:27.973Z"
     },
     {
       "id": 20,
@@ -236,9 +236,9 @@
       "exampleTranslation": "Он откладывал домашнее задание до последней минуты.",
       "status": "studying",
       "correctCount": 0,
-      "totalCount": 1,
+      "totalCount": 0,
       "createdAt": "2025-08-28T08:26:38.917Z",
-      "updatedAt": "2025-08-30T12:21:45.153Z"
+      "updatedAt": "2025-09-29T20:54:27.973Z"
     },
     {
       "id": 21,
@@ -248,9 +248,9 @@
       "exampleTranslation": "Хорошие отношения основаны на доверии и уважении.",
       "status": "studying",
       "correctCount": 0,
-      "totalCount": 2,
+      "totalCount": 0,
       "createdAt": "2025-08-28T08:26:38.917Z",
-      "updatedAt": "2025-08-29T14:21:53.120Z"
+      "updatedAt": "2025-09-29T20:54:27.973Z"
     },
     {
       "id": 22,
@@ -258,11 +258,11 @@
       "translation": "Вырастать",
       "example": "Sie ist in einem kleinen Dorf auf dem Land aufgewachsen.",
       "exampleTranslation": "Она выросла в маленькой деревне в сельской местности.",
-      "status": "review_7",
-      "correctCount": 3,
-      "totalCount": 3,
+      "status": "studying",
+      "correctCount": 0,
+      "totalCount": 0,
       "createdAt": "2025-08-28T08:26:38.917Z",
-      "updatedAt": "2025-08-28T09:49:32.323Z"
+      "updatedAt": "2025-09-29T20:54:27.973Z"
     },
     {
       "id": 23,
@@ -274,7 +274,7 @@
       "correctCount": 0,
       "totalCount": 0,
       "createdAt": "2025-08-28T08:26:38.917Z",
-      "updatedAt": "2025-08-30T12:06:05.346Z"
+      "updatedAt": "2025-09-29T20:54:27.973Z"
     },
     {
       "id": 24,
@@ -286,7 +286,7 @@
       "correctCount": 0,
       "totalCount": 0,
       "createdAt": "2025-08-28T08:26:38.918Z",
-      "updatedAt": "2025-08-30T12:06:05.346Z"
+      "updatedAt": "2025-09-29T20:54:27.973Z"
     },
     {
       "id": 25,
@@ -294,11 +294,11 @@
       "translation": "Воспоминание",
       "example": "Die alte Fotografie weckte viele schöne Erinnerungen an meine Kindheit.",
       "exampleTranslation": "Старая фотография вызвала много приятных воспоминаний о моем детстве.",
-      "status": "review_7",
-      "correctCount": 3,
-      "totalCount": 5,
+      "status": "studying",
+      "correctCount": 0,
+      "totalCount": 0,
       "createdAt": "2025-08-28T08:26:38.918Z",
-      "updatedAt": "2025-08-28T10:07:43.154Z"
+      "updatedAt": "2025-09-29T20:54:27.973Z"
     },
     {
       "id": 26,
@@ -307,10 +307,10 @@
       "example": "Ich bin gerade sehr beschäftigt und habe wenig Zeit.",
       "exampleTranslation": "Я сейчас очень занят и у меня мало времени.",
       "status": "studying",
-      "correctCount": 1,
-      "totalCount": 1,
+      "correctCount": 0,
+      "totalCount": 0,
       "createdAt": "2025-08-28T08:26:38.918Z",
-      "updatedAt": "2025-08-28T08:49:12.367Z"
+      "updatedAt": "2025-09-29T20:54:27.973Z"
     },
     {
       "id": 27,
@@ -320,9 +320,9 @@
       "exampleTranslation": "Вор смог исчезнуть в толпе и сбежать.",
       "status": "studying",
       "correctCount": 0,
-      "totalCount": 1,
+      "totalCount": 0,
       "createdAt": "2025-08-28T08:26:38.918Z",
-      "updatedAt": "2025-08-29T14:31:10.171Z"
+      "updatedAt": "2025-09-29T20:54:27.973Z"
     },
     {
       "id": 28,
@@ -331,10 +331,10 @@
       "example": "Er hat mich auf der Straße angesprochen und nach dem Weg gefragt.",
       "exampleTranslation": "Он заговорил со мной на улице и спросил дорогу.",
       "status": "studying",
-      "correctCount": 1,
-      "totalCount": 2,
+      "correctCount": 0,
+      "totalCount": 0,
       "createdAt": "2025-08-28T08:26:38.918Z",
-      "updatedAt": "2025-08-29T14:21:21.959Z"
+      "updatedAt": "2025-09-29T20:54:27.973Z"
     },
     {
       "id": 29,
@@ -343,10 +343,10 @@
       "example": "Wir sollten jetzt mit der Arbeit anfangen, um rechtzeitig fertig zu werden.",
       "exampleTranslation": "Мы должны сейчас начать работу, чтобы закончить вовремя.",
       "status": "studying",
-      "correctCount": 1,
-      "totalCount": 2,
+      "correctCount": 0,
+      "totalCount": 0,
       "createdAt": "2025-08-28T08:26:38.918Z",
-      "updatedAt": "2025-08-28T09:54:50.832Z"
+      "updatedAt": "2025-09-29T20:54:27.973Z"
     },
     {
       "id": 30,
@@ -356,9 +356,9 @@
       "exampleTranslation": "Мы заблудились в лесу и потратили часы, чтобы найти дорогу обратно.",
       "status": "studying",
       "correctCount": 0,
-      "totalCount": 1,
+      "totalCount": 0,
       "createdAt": "2025-08-28T08:26:38.918Z",
-      "updatedAt": "2025-08-29T14:29:05.695Z"
+      "updatedAt": "2025-09-29T20:54:27.973Z"
     },
     {
       "id": 31,
@@ -370,7 +370,7 @@
       "correctCount": 0,
       "totalCount": 0,
       "createdAt": "2025-08-28T08:26:38.918Z",
-      "updatedAt": "2025-08-30T12:06:05.346Z"
+      "updatedAt": "2025-09-29T20:54:27.973Z"
     },
     {
       "id": 32,
@@ -379,10 +379,10 @@
       "example": "Die Polizei hat die Bevölkerung aufgerufen, wachsam zu sein.",
       "exampleTranslation": "Полиция призвала население быть бдительным.",
       "status": "studying",
-      "correctCount": 2,
-      "totalCount": 2,
+      "correctCount": 0,
+      "totalCount": 0,
       "createdAt": "2025-08-28T08:26:38.918Z",
-      "updatedAt": "2025-08-28T10:00:42.523Z"
+      "updatedAt": "2025-09-29T20:54:27.973Z"
     },
     {
       "id": 33,
@@ -391,10 +391,10 @@
       "example": "Der Stau hat uns eine Stunde aufgehalten.",
       "exampleTranslation": "Пробка задержала нас на час.",
       "status": "studying",
-      "correctCount": 2,
-      "totalCount": 3,
+      "correctCount": 0,
+      "totalCount": 0,
       "createdAt": "2025-08-28T08:26:38.918Z",
-      "updatedAt": "2025-08-29T14:30:59.735Z"
+      "updatedAt": "2025-09-29T20:54:27.973Z"
     },
     {
       "id": 34,
@@ -403,10 +403,10 @@
       "example": "Die Sonne geht jeden Morgen im Osten auf.",
       "exampleTranslation": "Солнце восходит каждое утро на востоке.",
       "status": "studying",
-      "correctCount": 2,
-      "totalCount": 3,
+      "correctCount": 0,
+      "totalCount": 0,
       "createdAt": "2025-08-28T08:26:38.918Z",
-      "updatedAt": "2025-08-29T14:30:28.400Z"
+      "updatedAt": "2025-09-29T20:54:27.973Z"
     },
     {
       "id": 35,
@@ -415,10 +415,10 @@
       "example": "Der Lehrer war sehr aufmerksam und bemerkte sofort, dass etwas nicht stimmte.",
       "exampleTranslation": "Учитель был очень внимателен и сразу заметил, что что-то не так.",
       "status": "studying",
-      "correctCount": 2,
-      "totalCount": 3,
+      "correctCount": 0,
+      "totalCount": 0,
       "createdAt": "2025-08-28T08:26:38.918Z",
-      "updatedAt": "2025-08-29T14:23:13.070Z"
+      "updatedAt": "2025-09-29T20:54:27.973Z"
     },
     {
       "id": 36,
@@ -430,7 +430,7 @@
       "correctCount": 0,
       "totalCount": 0,
       "createdAt": "2025-08-28T08:26:38.918Z",
-      "updatedAt": "2025-08-30T12:06:05.346Z"
+      "updatedAt": "2025-09-29T20:54:27.973Z"
     },
     {
       "id": 37,
@@ -440,9 +440,9 @@
       "exampleTranslation": "Концерт пришлось отменить из-за болезни.",
       "status": "studying",
       "correctCount": 0,
-      "totalCount": 3,
+      "totalCount": 0,
       "createdAt": "2025-08-28T08:26:38.918Z",
-      "updatedAt": "2025-08-29T14:20:06.301Z"
+      "updatedAt": "2025-09-29T20:54:27.973Z"
     },
     {
       "id": 38,
@@ -450,11 +450,11 @@
       "translation": "Срезать, отрезать, справляться",
       "example": "Sie konnte in der Prüfung sehr gut abschneiden.",
       "exampleTranslation": "Она смогла очень хорошо справиться с экзаменом.",
-      "status": "review_7",
-      "correctCount": 3,
-      "totalCount": 3,
+      "status": "studying",
+      "correctCount": 0,
+      "totalCount": 0,
       "createdAt": "2025-08-28T08:26:38.918Z",
-      "updatedAt": "2025-08-28T10:02:16.060Z"
+      "updatedAt": "2025-09-29T20:54:27.973Z"
     },
     {
       "id": 39,
@@ -463,10 +463,10 @@
       "example": "Wenn du hart arbeitest, kannst du alles schaffen, was du dir vornimmst.",
       "exampleTranslation": "Если ты будешь усердно работать, ты сможешь справиться со всем, что задумаешь.",
       "status": "studying",
-      "correctCount": 1,
-      "totalCount": 3,
+      "correctCount": 0,
+      "totalCount": 0,
       "createdAt": "2025-08-28T08:26:38.918Z",
-      "updatedAt": "2025-08-29T14:29:23.517Z"
+      "updatedAt": "2025-09-29T20:54:27.973Z"
     },
     {
       "id": 40,
@@ -475,10 +475,10 @@
       "example": "Wir haben eine mündliche Vereinbarung getroffen, dass wir uns nächste Woche treffen.",
       "exampleTranslation": "Мы достигли устной договоренности о встрече на следующей неделе.",
       "status": "studying",
-      "correctCount": 1,
-      "totalCount": 2,
+      "correctCount": 0,
+      "totalCount": 0,
       "createdAt": "2025-08-28T08:26:38.918Z",
-      "updatedAt": "2025-08-29T14:30:36.904Z"
+      "updatedAt": "2025-09-29T20:54:27.973Z"
     },
     {
       "id": 41,
@@ -488,9 +488,9 @@
       "exampleTranslation": "Важно прощать, чтобы обрести внутренний покой.",
       "status": "studying",
       "correctCount": 0,
-      "totalCount": 2,
+      "totalCount": 0,
       "createdAt": "2025-08-28T08:26:38.919Z",
-      "updatedAt": "2025-08-28T09:45:43.704Z"
+      "updatedAt": "2025-09-29T20:54:27.973Z"
     },
     {
       "id": 42,
@@ -502,7 +502,7 @@
       "correctCount": 0,
       "totalCount": 0,
       "createdAt": "2025-08-28T08:26:38.919Z",
-      "updatedAt": "2025-08-30T12:06:05.346Z"
+      "updatedAt": "2025-09-29T20:54:27.973Z"
     },
     {
       "id": 43,
@@ -512,9 +512,9 @@
       "exampleTranslation": "Он предложил мне свою помощь, когда я в ней больше всего нуждался.",
       "status": "studying",
       "correctCount": 0,
-      "totalCount": 4,
+      "totalCount": 0,
       "createdAt": "2025-08-28T08:26:38.919Z",
-      "updatedAt": "2025-08-30T12:19:18.124Z"
+      "updatedAt": "2025-09-29T20:54:27.973Z"
     },
     {
       "id": 44,
@@ -523,10 +523,10 @@
       "example": "Du musst links biegen an der nächsten Kreuzung.",
       "exampleTranslation": "Тебе нужно повернуть налево на следующем перекрестке.",
       "status": "studying",
-      "correctCount": 1,
-      "totalCount": 1,
+      "correctCount": 0,
+      "totalCount": 0,
       "createdAt": "2025-08-28T08:26:38.919Z",
-      "updatedAt": "2025-08-28T10:04:22.296Z"
+      "updatedAt": "2025-09-29T20:54:27.973Z"
     },
     {
       "id": 45,
@@ -536,9 +536,9 @@
       "exampleTranslation": "Я просто не могу понять, почему он так поступил.",
       "status": "studying",
       "correctCount": 0,
-      "totalCount": 1,
+      "totalCount": 0,
       "createdAt": "2025-08-28T08:26:38.919Z",
-      "updatedAt": "2025-08-28T09:46:12.116Z"
+      "updatedAt": "2025-09-29T20:54:27.973Z"
     },
     {
       "id": 46,
@@ -547,10 +547,10 @@
       "example": "Die Entwicklung der Technologie ist in den letzten Jahren erstaunlich.",
       "exampleTranslation": "Развитие технологий в последние годы удивительно.",
       "status": "studying",
-      "correctCount": 1,
-      "totalCount": 1,
+      "correctCount": 0,
+      "totalCount": 0,
       "createdAt": "2025-08-28T08:26:38.919Z",
-      "updatedAt": "2025-08-28T09:35:56.612Z"
+      "updatedAt": "2025-09-29T20:54:27.973Z"
     },
     {
       "id": 47,
@@ -559,10 +559,10 @@
       "example": "Die Stadt wird in den nächsten Jahren weiter anwachsen.",
       "exampleTranslation": "Город будет продолжать разрастаться в ближайшие годы.",
       "status": "studying",
-      "correctCount": 2,
-      "totalCount": 3,
+      "correctCount": 0,
+      "totalCount": 0,
       "createdAt": "2025-08-28T08:26:38.919Z",
-      "updatedAt": "2025-08-30T12:20:18.727Z"
+      "updatedAt": "2025-09-29T20:54:27.973Z"
     },
     {
       "id": 48,
@@ -570,11 +570,11 @@
       "translation": "Придумывать",
       "example": "Er hat sich eine lustige Geschichte ausgedacht, um uns zum Lachen zu bringen.",
       "exampleTranslation": "Он придумал забавную историю, чтобы нас рассмешить.",
-      "status": "review_7",
-      "correctCount": 3,
-      "totalCount": 3,
+      "status": "studying",
+      "correctCount": 0,
+      "totalCount": 0,
       "createdAt": "2025-08-28T08:26:38.919Z",
-      "updatedAt": "2025-08-28T09:50:57.461Z"
+      "updatedAt": "2025-09-29T20:54:27.973Z"
     },
     {
       "id": 49,
@@ -583,10 +583,10 @@
       "example": "Eine ehrliche Antwort ist immer besser, auch wenn sie wehtut.",
       "exampleTranslation": "Честный ответ всегда лучше, даже если он причиняет боль.",
       "status": "studying",
-      "correctCount": 1,
-      "totalCount": 1,
+      "correctCount": 0,
+      "totalCount": 0,
       "createdAt": "2025-08-28T08:26:38.919Z",
-      "updatedAt": "2025-08-28T09:49:38.717Z"
+      "updatedAt": "2025-09-29T20:54:27.973Z"
     },
     {
       "id": 50,
@@ -596,9 +596,9 @@
       "exampleTranslation": "После войны павших солдат похоронили на кладбище.",
       "status": "studying",
       "correctCount": 0,
-      "totalCount": 2,
+      "totalCount": 0,
       "createdAt": "2025-08-28T08:26:38.919Z",
-      "updatedAt": "2025-08-29T14:21:30.976Z"
+      "updatedAt": "2025-09-29T20:54:27.973Z"
     },
     {
       "id": 51,
@@ -610,7 +610,7 @@
       "correctCount": 0,
       "totalCount": 0,
       "createdAt": "2025-08-28T08:26:38.919Z",
-      "updatedAt": "2025-08-30T12:06:05.346Z"
+      "updatedAt": "2025-09-29T20:54:27.973Z"
     },
     {
       "id": 52,
@@ -619,10 +619,10 @@
       "example": "Er musste am Seil ziehen, um die schwere Kiste zu bewegen.",
       "exampleTranslation": "Ему пришлось тянуть за веревку, чтобы сдвинуть тяжелый ящик.",
       "status": "studying",
-      "correctCount": 1,
-      "totalCount": 3,
+      "correctCount": 0,
+      "totalCount": 0,
       "createdAt": "2025-08-28T08:26:38.919Z",
-      "updatedAt": "2025-08-29T13:44:14.933Z"
+      "updatedAt": "2025-09-29T20:54:27.973Z"
     },
     {
       "id": 53,
@@ -632,9 +632,9 @@
       "exampleTranslation": "Когда поезд прибудет в Берлин?",
       "status": "studying",
       "correctCount": 0,
-      "totalCount": 2,
+      "totalCount": 0,
       "createdAt": "2025-08-28T08:26:38.919Z",
-      "updatedAt": "2025-08-29T13:45:07.088Z"
+      "updatedAt": "2025-09-29T20:54:27.973Z"
     },
     {
       "id": 54,
@@ -646,7 +646,7 @@
       "correctCount": 0,
       "totalCount": 0,
       "createdAt": "2025-08-28T08:26:38.919Z",
-      "updatedAt": "2025-08-30T12:06:05.346Z"
+      "updatedAt": "2025-09-29T20:54:27.973Z"
     },
     {
       "id": 55,
@@ -654,11 +654,11 @@
       "translation": "Трусливый",
       "example": "Es ist feige, sich vor der Verantwortung zu drücken.",
       "exampleTranslation": "Трусливо уклоняться от ответственности.",
-      "status": "review_7",
-      "correctCount": 3,
-      "totalCount": 3,
+      "status": "studying",
+      "correctCount": 0,
+      "totalCount": 0,
       "createdAt": "2025-08-28T08:26:38.919Z",
-      "updatedAt": "2025-08-28T09:56:47.464Z"
+      "updatedAt": "2025-09-29T20:54:27.973Z"
     },
     {
       "id": 56,
@@ -667,10 +667,10 @@
       "example": "Es war mir ein großes Vergnügen, Sie kennenzulernen.",
       "exampleTranslation": "Мне было очень приятно познакомиться с вами.",
       "status": "studying",
-      "correctCount": 1,
-      "totalCount": 2,
+      "correctCount": 0,
+      "totalCount": 0,
       "createdAt": "2025-08-28T08:26:38.919Z",
-      "updatedAt": "2025-08-28T09:49:49.508Z"
+      "updatedAt": "2025-09-29T20:54:27.973Z"
     },
     {
       "id": 57,
@@ -679,10 +679,10 @@
       "example": "Der Bus wird in fünf Minuten abfahren.",
       "exampleTranslation": "Автобус отправится через пять минут.",
       "status": "studying",
-      "correctCount": 1,
-      "totalCount": 1,
+      "correctCount": 0,
+      "totalCount": 0,
       "createdAt": "2025-08-28T08:26:38.920Z",
-      "updatedAt": "2025-08-28T08:49:22.723Z"
+      "updatedAt": "2025-09-29T20:54:27.973Z"
     },
     {
       "id": 58,
@@ -692,9 +692,9 @@
       "exampleTranslation": "Нужно правильно применять эту технику, чтобы добиться успеха.",
       "status": "studying",
       "correctCount": 0,
-      "totalCount": 1,
+      "totalCount": 0,
       "createdAt": "2025-08-28T08:26:38.920Z",
-      "updatedAt": "2025-08-29T14:21:59.699Z"
+      "updatedAt": "2025-09-29T20:54:27.973Z"
     },
     {
       "id": 59,
@@ -703,10 +703,10 @@
       "example": "Es war eine schwierige Entscheidung, aber am Ende die richtige.",
       "exampleTranslation": "Это было трудное решение, но в итоге правильное.",
       "status": "studying",
-      "correctCount": 1,
-      "totalCount": 3,
+      "correctCount": 0,
+      "totalCount": 0,
       "createdAt": "2025-08-28T08:26:38.920Z",
-      "updatedAt": "2025-08-28T09:51:03.780Z"
+      "updatedAt": "2025-09-29T20:54:27.973Z"
     },
     {
       "id": 60,
@@ -718,7 +718,7 @@
       "correctCount": 0,
       "totalCount": 0,
       "createdAt": "2025-08-28T08:26:38.920Z",
-      "updatedAt": "2025-08-30T12:06:05.346Z"
+      "updatedAt": "2025-09-29T20:54:27.973Z"
     },
     {
       "id": 61,
@@ -728,9 +728,9 @@
       "exampleTranslation": "Никогда не стоит сдаваться, даже когда трудно.",
       "status": "studying",
       "correctCount": 0,
-      "totalCount": 1,
+      "totalCount": 0,
       "createdAt": "2025-08-28T08:26:38.920Z",
-      "updatedAt": "2025-08-28T08:48:31.435Z"
+      "updatedAt": "2025-09-29T20:54:27.973Z"
     },
     {
       "id": 62,
@@ -740,9 +740,9 @@
       "exampleTranslation": "Офицер приказал солдатам удерживать позицию.",
       "status": "studying",
       "correctCount": 0,
-      "totalCount": 2,
+      "totalCount": 0,
       "createdAt": "2025-08-28T08:26:38.920Z",
-      "updatedAt": "2025-08-28T10:07:22.292Z"
+      "updatedAt": "2025-09-29T20:54:27.973Z"
     },
     {
       "id": 63,
@@ -750,11 +750,11 @@
       "translation": "Страдать",
       "example": "Viele Menschen leiden unter den Folgen des Klimawandels.",
       "exampleTranslation": "Многие люди страдают от последствий изменения климата.",
-      "status": "review_7",
-      "correctCount": 3,
-      "totalCount": 4,
+      "status": "studying",
+      "correctCount": 0,
+      "totalCount": 0,
       "createdAt": "2025-08-28T08:26:38.920Z",
-      "updatedAt": "2025-08-29T14:28:17.813Z"
+      "updatedAt": "2025-09-29T20:54:27.973Z"
     },
     {
       "id": 64,
@@ -764,9 +764,9 @@
       "exampleTranslation": "Чудо случилось!",
       "status": "studying",
       "correctCount": 0,
-      "totalCount": 2,
+      "totalCount": 0,
       "createdAt": "2025-08-28T08:26:38.920Z",
-      "updatedAt": "2025-08-29T13:29:10.738Z"
+      "updatedAt": "2025-09-29T20:54:27.973Z"
     },
     {
       "id": 65,
@@ -776,9 +776,9 @@
       "exampleTranslation": "Я могу предположить, что вы довольны результатом.",
       "status": "studying",
       "correctCount": 0,
-      "totalCount": 3,
+      "totalCount": 0,
       "createdAt": "2025-08-28T08:26:38.920Z",
-      "updatedAt": "2025-08-29T13:41:43.542Z"
+      "updatedAt": "2025-09-29T20:54:27.973Z"
     },
     {
       "id": 66,
@@ -787,10 +787,10 @@
       "example": "Sie hat eine schöne Belohnung für ihre harte Arbeit erhalten.",
       "exampleTranslation": "Она получила хорошее вознаграждение за свою усердную работу.",
       "status": "studying",
-      "correctCount": 1,
-      "totalCount": 3,
+      "correctCount": 0,
+      "totalCount": 0,
       "createdAt": "2025-08-28T08:26:38.920Z",
-      "updatedAt": "2025-08-28T10:05:25.206Z"
+      "updatedAt": "2025-09-29T20:54:27.973Z"
     },
     {
       "id": 67,
@@ -798,11 +798,11 @@
       "translation": "Узнавать",
       "example": "Ich konnte ihn sofort an seiner Stimme erkennen, obwohl ich ihn lange nicht gesehen hatte.",
       "exampleTranslation": "Я сразу узнал его по голосу, хотя давно его не видел.",
-      "status": "review_7",
-      "correctCount": 3,
-      "totalCount": 3,
+      "status": "studying",
+      "correctCount": 0,
+      "totalCount": 0,
       "createdAt": "2025-08-28T08:26:38.920Z",
-      "updatedAt": "2025-08-28T09:58:58.067Z"
+      "updatedAt": "2025-09-29T20:54:27.973Z"
     },
     {
       "id": 68,
@@ -810,11 +810,11 @@
       "translation": "Становиться",
       "example": "Er möchte Arzt werden, wenn er groß ist.",
       "exampleTranslation": "Он хочет стать врачом, когда вырастет.",
-      "status": "review_7",
-      "correctCount": 3,
-      "totalCount": 3,
+      "status": "studying",
+      "correctCount": 0,
+      "totalCount": 0,
       "createdAt": "2025-08-28T08:26:38.920Z",
-      "updatedAt": "2025-08-28T10:07:53.924Z"
+      "updatedAt": "2025-09-29T20:54:27.973Z"
     },
     {
       "id": 69,
@@ -826,7 +826,7 @@
       "correctCount": 0,
       "totalCount": 0,
       "createdAt": "2025-08-28T08:26:38.920Z",
-      "updatedAt": "2025-08-30T12:06:05.346Z"
+      "updatedAt": "2025-09-29T20:54:27.973Z"
     },
     {
       "id": 70,
@@ -836,9 +836,9 @@
       "exampleTranslation": "Нас тепло приняли в семье.",
       "status": "studying",
       "correctCount": 0,
-      "totalCount": 2,
+      "totalCount": 0,
       "createdAt": "2025-08-28T08:26:38.920Z",
-      "updatedAt": "2025-08-28T09:55:21.689Z"
+      "updatedAt": "2025-09-29T20:54:27.973Z"
     },
     {
       "id": 71,
@@ -848,9 +848,9 @@
       "exampleTranslation": "Я оставлю этот сувенир у себя навсегда.",
       "status": "studying",
       "correctCount": 0,
-      "totalCount": 1,
+      "totalCount": 0,
       "createdAt": "2025-08-28T08:26:38.920Z",
-      "updatedAt": "2025-08-28T09:51:58.507Z"
+      "updatedAt": "2025-09-29T20:54:27.973Z"
     },
     {
       "id": 72,
@@ -860,9 +860,9 @@
       "exampleTranslation": "Было очевидно, что он не знал ответа.",
       "status": "studying",
       "correctCount": 0,
-      "totalCount": 1,
+      "totalCount": 0,
       "createdAt": "2025-08-28T08:26:38.920Z",
-      "updatedAt": "2025-08-28T10:06:38.969Z"
+      "updatedAt": "2025-09-29T20:54:27.973Z"
     },
     {
       "id": 73,
@@ -870,11 +870,11 @@
       "translation": "Выгружать",
       "example": "Er musste die schweren Kisten vom LKW ausladen.",
       "exampleTranslation": "Ему пришлось выгружать тяжелые ящики из грузовика.",
-      "status": "review_7",
-      "correctCount": 3,
-      "totalCount": 4,
+      "status": "studying",
+      "correctCount": 0,
+      "totalCount": 0,
       "createdAt": "2025-08-28T08:26:38.920Z",
-      "updatedAt": "2025-08-29T13:45:23.943Z"
+      "updatedAt": "2025-09-29T20:54:27.973Z"
     },
     {
       "id": 74,
@@ -883,10 +883,10 @@
       "example": "Das Konzert war ein unvergessliches Ereignis für alle Beteiligten.",
       "exampleTranslation": "Концерт был незабываемым событием для всех участников.",
       "status": "studying",
-      "correctCount": 1,
-      "totalCount": 3,
+      "correctCount": 0,
+      "totalCount": 0,
       "createdAt": "2025-08-28T08:26:38.920Z",
-      "updatedAt": "2025-08-28T10:01:51.561Z"
+      "updatedAt": "2025-09-29T20:54:27.973Z"
     },
     {
       "id": 75,
@@ -896,9 +896,9 @@
       "exampleTranslation": "Ты не должен трогать горячий утюг.",
       "status": "studying",
       "correctCount": 0,
-      "totalCount": 2,
+      "totalCount": 0,
       "createdAt": "2025-08-28T08:26:38.921Z",
-      "updatedAt": "2025-08-29T13:45:11.371Z"
+      "updatedAt": "2025-09-29T20:54:27.973Z"
     },
     {
       "id": 76,
@@ -908,9 +908,9 @@
       "exampleTranslation": "Родители должны хорошо воспитывать своих детей.",
       "status": "studying",
       "correctCount": 0,
-      "totalCount": 4,
+      "totalCount": 0,
       "createdAt": "2025-08-28T08:50:45.549Z",
-      "updatedAt": "2025-08-30T12:19:53.436Z"
+      "updatedAt": "2025-09-29T20:54:27.973Z"
     },
     {
       "id": 77,
@@ -919,10 +919,10 @@
       "example": "Er konnte nicht schwimmen und ist fast ertrunken.",
       "exampleTranslation": "Он не умел плавать и чуть не утонул.",
       "status": "studying",
-      "correctCount": 1,
-      "totalCount": 1,
+      "correctCount": 0,
+      "totalCount": 0,
       "createdAt": "2025-08-28T08:50:45.550Z",
-      "updatedAt": "2025-08-28T09:36:44.540Z"
+      "updatedAt": "2025-09-29T20:54:27.973Z"
     },
     {
       "id": 78,
@@ -931,10 +931,10 @@
       "example": "Sie hat sich um eine Stelle als Lehrerin beworben.",
       "exampleTranslation": "Она подала заявление на должность учительницы.",
       "status": "studying",
-      "correctCount": 1,
-      "totalCount": 5,
+      "correctCount": 0,
+      "totalCount": 0,
       "createdAt": "2025-08-28T08:50:45.550Z",
-      "updatedAt": "2025-08-29T13:31:58.586Z"
+      "updatedAt": "2025-09-29T20:54:27.973Z"
     },
     {
       "id": 79,
@@ -943,10 +943,10 @@
       "example": "Der Zug wird pünktlich eintreffen.",
       "exampleTranslation": "Поезд прибудет вовремя.",
       "status": "studying",
-      "correctCount": 1,
-      "totalCount": 1,
+      "correctCount": 0,
+      "totalCount": 0,
       "createdAt": "2025-08-28T08:50:45.550Z",
-      "updatedAt": "2025-08-28T10:00:03.431Z"
+      "updatedAt": "2025-09-29T20:54:27.973Z"
     },
     {
       "id": 80,
@@ -954,11 +954,11 @@
       "translation": "Прочитать (от начала до конца)",
       "example": "Lies den Vertrag vor der Unterschrift genau durch.",
       "exampleTranslation": "Внимательно прочитай договор перед подписанием.",
-      "status": "review_7",
-      "correctCount": 3,
-      "totalCount": 3,
+      "status": "studying",
+      "correctCount": 0,
+      "totalCount": 0,
       "createdAt": "2025-08-28T08:50:45.550Z",
-      "updatedAt": "2025-08-29T13:44:51.086Z"
+      "updatedAt": "2025-09-29T20:54:27.973Z"
     },
     {
       "id": 81,
@@ -968,9 +968,9 @@
       "exampleTranslation": "Ты никогда не должен обманывать своих друзей.",
       "status": "studying",
       "correctCount": 0,
-      "totalCount": 1,
+      "totalCount": 0,
       "createdAt": "2025-08-28T08:50:45.550Z",
-      "updatedAt": "2025-08-28T09:51:11.433Z"
+      "updatedAt": "2025-09-29T20:54:27.973Z"
     },
     {
       "id": 82,
@@ -980,9 +980,9 @@
       "exampleTranslation": "Он изобрел новую машину.",
       "status": "studying",
       "correctCount": 0,
-      "totalCount": 2,
+      "totalCount": 0,
       "createdAt": "2025-08-28T08:50:45.550Z",
-      "updatedAt": "2025-08-28T09:53:12.794Z"
+      "updatedAt": "2025-09-29T20:54:27.973Z"
     },
     {
       "id": 83,
@@ -994,7 +994,7 @@
       "correctCount": 0,
       "totalCount": 0,
       "createdAt": "2025-08-28T08:50:45.550Z",
-      "updatedAt": "2025-08-30T12:06:05.346Z"
+      "updatedAt": "2025-09-29T20:54:27.973Z"
     },
     {
       "id": 84,
@@ -1002,11 +1002,11 @@
       "translation": "Гореть",
       "example": "Das Holz brennt gut.",
       "exampleTranslation": "Дрова хорошо горят.",
-      "status": "review_7",
-      "correctCount": 3,
-      "totalCount": 4,
+      "status": "studying",
+      "correctCount": 0,
+      "totalCount": 0,
       "createdAt": "2025-08-28T08:50:45.551Z",
-      "updatedAt": "2025-08-28T10:02:57.615Z"
+      "updatedAt": "2025-09-29T20:54:27.973Z"
     },
     {
       "id": 85,
@@ -1015,10 +1015,10 @@
       "example": "Sie muss ihre Medikamente regelmäßig einnehmen.",
       "exampleTranslation": "Она должна принимать свои лекарства регулярно.",
       "status": "studying",
-      "correctCount": 2,
-      "totalCount": 2,
+      "correctCount": 0,
+      "totalCount": 0,
       "createdAt": "2025-08-28T08:50:45.551Z",
-      "updatedAt": "2025-08-29T14:27:53.796Z"
+      "updatedAt": "2025-09-29T20:54:27.973Z"
     },
     {
       "id": 86,
@@ -1027,10 +1027,10 @@
       "example": "Es steht fest, dass wir morgen fahren.",
       "exampleTranslation": "Установлено, что мы едем завтра.",
       "status": "studying",
-      "correctCount": 1,
-      "totalCount": 3,
+      "correctCount": 0,
+      "totalCount": 0,
       "createdAt": "2025-08-28T08:50:45.551Z",
-      "updatedAt": "2025-08-30T12:20:06.309Z"
+      "updatedAt": "2025-09-29T20:54:27.973Z"
     },
     {
       "id": 87,
@@ -1040,9 +1040,9 @@
       "exampleTranslation": "Я испытываю большую радость.",
       "status": "studying",
       "correctCount": 0,
-      "totalCount": 1,
+      "totalCount": 0,
       "createdAt": "2025-08-28T08:50:45.551Z",
-      "updatedAt": "2025-08-28T09:55:01.689Z"
+      "updatedAt": "2025-09-29T20:54:27.973Z"
     },
     {
       "id": 88,
@@ -1052,9 +1052,9 @@
       "exampleTranslation": "Пожалуйста, не входите в комнату в обуви.",
       "status": "studying",
       "correctCount": 0,
-      "totalCount": 1,
+      "totalCount": 0,
       "createdAt": "2025-08-28T08:50:45.551Z",
-      "updatedAt": "2025-08-28T09:37:49.734Z"
+      "updatedAt": "2025-09-29T20:54:27.973Z"
     },
     {
       "id": 89,
@@ -1062,11 +1062,11 @@
       "translation": "Советовать, консультировать",
       "example": "Ich werde Sie gerne beraten.",
       "exampleTranslation": "Я с удовольствием проконсультирую вас.",
-      "status": "review_7",
-      "correctCount": 3,
-      "totalCount": 3,
+      "status": "studying",
+      "correctCount": 0,
+      "totalCount": 0,
       "createdAt": "2025-08-28T08:50:45.551Z",
-      "updatedAt": "2025-08-28T13:06:13.163Z"
+      "updatedAt": "2025-09-29T20:54:27.973Z"
     },
     {
       "id": 90,
@@ -1075,10 +1075,10 @@
       "example": "Er besitzt ein großes Haus.",
       "exampleTranslation": "Он владеет большим домом.",
       "status": "studying",
-      "correctCount": 1,
-      "totalCount": 2,
+      "correctCount": 0,
+      "totalCount": 0,
       "createdAt": "2025-08-28T08:50:45.551Z",
-      "updatedAt": "2025-08-28T09:37:35.027Z"
+      "updatedAt": "2025-09-29T20:54:27.973Z"
     },
     {
       "id": 91,
@@ -1088,9 +1088,9 @@
       "exampleTranslation": "Вотри мазь в пораженное место.",
       "status": "studying",
       "correctCount": 0,
-      "totalCount": 2,
+      "totalCount": 0,
       "createdAt": "2025-08-28T08:50:45.551Z",
-      "updatedAt": "2025-08-28T09:53:45.758Z"
+      "updatedAt": "2025-09-29T20:54:27.973Z"
     },
     {
       "id": 92,
@@ -1100,9 +1100,9 @@
       "exampleTranslation": "Как возникла эта проблема?",
       "status": "studying",
       "correctCount": 0,
-      "totalCount": 2,
+      "totalCount": 0,
       "createdAt": "2025-08-28T08:50:45.552Z",
-      "updatedAt": "2025-08-29T13:44:25.348Z"
+      "updatedAt": "2025-09-29T20:54:27.973Z"
     },
     {
       "id": 93,
@@ -1112,9 +1112,9 @@
       "exampleTranslation": "Мой вопрос относится к последней теме.",
       "status": "studying",
       "correctCount": 0,
-      "totalCount": 4,
+      "totalCount": 0,
       "createdAt": "2025-08-28T08:50:45.552Z",
-      "updatedAt": "2025-08-29T13:29:41.171Z"
+      "updatedAt": "2025-09-29T20:54:27.973Z"
     },
     {
       "id": 94,
@@ -1123,10 +1123,10 @@
       "example": "Sie hat das Band mit einer Schere durchgeschnitten.",
       "exampleTranslation": "Она разрезала ленту ножницами.",
       "status": "studying",
-      "correctCount": 2,
-      "totalCount": 2,
+      "correctCount": 0,
+      "totalCount": 0,
       "createdAt": "2025-08-28T08:50:45.552Z",
-      "updatedAt": "2025-08-28T10:04:29.738Z"
+      "updatedAt": "2025-09-29T20:54:27.973Z"
     },
     {
       "id": 95,
@@ -1135,10 +1135,10 @@
       "example": "Ich konnte letzte Nacht nicht durchschlafen.",
       "exampleTranslation": "Я не смог проспать всю ночь.",
       "status": "studying",
-      "correctCount": 2,
-      "totalCount": 2,
+      "correctCount": 0,
+      "totalCount": 0,
       "createdAt": "2025-08-28T08:50:45.552Z",
-      "updatedAt": "2025-08-28T09:45:55.899Z"
+      "updatedAt": "2025-09-29T20:54:27.973Z"
     },
     {
       "id": 96,
@@ -1146,11 +1146,11 @@
       "translation": "Вламываться",
       "example": "Letzte Nacht ist jemand in unser Haus eingebrochen.",
       "exampleTranslation": "Прошлой ночью кто-то вломился в наш дом.",
-      "status": "review_7",
-      "correctCount": 3,
-      "totalCount": 3,
+      "status": "studying",
+      "correctCount": 0,
+      "totalCount": 0,
       "createdAt": "2025-08-28T08:50:45.552Z",
-      "updatedAt": "2025-08-29T13:28:58.400Z"
+      "updatedAt": "2025-09-29T20:54:27.973Z"
     },
     {
       "id": 97,
@@ -1160,9 +1160,9 @@
       "exampleTranslation": "Из данных вырисовывается ясная картина.",
       "status": "studying",
       "correctCount": 0,
-      "totalCount": 4,
+      "totalCount": 0,
       "createdAt": "2025-08-28T08:50:45.553Z",
-      "updatedAt": "2025-08-29T14:19:22.364Z"
+      "updatedAt": "2025-09-29T20:54:27.973Z"
     },
     {
       "id": 98,
@@ -1172,9 +1172,9 @@
       "exampleTranslation": "Каждый может внести вклад в успех.",
       "status": "studying",
       "correctCount": 0,
-      "totalCount": 2,
+      "totalCount": 0,
       "createdAt": "2025-08-28T08:50:45.553Z",
-      "updatedAt": "2025-08-28T09:51:35.208Z"
+      "updatedAt": "2025-09-29T20:54:27.973Z"
     },
     {
       "id": 99,
@@ -1184,9 +1184,9 @@
       "exampleTranslation": "Я должен выбрать профессию.",
       "status": "studying",
       "correctCount": 0,
-      "totalCount": 1,
+      "totalCount": 0,
       "createdAt": "2025-08-28T08:50:45.553Z",
-      "updatedAt": "2025-08-28T10:01:04.428Z"
+      "updatedAt": "2025-09-29T20:54:27.973Z"
     },
     {
       "id": 100,
@@ -1195,10 +1195,10 @@
       "example": "Bitte tragen Sie Ihren Namen in die Liste ein.",
       "exampleTranslation": "Пожалуйста, впишите свое имя в список.",
       "status": "studying",
-      "correctCount": 1,
-      "totalCount": 2,
+      "correctCount": 0,
+      "totalCount": 0,
       "createdAt": "2025-08-28T08:50:45.553Z",
-      "updatedAt": "2025-08-29T14:30:00.567Z"
+      "updatedAt": "2025-09-29T20:54:27.973Z"
     },
     {
       "id": 101,
@@ -1207,10 +1207,10 @@
       "example": "Halt dich gut fest, sonst fällst du!",
       "exampleTranslation": "Держись крепче, иначе упадешь!",
       "status": "studying",
-      "correctCount": 1,
-      "totalCount": 4,
+      "correctCount": 0,
+      "totalCount": 0,
       "createdAt": "2025-08-28T08:50:45.553Z",
-      "updatedAt": "2025-08-30T12:19:27.909Z"
+      "updatedAt": "2025-09-29T20:54:27.973Z"
     },
     {
       "id": 102,
@@ -1219,10 +1219,10 @@
       "example": "Die Polizei hat den Dieb festgenommen.",
       "exampleTranslation": "Полиция арестовала вора.",
       "status": "studying",
-      "correctCount": 1,
-      "totalCount": 1,
+      "correctCount": 0,
+      "totalCount": 0,
       "createdAt": "2025-08-28T08:50:45.553Z",
-      "updatedAt": "2025-08-28T09:57:16.893Z"
+      "updatedAt": "2025-09-29T20:54:27.973Z"
     },
     {
       "id": 103,
@@ -1231,10 +1231,10 @@
       "example": "Er ist bei der Prüfung durchgefallen.",
       "exampleTranslation": "Он провалился на экзамене.",
       "status": "studying",
-      "correctCount": 2,
-      "totalCount": 2,
+      "correctCount": 0,
+      "totalCount": 0,
       "createdAt": "2025-08-28T08:50:45.553Z",
-      "updatedAt": "2025-08-28T09:56:43.470Z"
+      "updatedAt": "2025-09-29T20:54:27.973Z"
     },
     {
       "id": 104,
@@ -1244,9 +1244,9 @@
       "exampleTranslation": "Он смог доказать свою невиновность.",
       "status": "studying",
       "correctCount": 0,
-      "totalCount": 2,
+      "totalCount": 0,
       "createdAt": "2025-08-28T08:50:45.553Z",
-      "updatedAt": "2025-08-30T12:21:32.758Z"
+      "updatedAt": "2025-09-29T20:54:27.973Z"
     },
     {
       "id": 105,
@@ -1255,10 +1255,10 @@
       "example": "Der Hund hat mich gebissen.",
       "exampleTranslation": "Собака укусила меня.",
       "status": "studying",
-      "correctCount": 1,
-      "totalCount": 2,
+      "correctCount": 0,
+      "totalCount": 0,
       "createdAt": "2025-08-28T08:50:45.553Z",
-      "updatedAt": "2025-08-29T14:26:45.217Z"
+      "updatedAt": "2025-09-29T20:54:27.973Z"
     },
     {
       "id": 106,
@@ -1270,7 +1270,7 @@
       "correctCount": 0,
       "totalCount": 0,
       "createdAt": "2025-08-28T08:50:45.553Z",
-      "updatedAt": "2025-08-30T12:06:05.346Z"
+      "updatedAt": "2025-09-29T20:54:27.973Z"
     },
     {
       "id": 107,
@@ -1279,10 +1279,10 @@
       "example": "Die Kosten betragen 50 Euro.",
       "exampleTranslation": "Стоимость составляет 50 евро.",
       "status": "studying",
-      "correctCount": 1,
-      "totalCount": 1,
+      "correctCount": 0,
+      "totalCount": 0,
       "createdAt": "2025-08-28T08:50:45.553Z",
-      "updatedAt": "2025-08-28T09:36:40.767Z"
+      "updatedAt": "2025-09-29T20:54:27.973Z"
     },
     {
       "id": 108,
@@ -1292,9 +1292,9 @@
       "exampleTranslation": "Мне только что пришла в голову хорошая идея.",
       "status": "studying",
       "correctCount": 0,
-      "totalCount": 1,
+      "totalCount": 0,
       "createdAt": "2025-08-28T08:50:45.554Z",
-      "updatedAt": "2025-08-28T09:52:43.179Z"
+      "updatedAt": "2025-09-29T20:54:27.973Z"
     },
     {
       "id": 109,
@@ -1302,11 +1302,11 @@
       "translation": "Настраивать, устанавливать",
       "example": "Bitte stellen Sie die Lautstärke ein.",
       "exampleTranslation": "Пожалуйста, настройте громкость.",
-      "status": "review_7",
-      "correctCount": 3,
-      "totalCount": 3,
+      "status": "studying",
+      "correctCount": 0,
+      "totalCount": 0,
       "createdAt": "2025-08-28T08:50:45.554Z",
-      "updatedAt": "2025-08-28T09:59:05.760Z"
+      "updatedAt": "2025-09-29T20:54:27.973Z"
     },
     {
       "id": 110,
@@ -1315,10 +1315,10 @@
       "example": "Das Wasser fließt aus dem Hahn.",
       "exampleTranslation": "Вода течёт из крана.",
       "status": "studying",
-      "correctCount": 2,
-      "totalCount": 2,
+      "correctCount": 0,
+      "totalCount": 0,
       "createdAt": "2025-08-28T08:50:45.554Z",
-      "updatedAt": "2025-08-28T10:08:47.911Z"
+      "updatedAt": "2025-09-29T20:54:27.973Z"
     },
     {
       "id": 111,
@@ -1328,9 +1328,9 @@
       "exampleTranslation": "Я просто не могу этого понять.",
       "status": "studying",
       "correctCount": 0,
-      "totalCount": 3,
+      "totalCount": 0,
       "createdAt": "2025-08-28T08:50:45.554Z",
-      "updatedAt": "2025-08-28T10:04:47.284Z"
+      "updatedAt": "2025-09-29T20:54:27.973Z"
     },
     {
       "id": 112,
@@ -1340,9 +1340,9 @@
       "exampleTranslation": "Эта проблема касается всех нас.",
       "status": "studying",
       "correctCount": 0,
-      "totalCount": 2,
+      "totalCount": 0,
       "createdAt": "2025-08-28T08:50:45.554Z",
-      "updatedAt": "2025-08-29T13:28:46.006Z"
+      "updatedAt": "2025-09-29T20:54:27.973Z"
     },
     {
       "id": 113,
@@ -1352,9 +1352,9 @@
       "exampleTranslation": "Этот закон обязателен для всех.",
       "status": "studying",
       "correctCount": 0,
-      "totalCount": 1,
+      "totalCount": 0,
       "createdAt": "2025-08-28T08:50:45.554Z",
-      "updatedAt": "2025-08-29T13:32:16.908Z"
+      "updatedAt": "2025-09-29T20:54:27.973Z"
     },
     {
       "id": 114,
@@ -1364,9 +1364,9 @@
       "exampleTranslation": "Правительство приняло новый закон.",
       "status": "studying",
       "correctCount": 0,
-      "totalCount": 3,
+      "totalCount": 0,
       "createdAt": "2025-08-28T08:50:45.554Z",
-      "updatedAt": "2025-08-29T13:44:06.646Z"
+      "updatedAt": "2025-09-29T20:54:27.973Z"
     },
     {
       "id": 115,
@@ -1376,9 +1376,9 @@
       "exampleTranslation": "Я хочу узнать больше об этой теме.",
       "status": "studying",
       "correctCount": 0,
-      "totalCount": 3,
+      "totalCount": 0,
       "createdAt": "2025-08-28T08:50:45.554Z",
-      "updatedAt": "2025-08-29T13:44:30.367Z"
+      "updatedAt": "2025-09-29T20:54:27.973Z"
     },
     {
       "id": 116,
@@ -1388,9 +1388,9 @@
       "exampleTranslation": "Ты должен хорошо себя вести.",
       "status": "studying",
       "correctCount": 0,
-      "totalCount": 1,
+      "totalCount": 0,
       "createdAt": "2025-08-28T08:50:45.554Z",
-      "updatedAt": "2025-08-28T10:03:05.765Z"
+      "updatedAt": "2025-09-29T20:54:27.973Z"
     },
     {
       "id": 117,
@@ -1399,10 +1399,10 @@
       "example": "Ich möchte mich für den Kurs einschreiben.",
       "exampleTranslation": "Я хочу записаться на курс.",
       "status": "studying",
-      "correctCount": 1,
-      "totalCount": 2,
+      "correctCount": 0,
+      "totalCount": 0,
       "createdAt": "2025-08-28T08:50:45.554Z",
-      "updatedAt": "2025-08-28T10:00:51.636Z"
+      "updatedAt": "2025-09-29T20:54:27.973Z"
     },
     {
       "id": 118,
@@ -1410,11 +1410,11 @@
       "translation": "Ломать",
       "example": "Er hat sich den Arm gebrochen.",
       "exampleTranslation": "Он сломал себе руку.",
-      "status": "review_7",
-      "correctCount": 3,
-      "totalCount": 3,
+      "status": "studying",
+      "correctCount": 0,
+      "totalCount": 0,
       "createdAt": "2025-08-28T08:50:45.555Z",
-      "updatedAt": "2025-08-28T09:56:53.471Z"
+      "updatedAt": "2025-09-29T20:54:27.973Z"
     },
     {
       "id": 119,
@@ -1424,9 +1424,9 @@
       "exampleTranslation": "Пожалуйста, введите свой пароль.",
       "status": "studying",
       "correctCount": 0,
-      "totalCount": 1,
+      "totalCount": 0,
       "createdAt": "2025-08-28T08:50:45.555Z",
-      "updatedAt": "2025-08-28T09:56:35.052Z"
+      "updatedAt": "2025-09-29T20:54:27.973Z"
     },
     {
       "id": 120,
@@ -1438,7 +1438,7 @@
       "correctCount": 0,
       "totalCount": 0,
       "createdAt": "2025-08-28T08:50:45.555Z",
-      "updatedAt": "2025-08-30T12:06:05.346Z"
+      "updatedAt": "2025-09-29T20:54:27.973Z"
     },
     {
       "id": 121,
@@ -1447,10 +1447,10 @@
       "example": "Ich kann dieses Buch sehr empfehlen.",
       "exampleTranslation": "Я очень рекомендую эту книгу.",
       "status": "studying",
-      "correctCount": 1,
-      "totalCount": 2,
+      "correctCount": 0,
+      "totalCount": 0,
       "createdAt": "2025-08-28T08:50:45.555Z",
-      "updatedAt": "2025-08-28T10:04:58.977Z"
+      "updatedAt": "2025-09-29T20:54:27.973Z"
     },
     {
       "id": 122,
@@ -1459,10 +1459,10 @@
       "example": "Kannst du die Lösung erraten?",
       "exampleTranslation": "Можешь отгадать решение?",
       "status": "studying",
-      "correctCount": 1,
-      "totalCount": 2,
+      "correctCount": 0,
+      "totalCount": 0,
       "createdAt": "2025-08-28T08:50:45.555Z",
-      "updatedAt": "2025-08-28T10:08:21.525Z"
+      "updatedAt": "2025-09-29T20:54:27.973Z"
     },
     {
       "id": 123,
@@ -1471,10 +1471,10 @@
       "example": "Wir müssen das Problem bald besprechen.",
       "exampleTranslation": "Мы должны скоро обсудить эту проблему.",
       "status": "studying",
-      "correctCount": 1,
-      "totalCount": 2,
+      "correctCount": 0,
+      "totalCount": 0,
       "createdAt": "2025-08-28T08:50:45.555Z",
-      "updatedAt": "2025-08-29T14:26:59.790Z"
+      "updatedAt": "2025-09-29T20:54:27.973Z"
     },
     {
       "id": 124,
@@ -1484,9 +1484,9 @@
       "exampleTranslation": "Он обманул свою жену.",
       "status": "studying",
       "correctCount": 0,
-      "totalCount": 1,
+      "totalCount": 0,
       "createdAt": "2025-08-28T08:50:45.555Z",
-      "updatedAt": "2025-08-28T09:41:27.336Z"
+      "updatedAt": "2025-09-29T20:54:27.973Z"
     }
   ],
   "nextId": 125
