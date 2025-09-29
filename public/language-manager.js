@@ -21,6 +21,9 @@ class LanguageManager {
         
         this.translations = {
             'ru': {
+                // App
+                'appTitle': 'FluentFlow',
+
                 // Navigation
                 'home': 'Главная',
                 'import': 'Импорт',
@@ -96,6 +99,9 @@ class LanguageManager {
             },
             
             'en': {
+                // App
+                'appTitle': 'FluentFlow',
+
                 // Navigation
                 'home': 'Home',
                 'import': 'Import',

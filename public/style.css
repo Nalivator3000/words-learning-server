@@ -416,6 +416,7 @@ body {
     gap: var(--space-4);
     flex: 1;
     justify-content: center;
+    padding: 0 var(--space-8);
 }
 
 .header-right {
@@ -1555,21 +1556,33 @@ input:focus, textarea:focus, select:focus {
     right: 0;
     bottom: 0;
     background: var(--gradient-primary);
-    opacity: 0.1;
+    opacity: 0.85;
+    z-index: -1;
+}
+
+/* Dark overlay for better text contrast */
+.stat-card::after {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: rgba(0, 0, 0, 0.4);
     z-index: -1;
 }
 
 /* Different gradient backgrounds for stat cards */
 .stat-card:nth-child(1)::before {
-    background: var(--gradient-primary);
+    background: linear-gradient(135deg, #6D28D9, #8B5CF6);
 }
 
 .stat-card:nth-child(2)::before {
-    background: linear-gradient(135deg, var(--accent-amber), var(--accent-rose));
+    background: linear-gradient(135deg, #EA580C, #F97316);
 }
 
 .stat-card:nth-child(3)::before {
-    background: linear-gradient(135deg, var(--accent-emerald), var(--accent-cyan));
+    background: linear-gradient(135deg, #059669, #10B981);
 }
 
 .stat-card:hover {
@@ -1579,17 +1592,22 @@ input:focus, textarea:focus, select:focus {
 }
 
 .stat-card h3 {
-    font-size: var(--text-4xl);
-    font-weight: 900;
+    font-size: var(--text-lg);
+    font-weight: 700;
     color: white;
-    margin-bottom: var(--space-2);
-    text-shadow: 0 2px 8px rgba(0, 0, 0, 0.3);
+    margin-bottom: var(--space-3);
+    text-shadow: 0 2px 12px rgba(0, 0, 0, 0.8);
+    position: relative;
+    z-index: 1;
 }
 
 .stat-card p {
-    color: rgba(255, 255, 255, 0.9);
-    font-weight: 600;
-    font-size: var(--text-base);
+    color: white;
+    font-weight: 800;
+    font-size: var(--text-4xl);
+    text-shadow: 0 2px 12px rgba(0, 0, 0, 0.8);
+    position: relative;
+    z-index: 1;
 }
 
 /* Enhanced Word List */
