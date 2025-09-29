@@ -109,19 +109,26 @@ class LanguageLearningApp {
         this.init();
     }
 
-    // Scoring System - Calculate word score 0-100 points
+    // Scoring System - Calculate word score 0-100 points (smoother progression)
     calculateWordScore(word) {
         const correctCount = word.correctCount || word.correct_count || 0;
         const incorrectCount = word.incorrectCount || word.incorrect_count || 0;
         const totalCount = Math.max(1, correctCount + incorrectCount);
 
-        // Base score from accuracy (0-70 points)
-        const accuracy = correctCount / totalCount;
-        let score = Math.round(accuracy * 70);
+        // If no attempts yet, show 0
+        if (totalCount === 0 || (correctCount === 0 && incorrectCount === 0)) {
+            return 0;
+        }
 
-        // Bonus points for experience (0-30 points)
-        const correctBonus = Math.min(30, correctCount * 3);
-        score += correctBonus;
+        // Base score from accuracy (0-60 points)
+        const accuracy = correctCount / totalCount;
+        let score = Math.round(accuracy * 60);
+
+        // Smooth experience bonus (0-40 points)
+        // Each correct answer adds diminishing bonus: √(correctCount) * 12
+        const experienceBonus = Math.min(40, Math.round(Math.sqrt(correctCount) * 12));
+
+        score += experienceBonus;
 
         return Math.min(100, Math.max(0, score));
     }
