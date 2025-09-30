@@ -112,23 +112,17 @@ class QuizManager {
     }
 
     createWordBuildingQuestion(word) {
-        // Create shuffled letters for the word
+        // Create shuffled letters for the word (without extra letters)
         const letters = word.word.toLowerCase().split('');
-        
-        // Add some extra random letters to make it more challenging
-        const extraLetters = 'abcdefghijklmnopqrstuvwxyzäöüß'.split('');
-        const randomLetters = extraLetters
-            .filter(l => !letters.includes(l))
-            .sort(() => 0.5 - Math.random())
-            .slice(0, Math.min(4, 10 - letters.length));
-        
-        const allLetters = [...letters, ...randomLetters].sort(() => 0.5 - Math.random());
+
+        // Shuffle the letters
+        const shuffledLetters = [...letters].sort(() => 0.5 - Math.random());
 
         return {
             type: 'wordBuilding',
             questionText: word.translation,
             example: word.exampleTranslation,
-            letters: allLetters,
+            letters: shuffledLetters,
             correctAnswer: word.word,
             wordId: word.id
         };
