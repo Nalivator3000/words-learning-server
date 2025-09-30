@@ -215,16 +215,8 @@ class LanguageLearningApp {
         document.getElementById('reviewBtn').addEventListener('click', () => this.showSection('review'));
         document.getElementById('statsBtn').addEventListener('click', () => this.showSection('stats'));
         
-        // User menu
-        document.getElementById('userMenuBtn').addEventListener('click', () => this.toggleUserMenu());
-        document.getElementById('settingsBtn').addEventListener('click', () => {
-            this.showSection('settings');
-            this.hideUserMenu();
-        });
-        document.getElementById('logoutBtn').addEventListener('click', () => {
-            userManager.logout();
-            this.hideUserMenu();
-        });
+        // User menu - direct to settings
+        document.getElementById('userMenuBtn').addEventListener('click', () => this.showSection('settings'));
 
         // Quick actions
         document.getElementById('quickStudyBtn').addEventListener('click', () => this.quickStart('study'));
@@ -368,14 +360,6 @@ class LanguageLearningApp {
         document.getElementById('uiLanguageSelect').value = languageManager.getUILanguage();
     }
 
-    toggleUserMenu() {
-        const menu = document.getElementById('userMenu');
-        menu.classList.toggle('hidden');
-    }
-
-    hideUserMenu() {
-        document.getElementById('userMenu').classList.add('hidden');
-    }
 
     async showSection(sectionName) {
         // Update navigation
@@ -643,11 +627,11 @@ class LanguageLearningApp {
         
         // Add audio buttons only for foreign text using language detection
         // But NOT for multiple choice questions where user needs to pick from options
-        if (this.shouldShowAudioButton(question.questionText) && question.type !== 'multiple') {
+        if (this.shouldShowAudioButton(question.questionText) && question.type !== 'multipleChoice') {
             const questionAudioBtn = this.createAudioButton(question.questionText);
             questionTextEl.querySelector('div:first-child').appendChild(questionAudioBtn);
         }
-        
+
         if (question.example && this.shouldShowAudioButton(question.example)) {
             const exampleAudioBtn = this.createAudioButton(question.example);
             questionTextEl.querySelector('div:last-child').appendChild(exampleAudioBtn);
@@ -656,7 +640,7 @@ class LanguageLearningApp {
         const answerArea = document.getElementById('answerArea');
         answerArea.innerHTML = '';
 
-        if (question.type === 'multiple' || question.type === 'reverse_multiple') {
+        if (question.type === 'multipleChoice' || question.type === 'reverseMultipleChoice') {
             question.choices.forEach((choice, index) => {
                 const button = document.createElement('button');
                 button.className = 'choice-btn';
@@ -665,7 +649,7 @@ class LanguageLearningApp {
                 button.onclick = () => this.handleMultipleChoice(choice.text, button);
                 answerArea.appendChild(button);
             });
-        } else if (question.type === 'word_building') {
+        } else if (question.type === 'wordBuilding') {
             this.renderWordBuildingInterface(question, answerArea);
         } else {
             const input = document.createElement('input');
@@ -728,11 +712,11 @@ class LanguageLearningApp {
         
         // Add audio buttons only for German text using language detection
         // But NOT for multiple choice questions where user needs to pick from options
-        if (this.isGermanText(question.questionText) && question.type !== 'multiple') {
+        if (this.isGermanText(question.questionText) && question.type !== 'multipleChoice') {
             const questionAudioBtn = this.createAudioButton(question.questionText);
             questionTextEl.querySelector('div:first-child').appendChild(questionAudioBtn);
         }
-        
+
         if (question.example && this.isGermanText(question.example)) {
             const exampleAudioBtn = this.createAudioButton(question.example);
             questionTextEl.querySelector('div:last-child').appendChild(exampleAudioBtn);
@@ -741,7 +725,7 @@ class LanguageLearningApp {
         const answerArea = document.getElementById('reviewAnswerArea');
         answerArea.innerHTML = '';
 
-        if (question.type === 'multiple') {
+        if (question.type === 'multipleChoice' || question.type === 'reverseMultipleChoice') {
             question.choices.forEach((choice, index) => {
                 const button = document.createElement('button');
                 button.className = 'choice-btn';
@@ -750,6 +734,8 @@ class LanguageLearningApp {
                 button.onclick = () => this.handleReviewMultipleChoice(choice.text, button);
                 answerArea.appendChild(button);
             });
+        } else if (question.type === 'wordBuilding') {
+            this.renderWordBuildingInterface(question, answerArea);
         } else {
             const input = document.createElement('input');
             input.type = 'text';
