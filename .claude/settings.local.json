@@ -20,7 +20,11 @@
       "Bash(test:*)",
       "Bash(where psql)",
       "Bash(git rev-parse:*)",
-      "Bash(npm run version:*)"
+      "Bash(npm run version:*)",
+      "Bash(netstat:*)",
+      "Bash(taskkill:*)",
+      "Bash(npm run start:db:*)",
+      "Bash(timeout:*)"
     ],
     "deny": [],
     "ask": []

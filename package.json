@@ -4,8 +4,10 @@
   "description": "Server version of German words learning app",
   "main": "server-postgresql.js",
   "scripts": {
-    "start": "node server-postgresql.js",
-    "dev": "nodemon server-postgresql.js",
+    "start": "node server.js",
+    "start:db": "node server-postgresql.js",
+    "dev": "nodemon server.js",
+    "dev:db": "nodemon server-postgresql.js",
     "version": "node update-version.js",
     "precommit": "npm run version && git add public/index.html"
   },
