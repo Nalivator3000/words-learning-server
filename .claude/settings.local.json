@@ -24,7 +24,8 @@
       "Bash(netstat:*)",
       "Bash(taskkill:*)",
       "Bash(npm run start:db:*)",
-      "Bash(timeout:*)"
+      "Bash(timeout:*)",
+      "Bash(tasklist)"
     ],
     "deny": [],
     "ask": []

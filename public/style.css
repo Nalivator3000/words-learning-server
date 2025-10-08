@@ -477,7 +477,7 @@ body {
     opacity: 0;
     transition: var(--transition-base);
     pointer-events: none;
-    z-index: 9999;
+    z-index: 10002;
 }
 
 .user-menu:not(.hidden) {
