@@ -3,11 +3,12 @@ class UserManager {
         this.currentUser = null;
         this.currentLanguagePair = null;
         this.initialized = false;
+        this.apiUrl = window.location.origin;
     }
 
     async init() {
         try {
-            // Check if user is already logged in
+            // Check if user is already logged in (via localStorage session)
             const savedUser = localStorage.getItem('currentUser');
             if (savedUser) {
                 this.currentUser = JSON.parse(savedUser);
@@ -17,7 +18,7 @@ class UserManager {
                 this.initialized = true;
                 return true;
             }
-            
+
             this.showAuthModal();
             this.initialized = true;
             return false;
@@ -50,29 +51,34 @@ class UserManager {
 
     async login(email, password) {
         try {
-            // For now, use local storage authentication
-            // In real implementation, this would be server-side
-            const users = this.getStoredUsers();
-            const user = users.find(u => u.email === email);
-            
-            if (!user) {
-                throw new Error('Пользователь не найден');
+            const response = await fetch(`${this.apiUrl}/api/auth/login`, {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify({ email, password })
+            });
+
+            if (!response.ok) {
+                const error = await response.json();
+                throw new Error(error.error || 'Login failed');
             }
 
-            // Simple password check (in real app, use proper hashing)
-            if (user.password !== this.hashPassword(password)) {
-                throw new Error('Неверный пароль');
+            const data = await response.json();
+
+            this.currentUser = data.user;
+            this.currentUser.languagePairs = data.languagePairs || [];
+
+            // Set active language pair
+            if (this.currentUser.languagePairs.length > 0) {
+                this.currentLanguagePair = this.currentUser.languagePairs.find(lp => lp.is_active) || this.currentUser.languagePairs[0];
             }
 
-            this.currentUser = { ...user };
-            delete this.currentUser.password; // Don't keep password in memory
-            
             localStorage.setItem('currentUser', JSON.stringify(this.currentUser));
-            await this.loadUserLanguagePairs();
-            
+
             this.hideAuthModal();
             this.showUserInterface();
-            
+
             return true;
         } catch (error) {
             console.error('Login error:', error);
@@ -82,35 +88,30 @@ class UserManager {
 
     async register(name, email, password) {
         try {
-            const users = this.getStoredUsers();
-            
-            // Check if user already exists
-            if (users.find(u => u.email === email)) {
-                throw new Error('Пользователь с таким email уже существует');
+            const response = await fetch(`${this.apiUrl}/api/auth/register`, {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify({ name, email, password })
+            });
+
+            if (!response.ok) {
+                const error = await response.json();
+                throw new Error(error.error || 'Registration failed');
             }
 
-            const newUser = {
-                id: Date.now().toString(),
-                name,
-                email,
-                password: this.hashPassword(password),
-                createdAt: new Date().toISOString(),
-                languagePairs: []
-            };
+            const data = await response.json();
 
-            users.push(newUser);
-            localStorage.setItem('users', JSON.stringify(users));
+            this.currentUser = data.user;
+            this.currentUser.languagePairs = [data.languagePair];
+            this.currentLanguagePair = data.languagePair;
 
-            // Auto-login after registration
-            this.currentUser = { ...newUser };
-            delete this.currentUser.password;
-            
             localStorage.setItem('currentUser', JSON.stringify(this.currentUser));
-            await this.loadUserLanguagePairs();
-            
+
             this.hideAuthModal();
             this.showUserInterface();
-            
+
             return true;
         } catch (error) {
             console.error('Registration error:', error);
@@ -126,50 +127,9 @@ class UserManager {
                 return this.loginWithGoogleDemo();
             }
 
-            // Real Google OAuth implementation
-            return new Promise((resolve, reject) => {
-                google.accounts.id.initialize({
-                    client_id: 'YOUR_GOOGLE_CLIENT_ID', // Replace with actual client ID
-                    callback: async (response) => {
-                        try {
-                            // Decode JWT token to get user info
-                            const payload = JSON.parse(atob(response.credential.split('.')[1]));
-                            
-                            const googleUser = {
-                                id: 'google_' + payload.sub,
-                                name: payload.name,
-                                email: payload.email,
-                                picture: payload.picture,
-                                provider: 'google',
-                                createdAt: new Date().toISOString(),
-                                languagePairs: []
-                            };
+            // Real Google OAuth implementation (TODO: implement server-side)
+            return this.loginWithGoogleDemo();
 
-                            this.currentUser = googleUser;
-                            localStorage.setItem('currentUser', JSON.stringify(this.currentUser));
-                            
-                            // Also save to users list
-                            const users = this.getStoredUsers();
-                            if (!users.find(u => u.email === googleUser.email)) {
-                                users.push({...googleUser, password: null});
-                                localStorage.setItem('users', JSON.stringify(users));
-                            }
-                            
-                            await this.loadUserLanguagePairs();
-                            this.hideAuthModal();
-                            this.showUserInterface();
-                            
-                            resolve(true);
-                        } catch (error) {
-                            reject(error);
-                        }
-                    }
-                });
-
-                // Show Google sign-in prompt
-                google.accounts.id.prompt();
-            });
-            
         } catch (error) {
             console.error('Google login error:', error);
             // Fallback to demo
@@ -180,30 +140,8 @@ class UserManager {
     async loginWithGoogleDemo() {
         try {
             // Demo version for local testing
-            const googleUser = {
-                id: 'google_demo_' + Date.now(),
-                name: 'Google Demo User',
-                email: 'demo@gmail.com',
-                provider: 'google_demo',
-                createdAt: new Date().toISOString(),
-                languagePairs: []
-            };
-
-            this.currentUser = googleUser;
-            localStorage.setItem('currentUser', JSON.stringify(this.currentUser));
-            
-            // Also save to users list
-            const users = this.getStoredUsers();
-            if (!users.find(u => u.email === googleUser.email)) {
-                users.push({...googleUser, password: null});
-                localStorage.setItem('users', JSON.stringify(users));
-            }
-            
-            await this.loadUserLanguagePairs();
-            this.hideAuthModal();
-            this.showUserInterface();
-            
-            return true;
+            alert('Google login не реализован. Используйте обычный вход или регистрацию.');
+            return false;
         } catch (error) {
             console.error('Google login demo error:', error);
             throw error;
@@ -217,148 +155,143 @@ class UserManager {
         this.showAuthModal();
     }
 
-    getStoredUsers() {
-        try {
-            return JSON.parse(localStorage.getItem('users') || '[]');
-        } catch {
-            return [];
-        }
-    }
-
     hashPassword(password) {
-        // Simple hash function for demo (use proper hashing in production)
+        // Simple hash function (same as server-side)
         let hash = 0;
         for (let i = 0; i < password.length; i++) {
             const char = password.charCodeAt(i);
             hash = ((hash << 5) - hash) + char;
-            hash = hash & hash; // Convert to 32-bit integer
+            hash = hash & hash;
         }
         return hash.toString();
     }
 
     async loadUserLanguagePairs() {
         if (!this.currentUser) return;
-        
+
         try {
-            // Load language pairs for current user
-            const users = this.getStoredUsers();
-            const user = users.find(u => u.id === this.currentUser.id);
-            
-            if (user && user.languagePairs && user.languagePairs.length > 0) {
-                this.currentUser.languagePairs = user.languagePairs;
-                
-                // Set first language pair as active if none selected
-                if (!this.currentLanguagePair) {
-                    this.currentLanguagePair = user.languagePairs.find(lp => lp.active) || user.languagePairs[0];
-                }
-            } else {
-                // Create default language pair (German-Russian)
-                const defaultPair = {
-                    id: Date.now().toString(),
-                    name: 'Немецкий - Русский',
-                    fromLanguage: 'German',
-                    toLanguage: 'Russian',
-                    active: true,
-                    lessonSize: 10,
-                    createdAt: new Date().toISOString()
-                };
-                
-                this.currentUser.languagePairs = [defaultPair];
-                this.currentLanguagePair = defaultPair;
-                
-                await this.saveUserData();
+            const response = await fetch(`${this.apiUrl}/api/users/${this.currentUser.id}/language-pairs`);
+
+            if (!response.ok) {
+                throw new Error('Failed to load language pairs');
             }
-            
+
+            const languagePairs = await response.json();
+            this.currentUser.languagePairs = languagePairs;
+
+            // Set active language pair
+            if (languagePairs.length > 0) {
+                this.currentLanguagePair = languagePairs.find(lp => lp.is_active) || languagePairs[0];
+            }
+
             this.showUserInterface();
         } catch (error) {
             console.error('Error loading language pairs:', error);
         }
     }
 
-    async saveUserData() {
+    async createLanguagePair(fromLang, toLang, name) {
         if (!this.currentUser) return;
-        
+
         try {
-            // Update user in storage
-            const users = this.getStoredUsers();
-            const userIndex = users.findIndex(u => u.id === this.currentUser.id);
-            
-            if (userIndex !== -1) {
-                users[userIndex] = { ...users[userIndex], ...this.currentUser };
-                localStorage.setItem('users', JSON.stringify(users));
+            const response = await fetch(`${this.apiUrl}/api/users/${this.currentUser.id}/language-pairs`, {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify({
+                    name: name || `${fromLang} - ${toLang}`,
+                    from_lang: fromLang,
+                    to_lang: toLang
+                })
+            });
+
+            if (!response.ok) {
+                throw new Error('Failed to create language pair');
             }
-            
-            // Update current user in localStorage
+
+            const newPair = await response.json();
+            this.currentUser.languagePairs.push(newPair);
+
+            // Update localStorage
             localStorage.setItem('currentUser', JSON.stringify(this.currentUser));
+
+            return newPair;
         } catch (error) {
-            console.error('Error saving user data:', error);
+            console.error('Error creating language pair:', error);
+            throw error;
         }
     }
 
-    async createLanguagePair(fromLang, toLang, name) {
-        if (!this.currentUser) return;
-        
-        const newPair = {
-            id: Date.now().toString(),
-            name: name || `${fromLang} - ${toLang}`,
-            fromLanguage: fromLang,
-            toLanguage: toLang,
-            active: false,
-            lessonSize: 10,
-            createdAt: new Date().toISOString()
-        };
-        
-        this.currentUser.languagePairs = this.currentUser.languagePairs || [];
-        this.currentUser.languagePairs.push(newPair);
-        
-        await this.saveUserData();
-        return newPair;
-    }
-
     async setActiveLanguagePair(pairId) {
-        if (!this.currentUser || !this.currentUser.languagePairs) return;
-        
-        // Deactivate all pairs
-        this.currentUser.languagePairs.forEach(pair => {
-            pair.active = pair.id === pairId;
-        });
-        
-        this.currentLanguagePair = this.currentUser.languagePairs.find(pair => pair.id === pairId);
-        
-        await this.saveUserData();
-        this.showUserInterface();
-        
-        // Trigger app refresh with new language pair
-        if (window.app && window.app.updateStats) {
-            await window.app.updateStats();
+        if (!this.currentUser) return;
+
+        try {
+            const response = await fetch(`${this.apiUrl}/api/users/${this.currentUser.id}/language-pairs/${pairId}/activate`, {
+                method: 'PUT'
+            });
+
+            if (!response.ok) {
+                throw new Error('Failed to activate language pair');
+            }
+
+            const activatedPair = await response.json();
+
+            // Update local state
+            this.currentUser.languagePairs.forEach(pair => {
+                pair.is_active = pair.id === parseInt(pairId);
+            });
+
+            this.currentLanguagePair = activatedPair;
+
+            // Update localStorage
+            localStorage.setItem('currentUser', JSON.stringify(this.currentUser));
+
+            this.showUserInterface();
+
+            // Trigger app refresh with new language pair
+            if (window.app && window.app.updateStats) {
+                await window.app.updateStats();
+            }
+        } catch (error) {
+            console.error('Error activating language pair:', error);
+            throw error;
         }
     }
 
     async deleteLanguagePair(pairId) {
         if (!this.currentUser || !this.currentUser.languagePairs) return;
-        
-        // Don't delete if it's the only pair
-        if (this.currentUser.languagePairs.length <= 1) {
-            throw new Error('Нельзя удалить единственную языковую пару');
+
+        try {
+            const response = await fetch(`${this.apiUrl}/api/users/${this.currentUser.id}/language-pairs/${pairId}`, {
+                method: 'DELETE'
+            });
+
+            if (!response.ok) {
+                const error = await response.json();
+                throw new Error(error.error || 'Failed to delete language pair');
+            }
+
+            // Remove from local state
+            this.currentUser.languagePairs = this.currentUser.languagePairs.filter(
+                pair => pair.id !== parseInt(pairId)
+            );
+
+            // If deleted pair was active, activate first remaining pair
+            if (!this.currentUser.languagePairs.find(lp => lp.is_active)) {
+                if (this.currentUser.languagePairs.length > 0) {
+                    await this.setActiveLanguagePair(this.currentUser.languagePairs[0].id);
+                }
+            }
+
+            // Update localStorage
+            localStorage.setItem('currentUser', JSON.stringify(this.currentUser));
+
+            this.showUserInterface();
+        } catch (error) {
+            console.error('Error deleting language pair:', error);
+            throw error;
         }
-        
-        const pairToDelete = this.currentUser.languagePairs.find(pair => pair.id === pairId);
-        if (!pairToDelete) return;
-        
-        // Remove the pair
-        this.currentUser.languagePairs = this.currentUser.languagePairs.filter(pair => pair.id !== pairId);
-        
-        // If deleted pair was active, activate first remaining pair
-        if (pairToDelete.active) {
-            this.currentUser.languagePairs[0].active = true;
-            this.currentLanguagePair = this.currentUser.languagePairs[0];
-        }
-        
-        await this.saveUserData();
-        this.showUserInterface();
-        
-        // Clear words data for this language pair (implement in database)
-        // TODO: Implement database cleanup for language pair
     }
 
     getCurrentUser() {
@@ -370,14 +303,42 @@ class UserManager {
     }
 
     getLessonSize() {
-        return this.currentLanguagePair ? this.currentLanguagePair.lessonSize : 10;
+        return this.currentLanguagePair ? this.currentLanguagePair.lesson_size : 10;
     }
 
     async setLessonSize(size) {
-        if (!this.currentLanguagePair) return;
-        
-        this.currentLanguagePair.lessonSize = Math.max(5, Math.min(50, size));
-        await this.saveUserData();
+        if (!this.currentUser || !this.currentLanguagePair) return;
+
+        try {
+            const response = await fetch(`${this.apiUrl}/api/users/${this.currentUser.id}/lesson-size`, {
+                method: 'PUT',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify({
+                    lessonSize: Math.max(5, Math.min(50, size))
+                })
+            });
+
+            if (!response.ok) {
+                throw new Error('Failed to update lesson size');
+            }
+
+            const updatedPair = await response.json();
+            this.currentLanguagePair.lesson_size = updatedPair.lesson_size;
+
+            // Update in languagePairs array
+            const pairIndex = this.currentUser.languagePairs.findIndex(lp => lp.is_active);
+            if (pairIndex !== -1) {
+                this.currentUser.languagePairs[pairIndex].lesson_size = updatedPair.lesson_size;
+            }
+
+            // Update localStorage
+            localStorage.setItem('currentUser', JSON.stringify(this.currentUser));
+        } catch (error) {
+            console.error('Error setting lesson size:', error);
+            throw error;
+        }
     }
 
     isLoggedIn() {

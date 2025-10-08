@@ -27,9 +27,41 @@ const upload = multer({ dest: 'uploads/' });
 // Initialize database
 async function initDatabase() {
     try {
+        // Create users table
+        await db.query(`
+            CREATE TABLE IF NOT EXISTS users (
+                id SERIAL PRIMARY KEY,
+                name VARCHAR(255) NOT NULL,
+                email VARCHAR(255) UNIQUE NOT NULL,
+                password VARCHAR(255) NOT NULL,
+                provider VARCHAR(50) DEFAULT 'local',
+                picture TEXT,
+                createdAt TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+                updatedAt TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+            )
+        `);
+
+        // Create language_pairs table
+        await db.query(`
+            CREATE TABLE IF NOT EXISTS language_pairs (
+                id SERIAL PRIMARY KEY,
+                user_id INTEGER REFERENCES users(id) ON DELETE CASCADE,
+                name VARCHAR(255) NOT NULL,
+                from_lang VARCHAR(50) NOT NULL,
+                to_lang VARCHAR(50) NOT NULL,
+                is_active BOOLEAN DEFAULT false,
+                lesson_size INTEGER DEFAULT 10,
+                createdAt TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+                updatedAt TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+            )
+        `);
+
+        // Modify words table to include user and language pair reference
         await db.query(`
             CREATE TABLE IF NOT EXISTS words (
                 id SERIAL PRIMARY KEY,
+                user_id INTEGER REFERENCES users(id) ON DELETE CASCADE,
+                language_pair_id INTEGER REFERENCES language_pairs(id) ON DELETE CASCADE,
                 word VARCHAR(255) NOT NULL,
                 translation VARCHAR(255) NOT NULL,
                 example TEXT,
@@ -43,34 +75,240 @@ async function initDatabase() {
                 updatedAt TIMESTAMP DEFAULT CURRENT_TIMESTAMP
             )
         `);
-        
+
         console.log('PostgreSQL database initialized');
     } catch (err) {
         console.error('Database initialization error:', err);
     }
 }
 
+// Helper function for simple password hashing (same as client-side)
+function hashPassword(password) {
+    let hash = 0;
+    for (let i = 0; i < password.length; i++) {
+        const char = password.charCodeAt(i);
+        hash = ((hash << 5) - hash) + char;
+        hash = hash & hash;
+    }
+    return hash.toString();
+}
+
 // API Routes
 
-// Get all words with pagination
+// Authentication endpoints
+app.post('/api/auth/register', async (req, res) => {
+    try {
+        const { name, email, password } = req.body;
+
+        if (!name || !email || !password) {
+            return res.status(400).json({ error: 'Все поля обязательны' });
+        }
+
+        if (password.length < 6) {
+            return res.status(400).json({ error: 'Пароль должен быть минимум 6 символов' });
+        }
+
+        // Check if user exists
+        const existingUser = await db.query('SELECT id FROM users WHERE email = $1', [email]);
+        if (existingUser.rows.length > 0) {
+            return res.status(400).json({ error: 'Пользователь с таким email уже существует' });
+        }
+
+        // Create user
+        const hashedPassword = hashPassword(password);
+        const result = await db.query(
+            'INSERT INTO users (name, email, password) VALUES ($1, $2, $3) RETURNING id, name, email, createdat',
+            [name, email, hashedPassword]
+        );
+
+        const user = result.rows[0];
+
+        // Create default language pair
+        const langPairResult = await db.query(
+            'INSERT INTO language_pairs (user_id, name, from_lang, to_lang, is_active) VALUES ($1, $2, $3, $4, $5) RETURNING *',
+            [user.id, 'Немецкий → Русский', 'de', 'ru', true]
+        );
+
+        res.json({
+            user: {
+                id: user.id,
+                name: user.name,
+                email: user.email,
+                createdAt: user.createdat
+            },
+            languagePair: langPairResult.rows[0]
+        });
+    } catch (err) {
+        console.error('Registration error:', err);
+        res.status(500).json({ error: err.message });
+    }
+});
+
+app.post('/api/auth/login', async (req, res) => {
+    try {
+        const { email, password } = req.body;
+
+        if (!email || !password) {
+            return res.status(400).json({ error: 'Email и пароль обязательны' });
+        }
+
+        const result = await db.query('SELECT * FROM users WHERE email = $1', [email]);
+
+        if (result.rows.length === 0) {
+            return res.status(401).json({ error: 'Пользователь не найден' });
+        }
+
+        const user = result.rows[0];
+        const hashedPassword = hashPassword(password);
+
+        if (user.password !== hashedPassword) {
+            return res.status(401).json({ error: 'Неверный пароль' });
+        }
+
+        // Get user's language pairs
+        const langPairsResult = await db.query(
+            'SELECT * FROM language_pairs WHERE user_id = $1 ORDER BY is_active DESC, createdat ASC',
+            [user.id]
+        );
+
+        res.json({
+            user: {
+                id: user.id,
+                name: user.name,
+                email: user.email,
+                provider: user.provider,
+                picture: user.picture,
+                createdAt: user.createdat
+            },
+            languagePairs: langPairsResult.rows
+        });
+    } catch (err) {
+        console.error('Login error:', err);
+        res.status(500).json({ error: err.message });
+    }
+});
+
+// Language pairs endpoints
+app.get('/api/users/:userId/language-pairs', async (req, res) => {
+    try {
+        const { userId } = req.params;
+        const result = await db.query(
+            'SELECT * FROM language_pairs WHERE user_id = $1 ORDER BY is_active DESC, createdat ASC',
+            [userId]
+        );
+        res.json(result.rows);
+    } catch (err) {
+        res.status(500).json({ error: err.message });
+    }
+});
+
+app.post('/api/users/:userId/language-pairs', async (req, res) => {
+    try {
+        const { userId } = req.params;
+        const { name, from_lang, to_lang } = req.body;
+
+        const result = await db.query(
+            'INSERT INTO language_pairs (user_id, name, from_lang, to_lang, is_active) VALUES ($1, $2, $3, $4, $5) RETURNING *',
+            [userId, name, from_lang, to_lang, false]
+        );
+
+        res.json(result.rows[0]);
+    } catch (err) {
+        res.status(500).json({ error: err.message });
+    }
+});
+
+app.put('/api/users/:userId/language-pairs/:pairId/activate', async (req, res) => {
+    try {
+        const { userId, pairId } = req.params;
+
+        // Deactivate all pairs for this user
+        await db.query('UPDATE language_pairs SET is_active = false WHERE user_id = $1', [userId]);
+
+        // Activate the selected pair
+        const result = await db.query(
+            'UPDATE language_pairs SET is_active = true WHERE id = $1 AND user_id = $2 RETURNING *',
+            [pairId, userId]
+        );
+
+        if (result.rows.length === 0) {
+            return res.status(404).json({ error: 'Language pair not found' });
+        }
+
+        res.json(result.rows[0]);
+    } catch (err) {
+        res.status(500).json({ error: err.message });
+    }
+});
+
+app.delete('/api/users/:userId/language-pairs/:pairId', async (req, res) => {
+    try {
+        const { userId, pairId } = req.params;
+
+        // Check if this is the last language pair
+        const countResult = await db.query(
+            'SELECT COUNT(*) FROM language_pairs WHERE user_id = $1',
+            [userId]
+        );
+
+        if (parseInt(countResult.rows[0].count) <= 1) {
+            return res.status(400).json({ error: 'Нельзя удалить последнюю языковую пару' });
+        }
+
+        await db.query('DELETE FROM language_pairs WHERE id = $1 AND user_id = $2', [pairId, userId]);
+        res.json({ message: 'Language pair deleted' });
+    } catch (err) {
+        res.status(500).json({ error: err.message });
+    }
+});
+
+app.put('/api/users/:userId/lesson-size', async (req, res) => {
+    try {
+        const { userId } = req.params;
+        const { lessonSize } = req.body;
+
+        // Update lesson size for the active language pair
+        const result = await db.query(
+            'UPDATE language_pairs SET lesson_size = $1 WHERE user_id = $2 AND is_active = true RETURNING *',
+            [lessonSize, userId]
+        );
+
+        if (result.rows.length === 0) {
+            return res.status(404).json({ error: 'Active language pair not found' });
+        }
+
+        res.json(result.rows[0]);
+    } catch (err) {
+        res.status(500).json({ error: err.message });
+    }
+});
+
+// Get all words with pagination (filtered by user and language pair)
 app.get('/api/words', async (req, res) => {
     try {
-        const { page = 1, limit = 50, status } = req.query;
+        const { page = 1, limit = 50, status, userId, languagePairId } = req.query;
         const offset = (page - 1) * limit;
-        
-        let query = 'SELECT * FROM words';
+
+        let query = 'SELECT * FROM words WHERE 1=1';
         let params = [];
         let paramIndex = 1;
-        
+
+        // Filter by user and language pair
+        if (userId && languagePairId) {
+            query += ` AND user_id = $${paramIndex} AND language_pair_id = $${paramIndex + 1}`;
+            params.push(parseInt(userId), parseInt(languagePairId));
+            paramIndex += 2;
+        }
+
         if (status) {
-            query += ` WHERE status = $${paramIndex}`;
+            query += ` AND status = $${paramIndex}`;
             params.push(status);
             paramIndex++;
         }
-        
+
         query += ` ORDER BY createdAt DESC LIMIT $${paramIndex} OFFSET $${paramIndex + 1}`;
         params.push(parseInt(limit), parseInt(offset));
-        
+
         const result = await db.query(query, params);
         res.json(result.rows);
     } catch (err) {
@@ -78,17 +316,29 @@ app.get('/api/words', async (req, res) => {
     }
 });
 
-// Get word counts by status
+// Get word counts by status (filtered by user and language pair)
 app.get('/api/words/counts', async (req, res) => {
     try {
-        const result = await db.query(`
-            SELECT 
+        const { userId, languagePairId } = req.query;
+
+        let query = `
+            SELECT
                 status,
                 COUNT(*) as count
-            FROM words 
-            GROUP BY status
-        `);
-        
+            FROM words
+            WHERE 1=1
+        `;
+        let params = [];
+
+        if (userId && languagePairId) {
+            query += ` AND user_id = $1 AND language_pair_id = $2`;
+            params.push(parseInt(userId), parseInt(languagePairId));
+        }
+
+        query += ` GROUP BY status`;
+
+        const result = await db.query(query, params);
+
         const counts = {
             studying: 0,
             review: 0,
@@ -96,7 +346,7 @@ app.get('/api/words/counts', async (req, res) => {
             review30: 0,
             learned: 0
         };
-        
+
         result.rows.forEach(row => {
             if (row.status === 'studying') {
                 counts.studying = parseInt(row.count);
@@ -110,31 +360,33 @@ app.get('/api/words/counts', async (req, res) => {
                 counts.learned = parseInt(row.count);
             }
         });
-        
+
         res.json(counts);
     } catch (err) {
         res.status(500).json({ error: err.message });
     }
 });
 
-// Get random words for quiz
+// Get random words for quiz (filtered by user and language pair)
 app.get('/api/words/random/:status/:count', async (req, res) => {
     try {
         const { status, count } = req.params;
+        const { userId, languagePairId } = req.query;
+
         let query;
-        let params = [parseInt(count)];
-        
+        let params;
+
         if (status === 'studying') {
-            query = 'SELECT * FROM words WHERE status = $2 ORDER BY RANDOM() LIMIT $1';
-            params = [parseInt(count), 'studying'];
+            query = 'SELECT * FROM words WHERE status = $1 AND user_id = $2 AND language_pair_id = $3 ORDER BY RANDOM() LIMIT $4';
+            params = ['studying', parseInt(userId), parseInt(languagePairId), parseInt(count)];
         } else if (status === 'review') {
-            query = 'SELECT * FROM words WHERE status IN ($2, $3) ORDER BY RANDOM() LIMIT $1';
-            params = [parseInt(count), 'review_7', 'review_30'];
+            query = 'SELECT * FROM words WHERE status IN ($1, $2) AND user_id = $3 AND language_pair_id = $4 ORDER BY RANDOM() LIMIT $5';
+            params = ['review_7', 'review_30', parseInt(userId), parseInt(languagePairId), parseInt(count)];
         } else {
-            query = 'SELECT * FROM words WHERE status = $2 ORDER BY RANDOM() LIMIT $1';
-            params = [parseInt(count), status];
+            query = 'SELECT * FROM words WHERE status = $1 AND user_id = $2 AND language_pair_id = $3 ORDER BY RANDOM() LIMIT $4';
+            params = [status, parseInt(userId), parseInt(languagePairId), parseInt(count)];
         }
-        
+
         const result = await db.query(query, params);
         res.json(result.rows);
     } catch (err) {
@@ -145,17 +397,22 @@ app.get('/api/words/random/:status/:count', async (req, res) => {
 // Add new word
 app.post('/api/words', async (req, res) => {
     try {
-        const { word, translation, example, exampleTranslation } = req.body;
-        
+        const { word, translation, example, exampleTranslation, userId, languagePairId } = req.body;
+
         if (!word || !translation) {
             res.status(400).json({ error: 'Word and translation are required' });
             return;
         }
-        
-        const query = `INSERT INTO words (word, translation, example, exampleTranslation)
-                       VALUES ($1, $2, $3, $4) RETURNING id`;
-        
-        const result = await db.query(query, [word, translation, example || '', exampleTranslation || '']);
+
+        if (!userId || !languagePairId) {
+            res.status(400).json({ error: 'User and language pair are required' });
+            return;
+        }
+
+        const query = `INSERT INTO words (word, translation, example, exampleTranslation, user_id, language_pair_id)
+                       VALUES ($1, $2, $3, $4, $5, $6) RETURNING id`;
+
+        const result = await db.query(query, [word, translation, example || '', exampleTranslation || '', userId, languagePairId]);
         res.json({ id: result.rows[0].id, message: 'Word added successfully' });
     } catch (err) {
         res.status(500).json({ error: err.message });
@@ -166,29 +423,38 @@ app.post('/api/words', async (req, res) => {
 app.post('/api/words/bulk', async (req, res) => {
     try {
         const words = req.body;
-        
+
         if (!Array.isArray(words) || words.length === 0) {
             res.status(400).json({ error: 'Words array is required' });
             return;
         }
-        
+
+        // Validate that all words have userId and languagePairId
+        const hasContext = words.every(w => w.userId && w.languagePairId);
+        if (!hasContext) {
+            res.status(400).json({ error: 'All words must have userId and languagePairId' });
+            return;
+        }
+
         // Begin transaction
         await db.query('BEGIN');
-        
+
         try {
             for (const wordObj of words) {
                 await db.query(
-                    `INSERT INTO words (word, translation, example, exampleTranslation)
-                     VALUES ($1, $2, $3, $4)`,
+                    `INSERT INTO words (word, translation, example, exampleTranslation, user_id, language_pair_id)
+                     VALUES ($1, $2, $3, $4, $5, $6)`,
                     [
                         wordObj.word,
                         wordObj.translation,
                         wordObj.example || '',
-                        wordObj.exampleTranslation || ''
+                        wordObj.exampleTranslation || '',
+                        wordObj.userId,
+                        wordObj.languagePairId
                     ]
                 );
             }
-            
+
             await db.query('COMMIT');
             res.json({ message: `${words.length} words added successfully` });
         } catch (err) {
@@ -346,6 +612,71 @@ app.post('/api/words/import', upload.single('csvFile'), async (req, res) => {
             }
             res.status(500).json({ error: 'Error reading CSV file' });
         });
+});
+
+// Migration endpoint - migrate user from localStorage to database
+app.post('/api/migrate/user', async (req, res) => {
+    try {
+        const { name, email, password, languagePairs } = req.body;
+
+        if (!name || !email || !password) {
+            return res.status(400).json({ error: 'Name, email and password required' });
+        }
+
+        // Check if user already exists
+        const existingUser = await db.query('SELECT id FROM users WHERE email = $1', [email]);
+        if (existingUser.rows.length > 0) {
+            return res.status(400).json({ error: 'User already exists in database' });
+        }
+
+        // Create user with the password hash from localStorage
+        const result = await db.query(
+            'INSERT INTO users (name, email, password) VALUES ($1, $2, $3) RETURNING id, name, email, createdat',
+            [name, email, password]
+        );
+
+        const user = result.rows[0];
+
+        // Migrate language pairs
+        const migratedPairs = [];
+        if (languagePairs && languagePairs.length > 0) {
+            for (const pair of languagePairs) {
+                const pairResult = await db.query(
+                    'INSERT INTO language_pairs (user_id, name, from_lang, to_lang, is_active, lesson_size) VALUES ($1, $2, $3, $4, $5, $6) RETURNING *',
+                    [
+                        user.id,
+                        pair.name || 'Немецкий → Русский',
+                        pair.fromLanguage || 'de',
+                        pair.toLanguage || 'ru',
+                        pair.active || false,
+                        pair.lessonSize || 10
+                    ]
+                );
+                migratedPairs.push(pairResult.rows[0]);
+            }
+        } else {
+            // Create default language pair
+            const defaultPair = await db.query(
+                'INSERT INTO language_pairs (user_id, name, from_lang, to_lang, is_active) VALUES ($1, $2, $3, $4, $5) RETURNING *',
+                [user.id, 'Немецкий → Русский', 'de', 'ru', true]
+            );
+            migratedPairs.push(defaultPair.rows[0]);
+        }
+
+        res.json({
+            message: 'User migrated successfully',
+            user: {
+                id: user.id,
+                name: user.name,
+                email: user.email,
+                createdAt: user.createdat
+            },
+            languagePairs: migratedPairs
+        });
+    } catch (err) {
+        console.error('Migration error:', err);
+        res.status(500).json({ error: err.message });
+    }
 });
 
 // Serve main page
