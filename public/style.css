@@ -637,6 +637,7 @@ body {
     position: relative;
     overflow: hidden;
     transition: var(--transition-base);
+    z-index: 1;
 }
 
 .section::before {
