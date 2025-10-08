@@ -2000,7 +2000,7 @@ input:focus, textarea:focus, select:focus {
         right: 0;
         bottom: 0;
         background: rgba(0, 0, 0, 0.5);
-        z-index: 9998;
+        z-index: 900;
     }
 
     .mobile-menu-backdrop.active {
@@ -2021,7 +2021,7 @@ input:focus, textarea:focus, select:focus {
         gap: var(--space-3);
         box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
         display: none;
-        z-index: 9999;
+        z-index: 901;
     }
 
     .nav-buttons.mobile-open {
