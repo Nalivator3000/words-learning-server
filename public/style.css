@@ -1991,22 +1991,37 @@ input:focus, textarea:focus, select:focus {
         display: flex;
     }
 
+    /* Mobile menu backdrop */
+    .mobile-menu-backdrop {
+        display: none;
+        position: fixed;
+        top: 0;
+        left: 0;
+        right: 0;
+        bottom: 0;
+        background: rgba(0, 0, 0, 0.5);
+        z-index: 9998;
+    }
+
+    .mobile-menu-backdrop.active {
+        display: block;
+    }
+
     .nav-buttons {
         position: fixed;
-        top: 70px;
-        left: 20px;
-        right: 20px;
-        background: rgba(255, 255, 255, 0.98);
-        backdrop-filter: blur(20px);
-        border: 1px solid rgba(255, 255, 255, 0.3);
-        border-radius: var(--radius-xl);
-        margin-top: var(--space-2);
-        padding: var(--space-3);
+        top: 50%;
+        left: 50%;
+        transform: translate(-50%, -50%);
+        width: 90%;
+        max-width: 400px;
+        background: white;
+        border-radius: var(--radius-2xl);
+        padding: var(--space-6);
         flex-direction: column;
-        gap: var(--space-2);
-        box-shadow: var(--shadow-3d-lg);
+        gap: var(--space-3);
+        box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
         display: none;
-        z-index: 10003;
+        z-index: 9999;
     }
 
     .nav-buttons.mobile-open {
