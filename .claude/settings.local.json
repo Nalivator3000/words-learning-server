@@ -8,7 +8,19 @@
       "Read(//c/Users/Nalivator3000/Downloads/**)",
       "Bash(grep:*)",
       "Bash(git commit:*)",
-      "Bash(node:*)"
+      "Bash(node:*)",
+      "Read(//c/Users/Nalivator3000/Claude/Habit Tracker/**)",
+      "Bash(git log:*)",
+      "Bash(npm start)",
+      "Bash(pg_ctl:*)",
+      "Bash(net start:*)",
+      "Bash(sc query:*)",
+      "Bash(findstr:*)",
+      "Bash(tree:*)",
+      "Bash(test:*)",
+      "Bash(where psql)",
+      "Bash(git rev-parse:*)",
+      "Bash(npm run version:*)"
     ],
     "deny": [],
     "ask": []

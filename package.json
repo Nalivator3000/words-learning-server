@@ -1,11 +1,13 @@
 {
   "name": "words-learning-server",
-  "version": "1.0.0",
+  "version": "5.0.0",
   "description": "Server version of German words learning app",
   "main": "server-postgresql.js",
   "scripts": {
     "start": "node server-postgresql.js",
-    "dev": "nodemon server-postgresql.js"
+    "dev": "nodemon server-postgresql.js",
+    "version": "node update-version.js",
+    "precommit": "npm run version && git add public/index.html"
   },
   "dependencies": {
     "express": "^4.18.2",
