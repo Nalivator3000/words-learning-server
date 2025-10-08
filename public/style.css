@@ -1992,10 +1992,10 @@ input:focus, textarea:focus, select:focus {
     }
 
     .nav-buttons {
-        position: absolute;
-        top: 100%;
-        left: 0;
-        right: 0;
+        position: fixed;
+        top: 70px;
+        left: 20px;
+        right: 20px;
         background: rgba(255, 255, 255, 0.98);
         backdrop-filter: blur(20px);
         border: 1px solid rgba(255, 255, 255, 0.3);
@@ -2006,7 +2006,7 @@ input:focus, textarea:focus, select:focus {
         gap: var(--space-2);
         box-shadow: var(--shadow-3d-lg);
         display: none;
-        z-index: 100;
+        z-index: 10003;
     }
 
     .nav-buttons.mobile-open {
