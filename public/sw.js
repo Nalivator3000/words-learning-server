@@ -1,57 +1,38 @@
-// Service Worker for FluentFlow Language Learning App
-// Version: 2025.09.26
+// Service Worker - NO CACHING VERSION
+// Version: 2025.10.08
 
-const CACHE_NAME = 'fluentflow-v1';
-const urlsToCache = [
-  '/',
-  '/style.css',
-  '/app.js',
-  '/database.js',
-  '/user-manager.js',
-  '/language-manager.js',
-  '/quiz.js',
-  '/survival-mode.js'
-];
-
-// Install event
+// Install event - skip caching
 self.addEventListener('install', (event) => {
-  console.log('🔧 Service Worker: Installing');
-  event.waitUntil(
-    caches.open(CACHE_NAME)
-      .then((cache) => {
-        console.log('💾 Service Worker: Caching files');
-        return cache.addAll(urlsToCache);
-      })
-  );
+  console.log('🔧 Service Worker: Installing (NO CACHE MODE)');
+  // Skip waiting to activate immediately
+  self.skipWaiting();
 });
 
-// Fetch event
-self.addEventListener('fetch', (event) => {
-  event.respondWith(
-    caches.match(event.request)
-      .then((response) => {
-        // Return cached version or fetch from network
-        return response || fetch(event.request);
-      }
-    )
-  );
-});
-
-// Activate event
+// Activate event - delete ALL caches
 self.addEventListener('activate', (event) => {
-  console.log('✅ Service Worker: Activated');
+  console.log('✅ Service Worker: Activated - CLEARING ALL CACHES');
   event.waitUntil(
     caches.keys().then((cacheNames) => {
       return Promise.all(
         cacheNames.map((cacheName) => {
-          if (cacheName !== CACHE_NAME) {
-            console.log('🗑️ Service Worker: Deleting old cache:', cacheName);
-            return caches.delete(cacheName);
-          }
+          console.log('🗑️ Deleting cache:', cacheName);
+          return caches.delete(cacheName);
         })
       );
+    }).then(() => {
+      // Take control of all pages immediately
+      return self.clients.claim();
     })
   );
 });
 
-console.log('📱 FluentFlow Service Worker loaded');
+// Fetch event - ALWAYS fetch from network, NO CACHE
+self.addEventListener('fetch', (event) => {
+  event.respondWith(
+    fetch(event.request, {
+      cache: 'no-store' // Force fresh fetch, bypass cache
+    })
+  );
+});
+
+console.log('📱 Service Worker loaded - NO CACHING MODE');
