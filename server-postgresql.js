@@ -635,6 +635,8 @@ app.post('/api/import/google-sheets', async (req, res) => {
 
         // Fetch the CSV data from Google Sheets
         const https = require('https');
+        const { Readable } = require('stream');
+
         const fetchData = () => {
             return new Promise((resolve, reject) => {
                 https.get(csvUrl, (response) => {
@@ -647,27 +649,36 @@ app.post('/api/import/google-sheets', async (req, res) => {
 
         const csvData = await fetchData();
 
-        // Parse CSV data
-        const lines = csvData.split('\n');
+        // Parse CSV data using csv-parser
         const words = [];
+        const stream = Readable.from([csvData]);
 
-        // Skip header row
-        for (let i = 1; i < lines.length; i++) {
-            const line = lines[i].trim();
-            if (!line) continue;
+        await new Promise((resolve, reject) => {
+            stream
+                .pipe(csv())
+                .on('data', (row) => {
+                    // Support both English and Russian headers, and any case variations
+                    const word = row.Word || row.word || row.Слово || row.слово;
+                    const translation = row.Translation || row.translation || row.Перевод || row.перевод;
+                    const example = row.Example || row.example || row.Пример || row.пример || '';
+                    const exampleTranslation = row['Example Translation'] || row['example translation'] ||
+                                              row.exampleTranslation || row['Перевод примера'] ||
+                                              row['перевод примера'] || '';
 
-            const values = line.split(',').map(v => v.trim().replace(/^"|"$/g, ''));
+                    if (word && translation) {
+                        words.push({
+                            word: word.trim(),
+                            translation: translation.trim(),
+                            example: example ? example.trim() : '',
+                            exampleTranslation: exampleTranslation ? exampleTranslation.trim() : ''
+                        });
+                    }
+                })
+                .on('end', resolve)
+                .on('error', reject);
+        });
 
-            if (values.length >= 2 && values[0] && values[1]) {
-                words.push({
-                    word: values[0],
-                    translation: values[1],
-                    example: values[2] || '',
-                    exampleTranslation: values[3] || ''
-                });
-            }
-        }
-
+        console.log(`📊 Parsed ${words.length} words from Google Sheets`);
         res.json({ words });
     } catch (error) {
         console.error('Google Sheets import error:', error);
