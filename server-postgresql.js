@@ -419,6 +419,32 @@ app.post('/api/words', async (req, res) => {
     }
 });
 
+// Delete all words for a user/language pair
+app.delete('/api/words/all', async (req, res) => {
+    try {
+        const { userId, languagePairId } = req.query;
+
+        if (!userId || !languagePairId) {
+            return res.status(400).json({ error: 'userId and languagePairId are required' });
+        }
+
+        const result = await db.query(
+            'DELETE FROM words WHERE user_id = $1 AND language_pair_id = $2',
+            [userId, languagePairId]
+        );
+
+        console.log(`🗑️ Deleted ${result.rowCount} words for user ${userId}, language pair ${languagePairId}`);
+
+        res.json({
+            message: 'All words deleted successfully',
+            deletedCount: result.rowCount
+        });
+    } catch (err) {
+        console.error('Error deleting words:', err);
+        res.status(500).json({ error: err.message });
+    }
+});
+
 // Add multiple words
 app.post('/api/words/bulk', async (req, res) => {
     try {
