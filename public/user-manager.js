@@ -347,3 +347,4 @@ class UserManager {
 }
 
 const userManager = new UserManager();
+window.userManager = userManager;
