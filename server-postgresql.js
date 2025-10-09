@@ -68,12 +68,25 @@ async function initDatabase() {
                 exampleTranslation TEXT,
                 status VARCHAR(50) DEFAULT 'studying',
                 correctCount INTEGER DEFAULT 0,
-                totalCount INTEGER DEFAULT 0,
+                totalPoints INTEGER DEFAULT 0,
                 lastReviewDate TIMESTAMP,
                 nextReviewDate TIMESTAMP,
                 createdAt TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
                 updatedAt TIMESTAMP DEFAULT CURRENT_TIMESTAMP
             )
+        `);
+
+        // Migration: Rename totalCount to totalPoints if it exists
+        await db.query(`
+            DO $$
+            BEGIN
+                IF EXISTS (
+                    SELECT 1 FROM information_schema.columns
+                    WHERE table_name = 'words' AND column_name = 'totalcount'
+                ) THEN
+                    ALTER TABLE words RENAME COLUMN totalCount TO totalPoints;
+                END IF;
+            END $$;
         `);
 
         console.log('PostgreSQL database initialized');
@@ -492,7 +505,7 @@ app.post('/api/words/bulk', async (req, res) => {
     }
 });
 
-// Update word progress
+// Update word progress with point-based system
 app.put('/api/words/:id/progress', async (req, res) => {
     try {
         const { id } = req.params;
@@ -506,14 +519,43 @@ app.put('/api/words/:id/progress', async (req, res) => {
         }
 
         const word = wordResult.rows[0];
-        const newTotalCount = word.totalcount + 1;
-        const newCorrectCount = word.correctcount + (correct ? 1 : 0);
 
-        // Determine new status based on progress
+        // Point system based on question type
+        // Multiple choice: 2 points, Word building: 5 points, Typing: 10 points
+        // Survival mode: 0 points (excluded by client)
+        const pointsMap = {
+            'multiple': 2,
+            'multipleChoice': 2,
+            'reverse_multiple': 2,
+            'reverseMultipleChoice': 2,
+            'word_building': 5,
+            'wordBuilding': 5,
+            'typing': 10,
+            'complex': 5  // Weighted average of mixed types
+        };
+
+        const points = pointsMap[questionType] || 2; // Default 2 points
+
+        // Update points
+        const newTotalPoints = (word.totalpoints || 0) + points;
+        let newCorrectCount = (word.correctcount || 0);
+
+        if (correct) {
+            // Add points for correct answer
+            newCorrectCount += points;
+        } else {
+            // Deduct 1 point for incorrect answer (but not below 0)
+            newCorrectCount = Math.max(0, newCorrectCount - 1);
+        }
+
+        // Calculate percentage: (correctCount / totalPoints) * 100
+        const percentage = newTotalPoints > 0 ? Math.round((newCorrectCount / newTotalPoints) * 100) : 0;
+
+        // Determine new status based on points and accuracy
         let newStatus = word.status;
-        const accuracy = newCorrectCount / newTotalCount;
 
-        if (word.status === 'studying' && newTotalCount >= 3 && accuracy >= 0.8) {
+        if (word.status === 'studying' && newTotalPoints >= 30 && percentage >= 80) {
+            // Need at least 30 points (e.g., 3 typing questions or 15 multiple choice) and 80% accuracy
             newStatus = 'review_7';
         } else if (word.status === 'review_7' && correct) {
             newStatus = 'review_30';
@@ -524,14 +566,24 @@ app.put('/api/words/:id/progress', async (req, res) => {
         }
 
         const updateQuery = `UPDATE words
-                            SET correctCount = $1, totalCount = $2, status = $3,
+                            SET correctCount = $1, totalPoints = $2, status = $3,
                                 lastReviewDate = CURRENT_TIMESTAMP,
                                 updatedAt = CURRENT_TIMESTAMP
                             WHERE id = $4`;
 
-        await db.query(updateQuery, [newCorrectCount, newTotalCount, newStatus, id]);
-        res.json({ message: 'Progress updated successfully' });
+        await db.query(updateQuery, [newCorrectCount, newTotalPoints, newStatus, id]);
+
+        console.log(`📊 Word ${id} progress: ${newCorrectCount}/${newTotalPoints} points (${percentage}%) - Status: ${newStatus}`);
+
+        res.json({
+            message: 'Progress updated successfully',
+            points: newCorrectCount,
+            totalPoints: newTotalPoints,
+            percentage,
+            status: newStatus
+        });
     } catch (err) {
+        console.error('Error updating word progress:', err);
         res.status(500).json({ error: err.message });
     }
 });
@@ -580,6 +632,34 @@ app.put('/api/words/:id/status', async (req, res) => {
         res.json({ message: 'Word status updated successfully' });
     } catch (err) {
         console.error('Error updating word status:', err);
+        res.status(500).json({ error: err.message });
+    }
+});
+
+// Bulk update all words to studying status
+app.put('/api/words/bulk/reset-to-studying', async (req, res) => {
+    try {
+        const { userId, languagePairId } = req.query;
+
+        if (!userId || !languagePairId) {
+            return res.status(400).json({ error: 'userId and languagePairId are required' });
+        }
+
+        const result = await db.query(
+            `UPDATE words
+             SET status = 'studying', updatedAt = CURRENT_TIMESTAMP
+             WHERE user_id = $1 AND language_pair_id = $2`,
+            [userId, languagePairId]
+        );
+
+        console.log(`🔄 Reset ${result.rowCount} words to studying status for user ${userId}, language pair ${languagePairId}`);
+
+        res.json({
+            message: 'All words reset to studying status',
+            updatedCount: result.rowCount
+        });
+    } catch (err) {
+        console.error('Error resetting words to studying:', err);
         res.status(500).json({ error: err.message });
     }
 });

@@ -148,6 +148,17 @@ class APIDatabase {
         });
     }
 
+    async resetAllWordsToStudying() {
+        const { userId, languagePairId } = this.getUserContext();
+        if (!userId || !languagePairId) {
+            throw new Error('User context not available');
+        }
+
+        return await this.apiRequest(`/words/bulk/reset-to-studying?userId=${userId}&languagePairId=${languagePairId}`, {
+            method: 'PUT'
+        });
+    }
+
     async getWordCounts() {
         return await this.apiRequest('/words/counts');
     }

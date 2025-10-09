@@ -111,40 +111,40 @@ class LanguageLearningApp {
 
     // New Points-Based Scoring System
     calculateWordScore(word) {
-        // Calculate percentage from correctCount/totalCount
+        // Calculate percentage from correctCount (earned points) / totalPoints (possible points)
         const correctCount = word.correctcount || word.correctCount || 0;
-        const totalCount = word.totalcount || word.totalCount || 0;
+        const totalPoints = word.totalpoints || word.totalPoints || 0;
 
-        if (totalCount === 0) return 0;
+        if (totalPoints === 0) return 0;
 
-        const percentage = Math.round((correctCount / totalCount) * 100);
+        const percentage = Math.round((correctCount / totalPoints) * 100);
         return Math.min(100, Math.max(0, percentage));
     }
 
-    // Get score display with progress percentage and counts
+    // Get score display with progress percentage and points
     getScoreDisplay(score, word) {
         let className, text;
         const correctCount = word.correctcount || word.correctCount || 0;
-        const totalCount = word.totalcount || word.totalCount || 0;
+        const totalPoints = word.totalpoints || word.totalPoints || 0;
 
-        if (totalCount === 0) {
+        if (totalPoints === 0) {
             className = 'score-none';
             text = `Не изучено 🌱`;
         } else if (score >= 90) {
             className = 'score-complete';
-            text = `${correctCount}/${totalCount} (${score}%) ✅`;
+            text = `${correctCount}/${totalPoints} баллов (${score}%) ✅`;
         } else if (score >= 70) {
             className = 'score-high';
-            text = `${correctCount}/${totalCount} (${score}%) 🔥`;
+            text = `${correctCount}/${totalPoints} баллов (${score}%) 🔥`;
         } else if (score >= 50) {
             className = 'score-medium';
-            text = `${correctCount}/${totalCount} (${score}%) ⚡`;
+            text = `${correctCount}/${totalPoints} баллов (${score}%) ⚡`;
         } else if (score >= 30) {
             className = 'score-low';
-            text = `${correctCount}/${totalCount} (${score}%) 📚`;
+            text = `${correctCount}/${totalPoints} баллов (${score}%) 📚`;
         } else {
             className = 'score-very-low';
-            text = `${correctCount}/${totalCount} (${score}%) 🌱`;
+            text = `${correctCount}/${totalPoints} баллов (${score}%) 🌱`;
         }
 
         return { className, text };
@@ -241,7 +241,10 @@ class LanguageLearningApp {
         document.getElementById('exportReviewBtn').addEventListener('click', () => this.exportWords('review'));
         document.getElementById('exportLearnedBtn').addEventListener('click', () => this.exportWords('learned'));
         document.getElementById('exportAllBtn').addEventListener('click', () => this.exportWords());
-        
+
+        // Reset all words to studying
+        document.getElementById('resetAllToStudyingBtn').addEventListener('click', () => this.resetAllWordsToStudying());
+
         // Settings functionality
         document.getElementById('addLanguagePairBtn').addEventListener('click', () => this.showLanguagePairDialog());
         document.getElementById('lessonSizeInput').addEventListener('change', (e) => this.updateLessonSize(e.target.value));
@@ -1143,6 +1146,22 @@ schreiben,Sie schreibt einen Brief.,Писать,Она пишет письмо.
         } catch (error) {
             console.error('Error moving word:', error);
             alert('Ошибка при изменении статуса слова');
+        }
+    }
+
+    async resetAllWordsToStudying() {
+        if (!confirm('⚠️ Вы уверены, что хотите сбросить ВСЕ слова на изучение?\n\nЭто переместит все слова из "повторения" и "изучено" обратно в "изучение".')) {
+            return;
+        }
+
+        try {
+            const result = await database.resetAllWordsToStudying();
+            alert(`✅ Успешно! ${result.updatedCount} слов перемещены на изучение.`);
+            await this.updateStatsPage();
+            await this.updateStats();
+        } catch (error) {
+            console.error('Error resetting words:', error);
+            alert('Ошибка при сбросе слов');
         }
     }
 
