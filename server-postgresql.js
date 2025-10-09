@@ -614,6 +614,67 @@ app.post('/api/words/import', upload.single('csvFile'), async (req, res) => {
         });
 });
 
+// Google Sheets Import Proxy (to avoid CORS)
+app.post('/api/import/google-sheets', async (req, res) => {
+    try {
+        const { url } = req.body;
+
+        if (!url) {
+            return res.status(400).json({ error: 'URL is required' });
+        }
+
+        // Convert Google Sheets URL to CSV export URL
+        let csvUrl = url;
+        if (url.includes('docs.google.com/spreadsheets')) {
+            const match = url.match(/\/spreadsheets\/d\/([a-zA-Z0-9-_]+)/);
+            if (match) {
+                const spreadsheetId = match[1];
+                csvUrl = `https://docs.google.com/spreadsheets/d/${spreadsheetId}/export?format=csv`;
+            }
+        }
+
+        // Fetch the CSV data from Google Sheets
+        const https = require('https');
+        const fetchData = () => {
+            return new Promise((resolve, reject) => {
+                https.get(csvUrl, (response) => {
+                    let data = '';
+                    response.on('data', (chunk) => data += chunk);
+                    response.on('end', () => resolve(data));
+                }).on('error', reject);
+            });
+        };
+
+        const csvData = await fetchData();
+
+        // Parse CSV data
+        const lines = csvData.split('\n');
+        const words = [];
+
+        // Skip header row
+        for (let i = 1; i < lines.length; i++) {
+            const line = lines[i].trim();
+            if (!line) continue;
+
+            const values = line.split(',').map(v => v.trim().replace(/^"|"$/g, ''));
+
+            if (values.length >= 2 && values[0] && values[1]) {
+                words.push({
+                    word: values[0],
+                    translation: values[1],
+                    example: values[2] || '',
+                    exampleTranslation: values[3] || ''
+                });
+            }
+        }
+
+        res.json({ words });
+    } catch (error) {
+        console.error('Google Sheets import error:', error);
+        res.status(500).json({ error: error.message });
+    }
+});
+
 // Migration endpoint - migrate user from localStorage to database
 app.post('/api/migrate/user', async (req, res) => {
     try {

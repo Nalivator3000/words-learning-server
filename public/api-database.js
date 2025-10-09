@@ -23,6 +23,22 @@ class APIDatabase {
         }
     }
 
+    // Get current user context
+    getUserContext() {
+        // Get current user and language pair from userManager
+        if (!window.userManager || !window.userManager.isLoggedIn()) {
+            return { userId: null, languagePairId: null };
+        }
+
+        const user = window.userManager.getCurrentUser();
+        const languagePair = window.userManager.getCurrentLanguagePair();
+
+        return {
+            userId: user?.id,
+            languagePairId: languagePair?.id
+        };
+    }
+
     // Helper for API requests
     async apiRequest(endpoint, options = {}) {
         try {
