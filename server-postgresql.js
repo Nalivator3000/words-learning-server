@@ -670,6 +670,7 @@ app.post('/api/import/google-sheets', async (req, res) => {
         };
 
         const csvData = await fetchData(csvUrl);
+        console.log(`📄 CSV Data (first 500 chars):`, csvData.substring(0, 500));
 
         // Parse CSV data using csv-parser
         const words = [];
@@ -679,6 +680,8 @@ app.post('/api/import/google-sheets', async (req, res) => {
             stream
                 .pipe(csv())
                 .on('data', (row) => {
+                    console.log('🔍 Raw row:', row);
+
                     // Support both English and Russian headers, and any case variations
                     const word = row.Word || row.word || row.Слово || row.слово;
                     const translation = row.Translation || row.translation || row.Перевод || row.перевод;
@@ -687,6 +690,8 @@ app.post('/api/import/google-sheets', async (req, res) => {
                                               row.exampleTranslation || row['Перевод примера'] ||
                                               row['перевод примера'] || '';
 
+                    console.log('📝 Parsed:', { word, translation, example, exampleTranslation });
+
                     if (word && translation) {
                         words.push({
                             word: word.trim(),
@@ -694,6 +699,8 @@ app.post('/api/import/google-sheets', async (req, res) => {
                             example: example ? example.trim() : '',
                             exampleTranslation: exampleTranslation ? exampleTranslation.trim() : ''
                         });
+                    } else {
+                        console.log('⚠️ Skipped row - missing word or translation');
                     }
                 })
                 .on('end', resolve)

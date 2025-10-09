@@ -533,18 +533,29 @@ class LanguageLearningApp {
             this.showImportStatus('Загрузка данных...', 'info');
             const words = await ImportManager.fetchGoogleSheets(url);
 
-            if (words.length === 0) {
+            console.log('📥 Received words from Google Sheets:', words);
+
+            if (!words || words.length === 0) {
                 this.showImportStatus('Таблица не содержит корректных данных', 'error');
                 return;
             }
 
             // Add userId and languagePairId to each word
             const { userId, languagePairId } = database.getUserContext();
+            console.log('👤 User context:', { userId, languagePairId });
+
+            if (!userId || !languagePairId) {
+                this.showImportStatus('Ошибка: пользователь не авторизован', 'error');
+                return;
+            }
+
             const wordsWithContext = words.map(word => ({
                 ...word,
                 userId,
                 languagePairId
             }));
+
+            console.log('📝 Words with context (first 3):', wordsWithContext.slice(0, 3));
 
             await database.addWords(wordsWithContext);
             this.showImportStatus(`Успешно импортировано ${words.length} слов`, 'success');
