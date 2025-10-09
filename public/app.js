@@ -647,11 +647,11 @@ schreiben,Sie schreibt einen Brief.,Писать,Она пишет письмо.
             <div style="display: flex; align-items: center; gap: 10px; margin-bottom: 10px;">
                 <strong>${question.questionText}</strong>
             </div>
-            <div style="display: flex; align-items: center; gap: 10px;">
+            ${question.example ? `<div style="display: flex; align-items: center; gap: 10px;">
                 <small style="color: #6c757d; font-style: italic;">${question.example}</small>
-            </div>
+            </div>` : ''}
         `;
-        
+
         // Add audio buttons only for foreign text using language detection
         // But NOT for multiple choice questions where user needs to pick from options
         if (this.shouldShowAudioButton(question.questionText) && question.type !== 'multipleChoice') {
@@ -661,7 +661,7 @@ schreiben,Sie schreibt einen Brief.,Писать,Она пишет письмо.
 
         if (question.example && this.shouldShowAudioButton(question.example)) {
             const exampleAudioBtn = this.createAudioButton(question.example);
-            questionTextEl.querySelector('div:last-child').appendChild(exampleAudioBtn);
+            questionTextEl.querySelectorAll('div')[1]?.appendChild(exampleAudioBtn);
         }
 
         const answerArea = document.getElementById('answerArea');
@@ -732,11 +732,11 @@ schreiben,Sie schreibt einen Brief.,Писать,Она пишет письмо.
             <div style="display: flex; align-items: center; gap: 10px; margin-bottom: 10px;">
                 <strong>${question.questionText}</strong>
             </div>
-            <div style="display: flex; align-items: center; gap: 10px;">
+            ${question.example ? `<div style="display: flex; align-items: center; gap: 10px;">
                 <small style="color: #6c757d; font-style: italic;">${question.example}</small>
-            </div>
+            </div>` : ''}
         `;
-        
+
         // Add audio buttons only for German text using language detection
         // But NOT for multiple choice questions where user needs to pick from options
         if (this.isGermanText(question.questionText) && question.type !== 'multipleChoice') {
@@ -746,7 +746,7 @@ schreiben,Sie schreibt einen Brief.,Писать,Она пишет письмо.
 
         if (question.example && this.isGermanText(question.example)) {
             const exampleAudioBtn = this.createAudioButton(question.example);
-            questionTextEl.querySelector('div:last-child').appendChild(exampleAudioBtn);
+            questionTextEl.querySelectorAll('div')[1]?.appendChild(exampleAudioBtn);
         }
 
         const answerArea = document.getElementById('reviewAnswerArea');
