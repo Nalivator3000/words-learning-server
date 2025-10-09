@@ -635,11 +635,33 @@ app.post('/api/import/google-sheets', async (req, res) => {
 
         // Fetch the CSV data from Google Sheets
         const https = require('https');
+        const http = require('http');
         const { Readable } = require('stream');
 
-        const fetchData = () => {
+        const fetchData = (url, redirectCount = 0) => {
             return new Promise((resolve, reject) => {
-                https.get(csvUrl, (response) => {
+                if (redirectCount > 5) {
+                    reject(new Error('Too many redirects'));
+                    return;
+                }
+
+                const protocol = url.startsWith('https') ? https : http;
+
+                protocol.get(url, (response) => {
+                    // Handle redirects (301, 302, 307, 308)
+                    if (response.statusCode >= 300 && response.statusCode < 400 && response.headers.location) {
+                        console.log(`📍 Following redirect to: ${response.headers.location}`);
+                        fetchData(response.headers.location, redirectCount + 1)
+                            .then(resolve)
+                            .catch(reject);
+                        return;
+                    }
+
+                    if (response.statusCode !== 200) {
+                        reject(new Error(`HTTP ${response.statusCode}`));
+                        return;
+                    }
+
                     let data = '';
                     response.on('data', (chunk) => data += chunk);
                     response.on('end', () => resolve(data));
@@ -647,7 +669,7 @@ app.post('/api/import/google-sheets', async (req, res) => {
             });
         };
 
-        const csvData = await fetchData();
+        const csvData = await fetchData(csvUrl);
 
         // Parse CSV data using csv-parser
         const words = [];
