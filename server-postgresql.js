@@ -681,23 +681,34 @@ app.post('/api/import/google-sheets', async (req, res) => {
                 .pipe(csv())
                 .on('data', (row) => {
                     console.log('🔍 Raw row:', row);
+                    console.log('🔑 Row keys:', Object.keys(row));
 
-                    // Support both English and Russian headers, and any case variations
-                    const word = row.Word || row.word || row.Слово || row.слово;
-                    const translation = row.Translation || row.translation || row.Перевод || row.перевод;
-                    const example = row.Example || row.example || row.Пример || row.пример || '';
-                    const exampleTranslation = row['Example Translation'] || row['example translation'] ||
+                    // Try to get values by header names
+                    let word = row.Word || row.word || row.Слово || row.слово;
+                    let translation = row.Translation || row.translation || row.Перевод || row.перевод;
+                    let example = row.Example || row.example || row.Пример || row.пример || '';
+                    let exampleTranslation = row['Example Translation'] || row['example translation'] ||
                                               row.exampleTranslation || row['Перевод примера'] ||
                                               row['перевод примера'] || '';
+
+                    // Fallback: try to get by column index (first 4 columns)
+                    if (!word || !translation) {
+                        const values = Object.values(row);
+                        console.log('📊 Trying column index fallback, values:', values);
+                        word = word || values[0];
+                        translation = translation || values[1];
+                        example = example || values[2] || '';
+                        exampleTranslation = exampleTranslation || values[3] || '';
+                    }
 
                     console.log('📝 Parsed:', { word, translation, example, exampleTranslation });
 
                     if (word && translation) {
                         words.push({
-                            word: word.trim(),
-                            translation: translation.trim(),
-                            example: example ? example.trim() : '',
-                            exampleTranslation: exampleTranslation ? exampleTranslation.trim() : ''
+                            word: String(word).trim(),
+                            translation: String(translation).trim(),
+                            example: example ? String(example).trim() : '',
+                            exampleTranslation: exampleTranslation ? String(exampleTranslation).trim() : ''
                         });
                     } else {
                         console.log('⚠️ Skipped row - missing word or translation');
