@@ -165,19 +165,31 @@ class LanguageLearningApp {
     async init() {
         try {
             await database.init();
-            
+
             // Initialize language management
             languageManager.init();
-            
+
             // Initialize user management
             const isLoggedIn = await userManager.init();
-            
+
             this.setupEventListeners();
             this.setupAuthListeners();
             this.setupLanguageListeners();
             this.survivalMode.setupEventListeners();
-            
+
             if (isLoggedIn) {
+                // Check for expired review words on app load
+                try {
+                    const result = await database.checkExpiredReviews();
+                    if (result.expiredCount > 0) {
+                        console.log(`⏰ ${result.expiredCount} words returned to studying for review`);
+                        // Optionally show notification to user
+                        // alert(`⏰ ${result.expiredCount} слов вернулись на изучение для повторения`);
+                    }
+                } catch (err) {
+                    console.warn('Failed to check expired reviews:', err);
+                }
+
                 this.showSection('home');
                 await this.updateStats();
             }

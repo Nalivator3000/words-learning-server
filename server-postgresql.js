@@ -69,6 +69,7 @@ async function initDatabase() {
                 status VARCHAR(50) DEFAULT 'studying',
                 correctCount INTEGER DEFAULT 0,
                 totalPoints INTEGER DEFAULT 0,
+                reviewCycle INTEGER DEFAULT 1,
                 lastReviewDate TIMESTAMP,
                 nextReviewDate TIMESTAMP,
                 createdAt TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
@@ -85,6 +86,19 @@ async function initDatabase() {
                     WHERE table_name = 'words' AND column_name = 'totalcount'
                 ) THEN
                     ALTER TABLE words RENAME COLUMN totalCount TO totalPoints;
+                END IF;
+            END $$;
+        `);
+
+        // Migration: Add reviewCycle column if it doesn't exist
+        await db.query(`
+            DO $$
+            BEGIN
+                IF NOT EXISTS (
+                    SELECT 1 FROM information_schema.columns
+                    WHERE table_name = 'words' AND column_name = 'reviewcycle'
+                ) THEN
+                    ALTER TABLE words ADD COLUMN reviewCycle INTEGER DEFAULT 1;
                 END IF;
             END $$;
         `);
@@ -551,29 +565,45 @@ app.put('/api/words/:id/progress', async (req, res) => {
         // Calculate percentage: (correctCount / totalPoints) * 100
         const percentage = newTotalPoints > 0 ? Math.round((newCorrectCount / newTotalPoints) * 100) : 0;
 
-        // Determine new status based on points and accuracy
+        // Determine new status based on points, accuracy, and review cycle
         let newStatus = word.status;
+        let newReviewCycle = word.reviewcycle || 1;
+        let nextReviewDate = null;
 
         if (word.status === 'studying' && newTotalPoints >= 30 && percentage >= 80) {
-            // Need at least 30 points (e.g., 3 typing questions or 15 multiple choice) and 80% accuracy
-            newStatus = 'review_7';
-        } else if (word.status === 'review_7' && correct) {
-            newStatus = 'review_30';
-        } else if (word.status === 'review_30' && correct) {
-            newStatus = 'learned';
+            // Completed studying phase - move to review based on cycle
+            if (newReviewCycle === 1) {
+                newStatus = 'review_7';
+                // Set next review date to 7 days from now
+                nextReviewDate = new Date();
+                nextReviewDate.setDate(nextReviewDate.getDate() + 7);
+                console.log(`📅 Word ${id} moved to review_7, next review: ${nextReviewDate.toISOString()}`);
+            } else if (newReviewCycle === 2) {
+                newStatus = 'review_30';
+                // Set next review date to 30 days from now
+                nextReviewDate = new Date();
+                nextReviewDate.setDate(nextReviewDate.getDate() + 30);
+                console.log(`📅 Word ${id} moved to review_30, next review: ${nextReviewDate.toISOString()}`);
+            } else if (newReviewCycle >= 3) {
+                newStatus = 'learned';
+                console.log(`🎉 Word ${id} fully learned after 3 cycles!`);
+            }
         } else if (!correct && (word.status === 'review_7' || word.status === 'review_30')) {
+            // Failed review - reset to studying but keep cycle
             newStatus = 'studying';
+            console.log(`❌ Word ${id} failed review, back to studying (cycle ${newReviewCycle})`);
         }
 
         const updateQuery = `UPDATE words
-                            SET correctCount = $1, totalPoints = $2, status = $3,
+                            SET correctCount = $1, totalPoints = $2, status = $3, reviewCycle = $4,
                                 lastReviewDate = CURRENT_TIMESTAMP,
+                                nextReviewDate = $5,
                                 updatedAt = CURRENT_TIMESTAMP
-                            WHERE id = $4`;
+                            WHERE id = $6`;
 
-        await db.query(updateQuery, [newCorrectCount, newTotalPoints, newStatus, id]);
+        await db.query(updateQuery, [newCorrectCount, newTotalPoints, newStatus, newReviewCycle, nextReviewDate, id]);
 
-        console.log(`📊 Word ${id} progress: ${newCorrectCount}/${newTotalPoints} points (${percentage}%) - Status: ${newStatus}`);
+        console.log(`📊 Word ${id} progress: ${newCorrectCount}/${newTotalPoints} points (${percentage}%) - Status: ${newStatus}, Cycle: ${newReviewCycle}`);
 
         res.json({
             message: 'Progress updated successfully',
@@ -632,6 +662,61 @@ app.put('/api/words/:id/status', async (req, res) => {
         res.json({ message: 'Word status updated successfully' });
     } catch (err) {
         console.error('Error updating word status:', err);
+        res.status(500).json({ error: err.message });
+    }
+});
+
+// Check and reset expired review words (spaced repetition)
+app.post('/api/words/check-expired-reviews', async (req, res) => {
+    try {
+        const { userId, languagePairId } = req.query;
+
+        if (!userId || !languagePairId) {
+            return res.status(400).json({ error: 'userId and languagePairId are required' });
+        }
+
+        // Find words in review status whose nextReviewDate has passed
+        const expiredWords = await db.query(
+            `SELECT id, word, status, reviewCycle, nextReviewDate
+             FROM words
+             WHERE user_id = $1 AND language_pair_id = $2
+             AND status IN ('review_7', 'review_30')
+             AND nextReviewDate IS NOT NULL
+             AND nextReviewDate <= CURRENT_TIMESTAMP`,
+            [userId, languagePairId]
+        );
+
+        if (expiredWords.rows.length === 0) {
+            return res.json({
+                message: 'No expired review words found',
+                expiredCount: 0
+            });
+        }
+
+        // Reset each expired word: status → studying, cycle++, reset points
+        for (const word of expiredWords.rows) {
+            const newCycle = (word.reviewcycle || 1) + 1;
+            await db.query(
+                `UPDATE words
+                 SET status = 'studying',
+                     reviewCycle = $1,
+                     correctCount = 0,
+                     totalPoints = 0,
+                     nextReviewDate = NULL,
+                     updatedAt = CURRENT_TIMESTAMP
+                 WHERE id = $2`,
+                [newCycle, word.id]
+            );
+            console.log(`⏰ Word "${word.word}" (${word.status}) expired - reset to studying cycle ${newCycle}`);
+        }
+
+        res.json({
+            message: `${expiredWords.rows.length} words returned to studying for next review cycle`,
+            expiredCount: expiredWords.rows.length,
+            words: expiredWords.rows.map(w => ({ id: w.id, word: w.word, previousStatus: w.status, newCycle: (w.reviewcycle || 1) + 1 }))
+        });
+    } catch (err) {
+        console.error('Error checking expired reviews:', err);
         res.status(500).json({ error: err.message });
     }
 });

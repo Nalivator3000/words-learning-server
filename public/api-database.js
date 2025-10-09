@@ -159,6 +159,18 @@ class APIDatabase {
         });
     }
 
+    async checkExpiredReviews() {
+        const { userId, languagePairId } = this.getUserContext();
+        if (!userId || !languagePairId) {
+            console.warn('Cannot check expired reviews: user context not available');
+            return { expiredCount: 0 };
+        }
+
+        return await this.apiRequest(`/words/check-expired-reviews?userId=${userId}&languagePairId=${languagePairId}`, {
+            method: 'POST'
+        });
+    }
+
     async getWordCounts() {
         return await this.apiRequest('/words/counts');
     }
