@@ -1968,32 +1968,15 @@ input:focus, textarea:focus, select:focus {
     }
 }
 
-/* Mobile Navigation */
-@media (max-width: 768px) {
-    :root {
-        --text-4xl: 2rem;
-        --text-3xl: 1.5rem;
-        --space-8: 1.5rem;
-        --space-6: 1rem;
-    }
-
-    .container {
-        padding: var(--space-4);
-    }
-
-    /* Mobile: wrap header content */
+/* Tablet Navigation - wrap to second row with smaller buttons */
+@media (max-width: 1024px) {
     .app-header {
         flex-wrap: wrap;
-        padding: var(--space-4);
     }
 
     .header-left {
         order: 1;
         flex: 0 0 auto;
-    }
-
-    .header-left h1 {
-        font-size: var(--text-2xl);
     }
 
     .header-right {
@@ -2006,15 +1989,46 @@ input:focus, textarea:focus, select:focus {
         width: 100%;
         padding: 0;
         margin-top: var(--space-3);
-        justify-content: flex-start;
+        justify-content: center;
     }
 
-    /* Mobile navigation - icon bar under header */
     .nav-buttons {
         width: 100%;
+        justify-content: center;
+        gap: var(--space-2);
+    }
+
+    .nav-btn {
+        padding: var(--space-2) var(--space-4);
+        font-size: var(--text-sm);
+    }
+}
+
+/* Mobile Navigation - icon-only buttons */
+@media (max-width: 768px) {
+    :root {
+        --text-4xl: 2rem;
+        --text-3xl: 1.5rem;
+        --space-8: 1.5rem;
+        --space-6: 1rem;
+    }
+
+    .container {
+        padding: var(--space-4);
+    }
+
+    .app-header {
+        padding: var(--space-4);
+    }
+
+    .header-left h1 {
+        font-size: var(--text-2xl);
+    }
+
+    /* Mobile navigation - icon only, no text */
+    .nav-buttons {
         justify-content: space-around;
         gap: 0;
-        flex: 1;
     }
 
     .nav-container {
