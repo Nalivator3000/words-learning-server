@@ -206,6 +206,7 @@ class LanguageLearningApp {
         document.getElementById('quickReviewBtn').addEventListener('click', () => this.quickStart('review'));
 
         // Import functionality
+        document.getElementById('downloadTemplateBtn').addEventListener('click', () => this.downloadCSVTemplate());
         document.getElementById('csvImportBtn').addEventListener('click', () => {
             document.getElementById('csvInput').click();
         });
@@ -520,6 +521,22 @@ class LanguageLearningApp {
 
         // Reset file input
         event.target.value = '';
+    }
+
+    downloadCSVTemplate() {
+        const template = `Слово,Пример,Перевод,Перевод примера
+laufen,Ich laufe jeden Tag im Park.,Бегать,Я бегаю каждый день в парке.
+sprechen,Er spricht drei Sprachen.,Говорить,Он говорит на трёх языках.
+schreiben,Sie schreibt einen Brief.,Писать,Она пишет письмо.`;
+
+        const blob = new Blob(['\uFEFF' + template], { type: 'text/csv;charset=utf-8;' });
+        const link = document.createElement('a');
+        link.href = URL.createObjectURL(blob);
+        link.download = 'words_template.csv';
+        link.click();
+        URL.revokeObjectURL(link.href);
+
+        this.showImportStatus('Шаблон CSV скачан', 'success');
     }
 
     async handleGoogleSheetsImport() {
