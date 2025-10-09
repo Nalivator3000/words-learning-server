@@ -26,12 +26,26 @@ class APIDatabase {
     // Get current user context
     getUserContext() {
         // Get current user and language pair from userManager
-        if (!window.userManager || !window.userManager.isLoggedIn()) {
+        console.log('🔍 getUserContext - window.userManager exists?', !!window.userManager);
+
+        if (!window.userManager) {
+            console.error('❌ window.userManager is not defined!');
+            return { userId: null, languagePairId: null };
+        }
+
+        const isLoggedIn = window.userManager.isLoggedIn();
+        console.log('🔍 getUserContext - isLoggedIn?', isLoggedIn);
+
+        if (!isLoggedIn) {
+            console.error('❌ User is not logged in!');
             return { userId: null, languagePairId: null };
         }
 
         const user = window.userManager.getCurrentUser();
         const languagePair = window.userManager.getCurrentLanguagePair();
+
+        console.log('👤 Current user:', user);
+        console.log('🌍 Current language pair:', languagePair);
 
         return {
             userId: user?.id,
