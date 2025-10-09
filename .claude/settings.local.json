@@ -25,7 +25,11 @@
       "Bash(taskkill:*)",
       "Bash(npm run start:db:*)",
       "Bash(timeout:*)",
-      "Bash(tasklist)"
+      "Bash(tasklist)",
+      "Bash(curl:*)",
+      "Bash(python:*)",
+      "Bash(powershell:*)",
+      "Bash(npm install:*)"
     ],
     "deny": [],
     "ask": []

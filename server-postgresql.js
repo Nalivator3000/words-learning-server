@@ -497,22 +497,22 @@ app.put('/api/words/:id/progress', async (req, res) => {
     try {
         const { id } = req.params;
         const { correct, questionType } = req.body;
-        
+
         const wordResult = await db.query('SELECT * FROM words WHERE id = $1', [id]);
-        
+
         if (wordResult.rows.length === 0) {
             res.status(404).json({ error: 'Word not found' });
             return;
         }
-        
+
         const word = wordResult.rows[0];
         const newTotalCount = word.totalcount + 1;
         const newCorrectCount = word.correctcount + (correct ? 1 : 0);
-        
+
         // Determine new status based on progress
         let newStatus = word.status;
         const accuracy = newCorrectCount / newTotalCount;
-        
+
         if (word.status === 'studying' && newTotalCount >= 3 && accuracy >= 0.8) {
             newStatus = 'review_7';
         } else if (word.status === 'review_7' && correct) {
@@ -522,16 +522,64 @@ app.put('/api/words/:id/progress', async (req, res) => {
         } else if (!correct && (word.status === 'review_7' || word.status === 'review_30')) {
             newStatus = 'studying';
         }
-        
-        const updateQuery = `UPDATE words 
-                            SET correctCount = $1, totalCount = $2, status = $3, 
-                                lastReviewDate = CURRENT_TIMESTAMP, 
+
+        const updateQuery = `UPDATE words
+                            SET correctCount = $1, totalCount = $2, status = $3,
+                                lastReviewDate = CURRENT_TIMESTAMP,
                                 updatedAt = CURRENT_TIMESTAMP
                             WHERE id = $4`;
-        
+
         await db.query(updateQuery, [newCorrectCount, newTotalCount, newStatus, id]);
         res.json({ message: 'Progress updated successfully' });
     } catch (err) {
+        res.status(500).json({ error: err.message });
+    }
+});
+
+// Delete a single word
+app.delete('/api/words/:id', async (req, res) => {
+    try {
+        const { id } = req.params;
+        const result = await db.query('DELETE FROM words WHERE id = $1', [id]);
+
+        if (result.rowCount === 0) {
+            return res.status(404).json({ error: 'Word not found' });
+        }
+
+        res.json({ message: 'Word deleted successfully' });
+    } catch (err) {
+        console.error('Error deleting word:', err);
+        res.status(500).json({ error: err.message });
+    }
+});
+
+// Update word status
+app.put('/api/words/:id/status', async (req, res) => {
+    try {
+        const { id } = req.params;
+        const { status } = req.body;
+
+        if (!status) {
+            return res.status(400).json({ error: 'Status is required' });
+        }
+
+        const validStatuses = ['studying', 'review_7', 'review_30', 'learned'];
+        if (!validStatuses.includes(status)) {
+            return res.status(400).json({ error: 'Invalid status' });
+        }
+
+        const result = await db.query(
+            'UPDATE words SET status = $1, updatedAt = CURRENT_TIMESTAMP WHERE id = $2',
+            [status, id]
+        );
+
+        if (result.rowCount === 0) {
+            return res.status(404).json({ error: 'Word not found' });
+        }
+
+        res.json({ message: 'Word status updated successfully' });
+    } catch (err) {
+        console.error('Error updating word status:', err);
         res.status(500).json({ error: err.message });
     }
 });

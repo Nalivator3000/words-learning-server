@@ -135,6 +135,19 @@ class APIDatabase {
         });
     }
 
+    async deleteWord(wordId) {
+        return await this.apiRequest(`/words/${wordId}`, {
+            method: 'DELETE'
+        });
+    }
+
+    async updateWordStatus(wordId, newStatus) {
+        return await this.apiRequest(`/words/${wordId}/status`, {
+            method: 'PUT',
+            body: JSON.stringify({ status: newStatus })
+        });
+    }
+
     async getWordCounts() {
         return await this.apiRequest('/words/counts');
     }

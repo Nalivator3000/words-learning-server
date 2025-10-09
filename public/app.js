@@ -111,34 +111,40 @@ class LanguageLearningApp {
 
     // New Points-Based Scoring System
     calculateWordScore(word) {
-        // Get total points earned from different question types
-        const totalPoints = word.totalPoints || 0;
+        // Calculate percentage from correctCount/totalCount
+        const correctCount = word.correctcount || word.correctCount || 0;
+        const totalCount = word.totalcount || word.totalCount || 0;
 
-        // Progress is simply the percentage toward 100 points
-        const progress = Math.min(100, Math.max(0, totalPoints));
+        if (totalCount === 0) return 0;
 
-        return progress;
+        const percentage = Math.round((correctCount / totalCount) * 100);
+        return Math.min(100, Math.max(0, percentage));
     }
 
-    // Get score display with progress percentage
-    getScoreDisplay(score) {
+    // Get score display with progress percentage and counts
+    getScoreDisplay(score, word) {
         let className, text;
+        const correctCount = word.correctcount || word.correctCount || 0;
+        const totalCount = word.totalcount || word.totalCount || 0;
 
-        if (score >= 100) {
+        if (totalCount === 0) {
+            className = 'score-none';
+            text = `Не изучено 🌱`;
+        } else if (score >= 90) {
             className = 'score-complete';
-            text = `✅ Ready for review`;
-        } else if (score >= 75) {
+            text = `${correctCount}/${totalCount} (${score}%) ✅`;
+        } else if (score >= 70) {
             className = 'score-high';
-            text = `${score}% 🔥`;
+            text = `${correctCount}/${totalCount} (${score}%) 🔥`;
         } else if (score >= 50) {
             className = 'score-medium';
-            text = `${score}% ⚡`;
-        } else if (score >= 25) {
+            text = `${correctCount}/${totalCount} (${score}%) ⚡`;
+        } else if (score >= 30) {
             className = 'score-low';
-            text = `${score}% 📚`;
+            text = `${correctCount}/${totalCount} (${score}%) 📚`;
         } else {
-            className = 'score-none';
-            text = `${score}% 🌱`;
+            className = 'score-very-low';
+            text = `${correctCount}/${totalCount} (${score}%) 🌱`;
         }
 
         return { className, text };
@@ -444,6 +450,10 @@ class LanguageLearningApp {
             const item = document.createElement('div');
             item.className = 'word-item';
 
+            // Word content wrapper
+            const wordContent = document.createElement('div');
+            wordContent.className = 'word-content';
+
             // Main word info container
             const wordMain = document.createElement('div');
             wordMain.className = 'word-main';
@@ -454,7 +464,7 @@ class LanguageLearningApp {
             wordDiv.style.display = 'flex';
             wordDiv.style.alignItems = 'center';
             wordDiv.style.gap = '10px';
-            wordDiv.innerHTML = `<span>${word.word}</span>`;
+            wordDiv.innerHTML = `<span><strong>${word.word}</strong></span>`;
             if (this.shouldShowAudioButton(word.word)) {
                 wordDiv.appendChild(this.createAudioButton(word.word, 'audio-btn-small'));
             }
@@ -467,15 +477,79 @@ class LanguageLearningApp {
             wordMain.appendChild(wordDiv);
             wordMain.appendChild(translationDiv);
 
-            // Score display
+            // Meta info (dates, status)
+            const metaDiv = document.createElement('div');
+            metaDiv.className = 'word-meta';
+            metaDiv.style.fontSize = '12px';
+            metaDiv.style.color = '#6c757d';
+            metaDiv.style.marginTop = '5px';
+
+            const createdAt = word.createdat || word.createdAt;
+            const lastReviewed = word.lastreviewdate || word.lastReviewDate;
+
+            const dateAdded = createdAt ? new Date(createdAt).toLocaleDateString('ru-RU') : 'N/A';
+            const dateStudied = lastReviewed ? new Date(lastReviewed).toLocaleDateString('ru-RU') : 'Не изучалось';
+
+            metaDiv.innerHTML = `📅 Добавлено: ${dateAdded} | 📚 Изучалось: ${dateStudied}`;
+
+            wordContent.appendChild(wordMain);
+            wordContent.appendChild(metaDiv);
+
+            // Score display with progress bar
             const score = this.calculateWordScore(word);
-            const scoreDisplay = this.getScoreDisplay(score);
+            const scoreDisplay = this.getScoreDisplay(score, word);
+            const scoreContainer = document.createElement('div');
+            scoreContainer.className = 'word-score-container';
+
             const scoreDiv = document.createElement('div');
             scoreDiv.className = `word-score ${scoreDisplay.className}`;
             scoreDiv.textContent = scoreDisplay.text;
 
-            item.appendChild(wordMain);
-            item.appendChild(scoreDiv);
+            // Progress bar
+            const progressBar = document.createElement('div');
+            progressBar.className = 'word-progress-bar';
+            progressBar.style.cssText = 'width: 100%; height: 4px; background: #e0e0e0; border-radius: 2px; margin-top: 5px; overflow: hidden;';
+
+            const progressFill = document.createElement('div');
+            progressFill.style.cssText = `width: ${score}%; height: 100%; background: ${score >= 70 ? '#4caf50' : score >= 50 ? '#ff9800' : '#f44336'}; transition: width 0.3s;`;
+            progressBar.appendChild(progressFill);
+
+            scoreContainer.appendChild(scoreDiv);
+            scoreContainer.appendChild(progressBar);
+
+            // Action buttons
+            const actionsDiv = document.createElement('div');
+            actionsDiv.className = 'word-actions';
+            actionsDiv.style.cssText = 'display: flex; gap: 5px; margin-left: 10px;';
+
+            // Delete button
+            const deleteBtn = document.createElement('button');
+            deleteBtn.textContent = '🗑️';
+            deleteBtn.className = 'word-action-btn delete-btn';
+            deleteBtn.title = 'Удалить слово';
+            deleteBtn.style.cssText = 'padding: 5px 10px; border: none; background: #f44336; color: white; border-radius: 4px; cursor: pointer; font-size: 14px;';
+            deleteBtn.onclick = () => this.deleteWord(word.id);
+
+            // Move to learned button
+            const moveBtn = document.createElement('button');
+            if (word.status === 'learned') {
+                moveBtn.textContent = '↩️';
+                moveBtn.title = 'Вернуть в изучение';
+                moveBtn.style.cssText = 'padding: 5px 10px; border: none; background: #2196f3; color: white; border-radius: 4px; cursor: pointer; font-size: 14px;';
+                moveBtn.onclick = () => this.moveWordToStatus(word.id, 'studying');
+            } else {
+                moveBtn.textContent = '✅';
+                moveBtn.title = 'Отметить как изученное';
+                moveBtn.style.cssText = 'padding: 5px 10px; border: none; background: #4caf50; color: white; border-radius: 4px; cursor: pointer; font-size: 14px;';
+                moveBtn.onclick = () => this.moveWordToStatus(word.id, 'learned');
+            }
+
+            actionsDiv.appendChild(moveBtn);
+            actionsDiv.appendChild(deleteBtn);
+
+            item.appendChild(wordContent);
+            item.appendChild(scoreContainer);
+            item.appendChild(actionsDiv);
             container.appendChild(item);
         });
     }
@@ -1046,10 +1120,36 @@ schreiben,Sie schreibt einen Brief.,Писать,Она пишет письмо.
         document.getElementById('reviewQuizArea').classList.add('hidden');
     }
 
+    async deleteWord(wordId) {
+        if (!confirm('Вы уверены, что хотите удалить это слово?')) {
+            return;
+        }
+
+        try {
+            await database.deleteWord(wordId);
+            await this.updateStatsPage();
+            await this.updateStats();
+        } catch (error) {
+            console.error('Error deleting word:', error);
+            alert('Ошибка при удалении слова');
+        }
+    }
+
+    async moveWordToStatus(wordId, newStatus) {
+        try {
+            await database.updateWordStatus(wordId, newStatus);
+            await this.updateStatsPage();
+            await this.updateStats();
+        } catch (error) {
+            console.error('Error moving word:', error);
+            alert('Ошибка при изменении статуса слова');
+        }
+    }
+
     async exportWords(status = null) {
         try {
             const csvContent = await database.exportWords(status);
-            
+
             if (!csvContent) {
                 alert('Нет данных для экспорта');
                 return;
@@ -1057,21 +1157,21 @@ schreiben,Sie schreibt einen Brief.,Писать,Она пишет письмо.
 
             const blob = new Blob([csvContent], { type: 'text/csv;charset=utf-8;' });
             const link = document.createElement('a');
-            
+
             const url = URL.createObjectURL(blob);
             link.setAttribute('href', url);
-            
-            const filename = status ? 
+
+            const filename = status ?
                 `words_${status}_${new Date().toISOString().split('T')[0]}.csv` :
                 `all_words_${new Date().toISOString().split('T')[0]}.csv`;
-            
+
             link.setAttribute('download', filename);
             link.style.visibility = 'hidden';
-            
+
             document.body.appendChild(link);
             link.click();
             document.body.removeChild(link);
-            
+
         } catch (error) {
             console.error('Export error:', error);
             alert('Ошибка при экспорте данных');
