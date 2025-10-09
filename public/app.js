@@ -495,16 +495,24 @@ class LanguageLearningApp {
         try {
             const text = await file.text();
             const words = ImportManager.parseCSV(text);
-            
+
             if (words.length === 0) {
                 this.showImportStatus('Файл не содержит корректных данных', 'error');
                 return;
             }
 
-            await database.addWords(words);
+            // Add userId and languagePairId to each word
+            const { userId, languagePairId } = database.getUserContext();
+            const wordsWithContext = words.map(word => ({
+                ...word,
+                userId,
+                languagePairId
+            }));
+
+            await database.addWords(wordsWithContext);
             this.showImportStatus(`Успешно импортировано ${words.length} слов`, 'success');
             await this.updateStats();
-            
+
         } catch (error) {
             console.error('CSV Import Error:', error);
             this.showImportStatus('Ошибка при импорте CSV файла', 'error');
@@ -524,19 +532,27 @@ class LanguageLearningApp {
         try {
             this.showImportStatus('Загрузка данных...', 'info');
             const words = await ImportManager.fetchGoogleSheets(url);
-            
+
             if (words.length === 0) {
                 this.showImportStatus('Таблица не содержит корректных данных', 'error');
                 return;
             }
 
-            await database.addWords(words);
+            // Add userId and languagePairId to each word
+            const { userId, languagePairId } = database.getUserContext();
+            const wordsWithContext = words.map(word => ({
+                ...word,
+                userId,
+                languagePairId
+            }));
+
+            await database.addWords(wordsWithContext);
             this.showImportStatus(`Успешно импортировано ${words.length} слов`, 'success');
             await this.updateStats();
-            
+
             // Clear input
             document.getElementById('googleSheetsUrl').value = '';
-            
+
         } catch (error) {
             console.error('Google Sheets Import Error:', error);
             this.showImportStatus(error.message, 'error');
