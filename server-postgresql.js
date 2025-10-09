@@ -692,13 +692,14 @@ app.post('/api/import/google-sheets', async (req, res) => {
                                               row['перевод примера'] || '';
 
                     // Fallback: try to get by column index (first 4 columns)
+                    // Expected column order: Word (foreign), Example (foreign), Translation (native), ExampleTranslation (native)
                     if (!word || !translation) {
                         const values = Object.values(row);
                         console.log('📊 Trying column index fallback, values:', values);
-                        word = word || values[0];
-                        translation = translation || values[1];
-                        example = example || values[2] || '';
-                        exampleTranslation = exampleTranslation || values[3] || '';
+                        word = word || values[0];              // Foreign word
+                        example = example || values[1] || '';  // Foreign example sentence
+                        translation = translation || values[2]; // Native translation
+                        exampleTranslation = exampleTranslation || values[3] || ''; // Native example translation
                     }
 
                     console.log('📝 Parsed:', { word, translation, example, exampleTranslation });
