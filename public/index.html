@@ -79,7 +79,13 @@
                 <h1 data-translate="appTitle">German Words Learning</h1>
             </div>
             <nav class="header-nav">
-                <!-- Navigation moved to bottom on mobile -->
+                <div class="nav-buttons">
+                    <button id="homeBtn" class="nav-btn active" data-translate="home">Главная</button>
+                    <button id="importBtn" class="nav-btn" data-translate="import">Импорт</button>
+                    <button id="studyBtn" class="nav-btn" data-translate="study">Изучение</button>
+                    <button id="reviewBtn" class="nav-btn" data-translate="review">Повторение</button>
+                    <button id="statsBtn" class="nav-btn" data-translate="statistics">Статистика</button>
+                </div>
             </nav>
             <div class="header-right">
                 <button id="userMenuBtn" class="settings-btn">⚙️</button>
@@ -333,15 +339,6 @@
                 }
             }, 5000);
         </script>
-    </div>
-
-    <!-- Bottom Navigation Bar (Mobile) -->
-    <div class="nav-buttons">
-        <button id="homeBtn" class="nav-btn active" data-translate="home">Главная</button>
-        <button id="importBtn" class="nav-btn" data-translate="import">Импорт</button>
-        <button id="studyBtn" class="nav-btn" data-translate="study">Изучение</button>
-        <button id="reviewBtn" class="nav-btn" data-translate="review">Повторение</button>
-        <button id="statsBtn" class="nav-btn" data-translate="statistics">Статистика</button>
     </div>
 
     <script src="api-database.js"></script>
