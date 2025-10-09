@@ -191,33 +191,6 @@ class LanguageLearningApp {
             }
         });
 
-        // Mobile menu toggle
-        const mobileMenuToggle = document.getElementById('mobileMenuToggle');
-        const navButtons = document.querySelector('.nav-buttons');
-        const mobileMenuBackdrop = document.getElementById('mobileMenuBackdrop');
-
-        if (mobileMenuToggle && navButtons && mobileMenuBackdrop) {
-            // Toggle menu and backdrop
-            mobileMenuToggle.addEventListener('click', () => {
-                navButtons.classList.toggle('mobile-open');
-                mobileMenuBackdrop.style.display = navButtons.classList.contains('mobile-open') ? 'block' : 'none';
-            });
-
-            // Close mobile menu when clicking navigation items
-            navButtons.addEventListener('click', (e) => {
-                if (e.target.classList.contains('nav-btn')) {
-                    navButtons.classList.remove('mobile-open');
-                    mobileMenuBackdrop.style.display = 'none';
-                }
-            });
-
-            // Close menu when clicking backdrop
-            mobileMenuBackdrop.addEventListener('click', () => {
-                navButtons.classList.remove('mobile-open');
-                mobileMenuBackdrop.style.display = 'none';
-            });
-        }
-
         // Navigation
         document.getElementById('homeBtn').addEventListener('click', () => this.showSection('home'));
         document.getElementById('importBtn').addEventListener('click', () => this.showSection('import'));
