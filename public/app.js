@@ -409,6 +409,9 @@ class LanguageLearningApp {
             // Enable/disable quick action buttons
             document.getElementById('quickStudyBtn').disabled = counts.studying === 0;
             document.getElementById('quickReviewBtn').disabled = counts.review === 0;
+
+            // Load daily goals
+            await this.loadDailyGoals();
         } catch (error) {
             console.error('Error updating stats:', error);
         }
@@ -1980,6 +1983,22 @@ schreiben,Sie schreibt einen Brief.,Писать,Она пишет письмо.
             }
         } catch (err) {
             console.error('Error loading leaderboard:', err);
+        }
+    }
+
+    async loadDailyGoals() {
+        const user = userManager.getCurrentUser();
+        if (!user || !window.gamification) return;
+
+        try {
+            const goals = await window.gamification.getDailyGoals(user.id);
+            const goalsContainer = document.getElementById('dailyGoalsContainer');
+
+            if (goalsContainer && goals) {
+                window.gamification.renderDailyGoals(goalsContainer, goals);
+            }
+        } catch (err) {
+            console.error('Error loading daily goals:', err);
         }
     }
 }

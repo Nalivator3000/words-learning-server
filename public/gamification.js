@@ -127,6 +127,36 @@ class Gamification {
         }
     }
 
+    // Fetch daily goals
+    async getDailyGoals(userId) {
+        try {
+            const response = await fetch(`${this.apiUrl}/api/gamification/daily-goals/${userId}`);
+            if (!response.ok) throw new Error('Failed to fetch daily goals');
+
+            return await response.json();
+        } catch (err) {
+            console.error('Error fetching daily goals:', err);
+            return null;
+        }
+    }
+
+    // Update daily goal targets
+    async updateDailyGoals(userId, xpGoal, wordsGoal, quizzesGoal) {
+        try {
+            const response = await fetch(`${this.apiUrl}/api/gamification/daily-goals/${userId}`, {
+                method: 'PUT',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ xpGoal, wordsGoal, quizzesGoal })
+            });
+
+            if (!response.ok) throw new Error('Failed to update daily goals');
+            return await response.json();
+        } catch (err) {
+            console.error('Error updating daily goals:', err);
+            return null;
+        }
+    }
+
     // Render XP/Level display in header
     renderStatsHeader(containerElement, stats) {
         if (!stats) return;
@@ -452,6 +482,62 @@ class Gamification {
         `;
 
         containerElement.innerHTML = html;
+    }
+
+    // Render daily goals
+    renderDailyGoals(containerElement, goals) {
+        if (!goals) {
+            containerElement.innerHTML = '';
+            return;
+        }
+
+        const xpProgress = Math.min(100, Math.round((goals.xp_progress / goals.xp_goal) * 100));
+        const wordsProgress = Math.min(100, Math.round((goals.words_progress / goals.words_goal) * 100));
+        const quizzesProgress = Math.min(100, Math.round((goals.quizzes_progress / goals.quizzes_goal) * 100));
+
+        const allCompleted = goals.completed;
+
+        containerElement.innerHTML = `
+            <div class="daily-goals-card ${allCompleted ? 'completed' : ''}">
+                <div class="daily-goals-header">
+                    <h3>🎯 Ежедневные цели</h3>
+                    ${allCompleted ? '<span class="goals-completed-badge">✅ Выполнено!</span>' : ''}
+                </div>
+                <div class="daily-goals-list">
+                    <div class="goal-item ${goals.xp_progress >= goals.xp_goal ? 'completed' : ''}">
+                        <div class="goal-icon">⭐</div>
+                        <div class="goal-info">
+                            <div class="goal-label">XP за день</div>
+                            <div class="goal-progress-text">${goals.xp_progress} / ${goals.xp_goal}</div>
+                        </div>
+                        <div class="goal-progress-bar">
+                            <div class="goal-progress-fill" style="width: ${xpProgress}%;"></div>
+                        </div>
+                    </div>
+                    <div class="goal-item ${goals.words_progress >= goals.words_goal ? 'completed' : ''}">
+                        <div class="goal-icon">📚</div>
+                        <div class="goal-info">
+                            <div class="goal-label">Слов выучено</div>
+                            <div class="goal-progress-text">${goals.words_progress} / ${goals.words_goal}</div>
+                        </div>
+                        <div class="goal-progress-bar">
+                            <div class="goal-progress-fill" style="width: ${wordsProgress}%;"></div>
+                        </div>
+                    </div>
+                    <div class="goal-item ${goals.quizzes_progress >= goals.quizzes_goal ? 'completed' : ''}">
+                        <div class="goal-icon">✏️</div>
+                        <div class="goal-info">
+                            <div class="goal-label">Упражнений выполнено</div>
+                            <div class="goal-progress-text">${goals.quizzes_progress} / ${goals.quizzes_goal}</div>
+                        </div>
+                        <div class="goal-progress-bar">
+                            <div class="goal-progress-fill" style="width: ${quizzesProgress}%;"></div>
+                        </div>
+                    </div>
+                </div>
+                ${allCompleted ? '<div class="goals-reward">🎁 +25 XP бонус за выполнение всех целей!</div>' : ''}
+            </div>
+        `;
     }
 
     // Show XP earned notification

@@ -173,6 +173,25 @@ async function initDatabase() {
             )
         `);
 
+        // Gamification: Daily goals
+        await db.query(`
+            CREATE TABLE IF NOT EXISTS daily_goals (
+                id SERIAL PRIMARY KEY,
+                user_id INTEGER REFERENCES users(id) ON DELETE CASCADE,
+                goal_date DATE NOT NULL,
+                xp_goal INTEGER DEFAULT 50,
+                words_goal INTEGER DEFAULT 5,
+                quizzes_goal INTEGER DEFAULT 10,
+                xp_progress INTEGER DEFAULT 0,
+                words_progress INTEGER DEFAULT 0,
+                quizzes_progress INTEGER DEFAULT 0,
+                completed BOOLEAN DEFAULT FALSE,
+                createdAt TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+                updatedAt TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+                UNIQUE(user_id, goal_date)
+            )
+        `);
+
         console.log('PostgreSQL database initialized with gamification tables');
 
         // Initialize predefined achievements
@@ -371,9 +390,75 @@ async function updateDailyActivity(userId, wordsLearned = 0, quizzesCompleted = 
 
         console.log(`🔥 User ${userId} streak: ${newStreak} days (longest: ${newLongestStreak})`);
 
+        // Update daily goals
+        await updateDailyGoals(userId, wordsLearned, quizzesCompleted, xpEarned);
+
         return { currentStreak: newStreak, longestStreak: newLongestStreak };
     } catch (err) {
         console.error('Error updating daily activity:', err);
+        throw err;
+    }
+}
+
+// Gamification: Update daily goals progress
+async function updateDailyGoals(userId, wordsLearned = 0, quizzesCompleted = 0, xpEarned = 0) {
+    try {
+        const today = new Date().toISOString().split('T')[0];
+
+        // Get or create today's goal
+        let goal = await db.query(
+            'SELECT * FROM daily_goals WHERE user_id = $1 AND goal_date = $2',
+            [userId, today]
+        );
+
+        if (goal.rows.length === 0) {
+            // Create new daily goal with default values
+            await db.query(
+                `INSERT INTO daily_goals (user_id, goal_date, xp_goal, words_goal, quizzes_goal)
+                 VALUES ($1, $2, 50, 5, 10)`,
+                [userId, today]
+            );
+            goal = await db.query(
+                'SELECT * FROM daily_goals WHERE user_id = $1 AND goal_date = $2',
+                [userId, today]
+            );
+        }
+
+        const currentGoal = goal.rows[0];
+
+        // Update progress
+        const newXPProgress = (currentGoal.xp_progress || 0) + xpEarned;
+        const newWordsProgress = (currentGoal.words_progress || 0) + wordsLearned;
+        const newQuizzesProgress = (currentGoal.quizzes_progress || 0) + quizzesCompleted;
+
+        // Check if completed
+        const completed =
+            newXPProgress >= currentGoal.xp_goal &&
+            newWordsProgress >= currentGoal.words_goal &&
+            newQuizzesProgress >= currentGoal.quizzes_goal;
+
+        await db.query(
+            `UPDATE daily_goals
+             SET xp_progress = $1,
+                 words_progress = $2,
+                 quizzes_progress = $3,
+                 completed = $4,
+                 updatedat = CURRENT_TIMESTAMP
+             WHERE user_id = $5 AND goal_date = $6`,
+            [newXPProgress, newWordsProgress, newQuizzesProgress, completed, userId, today]
+        );
+
+        console.log(`🎯 User ${userId} daily goals: ${newXPProgress}/${currentGoal.xp_goal} XP, ${newWordsProgress}/${currentGoal.words_goal} words, ${newQuizzesProgress}/${currentGoal.quizzes_goal} quizzes`);
+
+        // Award bonus XP if goal just completed
+        if (completed && !currentGoal.completed) {
+            await awardXP(userId, 'daily_goal', 25, 'Daily goal completed!');
+            console.log(`🎉 User ${userId} completed daily goal! +25 bonus XP`);
+        }
+
+        return { completed, newXPProgress, newWordsProgress, newQuizzesProgress };
+    } catch (err) {
+        console.error('Error updating daily goals:', err);
         throw err;
     }
 }
@@ -905,6 +990,77 @@ app.get('/api/gamification/leaderboard/rank/:userId', async (req, res) => {
         });
     } catch (err) {
         console.error('Error getting user rank:', err);
+        res.status(500).json({ error: err.message });
+    }
+});
+
+// Gamification: Get today's daily goals
+app.get('/api/gamification/daily-goals/:userId', async (req, res) => {
+    try {
+        const { userId } = req.params;
+        const today = new Date().toISOString().split('T')[0];
+
+        let goal = await db.query(
+            'SELECT * FROM daily_goals WHERE user_id = $1 AND goal_date = $2',
+            [parseInt(userId), today]
+        );
+
+        if (goal.rows.length === 0) {
+            // Create default goal if doesn't exist
+            await db.query(
+                `INSERT INTO daily_goals (user_id, goal_date, xp_goal, words_goal, quizzes_goal)
+                 VALUES ($1, $2, 50, 5, 10)`,
+                [parseInt(userId), today]
+            );
+            goal = await db.query(
+                'SELECT * FROM daily_goals WHERE user_id = $1 AND goal_date = $2',
+                [parseInt(userId), today]
+            );
+        }
+
+        res.json(goal.rows[0]);
+    } catch (err) {
+        console.error('Error getting daily goals:', err);
+        res.status(500).json({ error: err.message });
+    }
+});
+
+// Gamification: Update daily goal targets
+app.put('/api/gamification/daily-goals/:userId', async (req, res) => {
+    try {
+        const { userId } = req.params;
+        const { xpGoal, wordsGoal, quizzesGoal } = req.body;
+        const today = new Date().toISOString().split('T')[0];
+
+        // Get or create today's goal
+        let goal = await db.query(
+            'SELECT * FROM daily_goals WHERE user_id = $1 AND goal_date = $2',
+            [parseInt(userId), today]
+        );
+
+        if (goal.rows.length === 0) {
+            await db.query(
+                `INSERT INTO daily_goals (user_id, goal_date, xp_goal, words_goal, quizzes_goal)
+                 VALUES ($1, $2, $3, $4, $5)`,
+                [parseInt(userId), today, xpGoal || 50, wordsGoal || 5, quizzesGoal || 10]
+            );
+        } else {
+            await db.query(
+                `UPDATE daily_goals
+                 SET xp_goal = $1, words_goal = $2, quizzes_goal = $3, updatedat = CURRENT_TIMESTAMP
+                 WHERE user_id = $4 AND goal_date = $5`,
+                [xpGoal, wordsGoal, quizzesGoal, parseInt(userId), today]
+            );
+        }
+
+        goal = await db.query(
+            'SELECT * FROM daily_goals WHERE user_id = $1 AND goal_date = $2',
+            [parseInt(userId), today]
+        );
+
+        res.json(goal.rows[0]);
+    } catch (err) {
+        console.error('Error updating daily goals:', err);
         res.status(500).json({ error: err.message });
     }
 });
