@@ -146,9 +146,88 @@ async function initDatabase() {
             )
         `);
 
+        // Gamification: Achievements definitions
+        await db.query(`
+            CREATE TABLE IF NOT EXISTS achievements (
+                id SERIAL PRIMARY KEY,
+                achievement_key VARCHAR(100) UNIQUE NOT NULL,
+                name VARCHAR(200) NOT NULL,
+                description TEXT,
+                icon VARCHAR(50),
+                category VARCHAR(50),
+                tier INTEGER DEFAULT 1,
+                requirement_value INTEGER,
+                xp_reward INTEGER DEFAULT 0,
+                createdAt TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+            )
+        `);
+
+        // Gamification: User achievements (unlocked badges)
+        await db.query(`
+            CREATE TABLE IF NOT EXISTS user_achievements (
+                id SERIAL PRIMARY KEY,
+                user_id INTEGER REFERENCES users(id) ON DELETE CASCADE,
+                achievement_id INTEGER REFERENCES achievements(id) ON DELETE CASCADE,
+                unlocked_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+                UNIQUE(user_id, achievement_id)
+            )
+        `);
+
         console.log('PostgreSQL database initialized with gamification tables');
+
+        // Initialize predefined achievements
+        await initializeAchievements();
     } catch (err) {
         console.error('Database initialization error:', err);
+    }
+}
+
+// Initialize predefined achievements
+async function initializeAchievements() {
+    const achievements = [
+        // Streak Achievements
+        { key: 'streak_3', name: 'Огонёк 🔥', description: 'Стрик 3 дня подряд', icon: '🔥', category: 'streak', tier: 1, requirement: 3, xp: 50 },
+        { key: 'streak_7', name: 'Неделя силы 💪', description: 'Стрик 7 дней подряд', icon: '💪', category: 'streak', tier: 2, requirement: 7, xp: 100 },
+        { key: 'streak_30', name: 'Месяц победы 🏆', description: 'Стрик 30 дней подряд', icon: '🏆', category: 'streak', tier: 3, requirement: 30, xp: 500 },
+        { key: 'streak_100', name: 'Легенда 👑', description: 'Стрик 100 дней подряд', icon: '👑', category: 'streak', tier: 4, requirement: 100, xp: 2000 },
+
+        // Word Count Achievements
+        { key: 'words_10', name: 'Первые шаги 🌱', description: 'Выучено 10 слов', icon: '🌱', category: 'words', tier: 1, requirement: 10, xp: 25 },
+        { key: 'words_50', name: 'Знаток 📚', description: 'Выучено 50 слов', icon: '📚', category: 'words', tier: 2, requirement: 50, xp: 100 },
+        { key: 'words_100', name: 'Эрудит 🎓', description: 'Выучено 100 слов', icon: '🎓', category: 'words', tier: 3, requirement: 100, xp: 250 },
+        { key: 'words_500', name: 'Мастер слова ⭐', description: 'Выучено 500 слов', icon: '⭐', category: 'words', tier: 4, requirement: 500, xp: 1000 },
+        { key: 'words_1000', name: 'Полиглот 🌍', description: 'Выучено 1000 слов', icon: '🌍', category: 'words', tier: 5, requirement: 1000, xp: 3000 },
+
+        // Level Achievements
+        { key: 'level_5', name: 'Новичок 🥉', description: 'Достигнут 5 уровень', icon: '🥉', category: 'level', tier: 1, requirement: 5, xp: 50 },
+        { key: 'level_10', name: 'Опытный 🥈', description: 'Достигнут 10 уровень', icon: '🥈', category: 'level', tier: 2, requirement: 10, xp: 100 },
+        { key: 'level_25', name: 'Профессионал 🥇', description: 'Достигнут 25 уровень', icon: '🥇', category: 'level', tier: 3, requirement: 25, xp: 500 },
+        { key: 'level_50', name: 'Эксперт 💎', description: 'Достигнут 50 уровень', icon: '💎', category: 'level', tier: 4, requirement: 50, xp: 1500 },
+        { key: 'level_100', name: 'Гроссмейстер 👾', description: 'Достигнут 100 уровень', icon: '👾', category: 'level', tier: 5, requirement: 100, xp: 5000 },
+
+        // Quiz Achievements
+        { key: 'quiz_100', name: 'Практикант ✏️', description: '100 упражнений выполнено', icon: '✏️', category: 'quiz', tier: 1, requirement: 100, xp: 50 },
+        { key: 'quiz_500', name: 'Трудяга 📝', description: '500 упражнений выполнено', icon: '📝', category: 'quiz', tier: 2, requirement: 500, xp: 250 },
+        { key: 'quiz_1000', name: 'Неутомимый 💪', description: '1000 упражнений выполнено', icon: '💪', category: 'quiz', tier: 3, requirement: 1000, xp: 750 },
+
+        // Special Achievements
+        { key: 'first_word', name: 'Первое слово 🎉', description: 'Выучено первое слово', icon: '🎉', category: 'special', tier: 1, requirement: 1, xp: 10 },
+        { key: 'early_bird', name: 'Ранняя пташка 🌅', description: 'Занятие до 8:00', icon: '🌅', category: 'special', tier: 1, requirement: 1, xp: 25 },
+        { key: 'night_owl', name: 'Ночная сова 🦉', description: 'Занятие после 23:00', icon: '🦉', category: 'special', tier: 1, requirement: 1, xp: 25 },
+    ];
+
+    try {
+        for (const ach of achievements) {
+            await db.query(
+                `INSERT INTO achievements (achievement_key, name, description, icon, category, tier, requirement_value, xp_reward)
+                 VALUES ($1, $2, $3, $4, $5, $6, $7, $8)
+                 ON CONFLICT (achievement_key) DO NOTHING`,
+                [ach.key, ach.name, ach.description, ach.icon, ach.category, ach.tier, ach.requirement, ach.xp]
+            );
+        }
+        console.log('✨ Achievements initialized');
+    } catch (err) {
+        console.error('Error initializing achievements:', err);
     }
 }
 
@@ -296,6 +375,79 @@ async function updateDailyActivity(userId, wordsLearned = 0, quizzesCompleted = 
     } catch (err) {
         console.error('Error updating daily activity:', err);
         throw err;
+    }
+}
+
+// Gamification: Check and unlock achievements
+async function checkAchievements(userId) {
+    try {
+        const stats = await getUserStats(userId);
+        const unlockedAchievements = [];
+
+        // Get all achievements
+        const achievementsResult = await db.query('SELECT * FROM achievements ORDER BY tier ASC');
+        const allAchievements = achievementsResult.rows;
+
+        // Get already unlocked achievements
+        const unlockedResult = await db.query(
+            'SELECT achievement_id FROM user_achievements WHERE user_id = $1',
+            [userId]
+        );
+        const unlockedIds = new Set(unlockedResult.rows.map(row => row.achievement_id));
+
+        // Check each achievement
+        for (const achievement of allAchievements) {
+            if (unlockedIds.has(achievement.id)) continue; // Already unlocked
+
+            let shouldUnlock = false;
+
+            switch (achievement.category) {
+                case 'streak':
+                    shouldUnlock = stats.current_streak >= achievement.requirement_value;
+                    break;
+                case 'words':
+                    shouldUnlock = stats.total_words_learned >= achievement.requirement_value;
+                    break;
+                case 'level':
+                    shouldUnlock = stats.level >= achievement.requirement_value;
+                    break;
+                case 'quiz':
+                    shouldUnlock = stats.total_quizzes_completed >= achievement.requirement_value;
+                    break;
+                case 'special':
+                    if (achievement.achievement_key === 'first_word') {
+                        shouldUnlock = stats.total_words_learned >= 1;
+                    } else if (achievement.achievement_key === 'early_bird') {
+                        const hour = new Date().getHours();
+                        shouldUnlock = hour < 8;
+                    } else if (achievement.achievement_key === 'night_owl') {
+                        const hour = new Date().getHours();
+                        shouldUnlock = hour >= 23;
+                    }
+                    break;
+            }
+
+            if (shouldUnlock) {
+                // Unlock achievement
+                await db.query(
+                    'INSERT INTO user_achievements (user_id, achievement_id) VALUES ($1, $2)',
+                    [userId, achievement.id]
+                );
+
+                // Award XP bonus
+                if (achievement.xp_reward > 0) {
+                    await awardXP(userId, 'achievement', achievement.xp_reward, `Achievement: ${achievement.name}`);
+                }
+
+                unlockedAchievements.push(achievement);
+                console.log(`🏆 User ${userId} unlocked achievement: ${achievement.name}`);
+            }
+        }
+
+        return unlockedAchievements;
+    } catch (err) {
+        console.error('Error checking achievements:', err);
+        return [];
     }
 }
 
@@ -564,6 +716,76 @@ app.get('/api/gamification/activity/:userId', async (req, res) => {
         res.json(result.rows);
     } catch (err) {
         console.error('Error getting activity:', err);
+        res.status(500).json({ error: err.message });
+    }
+});
+
+// Gamification: Get all achievements
+app.get('/api/gamification/achievements', async (req, res) => {
+    try {
+        const result = await db.query('SELECT * FROM achievements ORDER BY category, tier');
+        res.json(result.rows);
+    } catch (err) {
+        console.error('Error getting achievements:', err);
+        res.status(500).json({ error: err.message });
+    }
+});
+
+// Gamification: Get user's unlocked achievements
+app.get('/api/gamification/achievements/:userId', async (req, res) => {
+    try {
+        const { userId } = req.params;
+
+        const result = await db.query(
+            `SELECT a.*, ua.unlocked_at
+             FROM achievements a
+             INNER JOIN user_achievements ua ON a.id = ua.achievement_id
+             WHERE ua.user_id = $1
+             ORDER BY ua.unlocked_at DESC`,
+            [parseInt(userId)]
+        );
+
+        res.json(result.rows);
+    } catch (err) {
+        console.error('Error getting user achievements:', err);
+        res.status(500).json({ error: err.message });
+    }
+});
+
+// Gamification: Get achievement progress for user
+app.get('/api/gamification/achievements/:userId/progress', async (req, res) => {
+    try {
+        const { userId } = req.params;
+        const stats = await getUserStats(parseInt(userId));
+
+        const allAchievements = await db.query('SELECT * FROM achievements ORDER BY category, tier');
+        const unlocked = await db.query(
+            'SELECT achievement_id FROM user_achievements WHERE user_id = $1',
+            [parseInt(userId)]
+        );
+        const unlockedIds = new Set(unlocked.rows.map(row => row.achievement_id));
+
+        const progress = allAchievements.rows.map(ach => {
+            let currentValue = 0;
+            switch (ach.category) {
+                case 'streak': currentValue = stats.current_streak; break;
+                case 'words': currentValue = stats.total_words_learned; break;
+                case 'level': currentValue = stats.level; break;
+                case 'quiz': currentValue = stats.total_quizzes_completed; break;
+                case 'special': currentValue = 0; break; // Special achievements don't have progress
+            }
+
+            return {
+                ...ach,
+                unlocked: unlockedIds.has(ach.id),
+                progress: Math.min(100, Math.round((currentValue / ach.requirement_value) * 100)),
+                currentValue
+            };
+        });
+
+        res.json(progress);
+    } catch (err) {
+        console.error('Error getting achievement progress:', err);
         res.status(500).json({ error: err.message });
     }
 });
@@ -894,16 +1116,36 @@ app.put('/api/words/:id/progress', async (req, res) => {
 
             // Update daily activity
             await updateDailyActivity(userId, 0, 1, xpEarned);
-        }
 
-        res.json({
-            message: 'Progress updated successfully',
-            points: newCorrectCount,
-            totalPoints: newTotalPoints,
-            percentage,
-            status: newStatus,
-            xp: xpResult // Include XP info in response
-        });
+            // Update total_words_learned if word just became learned
+            if (newStatus === 'learned' && word.status !== 'learned') {
+                await db.query(
+                    'UPDATE user_stats SET total_words_learned = total_words_learned + 1 WHERE user_id = $1',
+                    [userId]
+                );
+            }
+
+            // Check for new achievements
+            const newAchievements = await checkAchievements(userId);
+
+            res.json({
+                message: 'Progress updated successfully',
+                points: newCorrectCount,
+                totalPoints: newTotalPoints,
+                percentage,
+                status: newStatus,
+                xp: xpResult, // Include XP info in response
+                achievements: newAchievements // Include newly unlocked achievements
+            });
+        } else {
+            res.json({
+                message: 'Progress updated successfully',
+                points: newCorrectCount,
+                totalPoints: newTotalPoints,
+                percentage,
+                status: newStatus
+            });
+        }
     } catch (err) {
         console.error('Error updating word progress:', err);
         res.status(500).json({ error: err.message });

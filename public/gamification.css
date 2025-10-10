@@ -398,6 +398,196 @@
     }
 }
 
+/* ============ Achievements ============ */
+.achievement-category {
+    margin-bottom: 30px;
+}
+
+.achievement-category h3 {
+    font-size: 20px;
+    margin-bottom: 15px;
+    color: #2c3e50;
+}
+
+.achievement-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+    gap: 15px;
+}
+
+.achievement-card {
+    display: flex;
+    gap: 15px;
+    padding: 15px;
+    border-radius: 12px;
+    background: #f8f9fa;
+    transition: all 0.3s ease;
+    position: relative;
+    overflow: hidden;
+}
+
+.achievement-card.unlocked {
+    background: linear-gradient(135deg, #fff5e6 0%, #ffe6f0 100%);
+    border: 2px solid #ffd700;
+    box-shadow: 0 4px 15px rgba(255, 215, 0, 0.2);
+}
+
+.achievement-card.locked {
+    background: #e9ecef;
+}
+
+.achievement-card:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 6px 20px rgba(0, 0, 0, 0.1);
+}
+
+.achievement-icon {
+    font-size: 48px;
+    flex-shrink: 0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 60px;
+    height: 60px;
+}
+
+.achievement-info {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    gap: 5px;
+}
+
+.achievement-name {
+    font-size: 16px;
+    font-weight: bold;
+    color: #2c3e50;
+}
+
+.achievement-description {
+    font-size: 13px;
+    color: #6c757d;
+}
+
+.achievement-progress-bar {
+    height: 6px;
+    background: #dee2e6;
+    border-radius: 10px;
+    overflow: hidden;
+    margin-top: 5px;
+}
+
+.achievement-progress-fill {
+    height: 100%;
+    background: linear-gradient(90deg, #667eea 0%, #764ba2 100%);
+    border-radius: 10px;
+    transition: width 0.5s ease;
+}
+
+.achievement-progress-text {
+    font-size: 11px;
+    color: #6c757d;
+    margin-top: 2px;
+}
+
+.achievement-unlocked-badge {
+    font-size: 13px;
+    color: #28a745;
+    font-weight: 600;
+}
+
+.achievement-xp {
+    font-size: 12px;
+    color: #667eea;
+    font-weight: bold;
+    margin-top: auto;
+}
+
+/* Achievement Notification */
+.achievement-notification {
+    position: fixed;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    z-index: 10000;
+    padding: 40px 60px;
+    background: linear-gradient(135deg, #ffd700 0%, #ffed4e 100%);
+    border-radius: 20px;
+    box-shadow: 0 15px 50px rgba(255, 215, 0, 0.5);
+    animation: achievementPopIn 0.5s ease, achievementPopOut 0.5s ease 3.5s forwards;
+    border: 3px solid #ffaa00;
+}
+
+.achievement-unlock-animation {
+    text-align: center;
+}
+
+.achievement-unlock-icon {
+    font-size: 80px;
+    margin-bottom: 15px;
+    animation: achievementBounce 0.6s ease;
+}
+
+.achievement-unlock-title {
+    font-size: 20px;
+    font-weight: bold;
+    color: #2c3e50;
+    margin-bottom: 10px;
+}
+
+.achievement-unlock-name {
+    font-size: 28px;
+    font-weight: bold;
+    color: #2c3e50;
+    margin-bottom: 10px;
+}
+
+.achievement-unlock-xp {
+    font-size: 18px;
+    color: #28a745;
+    font-weight: bold;
+}
+
+@keyframes achievementPopIn {
+    0% {
+        opacity: 0;
+        transform: translate(-50%, -50%) scale(0.3) rotate(-10deg);
+    }
+    50% {
+        transform: translate(-50%, -50%) scale(1.1) rotate(5deg);
+    }
+    100% {
+        opacity: 1;
+        transform: translate(-50%, -50%) scale(1) rotate(0deg);
+    }
+}
+
+@keyframes achievementPopOut {
+    0% {
+        opacity: 1;
+        transform: translate(-50%, -50%) scale(1);
+    }
+    100% {
+        opacity: 0;
+        transform: translate(-50%, -50%) scale(0.8);
+    }
+}
+
+@keyframes achievementBounce {
+    0%, 100% {
+        transform: scale(1);
+    }
+    25% {
+        transform: scale(1.2);
+    }
+    50% {
+        transform: scale(0.9);
+    }
+    75% {
+        transform: scale(1.1);
+    }
+}
+
 /* Responsive */
 @media (max-width: 768px) {
     .gamification-header {
@@ -425,5 +615,21 @@
     .heatmap-day {
         width: 10px;
         height: 10px;
+    }
+
+    .achievement-grid {
+        grid-template-columns: 1fr;
+    }
+
+    .achievement-notification {
+        padding: 30px 40px;
+    }
+
+    .achievement-unlock-icon {
+        font-size: 60px;
+    }
+
+    .achievement-unlock-name {
+        font-size: 22px;
     }
 }

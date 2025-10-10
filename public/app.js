@@ -1912,15 +1912,22 @@ schreiben,Sie schreibt einen Brief.,Писать,Она пишет письмо.
         if (!user || !window.gamification) return;
 
         try {
-            const [stats, xpLog, activityData] = await Promise.all([
+            const [stats, xpLog, activityData, achievementProgress] = await Promise.all([
                 window.gamification.getUserStats(user.id),
                 window.gamification.getXPLog(user.id, 50),
-                window.gamification.getActivityCalendar(user.id, 365)
+                window.gamification.getActivityCalendar(user.id, 365),
+                window.gamification.getAchievementProgress(user.id)
             ]);
 
             const statsContainer = document.getElementById('gamificationStatsContainer');
             if (statsContainer && stats) {
                 window.gamification.renderStatsPage(statsContainer, stats, xpLog, activityData);
+            }
+
+            // Render achievements
+            const achievementsContainer = document.getElementById('achievements-container');
+            if (achievementsContainer && achievementProgress) {
+                window.gamification.renderAchievements(achievementsContainer, achievementProgress);
             }
         } catch (err) {
             console.error('Error loading gamification stats:', err);

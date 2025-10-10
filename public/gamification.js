@@ -49,6 +49,45 @@ class Gamification {
         }
     }
 
+    // Fetch all achievements
+    async getAllAchievements() {
+        try {
+            const response = await fetch(`${this.apiUrl}/api/gamification/achievements`);
+            if (!response.ok) throw new Error('Failed to fetch achievements');
+
+            return await response.json();
+        } catch (err) {
+            console.error('Error fetching achievements:', err);
+            return [];
+        }
+    }
+
+    // Fetch user's unlocked achievements
+    async getUserAchievements(userId) {
+        try {
+            const response = await fetch(`${this.apiUrl}/api/gamification/achievements/${userId}`);
+            if (!response.ok) throw new Error('Failed to fetch user achievements');
+
+            return await response.json();
+        } catch (err) {
+            console.error('Error fetching user achievements:', err);
+            return [];
+        }
+    }
+
+    // Fetch achievement progress
+    async getAchievementProgress(userId) {
+        try {
+            const response = await fetch(`${this.apiUrl}/api/gamification/achievements/${userId}/progress`);
+            if (!response.ok) throw new Error('Failed to fetch achievement progress');
+
+            return await response.json();
+        } catch (err) {
+            console.error('Error fetching achievement progress:', err);
+            return [];
+        }
+    }
+
     // Render XP/Level display in header
     renderStatsHeader(containerElement, stats) {
         if (!stats) return;
@@ -122,7 +161,7 @@ class Gamification {
 
                 <!-- Achievement Stats -->
                 <section class="stats-section">
-                    <h2>🏆 Достижения</h2>
+                    <h2>🏆 Статистика</h2>
                     <div class="achievement-stats">
                         <div class="stat-item">
                             <span class="stat-icon">📚</span>
@@ -135,6 +174,12 @@ class Gamification {
                             <span class="stat-label">Упражнений выполнено</span>
                         </div>
                     </div>
+                </section>
+
+                <!-- Achievements Section -->
+                <section class="stats-section">
+                    <h2>🏅 Достижения</h2>
+                    <div id="achievements-container"></div>
                 </section>
 
                 <!-- XP History -->
@@ -253,6 +298,70 @@ class Gamification {
         containerElement.innerHTML = logHTML;
     }
 
+    // Render achievements grid
+    renderAchievements(containerElement, achievementProgress) {
+        if (!achievementProgress || achievementProgress.length === 0) {
+            containerElement.innerHTML = '<p>Нет доступных достижений</p>';
+            return;
+        }
+
+        // Group by category
+        const categories = {
+            'streak': { name: '🔥 Стрики', achievements: [] },
+            'words': { name: '📚 Слова', achievements: [] },
+            'level': { name: '⬆️ Уровни', achievements: [] },
+            'quiz': { name: '✏️ Упражнения', achievements: [] },
+            'special': { name: '⭐ Особые', achievements: [] }
+        };
+
+        achievementProgress.forEach(ach => {
+            if (categories[ach.category]) {
+                categories[ach.category].achievements.push(ach);
+            }
+        });
+
+        let html = '';
+
+        Object.values(categories).forEach(cat => {
+            if (cat.achievements.length === 0) return;
+
+            html += `<div class="achievement-category">
+                <h3>${cat.name}</h3>
+                <div class="achievement-grid">`;
+
+            cat.achievements.forEach(ach => {
+                const locked = !ach.unlocked;
+                const iconOpacity = locked ? '0.3' : '1';
+                const progressWidth = ach.progress || 0;
+
+                html += `
+                    <div class="achievement-card ${locked ? 'locked' : 'unlocked'}">
+                        <div class="achievement-icon" style="opacity: ${iconOpacity};">
+                            ${ach.icon}
+                        </div>
+                        <div class="achievement-info">
+                            <div class="achievement-name">${ach.name}</div>
+                            <div class="achievement-description">${ach.description}</div>
+                            ${locked ? `
+                                <div class="achievement-progress-bar">
+                                    <div class="achievement-progress-fill" style="width: ${progressWidth}%;"></div>
+                                </div>
+                                <div class="achievement-progress-text">${ach.currentValue || 0} / ${ach.requirement_value}</div>
+                            ` : `
+                                <div class="achievement-unlocked-badge">✅ Получено</div>
+                            `}
+                            <div class="achievement-xp">+${ach.xp_reward} XP</div>
+                        </div>
+                    </div>
+                `;
+            });
+
+            html += `</div></div>`;
+        });
+
+        containerElement.innerHTML = html;
+    }
+
     // Show XP earned notification
     showXPNotification(xpAmount, level, leveledUp = false) {
         const notification = document.createElement('div');
@@ -280,6 +389,28 @@ class Gamification {
         setTimeout(() => {
             notification.remove();
         }, 3000);
+    }
+
+    // Show achievement unlocked notification
+    showAchievementNotification(achievement) {
+        const notification = document.createElement('div');
+        notification.className = 'achievement-notification';
+
+        notification.innerHTML = `
+            <div class="achievement-unlock-animation">
+                <div class="achievement-unlock-icon">${achievement.icon}</div>
+                <div class="achievement-unlock-title">🏆 Достижение получено!</div>
+                <div class="achievement-unlock-name">${achievement.name}</div>
+                <div class="achievement-unlock-xp">+${achievement.xp_reward} XP</div>
+            </div>
+        `;
+
+        document.body.appendChild(notification);
+
+        // Remove after animation
+        setTimeout(() => {
+            notification.remove();
+        }, 4000);
     }
 
     // Helper: Get streak days text

@@ -205,6 +205,16 @@ class QuizManager {
             }
         }
 
+        // Show achievement notifications
+        if (window.gamification && progressResult && progressResult.achievements) {
+            progressResult.achievements.forEach((achievement, index) => {
+                // Stagger notifications if multiple achievements unlocked
+                setTimeout(() => {
+                    window.gamification.showAchievementNotification(achievement);
+                }, index * 1000);
+            });
+        }
+
         return {
             correct: isCorrect,
             partiallyCorrect: isPartiallyCorrect,
