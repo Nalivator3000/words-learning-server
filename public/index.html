@@ -40,6 +40,12 @@
             link.rel = 'stylesheet';
             link.href = 'style.css?v=' + Date.now();
             document.head.appendChild(link);
+
+            // Load gamification CSS
+            const gamificationLink = document.createElement('link');
+            gamificationLink.rel = 'stylesheet';
+            gamificationLink.href = 'gamification.css?v=' + Date.now();
+            document.head.appendChild(gamificationLink);
         })();
     </script>
 </head>
@@ -98,6 +104,7 @@
 
         <div class="user-info-bar">
             <span id="userInfo" class="user-info"></span>
+            <div id="gamificationHeader" class="gamification-header-container"></div>
         </div>
 
         <main>
@@ -285,6 +292,10 @@
                             <div id="learnedList" class="word-list"></div>
                         </div>
                     </div>
+                    <!-- Gamification Stats -->
+                    <div id="gamificationStatsContainer" class="gamification-section">
+                        <!-- Gamification stats will be rendered here by gamification.js -->
+                    </div>
                     <!-- Danger Zone - Reset Progress (moved to bottom) -->
                     <div class="export-section" style="margin-top: 40px; border-top: 2px solid #f44336; padding-top: 20px;">
                         <h3 style="color: #f44336;">⚠️ Опасная зона</h3>
@@ -372,6 +383,7 @@
     <script src="language-manager.js"></script>
     <script src="user-manager.js"></script>
     <script src="survival-mode.js"></script>
+    <script src="gamification.js"></script>
     <script src="app.js"></script>
 </body>
 </html>
