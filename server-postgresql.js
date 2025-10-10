@@ -550,28 +550,29 @@ app.put('/api/words/:id/progress', async (req, res) => {
 
         const points = pointsMap[questionType] || 2; // Default 2 points
 
-        // Update points
-        const newTotalPoints = (word.totalpoints || 0) + points;
+        // Point system: correctCount accumulates earned points (max 100)
+        // totalPoints is always 100 (fixed maximum)
+        const newTotalPoints = 100; // Fixed maximum
         let newCorrectCount = (word.correctcount || 0);
 
         if (correct) {
-            // Add points for correct answer
-            newCorrectCount += points;
+            // Add points for correct answer (cap at 100)
+            newCorrectCount = Math.min(100, newCorrectCount + points);
         } else {
             // Deduct 1 point for incorrect answer (but not below 0)
             newCorrectCount = Math.max(0, newCorrectCount - 1);
         }
 
-        // Calculate percentage: (correctCount / totalPoints) * 100
-        const percentage = newTotalPoints > 0 ? Math.round((newCorrectCount / newTotalPoints) * 100) : 0;
+        // Calculate percentage: (correctCount / 100) * 100 = correctCount
+        const percentage = newCorrectCount;
 
-        // Determine new status based on points, accuracy, and review cycle
+        // Determine new status based on points and review cycle
         let newStatus = word.status;
         let newReviewCycle = word.reviewcycle || 1;
         let nextReviewDate = null;
 
-        if (word.status === 'studying' && newTotalPoints >= 30 && percentage >= 80) {
-            // Completed studying phase - move to review based on cycle
+        if (word.status === 'studying' && newCorrectCount >= 80) {
+            // Completed studying phase (reached 80+ points out of 100) - move to review based on cycle
             if (newReviewCycle === 1) {
                 newStatus = 'review_7';
                 // Set next review date to 7 days from now

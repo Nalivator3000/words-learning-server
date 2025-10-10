@@ -111,40 +111,37 @@ class LanguageLearningApp {
 
     // New Points-Based Scoring System
     calculateWordScore(word) {
-        // Calculate percentage from correctCount (earned points) / totalPoints (possible points)
+        // correctCount is the earned points (0-100)
+        // totalPoints is always 100 (fixed maximum)
         const correctCount = word.correctcount || word.correctCount || 0;
-        const totalPoints = word.totalpoints || word.totalPoints || 0;
 
-        if (totalPoints === 0) return 0;
-
-        const percentage = Math.round((correctCount / totalPoints) * 100);
-        return Math.min(100, Math.max(0, percentage));
+        // Score IS the percentage (correctCount out of 100)
+        return Math.min(100, Math.max(0, correctCount));
     }
 
     // Get score display with progress percentage and points
     getScoreDisplay(score, word) {
         let className, text;
         const correctCount = word.correctcount || word.correctCount || 0;
-        const totalPoints = word.totalpoints || word.totalPoints || 0;
 
-        if (totalPoints === 0) {
+        if (correctCount === 0) {
             className = 'score-none';
             text = `Не изучено 🌱`;
         } else if (score >= 90) {
             className = 'score-complete';
-            text = `${correctCount}/${totalPoints} баллов (${score}%) ✅`;
+            text = `${correctCount}/100 баллов (${score}%) ✅`;
         } else if (score >= 70) {
             className = 'score-high';
-            text = `${correctCount}/${totalPoints} баллов (${score}%) 🔥`;
+            text = `${correctCount}/100 баллов (${score}%) 🔥`;
         } else if (score >= 50) {
             className = 'score-medium';
-            text = `${correctCount}/${totalPoints} баллов (${score}%) ⚡`;
+            text = `${correctCount}/100 баллов (${score}%) ⚡`;
         } else if (score >= 30) {
             className = 'score-low';
-            text = `${correctCount}/${totalPoints} баллов (${score}%) 📚`;
+            text = `${correctCount}/100 баллов (${score}%) 📚`;
         } else {
             className = 'score-very-low';
-            text = `${correctCount}/${totalPoints} баллов (${score}%) 🌱`;
+            text = `${correctCount}/100 баллов (${score}%) 🌱`;
         }
 
         return { className, text };
