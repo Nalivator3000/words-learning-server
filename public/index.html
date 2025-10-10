@@ -90,6 +90,7 @@
                     <button id="importBtn" class="nav-btn" data-translate="import">Импорт</button>
                     <button id="studyBtn" class="nav-btn" data-translate="study">Изучение</button>
                     <button id="reviewBtn" class="nav-btn" data-translate="review">Повторение</button>
+                    <button id="leaderboardBtn" class="nav-btn">🏆 Рейтинг</button>
                     <button id="statsBtn" class="nav-btn" data-translate="statistics">Статистика</button>
                 </div>
             </nav>
@@ -306,6 +307,21 @@
                             ⚠️ ВНИМАНИЕ: Это действие переместит все слова на "изучение" и обнулит все баллы! Необратимо!
                         </p>
                     </div>
+                </div>
+            </section>
+
+            <!-- Leaderboard Section -->
+            <section id="leaderboardSection" class="section">
+                <h2>🏆 Таблица лидеров</h2>
+                <div class="leaderboard-tabs">
+                    <button id="globalLeaderboardTab" class="tab-btn active">🌍 Глобальный</button>
+                    <button id="weeklyLeaderboardTab" class="tab-btn">📅 Неделя</button>
+                </div>
+                <div id="userRankCard" class="user-rank-card">
+                    <!-- User's rank will be displayed here -->
+                </div>
+                <div id="leaderboardContainer" class="leaderboard-container">
+                    <!-- Leaderboard will be rendered here -->
                 </div>
             </section>
 

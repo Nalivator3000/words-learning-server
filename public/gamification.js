@@ -88,6 +88,45 @@ class Gamification {
         }
     }
 
+    // Fetch global leaderboard
+    async getGlobalLeaderboard(limit = 100) {
+        try {
+            const response = await fetch(`${this.apiUrl}/api/gamification/leaderboard/global?limit=${limit}`);
+            if (!response.ok) throw new Error('Failed to fetch global leaderboard');
+
+            return await response.json();
+        } catch (err) {
+            console.error('Error fetching global leaderboard:', err);
+            return [];
+        }
+    }
+
+    // Fetch weekly leaderboard
+    async getWeeklyLeaderboard(limit = 100) {
+        try {
+            const response = await fetch(`${this.apiUrl}/api/gamification/leaderboard/weekly?limit=${limit}`);
+            if (!response.ok) throw new Error('Failed to fetch weekly leaderboard');
+
+            return await response.json();
+        } catch (err) {
+            console.error('Error fetching weekly leaderboard:', err);
+            return [];
+        }
+    }
+
+    // Fetch user's rank
+    async getUserRank(userId) {
+        try {
+            const response = await fetch(`${this.apiUrl}/api/gamification/leaderboard/rank/${userId}`);
+            if (!response.ok) throw new Error('Failed to fetch user rank');
+
+            return await response.json();
+        } catch (err) {
+            console.error('Error fetching user rank:', err);
+            return { global: { rank: null }, weekly: { rank: null } };
+        }
+    }
+
     // Render XP/Level display in header
     renderStatsHeader(containerElement, stats) {
         if (!stats) return;
@@ -358,6 +397,59 @@ class Gamification {
 
             html += `</div></div>`;
         });
+
+        containerElement.innerHTML = html;
+    }
+
+    // Render leaderboard
+    renderLeaderboard(containerElement, leaderboardData, currentUserId, type = 'global') {
+        if (!leaderboardData || leaderboardData.length === 0) {
+            containerElement.innerHTML = '<p>Лидерборд пуст</p>';
+            return;
+        }
+
+        const title = type === 'global' ? '🌍 Глобальный рейтинг' : '📅 Рейтинг недели';
+        const xpField = type === 'global' ? 'total_xp' : 'weekly_xp';
+
+        let html = `
+            <div class="leaderboard">
+                <h3 class="leaderboard-title">${title}</h3>
+                <div class="leaderboard-list">
+        `;
+
+        leaderboardData.forEach((user, index) => {
+            const isCurrentUser = user.id === currentUserId;
+            const rank = user.rank || (index + 1);
+            const xp = user[xpField] || 0;
+
+            // Medal for top 3
+            let medal = '';
+            if (rank === 1) medal = '🥇';
+            else if (rank === 2) medal = '🥈';
+            else if (rank === 3) medal = '🥉';
+
+            html += `
+                <div class="leaderboard-entry ${isCurrentUser ? 'current-user' : ''}">
+                    <div class="leaderboard-rank">${medal || `#${rank}`}</div>
+                    <div class="leaderboard-user-info">
+                        <div class="leaderboard-username">
+                            ${user.name}
+                            ${isCurrentUser ? '<span class="you-badge">Вы</span>' : ''}
+                        </div>
+                        <div class="leaderboard-stats">
+                            Ур. ${user.level} • ${user.current_streak || 0}🔥
+                            ${type === 'weekly' ? `• ${user.weekly_words || 0} слов` : ''}
+                        </div>
+                    </div>
+                    <div class="leaderboard-xp">${xp.toLocaleString()} XP</div>
+                </div>
+            `;
+        });
+
+        html += `
+                </div>
+            </div>
+        `;
 
         containerElement.innerHTML = html;
     }

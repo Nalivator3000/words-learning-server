@@ -790,6 +790,125 @@ app.get('/api/gamification/achievements/:userId/progress', async (req, res) => {
     }
 });
 
+// Gamification: Get global leaderboard
+app.get('/api/gamification/leaderboard/global', async (req, res) => {
+    try {
+        const { limit = 100 } = req.query;
+
+        const result = await db.query(
+            `SELECT
+                u.id,
+                u.name,
+                us.total_xp,
+                us.level,
+                us.current_streak,
+                us.longest_streak,
+                us.total_words_learned,
+                us.total_quizzes_completed,
+                ROW_NUMBER() OVER (ORDER BY us.total_xp DESC) as rank
+             FROM users u
+             INNER JOIN user_stats us ON u.id = us.user_id
+             ORDER BY us.total_xp DESC
+             LIMIT $1`,
+            [parseInt(limit)]
+        );
+
+        res.json(result.rows);
+    } catch (err) {
+        console.error('Error getting global leaderboard:', err);
+        res.status(500).json({ error: err.message });
+    }
+});
+
+// Gamification: Get weekly leaderboard
+app.get('/api/gamification/leaderboard/weekly', async (req, res) => {
+    try {
+        const { limit = 100 } = req.query;
+        const oneWeekAgo = new Date();
+        oneWeekAgo.setDate(oneWeekAgo.getDate() - 7);
+        const weekAgoStr = oneWeekAgo.toISOString().split('T')[0];
+
+        const result = await db.query(
+            `SELECT
+                u.id,
+                u.name,
+                us.level,
+                us.current_streak,
+                COALESCE(SUM(da.xp_earned), 0) as weekly_xp,
+                COALESCE(SUM(da.words_learned), 0) as weekly_words,
+                COALESCE(SUM(da.quizzes_completed), 0) as weekly_quizzes,
+                ROW_NUMBER() OVER (ORDER BY COALESCE(SUM(da.xp_earned), 0) DESC) as rank
+             FROM users u
+             INNER JOIN user_stats us ON u.id = us.user_id
+             LEFT JOIN daily_activity da ON u.id = da.user_id
+                AND da.activity_date >= $1
+             GROUP BY u.id, u.name, us.level, us.current_streak
+             ORDER BY weekly_xp DESC
+             LIMIT $2`,
+            [weekAgoStr, parseInt(limit)]
+        );
+
+        res.json(result.rows);
+    } catch (err) {
+        console.error('Error getting weekly leaderboard:', err);
+        res.status(500).json({ error: err.message });
+    }
+});
+
+// Gamification: Get user's rank
+app.get('/api/gamification/leaderboard/rank/:userId', async (req, res) => {
+    try {
+        const { userId } = req.params;
+
+        // Global rank
+        const globalRank = await db.query(
+            `SELECT
+                rank,
+                total_xp
+             FROM (
+                SELECT
+                    user_id,
+                    total_xp,
+                    ROW_NUMBER() OVER (ORDER BY total_xp DESC) as rank
+                FROM user_stats
+             ) ranked
+             WHERE user_id = $1`,
+            [parseInt(userId)]
+        );
+
+        // Weekly rank
+        const oneWeekAgo = new Date();
+        oneWeekAgo.setDate(oneWeekAgo.getDate() - 7);
+        const weekAgoStr = oneWeekAgo.toISOString().split('T')[0];
+
+        const weeklyRank = await db.query(
+            `SELECT
+                rank,
+                weekly_xp
+             FROM (
+                SELECT
+                    u.id as user_id,
+                    COALESCE(SUM(da.xp_earned), 0) as weekly_xp,
+                    ROW_NUMBER() OVER (ORDER BY COALESCE(SUM(da.xp_earned), 0) DESC) as rank
+                FROM users u
+                LEFT JOIN daily_activity da ON u.id = da.user_id
+                    AND da.activity_date >= $1
+                GROUP BY u.id
+             ) ranked
+             WHERE user_id = $2`,
+            [weekAgoStr, parseInt(userId)]
+        );
+
+        res.json({
+            global: globalRank.rows[0] || { rank: null, total_xp: 0 },
+            weekly: weeklyRank.rows[0] || { rank: null, weekly_xp: 0 }
+        });
+    } catch (err) {
+        console.error('Error getting user rank:', err);
+        res.status(500).json({ error: err.message });
+    }
+});
+
 // Get all words with pagination (filtered by user and language pair)
 app.get('/api/words', async (req, res) => {
     try {

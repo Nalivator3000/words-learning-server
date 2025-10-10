@@ -211,10 +211,15 @@ class LanguageLearningApp {
         document.getElementById('importBtn').addEventListener('click', () => this.showSection('import'));
         document.getElementById('studyBtn').addEventListener('click', () => this.showSection('study'));
         document.getElementById('reviewBtn').addEventListener('click', () => this.showSection('review'));
+        document.getElementById('leaderboardBtn').addEventListener('click', () => this.showSection('leaderboard'));
         document.getElementById('statsBtn').addEventListener('click', () => this.showSection('stats'));
-        
+
         // User menu - direct to settings
         document.getElementById('userMenuBtn').addEventListener('click', () => this.showSection('settings'));
+
+        // Leaderboard tabs
+        document.getElementById('globalLeaderboardTab').addEventListener('click', () => this.loadLeaderboard('global'));
+        document.getElementById('weeklyLeaderboardTab').addEventListener('click', () => this.loadLeaderboard('weekly'));
 
         // Quick actions
         document.getElementById('quickStudyBtn').addEventListener('click', () => this.quickStart('study'));
@@ -382,6 +387,8 @@ class LanguageLearningApp {
             await this.updateStats();
         } else if (sectionName === 'review') {
             await this.updateReviewStats();
+        } else if (sectionName === 'leaderboard') {
+            await this.loadLeaderboard('global');
         } else if (sectionName === 'stats') {
             await this.updateStatsPage();
         } else if (sectionName === 'settings') {
@@ -1931,6 +1938,48 @@ schreiben,Sie schreibt einen Brief.,Писать,Она пишет письмо.
             }
         } catch (err) {
             console.error('Error loading gamification stats:', err);
+        }
+    }
+
+    async loadLeaderboard(type = 'global') {
+        const user = userManager.getCurrentUser();
+        if (!user || !window.gamification) return;
+
+        try {
+            // Update tab buttons
+            document.querySelectorAll('.tab-btn').forEach(btn => btn.classList.remove('active'));
+            document.getElementById(`${type}LeaderboardTab`).classList.add('active');
+
+            // Fetch data
+            const [leaderboardData, userRank] = await Promise.all([
+                type === 'global'
+                    ? window.gamification.getGlobalLeaderboard(100)
+                    : window.gamification.getWeeklyLeaderboard(100),
+                window.gamification.getUserRank(user.id)
+            ]);
+
+            // Render leaderboard
+            const leaderboardContainer = document.getElementById('leaderboardContainer');
+            if (leaderboardContainer) {
+                window.gamification.renderLeaderboard(leaderboardContainer, leaderboardData, user.id, type);
+            }
+
+            // Render user rank card
+            const rankCard = document.getElementById('userRankCard');
+            if (rankCard && userRank) {
+                const rank = type === 'global' ? userRank.global : userRank.weekly;
+                const xp = type === 'global' ? rank.total_xp : rank.weekly_xp;
+
+                rankCard.innerHTML = `
+                    <div class="your-rank-card">
+                        <div class="your-rank-title">Ваше место</div>
+                        <div class="your-rank-value">#${rank.rank || '—'}</div>
+                        <div class="your-rank-xp">${(xp || 0).toLocaleString()} XP</div>
+                    </div>
+                `;
+            }
+        } catch (err) {
+            console.error('Error loading leaderboard:', err);
         }
     }
 }
