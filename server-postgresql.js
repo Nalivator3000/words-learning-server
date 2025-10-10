@@ -103,7 +103,50 @@ async function initDatabase() {
             END $$;
         `);
 
-        console.log('PostgreSQL database initialized');
+        // Gamification: User stats table for XP and levels
+        await db.query(`
+            CREATE TABLE IF NOT EXISTS user_stats (
+                id SERIAL PRIMARY KEY,
+                user_id INTEGER UNIQUE REFERENCES users(id) ON DELETE CASCADE,
+                total_xp INTEGER DEFAULT 0,
+                level INTEGER DEFAULT 1,
+                current_streak INTEGER DEFAULT 0,
+                longest_streak INTEGER DEFAULT 0,
+                last_activity_date DATE,
+                total_words_learned INTEGER DEFAULT 0,
+                total_quizzes_completed INTEGER DEFAULT 0,
+                createdAt TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+                updatedAt TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+            )
+        `);
+
+        // Gamification: Daily activity log for streak tracking
+        await db.query(`
+            CREATE TABLE IF NOT EXISTS daily_activity (
+                id SERIAL PRIMARY KEY,
+                user_id INTEGER REFERENCES users(id) ON DELETE CASCADE,
+                activity_date DATE NOT NULL,
+                words_learned INTEGER DEFAULT 0,
+                quizzes_completed INTEGER DEFAULT 0,
+                xp_earned INTEGER DEFAULT 0,
+                createdAt TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+                UNIQUE(user_id, activity_date)
+            )
+        `);
+
+        // Gamification: XP log for tracking XP sources
+        await db.query(`
+            CREATE TABLE IF NOT EXISTS xp_log (
+                id SERIAL PRIMARY KEY,
+                user_id INTEGER REFERENCES users(id) ON DELETE CASCADE,
+                action_type VARCHAR(50) NOT NULL,
+                xp_amount INTEGER NOT NULL,
+                description TEXT,
+                createdAt TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+            )
+        `);
+
+        console.log('PostgreSQL database initialized with gamification tables');
     } catch (err) {
         console.error('Database initialization error:', err);
     }
@@ -118,6 +161,80 @@ function hashPassword(password) {
         hash = hash & hash;
     }
     return hash.toString();
+}
+
+// Gamification: Calculate level from total XP
+// Progressive XP requirements: 100, 300, 600, 1000, 1500, 2100...
+function calculateLevel(totalXP) {
+    let level = 1;
+    let xpForNextLevel = 100;
+    let accumulatedXP = 0;
+
+    while (totalXP >= accumulatedXP + xpForNextLevel) {
+        accumulatedXP += xpForNextLevel;
+        level++;
+        xpForNextLevel = level * 100; // Each level requires level * 100 XP
+    }
+
+    return {
+        level,
+        currentLevelXP: totalXP - accumulatedXP,
+        xpForNextLevel,
+        progress: Math.round(((totalXP - accumulatedXP) / xpForNextLevel) * 100)
+    };
+}
+
+// Gamification: Get or create user stats
+async function getUserStats(userId) {
+    let stats = await db.query('SELECT * FROM user_stats WHERE user_id = $1', [userId]);
+
+    if (stats.rows.length === 0) {
+        // Create new stats entry for user
+        await db.query(
+            'INSERT INTO user_stats (user_id) VALUES ($1)',
+            [userId]
+        );
+        stats = await db.query('SELECT * FROM user_stats WHERE user_id = $1', [userId]);
+    }
+
+    return stats.rows[0];
+}
+
+// Gamification: Award XP to user
+async function awardXP(userId, actionType, xpAmount, description = '') {
+    try {
+        // Log XP
+        await db.query(
+            'INSERT INTO xp_log (user_id, action_type, xp_amount, description) VALUES ($1, $2, $3, $4)',
+            [userId, actionType, xpAmount, description]
+        );
+
+        // Update user stats
+        const result = await db.query(
+            `UPDATE user_stats
+             SET total_xp = total_xp + $1,
+                 updatedat = CURRENT_TIMESTAMP
+             WHERE user_id = $2
+             RETURNING total_xp`,
+            [xpAmount, userId]
+        );
+
+        const newTotalXP = result.rows[0]?.total_xp || 0;
+        const levelInfo = calculateLevel(newTotalXP);
+
+        // Update level if changed
+        await db.query(
+            'UPDATE user_stats SET level = $1 WHERE user_id = $2',
+            [levelInfo.level, userId]
+        );
+
+        console.log(`🎯 User ${userId} earned ${xpAmount} XP for ${actionType} - Level ${levelInfo.level}`);
+
+        return { xpAmount, newTotalXP, ...levelInfo };
+    } catch (err) {
+        console.error('Error awarding XP:', err);
+        throw err;
+    }
 }
 
 // API Routes
@@ -306,6 +423,85 @@ app.put('/api/users/:userId/lesson-size', async (req, res) => {
 
         res.json(result.rows[0]);
     } catch (err) {
+        res.status(500).json({ error: err.message });
+    }
+});
+
+// Gamification: Get user stats (XP, level, streak)
+app.get('/api/gamification/stats/:userId', async (req, res) => {
+    try {
+        const { userId } = req.params;
+        const stats = await getUserStats(parseInt(userId));
+        const levelInfo = calculateLevel(stats.total_xp);
+
+        res.json({
+            totalXP: stats.total_xp,
+            level: stats.level,
+            currentStreak: stats.current_streak,
+            longestStreak: stats.longest_streak,
+            totalWordsLearned: stats.total_words_learned,
+            totalQuizzesCompleted: stats.total_quizzes_completed,
+            lastActivityDate: stats.last_activity_date,
+            levelInfo
+        });
+    } catch (err) {
+        console.error('Error getting user stats:', err);
+        res.status(500).json({ error: err.message });
+    }
+});
+
+// Gamification: Award XP (called internally or for testing)
+app.post('/api/gamification/award-xp', async (req, res) => {
+    try {
+        const { userId, actionType, xpAmount, description } = req.body;
+
+        if (!userId || !actionType || !xpAmount) {
+            return res.status(400).json({ error: 'userId, actionType, and xpAmount are required' });
+        }
+
+        const result = await awardXP(parseInt(userId), actionType, xpAmount, description);
+        res.json(result);
+    } catch (err) {
+        console.error('Error awarding XP:', err);
+        res.status(500).json({ error: err.message });
+    }
+});
+
+// Gamification: Get XP history
+app.get('/api/gamification/xp-log/:userId', async (req, res) => {
+    try {
+        const { userId } = req.params;
+        const { limit = 50 } = req.query;
+
+        const result = await db.query(
+            'SELECT * FROM xp_log WHERE user_id = $1 ORDER BY createdat DESC LIMIT $2',
+            [parseInt(userId), parseInt(limit)]
+        );
+
+        res.json(result.rows);
+    } catch (err) {
+        console.error('Error getting XP log:', err);
+        res.status(500).json({ error: err.message });
+    }
+});
+
+// Gamification: Get daily activity calendar
+app.get('/api/gamification/activity/:userId', async (req, res) => {
+    try {
+        const { userId } = req.params;
+        const { days = 365 } = req.query;
+
+        const result = await db.query(
+            `SELECT activity_date, words_learned, quizzes_completed, xp_earned
+             FROM daily_activity
+             WHERE user_id = $1 AND activity_date >= CURRENT_DATE - INTERVAL '${parseInt(days)} days'
+             ORDER BY activity_date DESC`,
+            [parseInt(userId)]
+        );
+
+        res.json(result.rows);
+    } catch (err) {
+        console.error('Error getting activity:', err);
         res.status(500).json({ error: err.message });
     }
 });

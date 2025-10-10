@@ -29,7 +29,8 @@
       "Bash(curl:*)",
       "Bash(python:*)",
       "Bash(powershell:*)",
-      "Bash(npm install:*)"
+      "Bash(npm install:*)",
+      "Bash(git checkout:*)"
     ],
     "deny": [],
     "ask": []
