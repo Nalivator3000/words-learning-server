@@ -270,14 +270,6 @@
                         <button id="exportReviewBtn" class="export-btn">Экспорт слов на повторении</button>
                         <button id="exportLearnedBtn" class="export-btn">Экспорт изученных слов</button>
                         <button id="exportAllBtn" class="export-btn">Экспорт всех слов</button>
-                        <hr style="margin: 20px 0; border: none; border-top: 1px solid #e0e0e0;">
-                        <h3>Управление прогрессом</h3>
-                        <button id="resetAllToStudyingBtn" class="export-btn" style="background: #ff9800; color: white;">
-                            🔄 Сбросить весь прогресс
-                        </button>
-                        <p style="font-size: 12px; color: #6c757d; margin-top: 10px;">
-                            ⚠️ Переместит все слова на "изучение" и обнулит баллы (correctCount, totalPoints, reviewCycle)
-                        </p>
                     </div>
                     <div class="word-lists">
                         <div class="list-section">
@@ -292,6 +284,16 @@
                             <h3>Изучено (<span id="learnedListCount">0</span>)</h3>
                             <div id="learnedList" class="word-list"></div>
                         </div>
+                    </div>
+                    <!-- Danger Zone - Reset Progress (moved to bottom) -->
+                    <div class="export-section" style="margin-top: 40px; border-top: 2px solid #f44336; padding-top: 20px;">
+                        <h3 style="color: #f44336;">⚠️ Опасная зона</h3>
+                        <button id="resetAllToStudyingBtn" class="export-btn" style="background: #f44336; color: white;">
+                            🔄 Сбросить весь прогресс
+                        </button>
+                        <p style="font-size: 12px; color: #f44336; margin-top: 10px; font-weight: 600;">
+                            ⚠️ ВНИМАНИЕ: Это действие переместит все слова на "изучение" и обнулит все баллы! Необратимо!
+                        </p>
                     </div>
                 </div>
             </section>
