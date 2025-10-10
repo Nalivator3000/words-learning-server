@@ -721,7 +721,7 @@ app.post('/api/words/check-expired-reviews', async (req, res) => {
     }
 });
 
-// Bulk update all words to studying status
+// Bulk update all words to studying status and reset progress
 app.put('/api/words/bulk/reset-to-studying', async (req, res) => {
     try {
         const { userId, languagePairId } = req.query;
@@ -732,15 +732,20 @@ app.put('/api/words/bulk/reset-to-studying', async (req, res) => {
 
         const result = await db.query(
             `UPDATE words
-             SET status = 'studying', updatedAt = CURRENT_TIMESTAMP
+             SET status = 'studying',
+                 correctCount = 0,
+                 totalPoints = 0,
+                 reviewCycle = 1,
+                 nextReviewDate = NULL,
+                 updatedAt = CURRENT_TIMESTAMP
              WHERE user_id = $1 AND language_pair_id = $2`,
             [userId, languagePairId]
         );
 
-        console.log(`🔄 Reset ${result.rowCount} words to studying status for user ${userId}, language pair ${languagePairId}`);
+        console.log(`🔄 Reset ${result.rowCount} words to studying status (progress cleared) for user ${userId}, language pair ${languagePairId}`);
 
         res.json({
-            message: 'All words reset to studying status',
+            message: 'All words reset to studying status with progress cleared',
             updatedCount: result.rowCount
         });
     } catch (err) {

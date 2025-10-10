@@ -1162,13 +1162,18 @@ schreiben,Sie schreibt einen Brief.,Писать,Она пишет письмо.
     }
 
     async resetAllWordsToStudying() {
-        if (!confirm('⚠️ Вы уверены, что хотите сбросить ВСЕ слова на изучение?\n\nЭто переместит все слова из "повторения" и "изучено" обратно в "изучение".')) {
+        if (!confirm('⚠️ Вы уверены, что хотите ПОЛНОСТЬЮ СБРОСИТЬ ПРОГРЕСС?\n\n' +
+                     'Это действие:\n' +
+                     '• Переместит все слова в статус "изучение"\n' +
+                     '• Обнулит все баллы (correctCount и totalPoints)\n' +
+                     '• Сбросит циклы повторения (reviewCycle → 1)\n\n' +
+                     'Это необратимое действие!')) {
             return;
         }
 
         try {
             const result = await database.resetAllWordsToStudying();
-            alert(`✅ Успешно! ${result.updatedCount} слов перемещены на изучение.`);
+            alert(`✅ Успешно! ${result.updatedCount} слов сброшены. Прогресс обнулён.`);
             await this.updateStatsPage();
             await this.updateStats();
         } catch (error) {
