@@ -6,6 +6,13 @@
     <title>FluentFlow - Ultra Modern 3D Learning v4.1</title>
     <!-- Version: v5.0.0-FIX-f0e645b -->
 
+    <!-- PWA Manifest -->
+    <link rel="manifest" href="/manifest.json">
+    <meta name="theme-color" content="#7C3AED">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+    <meta name="apple-mobile-web-app-title" content="FluentFlow">
+
     <!-- Disable caching -->
     <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate">
     <meta http-equiv="Pragma" content="no-cache">
@@ -15,25 +22,21 @@
     <script src="https://accounts.google.com/gsi/client" async defer></script>
 
     <script>
-        // Force clear all caches and unregister service workers
-        (async function() {
-            // Unregister all service workers
-            if ('serviceWorker' in navigator) {
-                const registrations = await navigator.serviceWorker.getRegistrations();
-                for (let registration of registrations) {
-                    await registration.unregister();
-                    console.log('🗑️ Unregistered service worker');
-                }
-            }
+        // PWA Service Worker Registration
+        if ('serviceWorker' in navigator) {
+            window.addEventListener('load', () => {
+                navigator.serviceWorker.register('/sw.js')
+                    .then((registration) => {
+                        console.log('✅ Service Worker registered:', registration.scope);
+                    })
+                    .catch((error) => {
+                        console.log('❌ Service Worker registration failed:', error);
+                    });
+            });
+        }
 
-            // Clear all caches
-            if ('caches' in window) {
-                const names = await caches.keys();
-                for (let name of names) {
-                    await caches.delete(name);
-                    console.log('🗑️ Cleared cache:', name);
-                }
-            }
+        // Load stylesheets
+        (function() {
 
             // Load CSS with timestamp to bust cache
             const link = document.createElement('link');
@@ -95,6 +98,9 @@
                 </div>
             </nav>
             <div class="header-right">
+                <button id="themeToggle" class="theme-toggle" aria-label="Toggle theme">
+                    <span class="theme-icon">🌙</span>
+                </button>
                 <button id="userMenuBtn" class="settings-btn">⚙️</button>
                 <div id="userMenu" class="user-menu hidden">
                     <button id="settingsBtn" data-translate="settings">Настройки</button>
@@ -398,6 +404,7 @@
         </script>
     </div>
 
+    <script src="theme.js"></script>
     <script src="api-database.js"></script>
     <script src="quiz.js"></script>
     <script src="language-manager.js"></script>
