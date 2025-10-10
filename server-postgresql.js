@@ -733,11 +733,11 @@ app.put('/api/words/bulk/reset-to-studying', async (req, res) => {
         const result = await db.query(
             `UPDATE words
              SET status = 'studying',
-                 correctCount = 0,
-                 totalPoints = 0,
-                 reviewCycle = 1,
-                 nextReviewDate = NULL,
-                 updatedAt = CURRENT_TIMESTAMP
+                 correctcount = 0,
+                 totalpoints = 0,
+                 reviewcycle = 1,
+                 nextreviewdate = NULL,
+                 updatedat = CURRENT_TIMESTAMP
              WHERE user_id = $1 AND language_pair_id = $2`,
             [userId, languagePairId]
         );
