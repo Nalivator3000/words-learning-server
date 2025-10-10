@@ -237,6 +237,68 @@ async function awardXP(userId, actionType, xpAmount, description = '') {
     }
 }
 
+// Gamification: Update daily activity and check streak
+async function updateDailyActivity(userId, wordsLearned = 0, quizzesCompleted = 0, xpEarned = 0) {
+    try {
+        const today = new Date().toISOString().split('T')[0]; // YYYY-MM-DD
+
+        // Insert or update today's activity
+        await db.query(
+            `INSERT INTO daily_activity (user_id, activity_date, words_learned, quizzes_completed, xp_earned)
+             VALUES ($1, $2, $3, $4, $5)
+             ON CONFLICT (user_id, activity_date)
+             DO UPDATE SET
+                 words_learned = daily_activity.words_learned + $3,
+                 quizzes_completed = daily_activity.quizzes_completed + $4,
+                 xp_earned = daily_activity.xp_earned + $5`,
+            [userId, today, wordsLearned, quizzesCompleted, xpEarned]
+        );
+
+        // Update streak
+        const stats = await db.query('SELECT * FROM user_stats WHERE user_id = $1', [userId]);
+        const lastActivityDate = stats.rows[0]?.last_activity_date;
+        const currentStreak = stats.rows[0]?.current_streak || 0;
+        const longestStreak = stats.rows[0]?.longest_streak || 0;
+
+        let newStreak = currentStreak;
+        const yesterday = new Date();
+        yesterday.setDate(yesterday.getDate() - 1);
+        const yesterdayStr = yesterday.toISOString().split('T')[0];
+
+        if (!lastActivityDate || lastActivityDate === today) {
+            // Same day, keep streak
+            newStreak = currentStreak || 1;
+        } else if (lastActivityDate === yesterdayStr) {
+            // Consecutive day
+            newStreak = currentStreak + 1;
+        } else {
+            // Streak broken
+            newStreak = 1;
+        }
+
+        const newLongestStreak = Math.max(longestStreak, newStreak);
+
+        // Update user stats
+        await db.query(
+            `UPDATE user_stats
+             SET current_streak = $1,
+                 longest_streak = $2,
+                 last_activity_date = $3,
+                 total_quizzes_completed = total_quizzes_completed + $4,
+                 updatedat = CURRENT_TIMESTAMP
+             WHERE user_id = $5`,
+            [newStreak, newLongestStreak, today, quizzesCompleted, userId]
+        );
+
+        console.log(`🔥 User ${userId} streak: ${newStreak} days (longest: ${newLongestStreak})`);
+
+        return { currentStreak: newStreak, longestStreak: newLongestStreak };
+    } catch (err) {
+        console.error('Error updating daily activity:', err);
+        throw err;
+    }
+}
+
 // API Routes
 
 // Authentication endpoints
@@ -802,12 +864,45 @@ app.put('/api/words/:id/progress', async (req, res) => {
 
         console.log(`📊 Word ${id} progress: ${newCorrectCount}/${newTotalPoints} points (${percentage}%) - Status: ${newStatus}, Cycle: ${newReviewCycle}`);
 
+        // Gamification: Award XP for quiz answers
+        const userId = word.user_id;
+        let xpEarned = 0;
+        let xpResult = null;
+
+        if (correct) {
+            // Award XP based on question difficulty
+            const xpMap = {
+                'multiple': 5,
+                'multipleChoice': 5,
+                'reverse_multiple': 5,
+                'reverseMultipleChoice': 5,
+                'word_building': 10,
+                'wordBuilding': 10,
+                'typing': 15,
+                'complex': 10
+            };
+
+            xpEarned = xpMap[questionType] || 5;
+
+            // Bonus XP for completing a word (reaching learned status)
+            if (newStatus === 'learned' && word.status !== 'learned') {
+                xpEarned += 50; // Bonus XP for fully learning a word
+                xpResult = await awardXP(userId, 'word_learned', xpEarned, `Learned: ${word.word}`);
+            } else {
+                xpResult = await awardXP(userId, 'quiz_answer', xpEarned, `${questionType}: ${word.word}`);
+            }
+
+            // Update daily activity
+            await updateDailyActivity(userId, 0, 1, xpEarned);
+        }
+
         res.json({
             message: 'Progress updated successfully',
             points: newCorrectCount,
             totalPoints: newTotalPoints,
             percentage,
-            status: newStatus
+            status: newStatus,
+            xp: xpResult // Include XP info in response
         });
     } catch (err) {
         console.error('Error updating word progress:', err);
