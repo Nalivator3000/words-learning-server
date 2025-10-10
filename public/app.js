@@ -303,6 +303,7 @@ class LanguageLearningApp {
             await userManager.login(email, password);
             this.showSection('home');
             await this.updateStats();
+            await this.loadGamificationHeader(); // Load XP/level/streak display
         } catch (error) {
             this.showAuthError(error.message);
         }
@@ -333,6 +334,7 @@ class LanguageLearningApp {
             await userManager.register(name, email, password);
             this.showSection('home');
             await this.updateStats();
+            await this.loadGamificationHeader(); // Load XP/level/streak display
         } catch (error) {
             this.showAuthError(error.message);
         }
@@ -343,6 +345,7 @@ class LanguageLearningApp {
             await userManager.loginWithGoogle();
             this.showSection('home');
             await this.updateStats();
+            await this.loadGamificationHeader(); // Load XP/level/streak display
         } catch (error) {
             this.showAuthError(error.message);
         }
@@ -419,7 +422,7 @@ class LanguageLearningApp {
     async updateStatsPage() {
         try {
             const counts = await database.getWordCounts();
-            
+
             // Update counts
             document.getElementById('studyingListCount').textContent = counts.studying;
             document.getElementById('reviewListCount').textContent = counts.review;
@@ -427,6 +430,9 @@ class LanguageLearningApp {
 
             // Update word lists
             await this.updateWordLists();
+
+            // Load gamification stats
+            await this.loadGamificationStats();
         } catch (error) {
             console.error('Error updating stats page:', error);
         }
@@ -1881,6 +1887,43 @@ schreiben,Sie schreibt einen Brief.,Писать,Она пишет письмо.
             setTimeout(() => {
                 statusEl.style.display = 'none';
             }, 5000);
+        }
+    }
+
+    // ========== Gamification Methods ==========
+
+    async loadGamificationHeader() {
+        const user = userManager.getCurrentUser();
+        if (!user || !window.gamification) return;
+
+        try {
+            const stats = await window.gamification.getUserStats(user.id);
+            const headerContainer = document.getElementById('gamificationHeader');
+            if (headerContainer && stats) {
+                window.gamification.renderStatsHeader(headerContainer, stats);
+            }
+        } catch (err) {
+            console.error('Error loading gamification header:', err);
+        }
+    }
+
+    async loadGamificationStats() {
+        const user = userManager.getCurrentUser();
+        if (!user || !window.gamification) return;
+
+        try {
+            const [stats, xpLog, activityData] = await Promise.all([
+                window.gamification.getUserStats(user.id),
+                window.gamification.getXPLog(user.id, 50),
+                window.gamification.getActivityCalendar(user.id, 365)
+            ]);
+
+            const statsContainer = document.getElementById('gamificationStatsContainer');
+            if (statsContainer && stats) {
+                window.gamification.renderStatsPage(statsContainer, stats, xpLog, activityData);
+            }
+        } catch (err) {
+            console.error('Error loading gamification stats:', err);
         }
     }
 }

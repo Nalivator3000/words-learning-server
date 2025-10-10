@@ -192,14 +192,26 @@ class QuizManager {
         }
 
         // Update word progress in database (treat partial as correct for progress)
-        await database.updateWordProgress(question.wordId, isCorrect || isPartiallyCorrect, question.type);
+        const progressResult = await database.updateWordProgress(question.wordId, isCorrect || isPartiallyCorrect, question.type);
+
+        // Show XP notification if gamification is enabled and XP was awarded
+        if (window.gamification && progressResult && progressResult.xp) {
+            const { xpAmount, newTotalXP, level } = progressResult.xp;
+            const previousLevel = await this.getPreviousLevel(newTotalXP - xpAmount);
+            const leveledUp = level > previousLevel;
+
+            if (xpAmount > 0) {
+                window.gamification.showXPNotification(xpAmount, level, leveledUp);
+            }
+        }
 
         return {
             correct: isCorrect,
             partiallyCorrect: isPartiallyCorrect,
             feedback: feedback,
             correctAnswer: question.correctAnswer,
-            userAnswer: userAnswer
+            userAnswer: userAnswer,
+            xp: progressResult?.xp // Include XP info in result
         };
     }
 
@@ -386,6 +398,21 @@ class QuizManager {
         this.questions = [];
         this.mode = null;
         this.quizType = null;
+    }
+
+    // Helper: Calculate level from XP (client-side copy of server logic)
+    getPreviousLevel(totalXP) {
+        let level = 1;
+        let xpForNextLevel = 100;
+        let accumulatedXP = 0;
+
+        while (totalXP >= accumulatedXP + xpForNextLevel) {
+            accumulatedXP += xpForNextLevel;
+            level++;
+            xpForNextLevel = level * 100;
+        }
+
+        return level;
     }
 }
 
