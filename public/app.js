@@ -2,33 +2,61 @@ class AudioManager {
     constructor() {
         this.synth = window.speechSynthesis;
         this.voices = {};
+        this.customVoices = this.loadCustomVoices();
+        this.allVoices = [];
         this.initVoices();
+    }
+
+    loadCustomVoices() {
+        try {
+            const saved = localStorage.getItem('customVoiceSettings');
+            return saved ? JSON.parse(saved) : {};
+        } catch (error) {
+            console.error('Failed to load custom voice settings:', error);
+            return {};
+        }
+    }
+
+    saveCustomVoices() {
+        try {
+            localStorage.setItem('customVoiceSettings', JSON.stringify(this.customVoices));
+            console.log('✅ Custom voice settings saved');
+        } catch (error) {
+            console.error('Failed to save custom voice settings:', error);
+        }
+    }
+
+    setCustomVoice(langCode, voiceName) {
+        if (voiceName === 'auto') {
+            delete this.customVoices[langCode];
+        } else {
+            this.customVoices[langCode] = voiceName;
+        }
+        this.saveCustomVoices();
+
+        // Re-select voices with new custom settings
+        const allVoices = this.synth.getVoices();
+        this.selectVoicesForLanguages(allVoices);
+
+        console.log(`🎯 Custom voice set for ${langCode}: ${voiceName}`);
+    }
+
+    getCustomVoice(langCode) {
+        return this.customVoices[langCode] || 'auto';
     }
 
     initVoices() {
         const loadVoices = () => {
-            const allVoices = this.synth.getVoices();
+            this.allVoices = this.synth.getVoices();
 
-            console.log(`🔊 AudioManager: Found ${allVoices.length} total voices`);
+            console.log(`🔊 AudioManager: Found ${this.allVoices.length} total voices`);
 
-            // Select best voice for each language
-            this.voices = {
-                'ru-RU': this.selectBestVoice(allVoices, 'ru'),
-                'en-US': this.selectBestVoice(allVoices, 'en'),
-                'de-DE': this.selectBestVoice(allVoices, 'de'),
-                'es-ES': this.selectBestVoice(allVoices, 'es'),
-                'fr-FR': this.selectBestVoice(allVoices, 'fr'),
-                'it-IT': this.selectBestVoice(allVoices, 'it')
-            };
+            this.selectVoicesForLanguages(this.allVoices);
 
-            // Log selected voices
-            Object.entries(this.voices).forEach(([lang, voice]) => {
-                if (voice) {
-                    console.log(`✅ ${lang}: ${voice.name} (local: ${voice.localService})`);
-                } else {
-                    console.warn(`⚠️ ${lang}: No suitable voice found`);
-                }
-            });
+            // Populate UI if it exists
+            if (window.app && window.app.populateVoiceSelectors) {
+                window.app.populateVoiceSelectors(this.allVoices);
+            }
         };
 
         loadVoices();
@@ -37,6 +65,29 @@ class AudioManager {
         if (this.synth.onvoiceschanged !== undefined) {
             this.synth.onvoiceschanged = loadVoices;
         }
+    }
+
+    selectVoicesForLanguages(allVoices) {
+        const languages = ['ru-RU', 'en-US', 'de-DE', 'es-ES', 'fr-FR', 'it-IT'];
+
+        languages.forEach(langCode => {
+            const customVoiceName = this.customVoices[langCode];
+
+            if (customVoiceName) {
+                // Use custom selected voice
+                const customVoice = allVoices.find(v => v.name === customVoiceName);
+                this.voices[langCode] = customVoice || this.selectBestVoice(allVoices, langCode.split('-')[0]);
+                console.log(`✅ ${langCode}: ${this.voices[langCode]?.name} (custom)`);
+            } else {
+                // Use auto-selected best voice
+                this.voices[langCode] = this.selectBestVoice(allVoices, langCode.split('-')[0]);
+                if (this.voices[langCode]) {
+                    console.log(`✅ ${langCode}: ${this.voices[langCode].name} (auto, local: ${this.voices[langCode].localService})`);
+                } else {
+                    console.warn(`⚠️ ${langCode}: No suitable voice found`);
+                }
+            }
+        });
     }
 
     selectBestVoice(allVoices, languagePrefix) {
@@ -332,6 +383,9 @@ class LanguageLearningApp {
         document.getElementById('addLanguagePairBtn').addEventListener('click', () => this.showLanguagePairDialog());
         document.getElementById('lessonSizeInput').addEventListener('change', (e) => this.updateLessonSize(e.target.value));
         document.getElementById('syncBtn').addEventListener('click', () => this.syncWithServer());
+
+        // Voice settings functionality
+        this.setupVoiceSettings();
     }
 
     setupAuthListeners() {
@@ -1984,6 +2038,92 @@ schreiben,Sie schreibt einen Brief.,Писать,Она пишет письмо.
         } catch (err) {
             console.error('Error loading daily goals:', err);
         }
+    }
+
+    setupVoiceSettings() {
+        // Voice preview buttons
+        document.querySelectorAll('.voice-preview-btn').forEach(btn => {
+            btn.addEventListener('click', () => {
+                const langCode = btn.dataset.lang;
+                this.previewVoice(langCode);
+            });
+        });
+
+        // Voice select dropdowns
+        const languages = ['ru-RU', 'en-US', 'de-DE', 'es-ES', 'fr-FR', 'it-IT'];
+        languages.forEach(langCode => {
+            const select = document.getElementById(`voiceSelect-${langCode}`);
+            if (select) {
+                select.addEventListener('change', (e) => {
+                    const voiceName = e.target.value;
+                    this.audioManager.setCustomVoice(langCode, voiceName);
+                });
+            }
+        });
+    }
+
+    populateVoiceSelectors(allVoices) {
+        const languages = [
+            { code: 'ru-RU', prefix: 'ru', sample: 'Привет, это тестовое сообщение' },
+            { code: 'en-US', prefix: 'en', sample: 'Hello, this is a test message' },
+            { code: 'de-DE', prefix: 'de', sample: 'Hallo, dies ist eine Testnachricht' },
+            { code: 'es-ES', prefix: 'es', sample: 'Hola, este es un mensaje de prueba' },
+            { code: 'fr-FR', prefix: 'fr', sample: 'Bonjour, ceci est un message de test' },
+            { code: 'it-IT', prefix: 'it', sample: 'Ciao, questo è un messaggio di prova' }
+        ];
+
+        languages.forEach(({ code, prefix }) => {
+            const select = document.getElementById(`voiceSelect-${code}`);
+            if (!select) return;
+
+            // Get voices for this language
+            const langVoices = allVoices.filter(v => v.lang.startsWith(prefix));
+
+            // Clear existing options except "Auto"
+            select.innerHTML = '<option value="auto">Авто (рекомендуется)</option>';
+
+            // Add available voices
+            langVoices.forEach(voice => {
+                const option = document.createElement('option');
+                option.value = voice.name;
+                option.textContent = `${voice.name}${voice.localService ? ' 📍' : ' ☁️'}`;
+                select.appendChild(option);
+            });
+
+            // Set current custom voice if any
+            const customVoice = this.audioManager.getCustomVoice(code);
+            if (customVoice && customVoice !== 'auto') {
+                select.value = customVoice;
+            }
+        });
+
+        console.log('✅ Voice selectors populated');
+    }
+
+    previewVoice(langCode) {
+        const sampleText = {
+            'ru-RU': 'Привет! Это пример русского голоса для изучения иностранных слов.',
+            'en-US': 'Hello! This is a sample of the English voice for learning foreign words.',
+            'de-DE': 'Hallo! Dies ist ein Beispiel der deutschen Stimme zum Lernen von Fremdwörtern.',
+            'es-ES': 'Hola! Este es un ejemplo de voz en español para aprender palabras extranjeras.',
+            'fr-FR': 'Bonjour! Ceci est un exemple de voix française pour apprendre des mots étrangers.',
+            'it-IT': 'Ciao! Questo è un esempio di voce italiana per imparare parole straniere.'
+        };
+
+        const text = sampleText[langCode] || 'Test voice';
+        console.log(`🔊 Previewing voice for ${langCode}: "${text}"`);
+
+        // Disable button during playback
+        const btn = document.querySelector(`.voice-preview-btn[data-lang="${langCode}"]`);
+        if (btn) {
+            btn.disabled = true;
+            setTimeout(() => {
+                btn.disabled = false;
+            }, 3000);
+        }
+
+        // Speak sample
+        this.audioManager.speak(text, langCode);
     }
 }
 
