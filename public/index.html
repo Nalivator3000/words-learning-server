@@ -25,13 +25,34 @@
         // PWA Service Worker Registration
         if ('serviceWorker' in navigator) {
             window.addEventListener('load', () => {
-                navigator.serviceWorker.register('/sw.js')
+                navigator.serviceWorker.register('/service-worker.js')
                     .then((registration) => {
                         console.log('✅ Service Worker registered:', registration.scope);
+
+                        // Check for updates
+                        registration.addEventListener('updatefound', () => {
+                            const newWorker = registration.installing;
+                            newWorker.addEventListener('statechange', () => {
+                                if (newWorker.state === 'installed' && navigator.serviceWorker.controller) {
+                                    // New version available
+                                    console.log('🔄 New version available! Refresh to update.');
+                                    if (confirm('Доступно обновление приложения. Обновить сейчас?')) {
+                                        newWorker.postMessage({ type: 'SKIP_WAITING' });
+                                        window.location.reload();
+                                    }
+                                }
+                            });
+                        });
                     })
                     .catch((error) => {
                         console.log('❌ Service Worker registration failed:', error);
                     });
+            });
+
+            // Listen for controller change (new SW activated)
+            navigator.serviceWorker.addEventListener('controllerchange', () => {
+                console.log('🔄 Service Worker updated, reloading...');
+                window.location.reload();
             });
         }
 
