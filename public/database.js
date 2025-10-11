@@ -9,6 +9,21 @@ class Database {
         return Promise.resolve();
     }
 
+    getUserContext() {
+        // Get current user and language pair from userManager
+        if (!window.userManager || !window.userManager.isLoggedIn()) {
+            return { userId: null, languagePairId: null };
+        }
+
+        const user = window.userManager.getCurrentUser();
+        const languagePair = window.userManager.getCurrentLanguagePair();
+
+        return {
+            userId: user ? user.id : null,
+            languagePairId: languagePair ? languagePair.id : null
+        };
+    }
+
     async addWords(words) {
         try {
             const response = await fetch(`${this.apiUrl}/api/words/bulk`, {
@@ -34,7 +49,13 @@ class Database {
 
     async getWordsByStatus(status) {
         try {
-            const response = await fetch(`${this.apiUrl}/api/words?status=${status}`);
+            const { userId, languagePairId } = this.getUserContext();
+            const params = new URLSearchParams({ status });
+
+            if (userId) params.append('userId', userId);
+            if (languagePairId) params.append('languagePairId', languagePairId);
+
+            const response = await fetch(`${this.apiUrl}/api/words?${params}`);
 
             if (!response.ok) {
                 throw new Error(`Server error: ${response.status}`);
@@ -76,7 +97,13 @@ class Database {
 
     async getWordCounts() {
         try {
-            const response = await fetch(`${this.apiUrl}/api/words/counts`);
+            const { userId, languagePairId } = this.getUserContext();
+            const params = new URLSearchParams();
+
+            if (userId) params.append('userId', userId);
+            if (languagePairId) params.append('languagePairId', languagePairId);
+
+            const response = await fetch(`${this.apiUrl}/api/words/counts?${params}`);
 
             if (!response.ok) {
                 throw new Error(`Server error: ${response.status}`);
@@ -98,7 +125,13 @@ class Database {
 
     async getAllWords() {
         try {
-            const response = await fetch(`${this.apiUrl}/api/words`);
+            const { userId, languagePairId } = this.getUserContext();
+            const params = new URLSearchParams();
+
+            if (userId) params.append('userId', userId);
+            if (languagePairId) params.append('languagePairId', languagePairId);
+
+            const response = await fetch(`${this.apiUrl}/api/words?${params}`);
 
             if (!response.ok) {
                 throw new Error(`Server error: ${response.status}`);
@@ -114,7 +147,13 @@ class Database {
 
     async getRandomWords(status, count = 10) {
         try {
-            const response = await fetch(`${this.apiUrl}/api/words/random/${status}/${count}`);
+            const { userId, languagePairId } = this.getUserContext();
+            const params = new URLSearchParams();
+
+            if (userId) params.append('userId', userId);
+            if (languagePairId) params.append('languagePairId', languagePairId);
+
+            const response = await fetch(`${this.apiUrl}/api/words/random/${status}/${count}?${params}`);
 
             if (!response.ok) {
                 throw new Error(`Server error: ${response.status}`);
@@ -131,7 +170,13 @@ class Database {
 
     async getReviewWords(count = 10) {
         try {
-            const response = await fetch(`${this.apiUrl}/api/words/random/review/${count}`);
+            const { userId, languagePairId } = this.getUserContext();
+            const params = new URLSearchParams();
+
+            if (userId) params.append('userId', userId);
+            if (languagePairId) params.append('languagePairId', languagePairId);
+
+            const response = await fetch(`${this.apiUrl}/api/words/random/review/${count}?${params}`);
 
             if (!response.ok) {
                 throw new Error(`Server error: ${response.status}`);
