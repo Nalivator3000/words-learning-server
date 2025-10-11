@@ -44,10 +44,10 @@
   - Добавлена multi-user поддержка
   - Фильтрация по userId и languagePairId
 
-- [ ] **Настройка production БД (Neon.tech)**
-  - Создать аккаунт на Neon.tech
-  - Настроить DATABASE_URL
-  - Миграция данных из JSON
+- [x] **Production БД (Railway PostgreSQL)**
+  - Используем встроенную PostgreSQL на Railway
+  - Автоматический DATABASE_URL
+  - Достаточно для коммерческого продукта
 
 - [ ] **Тестирование PostgreSQL**
   - Проверить все endpoints
