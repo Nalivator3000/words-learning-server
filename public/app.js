@@ -8,29 +8,113 @@ class AudioManager {
     initVoices() {
         const loadVoices = () => {
             const allVoices = this.synth.getVoices();
-            
-            // Group voices by language
+
+            console.log(`🔊 AudioManager: Found ${allVoices.length} total voices`);
+
+            // Select best voice for each language
             this.voices = {
-                'ru-RU': allVoices.find(v => v.lang.startsWith('ru')),
-                'en-US': allVoices.find(v => v.lang.startsWith('en')),
-                'de-DE': allVoices.find(v => v.lang.startsWith('de')),
-                'es-ES': allVoices.find(v => v.lang.startsWith('es')),
-                'fr-FR': allVoices.find(v => v.lang.startsWith('fr')),
-                'it-IT': allVoices.find(v => v.lang.startsWith('it'))
+                'ru-RU': this.selectBestVoice(allVoices, 'ru'),
+                'en-US': this.selectBestVoice(allVoices, 'en'),
+                'de-DE': this.selectBestVoice(allVoices, 'de'),
+                'es-ES': this.selectBestVoice(allVoices, 'es'),
+                'fr-FR': this.selectBestVoice(allVoices, 'fr'),
+                'it-IT': this.selectBestVoice(allVoices, 'it')
             };
-            
-            // Fallback to first available voice if specific language not found
-            if (!this.voices['ru-RU'] && allVoices.length > 0) this.voices['ru-RU'] = allVoices[0];
-            if (!this.voices['en-US'] && allVoices.length > 0) this.voices['en-US'] = allVoices[0];
-            if (!this.voices['de-DE'] && allVoices.length > 0) this.voices['de-DE'] = allVoices[0];
+
+            // Log selected voices
+            Object.entries(this.voices).forEach(([lang, voice]) => {
+                if (voice) {
+                    console.log(`✅ ${lang}: ${voice.name} (local: ${voice.localService})`);
+                } else {
+                    console.warn(`⚠️ ${lang}: No suitable voice found`);
+                }
+            });
         };
 
         loadVoices();
-        
+
         // Some browsers load voices asynchronously
         if (this.synth.onvoiceschanged !== undefined) {
             this.synth.onvoiceschanged = loadVoices;
         }
+    }
+
+    selectBestVoice(allVoices, languagePrefix) {
+        // Filter voices for this language
+        const languageVoices = allVoices.filter(v => v.lang.startsWith(languagePrefix));
+
+        if (languageVoices.length === 0) {
+            console.warn(`No voices found for language: ${languagePrefix}`);
+            return null;
+        }
+
+        // Bad voice names to filter out (low quality TTS)
+        const badVoicePatterns = [
+            /espeak/i,
+            /festival/i,
+            /pico/i,
+            /flite/i
+        ];
+
+        // Filter out known bad voices
+        const goodVoices = languageVoices.filter(voice =>
+            !badVoicePatterns.some(pattern => pattern.test(voice.name))
+        );
+
+        const voicesToConsider = goodVoices.length > 0 ? goodVoices : languageVoices;
+
+        // Quality score function
+        const scoreVoice = (voice) => {
+            let score = 0;
+
+            // Priority 1: Local voices (offline, faster)
+            if (voice.localService) score += 100;
+
+            // Priority 2: Exact language match (de-DE better than de-US)
+            const exactMatch = {
+                'ru': ['ru-RU', 'ru_RU'],
+                'en': ['en-US', 'en-GB', 'en_US', 'en_GB'],
+                'de': ['de-DE', 'de_DE'],
+                'es': ['es-ES', 'es_ES'],
+                'fr': ['fr-FR', 'fr_FR'],
+                'it': ['it-IT', 'it_IT']
+            };
+
+            if (exactMatch[languagePrefix]?.some(lang => voice.lang.includes(lang))) {
+                score += 50;
+            }
+
+            // Priority 3: Quality TTS engines (Google, Microsoft, Apple)
+            const qualityEngines = [
+                { pattern: /google/i, score: 40 },
+                { pattern: /microsoft/i, score: 35 },
+                { pattern: /apple/i, score: 35 },
+                { pattern: /natural/i, score: 30 },
+                { pattern: /premium/i, score: 30 },
+                { pattern: /neural/i, score: 25 },
+                { pattern: /enhanced/i, score: 20 }
+            ];
+
+            qualityEngines.forEach(({ pattern, score: engineScore }) => {
+                if (pattern.test(voice.name)) score += engineScore;
+            });
+
+            // Slight preference for voices with the language in the name
+            if (new RegExp(languagePrefix, 'i').test(voice.name)) {
+                score += 10;
+            }
+
+            return score;
+        };
+
+        // Sort by score (highest first)
+        const sortedVoices = voicesToConsider.sort((a, b) => scoreVoice(b) - scoreVoice(a));
+
+        const bestVoice = sortedVoices[0];
+
+        console.log(`🎯 Best voice for ${languagePrefix}: ${bestVoice.name} (score: ${scoreVoice(bestVoice)})`);
+
+        return bestVoice;
     }
 
     speak(text, languageCode = null) {
