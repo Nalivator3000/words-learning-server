@@ -175,18 +175,6 @@ class LanguageLearningApp {
             this.survivalMode.setupEventListeners();
 
             if (isLoggedIn) {
-                // Check for expired review words on app load
-                try {
-                    const result = await database.checkExpiredReviews();
-                    if (result.expiredCount > 0) {
-                        console.log(`⏰ ${result.expiredCount} words returned to studying for review`);
-                        // Optionally show notification to user
-                        // alert(`⏰ ${result.expiredCount} слов вернулись на изучение для повторения`);
-                    }
-                } catch (err) {
-                    console.warn('Failed to check expired reviews:', err);
-                }
-
                 this.showSection('home');
                 await this.updateStats();
             }
@@ -255,9 +243,6 @@ class LanguageLearningApp {
         document.getElementById('exportReviewBtn').addEventListener('click', () => this.exportWords('review'));
         document.getElementById('exportLearnedBtn').addEventListener('click', () => this.exportWords('learned'));
         document.getElementById('exportAllBtn').addEventListener('click', () => this.exportWords());
-
-        // Reset all words to studying
-        document.getElementById('resetAllToStudyingBtn').addEventListener('click', () => this.resetAllWordsToStudying());
 
         // Settings functionality
         document.getElementById('addLanguagePairBtn').addEventListener('click', () => this.showLanguagePairDialog());
@@ -545,39 +530,8 @@ class LanguageLearningApp {
             scoreContainer.appendChild(scoreDiv);
             scoreContainer.appendChild(progressBar);
 
-            // Action buttons
-            const actionsDiv = document.createElement('div');
-            actionsDiv.className = 'word-actions';
-            actionsDiv.style.cssText = 'display: flex; gap: 5px; margin-left: 10px;';
-
-            // Delete button
-            const deleteBtn = document.createElement('button');
-            deleteBtn.textContent = '🗑️';
-            deleteBtn.className = 'word-action-btn delete-btn';
-            deleteBtn.title = 'Удалить слово';
-            deleteBtn.style.cssText = 'padding: 5px 10px; border: none; background: #f44336; color: white; border-radius: 4px; cursor: pointer; font-size: 14px;';
-            deleteBtn.onclick = () => this.deleteWord(word.id);
-
-            // Move to learned button
-            const moveBtn = document.createElement('button');
-            if (word.status === 'learned') {
-                moveBtn.textContent = '↩️';
-                moveBtn.title = 'Вернуть в изучение';
-                moveBtn.style.cssText = 'padding: 5px 10px; border: none; background: #2196f3; color: white; border-radius: 4px; cursor: pointer; font-size: 14px;';
-                moveBtn.onclick = () => this.moveWordToStatus(word.id, 'studying');
-            } else {
-                moveBtn.textContent = '✅';
-                moveBtn.title = 'Отметить как изученное';
-                moveBtn.style.cssText = 'padding: 5px 10px; border: none; background: #4caf50; color: white; border-radius: 4px; cursor: pointer; font-size: 14px;';
-                moveBtn.onclick = () => this.moveWordToStatus(word.id, 'learned');
-            }
-
-            actionsDiv.appendChild(moveBtn);
-            actionsDiv.appendChild(deleteBtn);
-
             item.appendChild(wordContent);
             item.appendChild(scoreContainer);
-            item.appendChild(actionsDiv);
             container.appendChild(item);
         });
     }
@@ -604,15 +558,7 @@ class LanguageLearningApp {
                 return;
             }
 
-            // Add userId and languagePairId to each word
-            const { userId, languagePairId } = database.getUserContext();
-            const wordsWithContext = words.map(word => ({
-                ...word,
-                userId,
-                languagePairId
-            }));
-
-            await database.addWords(wordsWithContext);
+            await database.addWords(words);
             this.showImportStatus(`Успешно импортировано ${words.length} слов`, 'success');
             await this.updateStats();
 
@@ -659,24 +605,7 @@ schreiben,Sie schreibt einen Brief.,Писать,Она пишет письмо.
                 return;
             }
 
-            // Add userId and languagePairId to each word
-            const { userId, languagePairId } = database.getUserContext();
-            console.log('👤 User context:', { userId, languagePairId });
-
-            if (!userId || !languagePairId) {
-                this.showImportStatus('Ошибка: пользователь не авторизован', 'error');
-                return;
-            }
-
-            const wordsWithContext = words.map(word => ({
-                ...word,
-                userId,
-                languagePairId
-            }));
-
-            console.log('📝 Words with context (first 3):', wordsWithContext.slice(0, 3));
-
-            await database.addWords(wordsWithContext);
+            await database.addWords(words);
             this.showImportStatus(`Успешно импортировано ${words.length} слов`, 'success');
             await this.updateStats();
 
@@ -1149,50 +1078,21 @@ schreiben,Sie schreibt einen Brief.,Писать,Она пишет письмо.
     }
 
     async deleteWord(wordId) {
-        if (!confirm('Вы уверены, что хотите удалить это слово?')) {
-            return;
-        }
-
-        try {
-            await database.deleteWord(wordId);
-            await this.updateStatsPage();
-            await this.updateStats();
-        } catch (error) {
-            console.error('Error deleting word:', error);
-            alert('Ошибка при удалении слова');
-        }
+        // Feature temporarily disabled - requires server endpoint
+        alert('Функция удаления временно недоступна');
+        console.warn('deleteWord: Not implemented on server');
     }
 
     async moveWordToStatus(wordId, newStatus) {
-        try {
-            await database.updateWordStatus(wordId, newStatus);
-            await this.updateStatsPage();
-            await this.updateStats();
-        } catch (error) {
-            console.error('Error moving word:', error);
-            alert('Ошибка при изменении статуса слова');
-        }
+        // Feature temporarily disabled - requires server endpoint
+        alert('Функция перемещения временно недоступна');
+        console.warn('moveWordToStatus: Not implemented on server');
     }
 
     async resetAllWordsToStudying() {
-        if (!confirm('⚠️ Вы уверены, что хотите ПОЛНОСТЬЮ СБРОСИТЬ ПРОГРЕСС?\n\n' +
-                     'Это действие:\n' +
-                     '• Переместит все слова в статус "изучение"\n' +
-                     '• Обнулит все баллы (correctCount и totalPoints)\n' +
-                     '• Сбросит циклы повторения (reviewCycle → 1)\n\n' +
-                     'Это необратимое действие!')) {
-            return;
-        }
-
-        try {
-            const result = await database.resetAllWordsToStudying();
-            alert(`✅ Успешно! ${result.updatedCount} слов сброшены. Прогресс обнулён.`);
-            await this.updateStatsPage();
-            await this.updateStats();
-        } catch (error) {
-            console.error('Error resetting words:', error);
-            alert('Ошибка при сбросе слов');
-        }
+        // Feature temporarily disabled - requires server endpoint
+        alert('Функция сброса прогресса временно недоступна');
+        console.warn('resetAllWordsToStudying: Not implemented on server');
     }
 
     async exportWords(status = null) {

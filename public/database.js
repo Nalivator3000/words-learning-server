@@ -9,42 +9,14 @@ class Database {
         return Promise.resolve();
     }
 
-    getUserContext() {
-        // Get current user and language pair from userManager
-        if (!window.userManager || !window.userManager.isLoggedIn()) {
-            return { userId: null, languagePairId: null };
-        }
-
-        const user = window.userManager.getCurrentUser();
-        const languagePair = window.userManager.getCurrentLanguagePair();
-
-        return {
-            userId: user ? user.id : null,
-            languagePairId: languagePair ? languagePair.id : null
-        };
-    }
-
     async addWords(words) {
         try {
-            const { userId, languagePairId } = this.getUserContext();
-
-            if (!userId || !languagePairId) {
-                throw new Error('User not logged in or no language pair selected');
-            }
-
-            // Add user context to each word
-            const wordsWithContext = words.map(word => ({
-                ...word,
-                userId,
-                languagePairId
-            }));
-
             const response = await fetch(`${this.apiUrl}/api/words/bulk`, {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json',
                 },
-                body: JSON.stringify(wordsWithContext)
+                body: JSON.stringify(words)
             });
 
             if (!response.ok) {
@@ -62,13 +34,7 @@ class Database {
 
     async getWordsByStatus(status) {
         try {
-            const { userId, languagePairId } = this.getUserContext();
-
-            if (!userId || !languagePairId) {
-                return [];
-            }
-
-            const response = await fetch(`${this.apiUrl}/api/words?status=${status}&userId=${userId}&languagePairId=${languagePairId}`);
+            const response = await fetch(`${this.apiUrl}/api/words?status=${status}`);
 
             if (!response.ok) {
                 throw new Error(`Server error: ${response.status}`);
@@ -110,19 +76,7 @@ class Database {
 
     async getWordCounts() {
         try {
-            const { userId, languagePairId } = this.getUserContext();
-
-            if (!userId || !languagePairId) {
-                return {
-                    studying: 0,
-                    review: 0,
-                    learned: 0,
-                    review7: 0,
-                    review30: 0
-                };
-            }
-
-            const response = await fetch(`${this.apiUrl}/api/words/counts?userId=${userId}&languagePairId=${languagePairId}`);
+            const response = await fetch(`${this.apiUrl}/api/words/counts`);
 
             if (!response.ok) {
                 throw new Error(`Server error: ${response.status}`);
@@ -144,13 +98,7 @@ class Database {
 
     async getAllWords() {
         try {
-            const { userId, languagePairId } = this.getUserContext();
-
-            if (!userId || !languagePairId) {
-                return [];
-            }
-
-            const response = await fetch(`${this.apiUrl}/api/words?userId=${userId}&languagePairId=${languagePairId}`);
+            const response = await fetch(`${this.apiUrl}/api/words`);
 
             if (!response.ok) {
                 throw new Error(`Server error: ${response.status}`);
@@ -166,13 +114,7 @@ class Database {
 
     async getRandomWords(status, count = 10) {
         try {
-            const { userId, languagePairId } = this.getUserContext();
-
-            if (!userId || !languagePairId) {
-                return [];
-            }
-
-            const response = await fetch(`${this.apiUrl}/api/words/random/${status}/${count}?userId=${userId}&languagePairId=${languagePairId}`);
+            const response = await fetch(`${this.apiUrl}/api/words/random/${status}/${count}`);
 
             if (!response.ok) {
                 throw new Error(`Server error: ${response.status}`);
