@@ -104,14 +104,18 @@
   - Pull-to-refresh
   - Haptic feedback (вибрация при действиях)
 
-- [~] **PWA (Progressive Web App)** ⚠️ ЧАСТИЧНО
-  - ✅ Manifest.json настроен
-  - ✅ Install prompt (PWAInstallManager)
+- [x] **PWA (Progressive Web App)** ✅ ГОТОВО
+  - ✅ Manifest.json настроен (shortcuts, categories, icons)
+  - ✅ Install prompt (PWAInstallManager в theme.js)
   - ✅ Установка как нативное приложение
-  - [ ] Service Worker для offline-режима
-  - [ ] Кеширование данных и ассетов
-  - [ ] Push-уведомления
-  - [ ] Splash screen
+  - ✅ Service Worker для offline-режима (service-worker.js)
+  - ✅ Кеширование данных и ассетов (Cache API)
+  - ✅ Cache-first стратегия для статики
+  - ✅ Network-first стратегия для API
+  - ✅ Автообновление версий
+  - ✅ Генератор иконок (generate-icons.html)
+  - [ ] Push-уведомления (следующая версия)
+  - [ ] Splash screen (следующая версия)
 
 ### 1.4 Новый UX
 - [ ] **Онбординг для новых пользователей**
