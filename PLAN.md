@@ -74,10 +74,13 @@
   - ✅ Сохранение выбора темы в localStorage
   - ✅ ThemeManager класс (theme.js)
 
-- [ ] **Glassmorphism & Neumorphism эффекты**
-  - Стеклянные карточки с backdrop-blur
-  - Мягкие тени и объёмные элементы
-  - Градиентные заливки с прозрачностью
+- [x] **Glassmorphism & Neumorphism эффекты** ✅ ГОТОВО (style.css)
+  - ✅ Стеклянные карточки с backdrop-blur (blur(24px-40px) + saturate(180%))
+  - ✅ Stat cards с shimmer анимацией при hover
+  - ✅ Auth modal с inset shadows и light reflection
+  - ✅ Градиентные радиальные фоны с прозрачностью (light + dark themes)
+  - ✅ Box-shadows с inset для 3D эффекта
+  - ✅ Webkit-backdrop-filter для Safari поддержки
 
 - [ ] **Микроанимации (Framer Motion / GSAP)**
   - Плавные переходы между секциями
