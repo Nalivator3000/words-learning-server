@@ -82,12 +82,15 @@
   - ✅ Box-shadows с inset для 3D эффекта
   - ✅ Webkit-backdrop-filter для Safari поддержки
 
-- [ ] **Микроанимации (Framer Motion / GSAP)**
-  - Плавные переходы между секциями
-  - Анимация появления карточек (stagger effect)
-  - Hover-эффекты с трансформациями
-  - Скелетоны при загрузке данных
-  - Конфетти при достижениях
+- [x] **Микроанимации (CSS)** ✅ ГОТОВО (style.css)
+  - ✅ Плавные переходы между секциями (sectionAppear animation)
+  - ✅ Stagger effect для карточек (cardAppear с delays 0.1s, 0.2s, 0.3s)
+  - ✅ Shimmer + glow эффекты для кнопок (shimmer + blur glow)
+  - ✅ Pulse анимация для активной навигации (infinite pulse 2s)
+  - ✅ Enhanced hover трансформации (translateY + scale + glow)
+  - ✅ Active state с микро-scale эффектом
+  - [ ] Skeleton loaders (будущая версия)
+  - [ ] Конфетти при достижениях (будущая версия)
 
 ### 1.2 Компонентная архитектура
 - [ ] **Переход на React / Vue 3**

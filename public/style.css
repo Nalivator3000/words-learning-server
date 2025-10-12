@@ -921,7 +921,22 @@ body {
 .nav-btn.active {
     background: var(--gradient-primary);
     color: white;
-    box-shadow: var(--shadow-3d-sm);
+    box-shadow: var(--shadow-3d-sm),
+                0 0 0 0 rgba(124, 58, 237, 0.7);
+    animation: pulse 2s cubic-bezier(0.4, 0, 0.6, 1) infinite;
+    position: relative;
+}
+
+/* Subtle pulse animation for active nav button */
+@keyframes pulse {
+    0%, 100% {
+        box-shadow: var(--shadow-3d-sm),
+                    0 0 0 0 rgba(124, 58, 237, 0.7);
+    }
+    50% {
+        box-shadow: var(--shadow-3d-sm),
+                    0 0 0 4px rgba(124, 58, 237, 0);
+    }
 }
 
 .mobile-menu-toggle {
@@ -1106,7 +1121,7 @@ body {
     font-size: var(--text-lg);
     font-weight: 700;
     cursor: pointer;
-    transition: var(--transition-base);
+    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
     display: inline-flex;
     align-items: center;
     justify-content: center;
@@ -1118,6 +1133,7 @@ body {
     box-shadow: var(--shadow-3d-md);
 }
 
+/* Shimmer effect on hover */
 .btn::before, .action-btn::before {
     content: '';
     position: absolute;
@@ -1125,17 +1141,44 @@ body {
     left: -100%;
     width: 100%;
     height: 100%;
-    background: linear-gradient(90deg, transparent, rgba(255,255,255,0.2), transparent);
-    transition: var(--transition-slow);
+    background: linear-gradient(90deg, transparent, rgba(255,255,255,0.3), transparent);
+    transition: left 0.6s ease;
+    pointer-events: none;
 }
 
 .btn:hover::before, .action-btn:hover::before {
     left: 100%;
 }
 
+/* Glow effect on hover */
+.btn::after, .action-btn::after {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: inherit;
+    border-radius: inherit;
+    opacity: 0;
+    filter: blur(20px);
+    z-index: -1;
+    transition: opacity 0.3s ease;
+}
+
+.btn:hover::after, .action-btn:hover::after {
+    opacity: 0.6;
+}
+
 .btn:hover, .action-btn:hover {
-    transform: translateY(-2px);
-    box-shadow: var(--shadow-3d-lg);
+    transform: translateY(-3px) scale(1.02);
+    box-shadow: var(--shadow-3d-lg),
+                0 0 30px rgba(124, 58, 237, 0.3);
+}
+
+.btn:active, .action-btn:active {
+    transform: translateY(-1px) scale(0.98);
+    transition: all 0.1s ease;
 }
 
 .btn.secondary {
@@ -2123,6 +2166,29 @@ input:focus, textarea:focus, select:focus {
     box-shadow: 0 8px 32px rgba(0, 0, 0, 0.12),
                 inset 0 1px 0 rgba(255, 255, 255, 0.1),
                 inset 0 -1px 0 rgba(0, 0, 0, 0.1);
+    opacity: 0;
+    transform: translateY(30px) scale(0.95);
+    animation: cardAppear 0.6s cubic-bezier(0.34, 1.56, 0.64, 1) forwards;
+}
+
+/* Stagger effect for stat cards */
+.stat-card:nth-child(1) {
+    animation-delay: 0.1s;
+}
+
+.stat-card:nth-child(2) {
+    animation-delay: 0.2s;
+}
+
+.stat-card:nth-child(3) {
+    animation-delay: 0.3s;
+}
+
+@keyframes cardAppear {
+    to {
+        opacity: 1;
+        transform: translateY(0) scale(1);
+    }
 }
 
 .stat-card::before {
