@@ -3025,3 +3025,287 @@ input:focus, textarea:focus, select:focus {
     background: var(--primary-400);
     box-shadow: 0 2px 6px rgba(0, 0, 0, 0.4);
 }
+
+/* ================================
+   ONBOARDING STYLES
+   ================================ */
+
+.onboarding-overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(0, 0, 0, 0.7);
+    z-index: 9997;
+    transition: opacity 0.3s ease;
+}
+
+.onboarding-tooltip {
+    position: fixed;
+    z-index: 9999;
+    max-width: 420px;
+    background: white;
+    border-radius: 16px;
+    box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3), 0 0 0 2px rgba(139, 92, 246, 0.2);
+    padding: 28px;
+    animation: tooltipAppear 0.4s cubic-bezier(0.34, 1.56, 0.64, 1);
+}
+
+@keyframes tooltipAppear {
+    from {
+        opacity: 0;
+        transform: scale(0.8);
+    }
+    to {
+        opacity: 1;
+        transform: scale(1);
+    }
+}
+
+.onboarding-tooltip.onboarding-center {
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%) !important;
+}
+
+.onboarding-content h3 {
+    margin: 0 0 12px 0;
+    font-size: 22px;
+    font-weight: 700;
+    color: #1a1a1a;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+}
+
+.onboarding-content p {
+    margin: 0 0 20px 0;
+    font-size: 15px;
+    line-height: 1.6;
+    color: #4a4a4a;
+}
+
+.onboarding-progress {
+    margin-bottom: 20px;
+    padding: 8px 12px;
+    background: linear-gradient(135deg, #8B5CF6, #06B6D4);
+    border-radius: 8px;
+    text-align: center;
+    font-size: 13px;
+    font-weight: 600;
+    color: white;
+}
+
+.onboarding-buttons {
+    display: flex;
+    gap: 10px;
+    flex-wrap: wrap;
+}
+
+.onboarding-btn-primary {
+    flex: 1;
+    padding: 12px 20px;
+    background: linear-gradient(135deg, #8B5CF6, #7C3AED);
+    color: white;
+    border: none;
+    border-radius: 10px;
+    font-size: 15px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.2s ease;
+    box-shadow: 0 4px 12px rgba(139, 92, 246, 0.3);
+}
+
+.onboarding-btn-primary:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 6px 20px rgba(139, 92, 246, 0.4);
+}
+
+.onboarding-btn-primary:active {
+    transform: translateY(0);
+}
+
+.onboarding-btn-secondary {
+    padding: 12px 20px;
+    background: #f0f0f0;
+    color: #333;
+    border: none;
+    border-radius: 10px;
+    font-size: 15px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.2s ease;
+}
+
+.onboarding-btn-secondary:hover {
+    background: #e0e0e0;
+}
+
+.onboarding-btn-skip {
+    padding: 12px 20px;
+    background: transparent;
+    color: #888;
+    border: 1px solid #ddd;
+    border-radius: 10px;
+    font-size: 14px;
+    font-weight: 500;
+    cursor: pointer;
+    transition: all 0.2s ease;
+}
+
+.onboarding-btn-skip:hover {
+    background: #f9f9f9;
+    border-color: #ccc;
+    color: #666;
+}
+
+.onboarding-highlight {
+    animation: highlightPulse 2s infinite;
+}
+
+@keyframes highlightPulse {
+    0%, 100% {
+        box-shadow: 0 0 0 9999px rgba(0, 0, 0, 0.7), 0 0 20px rgba(139, 92, 246, 0.6);
+    }
+    50% {
+        box-shadow: 0 0 0 9999px rgba(0, 0, 0, 0.7), 0 0 30px rgba(139, 92, 246, 0.9);
+    }
+}
+
+/* Completion message */
+.onboarding-completion {
+    position: fixed;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    z-index: 10000;
+    background: white;
+    border-radius: 20px;
+    padding: 40px;
+    box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
+    text-align: center;
+    animation: completionAppear 0.5s cubic-bezier(0.34, 1.56, 0.64, 1);
+    max-width: 500px;
+}
+
+@keyframes completionAppear {
+    from {
+        opacity: 0;
+        transform: translate(-50%, -50%) scale(0.5);
+    }
+    to {
+        opacity: 1;
+        transform: translate(-50%, -50%) scale(1);
+    }
+}
+
+.onboarding-completion.fade-out {
+    animation: completionFadeOut 0.5s ease forwards;
+}
+
+@keyframes completionFadeOut {
+    to {
+        opacity: 0;
+        transform: translate(-50%, -50%) scale(0.9);
+    }
+}
+
+.onboarding-completion-icon {
+    font-size: 64px;
+    margin-bottom: 20px;
+    animation: celebrationBounce 0.6s ease;
+}
+
+@keyframes celebrationBounce {
+    0%, 100% { transform: scale(1); }
+    50% { transform: scale(1.2); }
+}
+
+.onboarding-completion-content h2 {
+    margin: 0 0 16px 0;
+    font-size: 28px;
+    font-weight: 700;
+    background: linear-gradient(135deg, #8B5CF6, #06B6D4);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+}
+
+.onboarding-completion-content p {
+    margin: 0 0 12px 0;
+    font-size: 16px;
+    color: #4a4a4a;
+    line-height: 1.6;
+}
+
+.onboarding-first-achievement {
+    margin-top: 20px !important;
+    padding: 12px 20px;
+    background: linear-gradient(135deg, #FFD700, #FFA500);
+    border-radius: 12px;
+    color: white;
+    font-weight: 600;
+    box-shadow: 0 4px 12px rgba(255, 215, 0, 0.3);
+}
+
+/* Dark theme adjustments */
+[data-theme="dark"] .onboarding-tooltip {
+    background: rgba(30, 30, 30, 0.98);
+    box-shadow: 0 20px 60px rgba(0, 0, 0, 0.6), 0 0 0 2px rgba(139, 92, 246, 0.3);
+}
+
+[data-theme="dark"] .onboarding-content h3 {
+    color: #ffffff;
+}
+
+[data-theme="dark"] .onboarding-content p {
+    color: rgba(255, 255, 255, 0.8);
+}
+
+[data-theme="dark"] .onboarding-btn-secondary {
+    background: rgba(255, 255, 255, 0.1);
+    color: #ffffff;
+}
+
+[data-theme="dark"] .onboarding-btn-secondary:hover {
+    background: rgba(255, 255, 255, 0.15);
+}
+
+[data-theme="dark"] .onboarding-btn-skip {
+    background: transparent;
+    color: rgba(255, 255, 255, 0.6);
+    border-color: rgba(255, 255, 255, 0.2);
+}
+
+[data-theme="dark"] .onboarding-btn-skip:hover {
+    background: rgba(255, 255, 255, 0.05);
+    border-color: rgba(255, 255, 255, 0.3);
+    color: rgba(255, 255, 255, 0.8);
+}
+
+[data-theme="dark"] .onboarding-completion {
+    background: rgba(30, 30, 30, 0.98);
+}
+
+[data-theme="dark"] .onboarding-completion-content p {
+    color: rgba(255, 255, 255, 0.8);
+}
+
+/* Responsive */
+@media (max-width: 768px) {
+    .onboarding-tooltip {
+        max-width: 90%;
+        padding: 20px;
+    }
+
+    .onboarding-buttons {
+        flex-direction: column;
+    }
+
+    .onboarding-btn-primary,
+    .onboarding-btn-secondary,
+    .onboarding-btn-skip {
+        width: 100%;
+    }
+}
