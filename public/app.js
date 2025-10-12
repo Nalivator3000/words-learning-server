@@ -3,6 +3,7 @@ class AudioManager {
         this.synth = window.speechSynthesis;
         this.voices = {};
         this.customVoices = this.loadCustomVoices();
+        this.voiceSettings = this.loadVoiceSettings();
         this.allVoices = [];
         this.initVoices();
     }
@@ -15,6 +16,40 @@ class AudioManager {
             console.error('Failed to load custom voice settings:', error);
             return {};
         }
+    }
+
+    loadVoiceSettings() {
+        try {
+            const saved = localStorage.getItem('voiceSettings');
+            return saved ? JSON.parse(saved) : { rate: 0.8, pitch: 1.0, volume: 1.0 };
+        } catch (error) {
+            console.error('Failed to load voice settings:', error);
+            return { rate: 0.8, pitch: 1.0, volume: 1.0 };
+        }
+    }
+
+    saveVoiceSettings() {
+        try {
+            localStorage.setItem('voiceSettings', JSON.stringify(this.voiceSettings));
+            console.log('✅ Voice settings saved:', this.voiceSettings);
+        } catch (error) {
+            console.error('Failed to save voice settings:', error);
+        }
+    }
+
+    setVoiceRate(rate) {
+        this.voiceSettings.rate = parseFloat(rate);
+        this.saveVoiceSettings();
+    }
+
+    setVoicePitch(pitch) {
+        this.voiceSettings.pitch = parseFloat(pitch);
+        this.saveVoiceSettings();
+    }
+
+    setVoiceVolume(volume) {
+        this.voiceSettings.volume = parseFloat(volume);
+        this.saveVoiceSettings();
     }
 
     saveCustomVoices() {
@@ -191,9 +226,9 @@ class AudioManager {
         
         const utterance = new SpeechSynthesisUtterance(text);
         utterance.lang = languageCode;
-        utterance.rate = 0.8; // Slightly slower for learning
-        utterance.pitch = 1;
-        utterance.volume = 1;
+        utterance.rate = this.voiceSettings.rate; // User-configured speed
+        utterance.pitch = this.voiceSettings.pitch; // User-configured pitch
+        utterance.volume = this.voiceSettings.volume; // User-configured volume
         
         // Use appropriate voice for language
         const voice = this.voices[languageCode];
@@ -2060,6 +2095,86 @@ schreiben,Sie schreibt einen Brief.,Писать,Она пишет письмо.
                 });
             }
         });
+
+        // Voice controls (rate, pitch, volume)
+        const rateSlider = document.getElementById('voiceRateSlider');
+        const pitchSlider = document.getElementById('voicePitchSlider');
+        const volumeSlider = document.getElementById('voiceVolumeSlider');
+        const testBtn = document.getElementById('testVoiceSettingsBtn');
+
+        if (rateSlider) {
+            // Set initial value from saved settings
+            rateSlider.value = this.audioManager.voiceSettings.rate;
+            document.getElementById('voiceRateValue').textContent = `${this.audioManager.voiceSettings.rate}x`;
+
+            rateSlider.addEventListener('input', (e) => {
+                const value = parseFloat(e.target.value);
+                document.getElementById('voiceRateValue').textContent = `${value}x`;
+                this.audioManager.setVoiceRate(value);
+            });
+        }
+
+        if (pitchSlider) {
+            // Set initial value from saved settings
+            pitchSlider.value = this.audioManager.voiceSettings.pitch;
+            document.getElementById('voicePitchValue').textContent = this.audioManager.voiceSettings.pitch;
+
+            pitchSlider.addEventListener('input', (e) => {
+                const value = parseFloat(e.target.value);
+                document.getElementById('voicePitchValue').textContent = value;
+                this.audioManager.setVoicePitch(value);
+            });
+        }
+
+        if (volumeSlider) {
+            // Set initial value from saved settings
+            volumeSlider.value = this.audioManager.voiceSettings.volume;
+            document.getElementById('voiceVolumeValue').textContent = `${Math.round(this.audioManager.voiceSettings.volume * 100)}%`;
+
+            volumeSlider.addEventListener('input', (e) => {
+                const value = parseFloat(e.target.value);
+                document.getElementById('voiceVolumeValue').textContent = `${Math.round(value * 100)}%`;
+                this.audioManager.setVoiceVolume(value);
+            });
+        }
+
+        if (testBtn) {
+            testBtn.addEventListener('click', () => {
+                // Get current language pair to test with appropriate language
+                const currentPair = userManager ? userManager.getCurrentLanguagePair() : null;
+                let testText = 'Hallo! Dies ist ein Test der aktuellen Einstellungen.';
+                let langCode = 'de-DE';
+
+                if (currentPair) {
+                    const testTexts = {
+                        'German': { text: 'Hallo! Dies ist ein Test der aktuellen Einstellungen.', lang: 'de-DE' },
+                        'English': { text: 'Hello! This is a test of the current settings.', lang: 'en-US' },
+                        'Spanish': { text: 'Hola! Esta es una prueba de la configuración actual.', lang: 'es-ES' },
+                        'French': { text: 'Bonjour! Ceci est un test des paramètres actuels.', lang: 'fr-FR' },
+                        'Italian': { text: 'Ciao! Questo è un test delle impostazioni attuali.', lang: 'it-IT' },
+                        'Russian': { text: 'Привет! Это тест текущих настроек.', lang: 'ru-RU' }
+                    };
+                    const testData = testTexts[currentPair.fromLanguage];
+                    if (testData) {
+                        testText = testData.text;
+                        langCode = testData.lang;
+                    }
+                }
+
+                console.log(`🔊 Testing voice settings with: rate=${this.audioManager.voiceSettings.rate}, pitch=${this.audioManager.voiceSettings.pitch}, volume=${this.audioManager.voiceSettings.volume}`);
+
+                // Disable button during playback
+                testBtn.disabled = true;
+                testBtn.textContent = '⏳ Воспроизведение...';
+
+                setTimeout(() => {
+                    testBtn.disabled = false;
+                    testBtn.textContent = '🔊 Тест с текущими настройками';
+                }, 4000);
+
+                this.audioManager.speak(testText, langCode);
+            });
+        }
     }
 
     populateVoiceSelectors(allVoices) {

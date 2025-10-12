@@ -451,6 +451,52 @@
                             <p class="voice-info">
                                 ℹ️ Автоматический выбор использует умный алгоритм для подбора наилучшего голоса на вашем устройстве.
                             </p>
+
+                            <div class="voice-controls-section">
+                                <h4>⚙️ Параметры озвучки</h4>
+
+                                <div class="voice-control">
+                                    <label for="voiceRateSlider">
+                                        <span>Скорость: <span id="voiceRateValue">0.8x</span></span>
+                                        <small style="color: #6c757d;">Медленнее = лучше для запоминания</small>
+                                    </label>
+                                    <input type="range" id="voiceRateSlider" min="0.5" max="1.5" step="0.1" value="0.8" class="voice-slider">
+                                    <div class="slider-labels">
+                                        <span>0.5x</span>
+                                        <span>1.0x</span>
+                                        <span>1.5x</span>
+                                    </div>
+                                </div>
+
+                                <div class="voice-control">
+                                    <label for="voicePitchSlider">
+                                        <span>Тон: <span id="voicePitchValue">1.0</span></span>
+                                        <small style="color: #6c757d;">Высота голоса</small>
+                                    </label>
+                                    <input type="range" id="voicePitchSlider" min="0.5" max="2.0" step="0.1" value="1.0" class="voice-slider">
+                                    <div class="slider-labels">
+                                        <span>Низкий</span>
+                                        <span>Нормальный</span>
+                                        <span>Высокий</span>
+                                    </div>
+                                </div>
+
+                                <div class="voice-control">
+                                    <label for="voiceVolumeSlider">
+                                        <span>Громкость: <span id="voiceVolumeValue">100%</span></span>
+                                    </label>
+                                    <input type="range" id="voiceVolumeSlider" min="0" max="1" step="0.1" value="1" class="voice-slider">
+                                    <div class="slider-labels">
+                                        <span>0%</span>
+                                        <span>50%</span>
+                                        <span>100%</span>
+                                    </div>
+                                </div>
+
+                                <button id="testVoiceSettingsBtn" class="action-btn" style="margin-top: 10px;">
+                                    🔊 Тест с текущими настройками
+                                </button>
+                            </div>
                         </div>
                     </div>
 

@@ -30,7 +30,11 @@
       "Bash(python:*)",
       "Bash(powershell:*)",
       "Bash(npm install:*)",
-      "Bash(git checkout:*)"
+      "Bash(git checkout:*)",
+      "Bash(cat:*)",
+      "Bash(git merge:*)",
+      "Bash(git branch:*)",
+      "Bash(set PORT=3001)"
     ],
     "deny": [],
     "ask": []
