@@ -2,6 +2,55 @@
 
 ## 2025-10-13
 
+### Leaderboards System
+**Commit:** 🏆 LEADERBOARDS: Complete global ranking system
+
+**Изменения:**
+- База данных:
+  - `leaderboard_cache` - кеш рейтингов для оптимизации (id, leaderboard_type, time_period, rank_position, user_id, score, cached_at, UNIQUE constraint)
+
+- API Endpoints (4 новых):
+  - `GET /api/leaderboard/global/:type` - Топ-100 рейтинг (xp, streak, words)
+  - `GET /api/leaderboard/position/:userId/:type` - Позиция пользователя в рейтинге
+  - `GET /api/leaderboard/nearby/:userId/:type` - Пользователи рядом (±5 позиций)
+  - `GET /api/leaderboard/stats` - Глобальная статистика
+
+**Файлы:**
+- [server-postgresql.js:403-415](server-postgresql.js#L403-L415) - leaderboard_cache таблица
+- [server-postgresql.js:2830-3081](server-postgresql.js#L2830-L3081) - API endpoints
+
+**Функциональность:**
+- 3 типа рейтингов: XP (опыт), Streak (стрик), Words (слова)
+- Real-time rankings с ROW_NUMBER() window function
+- Nearby view: показывает пользователей выше и ниже твоей позиции
+- User position lookup: узнай свою позицию
+- Global stats: highest scores, averages
+- Efficient queries с CTEs и window functions
+- Ranked output с позициями (rank: 1, 2, 3...)
+
+**Query оптимизация:**
+- Window functions для ранжирования (ROW_NUMBER)
+- Фильтрация валидных записей (WHERE > 0)
+- Indexed joins на user_stats
+- Limit support для пагинации
+
+**Response format:**
+```json
+{
+  "rank": 1,
+  "id": 2,
+  "name": "User Name",
+  "score": 1500,
+  "level": 15
+}
+```
+
+**Следующие шаги:**
+- Frontend UI (таблица лидеров с аватарами)
+- Weekly/Monthly leaderboards (time periods)
+- Friends leaderboard (compare with friends)
+- Leagues system (Bronze → Diamond)
+
 ### Coins Economy System (Database Layer)
 **Commit:** 💰 COINS: Add coins economy system (database layer)
 
