@@ -111,7 +111,17 @@
   - Cards (Word Card, Stats Card, Achievement Card)
   - Modals & Dialogs
   - Progress Bars & Circular Progress
-  - Toast Notifications
+  - [x] **Toast Notifications** ✅ ГОТОВО (toast.js, style.css)
+    - ✅ 4 типа: success, error, warning, info
+    - ✅ Автоматическое удаление (4-5 секунд)
+    - ✅ Кнопка закрытия
+    - ✅ Action button с callback
+    - ✅ Loading toast (не закрывается автоматически)
+    - ✅ Achievement toast (специальное форматирование)
+    - ✅ Max 5 toasts одновременно
+    - ✅ Анимации: slide-in, fade-out
+    - ✅ Dark mode поддержка
+    - ✅ Responsive дизайн
   - Skeleton Loaders
 
 ### 1.3 Адаптивный дизайн нового поколения
