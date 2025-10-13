@@ -599,6 +599,9 @@ class LanguageLearningApp {
             // Update word lists
             await this.updateWordLists();
 
+            // Load analytics
+            await this.loadAnalytics();
+
             // Load gamification stats
             await this.loadGamificationStats();
         } catch (error) {
@@ -1970,6 +1973,61 @@ schreiben,Sie schreibt einen Brief.,Писать,Она пишет письмо.
             setTimeout(() => {
                 statusEl.style.display = 'none';
             }, 5000);
+        }
+    }
+
+    // ========== Analytics Methods ==========
+
+    async loadAnalytics() {
+        const user = userManager.getCurrentUser();
+        if (!user || !window.analytics) return;
+
+        try {
+            // Load learning progress chart (default to week view)
+            await this.loadProgressChart('week');
+
+            // Load exercise success rate stats
+            const exerciseStats = await window.analytics.getExerciseStats(user.id);
+            window.analytics.renderExerciseStatsChart('exerciseStatsChart', exerciseStats);
+
+            // Load study time statistics
+            const studyTime = await window.analytics.getStudyTime(user.id);
+            window.analytics.renderStudyTimeStats('studyTimeStats', studyTime);
+
+            // Load difficult words
+            const difficultWords = await window.analytics.getDifficultWords(user.id, 20);
+            window.analytics.renderDifficultWords('difficultWordsList', difficultWords);
+
+            // Load fluency prediction
+            const fluencyPrediction = await window.analytics.getFluencyPrediction(user.id);
+            window.analytics.renderFluencyPrediction('fluencyPrediction', fluencyPrediction);
+
+            // Add period selector event listeners
+            document.querySelectorAll('.period-btn').forEach(btn => {
+                btn.addEventListener('click', async (e) => {
+                    // Remove active class from all buttons
+                    document.querySelectorAll('.period-btn').forEach(b => b.classList.remove('active'));
+                    // Add active class to clicked button
+                    e.target.classList.add('active');
+                    // Load chart with selected period
+                    const period = e.target.getAttribute('data-period');
+                    await this.loadProgressChart(period);
+                });
+            });
+        } catch (error) {
+            console.error('Error loading analytics:', error);
+        }
+    }
+
+    async loadProgressChart(period) {
+        const user = userManager.getCurrentUser();
+        if (!user || !window.analytics) return;
+
+        try {
+            const progressData = await window.analytics.getLearningProgress(user.id, period);
+            window.analytics.renderProgressChart('progressChart', progressData, period);
+        } catch (error) {
+            console.error('Error loading progress chart:', error);
         }
     }
 

@@ -324,6 +324,58 @@
                             <div id="learnedList" class="word-list"></div>
                         </div>
                     </div>
+                    <!-- Analytics Section -->
+                    <div class="analytics-section">
+                        <h3>📊 Аналитика обучения</h3>
+
+                        <!-- Learning Progress Chart -->
+                        <div class="progress-chart-container">
+                            <div class="chart-header">
+                                <div class="chart-title">График прогресса обучения</div>
+                                <div class="chart-period-selector">
+                                    <button class="period-btn active" data-period="week">Неделя</button>
+                                    <button class="period-btn" data-period="month">Месяц</button>
+                                    <button class="period-btn" data-period="year">Год</button>
+                                </div>
+                            </div>
+                            <div class="chart-canvas-wrapper">
+                                <canvas id="progressChart"></canvas>
+                            </div>
+                        </div>
+
+                        <!-- Exercise Success Rate -->
+                        <div class="exercise-stats-container">
+                            <div class="exercise-stats-header">
+                                <h3>✅ Успешность по типам упражнений</h3>
+                                <p class="exercise-stats-description">Процент правильных ответов в разных режимах</p>
+                            </div>
+                            <div class="chart-canvas-wrapper" style="height: 250px;">
+                                <canvas id="exerciseStatsChart"></canvas>
+                            </div>
+                        </div>
+
+                        <!-- Study Time Tracking -->
+                        <div class="study-time-container">
+                            <h3>⏱️ Время обучения</h3>
+                            <div id="studyTimeStats"></div>
+                        </div>
+
+                        <!-- Difficult Words -->
+                        <div class="difficult-words-container">
+                            <h3>🎯 Самые сложные слова</h3>
+                            <p style="font-size: 14px; color: var(--text-secondary); margin-bottom: 16px;">
+                                Слова, в которых вы чаще всего ошибаетесь
+                            </p>
+                            <div id="difficultWordsList"></div>
+                        </div>
+
+                        <!-- Fluency Prediction -->
+                        <div class="fluency-prediction-container">
+                            <h3>🔮 Прогноз беглости</h3>
+                            <div id="fluencyPrediction"></div>
+                        </div>
+                    </div>
+
                     <!-- Gamification Stats -->
                     <div id="gamificationStatsContainer" class="gamification-section">
                         <!-- Gamification stats will be rendered here by gamification.js -->
@@ -550,6 +602,9 @@
         </script>
     </div>
 
+    <!-- Chart.js for analytics visualizations -->
+    <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.1/dist/chart.umd.min.js"></script>
+
     <script src="theme.js"></script>
     <script src="toast.js"></script>
     <script src="api-database.js"></script>
@@ -558,6 +613,7 @@
     <script src="user-manager.js"></script>
     <script src="survival-mode.js"></script>
     <script src="gamification.js"></script>
+    <script src="analytics.js"></script>
     <script src="onboarding.js"></script>
     <script src="app.js"></script>
 </body>
