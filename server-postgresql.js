@@ -295,10 +295,59 @@ async function initDatabase() {
             )
         `);
 
+        // Daily Challenges System: Challenge templates
+        await db.query(`
+            CREATE TABLE IF NOT EXISTS challenge_templates (
+                id SERIAL PRIMARY KEY,
+                challenge_type VARCHAR(50) NOT NULL,
+                title VARCHAR(255) NOT NULL,
+                description TEXT,
+                target_value INTEGER NOT NULL,
+                reward_xp INTEGER DEFAULT 0,
+                reward_coins INTEGER DEFAULT 0,
+                difficulty VARCHAR(20) DEFAULT 'easy',
+                icon TEXT,
+                is_active BOOLEAN DEFAULT TRUE,
+                createdAt TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+            )
+        `);
+
+        // Daily Challenges System: User challenges (daily instances)
+        await db.query(`
+            CREATE TABLE IF NOT EXISTS user_daily_challenges (
+                id SERIAL PRIMARY KEY,
+                user_id INTEGER REFERENCES users(id) ON DELETE CASCADE,
+                challenge_template_id INTEGER REFERENCES challenge_templates(id),
+                challenge_date DATE NOT NULL,
+                current_progress INTEGER DEFAULT 0,
+                target_value INTEGER NOT NULL,
+                is_completed BOOLEAN DEFAULT FALSE,
+                completed_at TIMESTAMP,
+                reward_claimed BOOLEAN DEFAULT FALSE,
+                createdAt TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+                UNIQUE(user_id, challenge_template_id, challenge_date)
+            )
+        `);
+
+        // Daily Challenges System: Challenge progress log
+        await db.query(`
+            CREATE TABLE IF NOT EXISTS challenge_progress_log (
+                id SERIAL PRIMARY KEY,
+                user_challenge_id INTEGER REFERENCES user_daily_challenges(id) ON DELETE CASCADE,
+                progress_increment INTEGER NOT NULL,
+                action_type VARCHAR(50),
+                action_details TEXT,
+                createdAt TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+            )
+        `);
+
         console.log('PostgreSQL database initialized with gamification tables');
 
         // Initialize predefined achievements
         await initializeAchievements();
+
+        // Initialize challenge templates
+        await initializeChallengeTemplates();
     } catch (err) {
         console.error('Database initialization error:', err);
     }
@@ -350,6 +399,40 @@ async function initializeAchievements() {
         console.log('✨ Achievements initialized');
     } catch (err) {
         console.error('Error initializing achievements:', err);
+    }
+}
+
+// Initialize predefined challenge templates
+async function initializeChallengeTemplates() {
+    const templates = [
+        // Daily challenges - Easy
+        { type: 'learn_words', title: 'Выучи 5 новых слов', description: 'Добавь 5 новых слов в свой словарь и начни их изучение', target: 5, xp: 50, coins: 10, difficulty: 'easy', icon: '📚' },
+        { type: 'review_words', title: 'Повтори 10 слов', description: 'Закрепи знания, повторив 10 слов из своего словаря', target: 10, xp: 30, coins: 5, difficulty: 'easy', icon: '🔄' },
+        { type: 'quiz_answers', title: 'Ответь правильно 5 раз', description: 'Дай 5 правильных ответов в любых упражнениях', target: 5, xp: 25, coins: 5, difficulty: 'easy', icon: '✅' },
+
+        // Daily challenges - Medium
+        { type: 'earn_xp', title: 'Заработай 100 XP', description: 'Накопи 100 очков опыта за день', target: 100, xp: 75, coins: 15, difficulty: 'medium', icon: '⭐' },
+        { type: 'perfect_quiz', title: 'Идеальный квиз', description: 'Пройди квиз без единой ошибки (минимум 5 вопросов)', target: 1, xp: 100, coins: 20, difficulty: 'medium', icon: '💯' },
+        { type: 'study_streak', title: 'Продли стрик', description: 'Сохрани свой ежедневный стрик', target: 1, xp: 50, coins: 10, difficulty: 'medium', icon: '🔥' },
+
+        // Daily challenges - Hard
+        { type: 'learn_many', title: 'Выучи 20 новых слов', description: 'Амбициозная цель: добавь 20 новых слов', target: 20, xp: 200, coins: 50, difficulty: 'hard', icon: '🎯' },
+        { type: 'quiz_marathon', title: 'Марафон упражнений', description: 'Выполни 30 упражнений за день', target: 30, xp: 150, coins: 30, difficulty: 'hard', icon: '🏃' },
+        { type: 'study_time', title: 'Час занятий', description: 'Уделяй обучению хотя бы 60 минут (считается по упражнениям)', target: 60, xp: 250, coins: 60, difficulty: 'hard', icon: '⏰' },
+    ];
+
+    try {
+        for (const template of templates) {
+            await db.query(
+                `INSERT INTO challenge_templates (challenge_type, title, description, target_value, reward_xp, reward_coins, difficulty, icon)
+                 VALUES ($1, $2, $3, $4, $5, $6, $7, $8)
+                 ON CONFLICT DO NOTHING`,
+                [template.type, template.title, template.description, template.target, template.xp, template.coins, template.difficulty, template.icon]
+            );
+        }
+        console.log('🎯 Challenge templates initialized');
+    } catch (err) {
+        console.error('Error initializing challenge templates:', err);
     }
 }
 
@@ -1979,6 +2062,325 @@ app.get('/api/reports/stats/summary', async (req, res) => {
         });
     } catch (err) {
         console.error('Error getting report stats:', err);
+        res.status(500).json({ error: err.message });
+    }
+});
+
+// ========================================
+// DAILY CHALLENGES SYSTEM ENDPOINTS
+// ========================================
+
+// Get daily challenges for user (auto-generate if not exist)
+app.get('/api/challenges/daily/:userId', async (req, res) => {
+    try {
+        const { userId } = req.params;
+        const today = new Date().toISOString().split('T')[0]; // YYYY-MM-DD
+
+        // Check if challenges exist for today
+        let challenges = await db.query(
+            `SELECT udc.*, ct.title, ct.description, ct.challenge_type, ct.difficulty, ct.icon, ct.reward_xp, ct.reward_coins
+             FROM user_daily_challenges udc
+             INNER JOIN challenge_templates ct ON udc.challenge_template_id = ct.id
+             WHERE udc.user_id = $1 AND udc.challenge_date = $2
+             ORDER BY ct.difficulty ASC`,
+            [parseInt(userId), today]
+        );
+
+        // If no challenges for today, generate them
+        if (challenges.rows.length === 0) {
+            // Get random 3 templates (1 easy, 1 medium, 1 hard)
+            const easyTemplate = await db.query(
+                `SELECT * FROM challenge_templates WHERE difficulty = 'easy' AND is_active = true ORDER BY RANDOM() LIMIT 1`
+            );
+            const mediumTemplate = await db.query(
+                `SELECT * FROM challenge_templates WHERE difficulty = 'medium' AND is_active = true ORDER BY RANDOM() LIMIT 1`
+            );
+            const hardTemplate = await db.query(
+                `SELECT * FROM challenge_templates WHERE difficulty = 'hard' AND is_active = true ORDER BY RANDOM() LIMIT 1`
+            );
+
+            const templates = [
+                ...easyTemplate.rows,
+                ...mediumTemplate.rows,
+                ...hardTemplate.rows
+            ];
+
+            // Create user challenges for today
+            for (const template of templates) {
+                await db.query(
+                    `INSERT INTO user_daily_challenges (user_id, challenge_template_id, challenge_date, target_value)
+                     VALUES ($1, $2, $3, $4)`,
+                    [parseInt(userId), template.id, today, template.target_value]
+                );
+            }
+
+            // Fetch newly created challenges
+            challenges = await db.query(
+                `SELECT udc.*, ct.title, ct.description, ct.challenge_type, ct.difficulty, ct.icon, ct.reward_xp, ct.reward_coins
+                 FROM user_daily_challenges udc
+                 INNER JOIN challenge_templates ct ON udc.challenge_template_id = ct.id
+                 WHERE udc.user_id = $1 AND udc.challenge_date = $2
+                 ORDER BY ct.difficulty ASC`,
+                [parseInt(userId), today]
+            );
+
+            console.log(`🎯 Generated 3 daily challenges for user ${userId}`);
+        }
+
+        res.json(challenges.rows);
+    } catch (err) {
+        console.error('Error getting daily challenges:', err);
+        res.status(500).json({ error: err.message });
+    }
+});
+
+// Update challenge progress
+app.post('/api/challenges/progress', async (req, res) => {
+    try {
+        const { userId, challengeType, increment = 1, actionDetails } = req.body;
+        const today = new Date().toISOString().split('T')[0];
+
+        // Find user challenge by type and date
+        const challenge = await db.query(
+            `SELECT udc.* FROM user_daily_challenges udc
+             INNER JOIN challenge_templates ct ON udc.challenge_template_id = ct.id
+             WHERE udc.user_id = $1 AND ct.challenge_type = $2 AND udc.challenge_date = $3 AND udc.is_completed = false`,
+            [parseInt(userId), challengeType, today]
+        );
+
+        if (challenge.rows.length === 0) {
+            return res.json({ message: 'No active challenge found', updated: false });
+        }
+
+        const userChallenge = challenge.rows[0];
+        const newProgress = userChallenge.current_progress + increment;
+        const isCompleted = newProgress >= userChallenge.target_value;
+
+        // Update progress
+        await db.query(
+            `UPDATE user_daily_challenges
+             SET current_progress = $1, is_completed = $2, completed_at = $3
+             WHERE id = $4`,
+            [newProgress, isCompleted, isCompleted ? new Date() : null, userChallenge.id]
+        );
+
+        // Log progress
+        await db.query(
+            `INSERT INTO challenge_progress_log (user_challenge_id, progress_increment, action_type, action_details)
+             VALUES ($1, $2, $3, $4)`,
+            [userChallenge.id, increment, challengeType, actionDetails || '']
+        );
+
+        if (isCompleted) {
+            console.log(`🎉 User ${userId} completed challenge: ${challengeType}`);
+        }
+
+        res.json({
+            message: isCompleted ? 'Challenge completed!' : 'Progress updated',
+            updated: true,
+            progress: newProgress,
+            target: userChallenge.target_value,
+            completed: isCompleted
+        });
+    } catch (err) {
+        console.error('Error updating challenge progress:', err);
+        res.status(500).json({ error: err.message });
+    }
+});
+
+// Claim challenge reward
+app.post('/api/challenges/claim-reward/:challengeId', async (req, res) => {
+    try {
+        const { challengeId } = req.params;
+        const { userId } = req.body;
+
+        // Get challenge details
+        const challenge = await db.query(
+            `SELECT udc.*, ct.reward_xp, ct.reward_coins, ct.title
+             FROM user_daily_challenges udc
+             INNER JOIN challenge_templates ct ON udc.challenge_template_id = ct.id
+             WHERE udc.id = $1 AND udc.user_id = $2 AND udc.is_completed = true AND udc.reward_claimed = false`,
+            [parseInt(challengeId), parseInt(userId)]
+        );
+
+        if (challenge.rows.length === 0) {
+            return res.status(400).json({ error: 'Challenge not found or reward already claimed' });
+        }
+
+        const ch = challenge.rows[0];
+
+        // Begin transaction
+        await db.query('BEGIN');
+
+        try {
+            // Mark reward as claimed
+            await db.query(
+                'UPDATE user_daily_challenges SET reward_claimed = true WHERE id = $1',
+                [parseInt(challengeId)]
+            );
+
+            // Award XP
+            if (ch.reward_xp > 0) {
+                await db.query(
+                    'INSERT INTO xp_log (user_id, xp_amount, action_type, action_details) VALUES ($1, $2, $3, $4)',
+                    [parseInt(userId), ch.reward_xp, 'challenge_complete', `Completed: ${ch.title}`]
+                );
+
+                await db.query(
+                    'UPDATE user_stats SET total_xp = total_xp + $1 WHERE user_id = $2',
+                    [ch.reward_xp, parseInt(userId)]
+                );
+            }
+
+            // Award coins (if coins system exists)
+            if (ch.reward_coins > 0) {
+                // For future coins system implementation
+                console.log(`💰 User ${userId} earned ${ch.reward_coins} coins from challenge`);
+            }
+
+            await db.query('COMMIT');
+
+            console.log(`🎁 User ${userId} claimed reward for challenge: ${ch.title}`);
+
+            res.json({
+                message: 'Reward claimed successfully',
+                xp: ch.reward_xp,
+                coins: ch.reward_coins
+            });
+        } catch (err) {
+            await db.query('ROLLBACK');
+            throw err;
+        }
+    } catch (err) {
+        console.error('Error claiming challenge reward:', err);
+        res.status(500).json({ error: err.message });
+    }
+});
+
+// Get challenge history
+app.get('/api/challenges/history/:userId', async (req, res) => {
+    try {
+        const { userId } = req.params;
+        const { limit = 30, offset = 0 } = req.query;
+
+        const history = await db.query(
+            `SELECT udc.*, ct.title, ct.description, ct.challenge_type, ct.difficulty, ct.icon, ct.reward_xp, ct.reward_coins
+             FROM user_daily_challenges udc
+             INNER JOIN challenge_templates ct ON udc.challenge_template_id = ct.id
+             WHERE udc.user_id = $1
+             ORDER BY udc.challenge_date DESC, udc.is_completed DESC
+             LIMIT $2 OFFSET $3`,
+            [parseInt(userId), parseInt(limit), parseInt(offset)]
+        );
+
+        // Get stats
+        const stats = await db.query(
+            `SELECT
+                COUNT(*) as total_challenges,
+                COUNT(CASE WHEN is_completed = true THEN 1 END) as completed_challenges,
+                SUM(CASE WHEN is_completed = true AND reward_claimed = true THEN ct.reward_xp ELSE 0 END) as total_xp_earned
+             FROM user_daily_challenges udc
+             INNER JOIN challenge_templates ct ON udc.challenge_template_id = ct.id
+             WHERE udc.user_id = $1`,
+            [parseInt(userId)]
+        );
+
+        res.json({
+            challenges: history.rows,
+            stats: stats.rows[0]
+        });
+    } catch (err) {
+        console.error('Error getting challenge history:', err);
+        res.status(500).json({ error: err.message });
+    }
+});
+
+// Admin: Create custom challenge template
+app.post('/api/admin/challenges/template', async (req, res) => {
+    try {
+        const { challengeType, title, description, targetValue, rewardXp, rewardCoins, difficulty, icon } = req.body;
+
+        if (!challengeType || !title || !targetValue) {
+            return res.status(400).json({ error: 'challengeType, title, and targetValue are required' });
+        }
+
+        const result = await db.query(
+            `INSERT INTO challenge_templates (challenge_type, title, description, target_value, reward_xp, reward_coins, difficulty, icon)
+             VALUES ($1, $2, $3, $4, $5, $6, $7, $8)
+             RETURNING *`,
+            [challengeType, title, description || '', parseInt(targetValue), rewardXp || 0, rewardCoins || 0, difficulty || 'medium', icon || '🎯']
+        );
+
+        console.log(`✨ Created new challenge template: ${title}`);
+        res.json(result.rows[0]);
+    } catch (err) {
+        console.error('Error creating challenge template:', err);
+        res.status(500).json({ error: err.message });
+    }
+});
+
+// Get challenge statistics
+app.get('/api/challenges/stats/:userId', async (req, res) => {
+    try {
+        const { userId } = req.params;
+
+        // Get completion rate by difficulty
+        const byDifficulty = await db.query(
+            `SELECT ct.difficulty,
+                    COUNT(*) as total,
+                    COUNT(CASE WHEN udc.is_completed = true THEN 1 END) as completed
+             FROM user_daily_challenges udc
+             INNER JOIN challenge_templates ct ON udc.challenge_template_id = ct.id
+             WHERE udc.user_id = $1
+             GROUP BY ct.difficulty`,
+            [parseInt(userId)]
+        );
+
+        // Get completion rate by challenge type
+        const byType = await db.query(
+            `SELECT ct.challenge_type,
+                    COUNT(*) as total,
+                    COUNT(CASE WHEN udc.is_completed = true THEN 1 END) as completed
+             FROM user_daily_challenges udc
+             INNER JOIN challenge_templates ct ON udc.challenge_template_id = ct.id
+             WHERE udc.user_id = $1
+             GROUP BY ct.challenge_type`,
+            [parseInt(userId)]
+        );
+
+        // Get current streak (consecutive days with at least 1 challenge completed)
+        const streakResult = await db.query(
+            `SELECT challenge_date
+             FROM user_daily_challenges
+             WHERE user_id = $1 AND is_completed = true
+             GROUP BY challenge_date
+             HAVING COUNT(*) > 0
+             ORDER BY challenge_date DESC
+             LIMIT 365`,
+            [parseInt(userId)]
+        );
+
+        let challengeStreak = 0;
+        const dates = streakResult.rows.map(row => row.challenge_date);
+        for (let i = 0; i < dates.length; i++) {
+            const expectedDate = new Date();
+            expectedDate.setDate(expectedDate.getDate() - i);
+            const expected = expectedDate.toISOString().split('T')[0];
+
+            if (dates[i] === expected) {
+                challengeStreak++;
+            } else {
+                break;
+            }
+        }
+
+        res.json({
+            byDifficulty: byDifficulty.rows,
+            byType: byType.rows,
+            challengeStreak
+        });
+    } catch (err) {
+        console.error('Error getting challenge stats:', err);
         res.status(500).json({ error: err.message });
     }
 });
