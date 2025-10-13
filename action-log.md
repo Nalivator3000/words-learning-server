@@ -2,6 +2,50 @@
 
 ## 2025-10-13
 
+### Daily Challenges System (Backend)
+**Commit:** 🎯 CHALLENGES: Complete daily challenges system
+
+**Изменения:**
+- База данных (3 таблицы):
+  - `challenge_templates` - шаблоны заданий (id, challenge_type, title, description, target_value, reward_xp, reward_coins, difficulty, icon, is_active, timestamps)
+  - `user_daily_challenges` - экземпляры заданий (id, user_id, challenge_template_id, challenge_date, current_progress, target_value, is_completed, completed_at, reward_claimed, timestamps)
+  - `challenge_progress_log` - история прогресса (id, user_challenge_id, progress_increment, action_type, action_details, timestamp)
+
+- Challenge Templates (9 predefined):
+  - **Easy (3):** Learn 5 words (50 XP, 10 coins), Review 10 words (30 XP, 5 coins), 5 correct answers (25 XP, 5 coins)
+  - **Medium (3):** Earn 100 XP (75 XP, 15 coins), Perfect quiz (100 XP, 20 coins), Maintain streak (50 XP, 10 coins)
+  - **Hard (3):** Learn 20 words (200 XP, 50 coins), 30 exercises (150 XP, 30 coins), 60 minutes study (250 XP, 60 coins)
+
+- API Endpoints (6 новых):
+  - `GET /api/challenges/daily/:userId` - получить или автогенерировать 3 челленджа на сегодня
+  - `POST /api/challenges/progress` - обновить прогресс челленджа
+  - `POST /api/challenges/claim-reward/:challengeId` - забрать награду (XP + coins)
+  - `GET /api/challenges/history/:userId` - история челленджей со статистикой
+  - `POST /api/admin/challenges/template` - создать кастомный челлендж (админ)
+  - `GET /api/challenges/stats/:userId` - статистика по сложности/типу, challenge streak
+
+**Файлы:**
+- [server-postgresql.js:298-342](server-postgresql.js#L298-L342) - создание таблиц
+- [server-postgresql.js:405-437](server-postgresql.js#L405-L437) - initializeChallengeTemplates()
+- [server-postgresql.js:2069-2386](server-postgresql.js#L2069-L2386) - API endpoints
+
+**Функциональность:**
+- Auto-generation: каждый день 1 easy + 1 medium + 1 hard (random selection)
+- Progress tracking: incremental updates, логирование каждого действия
+- Reward system: XP зачисляется в user_stats, coins (для будущей системы)
+- Challenge streak: подсчет consecutive days с выполненными челленджами
+- History: 30 дней истории с completion rate
+- Admin panel: создание кастомных челленджей
+- Transaction safety: BEGIN/COMMIT/ROLLBACK для rewards
+- Date-based reset: автоматическое обновление каждый день
+- UNIQUE constraint: user_id + challenge_template_id + challenge_date
+
+**Следующие шаги:**
+- Frontend UI для отображения челленджей (карточки с прогресс-барами)
+- Notifications о новых челленджах (push/email)
+- Achievement "Challenge Master" за 30 дней выполненных челленджей
+- Weekly challenges (расширение системы)
+
 ### Bug Reporting System (Backend)
 **Commit:** 🐛 REPORTS: Complete bug reporting system backend
 

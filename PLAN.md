@@ -214,11 +214,18 @@
   - Страница коллекции с locked/unlocked состояниями
 
 ### 2.4 Челленджи (Challenges)
-- [ ] **Ежедневные задания**
-  - Выучить 5 новых слов
-  - Повторить 10 слов
-  - Набрать 100 XP
-  - Награды за выполнение всех заданий дня
+- [x] **Ежедневные задания** ✅ ГОТОВО (Backend)
+  - ✅ 9 predefined challenge templates (Easy, Medium, Hard)
+  - ✅ Auto-generation: 3 challenges per day (1 each difficulty)
+  - ✅ Progress tracking with incremental updates (server-postgresql.js:2073-2189)
+  - ✅ Reward system: XP + Coins (transaction-safe)
+  - ✅ Таблицы БД: challenge_templates, user_daily_challenges, challenge_progress_log
+  - ✅ API endpoints: daily challenges, progress, claim reward, history, stats
+  - ✅ Challenge streak calculation
+  - ✅ Admin API for custom challenges
+  - [ ] UI для отображения челленджей (будущая версия)
+  - [ ] Уведомления о новых челленджах (будущая версия)
+  - [ ] Achievement "Challenge Master" за 30 дней челленджей (будущая версия)
 
 - [ ] **Недельные челленджи**
   - Выучить 50 слов за неделю
