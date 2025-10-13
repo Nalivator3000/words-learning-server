@@ -2,6 +2,54 @@
 
 ## 2025-10-13
 
+### Bug Reporting System (Backend)
+**Commit:** 🐛 REPORTS: Complete bug reporting system backend
+
+**Изменения:**
+- База данных:
+  - Добавлен флаг `is_beta_tester` к таблице `users` (миграция с IF NOT EXISTS)
+  - Создана таблица `reports` (id, user_id, report_type, title, description, page_url, browser_info, screen_resolution, status, priority, assigned_to, github_issue_number, timestamps)
+  - Создана таблица `report_attachments` (id, report_id, filename, filepath, mimetype, size, timestamp)
+  - Создана таблица `report_comments` (id, report_id, user_id, comment_text, is_internal, timestamp)
+  - Создана таблица `report_votes` (id, report_id, user_id, vote_type, timestamp с UNIQUE constraint)
+
+- API Endpoints (10 новых):
+  - `PUT /api/admin/users/:userId/beta-tester` - включить/выключить beta-доступ
+  - `GET /api/users/:userId/beta-tester` - проверить статус beta-тестера
+  - `POST /api/reports` - создать новый репорт (только для beta-тестеров, до 5 скриншотов)
+  - `GET /api/reports` - список репортов с фильтрацией (userId, status, reportType, priority)
+  - `GET /api/reports/:reportId` - детали репорта (с attachments, comments, votes)
+  - `PUT /api/admin/reports/:reportId` - обновить статус/приоритет/назначение/GitHub issue
+  - `POST /api/reports/:reportId/comments` - добавить комментарий к репорту
+  - `POST /api/reports/:reportId/vote` - проголосовать за репорт (upvote, important, me_too)
+  - `DELETE /api/admin/reports/:reportId` - удалить репорт (с файлами)
+  - `GET /api/reports/stats/summary` - статистика по репортам (total, byStatus, byType, byPriority)
+
+**Файлы:**
+- [server-postgresql.js:228-239](server-postgresql.js#L228-L239) - миграция is_beta_tester
+- [server-postgresql.js:241-296](server-postgresql.js#L241-L296) - создание таблиц
+- [server-postgresql.js:1584-1984](server-postgresql.js#L1584-L1984) - API endpoints
+
+**Функциональность:**
+- Report types: bug, feature, improvement, question
+- Status workflow: open → in_progress → resolved → closed
+- Priority levels: low, medium, high, critical
+- Автоматический сбор контекста (pageUrl, browserInfo, screenResolution)
+- Multi-file upload через multer (до 5 файлов)
+- Система комментариев (публичные + внутренние)
+- Voting system (upvote, important, me_too с UNIQUE constraint)
+- Assignment система для админов
+- GitHub Issues integration support (поле github_issue_number)
+- CASCADE deletion для связанных данных
+- Transaction safety (BEGIN/COMMIT/ROLLBACK)
+- Удаление файлов при удалении репорта
+
+**Следующие шаги:**
+- Frontend UI (FAB button, модальное окно)
+- Админ-панель для управления репортами
+- Email уведомления (Nodemailer/SendGrid)
+- GitHub Issues автоматизация (Octokit)
+
 ### Global Word Collections System (Backend)
 **Commit:** 📚 COLLECTIONS: Add global word collections system (backend)
 
