@@ -295,6 +295,63 @@ async function initDatabase() {
             )
         `);
 
+        // Friends System: Friendships table
+        await db.query(`
+            CREATE TABLE IF NOT EXISTS friendships (
+                id SERIAL PRIMARY KEY,
+                user_id INTEGER REFERENCES users(id) ON DELETE CASCADE,
+                friend_id INTEGER REFERENCES users(id) ON DELETE CASCADE,
+                status VARCHAR(20) DEFAULT 'pending',
+                requestedAt TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+                acceptedAt TIMESTAMP,
+                UNIQUE(user_id, friend_id),
+                CHECK (user_id != friend_id)
+            )
+        `);
+
+        // Friends System: Friend activity feed
+        await db.query(`
+            CREATE TABLE IF NOT EXISTS friend_activities (
+                id SERIAL PRIMARY KEY,
+                user_id INTEGER REFERENCES users(id) ON DELETE CASCADE,
+                activity_type VARCHAR(50) NOT NULL,
+                activity_data JSONB,
+                createdAt TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+            )
+        `);
+
+        // Achievements System: Achievement definitions
+        await db.query(`
+            CREATE TABLE IF NOT EXISTS achievements (
+                id SERIAL PRIMARY KEY,
+                achievement_key VARCHAR(100) UNIQUE NOT NULL,
+                title VARCHAR(255) NOT NULL,
+                description TEXT,
+                icon VARCHAR(50),
+                category VARCHAR(50),
+                difficulty VARCHAR(20),
+                reward_xp INTEGER DEFAULT 0,
+                reward_coins INTEGER DEFAULT 0,
+                is_secret BOOLEAN DEFAULT false,
+                is_active BOOLEAN DEFAULT true,
+                createdAt TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+            )
+        `);
+
+        // Achievements System: User achievements (unlocked achievements)
+        await db.query(`
+            CREATE TABLE IF NOT EXISTS user_achievements (
+                id SERIAL PRIMARY KEY,
+                user_id INTEGER REFERENCES users(id) ON DELETE CASCADE,
+                achievement_id INTEGER REFERENCES achievements(id) ON DELETE CASCADE,
+                progress INTEGER DEFAULT 0,
+                target INTEGER DEFAULT 1,
+                is_unlocked BOOLEAN DEFAULT false,
+                unlockedAt TIMESTAMP,
+                UNIQUE(user_id, achievement_id)
+            )
+        `);
+
         // Daily Challenges System: Challenge templates
         await db.query(`
             CREATE TABLE IF NOT EXISTS challenge_templates (
@@ -416,14 +473,14 @@ async function initDatabase() {
 
         console.log('PostgreSQL database initialized with gamification tables');
 
-        // Initialize predefined achievements
-        await initializeAchievements();
-
         // Initialize challenge templates
         await initializeChallengeTemplates();
 
         // Initialize shop items
         await initializeShopItems();
+
+        // Initialize achievements
+        await initializeAchievements();
     } catch (err) {
         console.error('Database initialization error:', err);
     }
@@ -606,6 +663,62 @@ async function getUserStats(userId) {
     }
 
     return stats.rows[0];
+}
+
+// Achievements: Initialize predefined achievements
+async function initializeAchievements() {
+    const achievements = [
+        // Learning milestones
+        { key: 'first_steps', title: 'Первые шаги', description: 'Выучите 10 слов', icon: '👣', category: 'learning', difficulty: 'easy', reward_xp: 50, reward_coins: 10, target: 10 },
+        { key: 'vocabulary_builder', title: 'Строитель словаря', description: 'Выучите 100 слов', icon: '📚', category: 'learning', difficulty: 'medium', reward_xp: 200, reward_coins: 50, target: 100 },
+        { key: 'word_master', title: 'Мастер слов', description: 'Выучите 500 слов', icon: '🎓', category: 'learning', difficulty: 'hard', reward_xp: 1000, reward_coins: 250, target: 500 },
+        { key: 'polyglot', title: 'Полиглот', description: 'Создайте 3 языковые пары', icon: '🌍', category: 'learning', difficulty: 'medium', reward_xp: 150, reward_coins: 30, target: 3 },
+
+        // Streak achievements
+        { key: 'week_warrior', title: 'Воин недели', description: 'Стрик 7 дней', icon: '🔥', category: 'streak', difficulty: 'easy', reward_xp: 100, reward_coins: 20, target: 7 },
+        { key: 'marathon_runner', title: 'Марафонец', description: 'Стрик 30 дней', icon: '🏃', category: 'streak', difficulty: 'hard', reward_xp: 500, reward_coins: 100, target: 30 },
+        { key: 'legendary_streak', title: 'Легендарный стрик', description: 'Стрик 100 дней', icon: '⭐', category: 'streak', difficulty: 'legendary', reward_xp: 2000, reward_coins: 500, target: 100 },
+
+        // Accuracy achievements
+        { key: 'perfectionist', title: 'Перфекционист', description: '100% правильных ответов в 10 квизах', icon: '💯', category: 'accuracy', difficulty: 'medium', reward_xp: 150, reward_coins: 30, target: 10 },
+        { key: 'sharpshooter', title: 'Снайпер', description: '100% правильных ответов в 50 квизах', icon: '🎯', category: 'accuracy', difficulty: 'hard', reward_xp: 500, reward_coins: 100, target: 50 },
+
+        // Time-based achievements
+        { key: 'night_owl', title: 'Ночной ученик', description: 'Изучайте слова после 22:00', icon: '🌙', category: 'time', difficulty: 'easy', reward_xp: 50, reward_coins: 10, is_secret: true, target: 1 },
+        { key: 'early_bird', title: 'Ранняя пташка', description: 'Изучайте слова до 6:00', icon: '🌅', category: 'time', difficulty: 'easy', reward_xp: 50, reward_coins: 10, is_secret: true, target: 1 },
+
+        // XP achievements
+        { key: 'xp_collector', title: 'Коллекционер XP', description: 'Заработайте 1000 XP', icon: '💎', category: 'xp', difficulty: 'medium', reward_xp: 200, reward_coins: 50, target: 1000 },
+        { key: 'xp_master', title: 'Мастер XP', description: 'Заработайте 10000 XP', icon: '👑', category: 'xp', difficulty: 'hard', reward_xp: 1000, reward_coins: 250, target: 10000 },
+
+        // Social achievements
+        { key: 'social_butterfly', title: 'Общительный', description: 'Добавьте 5 друзей', icon: '🦋', category: 'social', difficulty: 'easy', reward_xp: 100, reward_coins: 20, target: 5 },
+        { key: 'challenge_master', title: 'Мастер челленджей', description: 'Выполните 30 челленджей', icon: '🏆', category: 'challenges', difficulty: 'hard', reward_xp: 500, reward_coins: 100, target: 30 }
+    ];
+
+    for (const achievement of achievements) {
+        try {
+            await db.query(`
+                INSERT INTO achievements (achievement_key, title, description, icon, category, difficulty, reward_xp, reward_coins, is_secret)
+                VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9)
+                ON CONFLICT (achievement_key) DO NOTHING
+            `, [
+                achievement.key,
+                achievement.title,
+                achievement.description,
+                achievement.icon,
+                achievement.category,
+                achievement.difficulty,
+                achievement.reward_xp,
+                achievement.reward_coins,
+                achievement.is_secret || false
+            ]);
+        } catch (err) {
+            console.error(`Error initializing achievement ${achievement.key}:`, err.message);
+        }
+    }
+
+    console.log('✅ Achievements initialized');
 }
 
 // Gamification: Award XP to user
@@ -3076,6 +3189,923 @@ app.get('/api/leaderboard/stats', async (req, res) => {
         res.json(stats.rows[0]);
     } catch (err) {
         console.error('Error getting leaderboard stats:', err);
+        res.status(500).json({ error: err.message });
+    }
+});
+
+// ========================================
+// COINS ECONOMY SYSTEM ENDPOINTS
+// ========================================
+
+// Get user's coin balance
+app.get('/api/coins/balance/:userId', async (req, res) => {
+    try {
+        const { userId } = req.params;
+
+        const result = await db.query(
+            'SELECT coins_balance FROM user_stats WHERE user_id = $1',
+            [parseInt(userId)]
+        );
+
+        if (result.rows.length === 0) {
+            return res.status(404).json({ error: 'User not found' });
+        }
+
+        res.json({ coins_balance: result.rows[0].coins_balance || 0 });
+    } catch (err) {
+        console.error('Error getting coin balance:', err);
+        res.status(500).json({ error: err.message });
+    }
+});
+
+// Earn coins (add coins to balance)
+app.post('/api/coins/earn', async (req, res) => {
+    try {
+        const { userId, amount, source, description } = req.body;
+
+        if (!userId || !amount || !source) {
+            return res.status(400).json({ error: 'Missing required fields: userId, amount, source' });
+        }
+
+        if (amount <= 0) {
+            return res.status(400).json({ error: 'Amount must be positive' });
+        }
+
+        await db.query('BEGIN');
+
+        // Get current balance
+        const balanceResult = await db.query(
+            'SELECT coins_balance FROM user_stats WHERE user_id = $1',
+            [parseInt(userId)]
+        );
+
+        if (balanceResult.rows.length === 0) {
+            await db.query('ROLLBACK');
+            return res.status(404).json({ error: 'User not found' });
+        }
+
+        const currentBalance = balanceResult.rows[0].coins_balance || 0;
+        const newBalance = currentBalance + parseInt(amount);
+
+        // Update balance
+        await db.query(
+            'UPDATE user_stats SET coins_balance = $1 WHERE user_id = $2',
+            [newBalance, parseInt(userId)]
+        );
+
+        // Log transaction
+        const transactionResult = await db.query(`
+            INSERT INTO coin_transactions (user_id, amount, transaction_type, source, description, balance_after)
+            VALUES ($1, $2, 'earn', $3, $4, $5)
+            RETURNING *
+        `, [parseInt(userId), parseInt(amount), source, description || '', newBalance]);
+
+        await db.query('COMMIT');
+
+        res.json({
+            success: true,
+            transaction: transactionResult.rows[0],
+            new_balance: newBalance
+        });
+    } catch (err) {
+        await db.query('ROLLBACK');
+        console.error('Error earning coins:', err);
+        res.status(500).json({ error: err.message });
+    }
+});
+
+// Spend coins (deduct coins from balance)
+app.post('/api/coins/spend', async (req, res) => {
+    try {
+        const { userId, amount, source, description } = req.body;
+
+        if (!userId || !amount || !source) {
+            return res.status(400).json({ error: 'Missing required fields: userId, amount, source' });
+        }
+
+        if (amount <= 0) {
+            return res.status(400).json({ error: 'Amount must be positive' });
+        }
+
+        await db.query('BEGIN');
+
+        // Get current balance
+        const balanceResult = await db.query(
+            'SELECT coins_balance FROM user_stats WHERE user_id = $1',
+            [parseInt(userId)]
+        );
+
+        if (balanceResult.rows.length === 0) {
+            await db.query('ROLLBACK');
+            return res.status(404).json({ error: 'User not found' });
+        }
+
+        const currentBalance = balanceResult.rows[0].coins_balance || 0;
+
+        // Check sufficient funds
+        if (currentBalance < parseInt(amount)) {
+            await db.query('ROLLBACK');
+            return res.status(400).json({
+                error: 'Insufficient coins',
+                current_balance: currentBalance,
+                required: parseInt(amount)
+            });
+        }
+
+        const newBalance = currentBalance - parseInt(amount);
+
+        // Update balance
+        await db.query(
+            'UPDATE user_stats SET coins_balance = $1 WHERE user_id = $2',
+            [newBalance, parseInt(userId)]
+        );
+
+        // Log transaction
+        const transactionResult = await db.query(`
+            INSERT INTO coin_transactions (user_id, amount, transaction_type, source, description, balance_after)
+            VALUES ($1, $2, 'spend', $3, $4, $5)
+            RETURNING *
+        `, [parseInt(userId), parseInt(amount), source, description || '', newBalance]);
+
+        await db.query('COMMIT');
+
+        res.json({
+            success: true,
+            transaction: transactionResult.rows[0],
+            new_balance: newBalance
+        });
+    } catch (err) {
+        await db.query('ROLLBACK');
+        console.error('Error spending coins:', err);
+        res.status(500).json({ error: err.message });
+    }
+});
+
+// Get shop items (all active items or filtered by category)
+app.get('/api/coins/shop', async (req, res) => {
+    try {
+        const { category, item_type } = req.query;
+
+        let query = 'SELECT * FROM shop_items WHERE is_active = true';
+        let params = [];
+        let paramIndex = 1;
+
+        if (category) {
+            query += ` AND category = $${paramIndex}`;
+            params.push(category);
+            paramIndex++;
+        }
+
+        if (item_type) {
+            query += ` AND item_type = $${paramIndex}`;
+            params.push(item_type);
+            paramIndex++;
+        }
+
+        query += ' ORDER BY category, price_coins ASC';
+
+        const result = await db.query(query, params);
+
+        res.json(result.rows);
+    } catch (err) {
+        console.error('Error getting shop items:', err);
+        res.status(500).json({ error: err.message });
+    }
+});
+
+// Purchase shop item
+app.post('/api/coins/purchase', async (req, res) => {
+    try {
+        const { userId, shopItemId, quantity = 1 } = req.body;
+
+        if (!userId || !shopItemId) {
+            return res.status(400).json({ error: 'Missing required fields: userId, shopItemId' });
+        }
+
+        await db.query('BEGIN');
+
+        // Get shop item
+        const itemResult = await db.query(
+            'SELECT * FROM shop_items WHERE id = $1 AND is_active = true',
+            [parseInt(shopItemId)]
+        );
+
+        if (itemResult.rows.length === 0) {
+            await db.query('ROLLBACK');
+            return res.status(404).json({ error: 'Shop item not found or inactive' });
+        }
+
+        const item = itemResult.rows[0];
+        const totalCost = item.price_coins * parseInt(quantity);
+
+        // Check stock for limited items
+        if (item.is_limited && item.stock_quantity < parseInt(quantity)) {
+            await db.query('ROLLBACK');
+            return res.status(400).json({
+                error: 'Insufficient stock',
+                available: item.stock_quantity,
+                requested: parseInt(quantity)
+            });
+        }
+
+        // Get user balance
+        const balanceResult = await db.query(
+            'SELECT coins_balance FROM user_stats WHERE user_id = $1',
+            [parseInt(userId)]
+        );
+
+        if (balanceResult.rows.length === 0) {
+            await db.query('ROLLBACK');
+            return res.status(404).json({ error: 'User not found' });
+        }
+
+        const currentBalance = balanceResult.rows[0].coins_balance || 0;
+
+        // Check sufficient funds
+        if (currentBalance < totalCost) {
+            await db.query('ROLLBACK');
+            return res.status(400).json({
+                error: 'Insufficient coins',
+                current_balance: currentBalance,
+                required: totalCost
+            });
+        }
+
+        const newBalance = currentBalance - totalCost;
+
+        // Update balance
+        await db.query(
+            'UPDATE user_stats SET coins_balance = $1 WHERE user_id = $2',
+            [newBalance, parseInt(userId)]
+        );
+
+        // Update stock for limited items
+        if (item.is_limited) {
+            await db.query(
+                'UPDATE shop_items SET stock_quantity = stock_quantity - $1 WHERE id = $2',
+                [parseInt(quantity), parseInt(shopItemId)]
+            );
+        }
+
+        // Calculate expiration for time-limited items (boosters, freezes)
+        let expiresAt = null;
+        if (item.category === 'boosters') {
+            // 24 hours
+            expiresAt = new Date(Date.now() + 24 * 60 * 60 * 1000);
+        } else if (item.category === 'streak') {
+            // Extract days from item_key (e.g., "streak_freeze_1" -> 1 day)
+            const days = parseInt(item.item_key.split('_')[2]) || 1;
+            expiresAt = new Date(Date.now() + days * 24 * 60 * 60 * 1000);
+        }
+
+        // Create purchase record
+        const purchaseResult = await db.query(`
+            INSERT INTO user_purchases (user_id, shop_item_id, quantity, total_cost, is_active, expiresAt)
+            VALUES ($1, $2, $3, $4, true, $5)
+            RETURNING *
+        `, [parseInt(userId), parseInt(shopItemId), parseInt(quantity), totalCost, expiresAt]);
+
+        // Log transaction
+        await db.query(`
+            INSERT INTO coin_transactions (user_id, amount, transaction_type, source, description, balance_after)
+            VALUES ($1, $2, 'spend', 'shop_purchase', $3, $4)
+        `, [parseInt(userId), totalCost, `Purchased: ${item.name} x${quantity}`, newBalance]);
+
+        await db.query('COMMIT');
+
+        res.json({
+            success: true,
+            purchase: purchaseResult.rows[0],
+            item: item,
+            new_balance: newBalance
+        });
+    } catch (err) {
+        await db.query('ROLLBACK');
+        console.error('Error purchasing item:', err);
+        res.status(500).json({ error: err.message });
+    }
+});
+
+// Get transaction history
+app.get('/api/coins/transactions/:userId', async (req, res) => {
+    try {
+        const { userId } = req.params;
+        const { limit = 50, offset = 0 } = req.query;
+
+        const result = await db.query(`
+            SELECT * FROM coin_transactions
+            WHERE user_id = $1
+            ORDER BY timestamp DESC
+            LIMIT $2 OFFSET $3
+        `, [parseInt(userId), parseInt(limit), parseInt(offset)]);
+
+        res.json(result.rows);
+    } catch (err) {
+        console.error('Error getting transaction history:', err);
+        res.status(500).json({ error: err.message });
+    }
+});
+
+// Get user's purchases (active items)
+app.get('/api/coins/purchases/:userId', async (req, res) => {
+    try {
+        const { userId } = req.params;
+        const { active_only = 'true' } = req.query;
+
+        let query = `
+            SELECT up.*, si.name, si.description, si.icon, si.category, si.item_type, si.item_key
+            FROM user_purchases up
+            INNER JOIN shop_items si ON up.shop_item_id = si.id
+            WHERE up.user_id = $1
+        `;
+
+        if (active_only === 'true') {
+            query += ` AND up.is_active = true`;
+            query += ` AND (up.expiresAt IS NULL OR up.expiresAt > NOW())`;
+        }
+
+        query += ` ORDER BY up.purchasedAt DESC`;
+
+        const result = await db.query(query, [parseInt(userId)]);
+
+        res.json(result.rows);
+    } catch (err) {
+        console.error('Error getting user purchases:', err);
+        res.status(500).json({ error: err.message });
+    }
+});
+
+// ========================================
+// FRIENDS SYSTEM ENDPOINTS
+// ========================================
+
+// Send friend request
+app.post('/api/friends/request', async (req, res) => {
+    try {
+        const { userId, friendId } = req.body;
+
+        if (!userId || !friendId) {
+            return res.status(400).json({ error: 'Missing required fields: userId, friendId' });
+        }
+
+        if (parseInt(userId) === parseInt(friendId)) {
+            return res.status(400).json({ error: 'Cannot send friend request to yourself' });
+        }
+
+        // Check if friend exists
+        const friendCheck = await db.query('SELECT id FROM users WHERE id = $1', [parseInt(friendId)]);
+        if (friendCheck.rows.length === 0) {
+            return res.status(404).json({ error: 'User not found' });
+        }
+
+        // Check if friendship already exists (in either direction)
+        const existingFriendship = await db.query(
+            'SELECT * FROM friendships WHERE (user_id = $1 AND friend_id = $2) OR (user_id = $2 AND friend_id = $1)',
+            [parseInt(userId), parseInt(friendId)]
+        );
+
+        if (existingFriendship.rows.length > 0) {
+            const status = existingFriendship.rows[0].status;
+            if (status === 'accepted') {
+                return res.status(400).json({ error: 'Already friends' });
+            } else if (status === 'pending') {
+                return res.status(400).json({ error: 'Friend request already pending' });
+            } else if (status === 'blocked') {
+                return res.status(400).json({ error: 'Cannot send friend request' });
+            }
+        }
+
+        // Create friend request
+        const result = await db.query(`
+            INSERT INTO friendships (user_id, friend_id, status)
+            VALUES ($1, $2, 'pending')
+            RETURNING *
+        `, [parseInt(userId), parseInt(friendId)]);
+
+        // Log activity
+        await db.query(`
+            INSERT INTO friend_activities (user_id, activity_type, activity_data)
+            VALUES ($1, 'friend_request_sent', $2)
+        `, [parseInt(userId), JSON.stringify({ friend_id: parseInt(friendId) })]);
+
+        res.json({
+            success: true,
+            friendship: result.rows[0]
+        });
+    } catch (err) {
+        console.error('Error sending friend request:', err);
+        res.status(500).json({ error: err.message });
+    }
+});
+
+// Accept friend request
+app.post('/api/friends/accept/:friendshipId', async (req, res) => {
+    try {
+        const { friendshipId } = req.params;
+        const { userId } = req.body;
+
+        // Get friendship
+        const friendship = await db.query(
+            'SELECT * FROM friendships WHERE id = $1 AND friend_id = $2 AND status = $3',
+            [parseInt(friendshipId), parseInt(userId), 'pending']
+        );
+
+        if (friendship.rows.length === 0) {
+            return res.status(404).json({ error: 'Friend request not found or already processed' });
+        }
+
+        // Accept friendship
+        const result = await db.query(`
+            UPDATE friendships
+            SET status = 'accepted', acceptedAt = CURRENT_TIMESTAMP
+            WHERE id = $1
+            RETURNING *
+        `, [parseInt(friendshipId)]);
+
+        // Log activities for both users
+        await db.query(`
+            INSERT INTO friend_activities (user_id, activity_type, activity_data)
+            VALUES ($1, 'friend_request_accepted', $2)
+        `, [parseInt(userId), JSON.stringify({ friend_id: friendship.rows[0].user_id })]);
+
+        await db.query(`
+            INSERT INTO friend_activities (user_id, activity_type, activity_data)
+            VALUES ($1, 'became_friends', $2)
+        `, [friendship.rows[0].user_id, JSON.stringify({ friend_id: parseInt(userId) })]);
+
+        res.json({
+            success: true,
+            friendship: result.rows[0]
+        });
+    } catch (err) {
+        console.error('Error accepting friend request:', err);
+        res.status(500).json({ error: err.message });
+    }
+});
+
+// Decline friend request
+app.post('/api/friends/decline/:friendshipId', async (req, res) => {
+    try {
+        const { friendshipId } = req.params;
+        const { userId } = req.body;
+
+        // Verify the request is for this user
+        const friendship = await db.query(
+            'SELECT * FROM friendships WHERE id = $1 AND friend_id = $2 AND status = $3',
+            [parseInt(friendshipId), parseInt(userId), 'pending']
+        );
+
+        if (friendship.rows.length === 0) {
+            return res.status(404).json({ error: 'Friend request not found or already processed' });
+        }
+
+        // Delete friendship
+        await db.query('DELETE FROM friendships WHERE id = $1', [parseInt(friendshipId)]);
+
+        res.json({ success: true, message: 'Friend request declined' });
+    } catch (err) {
+        console.error('Error declining friend request:', err);
+        res.status(500).json({ error: err.message });
+    }
+});
+
+// Remove friend (unfriend)
+app.delete('/api/friends/:friendshipId', async (req, res) => {
+    try {
+        const { friendshipId } = req.params;
+        const { userId } = req.body;
+
+        // Verify the friendship involves this user
+        const friendship = await db.query(
+            'SELECT * FROM friendships WHERE id = $1 AND (user_id = $2 OR friend_id = $2)',
+            [parseInt(friendshipId), parseInt(userId)]
+        );
+
+        if (friendship.rows.length === 0) {
+            return res.status(404).json({ error: 'Friendship not found' });
+        }
+
+        // Delete friendship
+        await db.query('DELETE FROM friendships WHERE id = $1', [parseInt(friendshipId)]);
+
+        res.json({ success: true, message: 'Friend removed' });
+    } catch (err) {
+        console.error('Error removing friend:', err);
+        res.status(500).json({ error: err.message });
+    }
+});
+
+// Get friends list (accepted friendships only)
+app.get('/api/friends/:userId', async (req, res) => {
+    try {
+        const { userId } = req.params;
+
+        const friends = await db.query(`
+            SELECT
+                f.id as friendship_id,
+                f.acceptedAt,
+                u.id as user_id,
+                u.name,
+                u.email,
+                us.total_xp,
+                us.level,
+                us.current_streak,
+                us.total_words_learned
+            FROM friendships f
+            INNER JOIN users u ON (
+                CASE
+                    WHEN f.user_id = $1 THEN u.id = f.friend_id
+                    WHEN f.friend_id = $1 THEN u.id = f.user_id
+                END
+            )
+            LEFT JOIN user_stats us ON u.id = us.user_id
+            WHERE (f.user_id = $1 OR f.friend_id = $1) AND f.status = 'accepted'
+            ORDER BY f.acceptedAt DESC
+        `, [parseInt(userId)]);
+
+        res.json(friends.rows);
+    } catch (err) {
+        console.error('Error getting friends list:', err);
+        res.status(500).json({ error: err.message });
+    }
+});
+
+// Get pending friend requests (received)
+app.get('/api/friends/requests/received/:userId', async (req, res) => {
+    try {
+        const { userId } = req.params;
+
+        const requests = await db.query(`
+            SELECT
+                f.id as friendship_id,
+                f.requestedAt,
+                u.id as user_id,
+                u.name,
+                u.email,
+                us.total_xp,
+                us.level
+            FROM friendships f
+            INNER JOIN users u ON u.id = f.user_id
+            LEFT JOIN user_stats us ON u.id = us.user_id
+            WHERE f.friend_id = $1 AND f.status = 'pending'
+            ORDER BY f.requestedAt DESC
+        `, [parseInt(userId)]);
+
+        res.json(requests.rows);
+    } catch (err) {
+        console.error('Error getting received friend requests:', err);
+        res.status(500).json({ error: err.message });
+    }
+});
+
+// Get pending friend requests (sent)
+app.get('/api/friends/requests/sent/:userId', async (req, res) => {
+    try {
+        const { userId } = req.params;
+
+        const requests = await db.query(`
+            SELECT
+                f.id as friendship_id,
+                f.requestedAt,
+                u.id as user_id,
+                u.name,
+                u.email,
+                us.total_xp,
+                us.level
+            FROM friendships f
+            INNER JOIN users u ON u.id = f.friend_id
+            LEFT JOIN user_stats us ON u.id = us.user_id
+            WHERE f.user_id = $1 AND f.status = 'pending'
+            ORDER BY f.requestedAt DESC
+        `, [parseInt(userId)]);
+
+        res.json(requests.rows);
+    } catch (err) {
+        console.error('Error getting sent friend requests:', err);
+        res.status(500).json({ error: err.message });
+    }
+});
+
+// Search users by name or email (for adding friends)
+app.get('/api/friends/search', async (req, res) => {
+    try {
+        const { query, userId } = req.query;
+
+        if (!query || query.length < 2) {
+            return res.status(400).json({ error: 'Query must be at least 2 characters' });
+        }
+
+        const users = await db.query(`
+            SELECT
+                u.id,
+                u.name,
+                u.email,
+                us.total_xp,
+                us.level,
+                CASE
+                    WHEN f1.id IS NOT NULL THEN 'friends'
+                    WHEN f2.id IS NOT NULL THEN 'request_sent'
+                    WHEN f3.id IS NOT NULL THEN 'request_received'
+                    ELSE 'none'
+                END as friendship_status
+            FROM users u
+            LEFT JOIN user_stats us ON u.id = us.user_id
+            LEFT JOIN friendships f1 ON ((f1.user_id = $2 AND f1.friend_id = u.id) OR (f1.friend_id = $2 AND f1.user_id = u.id)) AND f1.status = 'accepted'
+            LEFT JOIN friendships f2 ON f2.user_id = $2 AND f2.friend_id = u.id AND f2.status = 'pending'
+            LEFT JOIN friendships f3 ON f3.friend_id = $2 AND f3.user_id = u.id AND f3.status = 'pending'
+            WHERE (LOWER(u.name) LIKE LOWER($1) OR LOWER(u.email) LIKE LOWER($1)) AND u.id != $2
+            LIMIT 20
+        `, [`%${query}%`, parseInt(userId)]);
+
+        res.json(users.rows);
+    } catch (err) {
+        console.error('Error searching users:', err);
+        res.status(500).json({ error: err.message });
+    }
+});
+
+// Get friend activity feed
+app.get('/api/friends/activities/:userId', async (req, res) => {
+    try {
+        const { userId } = req.params;
+        const { limit = 50, offset = 0 } = req.query;
+
+        // Get activities from friends
+        const activities = await db.query(`
+            SELECT
+                fa.*,
+                u.name as user_name
+            FROM friend_activities fa
+            INNER JOIN users u ON fa.user_id = u.id
+            WHERE fa.user_id IN (
+                SELECT CASE
+                    WHEN f.user_id = $1 THEN f.friend_id
+                    WHEN f.friend_id = $1 THEN f.user_id
+                END
+                FROM friendships f
+                WHERE (f.user_id = $1 OR f.friend_id = $1) AND f.status = 'accepted'
+            )
+            ORDER BY fa.createdAt DESC
+            LIMIT $2 OFFSET $3
+        `, [parseInt(userId), parseInt(limit), parseInt(offset)]);
+
+        res.json(activities.rows);
+    } catch (err) {
+        console.error('Error getting friend activities:', err);
+        res.status(500).json({ error: err.message });
+    }
+});
+
+// ========================================
+// ACHIEVEMENTS SYSTEM ENDPOINTS
+// ========================================
+
+// Get all achievements (with user progress if userId provided)
+app.get('/api/achievements', async (req, res) => {
+    try {
+        const { userId, category } = req.query;
+
+        let query = 'SELECT * FROM achievements WHERE is_active = true';
+        let params = [];
+
+        if (category) {
+            query += ' AND category = $1';
+            params.push(category);
+        }
+
+        // Filter out secret achievements if no userId (don't show them in public list)
+        if (!userId) {
+            query += params.length > 0 ? ' AND is_secret = false' : ' WHERE is_secret = false';
+        }
+
+        query += ' ORDER BY difficulty, category';
+
+        const achievements = await db.query(query, params);
+
+        // If userId provided, include user progress
+        if (userId) {
+            const userAchievements = await db.query(
+                'SELECT * FROM user_achievements WHERE user_id = $1',
+                [parseInt(userId)]
+            );
+
+            const userAchievementsMap = {};
+            userAchievements.rows.forEach(ua => {
+                userAchievementsMap[ua.achievement_id] = ua;
+            });
+
+            const enrichedAchievements = achievements.rows.map(ach => ({
+                ...ach,
+                user_progress: userAchievementsMap[ach.id] || {
+                    progress: 0,
+                    target: ach.target || 1,
+                    is_unlocked: false
+                }
+            }));
+
+            res.json(enrichedAchievements);
+        } else {
+            res.json(achievements.rows);
+        }
+    } catch (err) {
+        console.error('Error getting achievements:', err);
+        res.status(500).json({ error: err.message });
+    }
+});
+
+// Get user's unlocked achievements
+app.get('/api/achievements/unlocked/:userId', async (req, res) => {
+    try {
+        const { userId } = req.params;
+
+        const unlocked = await db.query(`
+            SELECT ua.*, a.title, a.description, a.icon, a.category, a.difficulty, a.reward_xp, a.reward_coins
+            FROM user_achievements ua
+            INNER JOIN achievements a ON ua.achievement_id = a.id
+            WHERE ua.user_id = $1 AND ua.is_unlocked = true
+            ORDER BY ua.unlockedAt DESC
+        `, [parseInt(userId)]);
+
+        res.json(unlocked.rows);
+    } catch (err) {
+        console.error('Error getting unlocked achievements:', err);
+        res.status(500).json({ error: err.message });
+    }
+});
+
+// Update achievement progress (and unlock if target reached)
+app.post('/api/achievements/progress', async (req, res) => {
+    try {
+        const { userId, achievementKey, increment = 1 } = req.body;
+
+        if (!userId || !achievementKey) {
+            return res.status(400).json({ error: 'Missing required fields: userId, achievementKey' });
+        }
+
+        await db.query('BEGIN');
+
+        // Get achievement
+        const achievement = await db.query(
+            'SELECT * FROM achievements WHERE achievement_key = $1 AND is_active = true',
+            [achievementKey]
+        );
+
+        if (achievement.rows.length === 0) {
+            await db.query('ROLLBACK');
+            return res.status(404).json({ error: 'Achievement not found' });
+        }
+
+        const ach = achievement.rows[0];
+
+        // Get or create user achievement
+        let userAchievement = await db.query(
+            'SELECT * FROM user_achievements WHERE user_id = $1 AND achievement_id = $2',
+            [parseInt(userId), ach.id]
+        );
+
+        if (userAchievement.rows.length === 0) {
+            // Create new user achievement
+            userAchievement = await db.query(`
+                INSERT INTO user_achievements (user_id, achievement_id, progress, target)
+                VALUES ($1, $2, 0, 1)
+                RETURNING *
+            `, [parseInt(userId), ach.id]);
+        }
+
+        const ua = userAchievement.rows[0];
+
+        // If already unlocked, skip
+        if (ua.is_unlocked) {
+            await db.query('COMMIT');
+            return res.json({ message: 'Achievement already unlocked', achievement: ua });
+        }
+
+        // Update progress
+        const newProgress = ua.progress + parseInt(increment);
+        const targetValue = ua.target;
+
+        const isNowUnlocked = newProgress >= targetValue;
+
+        if (isNowUnlocked) {
+            // Unlock achievement and award rewards
+            await db.query(`
+                UPDATE user_achievements
+                SET progress = $1, is_unlocked = true, unlockedAt = CURRENT_TIMESTAMP
+                WHERE id = $2
+            `, [newProgress, ua.id]);
+
+            // Award XP
+            if (ach.reward_xp > 0) {
+                await db.query(
+                    'INSERT INTO xp_log (user_id, xp_amount, action_type, action_details) VALUES ($1, $2, $3, $4)',
+                    [parseInt(userId), ach.reward_xp, 'achievement_unlocked', `Unlocked: ${ach.title}`]
+                );
+
+                await db.query(
+                    'UPDATE user_stats SET total_xp = total_xp + $1 WHERE user_id = $2',
+                    [ach.reward_xp, parseInt(userId)]
+                );
+            }
+
+            // Award coins
+            if (ach.reward_coins > 0) {
+                const stats = await getUserStats(parseInt(userId));
+                const currentBalance = stats.coins_balance || 0;
+                const newBalance = currentBalance + ach.reward_coins;
+
+                await db.query(
+                    'UPDATE user_stats SET coins_balance = $1 WHERE user_id = $2',
+                    [newBalance, parseInt(userId)]
+                );
+
+                await db.query(`
+                    INSERT INTO coin_transactions (user_id, amount, transaction_type, source, description, balance_after)
+                    VALUES ($1, $2, 'earn', 'achievement', $3, $4)
+                `, [parseInt(userId), ach.reward_coins, `Achievement: ${ach.title}`, newBalance]);
+            }
+
+            await db.query('COMMIT');
+
+            console.log(`🏆 User ${userId} unlocked achievement: ${ach.title}`);
+
+            res.json({
+                unlocked: true,
+                achievement: ach,
+                rewards: {
+                    xp: ach.reward_xp,
+                    coins: ach.reward_coins
+                }
+            });
+        } else {
+            // Just update progress
+            await db.query(
+                'UPDATE user_achievements SET progress = $1 WHERE id = $2',
+                [newProgress, ua.id]
+            );
+
+            await db.query('COMMIT');
+
+            res.json({
+                unlocked: false,
+                progress: newProgress,
+                target: targetValue
+            });
+        }
+    } catch (err) {
+        await db.query('ROLLBACK');
+        console.error('Error updating achievement progress:', err);
+        res.status(500).json({ error: err.message });
+    }
+});
+
+// Get achievement stats for user
+app.get('/api/achievements/stats/:userId', async (req, res) => {
+    try {
+        const { userId } = req.params;
+
+        const stats = await db.query(`
+            SELECT
+                COUNT(*) FILTER (WHERE is_unlocked = true) as unlocked_count,
+                COUNT(*) as total_assigned,
+                SUM(CASE WHEN is_unlocked = true THEN a.reward_xp ELSE 0 END) as total_xp_earned,
+                SUM(CASE WHEN is_unlocked = true THEN a.reward_coins ELSE 0 END) as total_coins_earned
+            FROM user_achievements ua
+            INNER JOIN achievements a ON ua.achievement_id = a.id
+            WHERE ua.user_id = $1
+        `, [parseInt(userId)]);
+
+        const totalAchievements = await db.query(
+            'SELECT COUNT(*) as count FROM achievements WHERE is_active = true'
+        );
+
+        res.json({
+            ...stats.rows[0],
+            total_achievements: parseInt(totalAchievements.rows[0].count)
+        });
+    } catch (err) {
+        console.error('Error getting achievement stats:', err);
+        res.status(500).json({ error: err.message });
+    }
+});
+
+// Admin: Create custom achievement
+app.post('/api/admin/achievements', async (req, res) => {
+    try {
+        const { achievement_key, title, description, icon, category, difficulty, reward_xp, reward_coins, is_secret } = req.body;
+
+        if (!achievement_key || !title) {
+            return res.status(400).json({ error: 'Missing required fields: achievement_key, title' });
+        }
+
+        const result = await db.query(`
+            INSERT INTO achievements (achievement_key, title, description, icon, category, difficulty, reward_xp, reward_coins, is_secret)
+            VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9)
+            RETURNING *
+        `, [achievement_key, title, description || '', icon || '🏆', category || 'custom', difficulty || 'medium', reward_xp || 0, reward_coins || 0, is_secret || false]);
+
+        res.json(result.rows[0]);
+    } catch (err) {
+        console.error('Error creating achievement:', err);
         res.status(500).json({ error: err.message });
     }
 });

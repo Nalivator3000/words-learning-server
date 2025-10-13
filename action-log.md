@@ -2,6 +2,110 @@
 
 ## 2025-10-13
 
+### Coins Economy System (API Endpoints)
+**Commit:** 💰 COINS: Complete API endpoints for coins economy system
+
+**Изменения:**
+- Реализованы 6 API endpoints для экономики монет
+- Интеграция с challenges (монеты автоматически начисляются при claim reward)
+
+**API Endpoints (6 новых):**
+- `GET /api/coins/balance/:userId` - получить баланс монет
+- `POST /api/coins/earn` - начислить монеты (с transaction logging)
+- `POST /api/coins/spend` - потратить монеты (с проверкой баланса)
+- `GET /api/coins/shop` - получить товары в магазине (фильтрация по category/item_type)
+- `POST /api/coins/purchase` - купить товар (с stock management и expiration)
+- `GET /api/coins/transactions/:userId` - история транзакций
+- `GET /api/coins/purchases/:userId` - покупки пользователя (active items)
+
+**Файлы:**
+- [server-postgresql.js:3083-3448](server-postgresql.js#L3083-L3448) - API endpoints
+
+**Функциональность:**
+- Transaction safety: BEGIN/COMMIT/ROLLBACK для всех операций
+- Insufficient funds check: проверка перед тратой монет
+- Stock management: уменьшение stock_quantity для limited items
+- Expiration calculation: автоматический расчет expiresAt для boosters/freezes
+- Balance tracking: balance_after в каждой транзакции
+- Active purchases: фильтрация по is_active и expiresAt
+
+**Интеграция:**
+- ✅ Challenges: монеты начисляются при claim reward (уже реализовано в server-postgresql.js:2359-2380)
+- Coins зачисляются автоматически через coin_transactions таблицу
+- Transaction-safe implementation с rollback при ошибках
+
+### Friends System (Backend)
+**Commit:** 👥 FRIENDS: Complete friends system with social features
+
+**Изменения:**
+- База данных (2 таблицы):
+  - `friendships` - связи друзей (id, user_id, friend_id, status, requestedAt, acceptedAt, UNIQUE constraint, CHECK constraint)
+  - `friend_activities` - лента активности (id, user_id, activity_type, activity_data JSONB, createdAt)
+
+- API Endpoints (8 новых):
+  - `POST /api/friends/request` - отправить заявку в друзья
+  - `POST /api/friends/accept/:friendshipId` - принять заявку
+  - `POST /api/friends/decline/:friendshipId` - отклонить заявку
+  - `DELETE /api/friends/:friendshipId` - удалить из друзей (unfriend)
+  - `GET /api/friends/:userId` - список друзей (accepted only)
+  - `GET /api/friends/requests/received/:userId` - входящие заявки
+  - `GET /api/friends/requests/sent/:userId` - исходящие заявки
+  - `GET /api/friends/search` - поиск пользователей по имени/email (с friendship_status)
+  - `GET /api/friends/activities/:userId` - лента активности друзей
+
+**Файлы:**
+- [server-postgresql.js:298-321](server-postgresql.js#L298-L321) - создание таблиц
+- [server-postgresql.js:3450-3857](server-postgresql.js#L3450-L3857) - API endpoints
+
+**Функциональность:**
+- Friend request workflow: pending → accepted/declined
+- Bidirectional friendship queries: (user_id = X OR friend_id = X)
+- Status tracking: pending, accepted, blocked
+- Activity logging: friend_request_sent, became_friends, etc.
+- Search with context: показывает friendship_status (friends, request_sent, request_received, none)
+- User validation: проверка существования пользователя, нельзя добавить себя
+- CASCADE deletion: удаление связанных данных при удалении пользователя
+- Friend stats: total_xp, level, current_streak, total_words_learned
+
+### Achievements System (Backend)
+**Commit:** 🏆 ACHIEVEMENTS: Complete achievement system with 15 predefined achievements
+
+**Изменения:**
+- База данных (2 таблицы):
+  - `achievements` - определения достижений (id, achievement_key UNIQUE, title, description, icon, category, difficulty, reward_xp, reward_coins, is_secret, is_active)
+  - `user_achievements` - прогресс пользователей (id, user_id, achievement_id, progress, target, is_unlocked, unlockedAt, UNIQUE constraint)
+
+- Predefined Achievements (15 штук):
+  - **Learning (4):** Первые шаги (10 слов), Строитель словаря (100 слов), Мастер слов (500 слов), Полиглот (3 пары)
+  - **Streak (3):** Воин недели (7 дней), Марафонец (30 дней), Легендарный стрик (100 дней)
+  - **Accuracy (2):** Перфекционист (10 квизов 100%), Снайпер (50 квизов 100%)
+  - **Time (2):** Ночной ученик (🌙 после 22:00), Ранняя пташка (🌅 до 6:00) - секретные
+  - **XP (2):** Коллекционер XP (1000 XP), Мастер XP (10000 XP)
+  - **Social (1):** Общительный (5 друзей)
+  - **Challenges (1):** Мастер челленджей (30 челленджей)
+
+- API Endpoints (5 новых):
+  - `GET /api/achievements` - все достижения (с прогрессом если userId указан)
+  - `GET /api/achievements/unlocked/:userId` - разблокированные достижения
+  - `POST /api/achievements/progress` - обновить прогресс (auto-unlock при достижении target)
+  - `GET /api/achievements/stats/:userId` - статистика (unlocked_count, total_xp_earned, total_coins_earned)
+  - `POST /api/admin/achievements` - создать кастомное достижение (админ)
+
+**Файлы:**
+- [server-postgresql.js:323-353](server-postgresql.js#L323-L353) - создание таблиц
+- [server-postgresql.js:668-722](server-postgresql.js#L668-L722) - initializeAchievements()
+- [server-postgresql.js:3859-4111](server-postgresql.js#L3859-L4111) - API endpoints
+
+**Функциональность:**
+- Progress tracking: incremental progress с auto-unlock
+- Secret achievements: скрыты в публичном списке
+- Reward system: автоматическое начисление XP + coins при unlock
+- Category filtering: learning, streak, accuracy, time, xp, social, challenges
+- Difficulty levels: easy, medium, hard, legendary
+- Transaction safety: BEGIN/COMMIT/ROLLBACK для unlock операций
+- User progress enrichment: автоматическое добавление прогресса к achievements list
+- Icon support: эмодзи иконки для каждого достижения
+
 ### Client-Side Database Refactoring
 **Commit:** 🔄 REFACTOR: Replace localStorage with server API in database.js
 
