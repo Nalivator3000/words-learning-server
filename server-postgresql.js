@@ -400,6 +400,20 @@ async function initDatabase() {
             )
         `);
 
+        // Leaderboards: Cached rankings (for performance)
+        await db.query(`
+            CREATE TABLE IF NOT EXISTS leaderboard_cache (
+                id SERIAL PRIMARY KEY,
+                leaderboard_type VARCHAR(50) NOT NULL,
+                time_period VARCHAR(20) NOT NULL,
+                rank_position INTEGER NOT NULL,
+                user_id INTEGER REFERENCES users(id) ON DELETE CASCADE,
+                score INTEGER NOT NULL,
+                cached_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+                UNIQUE(leaderboard_type, time_period, rank_position)
+            )
+        `);
+
         console.log('PostgreSQL database initialized with gamification tables');
 
         // Initialize predefined achievements
@@ -2809,6 +2823,259 @@ app.get('/api/shop/inventory/:userId', async (req, res) => {
         res.json(inventory.rows);
     } catch (err) {
         console.error('Error getting user inventory:', err);
+        res.status(500).json({ error: err.message });
+    }
+});
+
+// ========================================
+// LEADERBOARDS SYSTEM ENDPOINTS
+// ========================================
+
+// Get global leaderboard (top 100)
+app.get('/api/leaderboard/global/:type', async (req, res) => {
+    try {
+        const { type } = req.params; // xp, streak, words
+        const { period = 'all_time', limit = 100 } = req.query;
+
+        let query, params;
+
+        if (type === 'xp') {
+            query = `
+                SELECT u.id, u.name, u.email, us.total_xp as score, us.level
+                FROM users u
+                INNER JOIN user_stats us ON u.id = us.user_id
+                ORDER BY us.total_xp DESC
+                LIMIT $1
+            `;
+            params = [parseInt(limit)];
+        } else if (type === 'streak') {
+            query = `
+                SELECT u.id, u.name, u.email, us.current_streak as score, us.longest_streak
+                FROM users u
+                INNER JOIN user_stats us ON u.id = us.user_id
+                WHERE us.current_streak > 0
+                ORDER BY us.current_streak DESC, us.longest_streak DESC
+                LIMIT $1
+            `;
+            params = [parseInt(limit)];
+        } else if (type === 'words') {
+            query = `
+                SELECT u.id, u.name, u.email, us.total_words_learned as score
+                FROM users u
+                INNER JOIN user_stats us ON u.id = us.user_id
+                WHERE us.total_words_learned > 0
+                ORDER BY us.total_words_learned DESC
+                LIMIT $1
+            `;
+            params = [parseInt(limit)];
+        } else {
+            return res.status(400).json({ error: 'Invalid leaderboard type. Use: xp, streak, or words' });
+        }
+
+        const leaderboard = await db.query(query, params);
+
+        // Add rank position
+        const rankedLeaderboard = leaderboard.rows.map((user, index) => ({
+            rank: index + 1,
+            ...user
+        }));
+
+        res.json(rankedLeaderboard);
+    } catch (err) {
+        console.error('Error getting global leaderboard:', err);
+        res.status(500).json({ error: err.message });
+    }
+});
+
+// Get user's position in leaderboard
+app.get('/api/leaderboard/position/:userId/:type', async (req, res) => {
+    try {
+        const { userId, type } = req.params;
+
+        let query, params;
+
+        if (type === 'xp') {
+            query = `
+                WITH ranked_users AS (
+                    SELECT u.id, u.name, us.total_xp as score,
+                           ROW_NUMBER() OVER (ORDER BY us.total_xp DESC) as rank
+                    FROM users u
+                    INNER JOIN user_stats us ON u.id = us.user_id
+                )
+                SELECT rank, score FROM ranked_users WHERE id = $1
+            `;
+        } else if (type === 'streak') {
+            query = `
+                WITH ranked_users AS (
+                    SELECT u.id, u.name, us.current_streak as score,
+                           ROW_NUMBER() OVER (ORDER BY us.current_streak DESC, us.longest_streak DESC) as rank
+                    FROM users u
+                    INNER JOIN user_stats us ON u.id = us.user_id
+                    WHERE us.current_streak > 0
+                )
+                SELECT rank, score FROM ranked_users WHERE id = $1
+            `;
+        } else if (type === 'words') {
+            query = `
+                WITH ranked_users AS (
+                    SELECT u.id, u.name, us.total_words_learned as score,
+                           ROW_NUMBER() OVER (ORDER BY us.total_words_learned DESC) as rank
+                    FROM users u
+                    INNER JOIN user_stats us ON u.id = us.user_id
+                    WHERE us.total_words_learned > 0
+                )
+                SELECT rank, score FROM ranked_users WHERE id = $1
+            `;
+        } else {
+            return res.status(400).json({ error: 'Invalid leaderboard type' });
+        }
+
+        params = [parseInt(userId)];
+        const result = await db.query(query, params);
+
+        if (result.rows.length === 0) {
+            return res.json({ rank: null, score: 0, message: 'Not ranked yet' });
+        }
+
+        res.json(result.rows[0]);
+    } catch (err) {
+        console.error('Error getting user position:', err);
+        res.status(500).json({ error: err.message });
+    }
+});
+
+// Get nearby users in leaderboard (users around your rank)
+app.get('/api/leaderboard/nearby/:userId/:type', async (req, res) => {
+    try {
+        const { userId, type } = req.params;
+        const { range = 5 } = req.query; // Show ±5 users around you
+
+        // First get user's rank
+        let rankQuery, scoreField;
+
+        if (type === 'xp') {
+            scoreField = 'total_xp';
+            rankQuery = `
+                WITH ranked_users AS (
+                    SELECT u.id, u.name, u.email, us.total_xp as score, us.level,
+                           ROW_NUMBER() OVER (ORDER BY us.total_xp DESC) as rank
+                    FROM users u
+                    INNER JOIN user_stats us ON u.id = us.user_id
+                )
+                SELECT * FROM ranked_users WHERE id = $1
+            `;
+        } else if (type === 'streak') {
+            scoreField = 'current_streak';
+            rankQuery = `
+                WITH ranked_users AS (
+                    SELECT u.id, u.name, u.email, us.current_streak as score, us.longest_streak,
+                           ROW_NUMBER() OVER (ORDER BY us.current_streak DESC, us.longest_streak DESC) as rank
+                    FROM users u
+                    INNER JOIN user_stats us ON u.id = us.user_id
+                    WHERE us.current_streak > 0
+                )
+                SELECT * FROM ranked_users WHERE id = $1
+            `;
+        } else if (type === 'words') {
+            scoreField = 'total_words_learned';
+            rankQuery = `
+                WITH ranked_users AS (
+                    SELECT u.id, u.name, u.email, us.total_words_learned as score,
+                           ROW_NUMBER() OVER (ORDER BY us.total_words_learned DESC) as rank
+                    FROM users u
+                    INNER JOIN user_stats us ON u.id = us.user_id
+                    WHERE us.total_words_learned > 0
+                )
+                SELECT * FROM ranked_users WHERE id = $1
+            `;
+        } else {
+            return res.status(400).json({ error: 'Invalid leaderboard type' });
+        }
+
+        const userRankResult = await db.query(rankQuery, [parseInt(userId)]);
+
+        if (userRankResult.rows.length === 0) {
+            return res.json({ message: 'User not ranked yet', nearby: [] });
+        }
+
+        const userRank = userRankResult.rows[0].rank;
+        const rangeNum = parseInt(range);
+
+        // Get users in range
+        let nearbyQuery;
+        if (type === 'xp') {
+            nearbyQuery = `
+                WITH ranked_users AS (
+                    SELECT u.id, u.name, u.email, us.total_xp as score, us.level,
+                           ROW_NUMBER() OVER (ORDER BY us.total_xp DESC) as rank
+                    FROM users u
+                    INNER JOIN user_stats us ON u.id = us.user_id
+                )
+                SELECT * FROM ranked_users
+                WHERE rank BETWEEN $1 AND $2
+                ORDER BY rank ASC
+            `;
+        } else if (type === 'streak') {
+            nearbyQuery = `
+                WITH ranked_users AS (
+                    SELECT u.id, u.name, u.email, us.current_streak as score, us.longest_streak,
+                           ROW_NUMBER() OVER (ORDER BY us.current_streak DESC, us.longest_streak DESC) as rank
+                    FROM users u
+                    INNER JOIN user_stats us ON u.id = us.user_id
+                    WHERE us.current_streak > 0
+                )
+                SELECT * FROM ranked_users
+                WHERE rank BETWEEN $1 AND $2
+                ORDER BY rank ASC
+            `;
+        } else {
+            nearbyQuery = `
+                WITH ranked_users AS (
+                    SELECT u.id, u.name, u.email, us.total_words_learned as score,
+                           ROW_NUMBER() OVER (ORDER BY us.total_words_learned DESC) as rank
+                    FROM users u
+                    INNER JOIN user_stats us ON u.id = us.user_id
+                    WHERE us.total_words_learned > 0
+                )
+                SELECT * FROM ranked_users
+                WHERE rank BETWEEN $1 AND $2
+                ORDER BY rank ASC
+            `;
+        }
+
+        const minRank = Math.max(1, userRank - rangeNum);
+        const maxRank = userRank + rangeNum;
+
+        const nearby = await db.query(nearbyQuery, [minRank, maxRank]);
+
+        res.json({
+            userRank,
+            nearby: nearby.rows
+        });
+    } catch (err) {
+        console.error('Error getting nearby leaderboard:', err);
+        res.status(500).json({ error: err.message });
+    }
+});
+
+// Get leaderboard statistics
+app.get('/api/leaderboard/stats', async (req, res) => {
+    try {
+        const stats = await db.query(`
+            SELECT
+                COUNT(DISTINCT u.id) as total_users,
+                MAX(us.total_xp) as highest_xp,
+                MAX(us.current_streak) as longest_active_streak,
+                MAX(us.total_words_learned) as most_words_learned,
+                AVG(us.total_xp)::INTEGER as avg_xp,
+                AVG(us.total_words_learned)::INTEGER as avg_words
+            FROM users u
+            INNER JOIN user_stats us ON u.id = us.user_id
+        `);
+
+        res.json(stats.rows[0]);
+    } catch (err) {
+        console.error('Error getting leaderboard stats:', err);
         res.status(500).json({ error: err.message });
     }
 });
