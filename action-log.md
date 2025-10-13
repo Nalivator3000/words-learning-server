@@ -2,6 +2,43 @@
 
 ## 2025-10-13
 
+### Coins Economy System (Database Layer)
+**Commit:** 💰 COINS: Add coins economy system (database layer)
+
+**Изменения:**
+- База данных (4 компонента):
+  - Поле `coins_balance` добавлено в таблицу `user_stats` (миграция с IF NOT EXISTS)
+  - `coin_transactions` - история транзакций (id, user_id, amount, transaction_type, source, description, balance_after, timestamp)
+  - `shop_items` - каталог товаров (id, item_key UNIQUE, item_type, name, description, price_coins, icon, category, is_active, is_limited, stock_quantity)
+  - `user_purchases` - покупки пользователей (id, user_id, shop_item_id, quantity, total_cost, is_active, purchasedAt, expiresAt)
+
+- Shop Items (19 predefined):
+  - **Streak Protection (3):** Freeze 1/3/7 days (50-250 coins)
+  - **Hints (2):** Packs of 5/20 hints (30-100 coins)
+  - **Boosters (2):** XP Booster x2/x3 (80-120 coins)
+  - **Themes (5):** Ocean, Forest, Sunset, Neon, Galaxy (200-350 coins)
+  - **Avatars (5):** Cat, Dog, Panda, Unicorn, Dragon (100-300 coins)
+  - **Special (2):** Double Rewards 24h (500 coins), Challenge Refresh (150 coins)
+
+**Файлы:**
+- [server-postgresql.js:344-401](server-postgresql.js#L344-L401) - создание таблиц (migrations + tables)
+- [server-postgresql.js:501-547](server-postgresql.js#L501-L547) - initializeShopItems()
+
+**Функциональность:**
+- Transaction logging: каждая операция записывается с balance_after
+- Item categorization: streak, hints, boosters, themes, avatars, special, challenges
+- Item types: powerup, consumable, booster, theme, avatar
+- Stock management: is_limited + stock_quantity для ограниченных товаров
+- Time-limited purchases: expiresAt для временных покупок (бустеры, фризы)
+- Active/inactive items: is_active для включения/выключения покупок
+- UNIQUE constraint на item_key для безопасности
+
+**Следующие шаги:**
+- API endpoints (GET balance, POST earn/spend, GET shop, POST purchase, GET history)
+- Интеграция с challenges (начисление монет за rewards)
+- Balance validation (insufficient funds handling)
+- Inventory system (активация купленных предметов)
+
 ### Daily Challenges System (Backend)
 **Commit:** 🎯 CHALLENGES: Complete daily challenges system
 

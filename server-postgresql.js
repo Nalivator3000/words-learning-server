@@ -2342,9 +2342,26 @@ app.post('/api/challenges/claim-reward/:challengeId', async (req, res) => {
                 );
             }
 
-            // Award coins (if coins system exists)
+            // Award coins
             if (ch.reward_coins > 0) {
-                // For future coins system implementation
+                // Get current balance
+                const stats = await getUserStats(parseInt(userId));
+                const currentBalance = stats.coins_balance || 0;
+                const newBalance = currentBalance + ch.reward_coins;
+
+                // Update balance
+                await db.query(
+                    'UPDATE user_stats SET coins_balance = $1 WHERE user_id = $2',
+                    [newBalance, parseInt(userId)]
+                );
+
+                // Log transaction
+                await db.query(
+                    `INSERT INTO coin_transactions (user_id, amount, transaction_type, source, description, balance_after)
+                     VALUES ($1, $2, $3, $4, $5, $6)`,
+                    [parseInt(userId), ch.reward_coins, 'earn', 'challenge', `Challenge reward: ${ch.title}`, newBalance]
+                );
+
                 console.log(`💰 User ${userId} earned ${ch.reward_coins} coins from challenge`);
             }
 
@@ -2491,6 +2508,307 @@ app.get('/api/challenges/stats/:userId', async (req, res) => {
         });
     } catch (err) {
         console.error('Error getting challenge stats:', err);
+        res.status(500).json({ error: err.message });
+    }
+});
+
+// ========================================
+// COINS ECONOMY SYSTEM ENDPOINTS
+// ========================================
+
+// Get user coins balance
+app.get('/api/coins/balance/:userId', async (req, res) => {
+    try {
+        const { userId } = req.params;
+
+        const stats = await db.query(
+            'SELECT coins_balance FROM user_stats WHERE user_id = $1',
+            [parseInt(userId)]
+        );
+
+        if (stats.rows.length === 0) {
+            return res.json({ balance: 0 });
+        }
+
+        res.json({ balance: stats.rows[0].coins_balance || 0 });
+    } catch (err) {
+        console.error('Error getting coins balance:', err);
+        res.status(500).json({ error: err.message });
+    }
+});
+
+// Add coins to user (earn coins)
+app.post('/api/coins/earn', async (req, res) => {
+    try {
+        const { userId, amount, source, description } = req.body;
+
+        if (!userId || !amount || amount <= 0) {
+            return res.status(400).json({ error: 'userId and positive amount are required' });
+        }
+
+        await db.query('BEGIN');
+
+        try {
+            // Get current balance
+            const stats = await getUserStats(parseInt(userId));
+            const currentBalance = stats.coins_balance || 0;
+            const newBalance = currentBalance + amount;
+
+            // Update balance
+            await db.query(
+                'UPDATE user_stats SET coins_balance = $1 WHERE user_id = $2',
+                [newBalance, parseInt(userId)]
+            );
+
+            // Log transaction
+            await db.query(
+                `INSERT INTO coin_transactions (user_id, amount, transaction_type, source, description, balance_after)
+                 VALUES ($1, $2, $3, $4, $5, $6)`,
+                [parseInt(userId), amount, 'earn', source || 'manual', description || '', newBalance]
+            );
+
+            await db.query('COMMIT');
+
+            console.log(`💰 User ${userId} earned ${amount} coins (${source})`);
+
+            res.json({
+                message: 'Coins earned successfully',
+                amount,
+                newBalance
+            });
+        } catch (err) {
+            await db.query('ROLLBACK');
+            throw err;
+        }
+    } catch (err) {
+        console.error('Error earning coins:', err);
+        res.status(500).json({ error: err.message });
+    }
+});
+
+// Spend coins (generic endpoint)
+app.post('/api/coins/spend', async (req, res) => {
+    try {
+        const { userId, amount, source, description } = req.body;
+
+        if (!userId || !amount || amount <= 0) {
+            return res.status(400).json({ error: 'userId and positive amount are required' });
+        }
+
+        await db.query('BEGIN');
+
+        try {
+            // Get current balance
+            const stats = await getUserStats(parseInt(userId));
+            const currentBalance = stats.coins_balance || 0;
+
+            if (currentBalance < amount) {
+                await db.query('ROLLBACK');
+                return res.status(400).json({ error: 'Insufficient funds', balance: currentBalance, required: amount });
+            }
+
+            const newBalance = currentBalance - amount;
+
+            // Update balance
+            await db.query(
+                'UPDATE user_stats SET coins_balance = $1 WHERE user_id = $2',
+                [newBalance, parseInt(userId)]
+            );
+
+            // Log transaction
+            await db.query(
+                `INSERT INTO coin_transactions (user_id, amount, transaction_type, source, description, balance_after)
+                 VALUES ($1, $2, $3, $4, $5, $6)`,
+                [parseInt(userId), -amount, 'spend', source || 'manual', description || '', newBalance]
+            );
+
+            await db.query('COMMIT');
+
+            console.log(`💸 User ${userId} spent ${amount} coins (${source})`);
+
+            res.json({
+                message: 'Coins spent successfully',
+                amount,
+                newBalance
+            });
+        } catch (err) {
+            await db.query('ROLLBACK');
+            throw err;
+        }
+    } catch (err) {
+        console.error('Error spending coins:', err);
+        res.status(500).json({ error: err.message });
+    }
+});
+
+// Get coin transaction history
+app.get('/api/coins/history/:userId', async (req, res) => {
+    try {
+        const { userId } = req.params;
+        const { limit = 50, offset = 0 } = req.query;
+
+        const history = await db.query(
+            `SELECT * FROM coin_transactions
+             WHERE user_id = $1
+             ORDER BY createdat DESC
+             LIMIT $2 OFFSET $3`,
+            [parseInt(userId), parseInt(limit), parseInt(offset)]
+        );
+
+        res.json(history.rows);
+    } catch (err) {
+        console.error('Error getting coin history:', err);
+        res.status(500).json({ error: err.message });
+    }
+});
+
+// Get shop items
+app.get('/api/shop/items', async (req, res) => {
+    try {
+        const { category, type } = req.query;
+
+        let query = 'SELECT * FROM shop_items WHERE is_active = true';
+        let params = [];
+        let paramIndex = 1;
+
+        if (category) {
+            query += ` AND category = $${paramIndex}`;
+            params.push(category);
+            paramIndex++;
+        }
+
+        if (type) {
+            query += ` AND item_type = $${paramIndex}`;
+            params.push(type);
+            paramIndex++;
+        }
+
+        query += ' ORDER BY category, price_coins ASC';
+
+        const items = await db.query(query, params);
+        res.json(items.rows);
+    } catch (err) {
+        console.error('Error getting shop items:', err);
+        res.status(500).json({ error: err.message });
+    }
+});
+
+// Purchase item from shop
+app.post('/api/shop/purchase', async (req, res) => {
+    try {
+        const { userId, itemKey, quantity = 1 } = req.body;
+
+        if (!userId || !itemKey) {
+            return res.status(400).json({ error: 'userId and itemKey are required' });
+        }
+
+        await db.query('BEGIN');
+
+        try {
+            // Get item details
+            const item = await db.query(
+                'SELECT * FROM shop_items WHERE item_key = $1 AND is_active = true',
+                [itemKey]
+            );
+
+            if (item.rows.length === 0) {
+                await db.query('ROLLBACK');
+                return res.status(404).json({ error: 'Item not found or not available' });
+            }
+
+            const shopItem = item.rows[0];
+            const totalCost = shopItem.price_coins * quantity;
+
+            // Check stock
+            if (shopItem.is_limited && shopItem.stock_quantity < quantity) {
+                await db.query('ROLLBACK');
+                return res.status(400).json({ error: 'Insufficient stock', available: shopItem.stock_quantity });
+            }
+
+            // Check balance
+            const stats = await getUserStats(parseInt(userId));
+            const currentBalance = stats.coins_balance || 0;
+
+            if (currentBalance < totalCost) {
+                await db.query('ROLLBACK');
+                return res.status(400).json({ error: 'Insufficient funds', balance: currentBalance, required: totalCost });
+            }
+
+            const newBalance = currentBalance - totalCost;
+
+            // Update balance
+            await db.query(
+                'UPDATE user_stats SET coins_balance = $1 WHERE user_id = $2',
+                [newBalance, parseInt(userId)]
+            );
+
+            // Log transaction
+            await db.query(
+                `INSERT INTO coin_transactions (user_id, amount, transaction_type, source, description, balance_after)
+                 VALUES ($1, $2, $3, $4, $5, $6)`,
+                [parseInt(userId), -totalCost, 'purchase', 'shop', `Purchased: ${shopItem.name} x${quantity}`, newBalance]
+            );
+
+            // Create purchase record
+            const expiresAt = shopItem.item_type === 'booster' ? new Date(Date.now() + 24 * 60 * 60 * 1000) : null;
+            const purchaseResult = await db.query(
+                `INSERT INTO user_purchases (user_id, shop_item_id, quantity, total_cost, expiresAt)
+                 VALUES ($1, $2, $3, $4, $5)
+                 RETURNING *`,
+                [parseInt(userId), shopItem.id, quantity, totalCost, expiresAt]
+            );
+
+            // Update stock if limited
+            if (shopItem.is_limited) {
+                await db.query(
+                    'UPDATE shop_items SET stock_quantity = stock_quantity - $1 WHERE id = $2',
+                    [quantity, shopItem.id]
+                );
+            }
+
+            await db.query('COMMIT');
+
+            console.log(`🛒 User ${userId} purchased ${shopItem.name} x${quantity} for ${totalCost} coins`);
+
+            res.json({
+                message: 'Purchase successful',
+                purchase: purchaseResult.rows[0],
+                item: shopItem,
+                newBalance
+            });
+        } catch (err) {
+            await db.query('ROLLBACK');
+            throw err;
+        }
+    } catch (err) {
+        console.error('Error purchasing item:', err);
+        res.status(500).json({ error: err.message });
+    }
+});
+
+// Get user's purchases/inventory
+app.get('/api/shop/inventory/:userId', async (req, res) => {
+    try {
+        const { userId } = req.params;
+        const { activeOnly = 'true' } = req.query;
+
+        let query = `
+            SELECT up.*, si.name, si.description, si.icon, si.item_type, si.category
+            FROM user_purchases up
+            INNER JOIN shop_items si ON up.shop_item_id = si.id
+            WHERE up.user_id = $1
+        `;
+
+        if (activeOnly === 'true') {
+            query += ` AND up.is_active = true AND (up.expiresAt IS NULL OR up.expiresAt > NOW())`;
+        }
+
+        query += ' ORDER BY up.purchasedat DESC';
+
+        const inventory = await db.query(query, [parseInt(userId)]);
+        res.json(inventory.rows);
+    } catch (err) {
+        console.error('Error getting user inventory:', err);
         res.status(500).json({ error: err.message });
     }
 });
