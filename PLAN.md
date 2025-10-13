@@ -485,12 +485,12 @@
 ## 8. 🐛 Система репортов и обратной связи
 
 ### 8.1 Управление тестировщиками
-- [ ] **Beta-тестеры в базе данных**
-  - Добавить таблицу `beta_testers` (user_id, enabled, granted_at, notes)
-  - Флаг `is_beta_tester` в таблице users
-  - API для администратора: включить/выключить beta-доступ для пользователя
-  - Список всех beta-тестеров с их статистикой отправленных репортов
-  - Возможность массового включения/выключения beta-доступа
+- [x] **Beta-тестеры в базе данных** ✅ ГОТОВО (Backend)
+  - ✅ Флаг `is_beta_tester` в таблице users (server-postgresql.js:228-239)
+  - ✅ API для администратора: PUT /api/admin/users/:userId/beta-tester
+  - ✅ API для проверки статуса: GET /api/users/:userId/beta-tester
+  - [ ] Список всех beta-тестеров с их статистикой (будущая версия)
+  - [ ] Возможность массового включения/выключения beta-доступа (будущая версия)
 
 ### 8.2 UI для отправки репортов
 - [ ] **Плавающая кнопка для репортов** 🎯 ВЫСОКИЙ ПРИОРИТЕТ
@@ -520,67 +520,30 @@
   - Priority: Low / Medium / High (только для критичных багов)
   - Кнопки: "Отправить" и "Отмена"
 
-### 9.3 Backend для репортов
-- [ ] **API endpoints**
-  - `POST /api/reports` - создание нового репорта
-    - Принимает multipart/form-data (текст + файлы)
-    - Валидация: тип репорта, минимальная длина текста
-    - Сохранение изображений на сервере (или S3/Cloudinary)
-    - Генерация уникального report_id
-  - `GET /api/reports` - список всех репортов (только для админа)
-  - `GET /api/reports/:reportId` - детали репорта
-  - `PATCH /api/reports/:reportId/status` - обновление статуса (New → In Progress → Resolved → Closed)
-  - `POST /api/reports/:reportId/comment` - добавление комментария от админа
-  - `GET /api/beta-testers` - список beta-тестеров
-  - `POST /api/beta-testers/:userId/enable` - включить beta-доступ
-  - `DELETE /api/beta-testers/:userId` - отключить beta-доступ
+### 8.3 Backend для репортов
+- [x] **API endpoints** ✅ ГОТОВО (server-postgresql.js:1584-1984)
+  - ✅ `POST /api/reports` - создание нового репорта (с multipart/form-data, до 5 скриншотов)
+  - ✅ `GET /api/reports` - список всех репортов с фильтрацией (status, type, priority, userId)
+  - ✅ `GET /api/reports/:reportId` - детали репорта (с attachments, comments, votes)
+  - ✅ `PUT /api/admin/reports/:reportId` - обновление статуса/приоритета/назначения
+  - ✅ `POST /api/reports/:reportId/comments` - добавление комментария
+  - ✅ `POST /api/reports/:reportId/vote` - голосование (upvote, important, me_too)
+  - ✅ `DELETE /api/admin/reports/:reportId` - удаление репорта
+  - ✅ `GET /api/reports/stats/summary` - статистика по репортам
+  - ✅ Проверка beta_tester статуса для создания репортов
+  - ✅ Автоматический сбор контекста (pageUrl, browserInfo, screenResolution)
 
-- [ ] **База данных**
-  - Таблица `reports`:
-    ```sql
-    CREATE TABLE reports (
-      id SERIAL PRIMARY KEY,
-      user_id INTEGER REFERENCES users(id),
-      report_type VARCHAR(50) NOT NULL, -- bug, feature, ui, performance, other
-      description TEXT NOT NULL,
-      priority VARCHAR(20) DEFAULT 'medium', -- low, medium, high
-      status VARCHAR(20) DEFAULT 'new', -- new, in_progress, resolved, closed
-      page_context TEXT, -- URL/section where report was created
-      browser_info TEXT, -- user agent
-      screen_resolution VARCHAR(50),
-      language_pair_id INTEGER REFERENCES language_pairs(id),
-      contact_email VARCHAR(255),
-      technical_data TEXT, -- JSON with logs, errors
-      created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
-      updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
-      resolved_at TIMESTAMP
-    );
-    ```
-  - Таблица `report_attachments`:
-    ```sql
-    CREATE TABLE report_attachments (
-      id SERIAL PRIMARY KEY,
-      report_id INTEGER REFERENCES reports(id) ON DELETE CASCADE,
-      file_name VARCHAR(255) NOT NULL,
-      file_path VARCHAR(500) NOT NULL,
-      file_size INTEGER,
-      mime_type VARCHAR(100),
-      uploaded_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
-    );
-    ```
-  - Таблица `report_comments`:
-    ```sql
-    CREATE TABLE report_comments (
-      id SERIAL PRIMARY KEY,
-      report_id INTEGER REFERENCES reports(id) ON DELETE CASCADE,
-      user_id INTEGER REFERENCES users(id),
-      comment_text TEXT NOT NULL,
-      is_admin BOOLEAN DEFAULT FALSE,
-      created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
-    );
-    ```
+- [x] **База данных** ✅ ГОТОВО (server-postgresql.js:241-296)
+  - ✅ Таблица `reports` (id, user_id, report_type, title, description, page_url, browser_info, screen_resolution, status, priority, assigned_to, github_issue_number, timestamps)
+  - ✅ Таблица `report_attachments` (id, report_id, filename, filepath, mimetype, size, timestamp)
+  - ✅ Таблица `report_comments` (id, report_id, user_id, comment_text, is_internal, timestamp)
+  - ✅ Таблица `report_votes` (id, report_id, user_id, vote_type, timestamp, UNIQUE constraint)
+  - ✅ CASCADE deletion для связанных данных
+  - ✅ Status workflow: open → in_progress → resolved → closed
+  - ✅ Priority levels: low, medium, high, critical
+  - ✅ Report types: bug, feature, improvement, question
 
-### 9.4 Админ-панель для репортов
+### 8.4 Админ-панель для репортов
 - [ ] **Dashboard для администратора**
   - Список всех репортов с фильтрами:
     - По статусу (New, In Progress, Resolved, Closed)
@@ -603,7 +566,7 @@
     - Удалить (soft delete)
     - Связать с GitHub issue (интеграция)
 
-### 9.5 Уведомления
+### 8.5 Уведомления
 - [ ] **Email уведомления**
   - Администратору: новый репорт от beta-тестера (с приоритетом)
   - Пользователю: статус изменён (In Progress, Resolved)
@@ -615,7 +578,7 @@
   - Badge на иконке настроек, если есть обновления по его репортам
   - История отправленных репортов в профиле пользователя
 
-### 9.6 Интеграции
+### 8.6 Интеграции
 - [ ] **GitHub Issues автоматизация**
   - Автоматическое создание GitHub issue из репорта (с лейблами)
   - Синхронизация статусов (GitHub issue closed → report resolved)
@@ -629,7 +592,7 @@
   - Распределение по типам (pie chart)
   - Тренды (количество репортов по неделям)
 
-### 9.7 Дополнительные возможности
+### 8.7 Дополнительные возможности
 - [ ] **Голосование за feature requests**
   - Пользователи могут upvote чужие feature requests
   - Сортировка по популярности
