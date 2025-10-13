@@ -480,8 +480,173 @@
 
 ---
 
+## 8. 🔧 Финальная оптимизация и рефакторинг
+
+### 8.1 Код и архитектура
+- [ ] **Аудит кодовой базы**
+  - Поиск дублирования кода (DRY principle)
+  - Выявление неиспользуемых функций и переменных
+  - Проверка соответствия code style guide
+  - Анализ complexity metrics (цикломатическая сложность)
+
+- [ ] **Рефакторинг backend**
+  - Разделение server-postgresql.js на модули (routes, controllers, models)
+  - Вынос business logic из endpoints в отдельные service классы
+  - Улучшение error handling (единая система обработки ошибок)
+  - Добавление input validation (Joi/Yup схемы)
+  - Удаление устаревших endpoints
+  - Документация API (Swagger/OpenAPI)
+
+- [ ] **Рефакторинг frontend**
+  - Разделение app.js на модули (по функциональности)
+  - Вынос повторяющихся DOM операций в helpers
+  - Унификация работы с API (единый API client класс)
+  - Улучшение state management
+  - Удаление неиспользуемых CSS правил
+  - Минификация и бандлинг (Webpack/Vite)
+
+- [ ] **Очистка файлов**
+  - Удаление старых/неиспользуемых файлов (database.js, старые миграции)
+  - Удаление закомментированного кода
+  - Удаление console.log и debug кода
+  - Очистка node_modules и package-lock
+  - Проверка .gitignore на актуальность
+
+### 8.2 База данных
+- [ ] **Оптимизация PostgreSQL**
+  - Добавление недостающих индексов (EXPLAIN ANALYZE)
+  - Оптимизация медленных запросов
+  - Нормализация таблиц (если есть избыточность)
+  - Архивирование старых данных
+  - Настройка connection pooling
+  - Backup стратегия
+
+- [ ] **Миграции**
+  - Документирование всех миграций
+  - Добавление rollback скриптов
+  - Версионирование схемы БД
+
+### 8.3 Производительность
+- [ ] **Frontend оптимизация**
+  - Lazy loading для изображений
+  - Code splitting (разделение на chunks)
+  - Service Worker оптимизация (кеш стратегии)
+  - Минификация CSS/JS
+  - Сжатие изображений (WebP, оптимизация PNG)
+  - Tree shaking (удаление неиспользуемого кода)
+  - Lighthouse audit (цель: 90+ score)
+
+- [ ] **Backend оптимизация**
+  - Response compression (gzip/brotli)
+  - API response caching (Redis)
+  - Rate limiting для защиты от DDoS
+  - Query optimization (N+1 problem)
+  - Connection pooling
+  - CDN для статических файлов
+
+- [ ] **Мониторинг производительности**
+  - Логирование медленных запросов
+  - Трекинг API response times
+  - Memory leaks detection
+  - Error tracking (Sentry)
+
+### 8.4 Безопасность
+- [ ] **Security audit**
+  - SQL injection защита (prepared statements)
+  - XSS защита (sanitization)
+  - CSRF tokens
+  - Rate limiting
+  - Helmet.js для Express security headers
+  - Обновление зависимостей (npm audit fix)
+  - Secrets management (переменные окружения)
+  - HTTPS enforcement
+
+- [ ] **Аутентификация**
+  - JWT refresh tokens
+  - Secure cookie settings
+  - Password strength validation
+  - Account lockout после неудачных попыток
+  - 2FA (будущая версия)
+
+### 8.5 Тестирование
+- [ ] **Unit тесты**
+  - Backend functions (80%+ coverage)
+  - Frontend utilities
+  - Database queries
+
+- [ ] **Integration тесты**
+  - API endpoints (все критичные routes)
+  - Authentication flow
+  - Gamification system
+
+- [ ] **E2E тесты**
+  - User registration → login → word import → quiz flow
+  - Critical user journeys
+  - Playwright/Cypress
+
+### 8.6 DevOps и деплой
+- [ ] **CI/CD pipeline**
+  - Automated testing on push
+  - Automated deployment (Railway/Vercel)
+  - Staging environment
+  - Production deployment strategy
+
+- [ ] **Мониторинг**
+  - Uptime monitoring (UptimeRobot)
+  - Error tracking (Sentry)
+  - Analytics (PostHog/Mixpanel)
+  - Server logs aggregation
+
+- [ ] **Документация**
+  - README.md обновление
+  - API документация (Swagger)
+  - Deployment guide
+  - Contributing guidelines
+  - User manual (для пользователей)
+
+### 8.7 Структура проекта
+- [ ] **Реорганизация папок**
+  ```
+  ├── server/
+  │   ├── routes/          # API endpoints
+  │   ├── controllers/     # Business logic
+  │   ├── models/          # DB models
+  │   ├── middleware/      # Auth, validation
+  │   ├── services/        # Helper services
+  │   └── config/          # Configuration
+  ├── public/
+  │   ├── js/
+  │   │   ├── core/        # app.js, database.js
+  │   │   ├── features/    # gamification, analytics
+  │   │   └── utils/       # helpers, theme
+  │   ├── css/
+  │   ├── images/
+  │   └── index.html
+  ├── tests/
+  │   ├── unit/
+  │   ├── integration/
+  │   └── e2e/
+  └── docs/
+  ```
+
+### 8.8 Package dependencies
+- [ ] **Обновление зависимостей**
+  - npm outdated → npm update
+  - Major version updates (breaking changes)
+  - Security patches
+  - Удаление неиспользуемых пакетов
+
+- [ ] **Bundle size оптимизация**
+  - Анализ bundle size (webpack-bundle-analyzer)
+  - Замена тяжелых библиотек на легкие альтернативы
+  - Tree shaking
+  - Dynamic imports
+
+---
+
 **Создано**: 2025-10-09
-**Версия плана**: 1.0
+**Обновлено**: 2025-10-13
+**Версия плана**: 1.1
 **Приоритет**: HIGH
 
 *"Превратим изучение языков в увлекательное приключение!"* 🚀
