@@ -225,6 +225,76 @@ async function initDatabase() {
             )
         `);
 
+        // Bug Reporting System: Add is_beta_tester flag to users
+        await db.query(`
+            DO $$
+            BEGIN
+                IF NOT EXISTS (
+                    SELECT 1 FROM information_schema.columns
+                    WHERE table_name = 'users' AND column_name = 'is_beta_tester'
+                ) THEN
+                    ALTER TABLE users ADD COLUMN is_beta_tester BOOLEAN DEFAULT FALSE;
+                END IF;
+            END $$;
+        `);
+
+        // Bug Reporting System: Reports table
+        await db.query(`
+            CREATE TABLE IF NOT EXISTS reports (
+                id SERIAL PRIMARY KEY,
+                user_id INTEGER REFERENCES users(id) ON DELETE CASCADE,
+                report_type VARCHAR(50) NOT NULL,
+                title VARCHAR(255) NOT NULL,
+                description TEXT NOT NULL,
+                page_url TEXT,
+                browser_info TEXT,
+                screen_resolution VARCHAR(50),
+                status VARCHAR(50) DEFAULT 'open',
+                priority VARCHAR(20) DEFAULT 'medium',
+                assigned_to INTEGER REFERENCES users(id),
+                github_issue_number INTEGER,
+                createdAt TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+                updatedAt TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+            )
+        `);
+
+        // Bug Reporting System: Report attachments (screenshots)
+        await db.query(`
+            CREATE TABLE IF NOT EXISTS report_attachments (
+                id SERIAL PRIMARY KEY,
+                report_id INTEGER REFERENCES reports(id) ON DELETE CASCADE,
+                filename VARCHAR(255) NOT NULL,
+                filepath TEXT NOT NULL,
+                mimetype VARCHAR(100),
+                size INTEGER,
+                createdAt TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+            )
+        `);
+
+        // Bug Reporting System: Report comments
+        await db.query(`
+            CREATE TABLE IF NOT EXISTS report_comments (
+                id SERIAL PRIMARY KEY,
+                report_id INTEGER REFERENCES reports(id) ON DELETE CASCADE,
+                user_id INTEGER REFERENCES users(id) ON DELETE CASCADE,
+                comment_text TEXT NOT NULL,
+                is_internal BOOLEAN DEFAULT FALSE,
+                createdAt TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+            )
+        `);
+
+        // Bug Reporting System: Report votes (for prioritization)
+        await db.query(`
+            CREATE TABLE IF NOT EXISTS report_votes (
+                id SERIAL PRIMARY KEY,
+                report_id INTEGER REFERENCES reports(id) ON DELETE CASCADE,
+                user_id INTEGER REFERENCES users(id) ON DELETE CASCADE,
+                vote_type VARCHAR(20) NOT NULL,
+                createdAt TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+                UNIQUE(report_id, user_id)
+            )
+        `);
+
         console.log('PostgreSQL database initialized with gamification tables');
 
         // Initialize predefined achievements
@@ -1510,6 +1580,412 @@ app.post('/api/admin/global-collections', async (req, res) => {
         res.status(500).json({ error: err.message });
     }
 });
+
+// ========================================
+// BUG REPORTING SYSTEM ENDPOINTS
+// ========================================
+
+// Admin: Toggle beta tester status for user
+app.put('/api/admin/users/:userId/beta-tester', async (req, res) => {
+    try {
+        const { userId } = req.params;
+        const { isBetaTester } = req.body;
+
+        const result = await db.query(
+            'UPDATE users SET is_beta_tester = $1 WHERE id = $2 RETURNING id, name, email, is_beta_tester',
+            [isBetaTester, parseInt(userId)]
+        );
+
+        if (result.rows.length === 0) {
+            return res.status(404).json({ error: 'User not found' });
+        }
+
+        console.log(`👥 User ${userId} beta tester status: ${isBetaTester}`);
+        res.json(result.rows[0]);
+    } catch (err) {
+        console.error('Error updating beta tester status:', err);
+        res.status(500).json({ error: err.message });
+    }
+});
+
+// Check if user is beta tester
+app.get('/api/users/:userId/beta-tester', async (req, res) => {
+    try {
+        const { userId } = req.params;
+
+        const result = await db.query(
+            'SELECT is_beta_tester FROM users WHERE id = $1',
+            [parseInt(userId)]
+        );
+
+        if (result.rows.length === 0) {
+            return res.status(404).json({ error: 'User not found' });
+        }
+
+        res.json({ isBetaTester: result.rows[0].is_beta_tester || false });
+    } catch (err) {
+        console.error('Error checking beta tester status:', err);
+        res.status(500).json({ error: err.message });
+    }
+});
+
+// Create new report
+app.post('/api/reports', upload.array('screenshots', 5), async (req, res) => {
+    try {
+        const { userId, reportType, title, description, pageUrl, browserInfo, screenResolution } = req.body;
+
+        if (!userId || !reportType || !title || !description) {
+            return res.status(400).json({ error: 'userId, reportType, title, and description are required' });
+        }
+
+        // Check if user is beta tester
+        const userCheck = await db.query('SELECT is_beta_tester FROM users WHERE id = $1', [parseInt(userId)]);
+        if (userCheck.rows.length === 0) {
+            return res.status(404).json({ error: 'User not found' });
+        }
+
+        if (!userCheck.rows[0].is_beta_tester) {
+            return res.status(403).json({ error: 'Only beta testers can submit reports' });
+        }
+
+        // Begin transaction
+        await db.query('BEGIN');
+
+        try {
+            // Create report
+            const reportResult = await db.query(
+                `INSERT INTO reports (user_id, report_type, title, description, page_url, browser_info, screen_resolution)
+                 VALUES ($1, $2, $3, $4, $5, $6, $7)
+                 RETURNING *`,
+                [parseInt(userId), reportType, title, description, pageUrl || '', browserInfo || '', screenResolution || '']
+            );
+
+            const reportId = reportResult.rows[0].id;
+
+            // Save uploaded screenshots
+            if (req.files && req.files.length > 0) {
+                for (const file of req.files) {
+                    await db.query(
+                        `INSERT INTO report_attachments (report_id, filename, filepath, mimetype, size)
+                         VALUES ($1, $2, $3, $4, $5)`,
+                        [reportId, file.originalname, file.path, file.mimetype, file.size]
+                    );
+                }
+            }
+
+            await db.query('COMMIT');
+
+            console.log(`🐛 New report #${reportId} from user ${userId}: ${title}`);
+
+            res.json({
+                message: 'Report submitted successfully',
+                report: reportResult.rows[0]
+            });
+        } catch (err) {
+            await db.query('ROLLBACK');
+            throw err;
+        }
+    } catch (err) {
+        console.error('Error creating report:', err);
+        res.status(500).json({ error: err.message });
+    }
+});
+
+// Get all reports (with filtering)
+app.get('/api/reports', async (req, res) => {
+    try {
+        const { userId, status, reportType, priority, limit = 50, offset = 0 } = req.query;
+
+        let query = 'SELECT r.*, u.name as user_name, u.email as user_email FROM reports r INNER JOIN users u ON r.user_id = u.id WHERE 1=1';
+        let params = [];
+        let paramIndex = 1;
+
+        if (userId) {
+            query += ` AND r.user_id = $${paramIndex}`;
+            params.push(parseInt(userId));
+            paramIndex++;
+        }
+
+        if (status) {
+            query += ` AND r.status = $${paramIndex}`;
+            params.push(status);
+            paramIndex++;
+        }
+
+        if (reportType) {
+            query += ` AND r.report_type = $${paramIndex}`;
+            params.push(reportType);
+            paramIndex++;
+        }
+
+        if (priority) {
+            query += ` AND r.priority = $${paramIndex}`;
+            params.push(priority);
+            paramIndex++;
+        }
+
+        query += ` ORDER BY r.createdat DESC LIMIT $${paramIndex} OFFSET $${paramIndex + 1}`;
+        params.push(parseInt(limit), parseInt(offset));
+
+        const result = await db.query(query, params);
+        res.json(result.rows);
+    } catch (err) {
+        console.error('Error getting reports:', err);
+        res.status(500).json({ error: err.message });
+    }
+});
+
+// Get single report with details
+app.get('/api/reports/:reportId', async (req, res) => {
+    try {
+        const { reportId } = req.params;
+
+        const report = await db.query(
+            `SELECT r.*, u.name as user_name, u.email as user_email
+             FROM reports r
+             INNER JOIN users u ON r.user_id = u.id
+             WHERE r.id = $1`,
+            [parseInt(reportId)]
+        );
+
+        if (report.rows.length === 0) {
+            return res.status(404).json({ error: 'Report not found' });
+        }
+
+        // Get attachments
+        const attachments = await db.query(
+            'SELECT * FROM report_attachments WHERE report_id = $1',
+            [parseInt(reportId)]
+        );
+
+        // Get comments
+        const comments = await db.query(
+            `SELECT rc.*, u.name as user_name
+             FROM report_comments rc
+             INNER JOIN users u ON rc.user_id = u.id
+             WHERE rc.report_id = $1
+             ORDER BY rc.createdat ASC`,
+            [parseInt(reportId)]
+        );
+
+        // Get votes
+        const votes = await db.query(
+            'SELECT vote_type, COUNT(*) as count FROM report_votes WHERE report_id = $1 GROUP BY vote_type',
+            [parseInt(reportId)]
+        );
+
+        res.json({
+            ...report.rows[0],
+            attachments: attachments.rows,
+            comments: comments.rows,
+            votes: votes.rows
+        });
+    } catch (err) {
+        console.error('Error getting report details:', err);
+        res.status(500).json({ error: err.message });
+    }
+});
+
+// Admin: Update report status/priority
+app.put('/api/admin/reports/:reportId', async (req, res) => {
+    try {
+        const { reportId } = req.params;
+        const { status, priority, assignedTo, githubIssueNumber } = req.body;
+
+        let updateFields = [];
+        let params = [];
+        let paramIndex = 1;
+
+        if (status) {
+            updateFields.push(`status = $${paramIndex}`);
+            params.push(status);
+            paramIndex++;
+        }
+
+        if (priority) {
+            updateFields.push(`priority = $${paramIndex}`);
+            params.push(priority);
+            paramIndex++;
+        }
+
+        if (assignedTo !== undefined) {
+            updateFields.push(`assigned_to = $${paramIndex}`);
+            params.push(assignedTo ? parseInt(assignedTo) : null);
+            paramIndex++;
+        }
+
+        if (githubIssueNumber !== undefined) {
+            updateFields.push(`github_issue_number = $${paramIndex}`);
+            params.push(githubIssueNumber ? parseInt(githubIssueNumber) : null);
+            paramIndex++;
+        }
+
+        if (updateFields.length === 0) {
+            return res.status(400).json({ error: 'No fields to update' });
+        }
+
+        updateFields.push(`updatedat = CURRENT_TIMESTAMP`);
+        params.push(parseInt(reportId));
+
+        const query = `UPDATE reports SET ${updateFields.join(', ')} WHERE id = $${paramIndex} RETURNING *`;
+        const result = await db.query(query, params);
+
+        if (result.rows.length === 0) {
+            return res.status(404).json({ error: 'Report not found' });
+        }
+
+        console.log(`📝 Report #${reportId} updated`);
+        res.json(result.rows[0]);
+    } catch (err) {
+        console.error('Error updating report:', err);
+        res.status(500).json({ error: err.message });
+    }
+});
+
+// Add comment to report
+app.post('/api/reports/:reportId/comments', async (req, res) => {
+    try {
+        const { reportId } = req.params;
+        const { userId, commentText, isInternal = false } = req.body;
+
+        if (!userId || !commentText) {
+            return res.status(400).json({ error: 'userId and commentText are required' });
+        }
+
+        const result = await db.query(
+            `INSERT INTO report_comments (report_id, user_id, comment_text, is_internal)
+             VALUES ($1, $2, $3, $4)
+             RETURNING *`,
+            [parseInt(reportId), parseInt(userId), commentText, isInternal]
+        );
+
+        console.log(`💬 Comment added to report #${reportId} by user ${userId}`);
+        res.json(result.rows[0]);
+    } catch (err) {
+        console.error('Error adding comment:', err);
+        res.status(500).json({ error: err.message });
+    }
+});
+
+// Vote on report
+app.post('/api/reports/:reportId/vote', async (req, res) => {
+    try {
+        const { reportId } = req.params;
+        const { userId, voteType } = req.body;
+
+        if (!userId || !voteType) {
+            return res.status(400).json({ error: 'userId and voteType are required' });
+        }
+
+        const validVoteTypes = ['upvote', 'important', 'me_too'];
+        if (!validVoteTypes.includes(voteType)) {
+            return res.status(400).json({ error: 'Invalid vote type' });
+        }
+
+        // Insert or update vote
+        const result = await db.query(
+            `INSERT INTO report_votes (report_id, user_id, vote_type)
+             VALUES ($1, $2, $3)
+             ON CONFLICT (report_id, user_id)
+             DO UPDATE SET vote_type = $3
+             RETURNING *`,
+            [parseInt(reportId), parseInt(userId), voteType]
+        );
+
+        console.log(`👍 User ${userId} voted "${voteType}" on report #${reportId}`);
+        res.json(result.rows[0]);
+    } catch (err) {
+        console.error('Error voting on report:', err);
+        res.status(500).json({ error: err.message });
+    }
+});
+
+// Delete report (admin only)
+app.delete('/api/admin/reports/:reportId', async (req, res) => {
+    try {
+        const { reportId } = req.params;
+
+        // Begin transaction
+        await db.query('BEGIN');
+
+        try {
+            // Get attachments to delete files
+            const attachments = await db.query(
+                'SELECT filepath FROM report_attachments WHERE report_id = $1',
+                [parseInt(reportId)]
+            );
+
+            // Delete attachment files
+            for (const attachment of attachments.rows) {
+                if (fs.existsSync(attachment.filepath)) {
+                    fs.unlinkSync(attachment.filepath);
+                }
+            }
+
+            // Delete report (cascades to attachments, comments, votes)
+            const result = await db.query('DELETE FROM reports WHERE id = $1', [parseInt(reportId)]);
+
+            if (result.rowCount === 0) {
+                await db.query('ROLLBACK');
+                return res.status(404).json({ error: 'Report not found' });
+            }
+
+            await db.query('COMMIT');
+
+            console.log(`🗑️ Report #${reportId} deleted`);
+            res.json({ message: 'Report deleted successfully' });
+        } catch (err) {
+            await db.query('ROLLBACK');
+            throw err;
+        }
+    } catch (err) {
+        console.error('Error deleting report:', err);
+        res.status(500).json({ error: err.message });
+    }
+});
+
+// Get report statistics
+app.get('/api/reports/stats/summary', async (req, res) => {
+    try {
+        // Count by status
+        const statusCounts = await db.query(
+            `SELECT status, COUNT(*) as count
+             FROM reports
+             GROUP BY status`
+        );
+
+        // Count by type
+        const typeCounts = await db.query(
+            `SELECT report_type, COUNT(*) as count
+             FROM reports
+             GROUP BY report_type`
+        );
+
+        // Count by priority
+        const priorityCounts = await db.query(
+            `SELECT priority, COUNT(*) as count
+             FROM reports
+             GROUP BY priority`
+        );
+
+        // Total reports
+        const total = await db.query('SELECT COUNT(*) as count FROM reports');
+
+        res.json({
+            total: parseInt(total.rows[0].count),
+            byStatus: statusCounts.rows,
+            byType: typeCounts.rows,
+            byPriority: priorityCounts.rows
+        });
+    } catch (err) {
+        console.error('Error getting report stats:', err);
+        res.status(500).json({ error: err.message });
+    }
+});
+
+// ========================================
+// WORDS ENDPOINTS
+// ========================================
 
 // Get all words with pagination (filtered by user and language pair)
 app.get('/api/words', async (req, res) => {
