@@ -341,6 +341,65 @@ async function initDatabase() {
             )
         `);
 
+        // Coins System: Add coins_balance to user_stats
+        await db.query(`
+            DO $$
+            BEGIN
+                IF NOT EXISTS (
+                    SELECT 1 FROM information_schema.columns
+                    WHERE table_name = 'user_stats' AND column_name = 'coins_balance'
+                ) THEN
+                    ALTER TABLE user_stats ADD COLUMN coins_balance INTEGER DEFAULT 0;
+                END IF;
+            END $$;
+        `);
+
+        // Coins System: Transactions history
+        await db.query(`
+            CREATE TABLE IF NOT EXISTS coin_transactions (
+                id SERIAL PRIMARY KEY,
+                user_id INTEGER REFERENCES users(id) ON DELETE CASCADE,
+                amount INTEGER NOT NULL,
+                transaction_type VARCHAR(50) NOT NULL,
+                source VARCHAR(100),
+                description TEXT,
+                balance_after INTEGER NOT NULL,
+                createdAt TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+            )
+        `);
+
+        // Coins System: Shop items
+        await db.query(`
+            CREATE TABLE IF NOT EXISTS shop_items (
+                id SERIAL PRIMARY KEY,
+                item_key VARCHAR(100) UNIQUE NOT NULL,
+                item_type VARCHAR(50) NOT NULL,
+                name VARCHAR(255) NOT NULL,
+                description TEXT,
+                price_coins INTEGER NOT NULL,
+                icon TEXT,
+                category VARCHAR(50),
+                is_active BOOLEAN DEFAULT TRUE,
+                is_limited BOOLEAN DEFAULT FALSE,
+                stock_quantity INTEGER,
+                createdAt TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+            )
+        `);
+
+        // Coins System: User purchases
+        await db.query(`
+            CREATE TABLE IF NOT EXISTS user_purchases (
+                id SERIAL PRIMARY KEY,
+                user_id INTEGER REFERENCES users(id) ON DELETE CASCADE,
+                shop_item_id INTEGER REFERENCES shop_items(id),
+                quantity INTEGER DEFAULT 1,
+                total_cost INTEGER NOT NULL,
+                is_active BOOLEAN DEFAULT TRUE,
+                purchasedAt TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+                expiresAt TIMESTAMP
+            )
+        `);
+
         console.log('PostgreSQL database initialized with gamification tables');
 
         // Initialize predefined achievements
@@ -348,6 +407,9 @@ async function initDatabase() {
 
         // Initialize challenge templates
         await initializeChallengeTemplates();
+
+        // Initialize shop items
+        await initializeShopItems();
     } catch (err) {
         console.error('Database initialization error:', err);
     }
@@ -433,6 +495,54 @@ async function initializeChallengeTemplates() {
         console.log('🎯 Challenge templates initialized');
     } catch (err) {
         console.error('Error initializing challenge templates:', err);
+    }
+}
+
+// Initialize predefined shop items
+async function initializeShopItems() {
+    const items = [
+        // Streak Freezes
+        { key: 'streak_freeze_1', type: 'powerup', name: 'Заморозка стрика (1 день)', description: 'Сохраняет твой стрик на 1 день, если пропустишь занятие', price: 50, icon: '❄️', category: 'streak' },
+        { key: 'streak_freeze_3', type: 'powerup', name: 'Заморозка стрика (3 дня)', description: 'Сохраняет твой стрик на 3 дня', price: 120, icon: '🧊', category: 'streak' },
+        { key: 'streak_freeze_7', type: 'powerup', name: 'Заморозка стрика (7 дней)', description: 'Сохраняет твой стрик на неделю', price: 250, icon: '🌨️', category: 'streak' },
+
+        // Hints and Powerups
+        { key: 'hint_pack_5', type: 'consumable', name: 'Набор подсказок (5 шт)', description: '5 подсказок для использования в квизах', price: 30, icon: '💡', category: 'hints' },
+        { key: 'hint_pack_20', type: 'consumable', name: 'Набор подсказок (20 шт)', description: '20 подсказок для квизов (выгодно!)', price: 100, icon: '✨', category: 'hints' },
+        { key: 'xp_booster_2x', type: 'booster', name: 'XP Бустер x2 (1 час)', description: 'Удваивает получаемый XP на 1 час', price: 80, icon: '🚀', category: 'boosters' },
+        { key: 'xp_booster_3x', type: 'booster', name: 'XP Бустер x3 (30 мин)', description: 'Утраивает получаемый XP на 30 минут', price: 120, icon: '💫', category: 'boosters' },
+
+        // Themes
+        { key: 'theme_ocean', type: 'theme', name: 'Тема "Океан"', description: 'Синяя цветовая схема с морскими мотивами', price: 200, icon: '🌊', category: 'themes' },
+        { key: 'theme_forest', type: 'theme', name: 'Тема "Лес"', description: 'Зеленая природная тема', price: 200, icon: '🌲', category: 'themes' },
+        { key: 'theme_sunset', type: 'theme', name: 'Тема "Закат"', description: 'Оранжево-розовая тема заката', price: 200, icon: '🌅', category: 'themes' },
+        { key: 'theme_neon', type: 'theme', name: 'Тема "Неон"', description: 'Яркая неоновая тема для любителей киберпанка', price: 300, icon: '🌃', category: 'themes' },
+        { key: 'theme_galaxy', type: 'theme', name: 'Тема "Галактика"', description: 'Космическая тема с звездами', price: 350, icon: '🌌', category: 'themes' },
+
+        // Avatars
+        { key: 'avatar_cat', type: 'avatar', name: 'Аватар "Кот"', description: 'Милый котик для профиля', price: 100, icon: '🐱', category: 'avatars' },
+        { key: 'avatar_dog', type: 'avatar', name: 'Аватар "Собака"', description: 'Дружелюбный пёс', price: 100, icon: '🐶', category: 'avatars' },
+        { key: 'avatar_panda', type: 'avatar', name: 'Аватар "Панда"', description: 'Панда-полиглот', price: 150, icon: '🐼', category: 'avatars' },
+        { key: 'avatar_unicorn', type: 'avatar', name: 'Аватар "Единорог"', description: 'Магический единорог', price: 250, icon: '🦄', category: 'avatars' },
+        { key: 'avatar_dragon', type: 'avatar', name: 'Аватар "Дракон"', description: 'Мудрый дракон', price: 300, icon: '🐉', category: 'avatars' },
+
+        // Special Items
+        { key: 'double_rewards_24h', type: 'booster', name: 'Двойные награды (24 часа)', description: 'Удваивает награды из челленджей на 24 часа', price: 500, icon: '💰', category: 'special' },
+        { key: 'challenge_refresh', type: 'powerup', name: 'Обновить челленджи', description: 'Получи 3 новых челленджа сегодня', price: 150, icon: '🔄', category: 'challenges' },
+    ];
+
+    try {
+        for (const item of items) {
+            await db.query(
+                `INSERT INTO shop_items (item_key, item_type, name, description, price_coins, icon, category)
+                 VALUES ($1, $2, $3, $4, $5, $6, $7)
+                 ON CONFLICT (item_key) DO NOTHING`,
+                [item.key, item.type, item.name, item.description, item.price, item.icon, item.category]
+            );
+        }
+        console.log('🏪 Shop items initialized');
+    } catch (err) {
+        console.error('Error initializing shop items:', err);
     }
 }
 
