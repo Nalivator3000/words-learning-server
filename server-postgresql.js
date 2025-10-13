@@ -192,6 +192,39 @@ async function initDatabase() {
             )
         `);
 
+        // Global word collections (system-wide)
+        await db.query(`
+            CREATE TABLE IF NOT EXISTS global_word_collections (
+                id SERIAL PRIMARY KEY,
+                name VARCHAR(255) NOT NULL,
+                description TEXT,
+                from_lang VARCHAR(50) NOT NULL,
+                to_lang VARCHAR(50) NOT NULL,
+                category VARCHAR(100),
+                difficulty_level VARCHAR(20),
+                word_count INTEGER DEFAULT 0,
+                usage_count INTEGER DEFAULT 0,
+                created_by INTEGER REFERENCES users(id),
+                is_public BOOLEAN DEFAULT TRUE,
+                createdAt TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+                updatedAt TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+            )
+        `);
+
+        // Words in global collections
+        await db.query(`
+            CREATE TABLE IF NOT EXISTS global_collection_words (
+                id SERIAL PRIMARY KEY,
+                collection_id INTEGER REFERENCES global_word_collections(id) ON DELETE CASCADE,
+                word VARCHAR(255) NOT NULL,
+                translation VARCHAR(255) NOT NULL,
+                example TEXT,
+                exampleTranslation TEXT,
+                order_index INTEGER DEFAULT 0,
+                createdAt TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+            )
+        `);
+
         console.log('PostgreSQL database initialized with gamification tables');
 
         // Initialize predefined achievements
@@ -1282,6 +1315,198 @@ app.get('/api/analytics/fluency-prediction/:userId', async (req, res) => {
         });
     } catch (err) {
         console.error('Error getting fluency prediction:', err);
+        res.status(500).json({ error: err.message });
+    }
+});
+
+// ========================================
+// GLOBAL WORD COLLECTIONS ENDPOINTS
+// ========================================
+
+// Get all global collections with filtering
+app.get('/api/global-collections', async (req, res) => {
+    try {
+        const { from_lang, to_lang, category, difficulty_level } = req.query;
+
+        let query = 'SELECT * FROM global_word_collections WHERE is_public = true';
+        let params = [];
+        let paramIndex = 1;
+
+        if (from_lang && to_lang) {
+            query += ` AND from_lang = $${paramIndex} AND to_lang = $${paramIndex + 1}`;
+            params.push(from_lang, to_lang);
+            paramIndex += 2;
+        }
+
+        if (category) {
+            query += ` AND category = $${paramIndex}`;
+            params.push(category);
+            paramIndex++;
+        }
+
+        if (difficulty_level) {
+            query += ` AND difficulty_level = $${paramIndex}`;
+            params.push(difficulty_level);
+            paramIndex++;
+        }
+
+        query += ' ORDER BY usage_count DESC, createdat DESC';
+
+        const result = await db.query(query, params);
+        res.json(result.rows);
+    } catch (err) {
+        console.error('Error getting global collections:', err);
+        res.status(500).json({ error: err.message });
+    }
+});
+
+// Get single global collection with its words
+app.get('/api/global-collections/:collectionId', async (req, res) => {
+    try {
+        const { collectionId } = req.params;
+
+        const collection = await db.query(
+            'SELECT * FROM global_word_collections WHERE id = $1',
+            [parseInt(collectionId)]
+        );
+
+        if (collection.rows.length === 0) {
+            return res.status(404).json({ error: 'Collection not found' });
+        }
+
+        const words = await db.query(
+            'SELECT * FROM global_collection_words WHERE collection_id = $1 ORDER BY order_index ASC',
+            [parseInt(collectionId)]
+        );
+
+        res.json({
+            ...collection.rows[0],
+            words: words.rows
+        });
+    } catch (err) {
+        console.error('Error getting global collection:', err);
+        res.status(500).json({ error: err.message });
+    }
+});
+
+// Import global collection to user's personal words
+app.post('/api/global-collections/:collectionId/import', async (req, res) => {
+    try {
+        const { collectionId } = req.params;
+        const { userId, languagePairId } = req.body;
+
+        if (!userId || !languagePairId) {
+            return res.status(400).json({ error: 'userId and languagePairId are required' });
+        }
+
+        // Get collection words
+        const words = await db.query(
+            'SELECT * FROM global_collection_words WHERE collection_id = $1',
+            [parseInt(collectionId)]
+        );
+
+        if (words.rows.length === 0) {
+            return res.status(404).json({ error: 'No words found in collection' });
+        }
+
+        // Begin transaction
+        await db.query('BEGIN');
+
+        try {
+            let importedCount = 0;
+
+            for (const word of words.rows) {
+                // Check if word already exists
+                const existing = await db.query(
+                    'SELECT id FROM words WHERE user_id = $1 AND language_pair_id = $2 AND word = $3',
+                    [userId, languagePairId, word.word]
+                );
+
+                if (existing.rows.length === 0) {
+                    await db.query(
+                        `INSERT INTO words (user_id, language_pair_id, word, translation, example, exampleTranslation)
+                         VALUES ($1, $2, $3, $4, $5, $6)`,
+                        [userId, languagePairId, word.word, word.translation, word.example || '', word.exampletranslation || '']
+                    );
+                    importedCount++;
+                }
+            }
+
+            // Update usage count
+            await db.query(
+                'UPDATE global_word_collections SET usage_count = usage_count + 1 WHERE id = $1',
+                [parseInt(collectionId)]
+            );
+
+            await db.query('COMMIT');
+
+            console.log(`📦 Imported ${importedCount} words from collection ${collectionId} to user ${userId}`);
+
+            res.json({
+                message: `${importedCount} words imported successfully`,
+                importedCount,
+                totalWords: words.rows.length,
+                skippedCount: words.rows.length - importedCount
+            });
+        } catch (err) {
+            await db.query('ROLLBACK');
+            throw err;
+        }
+    } catch (err) {
+        console.error('Error importing global collection:', err);
+        res.status(500).json({ error: err.message });
+    }
+});
+
+// Admin: Create new global collection
+app.post('/api/admin/global-collections', async (req, res) => {
+    try {
+        const { name, description, from_lang, to_lang, category, difficulty_level, created_by, words } = req.body;
+
+        if (!name || !from_lang || !to_lang) {
+            return res.status(400).json({ error: 'name, from_lang, and to_lang are required' });
+        }
+
+        // Begin transaction
+        await db.query('BEGIN');
+
+        try {
+            // Create collection
+            const collectionResult = await db.query(
+                `INSERT INTO global_word_collections (name, description, from_lang, to_lang, category, difficulty_level, created_by, word_count)
+                 VALUES ($1, $2, $3, $4, $5, $6, $7, $8)
+                 RETURNING *`,
+                [name, description || '', from_lang, to_lang, category || 'General', difficulty_level || 'A1', created_by || null, words?.length || 0]
+            );
+
+            const collectionId = collectionResult.rows[0].id;
+
+            // Add words if provided
+            if (words && Array.isArray(words) && words.length > 0) {
+                for (let i = 0; i < words.length; i++) {
+                    const word = words[i];
+                    await db.query(
+                        `INSERT INTO global_collection_words (collection_id, word, translation, example, exampleTranslation, order_index)
+                         VALUES ($1, $2, $3, $4, $5, $6)`,
+                        [collectionId, word.word, word.translation, word.example || '', word.exampleTranslation || '', i]
+                    );
+                }
+            }
+
+            await db.query('COMMIT');
+
+            console.log(`✨ Created global collection "${name}" with ${words?.length || 0} words`);
+
+            res.json({
+                message: 'Global collection created successfully',
+                collection: collectionResult.rows[0]
+            });
+        } catch (err) {
+            await db.query('ROLLBACK');
+            throw err;
+        }
+    } catch (err) {
+        console.error('Error creating global collection:', err);
         res.status(500).json({ error: err.message });
     }
 });
