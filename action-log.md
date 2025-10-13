@@ -2,6 +2,52 @@
 
 ## 2025-10-13
 
+### Client-Side Database Refactoring
+**Commit:** 🔄 REFACTOR: Replace localStorage with server API in database.js
+
+**Изменения:**
+- Полностью переписан [public/database.js](public/database.js) с localStorage на серверное API
+- Все операции теперь работают через HTTP запросы к backend
+- Убрана зависимость от локального хранилища браузера
+
+**Функции переписаны (13 функций):**
+- `initDB()` - инициализация через проверку подключения
+- `getAllWords()` - GET /api/words/:userId
+- `addWord()` - POST /api/words с полными данными слова
+- `updateWord()` - PUT /api/words/:wordId
+- `deleteWord()` - DELETE /api/words/:wordId
+- `getWordsByCollection()` - GET /api/words/:userId?collectionId=X
+- `searchWords()` - GET /api/words/:userId/search?query=X
+- `updateWordStatistics()` - PUT /api/words/:wordId/statistics
+- `getCollections()` - GET /api/collections/:userId
+- `addCollection()` - POST /api/collections
+- `updateCollection()` - PUT /api/collections/:collectionId
+- `deleteCollection()` - DELETE /api/collections/:collectionId
+- `exportToJSON()` - GET /api/words/:userId для экспорта
+
+**Технические детали:**
+- Async/await для всех запросов
+- Обработка ошибок с try/catch
+- HTTP методы: GET, POST, PUT, DELETE
+- JSON формат данных
+- API endpoints используют существующие маршруты из server-postgresql.js
+- Централизованная обработка ошибок сети
+
+**Файлы:**
+- [public/database.js](public/database.js) - полная переработка (было: localStorage, стало: API)
+
+**Преимущества:**
+- Синхронизация данных между устройствами
+- Централизованное хранилище
+- Более надежное хранение (PostgreSQL vs localStorage)
+- Готовность к multi-device support
+- Отсутствие ограничений localStorage (5-10MB)
+
+**Следующие шаги:**
+- Тестирование всех функций на реальных данных
+- Проверка совместимости с gamification.js
+- Миграция существующих данных из localStorage (если нужно)
+
 ### Leaderboards System
 **Commit:** 🏆 LEADERBOARDS: Complete global ranking system
 
