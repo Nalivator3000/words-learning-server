@@ -1,5 +1,72 @@
 # Action Log - Words Learning Server
 
+## 2025-10-14
+
+### User Profiles System (Backend)
+**Commit:** 👤 PROFILES: Complete user profiles system with public profiles
+
+**Изменения:**
+- База данных:
+  - Миграция users table: добавлены поля username (UNIQUE), bio, avatar_url, is_public
+  - `user_profiles` table: showcase_achievements, favorite_languages, study_goal, daily_goal_minutes, timezone, language_level (JSONB), profile_views, last_active
+
+- API Endpoints (6 новых):
+  - `GET /api/profiles/:userId` - публичный профиль (с stats, counts)
+  - `PUT /api/profiles/:userId` - обновить свой профиль
+  - `POST /api/profiles/:userId/avatar` - загрузка аватара (URL-based)
+  - `GET /api/profiles/:userId/showcase` - showcase достижения (топ-3)
+  - `GET /api/profiles/search/users` - поиск пользователей по username/name
+  - `GET /api/profiles/:userId/activity` - активность профиля (XP, achievements, streak)
+
+**Файлы:**
+- [server-postgresql.js:241-288](server-postgresql.js#L241-L288) - миграции и таблицы
+- [server-postgresql.js:4162-4527](server-postgresql.js#L4162-L4527) - API endpoints
+
+**Функциональность:**
+- Privacy control: is_public флаг для приватных профилей
+- Profile views tracking: автоматический подсчет просмотров
+- Showcase achievements: массив до 3х лучших достижений
+- User stats aggregation: XP, level, streak, words, achievements, friends count
+- Dynamic profile updates: flexible field updates с transaction safety
+- Activity summary: последние XP действия, достижения, стрик
+
+### Leagues System (Backend)
+**Commit:** 🏆 LEAGUES: Complete weekly leagues system (Bronze → Diamond)
+
+**Изменения:**
+- База данных (2 таблицы):
+  - `league_memberships` - участие в лигах (id, user_id, league_tier, week_start_date, week_xp, rank_in_league, promoted, demoted, UNIQUE constraint)
+  - `league_tiers` - конфигурация лиг (id, tier_name UNIQUE, tier_level, promotion_threshold, demotion_threshold, min_xp_required, icon, color)
+
+- Predefined League Tiers (5 уровней):
+  - **Bronze** 🥉: level 1, top 3 promoted, min XP: 0
+  - **Silver** 🥈: level 2, top 3 promoted, bottom 8 demoted, min XP: 500
+  - **Gold** 🥇: level 3, top 3 promoted, bottom 8 demoted, min XP: 1500
+  - **Platinum** 💎: level 4, top 3 promoted, bottom 8 demoted, min XP: 3000
+  - **Diamond** 💠: level 5, bottom 8 demoted, min XP: 5000
+
+- API Endpoints (6 новых):
+  - `GET /api/leagues/current/:userId` - текущая лига пользователя (auto-create if needed)
+  - `GET /api/leagues/leaderboard/:tier` - топ-50 в лиге за текущую неделю
+  - `POST /api/leagues/update-xp` - обновить недельный XP
+  - `GET /api/leagues/history/:userId` - история участия в лигах
+  - `GET /api/leagues/tiers` - список всех лиг
+  - `POST /api/admin/leagues/process-week` - еженедельная обработка повышений/понижений
+
+**Файлы:**
+- [server-postgresql.js:404-432](server-postgresql.js#L404-L432) - создание таблиц
+- [server-postgresql.js:803-826](server-postgresql.js#L803-L826) - initializeLeagueTiers()
+- [server-postgresql.js:4529-4775](server-postgresql.js#L4529-L4775) - API endpoints
+
+**Функциональность:**
+- Weekly reset: лиги работают по неделям (понедельник)
+- Auto-placement: новые пользователи попадают в лигу по total XP
+- Promotion/Demotion: топ-3 повышаются, низ-8 понижаются
+- Week XP tracking: отдельный счетчик XP за текущую неделю
+- ROW_NUMBER ranking: эффективное ранжирование с window functions
+- Transaction-safe processing: обработка всех пользователей в транзакции
+- League history: сохранение результатов всех недель с promoted/demoted флагами
+
 ## 2025-10-13
 
 ### Coins Economy System (API Endpoints)

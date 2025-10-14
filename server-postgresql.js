@@ -238,6 +238,55 @@ async function initDatabase() {
             END $$;
         `);
 
+        // User Profiles: Add profile fields to users table
+        await db.query(`
+            DO $$
+            BEGIN
+                IF NOT EXISTS (
+                    SELECT 1 FROM information_schema.columns
+                    WHERE table_name = 'users' AND column_name = 'username'
+                ) THEN
+                    ALTER TABLE users ADD COLUMN username VARCHAR(50) UNIQUE;
+                END IF;
+                IF NOT EXISTS (
+                    SELECT 1 FROM information_schema.columns
+                    WHERE table_name = 'users' AND column_name = 'bio'
+                ) THEN
+                    ALTER TABLE users ADD COLUMN bio TEXT;
+                END IF;
+                IF NOT EXISTS (
+                    SELECT 1 FROM information_schema.columns
+                    WHERE table_name = 'users' AND column_name = 'avatar_url'
+                ) THEN
+                    ALTER TABLE users ADD COLUMN avatar_url TEXT;
+                END IF;
+                IF NOT EXISTS (
+                    SELECT 1 FROM information_schema.columns
+                    WHERE table_name = 'users' AND column_name = 'is_public'
+                ) THEN
+                    ALTER TABLE users ADD COLUMN is_public BOOLEAN DEFAULT true;
+                END IF;
+            END $$;
+        `);
+
+        // User Profiles: Extended profile information
+        await db.query(`
+            CREATE TABLE IF NOT EXISTS user_profiles (
+                id SERIAL PRIMARY KEY,
+                user_id INTEGER UNIQUE REFERENCES users(id) ON DELETE CASCADE,
+                showcase_achievements TEXT[],
+                favorite_languages TEXT[],
+                study_goal TEXT,
+                daily_goal_minutes INTEGER DEFAULT 15,
+                timezone VARCHAR(50) DEFAULT 'UTC',
+                language_level JSONB,
+                profile_views INTEGER DEFAULT 0,
+                last_active TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+                createdAt TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+                updatedAt TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+            )
+        `);
+
         // Bug Reporting System: Reports table
         await db.query(`
             CREATE TABLE IF NOT EXISTS reports (
@@ -349,6 +398,36 @@ async function initDatabase() {
                 is_unlocked BOOLEAN DEFAULT false,
                 unlockedAt TIMESTAMP,
                 UNIQUE(user_id, achievement_id)
+            )
+        `);
+
+        // Leagues System: League memberships and history
+        await db.query(`
+            CREATE TABLE IF NOT EXISTS league_memberships (
+                id SERIAL PRIMARY KEY,
+                user_id INTEGER REFERENCES users(id) ON DELETE CASCADE,
+                league_tier VARCHAR(20) NOT NULL,
+                week_start_date DATE NOT NULL,
+                week_xp INTEGER DEFAULT 0,
+                rank_in_league INTEGER,
+                promoted BOOLEAN DEFAULT false,
+                demoted BOOLEAN DEFAULT false,
+                createdAt TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+                UNIQUE(user_id, week_start_date)
+            )
+        `);
+
+        // Leagues System: League tiers configuration
+        await db.query(`
+            CREATE TABLE IF NOT EXISTS league_tiers (
+                id SERIAL PRIMARY KEY,
+                tier_name VARCHAR(20) UNIQUE NOT NULL,
+                tier_level INTEGER NOT NULL,
+                promotion_threshold INTEGER,
+                demotion_threshold INTEGER,
+                min_xp_required INTEGER DEFAULT 0,
+                icon VARCHAR(50),
+                color VARCHAR(20)
             )
         `);
 
@@ -481,6 +560,9 @@ async function initDatabase() {
 
         // Initialize achievements
         await initializeAchievements();
+
+        // Initialize league tiers
+        await initializeLeagueTiers();
     } catch (err) {
         console.error('Database initialization error:', err);
     }
@@ -719,6 +801,31 @@ async function initializeAchievements() {
     }
 
     console.log('✅ Achievements initialized');
+}
+
+// Leagues: Initialize league tiers
+async function initializeLeagueTiers() {
+    const tiers = [
+        { name: 'Bronze', level: 1, promotion: 3, demotion: null, min_xp: 0, icon: '🥉', color: '#CD7F32' },
+        { name: 'Silver', level: 2, promotion: 3, demotion: 8, min_xp: 500, icon: '🥈', color: '#C0C0C0' },
+        { name: 'Gold', level: 3, promotion: 3, demotion: 8, min_xp: 1500, icon: '🥇', color: '#FFD700' },
+        { name: 'Platinum', level: 4, promotion: 3, demotion: 8, min_xp: 3000, icon: '💎', color: '#E5E4E2' },
+        { name: 'Diamond', level: 5, promotion: null, demotion: 8, min_xp: 5000, icon: '💠', color: '#B9F2FF' }
+    ];
+
+    for (const tier of tiers) {
+        try {
+            await db.query(`
+                INSERT INTO league_tiers (tier_name, tier_level, promotion_threshold, demotion_threshold, min_xp_required, icon, color)
+                VALUES ($1, $2, $3, $4, $5, $6, $7)
+                ON CONFLICT (tier_name) DO NOTHING
+            `, [tier.name, tier.level, tier.promotion, tier.demotion, tier.min_xp, tier.icon, tier.color]);
+        } catch (err) {
+            console.error(`Error initializing league tier ${tier.name}:`, err.message);
+        }
+    }
+
+    console.log('✅ League tiers initialized');
 }
 
 // Gamification: Award XP to user
@@ -4106,6 +4213,563 @@ app.post('/api/admin/achievements', async (req, res) => {
         res.json(result.rows[0]);
     } catch (err) {
         console.error('Error creating achievement:', err);
+        res.status(500).json({ error: err.message });
+    }
+});
+
+// ========================================
+// USER PROFILES SYSTEM ENDPOINTS
+// ========================================
+
+// Get public profile
+app.get('/api/profiles/:userId', async (req, res) => {
+    try {
+        const { userId } = req.params;
+
+        // Get user basic info
+        const user = await db.query(`
+            SELECT u.id, u.username, u.name, u.email, u.avatar_url, u.bio, u.is_public, u.createdAt,
+                   up.showcase_achievements, up.favorite_languages, up.study_goal, up.daily_goal_minutes,
+                   up.timezone, up.language_level, up.profile_views, up.last_active
+            FROM users u
+            LEFT JOIN user_profiles up ON u.id = up.user_id
+            WHERE u.id = $1
+        `, [parseInt(userId)]);
+
+        if (user.rows.length === 0) {
+            return res.status(404).json({ error: 'User not found' });
+        }
+
+        const profile = user.rows[0];
+
+        // Check if profile is public
+        if (!profile.is_public) {
+            return res.status(403).json({ error: 'Profile is private' });
+        }
+
+        // Get user stats
+        const stats = await db.query(`
+            SELECT total_xp, level, current_streak, longest_streak, total_words_learned,
+                   quizzes_completed, perfect_quizzes, coins_balance
+            FROM user_stats
+            WHERE user_id = $1
+        `, [parseInt(userId)]);
+
+        // Get language pairs count
+        const langPairs = await db.query(
+            'SELECT COUNT(*) as count FROM language_pairs WHERE user_id = $1',
+            [parseInt(userId)]
+        );
+
+        // Get unlocked achievements count
+        const achievements = await db.query(
+            'SELECT COUNT(*) as count FROM user_achievements WHERE user_id = $1 AND is_unlocked = true',
+            [parseInt(userId)]
+        );
+
+        // Get friends count
+        const friends = await db.query(
+            'SELECT COUNT(*) as count FROM friendships WHERE (user_id = $1 OR friend_id = $1) AND status = $2',
+            [parseInt(userId), 'accepted']
+        );
+
+        // Increment profile views
+        await db.query(
+            'UPDATE user_profiles SET profile_views = profile_views + 1 WHERE user_id = $1',
+            [parseInt(userId)]
+        );
+
+        res.json({
+            ...profile,
+            stats: stats.rows[0] || {},
+            counts: {
+                language_pairs: parseInt(langPairs.rows[0].count),
+                achievements: parseInt(achievements.rows[0].count),
+                friends: parseInt(friends.rows[0].count)
+            }
+        });
+    } catch (err) {
+        console.error('Error getting user profile:', err);
+        res.status(500).json({ error: err.message });
+    }
+});
+
+// Update own profile
+app.put('/api/profiles/:userId', async (req, res) => {
+    try {
+        const { userId } = req.params;
+        const {
+            username,
+            bio,
+            avatar_url,
+            is_public,
+            showcase_achievements,
+            favorite_languages,
+            study_goal,
+            daily_goal_minutes,
+            timezone
+        } = req.body;
+
+        await db.query('BEGIN');
+
+        // Update users table
+        const userUpdateFields = [];
+        const userUpdateValues = [];
+        let paramIndex = 1;
+
+        if (username !== undefined) {
+            userUpdateFields.push(`username = $${paramIndex++}`);
+            userUpdateValues.push(username);
+        }
+        if (bio !== undefined) {
+            userUpdateFields.push(`bio = $${paramIndex++}`);
+            userUpdateValues.push(bio);
+        }
+        if (avatar_url !== undefined) {
+            userUpdateFields.push(`avatar_url = $${paramIndex++}`);
+            userUpdateValues.push(avatar_url);
+        }
+        if (is_public !== undefined) {
+            userUpdateFields.push(`is_public = $${paramIndex++}`);
+            userUpdateValues.push(is_public);
+        }
+
+        if (userUpdateFields.length > 0) {
+            userUpdateFields.push(`updatedAt = CURRENT_TIMESTAMP`);
+            userUpdateValues.push(parseInt(userId));
+
+            await db.query(
+                `UPDATE users SET ${userUpdateFields.join(', ')} WHERE id = $${paramIndex}`,
+                userUpdateValues
+            );
+        }
+
+        // Get or create user profile
+        const existingProfile = await db.query(
+            'SELECT id FROM user_profiles WHERE user_id = $1',
+            [parseInt(userId)]
+        );
+
+        if (existingProfile.rows.length === 0) {
+            await db.query(
+                'INSERT INTO user_profiles (user_id) VALUES ($1)',
+                [parseInt(userId)]
+            );
+        }
+
+        // Update user_profiles table
+        const profileUpdateFields = [];
+        const profileUpdateValues = [];
+        paramIndex = 1;
+
+        if (showcase_achievements !== undefined) {
+            profileUpdateFields.push(`showcase_achievements = $${paramIndex++}`);
+            profileUpdateValues.push(showcase_achievements);
+        }
+        if (favorite_languages !== undefined) {
+            profileUpdateFields.push(`favorite_languages = $${paramIndex++}`);
+            profileUpdateValues.push(favorite_languages);
+        }
+        if (study_goal !== undefined) {
+            profileUpdateFields.push(`study_goal = $${paramIndex++}`);
+            profileUpdateValues.push(study_goal);
+        }
+        if (daily_goal_minutes !== undefined) {
+            profileUpdateFields.push(`daily_goal_minutes = $${paramIndex++}`);
+            profileUpdateValues.push(parseInt(daily_goal_minutes));
+        }
+        if (timezone !== undefined) {
+            profileUpdateFields.push(`timezone = $${paramIndex++}`);
+            profileUpdateValues.push(timezone);
+        }
+
+        if (profileUpdateFields.length > 0) {
+            profileUpdateFields.push(`updatedAt = CURRENT_TIMESTAMP`);
+            profileUpdateValues.push(parseInt(userId));
+
+            await db.query(
+                `UPDATE user_profiles SET ${profileUpdateFields.join(', ')} WHERE user_id = $${paramIndex}`,
+                profileUpdateValues
+            );
+        }
+
+        await db.query('COMMIT');
+
+        res.json({ success: true, message: 'Profile updated successfully' });
+    } catch (err) {
+        await db.query('ROLLBACK');
+        console.error('Error updating profile:', err);
+        res.status(500).json({ error: err.message });
+    }
+});
+
+// Upload avatar (URL-based for now, can be extended to file upload)
+app.post('/api/profiles/:userId/avatar', async (req, res) => {
+    try {
+        const { userId } = req.params;
+        const { avatar_url } = req.body;
+
+        if (!avatar_url) {
+            return res.status(400).json({ error: 'Missing avatar_url' });
+        }
+
+        await db.query(
+            'UPDATE users SET avatar_url = $1, updatedAt = CURRENT_TIMESTAMP WHERE id = $2',
+            [avatar_url, parseInt(userId)]
+        );
+
+        res.json({ success: true, avatar_url });
+    } catch (err) {
+        console.error('Error uploading avatar:', err);
+        res.status(500).json({ error: err.message });
+    }
+});
+
+// Get user's showcase achievements
+app.get('/api/profiles/:userId/showcase', async (req, res) => {
+    try {
+        const { userId } = req.params;
+
+        const showcase = await db.query(`
+            SELECT up.showcase_achievements
+            FROM user_profiles up
+            WHERE up.user_id = $1
+        `, [parseInt(userId)]);
+
+        if (showcase.rows.length === 0 || !showcase.rows[0].showcase_achievements) {
+            return res.json([]);
+        }
+
+        const achievementIds = showcase.rows[0].showcase_achievements;
+
+        // Get full achievement details
+        const achievements = await db.query(`
+            SELECT ua.*, a.title, a.description, a.icon, a.category, a.difficulty
+            FROM user_achievements ua
+            INNER JOIN achievements a ON ua.achievement_id = a.id
+            WHERE ua.user_id = $1 AND ua.is_unlocked = true AND a.id = ANY($2)
+            ORDER BY ua.unlockedAt DESC
+        `, [parseInt(userId), achievementIds]);
+
+        res.json(achievements.rows);
+    } catch (err) {
+        console.error('Error getting showcase achievements:', err);
+        res.status(500).json({ error: err.message });
+    }
+});
+
+// Search users by username
+app.get('/api/profiles/search/users', async (req, res) => {
+    try {
+        const { query } = req.query;
+
+        if (!query || query.length < 2) {
+            return res.status(400).json({ error: 'Query must be at least 2 characters' });
+        }
+
+        const users = await db.query(`
+            SELECT u.id, u.username, u.name, u.avatar_url, u.bio,
+                   us.total_xp, us.level, us.current_streak
+            FROM users u
+            LEFT JOIN user_stats us ON u.id = us.user_id
+            WHERE u.is_public = true
+              AND (LOWER(u.username) LIKE LOWER($1) OR LOWER(u.name) LIKE LOWER($1))
+            LIMIT 20
+        `, [`%${query}%`]);
+
+        res.json(users.rows);
+    } catch (err) {
+        console.error('Error searching users:', err);
+        res.status(500).json({ error: err.message });
+    }
+});
+
+// Get profile activity summary (for public profiles)
+app.get('/api/profiles/:userId/activity', async (req, res) => {
+    try {
+        const { userId } = req.params;
+        const { days = 30 } = req.query;
+
+        // Get recent XP activity
+        const xpActivity = await db.query(`
+            SELECT DATE(timestamp) as date, SUM(xp_amount) as total_xp, COUNT(*) as actions
+            FROM xp_log
+            WHERE user_id = $1 AND timestamp >= NOW() - INTERVAL '${parseInt(days)} days'
+            GROUP BY DATE(timestamp)
+            ORDER BY date DESC
+        `, [parseInt(userId)]);
+
+        // Get recent achievements
+        const recentAchievements = await db.query(`
+            SELECT ua.unlockedAt, a.title, a.icon, a.category
+            FROM user_achievements ua
+            INNER JOIN achievements a ON ua.achievement_id = a.id
+            WHERE ua.user_id = $1 AND ua.is_unlocked = true
+            ORDER BY ua.unlockedAt DESC
+            LIMIT 5
+        `, [parseInt(userId)]);
+
+        // Get study streak info
+        const streakInfo = await db.query(
+            'SELECT current_streak, longest_streak, last_study_date FROM user_stats WHERE user_id = $1',
+            [parseInt(userId)]
+        );
+
+        res.json({
+            xp_activity: xpActivity.rows,
+            recent_achievements: recentAchievements.rows,
+            streak: streakInfo.rows[0] || {}
+        });
+    } catch (err) {
+        console.error('Error getting profile activity:', err);
+        res.status(500).json({ error: err.message });
+    }
+});
+
+// ========================================
+// LEAGUES SYSTEM ENDPOINTS
+// ========================================
+
+// Get current week league for user
+app.get('/api/leagues/current/:userId', async (req, res) => {
+    try {
+        const { userId } = req.params;
+
+        // Get current week start (Monday)
+        const weekStart = await db.query(`
+            SELECT DATE_TRUNC('week', CURRENT_DATE)::DATE as week_start
+        `);
+        const weekStartDate = weekStart.rows[0].week_start;
+
+        // Get or create league membership for this week
+        let membership = await db.query(`
+            SELECT lm.*, lt.icon, lt.color, lt.tier_level
+            FROM league_memberships lm
+            INNER JOIN league_tiers lt ON lm.league_tier = lt.tier_name
+            WHERE lm.user_id = $1 AND lm.week_start_date = $2
+        `, [parseInt(userId), weekStartDate]);
+
+        if (membership.rows.length === 0) {
+            // Create new membership (start in Bronze by default)
+            const stats = await db.query('SELECT total_xp FROM user_stats WHERE user_id = $1', [parseInt(userId)]);
+            const totalXP = stats.rows[0]?.total_xp || 0;
+
+            // Determine starting tier based on total XP
+            const tier = await db.query(`
+                SELECT tier_name FROM league_tiers
+                WHERE min_xp_required <= $1
+                ORDER BY tier_level DESC
+                LIMIT 1
+            `, [totalXP]);
+
+            const startTier = tier.rows[0]?.tier_name || 'Bronze';
+
+            await db.query(`
+                INSERT INTO league_memberships (user_id, league_tier, week_start_date, week_xp)
+                VALUES ($1, $2, $3, 0)
+            `, [parseInt(userId), startTier, weekStartDate]);
+
+            membership = await db.query(`
+                SELECT lm.*, lt.icon, lt.color, lt.tier_level
+                FROM league_memberships lm
+                INNER JOIN league_tiers lt ON lm.league_tier = lt.tier_name
+                WHERE lm.user_id = $1 AND lm.week_start_date = $2
+            `, [parseInt(userId), weekStartDate]);
+        }
+
+        res.json(membership.rows[0]);
+    } catch (err) {
+        console.error('Error getting current league:', err);
+        res.status(500).json({ error: err.message });
+    }
+});
+
+// Get league leaderboard for current week
+app.get('/api/leagues/leaderboard/:tier', async (req, res) => {
+    try {
+        const { tier } = req.params;
+        const { limit = 50 } = req.query;
+
+        // Get current week start
+        const weekStart = await db.query(`SELECT DATE_TRUNC('week', CURRENT_DATE)::DATE as week_start`);
+        const weekStartDate = weekStart.rows[0].week_start;
+
+        const leaderboard = await db.query(`
+            SELECT
+                lm.user_id,
+                lm.week_xp,
+                lm.rank_in_league,
+                u.username,
+                u.name,
+                u.avatar_url,
+                us.level,
+                ROW_NUMBER() OVER (ORDER BY lm.week_xp DESC) as rank
+            FROM league_memberships lm
+            INNER JOIN users u ON lm.user_id = u.id
+            LEFT JOIN user_stats us ON u.id = us.user_id
+            WHERE lm.league_tier = $1 AND lm.week_start_date = $2
+            ORDER BY lm.week_xp DESC
+            LIMIT $3
+        `, [tier, weekStartDate, parseInt(limit)]);
+
+        res.json(leaderboard.rows);
+    } catch (err) {
+        console.error('Error getting league leaderboard:', err);
+        res.status(500).json({ error: err.message });
+    }
+});
+
+// Update week XP (called when user earns XP)
+app.post('/api/leagues/update-xp', async (req, res) => {
+    try {
+        const { userId, xpEarned } = req.body;
+
+        if (!userId || !xpEarned) {
+            return res.status(400).json({ error: 'Missing required fields: userId, xpEarned' });
+        }
+
+        // Get current week start
+        const weekStart = await db.query(`SELECT DATE_TRUNC('week', CURRENT_DATE)::DATE as week_start`);
+        const weekStartDate = weekStart.rows[0].week_start;
+
+        // Update week XP
+        await db.query(`
+            INSERT INTO league_memberships (user_id, league_tier, week_start_date, week_xp)
+            VALUES ($1, 'Bronze', $2, $3)
+            ON CONFLICT (user_id, week_start_date)
+            DO UPDATE SET week_xp = league_memberships.week_xp + $3
+        `, [parseInt(userId), weekStartDate, parseInt(xpEarned)]);
+
+        res.json({ success: true });
+    } catch (err) {
+        console.error('Error updating league XP:', err);
+        res.status(500).json({ error: err.message });
+    }
+});
+
+// Get user's league history
+app.get('/api/leagues/history/:userId', async (req, res) => {
+    try {
+        const { userId } = req.params;
+        const { limit = 10 } = req.query;
+
+        const history = await db.query(`
+            SELECT
+                lm.*,
+                lt.icon,
+                lt.color,
+                lt.tier_level
+            FROM league_memberships lm
+            INNER JOIN league_tiers lt ON lm.league_tier = lt.tier_name
+            WHERE lm.user_id = $1
+            ORDER BY lm.week_start_date DESC
+            LIMIT $2
+        `, [parseInt(userId), parseInt(limit)]);
+
+        res.json(history.rows);
+    } catch (err) {
+        console.error('Error getting league history:', err);
+        res.status(500).json({ error: err.message });
+    }
+});
+
+// Get all league tiers
+app.get('/api/leagues/tiers', async (req, res) => {
+    try {
+        const tiers = await db.query(`
+            SELECT * FROM league_tiers
+            ORDER BY tier_level ASC
+        `);
+
+        res.json(tiers.rows);
+    } catch (err) {
+        console.error('Error getting league tiers:', err);
+        res.status(500).json({ error: err.message });
+    }
+});
+
+// Admin: Process weekly promotions/demotions (run at end of week)
+app.post('/api/admin/leagues/process-week', async (req, res) => {
+    try {
+        // Get last week's start date
+        const lastWeekStart = await db.query(`
+            SELECT DATE_TRUNC('week', CURRENT_DATE - INTERVAL '1 week')::DATE as week_start
+        `);
+        const lastWeekStartDate = lastWeekStart.rows[0].week_start;
+
+        // Get current week start
+        const weekStart = await db.query(`
+            SELECT DATE_TRUNC('week', CURRENT_DATE)::DATE as week_start
+        `);
+        const weekStartDate = weekStart.rows[0].week_start;
+
+        // Get all users in last week's leagues with their ranks
+        const lastWeekUsers = await db.query(`
+            SELECT
+                lm.user_id,
+                lm.league_tier,
+                lm.week_xp,
+                lt.tier_level,
+                lt.promotion_threshold,
+                lt.demotion_threshold,
+                ROW_NUMBER() OVER (PARTITION BY lm.league_tier ORDER BY lm.week_xp DESC) as rank
+            FROM league_memberships lm
+            INNER JOIN league_tiers lt ON lm.league_tier = lt.tier_name
+            WHERE lm.week_start_date = $1
+        `, [lastWeekStartDate]);
+
+        await db.query('BEGIN');
+
+        for (const user of lastWeekUsers.rows) {
+            let newTier = user.league_tier;
+            let promoted = false;
+            let demoted = false;
+
+            // Check for promotion
+            if (user.promotion_threshold && user.rank <= user.promotion_threshold) {
+                const higherTier = await db.query(
+                    'SELECT tier_name FROM league_tiers WHERE tier_level = $1',
+                    [user.tier_level + 1]
+                );
+                if (higherTier.rows.length > 0) {
+                    newTier = higherTier.rows[0].tier_name;
+                    promoted = true;
+                }
+            }
+
+            // Check for demotion
+            if (user.demotion_threshold && user.rank >= user.demotion_threshold && !promoted) {
+                const lowerTier = await db.query(
+                    'SELECT tier_name FROM league_tiers WHERE tier_level = $1',
+                    [user.tier_level - 1]
+                );
+                if (lowerTier.rows.length > 0) {
+                    newTier = lowerTier.rows[0].tier_name;
+                    demoted = true;
+                }
+            }
+
+            // Update last week's record
+            await db.query(`
+                UPDATE league_memberships
+                SET rank_in_league = $1, promoted = $2, demoted = $3
+                WHERE user_id = $4 AND week_start_date = $5
+            `, [user.rank, promoted, demoted, user.user_id, lastWeekStartDate]);
+
+            // Create new week's membership
+            await db.query(`
+                INSERT INTO league_memberships (user_id, league_tier, week_start_date, week_xp)
+                VALUES ($1, $2, $3, 0)
+                ON CONFLICT (user_id, week_start_date) DO NOTHING
+            `, [user.user_id, newTier, weekStartDate]);
+        }
+
+        await db.query('COMMIT');
+
+        res.json({ success: true, processed: lastWeekUsers.rows.length });
+    } catch (err) {
+        await db.query('ROLLBACK');
+        console.error('Error processing weekly leagues:', err);
         res.status(500).json({ error: err.message });
     }
 });
