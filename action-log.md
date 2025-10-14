@@ -2,6 +2,79 @@
 
 ## 2025-10-14
 
+### Streak Freeze System (Backend)
+**Commit:** ❄️ FREEZE: Complete streak freeze system
+
+**Изменения:**
+- База данных: `streak_freezes` table (id, user_id, freeze_days, purchased_at, expires_at, is_active, used_on_date)
+- API Endpoints (3 новых):
+  - `POST /api/streak-freeze/purchase` - купить заморозку стрика
+  - `GET /api/streak-freeze/:userId` - получить активные заморозки
+  - `POST /api/streak-freeze/use` - использовать заморозку (auto-called при пропуске дня)
+
+**Файлы:**
+- [server-postgresql.js:434-446](server-postgresql.js#L434-L446) - таблица
+- [server-postgresql.js:4808-4890](server-postgresql.js#L4808-L4890) - API endpoints
+
+**Функциональность:**
+- Expiration tracking: заморозки действуют N дней с момента покупки
+- Auto-use: старейшая активная заморозка используется автоматически при пропуске
+- Multi-freeze support: можно иметь несколько активных заморозок
+- Purchase tracking: история покупок с датами
+
+### Daily Goals System (Backend)
+**Commit:** 🎯 GOALS: Complete daily goals system with auto-rewards
+
+**Изменения:**
+- База данных: `daily_goals` table (id, user_id, goal_date, goal_type, target_value, current_progress, is_completed, completed_at, reward_xp, reward_coins, UNIQUE constraint)
+- API Endpoints (3 новых):
+  - `GET /api/daily-goals/:userId` - получить или создать цели на сегодня (auto-create 3 default goals)
+  - `POST /api/daily-goals/progress` - обновить прогресс цели (auto-complete + rewards)
+  - `GET /api/daily-goals/stats/:userId` - статистика по целям за N дней
+
+**Файлы:**
+- [server-postgresql.js:448-463](server-postgresql.js#L448-L463) - таблица
+- [server-postgresql.js:4892-5085](server-postgresql.js#L4892-L5085) - API endpoints
+
+**Функциональность:**
+- Auto-generation: 3 default goals каждый день (xp: 50, words_learned: 10, quizzes: 5)
+- Progress tracking: incremental updates с auto-completion
+- Auto-rewards: XP + coins автоматически начисляются при завершении
+- Goal types: xp, words_learned, quizzes (расширяемо)
+- Daily reset: новые цели создаются каждый день
+- Stats: total goals, completion rate, earned rewards
+
+### Duels System (Backend)
+**Commit:** ⚔️ DUELS: Complete 1v1 battles system
+
+**Изменения:**
+- База данных (2 таблицы):
+  - `duels` table: id, challenger_id, opponent_id, status, language_pair_id, total_questions, time_limit_seconds, challenger_score, opponent_score, winner_id, started_at, completed_at, CHECK constraint
+  - `duel_answers` table: id, duel_id, user_id, word_id, is_correct, answer_time_ms, answeredAt
+
+- API Endpoints (7 новых):
+  - `POST /api/duels/challenge` - вызвать друга на дуэль
+  - `POST /api/duels/:duelId/accept` - принять вызов
+  - `POST /api/duels/:duelId/decline` - отклонить вызов
+  - `POST /api/duels/:duelId/answer` - отправить ответ (auto-complete duel)
+  - `GET /api/duels/:duelId` - детали дуэли (с ответами)
+  - `GET /api/duels/user/:userId` - все дуэли пользователя
+  - `GET /api/duels/stats/:userId` - статистика (wins/losses/draws)
+
+**Файлы:**
+- [server-postgresql.js:465-496](server-postgresql.js#L465-L496) - таблицы
+- [server-postgresql.js:5087-5362](server-postgresql.js#L5087-L5362) - API endpoints
+
+**Функциональность:**
+- Challenge workflow: pending → active → completed/declined
+- Real-time scoring: обновление счета после каждого ответа
+- Auto-completion: дуэль завершается когда оба игрока ответили на все вопросы
+- Winner determination: автоматическое определение победителя по счету
+- XP rewards: 100 XP победителю
+- Answer tracking: сохранение всех ответов с временем
+- Stats: общая статистика побед/поражений/ничьих
+- Activity logging: интеграция с friend activities
+
 ### User Profiles System (Backend)
 **Commit:** 👤 PROFILES: Complete user profiles system with public profiles
 

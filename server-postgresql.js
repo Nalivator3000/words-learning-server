@@ -431,6 +431,70 @@ async function initDatabase() {
             )
         `);
 
+        // Streak Freeze System: Active freezes
+        await db.query(`
+            CREATE TABLE IF NOT EXISTS streak_freezes (
+                id SERIAL PRIMARY KEY,
+                user_id INTEGER REFERENCES users(id) ON DELETE CASCADE,
+                freeze_days INTEGER NOT NULL,
+                purchased_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+                expires_at TIMESTAMP NOT NULL,
+                is_active BOOLEAN DEFAULT true,
+                used_on_date DATE,
+                createdAt TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+            )
+        `);
+
+        // Daily Goals System: User daily goals
+        await db.query(`
+            CREATE TABLE IF NOT EXISTS daily_goals (
+                id SERIAL PRIMARY KEY,
+                user_id INTEGER REFERENCES users(id) ON DELETE CASCADE,
+                goal_date DATE NOT NULL,
+                goal_type VARCHAR(50) NOT NULL,
+                target_value INTEGER NOT NULL,
+                current_progress INTEGER DEFAULT 0,
+                is_completed BOOLEAN DEFAULT false,
+                completed_at TIMESTAMP,
+                reward_xp INTEGER DEFAULT 0,
+                reward_coins INTEGER DEFAULT 0,
+                UNIQUE(user_id, goal_date, goal_type)
+            )
+        `);
+
+        // Duels System: 1v1 battles
+        await db.query(`
+            CREATE TABLE IF NOT EXISTS duels (
+                id SERIAL PRIMARY KEY,
+                challenger_id INTEGER REFERENCES users(id) ON DELETE CASCADE,
+                opponent_id INTEGER REFERENCES users(id) ON DELETE CASCADE,
+                status VARCHAR(20) DEFAULT 'pending',
+                language_pair_id INTEGER REFERENCES language_pairs(id),
+                total_questions INTEGER DEFAULT 10,
+                time_limit_seconds INTEGER DEFAULT 300,
+                challenger_score INTEGER DEFAULT 0,
+                opponent_score INTEGER DEFAULT 0,
+                winner_id INTEGER REFERENCES users(id),
+                started_at TIMESTAMP,
+                completed_at TIMESTAMP,
+                createdAt TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+                CHECK (challenger_id != opponent_id)
+            )
+        `);
+
+        // Duels System: Duel answers
+        await db.query(`
+            CREATE TABLE IF NOT EXISTS duel_answers (
+                id SERIAL PRIMARY KEY,
+                duel_id INTEGER REFERENCES duels(id) ON DELETE CASCADE,
+                user_id INTEGER REFERENCES users(id) ON DELETE CASCADE,
+                word_id INTEGER REFERENCES words(id) ON DELETE CASCADE,
+                is_correct BOOLEAN NOT NULL,
+                answer_time_ms INTEGER,
+                answeredAt TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+            )
+        `);
+
         // Daily Challenges System: Challenge templates
         await db.query(`
             CREATE TABLE IF NOT EXISTS challenge_templates (
@@ -4770,6 +4834,529 @@ app.post('/api/admin/leagues/process-week', async (req, res) => {
     } catch (err) {
         await db.query('ROLLBACK');
         console.error('Error processing weekly leagues:', err);
+        res.status(500).json({ error: err.message });
+    }
+});
+
+// ========================================
+// STREAK FREEZE SYSTEM ENDPOINTS
+// ========================================
+
+// Purchase streak freeze
+app.post('/api/streak-freeze/purchase', async (req, res) => {
+    try {
+        const { userId, freezeDays } = req.body;
+
+        if (!userId || !freezeDays) {
+            return res.status(400).json({ error: 'Missing required fields: userId, freezeDays' });
+        }
+
+        // Calculate expiration (freezeDays from now)
+        const expiresAt = new Date();
+        expiresAt.setDate(expiresAt.getDate() + parseInt(freezeDays));
+
+        await db.query(`
+            INSERT INTO streak_freezes (user_id, freeze_days, expires_at)
+            VALUES ($1, $2, $3)
+        `, [parseInt(userId), parseInt(freezeDays), expiresAt]);
+
+        res.json({ success: true, expires_at: expiresAt });
+    } catch (err) {
+        console.error('Error purchasing streak freeze:', err);
+        res.status(500).json({ error: err.message });
+    }
+});
+
+// Get active streak freezes
+app.get('/api/streak-freeze/:userId', async (req, res) => {
+    try {
+        const { userId } = req.params;
+
+        const freezes = await db.query(`
+            SELECT * FROM streak_freezes
+            WHERE user_id = $1 AND is_active = true AND expires_at > NOW()
+            ORDER BY expires_at ASC
+        `, [parseInt(userId)]);
+
+        res.json(freezes.rows);
+    } catch (err) {
+        console.error('Error getting streak freezes:', err);
+        res.status(500).json({ error: err.message });
+    }
+});
+
+// Use streak freeze (auto-called when streak would break)
+app.post('/api/streak-freeze/use', async (req, res) => {
+    try {
+        const { userId, date } = req.body;
+
+        if (!userId) {
+            return res.status(400).json({ error: 'Missing userId' });
+        }
+
+        const useDate = date || new Date().toISOString().split('T')[0];
+
+        // Find oldest active freeze
+        const freeze = await db.query(`
+            SELECT * FROM streak_freezes
+            WHERE user_id = $1 AND is_active = true AND expires_at > NOW() AND used_on_date IS NULL
+            ORDER BY purchased_at ASC
+            LIMIT 1
+        `, [parseInt(userId)]);
+
+        if (freeze.rows.length === 0) {
+            return res.status(404).json({ error: 'No active freeze available' });
+        }
+
+        // Mark as used
+        await db.query(`
+            UPDATE streak_freezes
+            SET used_on_date = $1, is_active = false
+            WHERE id = $2
+        `, [useDate, freeze.rows[0].id]);
+
+        res.json({ success: true, freeze_used: freeze.rows[0] });
+    } catch (err) {
+        console.error('Error using streak freeze:', err);
+        res.status(500).json({ error: err.message });
+    }
+});
+
+// ========================================
+// DAILY GOALS SYSTEM ENDPOINTS
+// ========================================
+
+// Get or create daily goals for user
+app.get('/api/daily-goals/:userId', async (req, res) => {
+    try {
+        const { userId } = req.params;
+        const today = new Date().toISOString().split('T')[0];
+
+        // Check if goals exist for today
+        let goals = await db.query(`
+            SELECT * FROM daily_goals
+            WHERE user_id = $1 AND goal_date = $2
+            ORDER BY goal_type
+        `, [parseInt(userId), today]);
+
+        if (goals.rows.length === 0) {
+            // Create default goals
+            const defaultGoals = [
+                { type: 'xp', target: 50, reward_xp: 25, reward_coins: 5 },
+                { type: 'words_learned', target: 10, reward_xp: 50, reward_coins: 10 },
+                { type: 'quizzes', target: 5, reward_xp: 30, reward_coins: 5 }
+            ];
+
+            await db.query('BEGIN');
+
+            for (const goal of defaultGoals) {
+                await db.query(`
+                    INSERT INTO daily_goals (user_id, goal_date, goal_type, target_value, reward_xp, reward_coins)
+                    VALUES ($1, $2, $3, $4, $5, $6)
+                `, [parseInt(userId), today, goal.type, goal.target, goal.reward_xp, goal.reward_coins]);
+            }
+
+            await db.query('COMMIT');
+
+            goals = await db.query(`
+                SELECT * FROM daily_goals
+                WHERE user_id = $1 AND goal_date = $2
+                ORDER BY goal_type
+            `, [parseInt(userId), today]);
+        }
+
+        res.json(goals.rows);
+    } catch (err) {
+        await db.query('ROLLBACK');
+        console.error('Error getting daily goals:', err);
+        res.status(500).json({ error: err.message });
+    }
+});
+
+// Update goal progress
+app.post('/api/daily-goals/progress', async (req, res) => {
+    try {
+        const { userId, goalType, increment = 1 } = req.body;
+
+        if (!userId || !goalType) {
+            return res.status(400).json({ error: 'Missing required fields: userId, goalType' });
+        }
+
+        const today = new Date().toISOString().split('T')[0];
+
+        await db.query('BEGIN');
+
+        // Update progress
+        const result = await db.query(`
+            UPDATE daily_goals
+            SET current_progress = current_progress + $1
+            WHERE user_id = $2 AND goal_date = $3 AND goal_type = $4
+            RETURNING *
+        `, [parseInt(increment), parseInt(userId), today, goalType]);
+
+        if (result.rows.length === 0) {
+            await db.query('ROLLBACK');
+            return res.status(404).json({ error: 'Goal not found' });
+        }
+
+        const goal = result.rows[0];
+
+        // Check if goal completed
+        if (!goal.is_completed && goal.current_progress >= goal.target_value) {
+            // Mark as completed
+            await db.query(`
+                UPDATE daily_goals
+                SET is_completed = true, completed_at = CURRENT_TIMESTAMP
+                WHERE id = $1
+            `, [goal.id]);
+
+            // Award rewards
+            if (goal.reward_xp > 0) {
+                await db.query(
+                    'INSERT INTO xp_log (user_id, xp_amount, action_type, action_details) VALUES ($1, $2, $3, $4)',
+                    [parseInt(userId), goal.reward_xp, 'daily_goal', `Completed goal: ${goalType}`]
+                );
+
+                await db.query(
+                    'UPDATE user_stats SET total_xp = total_xp + $1 WHERE user_id = $2',
+                    [goal.reward_xp, parseInt(userId)]
+                );
+            }
+
+            if (goal.reward_coins > 0) {
+                const stats = await db.query('SELECT coins_balance FROM user_stats WHERE user_id = $1', [parseInt(userId)]);
+                const currentBalance = stats.rows[0]?.coins_balance || 0;
+                const newBalance = currentBalance + goal.reward_coins;
+
+                await db.query(
+                    'UPDATE user_stats SET coins_balance = $1 WHERE user_id = $2',
+                    [newBalance, parseInt(userId)]
+                );
+
+                await db.query(`
+                    INSERT INTO coin_transactions (user_id, amount, transaction_type, source, description, balance_after)
+                    VALUES ($1, $2, 'earn', 'daily_goal', $3, $4)
+                `, [parseInt(userId), goal.reward_coins, `Daily goal: ${goalType}`, newBalance]);
+            }
+
+            await db.query('COMMIT');
+
+            res.json({
+                completed: true,
+                goal: result.rows[0],
+                rewards: {
+                    xp: goal.reward_xp,
+                    coins: goal.reward_coins
+                }
+            });
+        } else {
+            await db.query('COMMIT');
+            res.json({ completed: false, goal: result.rows[0] });
+        }
+    } catch (err) {
+        await db.query('ROLLBACK');
+        console.error('Error updating goal progress:', err);
+        res.status(500).json({ error: err.message });
+    }
+});
+
+// Get goal stats
+app.get('/api/daily-goals/stats/:userId', async (req, res) => {
+    try {
+        const { userId } = req.params;
+        const { days = 30 } = req.query;
+
+        const stats = await db.query(`
+            SELECT
+                COUNT(*) as total_goals,
+                COUNT(*) FILTER (WHERE is_completed = true) as completed_goals,
+                SUM(reward_xp) FILTER (WHERE is_completed = true) as total_xp_earned,
+                SUM(reward_coins) FILTER (WHERE is_completed = true) as total_coins_earned,
+                COUNT(DISTINCT goal_date) FILTER (WHERE is_completed = true) as days_completed
+            FROM daily_goals
+            WHERE user_id = $1 AND goal_date >= CURRENT_DATE - INTERVAL '${parseInt(days)} days'
+        `, [parseInt(userId)]);
+
+        res.json(stats.rows[0]);
+    } catch (err) {
+        console.error('Error getting goal stats:', err);
+        res.status(500).json({ error: err.message });
+    }
+});
+
+// ========================================
+// DUELS SYSTEM ENDPOINTS
+// ========================================
+
+// Challenge friend to duel
+app.post('/api/duels/challenge', async (req, res) => {
+    try {
+        const { challengerId, opponentId, languagePairId, totalQuestions = 10, timeLimitSeconds = 300 } = req.body;
+
+        if (!challengerId || !opponentId) {
+            return res.status(400).json({ error: 'Missing required fields: challengerId, opponentId' });
+        }
+
+        if (parseInt(challengerId) === parseInt(opponentId)) {
+            return res.status(400).json({ error: 'Cannot challenge yourself' });
+        }
+
+        const duel = await db.query(`
+            INSERT INTO duels (challenger_id, opponent_id, language_pair_id, total_questions, time_limit_seconds, status)
+            VALUES ($1, $2, $3, $4, $5, 'pending')
+            RETURNING *
+        `, [parseInt(challengerId), parseInt(opponentId), languagePairId ? parseInt(languagePairId) : null, parseInt(totalQuestions), parseInt(timeLimitSeconds)]);
+
+        // Log activity
+        await db.query(`
+            INSERT INTO friend_activities (user_id, activity_type, activity_data)
+            VALUES ($1, 'duel_challenged', $2)
+        `, [parseInt(challengerId), JSON.stringify({ opponent_id: parseInt(opponentId), duel_id: duel.rows[0].id })]);
+
+        res.json(duel.rows[0]);
+    } catch (err) {
+        console.error('Error creating duel:', err);
+        res.status(500).json({ error: err.message });
+    }
+});
+
+// Accept duel
+app.post('/api/duels/:duelId/accept', async (req, res) => {
+    try {
+        const { duelId } = req.params;
+        const { userId } = req.body;
+
+        // Verify user is the opponent
+        const duel = await db.query(
+            'SELECT * FROM duels WHERE id = $1 AND opponent_id = $2 AND status = $3',
+            [parseInt(duelId), parseInt(userId), 'pending']
+        );
+
+        if (duel.rows.length === 0) {
+            return res.status(404).json({ error: 'Duel not found or already processed' });
+        }
+
+        // Start duel
+        const result = await db.query(`
+            UPDATE duels
+            SET status = 'active', started_at = CURRENT_TIMESTAMP
+            WHERE id = $1
+            RETURNING *
+        `, [parseInt(duelId)]);
+
+        res.json(result.rows[0]);
+    } catch (err) {
+        console.error('Error accepting duel:', err);
+        res.status(500).json({ error: err.message });
+    }
+});
+
+// Decline duel
+app.post('/api/duels/:duelId/decline', async (req, res) => {
+    try {
+        const { duelId } = req.params;
+        const { userId } = req.body;
+
+        const duel = await db.query(
+            'SELECT * FROM duels WHERE id = $1 AND opponent_id = $2 AND status = $3',
+            [parseInt(duelId), parseInt(userId), 'pending']
+        );
+
+        if (duel.rows.length === 0) {
+            return res.status(404).json({ error: 'Duel not found or already processed' });
+        }
+
+        await db.query(
+            'UPDATE duels SET status = $1 WHERE id = $2',
+            ['declined', parseInt(duelId)]
+        );
+
+        res.json({ success: true, message: 'Duel declined' });
+    } catch (err) {
+        console.error('Error declining duel:', err);
+        res.status(500).json({ error: err.message });
+    }
+});
+
+// Submit duel answer
+app.post('/api/duels/:duelId/answer', async (req, res) => {
+    try {
+        const { duelId } = req.params;
+        const { userId, wordId, isCorrect, answerTimeMs } = req.body;
+
+        if (!userId || wordId === undefined || isCorrect === undefined) {
+            return res.status(400).json({ error: 'Missing required fields' });
+        }
+
+        await db.query('BEGIN');
+
+        // Save answer
+        await db.query(`
+            INSERT INTO duel_answers (duel_id, user_id, word_id, is_correct, answer_time_ms)
+            VALUES ($1, $2, $3, $4, $5)
+        `, [parseInt(duelId), parseInt(userId), parseInt(wordId), isCorrect, answerTimeMs || null]);
+
+        // Update score
+        const duel = await db.query('SELECT * FROM duels WHERE id = $1', [parseInt(duelId)]);
+        const duelData = duel.rows[0];
+
+        if (isCorrect) {
+            if (parseInt(userId) === duelData.challenger_id) {
+                await db.query(
+                    'UPDATE duels SET challenger_score = challenger_score + 1 WHERE id = $1',
+                    [parseInt(duelId)]
+                );
+            } else {
+                await db.query(
+                    'UPDATE duels SET opponent_score = opponent_score + 1 WHERE id = $1',
+                    [parseInt(duelId)]
+                );
+            }
+        }
+
+        // Check if duel is complete
+        const answerCount = await db.query(
+            'SELECT COUNT(*) as count FROM duel_answers WHERE duel_id = $1',
+            [parseInt(duelId)]
+        );
+
+        const totalAnswers = parseInt(answerCount.rows[0].count);
+        const expectedAnswers = duelData.total_questions * 2; // Both players answer all questions
+
+        if (totalAnswers >= expectedAnswers) {
+            // Duel complete, determine winner
+            const finalDuel = await db.query('SELECT * FROM duels WHERE id = $1', [parseInt(duelId)]);
+            const fd = finalDuel.rows[0];
+
+            let winnerId = null;
+            if (fd.challenger_score > fd.opponent_score) {
+                winnerId = fd.challenger_id;
+            } else if (fd.opponent_score > fd.challenger_score) {
+                winnerId = fd.opponent_id;
+            }
+
+            await db.query(`
+                UPDATE duels
+                SET status = 'completed', winner_id = $1, completed_at = CURRENT_TIMESTAMP
+                WHERE id = $2
+            `, [winnerId, parseInt(duelId)]);
+
+            // Award XP to winner
+            if (winnerId) {
+                await db.query(
+                    'INSERT INTO xp_log (user_id, xp_amount, action_type, action_details) VALUES ($1, $2, $3, $4)',
+                    [winnerId, 100, 'duel_won', `Duel victory`]
+                );
+
+                await db.query(
+                    'UPDATE user_stats SET total_xp = total_xp + $1 WHERE user_id = $2',
+                    [100, winnerId]
+                );
+            }
+        }
+
+        await db.query('COMMIT');
+
+        res.json({ success: true });
+    } catch (err) {
+        await db.query('ROLLBACK');
+        console.error('Error submitting duel answer:', err);
+        res.status(500).json({ error: err.message });
+    }
+});
+
+// Get duel details
+app.get('/api/duels/:duelId', async (req, res) => {
+    try {
+        const { duelId } = req.params;
+
+        const duel = await db.query(`
+            SELECT d.*,
+                   u1.name as challenger_name, u1.avatar_url as challenger_avatar,
+                   u2.name as opponent_name, u2.avatar_url as opponent_avatar,
+                   u3.name as winner_name
+            FROM duels d
+            LEFT JOIN users u1 ON d.challenger_id = u1.id
+            LEFT JOIN users u2 ON d.opponent_id = u2.id
+            LEFT JOIN users u3 ON d.winner_id = u3.id
+            WHERE d.id = $1
+        `, [parseInt(duelId)]);
+
+        if (duel.rows.length === 0) {
+            return res.status(404).json({ error: 'Duel not found' });
+        }
+
+        // Get answers
+        const answers = await db.query(
+            'SELECT * FROM duel_answers WHERE duel_id = $1 ORDER BY answeredAt',
+            [parseInt(duelId)]
+        );
+
+        res.json({
+            ...duel.rows[0],
+            answers: answers.rows
+        });
+    } catch (err) {
+        console.error('Error getting duel:', err);
+        res.status(500).json({ error: err.message });
+    }
+});
+
+// Get user's duels
+app.get('/api/duels/user/:userId', async (req, res) => {
+    try {
+        const { userId } = req.params;
+        const { status } = req.query;
+
+        let query = `
+            SELECT d.*,
+                   u1.name as challenger_name, u1.avatar_url as challenger_avatar,
+                   u2.name as opponent_name, u2.avatar_url as opponent_avatar,
+                   u3.name as winner_name
+            FROM duels d
+            LEFT JOIN users u1 ON d.challenger_id = u1.id
+            LEFT JOIN users u2 ON d.opponent_id = u2.id
+            LEFT JOIN users u3 ON d.winner_id = u3.id
+            WHERE (d.challenger_id = $1 OR d.opponent_id = $1)
+        `;
+
+        const params = [parseInt(userId)];
+
+        if (status) {
+            query += ' AND d.status = $2';
+            params.push(status);
+        }
+
+        query += ' ORDER BY d.createdAt DESC LIMIT 50';
+
+        const duels = await db.query(query, params);
+
+        res.json(duels.rows);
+    } catch (err) {
+        console.error('Error getting user duels:', err);
+        res.status(500).json({ error: err.message });
+    }
+});
+
+// Get duel stats
+app.get('/api/duels/stats/:userId', async (req, res) => {
+    try {
+        const { userId } = req.params;
+
+        const stats = await db.query(`
+            SELECT
+                COUNT(*) as total_duels,
+                COUNT(*) FILTER (WHERE winner_id = $1) as wins,
+                COUNT(*) FILTER (WHERE winner_id IS NOT NULL AND winner_id != $1) as losses,
+                COUNT(*) FILTER (WHERE winner_id IS NULL AND status = 'completed') as draws,
+                COUNT(*) FILTER (WHERE status = 'pending' AND opponent_id = $1) as pending_challenges
+            FROM duels
+            WHERE (challenger_id = $1 OR opponent_id = $1) AND status IN ('completed', 'pending')
+        `, [parseInt(userId)]);
+
+        res.json(stats.rows[0]);
+    } catch (err) {
+        console.error('Error getting duel stats:', err);
         res.status(500).json({ error: err.message });
     }
 });
