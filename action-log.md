@@ -2,6 +2,91 @@
 
 ## 2025-10-14
 
+### Boosters System (Backend)
+**Commit:** 🚀 BOOSTERS: Complete power-ups system with time-limited boosters
+
+**Изменения:**
+- База данных: `boosters` table (id, user_id, booster_type, multiplier, duration_minutes, purchased_at, activated_at, expires_at, is_active, is_used)
+- API Endpoints (6 новых):
+  - `POST /api/boosters/purchase` - купить бустер (coins → booster, transaction log)
+  - `POST /api/boosters/:boosterId/activate` - активировать бустер (начать таймер)
+  - `GET /api/boosters/active/:userId` - активные бустеры (unexpired только)
+  - `GET /api/boosters/inventory/:userId` - инвентарь бустеров (не активированные)
+  - `GET /api/boosters/history/:userId` - история использованных бустеров
+  - `POST /api/boosters/apply-multiplier` - применить множитель к XP (auto-calculation)
+
+**Файлы:**
+- [server-postgresql.js:498-513](server-postgresql.js#L498-L513) - таблица
+- [server-postgresql.js:5385-5601](server-postgresql.js#L5385-L5601) - API endpoints
+
+**Функциональность:**
+- Purchase-Activate workflow: купить → сохранить в инвентарь → активировать при необходимости
+- Time-based expiration: бустер действует N минут с момента активации
+- Type restriction: можно иметь только 1 активный бустер каждого типа одновременно
+- Multiplier application: умножает baseXp на multiplier (1.5x, 2.0x, 3.0x)
+- Coin deduction: проверка баланса перед покупкой, transaction log
+- Usage tracking: is_used флаг для истории
+- Booster types: xp_booster, coin_booster, learning_booster (расширяемо)
+
+### Push Notifications System (Backend)
+**Commit:** 🔔 NOTIFICATIONS: Complete push notifications system with preferences
+
+**Изменения:**
+- База данных (3 таблицы):
+  - `push_subscriptions` - подписки на push (id, user_id, endpoint UNIQUE, keys_p256dh, keys_auth, user_agent, is_active, created_at, last_used_at)
+  - `notification_preferences` - настройки уведомлений (id, user_id UNIQUE, daily_reminder, daily_reminder_time, streak_warning, achievements, friend_requests, duel_challenges, new_followers, weekly_report)
+  - `notification_history` - история уведомлений (id, user_id, notification_type, title, body, data JSONB, is_read, sent_at, read_at)
+
+- API Endpoints (8 новых):
+  - `POST /api/notifications/subscribe` - подписаться на push (Web Push API subscription)
+  - `POST /api/notifications/unsubscribe` - отписаться от push
+  - `GET /api/notifications/preferences/:userId` - получить настройки (auto-create defaults)
+  - `PUT /api/notifications/preferences/:userId` - обновить настройки (гранулярный контроль)
+  - `POST /api/notifications/send` - отправить уведомление (internal use, backend-triggered)
+  - `GET /api/notifications/history/:userId` - история уведомлений (last 50)
+  - `PUT /api/notifications/:notificationId/read` - пометить как прочитанное
+  - `GET /api/notifications/unread-count/:userId` - количество непрочитанных
+
+**Файлы:**
+- [server-postgresql.js:515-561](server-postgresql.js#L515-L561) - таблицы
+- [server-postgresql.js:5603-5810](server-postgresql.js#L5603-L5810) - API endpoints
+
+**Функциональность:**
+- Web Push API integration: endpoint + keys (p256dh, auth) для браузерных уведомлений
+- Subscription management: update existing или create new, is_active флаг
+- Notification preferences: 8 типов уведомлений с индивидуальным контролем
+- Daily reminder time: пользователь выбирает время для ежедневного напоминания
+- Notification history: сохранение всех отправленных уведомлений
+- Read/Unread tracking: is_read флаг + read_at timestamp
+- Data payload: JSONB поле для дополнительных данных (achievement details, friend info, etc.)
+- Multi-device support: один пользователь может иметь несколько subscriptions
+
+### User Settings System (Backend)
+**Commit:** ⚙️ SETTINGS: Complete user preferences system
+
+**Изменения:**
+- База данных: `user_settings` table (id, user_id UNIQUE, theme, language, timezone, date_format, time_format, sound_effects, animations, auto_play_audio, speech_rate, speech_pitch, speech_volume, created_at, updated_at)
+- API Endpoints (4 новых):
+  - `GET /api/settings/:userId` - получить настройки (auto-create defaults)
+  - `PUT /api/settings/:userId` - обновить все настройки (bulk update)
+  - `PATCH /api/settings/:userId/:setting` - обновить одну настройку (granular)
+  - `POST /api/settings/:userId/reset` - сбросить на дефолты
+
+**Файлы:**
+- [server-postgresql.js:563-582](server-postgresql.js#L563-L582) - таблица
+- [server-postgresql.js:5813-5923](server-postgresql.js#L5813-L5923) - API endpoints
+
+**Функциональность:**
+- Theme preferences: auto, light, dark (system detection)
+- Localization: language, timezone, date_format, time_format
+- UI preferences: sound_effects, animations (accessibility)
+- TTS settings: auto_play_audio, speech_rate (0.5-2.0), speech_pitch (0.5-2.0), speech_volume (0.0-1.0)
+- Auto-creation: дефолтные настройки создаются при первом запросе
+- Flexible updates: обновление всех полей или только одного
+- Reset to defaults: очистка + создание новой записи с дефолтами
+- Validation: whitelist allowed settings для PATCH endpoint
+- Timestamp tracking: updated_at обновляется при каждом изменении
+
 ### Streak Freeze System (Backend)
 **Commit:** ❄️ FREEZE: Complete streak freeze system
 

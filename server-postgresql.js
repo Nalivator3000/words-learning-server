@@ -495,6 +495,92 @@ async function initDatabase() {
             )
         `);
 
+        // Boosters System: Temporary power-ups
+        await db.query(`
+            CREATE TABLE IF NOT EXISTS boosters (
+                id SERIAL PRIMARY KEY,
+                user_id INTEGER REFERENCES users(id) ON DELETE CASCADE,
+                booster_type VARCHAR(50) NOT NULL,
+                multiplier DECIMAL(3,2) NOT NULL,
+                duration_minutes INTEGER NOT NULL,
+                purchased_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+                activated_at TIMESTAMP,
+                expires_at TIMESTAMP,
+                is_active BOOLEAN DEFAULT false,
+                is_used BOOLEAN DEFAULT false,
+                createdAt TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+            )
+        `);
+
+        // Push Notifications System: Subscriptions
+        await db.query(`
+            CREATE TABLE IF NOT EXISTS push_subscriptions (
+                id SERIAL PRIMARY KEY,
+                user_id INTEGER REFERENCES users(id) ON DELETE CASCADE,
+                endpoint TEXT NOT NULL UNIQUE,
+                keys_p256dh TEXT NOT NULL,
+                keys_auth TEXT NOT NULL,
+                user_agent TEXT,
+                is_active BOOLEAN DEFAULT true,
+                created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+                last_used_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+            )
+        `);
+
+        // Notification preferences
+        await db.query(`
+            CREATE TABLE IF NOT EXISTS notification_preferences (
+                id SERIAL PRIMARY KEY,
+                user_id INTEGER REFERENCES users(id) ON DELETE CASCADE UNIQUE,
+                daily_reminder BOOLEAN DEFAULT true,
+                daily_reminder_time TIME DEFAULT '19:00:00',
+                streak_warning BOOLEAN DEFAULT true,
+                achievements BOOLEAN DEFAULT true,
+                friend_requests BOOLEAN DEFAULT true,
+                duel_challenges BOOLEAN DEFAULT true,
+                new_followers BOOLEAN DEFAULT true,
+                weekly_report BOOLEAN DEFAULT true,
+                created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+                updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+            )
+        `);
+
+        // Notification history
+        await db.query(`
+            CREATE TABLE IF NOT EXISTS notification_history (
+                id SERIAL PRIMARY KEY,
+                user_id INTEGER REFERENCES users(id) ON DELETE CASCADE,
+                notification_type VARCHAR(50) NOT NULL,
+                title VARCHAR(255) NOT NULL,
+                body TEXT,
+                data JSONB,
+                is_read BOOLEAN DEFAULT false,
+                sent_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+                read_at TIMESTAMP
+            )
+        `);
+
+        // User Settings System: General preferences
+        await db.query(`
+            CREATE TABLE IF NOT EXISTS user_settings (
+                id SERIAL PRIMARY KEY,
+                user_id INTEGER REFERENCES users(id) ON DELETE CASCADE UNIQUE,
+                theme VARCHAR(20) DEFAULT 'auto',
+                language VARCHAR(10) DEFAULT 'en',
+                timezone VARCHAR(50) DEFAULT 'UTC',
+                date_format VARCHAR(20) DEFAULT 'YYYY-MM-DD',
+                time_format VARCHAR(10) DEFAULT '24h',
+                sound_effects BOOLEAN DEFAULT true,
+                animations BOOLEAN DEFAULT true,
+                auto_play_audio BOOLEAN DEFAULT true,
+                speech_rate DECIMAL(3,2) DEFAULT 1.0,
+                speech_pitch DECIMAL(3,2) DEFAULT 1.0,
+                speech_volume DECIMAL(3,2) DEFAULT 1.0,
+                created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+                updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+            )
+        `);
+
         // Daily Challenges System: Challenge templates
         await db.query(`
             CREATE TABLE IF NOT EXISTS challenge_templates (
@@ -5357,6 +5443,481 @@ app.get('/api/duels/stats/:userId', async (req, res) => {
         res.json(stats.rows[0]);
     } catch (err) {
         console.error('Error getting duel stats:', err);
+        res.status(500).json({ error: err.message });
+    }
+});
+
+// =========================
+// BOOSTERS SYSTEM
+// =========================
+
+// Purchase booster (not activated yet)
+app.post('/api/boosters/purchase', async (req, res) => {
+    try {
+        const { userId, boosterType, multiplier, durationMinutes, cost } = req.body;
+
+        await db.query('BEGIN');
+
+        // Check user has enough coins
+        const userCoins = await db.query('SELECT coins FROM users WHERE id = $1', [parseInt(userId)]);
+        if (userCoins.rows.length === 0 || userCoins.rows[0].coins < cost) {
+            await db.query('ROLLBACK');
+            return res.status(400).json({ error: 'Not enough coins' });
+        }
+
+        // Deduct coins
+        await db.query('UPDATE users SET coins = coins - $1 WHERE id = $2', [cost, parseInt(userId)]);
+
+        // Create booster
+        const result = await db.query(`
+            INSERT INTO boosters (user_id, booster_type, multiplier, duration_minutes)
+            VALUES ($1, $2, $3, $4)
+            RETURNING *
+        `, [parseInt(userId), boosterType, multiplier, durationMinutes]);
+
+        // Log transaction
+        await db.query(`
+            INSERT INTO coin_transactions (user_id, amount, transaction_type, description)
+            VALUES ($1, $2, $3, $4)
+        `, [parseInt(userId), -cost, 'purchase', `Bought ${boosterType} booster (${multiplier}x for ${durationMinutes} min)`]);
+
+        await db.query('COMMIT');
+        res.json({ success: true, booster: result.rows[0] });
+    } catch (err) {
+        await db.query('ROLLBACK');
+        console.error('Error purchasing booster:', err);
+        res.status(500).json({ error: err.message });
+    }
+});
+
+// Activate booster (start countdown)
+app.post('/api/boosters/:boosterId/activate', async (req, res) => {
+    try {
+        const { boosterId } = req.params;
+
+        await db.query('BEGIN');
+
+        // Get booster
+        const booster = await db.query('SELECT * FROM boosters WHERE id = $1', [parseInt(boosterId)]);
+        if (booster.rows.length === 0) {
+            await db.query('ROLLBACK');
+            return res.status(404).json({ error: 'Booster not found' });
+        }
+
+        const boosterData = booster.rows[0];
+        if (boosterData.is_used) {
+            await db.query('ROLLBACK');
+            return res.status(400).json({ error: 'Booster already used' });
+        }
+
+        // Check if user already has active booster of this type
+        const activeBooster = await db.query(`
+            SELECT * FROM boosters
+            WHERE user_id = $1 AND booster_type = $2 AND is_active = true AND expires_at > CURRENT_TIMESTAMP
+        `, [boosterData.user_id, boosterData.booster_type]);
+
+        if (activeBooster.rows.length > 0) {
+            await db.query('ROLLBACK');
+            return res.status(400).json({ error: 'You already have an active booster of this type' });
+        }
+
+        // Activate booster
+        const expiresAt = new Date();
+        expiresAt.setMinutes(expiresAt.getMinutes() + boosterData.duration_minutes);
+
+        await db.query(`
+            UPDATE boosters
+            SET is_active = true, is_used = true, activated_at = CURRENT_TIMESTAMP, expires_at = $1
+            WHERE id = $2
+        `, [expiresAt, parseInt(boosterId)]);
+
+        await db.query('COMMIT');
+        res.json({ success: true, expires_at: expiresAt });
+    } catch (err) {
+        await db.query('ROLLBACK');
+        console.error('Error activating booster:', err);
+        res.status(500).json({ error: err.message });
+    }
+});
+
+// Get user's active boosters
+app.get('/api/boosters/active/:userId', async (req, res) => {
+    try {
+        const { userId } = req.params;
+
+        const boosters = await db.query(`
+            SELECT * FROM boosters
+            WHERE user_id = $1 AND is_active = true AND expires_at > CURRENT_TIMESTAMP
+            ORDER BY expires_at ASC
+        `, [parseInt(userId)]);
+
+        res.json(boosters.rows);
+    } catch (err) {
+        console.error('Error getting active boosters:', err);
+        res.status(500).json({ error: err.message });
+    }
+});
+
+// Get user's booster inventory (not activated yet)
+app.get('/api/boosters/inventory/:userId', async (req, res) => {
+    try {
+        const { userId } = req.params;
+
+        const boosters = await db.query(`
+            SELECT * FROM boosters
+            WHERE user_id = $1 AND is_used = false
+            ORDER BY purchased_at DESC
+        `, [parseInt(userId)]);
+
+        res.json(boosters.rows);
+    } catch (err) {
+        console.error('Error getting booster inventory:', err);
+        res.status(500).json({ error: err.message });
+    }
+});
+
+// Get booster history
+app.get('/api/boosters/history/:userId', async (req, res) => {
+    try {
+        const { userId } = req.params;
+
+        const boosters = await db.query(`
+            SELECT * FROM boosters
+            WHERE user_id = $1 AND is_used = true
+            ORDER BY activated_at DESC
+            LIMIT 50
+        `, [parseInt(userId)]);
+
+        res.json(boosters.rows);
+    } catch (err) {
+        console.error('Error getting booster history:', err);
+        res.status(500).json({ error: err.message });
+    }
+});
+
+// Apply booster multiplier to XP gain
+app.post('/api/boosters/apply-multiplier', async (req, res) => {
+    try {
+        const { userId, baseXp, boosterType } = req.body;
+
+        // Get active booster of specified type
+        const booster = await db.query(`
+            SELECT * FROM boosters
+            WHERE user_id = $1 AND booster_type = $2 AND is_active = true AND expires_at > CURRENT_TIMESTAMP
+            LIMIT 1
+        `, [parseInt(userId), boosterType]);
+
+        if (booster.rows.length === 0) {
+            return res.json({ multiplied_xp: baseXp, multiplier: 1.0 });
+        }
+
+        const multiplier = parseFloat(booster.rows[0].multiplier);
+        const multipliedXp = Math.floor(baseXp * multiplier);
+
+        res.json({ multiplied_xp: multipliedXp, multiplier: multiplier });
+    } catch (err) {
+        console.error('Error applying booster multiplier:', err);
+        res.status(500).json({ error: err.message });
+    }
+});
+
+// =========================
+// PUSH NOTIFICATIONS SYSTEM
+// =========================
+
+// Subscribe to push notifications
+app.post('/api/notifications/subscribe', async (req, res) => {
+    try {
+        const { userId, subscription } = req.body;
+        const { endpoint, keys } = subscription;
+
+        // Check if subscription exists
+        const existing = await db.query('SELECT * FROM push_subscriptions WHERE endpoint = $1', [endpoint]);
+
+        if (existing.rows.length > 0) {
+            // Update existing subscription
+            await db.query(`
+                UPDATE push_subscriptions
+                SET user_id = $1, keys_p256dh = $2, keys_auth = $3, is_active = true, last_used_at = CURRENT_TIMESTAMP
+                WHERE endpoint = $4
+            `, [parseInt(userId), keys.p256dh, keys.auth, endpoint]);
+        } else {
+            // Create new subscription
+            await db.query(`
+                INSERT INTO push_subscriptions (user_id, endpoint, keys_p256dh, keys_auth, user_agent)
+                VALUES ($1, $2, $3, $4, $5)
+            `, [parseInt(userId), endpoint, keys.p256dh, keys.auth, req.headers['user-agent'] || null]);
+        }
+
+        // Create default notification preferences if not exist
+        const prefs = await db.query('SELECT * FROM notification_preferences WHERE user_id = $1', [parseInt(userId)]);
+        if (prefs.rows.length === 0) {
+            await db.query('INSERT INTO notification_preferences (user_id) VALUES ($1)', [parseInt(userId)]);
+        }
+
+        res.json({ success: true });
+    } catch (err) {
+        console.error('Error subscribing to push notifications:', err);
+        res.status(500).json({ error: err.message });
+    }
+});
+
+// Unsubscribe from push notifications
+app.post('/api/notifications/unsubscribe', async (req, res) => {
+    try {
+        const { endpoint } = req.body;
+
+        await db.query(`
+            UPDATE push_subscriptions SET is_active = false WHERE endpoint = $1
+        `, [endpoint]);
+
+        res.json({ success: true });
+    } catch (err) {
+        console.error('Error unsubscribing from push notifications:', err);
+        res.status(500).json({ error: err.message });
+    }
+});
+
+// Get notification preferences
+app.get('/api/notifications/preferences/:userId', async (req, res) => {
+    try {
+        const { userId } = req.params;
+
+        let prefs = await db.query('SELECT * FROM notification_preferences WHERE user_id = $1', [parseInt(userId)]);
+
+        // Create default if not exist
+        if (prefs.rows.length === 0) {
+            await db.query('INSERT INTO notification_preferences (user_id) VALUES ($1)', [parseInt(userId)]);
+            prefs = await db.query('SELECT * FROM notification_preferences WHERE user_id = $1', [parseInt(userId)]);
+        }
+
+        res.json(prefs.rows[0]);
+    } catch (err) {
+        console.error('Error getting notification preferences:', err);
+        res.status(500).json({ error: err.message });
+    }
+});
+
+// Update notification preferences
+app.put('/api/notifications/preferences/:userId', async (req, res) => {
+    try {
+        const { userId } = req.params;
+        const prefs = req.body;
+
+        const fields = [];
+        const values = [];
+        let paramIndex = 1;
+
+        for (const [key, value] of Object.entries(prefs)) {
+            if (key !== 'id' && key !== 'user_id' && key !== 'created_at') {
+                fields.push(`${key} = $${paramIndex}`);
+                values.push(value);
+                paramIndex++;
+            }
+        }
+
+        if (fields.length > 0) {
+            values.push(parseInt(userId));
+            await db.query(`
+                UPDATE notification_preferences
+                SET ${fields.join(', ')}, updated_at = CURRENT_TIMESTAMP
+                WHERE user_id = $${paramIndex}
+            `, values);
+        }
+
+        res.json({ success: true });
+    } catch (err) {
+        console.error('Error updating notification preferences:', err);
+        res.status(500).json({ error: err.message });
+    }
+});
+
+// Send notification (internal use - called by backend)
+app.post('/api/notifications/send', async (req, res) => {
+    try {
+        const { userId, type, title, body, data } = req.body;
+
+        // Save to history
+        await db.query(`
+            INSERT INTO notification_history (user_id, notification_type, title, body, data)
+            VALUES ($1, $2, $3, $4, $5)
+        `, [parseInt(userId), type, title, body || null, data ? JSON.stringify(data) : null]);
+
+        // Get user's active subscriptions
+        const subscriptions = await db.query(`
+            SELECT * FROM push_subscriptions WHERE user_id = $1 AND is_active = true
+        `, [parseInt(userId)]);
+
+        // TODO: Here you would use web-push library to send actual push notifications
+        // For now, we just save to history
+
+        res.json({ success: true, subscriptions_count: subscriptions.rows.length });
+    } catch (err) {
+        console.error('Error sending notification:', err);
+        res.status(500).json({ error: err.message });
+    }
+});
+
+// Get notification history
+app.get('/api/notifications/history/:userId', async (req, res) => {
+    try {
+        const { userId } = req.params;
+        const limit = req.query.limit || 50;
+
+        const notifications = await db.query(`
+            SELECT * FROM notification_history
+            WHERE user_id = $1
+            ORDER BY sent_at DESC
+            LIMIT $2
+        `, [parseInt(userId), parseInt(limit)]);
+
+        res.json(notifications.rows);
+    } catch (err) {
+        console.error('Error getting notification history:', err);
+        res.status(500).json({ error: err.message });
+    }
+});
+
+// Mark notification as read
+app.put('/api/notifications/:notificationId/read', async (req, res) => {
+    try {
+        const { notificationId } = req.params;
+
+        await db.query(`
+            UPDATE notification_history SET is_read = true, read_at = CURRENT_TIMESTAMP WHERE id = $1
+        `, [parseInt(notificationId)]);
+
+        res.json({ success: true });
+    } catch (err) {
+        console.error('Error marking notification as read:', err);
+        res.status(500).json({ error: err.message });
+    }
+});
+
+// Get unread notification count
+app.get('/api/notifications/unread-count/:userId', async (req, res) => {
+    try {
+        const { userId } = req.params;
+
+        const result = await db.query(`
+            SELECT COUNT(*) as count FROM notification_history WHERE user_id = $1 AND is_read = false
+        `, [parseInt(userId)]);
+
+        res.json({ count: parseInt(result.rows[0].count) });
+    } catch (err) {
+        console.error('Error getting unread notification count:', err);
+        res.status(500).json({ error: err.message });
+    }
+});
+
+// =========================
+// USER SETTINGS SYSTEM
+// =========================
+
+// Get user settings
+app.get('/api/settings/:userId', async (req, res) => {
+    try {
+        const { userId } = req.params;
+
+        let settings = await db.query('SELECT * FROM user_settings WHERE user_id = $1', [parseInt(userId)]);
+
+        // Create default settings if not exist
+        if (settings.rows.length === 0) {
+            await db.query('INSERT INTO user_settings (user_id) VALUES ($1)', [parseInt(userId)]);
+            settings = await db.query('SELECT * FROM user_settings WHERE user_id = $1', [parseInt(userId)]);
+        }
+
+        res.json(settings.rows[0]);
+    } catch (err) {
+        console.error('Error getting user settings:', err);
+        res.status(500).json({ error: err.message });
+    }
+});
+
+// Update user settings
+app.put('/api/settings/:userId', async (req, res) => {
+    try {
+        const { userId } = req.params;
+        const settings = req.body;
+
+        // Ensure settings exist
+        const existing = await db.query('SELECT * FROM user_settings WHERE user_id = $1', [parseInt(userId)]);
+        if (existing.rows.length === 0) {
+            await db.query('INSERT INTO user_settings (user_id) VALUES ($1)', [parseInt(userId)]);
+        }
+
+        const fields = [];
+        const values = [];
+        let paramIndex = 1;
+
+        for (const [key, value] of Object.entries(settings)) {
+            if (key !== 'id' && key !== 'user_id' && key !== 'created_at') {
+                fields.push(`${key} = $${paramIndex}`);
+                values.push(value);
+                paramIndex++;
+            }
+        }
+
+        if (fields.length > 0) {
+            values.push(parseInt(userId));
+            await db.query(`
+                UPDATE user_settings
+                SET ${fields.join(', ')}, updated_at = CURRENT_TIMESTAMP
+                WHERE user_id = $${paramIndex}
+            `, values);
+        }
+
+        res.json({ success: true });
+    } catch (err) {
+        console.error('Error updating user settings:', err);
+        res.status(500).json({ error: err.message });
+    }
+});
+
+// Update specific setting
+app.patch('/api/settings/:userId/:setting', async (req, res) => {
+    try {
+        const { userId, setting } = req.params;
+        const { value } = req.body;
+
+        // Ensure settings exist
+        const existing = await db.query('SELECT * FROM user_settings WHERE user_id = $1', [parseInt(userId)]);
+        if (existing.rows.length === 0) {
+            await db.query('INSERT INTO user_settings (user_id) VALUES ($1)', [parseInt(userId)]);
+        }
+
+        const allowedSettings = ['theme', 'language', 'timezone', 'date_format', 'time_format',
+                                  'sound_effects', 'animations', 'auto_play_audio',
+                                  'speech_rate', 'speech_pitch', 'speech_volume'];
+
+        if (!allowedSettings.includes(setting)) {
+            return res.status(400).json({ error: 'Invalid setting name' });
+        }
+
+        await db.query(`
+            UPDATE user_settings SET ${setting} = $1, updated_at = CURRENT_TIMESTAMP WHERE user_id = $2
+        `, [value, parseInt(userId)]);
+
+        res.json({ success: true });
+    } catch (err) {
+        console.error('Error updating specific setting:', err);
+        res.status(500).json({ error: err.message });
+    }
+});
+
+// Reset settings to default
+app.post('/api/settings/:userId/reset', async (req, res) => {
+    try {
+        const { userId } = req.params;
+
+        await db.query('DELETE FROM user_settings WHERE user_id = $1', [parseInt(userId)]);
+        await db.query('INSERT INTO user_settings (user_id) VALUES ($1)', [parseInt(userId)]);
+
+        const settings = await db.query('SELECT * FROM user_settings WHERE user_id = $1', [parseInt(userId)]);
+
+        res.json({ success: true, settings: settings.rows[0] });
+    } catch (err) {
+        console.error('Error resetting user settings:', err);
         res.status(500).json({ error: err.message });
     }
 });
