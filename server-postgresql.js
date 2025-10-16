@@ -7257,6 +7257,82 @@ app.delete('/api/tts/cache/clear', async (req, res) => {
     }
 });
 
+// Bulk synthesize (for offline preloading)
+app.post('/api/tts/bulk-synthesize', async (req, res) => {
+    try {
+        const { words, userId } = req.body;
+
+        if (!words || !Array.isArray(words)) {
+            return res.status(400).json({ error: 'Missing or invalid words array' });
+        }
+
+        let synthesized = 0;
+        let cached = 0;
+        let errors = 0;
+        const results = [];
+
+        for (const word of words) {
+            try {
+                const { text, language } = word;
+                const cacheKey = crypto.createHash('md5').update(`${language}_${text}`).digest('hex');
+                const cacheFile = path.join(TTS_CACHE_DIR, `${cacheKey}.json`);
+
+                if (fs.existsSync(cacheFile)) {
+                    cached++;
+                    const cached_data = JSON.parse(fs.readFileSync(cacheFile, 'utf8'));
+                    results.push({ text, language, audioUrl: cached_data.audioUrl, cached: true });
+                } else {
+                    const mockAudioUrl = `data:audio/mp3;base64,${Buffer.from(`MOCK_${text}`).toString('base64')}`;
+                    const result = {
+                        audioUrl: mockAudioUrl,
+                        provider: 'mock',
+                        text: text,
+                        language: language,
+                        cached: false,
+                        timestamp: new Date().toISOString()
+                    };
+                    fs.writeFileSync(cacheFile, JSON.stringify(result), 'utf8');
+                    synthesized++;
+                    results.push({ text, language, audioUrl: mockAudioUrl, cached: false });
+                }
+            } catch (err) {
+                console.error(`Error processing word ${word.text}:`, err);
+                errors++;
+            }
+        }
+
+        res.json({ success: true, total: words.length, synthesized, cached, errors, results });
+    } catch (err) {
+        console.error('Error in bulk synthesize:', err);
+        res.status(500).json({ error: err.message });
+    }
+});
+
+// Get popular words (for offline preloading)
+app.get('/api/words/popular/:userId', async (req, res) => {
+    try {
+        const { userId } = req.params;
+        const limit = req.query.limit || 100;
+
+        // Get user's words (simplified - just return all words for now)
+        const words = await db.query(`
+            SELECT
+                word AS text,
+                'de-DE' AS language,
+                1 as usage_count
+            FROM words
+            WHERE user_id = $1
+            ORDER BY word ASC
+            LIMIT $2
+        `, [parseInt(userId), parseInt(limit)]);
+
+        res.json(words.rows);
+    } catch (err) {
+        console.error('Error getting popular words:', err);
+        res.status(500).json({ error: err.message });
+    }
+});
+
 // ========================================
 // WORDS ENDPOINTS
 // ========================================

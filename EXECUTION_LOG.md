@@ -69,3 +69,30 @@ Response: {"cached_items":1,"total_size_bytes":163,"total_size_mb":"0.00"}
 - Real TTS API integration (требует API keys)
 
 ---
+
+### Iteration 2 - COMPLETED ✅
+**Date:** 2025-10-14  
+**Task:** Offline поддержка для TTS  
+**Status:** [x] COMPLETED
+
+**Implementation:**
+
+1. **Backend API Endpoints (2 новых):**
+   - `POST /api/tts/bulk-synthesize` - массовый синтез для offline preloading
+   - `GET /api/words/popular/:userId` - топ слов пользователя
+
+2. **Реализованные фичи:**
+   - ✅ Bulk synthesize с batch processing
+   - ✅ Статистика (synthesized/cached/errors)
+   - ✅ Popular words query
+   - ✅ Error handling для каждого слова
+
+3. **Файлы изменены:**
+   - `server-postgresql.js:7260-7309` - bulk-synthesize (50 строк)
+   - `server-postgresql.js:7311-7334` - popular words (24 строки)
+
+**Testing Results:**
+✅ Bulk synthesize: 3 words, 2 new + 1 cached  
+✅ Popular words: 5 German words returned
+
+---

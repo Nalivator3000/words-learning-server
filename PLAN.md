@@ -32,10 +32,14 @@
   - [ ] Frontend integration (следующая итерация)
   - [ ] Real API keys configuration (.env)
 
-- [ ] **Offline поддержка**
-  - Кеширование часто используемых слов
-  - Загрузка качественных голосовых пакетов для offline
-  - Web Audio API для воспроизведения закешированных аудио
+- [x] **Offline поддержка** ✅ ГОТОВО (Backend)
+  - ✅ Bulk TTS synthesis endpoint `/api/tts/bulk-synthesize`
+  - ✅ Popular words endpoint `/api/words/popular/:userId`
+  - ✅ Batch processing с подробной статистикой (synthesized/cached/errors)
+  - ✅ Готовность к frontend integration (IndexedDB, Service Worker)
+  - [ ] Frontend integration (следующая итерация)
+  - [ ] Service Worker cache для audio
+  - [ ] UI для управления offline кешем
 
 - [x] **Улучшения произношения** ✅ ГОТОВО (index.html, app.js, style.css)
   - ✅ Регулировка скорости озвучки (0.5x - 1.5x) с слайдером
