@@ -2,6 +2,91 @@
 
 ## 2025-10-14
 
+### Weekly Challenges System (Backend)
+**Commit:** 📅 WEEKLY: Complete weekly challenges with bigger rewards
+
+**Изменения:**
+- База данных: `weekly_challenges` table (id, user_id, week_start_date, challenge_type, title, description, target_value, current_progress, is_completed, completed_at, reward_xp, reward_coins, reward_claimed, difficulty, UNIQUE constraint)
+- API Endpoints (4 новых):
+  - `GET /api/weekly-challenges/:userId` - получить или создать челленджи на текущую неделю (auto-create 3 default)
+  - `POST /api/weekly-challenges/progress` - обновить прогресс (auto-complete при достижении target)
+  - `POST /api/weekly-challenges/:challengeId/claim` - забрать награду (XP + coins, transaction-safe)
+  - `GET /api/weekly-challenges/stats/:userId` - статистика по всем челленджам
+
+**Файлы:**
+- [server-postgresql.js:645-664](server-postgresql.js#L645-L664) - таблица
+- [server-postgresql.js:6580-6774](server-postgresql.js#L6580-L6774) - API endpoints
+
+**Функциональность:**
+- Week calculation: автоматическое определение начала недели (понедельник)
+- Default challenges: 3 челленджа каждую неделю (XP 500, words 50, streak 7)
+- Bigger rewards: XP 100-200, coins 25-50 (больше чем daily)
+- Difficulty levels: medium, hard (еженедельные более сложные)
+- Progress tracking: инкрементальное обновление с auto-completion
+- UNIQUE constraint: (user_id, week_start_date, challenge_type) предотвращает дубликаты
+- Weekly reset: новые челленджи создаются каждую неделю автоматически
+
+### Milestones & Rewards System (Backend)
+**Commit:** 🏅 MILESTONES: Complete milestone tracking with dynamic rewards
+
+**Изменения:**
+- База данных: `user_milestones` table (id, user_id, milestone_type, milestone_value, is_reached, reached_at, reward_xp, reward_coins, reward_claimed, special_reward, UNIQUE constraint)
+- API Endpoints (4 новых):
+  - `POST /api/milestones/check` - проверить и создать достигнутые milestones (batch creation)
+  - `GET /api/milestones/:userId` - получить все milestones (фильтр по типу)
+  - `POST /api/milestones/:milestoneId/claim` - забрать награду (XP + coins + special)
+  - `GET /api/milestones/:userId/progress` - прогресс по всем типам (с current stats)
+
+**Файлы:**
+- [server-postgresql.js:666-681](server-postgresql.js#L666-L681) - таблица
+- [server-postgresql.js:6776-7013](server-postgresql.js#L6776-L7013) - API endpoints
+
+**Функциональность:**
+- Milestone types: words_learned, total_xp, streak_days, quizzes_completed, achievements_unlocked
+- Predefined thresholds: 8 уровней для каждого типа (10, 50, 100, 250, 500, 1000, 2500, 5000)
+- Dynamic rewards: XP = value * 0.5, coins = value * 0.1
+- Batch creation: check endpoint создаёт все достигнутые milestones за раз
+- Progress tracking: агрегация текущих stats из user_stats и achievements
+- Special rewards: поддержка специальных наград (badges, themes, etc.)
+- UNIQUE constraint: (user_id, milestone_type, milestone_value) для дубликатов
+
+### User Badges System (Backend)
+**Commit:** 🎖️ BADGES: Complete badge collection with rarity system
+
+**Изменения:**
+- База данных (2 таблицы):
+  - `badges` - определения бейджей (id, badge_key UNIQUE, badge_name, description, icon, rarity, category, is_active, created_at)
+  - `user_badges` - earned badges (id, user_id, badge_id, earned_at, is_equipped, UNIQUE constraint)
+
+- Predefined Badges (10 бейджей):
+  - **Achievement (4):** First Steps 👣, Word Master 📚 (1000 words), Streak Legend 🔥 (365 days), Perfectionist 💯 (100 perfect quizzes)
+  - **Time (2):** Night Owl 🦉 (after midnight), Early Bird 🌅 (before 6 AM)
+  - **Social (2):** Social Butterfly 🦋 (50+ friends), Duel Champion ⚔️ (100 wins)
+  - **Special (2):** Beta Tester 🧪 (legendary), League Master 💠 (Diamond)
+
+- Rarity levels: common, uncommon, rare, epic, legendary
+
+- API Endpoints (6 новых):
+  - `GET /api/badges` - все бейджи (с is_earned если userId указан)
+  - `GET /api/badges/user/:userId` - earned badges (с датами и equip status)
+  - `POST /api/badges/award` - наградить бейджем (duplicate check)
+  - `POST /api/badges/:badgeId/equip` - экипировать бейдж (только 1 одновременно)
+  - `POST /api/badges/:badgeId/unequip` - снять бейдж
+  - `GET /api/badges/user/:userId/equipped` - получить текущий бейдж
+
+**Файлы:**
+- [server-postgresql.js:683-708](server-postgresql.js#L683-L708) - таблицы
+- [server-postgresql.js:1107-1142](server-postgresql.js#L1107-L1142) - initializeBadges()
+- [server-postgresql.js:7015-7161](server-postgresql.js#L7015-L7161) - API endpoints
+
+**Функциональность:**
+- Badge categories: achievement, streak, accuracy, time, social, competitive, league, special
+- Rarity system: сортировка по редкости (legendary → common)
+- Equip system: только 1 бейдж может быть equipped одновременно
+- User enrichment: автоматическое добавление is_earned для списка бейджей
+- Award protection: duplicate check при выдаче бейджа
+- UNIQUE constraints: badge_key для определений, (user_id, badge_id) для earned
+
 ### Activity Feed System (Backend)
 **Commit:** 📰 FEED: Complete activity feed with social interactions
 

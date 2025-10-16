@@ -642,6 +642,71 @@ async function initDatabase() {
             )
         `);
 
+        // Weekly Challenges System: Week-long challenges
+        await db.query(`
+            CREATE TABLE IF NOT EXISTS weekly_challenges (
+                id SERIAL PRIMARY KEY,
+                user_id INTEGER REFERENCES users(id) ON DELETE CASCADE,
+                week_start_date DATE NOT NULL,
+                challenge_type VARCHAR(50) NOT NULL,
+                title VARCHAR(255) NOT NULL,
+                description TEXT,
+                target_value INTEGER NOT NULL,
+                current_progress INTEGER DEFAULT 0,
+                is_completed BOOLEAN DEFAULT false,
+                completed_at TIMESTAMP,
+                reward_xp INTEGER DEFAULT 0,
+                reward_coins INTEGER DEFAULT 0,
+                reward_claimed BOOLEAN DEFAULT false,
+                difficulty VARCHAR(20) DEFAULT 'medium',
+                UNIQUE(user_id, week_start_date, challenge_type)
+            )
+        `);
+
+        // Milestones & Rewards System: User milestones
+        await db.query(`
+            CREATE TABLE IF NOT EXISTS user_milestones (
+                id SERIAL PRIMARY KEY,
+                user_id INTEGER REFERENCES users(id) ON DELETE CASCADE,
+                milestone_type VARCHAR(50) NOT NULL,
+                milestone_value INTEGER NOT NULL,
+                is_reached BOOLEAN DEFAULT false,
+                reached_at TIMESTAMP,
+                reward_xp INTEGER DEFAULT 0,
+                reward_coins INTEGER DEFAULT 0,
+                reward_claimed BOOLEAN DEFAULT false,
+                special_reward TEXT,
+                UNIQUE(user_id, milestone_type, milestone_value)
+            )
+        `);
+
+        // User Badges System: Badge definitions
+        await db.query(`
+            CREATE TABLE IF NOT EXISTS badges (
+                id SERIAL PRIMARY KEY,
+                badge_key VARCHAR(100) UNIQUE NOT NULL,
+                badge_name VARCHAR(255) NOT NULL,
+                description TEXT,
+                icon TEXT,
+                rarity VARCHAR(20) DEFAULT 'common',
+                category VARCHAR(50),
+                is_active BOOLEAN DEFAULT true,
+                created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+            )
+        `);
+
+        // User badges (earned by users)
+        await db.query(`
+            CREATE TABLE IF NOT EXISTS user_badges (
+                id SERIAL PRIMARY KEY,
+                user_id INTEGER REFERENCES users(id) ON DELETE CASCADE,
+                badge_id INTEGER REFERENCES badges(id) ON DELETE CASCADE,
+                earned_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+                is_equipped BOOLEAN DEFAULT false,
+                UNIQUE(user_id, badge_id)
+            )
+        `);
+
         // Daily Challenges System: Challenge templates
         await db.query(`
             CREATE TABLE IF NOT EXISTS challenge_templates (
@@ -774,6 +839,9 @@ async function initDatabase() {
 
         // Initialize league tiers
         await initializeLeagueTiers();
+
+        // Initialize badges
+        await initializeBadges();
     } catch (err) {
         console.error('Database initialization error:', err);
     }
@@ -1037,6 +1105,43 @@ async function initializeLeagueTiers() {
     }
 
     console.log('✅ League tiers initialized');
+}
+
+// Initialize predefined badges
+async function initializeBadges() {
+    const badges = [
+        // Achievement-based badges
+        { key: 'first_steps', name: 'First Steps', description: 'Completed onboarding', icon: '👣', rarity: 'common', category: 'achievement' },
+        { key: 'word_master', name: 'Word Master', description: 'Learned 1000 words', icon: '📚', rarity: 'epic', category: 'achievement' },
+        { key: 'streak_legend', name: 'Streak Legend', description: '365-day streak', icon: '🔥', rarity: 'legendary', category: 'streak' },
+        { key: 'perfectionist', name: 'Perfectionist', description: '100 perfect quizzes', icon: '💯', rarity: 'rare', category: 'accuracy' },
+
+        // Time-based badges
+        { key: 'night_owl', name: 'Night Owl', description: 'Study after midnight', icon: '🦉', rarity: 'uncommon', category: 'time' },
+        { key: 'early_bird', name: 'Early Bird', description: 'Study before 6 AM', icon: '🌅', rarity: 'uncommon', category: 'time' },
+
+        // Social badges
+        { key: 'social_butterfly', name: 'Social Butterfly', description: '50+ friends', icon: '🦋', rarity: 'rare', category: 'social' },
+        { key: 'duel_champion', name: 'Duel Champion', description: 'Won 100 duels', icon: '⚔️', rarity: 'epic', category: 'competitive' },
+
+        // Special badges
+        { key: 'beta_tester', name: 'Beta Tester', description: 'Early adopter', icon: '🧪', rarity: 'legendary', category: 'special' },
+        { key: 'league_master', name: 'League Master', description: 'Reached Diamond', icon: '💠', rarity: 'epic', category: 'league' }
+    ];
+
+    for (const badge of badges) {
+        try {
+            await db.query(`
+                INSERT INTO badges (badge_key, badge_name, description, icon, rarity, category)
+                VALUES ($1, $2, $3, $4, $5, $6)
+                ON CONFLICT (badge_key) DO NOTHING
+            `, [badge.key, badge.name, badge.description, badge.icon, badge.rarity, badge.category]);
+        } catch (err) {
+            console.error(`Error initializing badge ${badge.key}:`, err.message);
+        }
+    }
+
+    console.log('✅ Badges initialized');
 }
 
 // Gamification: Award XP to user
@@ -6552,6 +6657,505 @@ app.post('/api/inventory/cleanup-expired', async (req, res) => {
         res.json({ success: true, deleted_count: result.rows.length });
     } catch (err) {
         console.error('Error cleaning up expired items:', err);
+        res.status(500).json({ error: err.message });
+    }
+});
+
+// =========================
+// WEEKLY CHALLENGES SYSTEM
+// =========================
+
+// Get or create weekly challenges for user
+app.get('/api/weekly-challenges/:userId', async (req, res) => {
+    try {
+        const { userId } = req.params;
+
+        // Get current week start (Monday)
+        const now = new Date();
+        const dayOfWeek = now.getDay();
+        const weekStart = new Date(now);
+        weekStart.setDate(now.getDate() - (dayOfWeek === 0 ? 6 : dayOfWeek - 1));
+        weekStart.setHours(0, 0, 0, 0);
+        const weekStartStr = weekStart.toISOString().split('T')[0];
+
+        let challenges = await db.query(`
+            SELECT * FROM weekly_challenges
+            WHERE user_id = $1 AND week_start_date = $2
+            ORDER BY difficulty DESC
+        `, [parseInt(userId), weekStartStr]);
+
+        // Create default challenges if none exist
+        if (challenges.rows.length === 0) {
+            const defaultChallenges = [
+                { type: 'weekly_xp', title: 'Weekly XP Master', description: 'Earn 500 XP this week', target: 500, reward_xp: 200, reward_coins: 50, difficulty: 'hard' },
+                { type: 'weekly_words', title: 'Word Collector', description: 'Learn 50 new words this week', target: 50, reward_xp: 150, reward_coins: 30, difficulty: 'medium' },
+                { type: 'weekly_streak', title: 'Streak Keeper', description: 'Maintain your streak all week (7 days)', target: 7, reward_xp: 100, reward_coins: 25, difficulty: 'medium' }
+            ];
+
+            await db.query('BEGIN');
+            for (const challenge of defaultChallenges) {
+                await db.query(`
+                    INSERT INTO weekly_challenges (user_id, week_start_date, challenge_type, title, description, target_value, reward_xp, reward_coins, difficulty)
+                    VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9)
+                `, [parseInt(userId), weekStartStr, challenge.type, challenge.title, challenge.description, challenge.target, challenge.reward_xp, challenge.reward_coins, challenge.difficulty]);
+            }
+            await db.query('COMMIT');
+
+            challenges = await db.query(`
+                SELECT * FROM weekly_challenges
+                WHERE user_id = $1 AND week_start_date = $2
+                ORDER BY difficulty DESC
+            `, [parseInt(userId), weekStartStr]);
+        }
+
+        res.json(challenges.rows);
+    } catch (err) {
+        await db.query('ROLLBACK');
+        console.error('Error getting weekly challenges:', err);
+        res.status(500).json({ error: err.message });
+    }
+});
+
+// Update weekly challenge progress
+app.post('/api/weekly-challenges/progress', async (req, res) => {
+    try {
+        const { userId, challengeType, increment } = req.body;
+
+        // Get current week start
+        const now = new Date();
+        const dayOfWeek = now.getDay();
+        const weekStart = new Date(now);
+        weekStart.setDate(now.getDate() - (dayOfWeek === 0 ? 6 : dayOfWeek - 1));
+        weekStart.setHours(0, 0, 0, 0);
+        const weekStartStr = weekStart.toISOString().split('T')[0];
+
+        await db.query('BEGIN');
+
+        // Update progress
+        await db.query(`
+            UPDATE weekly_challenges
+            SET current_progress = current_progress + $1
+            WHERE user_id = $2 AND week_start_date = $3 AND challenge_type = $4
+        `, [increment || 1, parseInt(userId), weekStartStr, challengeType]);
+
+        // Check if completed
+        const challenge = await db.query(`
+            SELECT * FROM weekly_challenges
+            WHERE user_id = $1 AND week_start_date = $2 AND challenge_type = $3
+        `, [parseInt(userId), weekStartStr, challengeType]);
+
+        if (challenge.rows.length > 0) {
+            const c = challenge.rows[0];
+            if (!c.is_completed && c.current_progress >= c.target_value) {
+                await db.query(`
+                    UPDATE weekly_challenges
+                    SET is_completed = true, completed_at = CURRENT_TIMESTAMP
+                    WHERE id = $1
+                `, [c.id]);
+            }
+        }
+
+        await db.query('COMMIT');
+        res.json({ success: true });
+    } catch (err) {
+        await db.query('ROLLBACK');
+        console.error('Error updating weekly challenge progress:', err);
+        res.status(500).json({ error: err.message });
+    }
+});
+
+// Claim weekly challenge reward
+app.post('/api/weekly-challenges/:challengeId/claim', async (req, res) => {
+    try {
+        const { challengeId } = req.params;
+
+        await db.query('BEGIN');
+
+        const challenge = await db.query('SELECT * FROM weekly_challenges WHERE id = $1', [parseInt(challengeId)]);
+
+        if (challenge.rows.length === 0) {
+            await db.query('ROLLBACK');
+            return res.status(404).json({ error: 'Challenge not found' });
+        }
+
+        const c = challenge.rows[0];
+
+        if (!c.is_completed) {
+            await db.query('ROLLBACK');
+            return res.status(400).json({ error: 'Challenge not completed' });
+        }
+
+        if (c.reward_claimed) {
+            await db.query('ROLLBACK');
+            return res.status(400).json({ error: 'Reward already claimed' });
+        }
+
+        // Award XP
+        if (c.reward_xp > 0) {
+            await db.query('INSERT INTO xp_log (user_id, xp_amount, action_type, action_details) VALUES ($1, $2, $3, $4)',
+                [c.user_id, c.reward_xp, 'weekly_challenge', `Completed: ${c.title}`]);
+            await db.query('UPDATE user_stats SET total_xp = total_xp + $1 WHERE user_id = $2', [c.reward_xp, c.user_id]);
+        }
+
+        // Award coins
+        if (c.reward_coins > 0) {
+            await db.query('UPDATE users SET coins = coins + $1 WHERE id = $2', [c.reward_coins, c.user_id]);
+            await db.query(`
+                INSERT INTO coin_transactions (user_id, amount, transaction_type, description)
+                VALUES ($1, $2, $3, $4)
+            `, [c.user_id, c.reward_coins, 'reward', `Weekly challenge: ${c.title}`]);
+        }
+
+        // Mark as claimed
+        await db.query('UPDATE weekly_challenges SET reward_claimed = true WHERE id = $1', [parseInt(challengeId)]);
+
+        await db.query('COMMIT');
+        res.json({ success: true, reward_xp: c.reward_xp, reward_coins: c.reward_coins });
+    } catch (err) {
+        await db.query('ROLLBACK');
+        console.error('Error claiming weekly challenge reward:', err);
+        res.status(500).json({ error: err.message });
+    }
+});
+
+// Get weekly challenge stats
+app.get('/api/weekly-challenges/stats/:userId', async (req, res) => {
+    try {
+        const { userId } = req.params;
+
+        const stats = await db.query(`
+            SELECT
+                COUNT(*) as total_challenges,
+                COUNT(*) FILTER (WHERE is_completed = true) as completed_challenges,
+                SUM(reward_xp) FILTER (WHERE reward_claimed = true) as total_xp_earned,
+                SUM(reward_coins) FILTER (WHERE reward_claimed = true) as total_coins_earned
+            FROM weekly_challenges
+            WHERE user_id = $1
+        `, [parseInt(userId)]);
+
+        res.json(stats.rows[0]);
+    } catch (err) {
+        console.error('Error getting weekly challenge stats:', err);
+        res.status(500).json({ error: err.message });
+    }
+});
+
+// =========================
+// MILESTONES & REWARDS SYSTEM
+// =========================
+
+// Check and create milestones for user
+app.post('/api/milestones/check', async (req, res) => {
+    try {
+        const { userId, milestoneType, currentValue } = req.body;
+
+        // Define milestone thresholds
+        const milestones = {
+            'words_learned': [10, 50, 100, 250, 500, 1000, 2500, 5000],
+            'total_xp': [100, 500, 1000, 2500, 5000, 10000, 25000, 50000],
+            'streak_days': [7, 14, 30, 60, 100, 180, 365, 500],
+            'quizzes_completed': [10, 50, 100, 250, 500, 1000, 2500, 5000],
+            'achievements_unlocked': [5, 10, 15, 20, 25, 30, 40, 50]
+        };
+
+        const thresholds = milestones[milestoneType] || [];
+        const newMilestones = [];
+
+        await db.query('BEGIN');
+
+        for (const threshold of thresholds) {
+            if (currentValue >= threshold) {
+                // Check if milestone exists
+                const existing = await db.query(
+                    'SELECT * FROM user_milestones WHERE user_id = $1 AND milestone_type = $2 AND milestone_value = $3',
+                    [parseInt(userId), milestoneType, threshold]
+                );
+
+                if (existing.rows.length === 0) {
+                    // Create milestone
+                    const rewardXp = Math.floor(threshold * 0.5);
+                    const rewardCoins = Math.floor(threshold * 0.1);
+
+                    const result = await db.query(`
+                        INSERT INTO user_milestones (user_id, milestone_type, milestone_value, is_reached, reached_at, reward_xp, reward_coins)
+                        VALUES ($1, $2, $3, true, CURRENT_TIMESTAMP, $4, $5)
+                        RETURNING *
+                    `, [parseInt(userId), milestoneType, threshold, rewardXp, rewardCoins]);
+
+                    newMilestones.push(result.rows[0]);
+                }
+            }
+        }
+
+        await db.query('COMMIT');
+        res.json({ success: true, new_milestones: newMilestones });
+    } catch (err) {
+        await db.query('ROLLBACK');
+        console.error('Error checking milestones:', err);
+        res.status(500).json({ error: err.message });
+    }
+});
+
+// Get user milestones
+app.get('/api/milestones/:userId', async (req, res) => {
+    try {
+        const { userId } = req.params;
+        const { milestoneType } = req.query;
+
+        let query = 'SELECT * FROM user_milestones WHERE user_id = $1';
+        const params = [parseInt(userId)];
+
+        if (milestoneType) {
+            query += ' AND milestone_type = $2';
+            params.push(milestoneType);
+        }
+
+        query += ' ORDER BY milestone_value ASC';
+
+        const milestones = await db.query(query, params);
+
+        res.json(milestones.rows);
+    } catch (err) {
+        console.error('Error getting milestones:', err);
+        res.status(500).json({ error: err.message });
+    }
+});
+
+// Claim milestone reward
+app.post('/api/milestones/:milestoneId/claim', async (req, res) => {
+    try {
+        const { milestoneId } = req.params;
+
+        await db.query('BEGIN');
+
+        const milestone = await db.query('SELECT * FROM user_milestones WHERE id = $1', [parseInt(milestoneId)]);
+
+        if (milestone.rows.length === 0) {
+            await db.query('ROLLBACK');
+            return res.status(404).json({ error: 'Milestone not found' });
+        }
+
+        const m = milestone.rows[0];
+
+        if (!m.is_reached) {
+            await db.query('ROLLBACK');
+            return res.status(400).json({ error: 'Milestone not reached' });
+        }
+
+        if (m.reward_claimed) {
+            await db.query('ROLLBACK');
+            return res.status(400).json({ error: 'Reward already claimed' });
+        }
+
+        // Award XP
+        if (m.reward_xp > 0) {
+            await db.query('INSERT INTO xp_log (user_id, xp_amount, action_type, action_details) VALUES ($1, $2, $3, $4)',
+                [m.user_id, m.reward_xp, 'milestone', `${m.milestone_type}: ${m.milestone_value}`]);
+            await db.query('UPDATE user_stats SET total_xp = total_xp + $1 WHERE user_id = $2', [m.reward_xp, m.user_id]);
+        }
+
+        // Award coins
+        if (m.reward_coins > 0) {
+            await db.query('UPDATE users SET coins = coins + $1 WHERE id = $2', [m.reward_coins, m.user_id]);
+            await db.query(`
+                INSERT INTO coin_transactions (user_id, amount, transaction_type, description)
+                VALUES ($1, $2, $3, $4)
+            `, [m.user_id, m.reward_coins, 'reward', `Milestone: ${m.milestone_type} ${m.milestone_value}`]);
+        }
+
+        // Mark as claimed
+        await db.query('UPDATE user_milestones SET reward_claimed = true WHERE id = $1', [parseInt(milestoneId)]);
+
+        await db.query('COMMIT');
+        res.json({ success: true, reward_xp: m.reward_xp, reward_coins: m.reward_coins, special_reward: m.special_reward });
+    } catch (err) {
+        await db.query('ROLLBACK');
+        console.error('Error claiming milestone reward:', err);
+        res.status(500).json({ error: err.message });
+    }
+});
+
+// Get milestone progress
+app.get('/api/milestones/:userId/progress', async (req, res) => {
+    try {
+        const { userId } = req.params;
+
+        // Get current stats
+        const stats = await db.query(`
+            SELECT
+                us.total_words_learned as words_learned,
+                us.total_xp,
+                us.current_streak as streak_days,
+                us.quizzes_completed
+            FROM user_stats us
+            WHERE us.user_id = $1
+        `, [parseInt(userId)]);
+
+        const achievements = await db.query(
+            'SELECT COUNT(*) as count FROM user_achievements WHERE user_id = $1 AND is_unlocked = true',
+            [parseInt(userId)]
+        );
+
+        const currentStats = stats.rows[0] || {};
+        currentStats.achievements_unlocked = parseInt(achievements.rows[0].count);
+
+        // Get all milestones
+        const milestones = await db.query('SELECT * FROM user_milestones WHERE user_id = $1 ORDER BY milestone_value ASC', [parseInt(userId)]);
+
+        res.json({
+            current_stats: currentStats,
+            milestones: milestones.rows
+        });
+    } catch (err) {
+        console.error('Error getting milestone progress:', err);
+        res.status(500).json({ error: err.message });
+    }
+});
+
+// =========================
+// USER BADGES SYSTEM
+// =========================
+
+// Get all badges
+app.get('/api/badges', async (req, res) => {
+    try {
+        const { userId } = req.query;
+
+        const badges = await db.query('SELECT * FROM badges WHERE is_active = true ORDER BY rarity DESC, badge_name ASC');
+
+        if (userId) {
+            // Add user's earned status
+            const userBadges = await db.query('SELECT badge_id FROM user_badges WHERE user_id = $1', [parseInt(userId)]);
+            const earnedIds = new Set(userBadges.rows.map(ub => ub.badge_id));
+
+            badges.rows.forEach(badge => {
+                badge.is_earned = earnedIds.has(badge.id);
+            });
+        }
+
+        res.json(badges.rows);
+    } catch (err) {
+        console.error('Error getting badges:', err);
+        res.status(500).json({ error: err.message });
+    }
+});
+
+// Get user's earned badges
+app.get('/api/badges/user/:userId', async (req, res) => {
+    try {
+        const { userId } = req.params;
+
+        const badges = await db.query(`
+            SELECT b.*, ub.earned_at, ub.is_equipped
+            FROM user_badges ub
+            JOIN badges b ON ub.badge_id = b.id
+            WHERE ub.user_id = $1
+            ORDER BY ub.earned_at DESC
+        `, [parseInt(userId)]);
+
+        res.json(badges.rows);
+    } catch (err) {
+        console.error('Error getting user badges:', err);
+        res.status(500).json({ error: err.message });
+    }
+});
+
+// Award badge to user
+app.post('/api/badges/award', async (req, res) => {
+    try {
+        const { userId, badgeKey } = req.body;
+
+        // Get badge
+        const badge = await db.query('SELECT * FROM badges WHERE badge_key = $1', [badgeKey]);
+
+        if (badge.rows.length === 0) {
+            return res.status(404).json({ error: 'Badge not found' });
+        }
+
+        // Check if already earned
+        const existing = await db.query(
+            'SELECT * FROM user_badges WHERE user_id = $1 AND badge_id = $2',
+            [parseInt(userId), badge.rows[0].id]
+        );
+
+        if (existing.rows.length > 0) {
+            return res.status(400).json({ error: 'Badge already earned' });
+        }
+
+        // Award badge
+        const result = await db.query(`
+            INSERT INTO user_badges (user_id, badge_id)
+            VALUES ($1, $2)
+            RETURNING *
+        `, [parseInt(userId), badge.rows[0].id]);
+
+        res.json({ success: true, badge: { ...badge.rows[0], ...result.rows[0] } });
+    } catch (err) {
+        console.error('Error awarding badge:', err);
+        res.status(500).json({ error: err.message });
+    }
+});
+
+// Equip badge
+app.post('/api/badges/:badgeId/equip', async (req, res) => {
+    try {
+        const { badgeId } = req.params;
+        const { userId } = req.body;
+
+        await db.query('BEGIN');
+
+        // Unequip all badges
+        await db.query('UPDATE user_badges SET is_equipped = false WHERE user_id = $1', [parseInt(userId)]);
+
+        // Equip this badge
+        await db.query(
+            'UPDATE user_badges SET is_equipped = true WHERE user_id = $1 AND badge_id = $2',
+            [parseInt(userId), parseInt(badgeId)]
+        );
+
+        await db.query('COMMIT');
+        res.json({ success: true });
+    } catch (err) {
+        await db.query('ROLLBACK');
+        console.error('Error equipping badge:', err);
+        res.status(500).json({ error: err.message });
+    }
+});
+
+// Unequip badge
+app.post('/api/badges/:badgeId/unequip', async (req, res) => {
+    try {
+        const { badgeId } = req.params;
+        const { userId } = req.body;
+
+        await db.query(
+            'UPDATE user_badges SET is_equipped = false WHERE user_id = $1 AND badge_id = $2',
+            [parseInt(userId), parseInt(badgeId)]
+        );
+
+        res.json({ success: true });
+    } catch (err) {
+        console.error('Error unequipping badge:', err);
+        res.status(500).json({ error: err.message });
+    }
+});
+
+// Get equipped badge
+app.get('/api/badges/user/:userId/equipped', async (req, res) => {
+    try {
+        const { userId } = req.params;
+
+        const badge = await db.query(`
+            SELECT b.*, ub.earned_at
+            FROM user_badges ub
+            JOIN badges b ON ub.badge_id = b.id
+            WHERE ub.user_id = $1 AND ub.is_equipped = true
+            LIMIT 1
+        `, [parseInt(userId)]);
+
+        res.json(badge.rows[0] || null);
+    } catch (err) {
+        console.error('Error getting equipped badge:', err);
         res.status(500).json({ error: err.message });
     }
 });
