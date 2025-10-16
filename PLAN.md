@@ -242,11 +242,15 @@
   - [ ] Уведомления о новых челленджах (будущая версия)
   - [ ] Achievement "Challenge Master" за 30 дней челленджей (будущая версия)
 
-- [ ] **Недельные челленджи**
-  - Выучить 50 слов за неделю
-  - Сохранить стрик всю неделю
-  - Пройти 20 квизов
-  - Награды: особые бейджи, внутриигровая валюта
+- [x] **Недельные челленджи** ✅ ГОТОВО (Backend)
+  - ✅ Таблица weekly_challenges (user_id, week_start_date, challenge_type, target_value, current_progress)
+  - ✅ GET `/api/weekly-challenges/:userId` - получить челленджи текущей недели
+  - ✅ POST `/api/weekly-challenges/:userId/update` - обновить прогресс
+  - ✅ POST `/api/weekly-challenges/:userId/claim` - забрать награду
+  - ✅ GET `/api/weekly-challenges/stats/:userId` - статистика
+  - ✅ 3 типа челленджей: Weekly XP Master (500 XP), Word Collector (50 слов), Streak Keeper (7 дней)
+  - ✅ Автогенерация челленджей при первом запросе
+  - [ ] Frontend UI (будущая версия)
 
 - [ ] **Сезонные события**
   - Летний марафон
