@@ -5,6 +5,7 @@ const cors = require('cors');
 const multer = require('multer');
 const csv = require('csv-parser');
 const fs = require('fs');
+const crypto = require('crypto');
 require('dotenv').config();
 
 const app = express();
@@ -7156,6 +7157,102 @@ app.get('/api/badges/user/:userId/equipped', async (req, res) => {
         res.json(badge.rows[0] || null);
     } catch (err) {
         console.error('Error getting equipped badge:', err);
+        res.status(500).json({ error: err.message });
+    }
+});
+
+// =========================
+// TTS FALLBACK SYSTEM
+// =========================
+
+// Create cache directory if not exists
+const TTS_CACHE_DIR = path.join(__dirname, 'cache', 'tts');
+if (!fs.existsSync(TTS_CACHE_DIR)) {
+    fs.mkdirSync(TTS_CACHE_DIR, { recursive: true });
+}
+
+// Synthesize speech using fallback TTS API
+app.post('/api/tts/synthesize', async (req, res) => {
+    try {
+        const { text, language, provider } = req.body;
+
+        if (!text || !language) {
+            return res.status(400).json({ error: 'Missing required fields: text, language' });
+        }
+
+        // Create cache key
+        const cacheKey = crypto.createHash('md5').update(`${language}_${text}`).digest('hex');
+        const cacheFile = path.join(TTS_CACHE_DIR, `${cacheKey}.json`);
+
+        // Check cache
+        if (fs.existsSync(cacheFile)) {
+            const cached = JSON.parse(fs.readFileSync(cacheFile, 'utf8'));
+            return res.json({
+                audioUrl: cached.audioUrl,
+                provider: cached.provider,
+                cached: true
+            });
+        }
+
+        // Mock TTS synthesis (в production здесь будет real API call)
+        // TODO: Integrate real TTS providers (Azure, Google, Amazon)
+        const mockAudioUrl = `data:audio/mp3;base64,${Buffer.from('MOCK_AUDIO_DATA').toString('base64')}`;
+
+        const result = {
+            audioUrl: mockAudioUrl,
+            provider: provider || 'mock',
+            text: text,
+            language: language,
+            cached: false,
+            timestamp: new Date().toISOString()
+        };
+
+        // Save to cache
+        fs.writeFileSync(cacheFile, JSON.stringify(result), 'utf8');
+
+        res.json({
+            audioUrl: result.audioUrl,
+            provider: result.provider,
+            cached: false
+        });
+
+    } catch (err) {
+        console.error('Error in TTS synthesize:', err);
+        res.status(500).json({ error: err.message });
+    }
+});
+
+// Get TTS cache stats
+app.get('/api/tts/cache/stats', async (req, res) => {
+    try {
+        const files = fs.readdirSync(TTS_CACHE_DIR);
+        const totalSize = files.reduce((acc, file) => {
+            const stats = fs.statSync(path.join(TTS_CACHE_DIR, file));
+            return acc + stats.size;
+        }, 0);
+
+        res.json({
+            cached_items: files.length,
+            total_size_bytes: totalSize,
+            total_size_mb: (totalSize / (1024 * 1024)).toFixed(2)
+        });
+    } catch (err) {
+        console.error('Error getting TTS cache stats:', err);
+        res.status(500).json({ error: err.message });
+    }
+});
+
+// Clear TTS cache
+app.delete('/api/tts/cache/clear', async (req, res) => {
+    try {
+        const files = fs.readdirSync(TTS_CACHE_DIR);
+        files.forEach(file => {
+            fs.unlinkSync(path.join(TTS_CACHE_DIR, file));
+        });
+
+        res.json({ success: true, deleted_items: files.length });
+    } catch (err) {
+        console.error('Error clearing TTS cache:', err);
         res.status(500).json({ error: err.message });
     }
 });

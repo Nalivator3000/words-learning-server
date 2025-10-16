@@ -23,12 +23,14 @@
   - ✅ Авто-режим с умным алгоритмом подбора
   - ✅ Dark mode поддержка для всех элементов
 
-- [ ] **Fallback стратегия**
-  - Если нет нативного голоса → использовать онлайн TTS API
-  - Google Cloud TTS (платный, но качественный)
-  - Microsoft Azure Speech (бесплатно до 500k символов/месяц)
-  - Amazon Polly (качественные нейронные голоса)
-  - Elevenlabs (самое высокое качество, но дорого)
+- [x] **Fallback стратегия** ✅ ГОТОВО (Backend)
+  - ✅ API endpoint `/api/tts/synthesize` с кешированием
+  - ✅ Cache management (`/cache/stats`, `/cache/clear`)
+  - ✅ MD5-хеширование для cache keys
+  - ✅ Файловое кеширование (cache/tts/)
+  - ✅ Готовность к интеграции real TTS (Azure/Google/Amazon/Elevenlabs)
+  - [ ] Frontend integration (следующая итерация)
+  - [ ] Real API keys configuration (.env)
 
 - [ ] **Offline поддержка**
   - Кеширование часто используемых слов
