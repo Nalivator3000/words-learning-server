@@ -2,6 +2,92 @@
 
 ## 2025-10-14
 
+### Activity Feed System (Backend)
+**Commit:** 📰 FEED: Complete activity feed with social interactions
+
+**Изменения:**
+- База данных: `activity_feed` table (id, user_id, activity_type, activity_data JSONB, is_public, created_at) + indexes
+- API Endpoints (6 новых):
+  - `POST /api/activity-feed` - опубликовать активность (achievement, streak, word learned, etc.)
+  - `GET /api/activity-feed/global` - глобальная лента (все публичные активности)
+  - `GET /api/activity-feed/user/:userId` - личная лента пользователя
+  - `GET /api/activity-feed/friends/:userId` - лента друзей (только accepted friendships)
+  - `GET /api/activity-feed/type/:activityType` - фильтр по типу активности
+  - `DELETE /api/activity-feed/:activityId` - удалить свою активность (ownership check)
+
+**Файлы:**
+- [server-postgresql.js:584-603](server-postgresql.js#L584-L603) - таблица + indexes
+- [server-postgresql.js:5946-6121](server-postgresql.js#L5946-L6121) - API endpoints
+
+**Функциональность:**
+- Activity types: achievement_unlocked, streak_milestone, word_learned, level_up, challenge_completed, duel_won, friend_added
+- Privacy control: is_public флаг для приватных активностей
+- Rich data: JSONB activity_data для деталей (achievement name, streak count, etc.)
+- User enrichment: автоматическое добавление name, avatar_url, level, XP
+- Friends filtering: bidirectional friendship queries (UNION)
+- Pagination: limit + offset для infinite scroll
+- Performance: indexes на created_at и user_id для быстрых запросов
+- Ownership protection: только автор может удалять свою активность
+
+### Social Reactions System (Backend)
+**Commit:** ❤️ REACTIONS: Complete likes & comments system
+
+**Изменения:**
+- База данных (2 таблицы):
+  - `activity_likes` - лайки (id, activity_id, user_id, created_at, UNIQUE constraint)
+  - `activity_comments` - комментарии (id, activity_id, user_id, comment_text, created_at)
+
+- API Endpoints (7 новых):
+  - `POST /api/activity-feed/:activityId/like` - лайкнуть активность (duplicate check)
+  - `DELETE /api/activity-feed/:activityId/like` - убрать лайк
+  - `GET /api/activity-feed/:activityId/likes` - список лайкнувших (с user info)
+  - `POST /api/activity-feed/:activityId/comment` - добавить комментарий (text validation)
+  - `GET /api/activity-feed/:activityId/comments` - все комментарии (chronological order)
+  - `DELETE /api/activity-feed/comments/:commentId` - удалить комментарий (ownership check)
+  - `GET /api/activity-feed/:activityId/details` - полная информация (likes_count, comments_count, is_liked)
+
+**Файлы:**
+- [server-postgresql.js:605-625](server-postgresql.js#L605-L625) - таблицы
+- [server-postgresql.js:6123-6362](server-postgresql.js#L6123-L6362) - API endpoints
+
+**Функциональность:**
+- Duplicate prevention: UNIQUE constraint на (activity_id, user_id) для лайков
+- Like/unlike: toggle механика с live count updates
+- Comment validation: trimming, length check, empty text rejection
+- User enrichment: автоматическое добавление name + avatar к reactions
+- Ownership protection: только автор комментария может его удалить
+- Details endpoint: полная агрегация (counts + is_liked для текущего юзера)
+- Chronological order: комментарии сортируются ASC (oldest first, как в соцсетях)
+- CASCADE deletion: автоматическое удаление reactions при удалении activity
+
+### User Inventory System (Backend)
+**Commit:** 🎒 INVENTORY: Complete user inventory management
+
+**Изменения:**
+- База данных: `user_inventory` table (id, user_id, item_type, item_id, item_name, quantity, is_equipped, is_active, acquired_at, expires_at, metadata JSONB, UNIQUE constraint)
+- API Endpoints (7 новых):
+  - `GET /api/inventory/:userId` - получить инвентарь (фильтр по item_type)
+  - `POST /api/inventory` - добавить предмет (auto-stack existing)
+  - `POST /api/inventory/:inventoryId/use` - использовать предмет (quantity decrement)
+  - `POST /api/inventory/:inventoryId/equip` - экипировать предмет (auto-unequip others)
+  - `POST /api/inventory/:inventoryId/unequip` - снять предмет
+  - `GET /api/inventory/:userId/equipped` - получить экипированные предметы
+  - `POST /api/inventory/cleanup-expired` - удалить истёкшие предметы (cron job)
+
+**Файлы:**
+- [server-postgresql.js:627-643](server-postgresql.js#L627-L643) - таблица
+- [server-postgresql.js:6364-6557](server-postgresql.js#L6364-L6557) - API endpoints
+
+**Функциональность:**
+- Item types: theme, avatar, booster, hint, freeze, badge, consumable
+- Quantity stacking: автоматическое увеличение quantity для существующих предметов
+- Consumable mechanics: use endpoint уменьшает quantity, удаляет при 0
+- Equip system: только 1 предмет каждого типа может быть equipped одновременно
+- Time-limited items: expires_at для временных предметов (boosters, freezes)
+- Metadata storage: JSONB для дополнительных данных (duration, multiplier, etc.)
+- UNIQUE constraint: (user_id, item_type, item_id) предотвращает дубликаты
+- Cleanup endpoint: автоматическая очистка истёкших предметов (для cron)
+
 ### Boosters System (Backend)
 **Commit:** 🚀 BOOSTERS: Complete power-ups system with time-limited boosters
 

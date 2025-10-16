@@ -581,6 +581,67 @@ async function initDatabase() {
             )
         `);
 
+        // Activity Feed System: Global feed
+        await db.query(`
+            CREATE TABLE IF NOT EXISTS activity_feed (
+                id SERIAL PRIMARY KEY,
+                user_id INTEGER REFERENCES users(id) ON DELETE CASCADE,
+                activity_type VARCHAR(50) NOT NULL,
+                activity_data JSONB,
+                is_public BOOLEAN DEFAULT true,
+                created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+            )
+        `);
+
+        // Create index for efficient feed queries
+        await db.query(`
+            CREATE INDEX IF NOT EXISTS idx_activity_feed_created_at ON activity_feed(created_at DESC);
+        `);
+
+        await db.query(`
+            CREATE INDEX IF NOT EXISTS idx_activity_feed_user_id ON activity_feed(user_id);
+        `);
+
+        // Social Reactions System: Likes
+        await db.query(`
+            CREATE TABLE IF NOT EXISTS activity_likes (
+                id SERIAL PRIMARY KEY,
+                activity_id INTEGER REFERENCES activity_feed(id) ON DELETE CASCADE,
+                user_id INTEGER REFERENCES users(id) ON DELETE CASCADE,
+                created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+                UNIQUE(activity_id, user_id)
+            )
+        `);
+
+        // Comments
+        await db.query(`
+            CREATE TABLE IF NOT EXISTS activity_comments (
+                id SERIAL PRIMARY KEY,
+                activity_id INTEGER REFERENCES activity_feed(id) ON DELETE CASCADE,
+                user_id INTEGER REFERENCES users(id) ON DELETE CASCADE,
+                comment_text TEXT NOT NULL,
+                created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+            )
+        `);
+
+        // User Inventory System: Owned items
+        await db.query(`
+            CREATE TABLE IF NOT EXISTS user_inventory (
+                id SERIAL PRIMARY KEY,
+                user_id INTEGER REFERENCES users(id) ON DELETE CASCADE,
+                item_type VARCHAR(50) NOT NULL,
+                item_id VARCHAR(100) NOT NULL,
+                item_name VARCHAR(255) NOT NULL,
+                quantity INTEGER DEFAULT 1,
+                is_equipped BOOLEAN DEFAULT false,
+                is_active BOOLEAN DEFAULT true,
+                acquired_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+                expires_at TIMESTAMP,
+                metadata JSONB,
+                UNIQUE(user_id, item_type, item_id)
+            )
+        `);
+
         // Daily Challenges System: Challenge templates
         await db.query(`
             CREATE TABLE IF NOT EXISTS challenge_templates (
@@ -5918,6 +5979,579 @@ app.post('/api/settings/:userId/reset', async (req, res) => {
         res.json({ success: true, settings: settings.rows[0] });
     } catch (err) {
         console.error('Error resetting user settings:', err);
+        res.status(500).json({ error: err.message });
+    }
+});
+
+// =========================
+// ACTIVITY FEED SYSTEM
+// =========================
+
+// Post activity to feed
+app.post('/api/activity-feed', async (req, res) => {
+    try {
+        const { userId, activityType, activityData, isPublic } = req.body;
+
+        const result = await db.query(`
+            INSERT INTO activity_feed (user_id, activity_type, activity_data, is_public)
+            VALUES ($1, $2, $3, $4)
+            RETURNING *
+        `, [parseInt(userId), activityType, activityData ? JSON.stringify(activityData) : null, isPublic !== false]);
+
+        res.json({ success: true, activity: result.rows[0] });
+    } catch (err) {
+        console.error('Error posting activity:', err);
+        res.status(500).json({ error: err.message });
+    }
+});
+
+// Get global feed (public activities from all users)
+app.get('/api/activity-feed/global', async (req, res) => {
+    try {
+        const limit = req.query.limit || 50;
+        const offset = req.query.offset || 0;
+
+        const activities = await db.query(`
+            SELECT
+                af.*,
+                u.name as user_name,
+                u.avatar_url,
+                us.level,
+                us.total_xp
+            FROM activity_feed af
+            JOIN users u ON af.user_id = u.id
+            LEFT JOIN user_stats us ON af.user_id = us.user_id
+            WHERE af.is_public = true
+            ORDER BY af.created_at DESC
+            LIMIT $1 OFFSET $2
+        `, [parseInt(limit), parseInt(offset)]);
+
+        res.json(activities.rows);
+    } catch (err) {
+        console.error('Error getting global feed:', err);
+        res.status(500).json({ error: err.message });
+    }
+});
+
+// Get user's personal feed (their activities only)
+app.get('/api/activity-feed/user/:userId', async (req, res) => {
+    try {
+        const { userId } = req.params;
+        const limit = req.query.limit || 50;
+
+        const activities = await db.query(`
+            SELECT * FROM activity_feed
+            WHERE user_id = $1
+            ORDER BY created_at DESC
+            LIMIT $2
+        `, [parseInt(userId), parseInt(limit)]);
+
+        res.json(activities.rows);
+    } catch (err) {
+        console.error('Error getting user feed:', err);
+        res.status(500).json({ error: err.message });
+    }
+});
+
+// Get friends feed (activities from friends)
+app.get('/api/activity-feed/friends/:userId', async (req, res) => {
+    try {
+        const { userId } = req.params;
+        const limit = req.query.limit || 50;
+
+        const activities = await db.query(`
+            SELECT
+                af.*,
+                u.name as user_name,
+                u.avatar_url,
+                us.level,
+                us.total_xp
+            FROM activity_feed af
+            JOIN users u ON af.user_id = u.id
+            LEFT JOIN user_stats us ON af.user_id = us.user_id
+            WHERE af.user_id IN (
+                SELECT friend_id FROM friendships WHERE user_id = $1 AND status = 'accepted'
+                UNION
+                SELECT user_id FROM friendships WHERE friend_id = $1 AND status = 'accepted'
+            )
+            AND af.is_public = true
+            ORDER BY af.created_at DESC
+            LIMIT $2
+        `, [parseInt(userId), parseInt(limit)]);
+
+        res.json(activities.rows);
+    } catch (err) {
+        console.error('Error getting friends feed:', err);
+        res.status(500).json({ error: err.message });
+    }
+});
+
+// Get feed by activity type
+app.get('/api/activity-feed/type/:activityType', async (req, res) => {
+    try {
+        const { activityType } = req.params;
+        const limit = req.query.limit || 50;
+
+        const activities = await db.query(`
+            SELECT
+                af.*,
+                u.name as user_name,
+                u.avatar_url,
+                us.level
+            FROM activity_feed af
+            JOIN users u ON af.user_id = u.id
+            LEFT JOIN user_stats us ON af.user_id = us.user_id
+            WHERE af.activity_type = $1 AND af.is_public = true
+            ORDER BY af.created_at DESC
+            LIMIT $2
+        `, [activityType, parseInt(limit)]);
+
+        res.json(activities.rows);
+    } catch (err) {
+        console.error('Error getting feed by type:', err);
+        res.status(500).json({ error: err.message });
+    }
+});
+
+// Delete activity
+app.delete('/api/activity-feed/:activityId', async (req, res) => {
+    try {
+        const { activityId } = req.params;
+        const { userId } = req.body;
+
+        // Check ownership
+        const activity = await db.query('SELECT * FROM activity_feed WHERE id = $1', [parseInt(activityId)]);
+        if (activity.rows.length === 0) {
+            return res.status(404).json({ error: 'Activity not found' });
+        }
+
+        if (activity.rows[0].user_id !== parseInt(userId)) {
+            return res.status(403).json({ error: 'Not authorized to delete this activity' });
+        }
+
+        await db.query('DELETE FROM activity_feed WHERE id = $1', [parseInt(activityId)]);
+
+        res.json({ success: true });
+    } catch (err) {
+        console.error('Error deleting activity:', err);
+        res.status(500).json({ error: err.message });
+    }
+});
+
+// =========================
+// SOCIAL REACTIONS SYSTEM
+// =========================
+
+// Like an activity
+app.post('/api/activity-feed/:activityId/like', async (req, res) => {
+    try {
+        const { activityId } = req.params;
+        const { userId } = req.body;
+
+        // Check if already liked
+        const existing = await db.query(
+            'SELECT * FROM activity_likes WHERE activity_id = $1 AND user_id = $2',
+            [parseInt(activityId), parseInt(userId)]
+        );
+
+        if (existing.rows.length > 0) {
+            return res.status(400).json({ error: 'Already liked' });
+        }
+
+        await db.query(`
+            INSERT INTO activity_likes (activity_id, user_id)
+            VALUES ($1, $2)
+        `, [parseInt(activityId), parseInt(userId)]);
+
+        // Get like count
+        const count = await db.query(
+            'SELECT COUNT(*) as count FROM activity_likes WHERE activity_id = $1',
+            [parseInt(activityId)]
+        );
+
+        res.json({ success: true, like_count: parseInt(count.rows[0].count) });
+    } catch (err) {
+        console.error('Error liking activity:', err);
+        res.status(500).json({ error: err.message });
+    }
+});
+
+// Unlike an activity
+app.delete('/api/activity-feed/:activityId/like', async (req, res) => {
+    try {
+        const { activityId } = req.params;
+        const { userId } = req.body;
+
+        await db.query(
+            'DELETE FROM activity_likes WHERE activity_id = $1 AND user_id = $2',
+            [parseInt(activityId), parseInt(userId)]
+        );
+
+        // Get like count
+        const count = await db.query(
+            'SELECT COUNT(*) as count FROM activity_likes WHERE activity_id = $1',
+            [parseInt(activityId)]
+        );
+
+        res.json({ success: true, like_count: parseInt(count.rows[0].count) });
+    } catch (err) {
+        console.error('Error unliking activity:', err);
+        res.status(500).json({ error: err.message });
+    }
+});
+
+// Get likes for activity
+app.get('/api/activity-feed/:activityId/likes', async (req, res) => {
+    try {
+        const { activityId } = req.params;
+
+        const likes = await db.query(`
+            SELECT
+                al.*,
+                u.name as user_name,
+                u.avatar_url
+            FROM activity_likes al
+            JOIN users u ON al.user_id = u.id
+            WHERE al.activity_id = $1
+            ORDER BY al.created_at DESC
+        `, [parseInt(activityId)]);
+
+        res.json(likes.rows);
+    } catch (err) {
+        console.error('Error getting likes:', err);
+        res.status(500).json({ error: err.message });
+    }
+});
+
+// Add comment to activity
+app.post('/api/activity-feed/:activityId/comment', async (req, res) => {
+    try {
+        const { activityId } = req.params;
+        const { userId, commentText } = req.body;
+
+        if (!commentText || commentText.trim().length === 0) {
+            return res.status(400).json({ error: 'Comment text is required' });
+        }
+
+        const result = await db.query(`
+            INSERT INTO activity_comments (activity_id, user_id, comment_text)
+            VALUES ($1, $2, $3)
+            RETURNING *
+        `, [parseInt(activityId), parseInt(userId), commentText.trim()]);
+
+        // Get user info
+        const user = await db.query('SELECT name, avatar_url FROM users WHERE id = $1', [parseInt(userId)]);
+
+        res.json({
+            success: true,
+            comment: {
+                ...result.rows[0],
+                user_name: user.rows[0].name,
+                avatar_url: user.rows[0].avatar_url
+            }
+        });
+    } catch (err) {
+        console.error('Error adding comment:', err);
+        res.status(500).json({ error: err.message });
+    }
+});
+
+// Get comments for activity
+app.get('/api/activity-feed/:activityId/comments', async (req, res) => {
+    try {
+        const { activityId } = req.params;
+
+        const comments = await db.query(`
+            SELECT
+                ac.*,
+                u.name as user_name,
+                u.avatar_url
+            FROM activity_comments ac
+            JOIN users u ON ac.user_id = u.id
+            WHERE ac.activity_id = $1
+            ORDER BY ac.created_at ASC
+        `, [parseInt(activityId)]);
+
+        res.json(comments.rows);
+    } catch (err) {
+        console.error('Error getting comments:', err);
+        res.status(500).json({ error: err.message });
+    }
+});
+
+// Delete comment
+app.delete('/api/activity-feed/comments/:commentId', async (req, res) => {
+    try {
+        const { commentId } = req.params;
+        const { userId } = req.body;
+
+        // Check ownership
+        const comment = await db.query('SELECT * FROM activity_comments WHERE id = $1', [parseInt(commentId)]);
+        if (comment.rows.length === 0) {
+            return res.status(404).json({ error: 'Comment not found' });
+        }
+
+        if (comment.rows[0].user_id !== parseInt(userId)) {
+            return res.status(403).json({ error: 'Not authorized to delete this comment' });
+        }
+
+        await db.query('DELETE FROM activity_comments WHERE id = $1', [parseInt(commentId)]);
+
+        res.json({ success: true });
+    } catch (err) {
+        console.error('Error deleting comment:', err);
+        res.status(500).json({ error: err.message });
+    }
+});
+
+// Get activity with likes and comments count
+app.get('/api/activity-feed/:activityId/details', async (req, res) => {
+    try {
+        const { activityId } = req.params;
+        const { userId } = req.query;
+
+        // Get activity
+        const activity = await db.query(`
+            SELECT
+                af.*,
+                u.name as user_name,
+                u.avatar_url,
+                us.level,
+                us.total_xp
+            FROM activity_feed af
+            JOIN users u ON af.user_id = u.id
+            LEFT JOIN user_stats us ON af.user_id = us.user_id
+            WHERE af.id = $1
+        `, [parseInt(activityId)]);
+
+        if (activity.rows.length === 0) {
+            return res.status(404).json({ error: 'Activity not found' });
+        }
+
+        // Get counts
+        const likesCount = await db.query(
+            'SELECT COUNT(*) as count FROM activity_likes WHERE activity_id = $1',
+            [parseInt(activityId)]
+        );
+
+        const commentsCount = await db.query(
+            'SELECT COUNT(*) as count FROM activity_comments WHERE activity_id = $1',
+            [parseInt(activityId)]
+        );
+
+        // Check if current user liked
+        let isLiked = false;
+        if (userId) {
+            const userLike = await db.query(
+                'SELECT * FROM activity_likes WHERE activity_id = $1 AND user_id = $2',
+                [parseInt(activityId), parseInt(userId)]
+            );
+            isLiked = userLike.rows.length > 0;
+        }
+
+        res.json({
+            ...activity.rows[0],
+            likes_count: parseInt(likesCount.rows[0].count),
+            comments_count: parseInt(commentsCount.rows[0].count),
+            is_liked: isLiked
+        });
+    } catch (err) {
+        console.error('Error getting activity details:', err);
+        res.status(500).json({ error: err.message });
+    }
+});
+
+// =========================
+// USER INVENTORY SYSTEM
+// =========================
+
+// Get user's inventory
+app.get('/api/inventory/:userId', async (req, res) => {
+    try {
+        const { userId } = req.params;
+        const { itemType } = req.query;
+
+        let query = 'SELECT * FROM user_inventory WHERE user_id = $1';
+        const params = [parseInt(userId)];
+
+        if (itemType) {
+            query += ' AND item_type = $2';
+            params.push(itemType);
+        }
+
+        query += ' ORDER BY acquired_at DESC';
+
+        const items = await db.query(query, params);
+
+        res.json(items.rows);
+    } catch (err) {
+        console.error('Error getting inventory:', err);
+        res.status(500).json({ error: err.message });
+    }
+});
+
+// Add item to inventory
+app.post('/api/inventory', async (req, res) => {
+    try {
+        const { userId, itemType, itemId, itemName, quantity, expiresAt, metadata } = req.body;
+
+        // Check if item exists
+        const existing = await db.query(
+            'SELECT * FROM user_inventory WHERE user_id = $1 AND item_type = $2 AND item_id = $3',
+            [parseInt(userId), itemType, itemId]
+        );
+
+        let result;
+        if (existing.rows.length > 0) {
+            // Update quantity
+            result = await db.query(`
+                UPDATE user_inventory
+                SET quantity = quantity + $1, is_active = true
+                WHERE user_id = $2 AND item_type = $3 AND item_id = $4
+                RETURNING *
+            `, [quantity || 1, parseInt(userId), itemType, itemId]);
+        } else {
+            // Insert new
+            result = await db.query(`
+                INSERT INTO user_inventory (user_id, item_type, item_id, item_name, quantity, expires_at, metadata)
+                VALUES ($1, $2, $3, $4, $5, $6, $7)
+                RETURNING *
+            `, [
+                parseInt(userId),
+                itemType,
+                itemId,
+                itemName,
+                quantity || 1,
+                expiresAt || null,
+                metadata ? JSON.stringify(metadata) : null
+            ]);
+        }
+
+        res.json({ success: true, item: result.rows[0] });
+    } catch (err) {
+        console.error('Error adding to inventory:', err);
+        res.status(500).json({ error: err.message });
+    }
+});
+
+// Use/consume item from inventory
+app.post('/api/inventory/:inventoryId/use', async (req, res) => {
+    try {
+        const { inventoryId } = req.params;
+        const { quantity } = req.body;
+
+        const item = await db.query('SELECT * FROM user_inventory WHERE id = $1', [parseInt(inventoryId)]);
+
+        if (item.rows.length === 0) {
+            return res.status(404).json({ error: 'Item not found' });
+        }
+
+        const itemData = item.rows[0];
+        const useQuantity = quantity || 1;
+
+        if (itemData.quantity < useQuantity) {
+            return res.status(400).json({ error: 'Insufficient quantity' });
+        }
+
+        let result;
+        if (itemData.quantity === useQuantity) {
+            // Remove item
+            await db.query('DELETE FROM user_inventory WHERE id = $1', [parseInt(inventoryId)]);
+            result = null;
+        } else {
+            // Decrease quantity
+            result = await db.query(`
+                UPDATE user_inventory SET quantity = quantity - $1 WHERE id = $2 RETURNING *
+            `, [useQuantity, parseInt(inventoryId)]);
+        }
+
+        res.json({ success: true, item: result ? result.rows[0] : null });
+    } catch (err) {
+        console.error('Error using item:', err);
+        res.status(500).json({ error: err.message });
+    }
+});
+
+// Equip item (themes, avatars, etc.)
+app.post('/api/inventory/:inventoryId/equip', async (req, res) => {
+    try {
+        const { inventoryId } = req.params;
+        const { userId } = req.body;
+
+        await db.query('BEGIN');
+
+        // Get item
+        const item = await db.query('SELECT * FROM user_inventory WHERE id = $1', [parseInt(inventoryId)]);
+
+        if (item.rows.length === 0) {
+            await db.query('ROLLBACK');
+            return res.status(404).json({ error: 'Item not found' });
+        }
+
+        const itemData = item.rows[0];
+
+        // Unequip all items of same type
+        await db.query(
+            'UPDATE user_inventory SET is_equipped = false WHERE user_id = $1 AND item_type = $2',
+            [parseInt(userId), itemData.item_type]
+        );
+
+        // Equip this item
+        await db.query('UPDATE user_inventory SET is_equipped = true WHERE id = $1', [parseInt(inventoryId)]);
+
+        await db.query('COMMIT');
+
+        res.json({ success: true });
+    } catch (err) {
+        await db.query('ROLLBACK');
+        console.error('Error equipping item:', err);
+        res.status(500).json({ error: err.message });
+    }
+});
+
+// Unequip item
+app.post('/api/inventory/:inventoryId/unequip', async (req, res) => {
+    try {
+        const { inventoryId } = req.params;
+
+        await db.query('UPDATE user_inventory SET is_equipped = false WHERE id = $1', [parseInt(inventoryId)]);
+
+        res.json({ success: true });
+    } catch (err) {
+        console.error('Error unequipping item:', err);
+        res.status(500).json({ error: err.message });
+    }
+});
+
+// Get equipped items
+app.get('/api/inventory/:userId/equipped', async (req, res) => {
+    try {
+        const { userId } = req.params;
+
+        const items = await db.query(`
+            SELECT * FROM user_inventory
+            WHERE user_id = $1 AND is_equipped = true
+        `, [parseInt(userId)]);
+
+        res.json(items.rows);
+    } catch (err) {
+        console.error('Error getting equipped items:', err);
+        res.status(500).json({ error: err.message });
+    }
+});
+
+// Clean up expired items
+app.post('/api/inventory/cleanup-expired', async (req, res) => {
+    try {
+        const result = await db.query(`
+            DELETE FROM user_inventory
+            WHERE expires_at IS NOT NULL AND expires_at < CURRENT_TIMESTAMP
+            RETURNING *
+        `);
+
+        res.json({ success: true, deleted_count: result.rows.length });
+    } catch (err) {
+        console.error('Error cleaning up expired items:', err);
         res.status(500).json({ error: err.message });
     }
 });
