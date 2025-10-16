@@ -1722,6 +1722,38 @@ app.get('/api/gamification/achievements/:userId/progress', async (req, res) => {
     }
 });
 
+// Gamification: Get recent unlocked achievements
+app.get('/api/gamification/achievements/:userId/recent', async (req, res) => {
+    try {
+        const { userId } = req.params;
+        const limit = parseInt(req.query.limit) || 10;
+
+        const recent = await db.query(`
+            SELECT
+                ua.achievement_id,
+                ua.unlocked_at,
+                a.name,
+                a.description,
+                a.icon,
+                a.xp_reward,
+                a.category
+            FROM user_achievements ua
+            JOIN achievements a ON ua.achievement_id = a.id
+            WHERE ua.user_id = $1
+            ORDER BY ua.unlocked_at DESC
+            LIMIT $2
+        `, [parseInt(userId), limit]);
+
+        res.json({
+            recent: recent.rows,
+            total_unlocked: recent.rows.length
+        });
+    } catch (err) {
+        console.error('Error getting recent achievements:', err);
+        res.status(500).json({ error: err.message });
+    }
+});
+
 // Gamification: Get global leaderboard
 app.get('/api/gamification/leaderboard/global', async (req, res) => {
     try {
