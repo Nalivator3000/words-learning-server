@@ -7333,6 +7333,252 @@ app.get('/api/words/popular/:userId', async (req, res) => {
     }
 });
 
+// =========================
+// PERSONAL INSIGHTS SYSTEM
+// =========================
+
+// Helper functions for insights
+function getTimeInsightTitle(hour) {
+    if (hour >= 6 && hour < 12) return "Вы лучше всего учитесь утром";
+    if (hour >= 12 && hour < 18) return "Вы продуктивны днём";
+    if (hour >= 18 && hour < 22) return "Вечер - ваше лучшее время";
+    return "Вы ночная сова";
+}
+
+function getTimeIcon(hour) {
+    if (hour >= 6 && hour < 12) return "☀️";
+    if (hour >= 12 && hour < 18) return "🌤️";
+    if (hour >= 18 && hour < 22) return "🌆";
+    return "🌙";
+}
+
+function getExerciseTitle(actionType) {
+    const titles = {
+        'quiz_completed': 'Квизы',
+        'word_learned': 'Изучение новых слов',
+        'word_reviewed': 'Повторение',
+        'streak_maintained': 'Поддержание стрика',
+        'achievement_earned': 'Достижения'
+    };
+    return titles[actionType] || actionType;
+}
+
+// Get personal insights for user
+app.get('/api/users/:userId/insights', async (req, res) => {
+    try {
+        const { userId } = req.params;
+        const period = req.query.period || 'month';
+        const limit = parseInt(req.query.limit) || 5;
+
+        // Calculate interval based on period
+        let interval = '30 days';
+        if (period === 'week') interval = '7 days';
+        if (period === 'all') interval = '365 days';
+
+        const insights = [];
+
+        // 1. Best learning time
+        const timeQuery = await db.query(`
+            SELECT
+                EXTRACT(HOUR FROM createdat) as hour,
+                COUNT(*) as activities,
+                SUM(xp_amount) as total_xp
+            FROM xp_log
+            WHERE user_id = $1
+              AND createdat >= NOW() - INTERVAL '${interval}'
+            GROUP BY hour
+            HAVING COUNT(*) >= 1
+            ORDER BY total_xp DESC
+            LIMIT 1
+        `, [parseInt(userId)]);
+
+        if (timeQuery.rows.length > 0) {
+            const timeData = timeQuery.rows[0];
+            const totalXpQuery = await db.query(`
+                SELECT SUM(xp_amount) as total FROM xp_log
+                WHERE user_id = $1 AND createdat >= NOW() - INTERVAL '${interval}'
+            `, [parseInt(userId)]);
+
+            const totalXp = totalXpQuery.rows[0]?.total || 1;
+            const percentage = Math.round((timeData.total_xp / totalXp) * 100);
+
+            insights.push({
+                id: 'best_time',
+                type: 'learning_time',
+                title: getTimeInsightTitle(parseInt(timeData.hour)),
+                description: `${percentage}% вашего XP заработано в ${timeData.hour}:00`,
+                icon: getTimeIcon(parseInt(timeData.hour)),
+                priority: 'high',
+                data: {
+                    peak_hour: parseInt(timeData.hour),
+                    activities: parseInt(timeData.activities),
+                    xp: parseInt(timeData.total_xp),
+                    percentage: percentage
+                }
+            });
+        }
+
+        // 2. Favorite exercise type
+        const exerciseQuery = await db.query(`
+            SELECT
+                action_type,
+                COUNT(*) as count,
+                SUM(xp_amount) as total_xp
+            FROM xp_log
+            WHERE user_id = $1
+              AND createdat >= NOW() - INTERVAL '${interval}'
+            GROUP BY action_type
+            HAVING COUNT(*) >= 1
+            ORDER BY count DESC
+            LIMIT 1
+        `, [parseInt(userId)]);
+
+        if (exerciseQuery.rows.length > 0) {
+            const exerciseData = exerciseQuery.rows[0];
+            insights.push({
+                id: 'favorite_exercise',
+                type: 'exercise_preference',
+                title: `Ваш любимый тип активности - ${getExerciseTitle(exerciseData.action_type)}`,
+                description: `Вы выполнили ${exerciseData.count} раз за ${period === 'week' ? 'неделю' : 'месяц'}`,
+                icon: '📝',
+                priority: 'medium',
+                data: {
+                    favorite_type: exerciseData.action_type,
+                    count: parseInt(exerciseData.count),
+                    total_xp: parseInt(exerciseData.total_xp)
+                }
+            });
+        }
+
+        // 3. Progress comparison (current vs previous period)
+        let currentPeriod, previousPeriod;
+        if (period === 'week') {
+            currentPeriod = "DATE_TRUNC('week', NOW())";
+            previousPeriod = "DATE_TRUNC('week', NOW() - INTERVAL '1 week')";
+        } else {
+            currentPeriod = "DATE_TRUNC('month', NOW())";
+            previousPeriod = "DATE_TRUNC('month', NOW() - INTERVAL '1 month')";
+        }
+
+        const currentXpQuery = await db.query(`
+            SELECT SUM(xp_amount) as xp, COUNT(DISTINCT DATE(createdat)) as active_days
+            FROM xp_log
+            WHERE user_id = $1 AND createdat >= ${currentPeriod}
+        `, [parseInt(userId)]);
+
+        const previousXpQuery = await db.query(`
+            SELECT SUM(xp_amount) as xp, COUNT(DISTINCT DATE(createdat)) as active_days
+            FROM xp_log
+            WHERE user_id = $1
+              AND createdat >= ${previousPeriod}
+              AND createdat < ${currentPeriod}
+        `, [parseInt(userId)]);
+
+        const currentXp = parseInt(currentXpQuery.rows[0]?.xp) || 0;
+        const previousXp = parseInt(previousXpQuery.rows[0]?.xp) || 0;
+
+        if (previousXp > 0 && currentXp > previousXp) {
+            const improvement = Math.round(((currentXp - previousXp) / previousXp) * 100);
+            insights.push({
+                id: 'progress_acceleration',
+                type: 'progress',
+                title: `Вы выучили на ${improvement}% больше, чем в прошлом периоде`,
+                description: `Текущий XP: ${currentXp} (было ${previousXp})`,
+                icon: '🚀',
+                priority: 'high',
+                data: {
+                    improvement_percentage: improvement,
+                    current_xp: currentXp,
+                    previous_xp: previousXp
+                }
+            });
+        } else if (currentXp > 0) {
+            insights.push({
+                id: 'keep_going',
+                type: 'motivation',
+                title: 'Продолжайте в том же духе!',
+                description: `Вы заработали ${currentXp} XP за текущий период`,
+                icon: '💪',
+                priority: 'medium',
+                data: {
+                    current_xp: currentXp
+                }
+            });
+        }
+
+        // 4. Streak pattern (most productive day of week)
+        const dayQuery = await db.query(`
+            SELECT
+                EXTRACT(DOW FROM createdat) as day_of_week,
+                COUNT(*) as activities,
+                SUM(xp_amount) as total_xp
+            FROM xp_log
+            WHERE user_id = $1
+              AND createdat >= NOW() - INTERVAL '${interval}'
+            GROUP BY day_of_week
+            HAVING COUNT(*) >= 1
+            ORDER BY total_xp DESC
+            LIMIT 1
+        `, [parseInt(userId)]);
+
+        if (dayQuery.rows.length > 0) {
+            const dayData = dayQuery.rows[0];
+            const dayNames = ['Воскресенье', 'Понедельник', 'Вторник', 'Среда', 'Четверг', 'Пятница', 'Суббота'];
+            const dayName = dayNames[parseInt(dayData.day_of_week)];
+
+            insights.push({
+                id: 'productive_day',
+                type: 'streak_pattern',
+                title: `${dayName} - ваш самый продуктивный день`,
+                description: `${dayData.activities} активностей, ${dayData.total_xp} XP`,
+                icon: '📅',
+                priority: 'low',
+                data: {
+                    day_of_week: parseInt(dayData.day_of_week),
+                    day_name: dayName,
+                    activities: parseInt(dayData.activities),
+                    total_xp: parseInt(dayData.total_xp)
+                }
+            });
+        }
+
+        // 5. Total words learned milestone
+        const wordsCountQuery = await db.query(`
+            SELECT COUNT(*) as total FROM words WHERE user_id = $1
+        `, [parseInt(userId)]);
+
+        const totalWords = parseInt(wordsCountQuery.rows[0]?.total) || 0;
+        if (totalWords > 0 && (totalWords % 100 === 0 || totalWords === 50 || totalWords === 500)) {
+            insights.push({
+                id: 'milestone',
+                type: 'achievement',
+                title: `🎉 Поздравляем! ${totalWords} слов изучено!`,
+                description: 'Отличный прогресс на пути к свободному владению языком',
+                icon: '🏆',
+                priority: 'high',
+                data: {
+                    total_words: totalWords
+                }
+            });
+        }
+
+        // Sort by priority and limit
+        const priorityOrder = { high: 1, medium: 2, low: 3 };
+        insights.sort((a, b) => priorityOrder[a.priority] - priorityOrder[b.priority]);
+
+        res.json({
+            insights: insights.slice(0, limit),
+            generated_at: new Date().toISOString(),
+            period: period,
+            total_insights: insights.length
+        });
+
+    } catch (err) {
+        console.error('Error generating insights:', err);
+        res.status(500).json({ error: err.message });
+    }
+});
+
 // ========================================
 // WORDS ENDPOINTS
 // ========================================

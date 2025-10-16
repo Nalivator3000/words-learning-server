@@ -1,144 +1,220 @@
-# ТЕКУЩАЯ ЗАДАЧА: Дизайн-система на основе Tailwind CSS / UnoCSS
+# ТЕКУЩАЯ ЗАДАЧА: Персональные инсайты (Personal Insights)
 
 ## КОНТЕКСТ
-Проект использует множество кастомных CSS переменных и inline стилей. Для улучшения поддерживаемости, скорости разработки и единообразия дизайна нужно перейти на modern utility-first CSS framework.
+У пользователей есть богатая статистика обучения (XP logs, quiz results, activity patterns), но нет персонализированных подсказок и инсайтов. Нужна система, которая анализирует данные и предоставляет полезные наблюдения.
 
 ## ЦЕЛЬ
-Интегрировать Tailwind CSS или UnoCSS для замены текущих CSS переменных на единую дизайн-систему.
+Реализовать backend API для генерации персональных инсайтов на основе паттернов обучения пользователя.
 
 ## ЧТО НУЖНО СДЕЛАТЬ
 
-### 1. Выбор фреймворка
-Оценить два варианта:
+### 1. Анализ данных для инсайтов
 
-**Tailwind CSS:**
-- ✅ Более популярен, больше документации
-- ✅ Богатая экосистема плагинов
-- ✅ Встроенная темная тема (dark:)
-- ❌ Больший bundle size
-- ❌ Requires Node.js build step
+**Типы инсайтов:**
+1. **Время обучения** (Best learning time)
+   - "Вы лучше всего учитесь утром" (6-12)
+   - "Ваш любимый час для занятий - 20:00"
+   - Анализ: COUNT и AVG(xp) по часам дня
 
-**UnoCSS:**
-- ✅ Более быстрый (instant on-demand)
-- ✅ Меньший bundle size
-- ✅ Поддержка Tailwind syntax + custom shortcuts
-- ✅ Zero-config dark mode
-- ❌ Меньше community resources
+2. **Тип упражнений** (Favorite exercise type)
+   - "Ваш любимый тип упражнений - Multiple Choice"
+   - "Вы получаете больше всего XP из Quiz"
+   - Анализ: GROUP BY action_type в xp_log
 
-**Рекомендация:** UnoCSS для production (быстрее, легче), но можно начать с Tailwind для простоты.
+3. **Прогресс** (Progress rate)
+   - "Вы выучили 20% быстрее, чем в прошлом месяце"
+   - "Ваш темп обучения ускорился на 35%"
+   - Анализ: Сравнение XP за текущий и прошлый период
 
-### 2. Установка и настройка
+4. **Streak паттерны** (Streak patterns)
+   - "Вы наиболее продуктивны по вторникам"
+   - "Выходные - ваше самое активное время"
+   - Анализ: Day of week в activity_log
 
-```bash
-# Вариант 1: Tailwind CSS
-npm install -D tailwindcss postcss autoprefixer
-npx tailwindcss init
+5. **Точность** (Accuracy trends)
+   - "Ваша точность улучшилась на 15% за месяц"
+   - "Вы делаете меньше ошибок в новых словах"
+   - Анализ: correctcount/incorrectcount в words
 
-# Вариант 2: UnoCSS
-npm install -D unocss
-```
+### 2. Backend API Endpoint
 
-### 3. Конфигурация темы
-Создать `tailwind.config.js` или `uno.config.js` с брендовыми цветами:
+**Endpoint:** `GET /api/users/:userId/insights`
 
-```javascript
-// tailwind.config.js
-module.exports = {
-  darkMode: 'class', // поддержка dark mode через класс
-  theme: {
-    extend: {
-      colors: {
-        primary: {
-          50: '#f0f9ff',
-          100: '#e0f2fe',
-          // ... (взять из текущих CSS переменных)
-          900: '#0c4a6e'
-        },
-        accent: {
-          // текущий accent color
-        }
-      },
-      fontFamily: {
-        sans: ['Inter', 'system-ui', 'sans-serif'],
-      },
-      boxShadow: {
-        'glass': '0 8px 32px 0 rgba(31, 38, 135, 0.37)',
-        // glassmorphism shadows
-      }
-    }
-  }
-}
-```
+**Query Parameters:**
+- `period` (optional): 'week', 'month', 'all' (default: 'month')
+- `limit` (optional): количество инсайтов (default: 5)
 
-### 4. Миграция CSS переменных
-Найти все CSS переменные в `style.css` и заменить на Tailwind utilities:
-
-**До:**
-```css
-.card {
-  background: var(--card-bg);
-  border-radius: var(--border-radius);
-  padding: var(--spacing-md);
-}
-```
-
-**После:**
-```html
-<div class="bg-white dark:bg-gray-800 rounded-xl p-6 shadow-glass">
-  <!-- card content -->
-</div>
-```
-
-### 5. Поэтапная замена классов
-- Начать с простых компонентов (buttons, cards)
-- Заменить margin/padding на Tailwind spacing (m-4, p-6)
-- Заменить цвета на Tailwind color palette
-- Заменить flexbox/grid на Tailwind layout utilities
-- Оставить сложные анимации в отдельном CSS файле (animations.css)
-
-### 6. Build процесс
-Обновить `package.json` для сборки CSS:
-
+**Response:**
 ```json
 {
-  "scripts": {
-    "build:css": "tailwindcss -i ./public/css/input.css -o ./public/css/output.css --watch",
-    "dev": "npm run build:css & node server-postgresql.js"
-  }
+  "insights": [
+    {
+      "id": "best_time",
+      "type": "learning_time",
+      "title": "Вы лучше всего учитесь утром",
+      "description": "83% вашего XP заработано между 8:00 и 12:00",
+      "icon": "☀️",
+      "priority": "high",
+      "data": {
+        "peak_hour": 9,
+        "peak_hour_xp_percentage": 35
+      }
+    },
+    {
+      "id": "favorite_exercise",
+      "type": "exercise_preference",
+      "title": "Ваш любимый тип упражнений - Quiz",
+      "description": "Вы прошли 45 квизов за последний месяц",
+      "icon": "📝",
+      "priority": "medium",
+      "data": {
+        "favorite_type": "quiz_completed",
+        "count": 45
+      }
+    },
+    {
+      "id": "progress_acceleration",
+      "type": "progress",
+      "title": "Вы выучили 28% быстрее, чем в прошлом месяце",
+      "description": "Ваш средний темп: 15 слов/день (было 12)",
+      "icon": "🚀",
+      "priority": "high",
+      "data": {
+        "improvement_percentage": 28,
+        "current_rate": 15,
+        "previous_rate": 12
+      }
+    }
+  ],
+  "generated_at": "2025-10-16T12:00:00Z"
 }
 ```
 
-### 7. Оптимизация production
-- PurgeCSS для удаления неиспользуемых стилей
-- Минификация CSS
-- CDN для production (если нужен zero-config)
+### 3. SQL Queries
 
-### 8. Тестирование
-- Проверить все страницы в light/dark theme
-- Проверить responsive на mobile/tablet/desktop
-- Убедиться, что glassmorphism эффекты сохранены
-- Проверить анимации (transitions, hover states)
+**Best learning time:**
+```sql
+SELECT
+  EXTRACT(HOUR FROM created_at) as hour,
+  COUNT(*) as activities,
+  SUM(xp_earned) as total_xp
+FROM xp_log
+WHERE user_id = $1
+  AND created_at >= NOW() - INTERVAL '30 days'
+GROUP BY hour
+ORDER BY total_xp DESC
+LIMIT 3
+```
+
+**Favorite exercise type:**
+```sql
+SELECT
+  action_type,
+  COUNT(*) as count,
+  SUM(xp_earned) as total_xp
+FROM xp_log
+WHERE user_id = $1
+  AND created_at >= NOW() - INTERVAL '30 days'
+GROUP BY action_type
+ORDER BY count DESC
+LIMIT 1
+```
+
+**Progress rate comparison:**
+```sql
+-- Current month
+SELECT COUNT(DISTINCT word_id) as words_learned
+FROM words
+WHERE user_id = $1
+  AND created_at >= DATE_TRUNC('month', NOW())
+
+-- Previous month
+SELECT COUNT(DISTINCT word_id) as words_learned
+FROM words
+WHERE user_id = $1
+  AND created_at >= DATE_TRUNC('month', NOW() - INTERVAL '1 month')
+  AND created_at < DATE_TRUNC('month', NOW())
+```
+
+### 4. Insight Generation Logic
+
+```javascript
+async function generateInsights(userId, period = 'month') {
+  const insights = [];
+
+  // 1. Best learning time
+  const timeData = await getBestLearningTime(userId, period);
+  if (timeData.peak_hour) {
+    insights.push({
+      id: 'best_time',
+      type: 'learning_time',
+      title: getTimeInsightTitle(timeData.peak_hour),
+      description: `${timeData.percentage}% вашего XP заработано в это время`,
+      icon: getTimeIcon(timeData.peak_hour),
+      priority: 'high',
+      data: timeData
+    });
+  }
+
+  // 2. Favorite exercise
+  const exerciseData = await getFavoriteExercise(userId, period);
+  if (exerciseData.type) {
+    insights.push({...});
+  }
+
+  // 3. Progress comparison
+  const progressData = await getProgressComparison(userId);
+  if (progressData.improvement > 0) {
+    insights.push({...});
+  }
+
+  return insights;
+}
+```
+
+### 5. Helper Functions
+
+```javascript
+function getTimeInsightTitle(hour) {
+  if (hour >= 6 && hour < 12) return "Вы лучше всего учитесь утром";
+  if (hour >= 12 && hour < 18) return "Вы продуктивны днём";
+  if (hour >= 18 && hour < 22) return "Вечер - ваше лучшее время";
+  return "Вы ночная сова";
+}
+
+function getTimeIcon(hour) {
+  if (hour >= 6 && hour < 12) return "☀️";
+  if (hour >= 12 && hour < 18) return "🌤️";
+  if (hour >= 18 && hour < 22) return "🌆";
+  return "🌙";
+}
+```
+
+### 6. Тестирование
+
+```bash
+# Test insights endpoint
+curl http://localhost:3001/api/users/1/insights
+
+# Test with period parameter
+curl "http://localhost:3001/api/users/1/insights?period=week&limit=3"
+```
 
 ## ВАЖНО
-1. Обновить `PLAN.md`: заменить `[ ]` на `[>]` для задачи "Дизайн-система"
-2. НЕ удалять старый CSS сразу - делать постепенную миграцию
-3. Сохранить все кастомные анимации (@keyframes)
-4. Сохранить glassmorphism эффекты (backdrop-filter)
+1. Обновить `PLAN.md`: заменить `[ ]` на `[>]` для задачи "Персональные инсайты"
+2. Вернуть минимум 3 инсайта, максимум 10
+3. Только инсайты с достаточными данными (минимум 5 записей)
+4. Кешировать результаты на 1 час (Redis или in-memory)
 
 ## ГОТОВО КОГДА
-- [ ] Tailwind/UnoCSS установлен и настроен
-- [ ] Конфигурация темы создана с брендовыми цветами
-- [ ] Хотя бы 5 компонентов мигрированы (buttons, cards, header, nav, footer)
-- [ ] Dark mode работает корректно
-- [ ] Build процесс настроен
-- [ ] PLAN.md обновлен ([>] → [x] статус)
-- [ ] Код готов к коммиту
+- [ ] Endpoint `/api/users/:userId/insights` реализован
+- [ ] Минимум 3 типа инсайтов работают (time, exercise, progress)
+- [ ] SQL queries оптимизированы (WITH indexes)
+- [ ] Протестировано на реальных данных пользователя
+- [ ] PLAN.md обновлен
+- [ ] Код закоммичен
 
-## АЛЬТЕРНАТИВНЫЙ ПОДХОД (OPTIONAL)
-Если полная миграция слишком масштабна для одной итерации, можно начать с:
-1. Установить Tailwind CDN (для быстрого старта без build step)
-2. Создать utility классы для 10 самых используемых паттернов
-3. Мигрировать только критичные компоненты (header, cards)
-4. Оставить остальное на следующие итерации
-
-Это позволит быстрее получить результат и оценить преимущества.
+## БОНУС (OPTIONAL)
+- Streak patterns (день недели анализ)
+- Accuracy trends (improvement over time)
+- Weekly summary (дайджест за неделю)

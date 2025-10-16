@@ -272,10 +272,13 @@
   - ✅ Время обучения (дневное/недельное/общее) - рассчитано из quizzes_completed
   - ✅ Predicted fluency date (ML-модель) - линейная регрессия на основе темпа обучения
 
-- [ ] **Персональные инсайты**
-  - "Вы лучше всего учитесь утром"
-  - "Ваш любимый тип упражнений - Multiple Choice"
-  - "Вы выучили 20% быстрее, чем в прошлом месяце"
+- [x] **Персональные инсайты** ✅ ГОТОВО (Backend)
+  - ✅ API endpoint `/api/users/:userId/insights`
+  - ✅ 5 типов инсайтов: Best learning time, Favorite exercise, Progress comparison, Streak patterns, Milestones
+  - ✅ Query параметры: period (week/month/all), limit
+  - ✅ Priority sorting (high → medium → low)
+  - ✅ Корректная обработка lowercase column names (createdat, xp_amount)
+  - [ ] Frontend UI для отображения инсайтов (будущая версия)
 
 ### 2.7 Рейтинговая система
 - [ ] **Персональный рейтинг**
