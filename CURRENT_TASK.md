@@ -1,67 +1,144 @@
-# ТЕКУЩАЯ ЗАДАЧА: Offline поддержка для TTS
+# ТЕКУЩАЯ ЗАДАЧА: Дизайн-система на основе Tailwind CSS / UnoCSS
 
 ## КОНТЕКСТ
-В предыдущей итерации мы создали TTS fallback систему с кешированием. Теперь нужно добавить полноценную offline поддержку - загрузку и хранение аудио файлов для часто используемых слов.
+Проект использует множество кастомных CSS переменных и inline стилей. Для улучшения поддерживаемости, скорости разработки и единообразия дизайна нужно перейти на modern utility-first CSS framework.
 
 ## ЦЕЛЬ
-Реализовать систему предзагрузки и offline воспроизведения аудио для наиболее популярных слов.
+Интегрировать Tailwind CSS или UnoCSS для замены текущих CSS переменных на единую дизайн-систему.
 
 ## ЧТО НУЖНО СДЕЛАТЬ
 
-### 1. Backend: Bulk TTS синтез для популярных слов
-Создать endpoint для массового синтеза:
+### 1. Выбор фреймворка
+Оценить два варианта:
 
+**Tailwind CSS:**
+- ✅ Более популярен, больше документации
+- ✅ Богатая экосистема плагинов
+- ✅ Встроенная темная тема (dark:)
+- ❌ Больший bundle size
+- ❌ Requires Node.js build step
+
+**UnoCSS:**
+- ✅ Более быстрый (instant on-demand)
+- ✅ Меньший bundle size
+- ✅ Поддержка Tailwind syntax + custom shortcuts
+- ✅ Zero-config dark mode
+- ❌ Меньше community resources
+
+**Рекомендация:** UnoCSS для production (быстрее, легче), но можно начать с Tailwind для простоты.
+
+### 2. Установка и настройка
+
+```bash
+# Вариант 1: Tailwind CSS
+npm install -D tailwindcss postcss autoprefixer
+npx tailwindcss init
+
+# Вариант 2: UnoCSS
+npm install -D unocss
 ```
-POST /api/tts/bulk-synthesize
-Body: {
-  words: [{ text: string, language: string }],
-  userId: number
+
+### 3. Конфигурация темы
+Создать `tailwind.config.js` или `uno.config.js` с брендовыми цветами:
+
+```javascript
+// tailwind.config.js
+module.exports = {
+  darkMode: 'class', // поддержка dark mode через класс
+  theme: {
+    extend: {
+      colors: {
+        primary: {
+          50: '#f0f9ff',
+          100: '#e0f2fe',
+          // ... (взять из текущих CSS переменных)
+          900: '#0c4a6e'
+        },
+        accent: {
+          // текущий accent color
+        }
+      },
+      fontFamily: {
+        sans: ['Inter', 'system-ui', 'sans-serif'],
+      },
+      boxShadow: {
+        'glass': '0 8px 32px 0 rgba(31, 38, 135, 0.37)',
+        // glassmorphism shadows
+      }
+    }
+  }
 }
+```
 
-Response: {
-  synthesized: number,
-  cached: number,
-  errors: number
+### 4. Миграция CSS переменных
+Найти все CSS переменные в `style.css` и заменить на Tailwind utilities:
+
+**До:**
+```css
+.card {
+  background: var(--card-bg);
+  border-radius: var(--border-radius);
+  padding: var(--spacing-md);
 }
 ```
 
-### 2. Backend: Статистика популярных слов
-Endpoint для определения топ-100 слов пользователя:
-
-```
-GET /api/words/popular/:userId?limit=100
-
-Response: [
-  { text: string, language: string, usage_count: number }
-]
+**После:**
+```html
+<div class="bg-white dark:bg-gray-800 rounded-xl p-6 shadow-glass">
+  <!-- card content -->
+</div>
 ```
 
-### 3. Frontend: Service Worker для offline кеша
-Обновить `service-worker.js`:
-- Кеширование audio responses
-- Cache API для аудио файлов
-- Fallback на cached audio при offline
+### 5. Поэтапная замена классов
+- Начать с простых компонентов (buttons, cards)
+- Заменить margin/padding на Tailwind spacing (m-4, p-6)
+- Заменить цвета на Tailwind color palette
+- Заменить flexbox/grid на Tailwind layout utilities
+- Оставить сложные анимации в отдельном CSS файле (animations.css)
 
-### 4. Frontend: UI для управления offline кешем
-Добавить в Settings:
-- Кнопка "Загрузить топ-100 слов для offline"
-- Прогресс-бар загрузки
-- Показать размер offline кеша
-- Кнопка очистки кеша
+### 6. Build процесс
+Обновить `package.json` для сборки CSS:
 
-### 5. Автоматическая предзагрузка
-- При добавлении новых слов автоматически синтезировать audio
-- Сохранять в IndexedDB для offline доступа
+```json
+{
+  "scripts": {
+    "build:css": "tailwindcss -i ./public/css/input.css -o ./public/css/output.css --watch",
+    "dev": "npm run build:css & node server-postgresql.js"
+  }
+}
+```
+
+### 7. Оптимизация production
+- PurgeCSS для удаления неиспользуемых стилей
+- Минификация CSS
+- CDN для production (если нужен zero-config)
+
+### 8. Тестирование
+- Проверить все страницы в light/dark theme
+- Проверить responsive на mobile/tablet/desktop
+- Убедиться, что glassmorphism эффекты сохранены
+- Проверить анимации (transitions, hover states)
 
 ## ВАЖНО
-1. Обновить `PLAN.md`: заменить `[ ]` на `[>]` для задачи "Offline поддержка"
-2. Использовать IndexedDB для хранения audio (больше объем чем localStorage)
-3. Ограничить размер кеша (например, 50MB)
+1. Обновить `PLAN.md`: заменить `[ ]` на `[>]` для задачи "Дизайн-система"
+2. НЕ удалять старый CSS сразу - делать постепенную миграцию
+3. Сохранить все кастомные анимации (@keyframes)
+4. Сохранить glassmorphism эффекты (backdrop-filter)
 
 ## ГОТОВО КОГДА
-- [ ] Bulk synthesize endpoint работает
-- [ ] Popular words endpoint реализован
-- [ ] Service Worker обновлен
-- [ ] UI для offline кеша добавлен
-- [ ] PLAN.md обновлен ([>] статус)
+- [ ] Tailwind/UnoCSS установлен и настроен
+- [ ] Конфигурация темы создана с брендовыми цветами
+- [ ] Хотя бы 5 компонентов мигрированы (buttons, cards, header, nav, footer)
+- [ ] Dark mode работает корректно
+- [ ] Build процесс настроен
+- [ ] PLAN.md обновлен ([>] → [x] статус)
 - [ ] Код готов к коммиту
+
+## АЛЬТЕРНАТИВНЫЙ ПОДХОД (OPTIONAL)
+Если полная миграция слишком масштабна для одной итерации, можно начать с:
+1. Установить Tailwind CDN (для быстрого старта без build step)
+2. Создать utility классы для 10 самых используемых паттернов
+3. Мигрировать только критичные компоненты (header, cards)
+4. Оставить остальное на следующие итерации
+
+Это позволит быстрее получить результат и оценить преимущества.

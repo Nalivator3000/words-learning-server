@@ -34,7 +34,9 @@
       "Bash(cat:*)",
       "Bash(git merge:*)",
       "Bash(git branch:*)",
-      "Bash(set PORT=3001)"
+      "Bash(set PORT=3001)",
+      "Bash(npx tailwindcss:*)",
+      "Bash(npm run build:css:*)"
     ],
     "deny": [],
     "ask": []
