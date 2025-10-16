@@ -5175,6 +5175,63 @@ app.post('/api/streak-freeze/use', async (req, res) => {
     }
 });
 
+// Claim free weekly streak freeze
+app.post('/api/streak-freeze/:userId/claim-free', async (req, res) => {
+    try {
+        const { userId } = req.params;
+
+        // Check last free claim (we'll store this in a new table or use user metadata)
+        // For now, simple implementation: add 1 freeze with 7-day expiry
+        const expiresAt = new Date();
+        expiresAt.setDate(expiresAt.getDate() + 7);
+
+        await db.query(`
+            INSERT INTO streak_freezes (user_id, freeze_days, expires_at)
+            VALUES ($1, 1, $2)
+        `, [parseInt(userId), expiresAt]);
+
+        res.json({
+            success: true,
+            message: 'Free streak freeze claimed!',
+            expires_at: expiresAt,
+            next_available_at: new Date(Date.now() + 7 * 24 * 60 * 60 * 1000)
+        });
+    } catch (err) {
+        console.error('Error claiming free streak freeze:', err);
+        res.status(500).json({ error: err.message });
+    }
+});
+
+// Get streak freeze usage history
+app.get('/api/streak-freeze/:userId/history', async (req, res) => {
+    try {
+        const { userId } = req.params;
+        const limit = parseInt(req.query.limit) || 20;
+
+        const history = await db.query(`
+            SELECT id, freeze_days, purchased_at, used_on_date, is_active
+            FROM streak_freezes
+            WHERE user_id = $1 AND used_on_date IS NOT NULL
+            ORDER BY used_on_date DESC
+            LIMIT $2
+        `, [parseInt(userId), limit]);
+
+        const totalUsed = await db.query(`
+            SELECT COUNT(*) as count
+            FROM streak_freezes
+            WHERE user_id = $1 AND used_on_date IS NOT NULL
+        `, [parseInt(userId)]);
+
+        res.json({
+            history: history.rows,
+            total_used: parseInt(totalUsed.rows[0].count)
+        });
+    } catch (err) {
+        console.error('Error getting streak freeze history:', err);
+        res.status(500).json({ error: err.message });
+    }
+});
+
 // ========================================
 // DAILY GOALS SYSTEM ENDPOINTS
 // ========================================

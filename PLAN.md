@@ -190,9 +190,15 @@
   - [ ] Уведомления о риске потери стрика (будущая версия)
   - [ ] Награды за мильстоны (7, 30, 100, 365 дней) - частично есть в achievements
 
-- [ ] **Защита стрика (Streak Freeze)**
-  - Возможность заморозить стрик (1 день бесплатно в неделю)
-  - Покупка заморозок за внутриигровую валюту
+- [x] **Защита стрика (Streak Freeze)** ✅ ГОТОВО (Backend)
+  - ✅ Таблица `streak_freezes` (user_id, freeze_days, expires_at, is_active, used_on_date)
+  - ✅ GET `/api/streak-freeze/:userId` - получить активные заморозки
+  - ✅ POST `/api/streak-freeze/use` - использовать заморозку (manual/auto)
+  - ✅ POST `/api/streak-freeze/:userId/claim-free` - получить бесплатную заморозку (раз в неделю)
+  - ✅ GET `/api/streak-freeze/:userId/history` - история использования заморозок
+  - ✅ Покупка через shop (streak_freeze_1/3/7) - уже реализовано
+  - [ ] Frontend UI (кнопка "использовать заморозку", индикатор количества)
+  - [ ] Автоматическое использование при потере стрика (интеграция со streak check)
 
 ### 2.2 Система очков и уровней (XP & Levels)
 - [ ] **Опыт (Experience Points)**

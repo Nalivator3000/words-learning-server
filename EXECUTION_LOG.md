@@ -195,3 +195,54 @@ Response: {"cached_items":1,"total_size_bytes":163,"total_size_mb":"0.00"}
 - Еженедельный digest email с инсайтами
 
 ---
+
+### Iteration 5 - COMPLETED ✅
+**Date:** 2025-10-16
+**Task:** Защита стрика (Streak Freeze) - Enhancement
+**Status:** [x] COMPLETED
+
+**Context:**
+Система streak_freezes уже частично существовала. Добавлены недостающие endpoints.
+
+**Implementation:**
+
+1. **Existing endpoints (already working):**
+   - ✅ GET `/api/streak-freeze/:userId` - получить активные заморозки
+   - ✅ POST `/api/streak-freeze/use` - использовать заморозку
+   - ✅ Shop integration (покупка streak_freeze_1/3/7 за монеты)
+
+2. **NEW endpoints added:**
+   - ✅ POST `/api/streak-freeze/:userId/claim-free` - бесплатная заморозка (раз в неделю)
+   - ✅ GET `/api/streak-freeze/:userId/history` - история использования
+
+3. **Files Changed:**
+   - `server-postgresql.js:5178-5233` - 2 new endpoints (56 lines added)
+
+**Testing Results:**
+```bash
+# Claim free freeze
+curl -X POST http://localhost:3001/api/streak-freeze/1/claim-free
+✅ {"success":true,"message":"Free streak freeze claimed!","expires_at":"2025-10-23T20:10:06.693Z"}
+
+# Use freeze
+curl -X POST http://localhost:3001/api/streak-freeze/use -d '{"userId":1,"date":"2025-10-16"}'
+✅ {"success":true,"freeze_used":{...}}
+
+# Check history
+curl http://localhost:3001/api/streak-freeze/1/history
+✅ {"history":[...],"total_used":1}
+```
+
+**Features:**
+- Free weekly freeze (7-day expiry)
+- Usage tracking with reason (manual/auto)
+- History with pagination (limit param)
+- Total count of used freezes
+
+**Next Steps (future iterations):**
+- Frontend UI button "Use Freeze"
+- Auto-use при потере стрика
+- Weekly claim reminder
+- Achievement "Ice Guardian" за 10 uses
+
+---
