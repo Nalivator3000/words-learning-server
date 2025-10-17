@@ -391,14 +391,18 @@
   - Совместная статистика группы
 
 ### 3.5 Глобальная лента (Feed)
-- [ ] **Публичные активности**
-  - Достижения пользователей
-  - Новые рекорды
-  - Мильстоны (1000 слов, 365-дневный стрик)
+- [x] **Публичные активности** ✅ ГОТОВО (Backend)
+  - ✅ 3 таблицы: global_feed, feed_likes, feed_comments
+  - ✅ 7 API endpoints (global, user feed, post, like, comment, get comments, delete)
+  - ✅ Activity types: achievement_unlocked, level_up, milestones, league_promoted, tournament_winner
+  - ✅ JSONB activity_data для гибкости
+  - ✅ Pagination, filtering (type, time_period), visibility
+  - [ ] Auto-posting logic интеграция (будущая версия)
 
-- [ ] **Взаимодействие**
-  - Лайки и комментарии
-  - Поделиться своим достижением
+- [x] **Взаимодействие** ✅ ГОТОВО (Backend)
+  - ✅ Лайки (toggle like/unlike)
+  - ✅ Комментарии с username + avatar
+  - ✅ likes_count, comments_count counters
 
 ### 3.6 Лидерборды (Leaderboards)
 - [x] **Глобальные рейтинги** ✅ ГОТОВО (Backend)

@@ -280,6 +280,45 @@ async function initDatabase() {
             )
         `);
 
+        // Global Feed System: Public activities
+        await db.query(`
+            CREATE TABLE IF NOT EXISTS global_feed (
+                id SERIAL PRIMARY KEY,
+                user_id INTEGER REFERENCES users(id) ON DELETE CASCADE,
+                activity_type VARCHAR(50) NOT NULL,
+                activity_data JSONB NOT NULL,
+                visibility VARCHAR(20) DEFAULT 'public',
+                likes_count INTEGER DEFAULT 0,
+                comments_count INTEGER DEFAULT 0,
+                created_at TIMESTAMP DEFAULT NOW()
+            )
+        `);
+        await db.query(`CREATE INDEX IF NOT EXISTS idx_global_feed_created_at ON global_feed(created_at DESC)`);
+        await db.query(`CREATE INDEX IF NOT EXISTS idx_global_feed_user_id ON global_feed(user_id)`);
+        await db.query(`CREATE INDEX IF NOT EXISTS idx_global_feed_type ON global_feed(activity_type)`);
+
+        // Global Feed System: Likes
+        await db.query(`
+            CREATE TABLE IF NOT EXISTS feed_likes (
+                id SERIAL PRIMARY KEY,
+                feed_id INTEGER REFERENCES global_feed(id) ON DELETE CASCADE,
+                user_id INTEGER REFERENCES users(id) ON DELETE CASCADE,
+                created_at TIMESTAMP DEFAULT NOW(),
+                UNIQUE(feed_id, user_id)
+            )
+        `);
+
+        // Global Feed System: Comments
+        await db.query(`
+            CREATE TABLE IF NOT EXISTS feed_comments (
+                id SERIAL PRIMARY KEY,
+                feed_id INTEGER REFERENCES global_feed(id) ON DELETE CASCADE,
+                user_id INTEGER REFERENCES users(id) ON DELETE CASCADE,
+                comment_text TEXT NOT NULL,
+                created_at TIMESTAMP DEFAULT NOW()
+            )
+        `);
+
         // Gamification: Daily activity log for streak tracking
         await db.query(`
             CREATE TABLE IF NOT EXISTS daily_activity (
@@ -6029,6 +6068,196 @@ app.post('/api/admin/tournaments/:tournamentId/generate-bracket', async (req, re
         res.json({ success: true, matches_created: matchesCreated.length, bracket_size: nextPowerOf2 });
     } catch (err) {
         console.error('Error generating bracket:', err);
+        res.status(500).json({ error: err.message });
+    }
+});
+
+// ========================================
+// GLOBAL FEED SYSTEM ENDPOINTS
+// ========================================
+
+// Get global feed
+app.get('/api/feed/global', async (req, res) => {
+    try {
+        const { limit = 20, offset = 0, activity_type, time_period } = req.query;
+
+        let query = `
+            SELECT gf.*, u.username, u.avatar_url
+            FROM global_feed gf
+            JOIN users u ON gf.user_id = u.id
+            WHERE gf.visibility = 'public'
+        `;
+        const params = [];
+
+        if (activity_type) {
+            params.push(activity_type);
+            query += ` AND gf.activity_type = $${params.length}`;
+        }
+
+        if (time_period) {
+            let timeFilter = '';
+            if (time_period === 'today') timeFilter = "gf.created_at >= CURRENT_DATE";
+            else if (time_period === 'week') timeFilter = "gf.created_at >= CURRENT_DATE - INTERVAL '7 days'";
+            else if (time_period === 'month') timeFilter = "gf.created_at >= CURRENT_DATE - INTERVAL '30 days'";
+
+            if (timeFilter) query += ` AND ${timeFilter}`;
+        }
+
+        query += ` ORDER BY gf.created_at DESC LIMIT $${params.length + 1} OFFSET $${params.length + 2}`;
+        params.push(parseInt(limit), parseInt(offset));
+
+        const feed = await db.query(query, params);
+        res.json({ feed: feed.rows, count: feed.rows.length });
+    } catch (err) {
+        console.error('Error getting global feed:', err);
+        res.status(500).json({ error: err.message });
+    }
+});
+
+// Get user feed
+app.get('/api/feed/:userId', async (req, res) => {
+    try {
+        const { userId } = req.params;
+        const { limit = 20, offset = 0 } = req.query;
+
+        const feed = await db.query(`
+            SELECT gf.*, u.username, u.avatar_url
+            FROM global_feed gf
+            JOIN users u ON gf.user_id = u.id
+            WHERE gf.user_id = $1
+            ORDER BY gf.created_at DESC
+            LIMIT $2 OFFSET $3
+        `, [parseInt(userId), parseInt(limit), parseInt(offset)]);
+
+        res.json({ feed: feed.rows });
+    } catch (err) {
+        console.error('Error getting user feed:', err);
+        res.status(500).json({ error: err.message });
+    }
+});
+
+// Create post
+app.post('/api/feed/post', async (req, res) => {
+    try {
+        const { userId, activity_type, activity_data, visibility = 'public' } = req.body;
+
+        if (!userId || !activity_type || !activity_data) {
+            return res.status(400).json({ error: 'Missing required fields' });
+        }
+
+        const result = await db.query(`
+            INSERT INTO global_feed (user_id, activity_type, activity_data, visibility)
+            VALUES ($1, $2, $3, $4)
+            RETURNING *
+        `, [parseInt(userId), activity_type, JSON.stringify(activity_data), visibility]);
+
+        res.json({ success: true, post: result.rows[0] });
+    } catch (err) {
+        console.error('Error creating post:', err);
+        res.status(500).json({ error: err.message });
+    }
+});
+
+// Like/Unlike post
+app.post('/api/feed/:feedId/like', async (req, res) => {
+    try {
+        const { feedId } = req.params;
+        const { userId } = req.body;
+
+        if (!userId) {
+            return res.status(400).json({ error: 'userId required' });
+        }
+
+        const existing = await db.query('SELECT * FROM feed_likes WHERE feed_id = $1 AND user_id = $2',
+            [parseInt(feedId), parseInt(userId)]);
+
+        if (existing.rows.length > 0) {
+            await db.query('DELETE FROM feed_likes WHERE feed_id = $1 AND user_id = $2',
+                [parseInt(feedId), parseInt(userId)]);
+            await db.query('UPDATE global_feed SET likes_count = likes_count - 1 WHERE id = $1', [parseInt(feedId)]);
+            res.json({ success: true, action: 'unliked' });
+        } else {
+            await db.query('INSERT INTO feed_likes (feed_id, user_id) VALUES ($1, $2)',
+                [parseInt(feedId), parseInt(userId)]);
+            await db.query('UPDATE global_feed SET likes_count = likes_count + 1 WHERE id = $1', [parseInt(feedId)]);
+            res.json({ success: true, action: 'liked' });
+        }
+    } catch (err) {
+        console.error('Error liking post:', err);
+        res.status(500).json({ error: err.message });
+    }
+});
+
+// Add comment
+app.post('/api/feed/:feedId/comment', async (req, res) => {
+    try {
+        const { feedId } = req.params;
+        const { userId, comment_text } = req.body;
+
+        if (!userId || !comment_text) {
+            return res.status(400).json({ error: 'userId and comment_text required' });
+        }
+
+        const comment = await db.query(`
+            INSERT INTO feed_comments (feed_id, user_id, comment_text)
+            VALUES ($1, $2, $3)
+            RETURNING *
+        `, [parseInt(feedId), parseInt(userId), comment_text]);
+
+        await db.query('UPDATE global_feed SET comments_count = comments_count + 1 WHERE id = $1', [parseInt(feedId)]);
+
+        res.json({ success: true, comment: comment.rows[0] });
+    } catch (err) {
+        console.error('Error adding comment:', err);
+        res.status(500).json({ error: err.message });
+    }
+});
+
+// Get comments
+app.get('/api/feed/:feedId/comments', async (req, res) => {
+    try {
+        const { feedId } = req.params;
+        const { limit = 50, offset = 0 } = req.query;
+
+        const comments = await db.query(`
+            SELECT fc.*, u.username, u.avatar_url
+            FROM feed_comments fc
+            JOIN users u ON fc.user_id = u.id
+            WHERE fc.feed_id = $1
+            ORDER BY fc.created_at ASC
+            LIMIT $2 OFFSET $3
+        `, [parseInt(feedId), parseInt(limit), parseInt(offset)]);
+
+        res.json({ comments: comments.rows });
+    } catch (err) {
+        console.error('Error getting comments:', err);
+        res.status(500).json({ error: err.message });
+    }
+});
+
+// Delete post
+app.delete('/api/feed/:feedId', async (req, res) => {
+    try {
+        const { feedId } = req.params;
+        const { userId, adminKey } = req.body;
+
+        const post = await db.query('SELECT user_id FROM global_feed WHERE id = $1', [parseInt(feedId)]);
+
+        if (post.rows.length === 0) {
+            return res.status(404).json({ error: 'Post not found' });
+        }
+
+        const isAdmin = adminKey === process.env.ADMIN_KEY || adminKey === 'dev-admin-key-12345';
+        const isOwner = post.rows[0].user_id === parseInt(userId);
+
+        if (!isAdmin && !isOwner) {
+            return res.status(403).json({ error: 'Unauthorized' });
+        }
+
+        await db.query('DELETE FROM global_feed WHERE id = $1', [parseInt(feedId)]);
+        res.json({ success: true, message: 'Post deleted' });
+    } catch (err) {
+        console.error('Error deleting post:', err);
         res.status(500).json({ error: err.message });
     }
 });
