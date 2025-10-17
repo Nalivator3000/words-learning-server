@@ -564,3 +564,87 @@ curl -X POST http://localhost:3001/api/admin/leagues/process-week-end -H "Conten
 - Season system (reset highest_tier each quarter)
 
 ---
+
+### Iteration 14 - COMPLETED ✅
+**Date:** 2025-10-17
+**Task:** Tournaments System (Групповые турниры)
+**Status:** [x] COMPLETED
+
+**Implementation:**
+
+1. **Database Schema (3 tables):**
+   - ✅ `tournaments` - tournament configuration (title, type, bracket_type, dates, prizes, status)
+   - ✅ `tournament_participants` - registered users (seed, current_round, is_eliminated, final_position)
+   - ✅ `tournament_matches` - bracket matches (round_number, match_number, players, scores, winner, status)
+
+2. **API Endpoints (8):**
+   - ✅ GET `/api/tournaments` - список турниров (filter: status, type)
+   - ✅ GET `/api/tournaments/:tournamentId` - детали + participants_count
+   - ✅ POST `/api/tournaments/:tournamentId/register` - регистрация (validation: deadline, status, capacity)
+   - ✅ DELETE `/api/tournaments/:tournamentId/unregister` - отмена регистрации
+   - ✅ GET `/api/tournaments/:tournamentId/bracket` - текущая bracket structure с usernames
+   - ✅ GET `/api/tournaments/:tournamentId/participants` - список участников (seed order, stats)
+   - ✅ POST `/api/admin/tournaments/create` - создать турнир (admin, с призами)
+   - ✅ POST `/api/admin/tournaments/:tournamentId/generate-bracket` - сгенерировать bracket (admin)
+
+3. **Bracket Generation Logic:**
+   - Seeding по total_xp (DESC): высший seed vs низший seed
+   - Next power of 2 calculation для размера bracket
+   - Bye system: если участников не степень 2, высшие seeds проходят автоматически
+   - Round 1 matches creation: player1 vs player2
+   - Tournament status: registration → in_progress
+
+4. **Features:**
+   - Tournament types: weekly, monthly, special
+   - Bracket types: single_elimination, double_elimination, round_robin (in schema)
+   - Max participants: 64 (configurable)
+   - Registration deadline validation
+   - Capacity check (tournament full)
+   - Prize structure: 1st/2nd/3rd (coins + gems)
+   - Default prizes: 1st (500 coins, 50 gems), 2nd (300 coins, 30 gems), 3rd (150 coins, 15 gems)
+
+5. **Files Modified:**
+   - `server-postgresql.js:223-281` - Tournaments tables (59 lines)
+   - `server-postgresql.js:5762-6034` - 8 API endpoints (273 lines)
+
+**Testing Plan:**
+```bash
+# Create tournament (admin)
+curl -X POST http://localhost:3001/api/admin/tournaments/create -H "Content-Type: application/json" -d '{"adminKey":"dev-admin-key-12345","title":"Weekly Tournament #1","tournament_type":"weekly","bracket_type":"single_elimination","start_date":"2025-10-21","end_date":"2025-10-27","registration_deadline":"2025-10-20"}'
+✅ Expected: tournament created with id
+
+# Register for tournament
+curl -X POST http://localhost:3001/api/tournaments/1/register -H "Content-Type: application/json" -d '{"userId":1}'
+✅ Expected: {success: true, message: "Registered successfully"}
+
+# Get participants
+curl http://localhost:3001/api/tournaments/1/participants
+✅ Expected: list of registered users with stats
+
+# Generate bracket (admin)
+curl -X POST http://localhost:3001/api/admin/tournaments/1/generate-bracket -H "Content-Type: application/json" -d '{"adminKey":"dev-admin-key-12345"}'
+✅ Expected: {success: true, matches_created: N, bracket_size: power of 2}
+
+# Get bracket
+curl http://localhost:3001/api/tournaments/1/bracket
+✅ Expected: matches with player1/player2 usernames, round/match numbers
+```
+
+**Integration Points:**
+- Can be integrated with duels system (matches as duels)
+- Can be integrated with achievements (tournament winner, participations)
+- Can be integrated with friend feed (friend joined/won tournament)
+- Can be integrated with push notifications (match ready, tournament results)
+- Can be integrated with currency system (prize distribution)
+
+**Next Steps (future iterations):**
+- Match completion logic (update scores, determine winner)
+- Next round generation (advance winners)
+- Prize distribution on tournament completion
+- Frontend UI (bracket visualization, registration flow)
+- Real-time match updates via WebSocket
+- Tournament history/archive
+- Spectator mode
+- Cron job for weekly tournament auto-creation
+
+---

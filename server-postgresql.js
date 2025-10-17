@@ -220,6 +220,66 @@ async function initDatabase() {
             )
         `);
 
+        // Tournaments System: Tournament configuration
+        await db.query(`
+            CREATE TABLE IF NOT EXISTS tournaments (
+                id SERIAL PRIMARY KEY,
+                title VARCHAR(255) NOT NULL,
+                description TEXT,
+                tournament_type VARCHAR(50) NOT NULL,
+                bracket_type VARCHAR(50) NOT NULL,
+                language_pair_id INTEGER,
+                start_date TIMESTAMP NOT NULL,
+                end_date TIMESTAMP NOT NULL,
+                registration_deadline TIMESTAMP NOT NULL,
+                max_participants INTEGER DEFAULT 64,
+                status VARCHAR(50) DEFAULT 'registration',
+                prize_1st_coins INTEGER DEFAULT 0,
+                prize_1st_gems INTEGER DEFAULT 0,
+                prize_2nd_coins INTEGER DEFAULT 0,
+                prize_2nd_gems INTEGER DEFAULT 0,
+                prize_3rd_coins INTEGER DEFAULT 0,
+                prize_3rd_gems INTEGER DEFAULT 0,
+                created_at TIMESTAMP DEFAULT NOW()
+            )
+        `);
+
+        // Tournaments System: Participants
+        await db.query(`
+            CREATE TABLE IF NOT EXISTS tournament_participants (
+                id SERIAL PRIMARY KEY,
+                tournament_id INTEGER REFERENCES tournaments(id) ON DELETE CASCADE,
+                user_id INTEGER REFERENCES users(id) ON DELETE CASCADE,
+                seed INTEGER,
+                current_round INTEGER DEFAULT 1,
+                is_eliminated BOOLEAN DEFAULT false,
+                final_position INTEGER,
+                total_score INTEGER DEFAULT 0,
+                registered_at TIMESTAMP DEFAULT NOW(),
+                UNIQUE(tournament_id, user_id)
+            )
+        `);
+
+        // Tournaments System: Bracket matches
+        await db.query(`
+            CREATE TABLE IF NOT EXISTS tournament_matches (
+                id SERIAL PRIMARY KEY,
+                tournament_id INTEGER REFERENCES tournaments(id) ON DELETE CASCADE,
+                round_number INTEGER NOT NULL,
+                match_number INTEGER NOT NULL,
+                player1_id INTEGER,
+                player2_id INTEGER,
+                player1_score INTEGER DEFAULT 0,
+                player2_score INTEGER DEFAULT 0,
+                winner_id INTEGER,
+                status VARCHAR(50) DEFAULT 'pending',
+                scheduled_at TIMESTAMP,
+                started_at TIMESTAMP,
+                completed_at TIMESTAMP,
+                UNIQUE(tournament_id, round_number, match_number)
+            )
+        `);
+
         // Gamification: Daily activity log for streak tracking
         await db.query(`
             CREATE TABLE IF NOT EXISTS daily_activity (
@@ -5695,6 +5755,280 @@ app.post('/api/admin/leagues/process-week-end', async (req, res) => {
         });
     } catch (err) {
         console.error('Error processing week end:', err);
+        res.status(500).json({ error: err.message });
+    }
+});
+
+// ========================================
+// TOURNAMENTS SYSTEM ENDPOINTS
+// ========================================
+
+// Get all tournaments
+app.get('/api/tournaments', async (req, res) => {
+    try {
+        const { status, type } = req.query;
+
+        let query = 'SELECT * FROM tournaments WHERE 1=1';
+        const params = [];
+
+        if (status) {
+            params.push(status);
+            query += ` AND status = $${params.length}`;
+        }
+        if (type) {
+            params.push(type);
+            query += ` AND tournament_type = $${params.length}`;
+        }
+
+        query += ' ORDER BY start_date DESC';
+
+        const tournaments = await db.query(query, params);
+        res.json({ tournaments: tournaments.rows });
+    } catch (err) {
+        console.error('Error getting tournaments:', err);
+        res.status(500).json({ error: err.message });
+    }
+});
+
+// Get tournament details
+app.get('/api/tournaments/:tournamentId', async (req, res) => {
+    try {
+        const { tournamentId } = req.params;
+
+        const tournament = await db.query('SELECT * FROM tournaments WHERE id = $1', [parseInt(tournamentId)]);
+
+        if (tournament.rows.length === 0) {
+            return res.status(404).json({ error: 'Tournament not found' });
+        }
+
+        const participantsCount = await db.query(
+            'SELECT COUNT(*) FROM tournament_participants WHERE tournament_id = $1',
+            [parseInt(tournamentId)]
+        );
+
+        res.json({
+            ...tournament.rows[0],
+            participants_count: parseInt(participantsCount.rows[0].count)
+        });
+    } catch (err) {
+        console.error('Error getting tournament:', err);
+        res.status(500).json({ error: err.message });
+    }
+});
+
+// Register for tournament
+app.post('/api/tournaments/:tournamentId/register', async (req, res) => {
+    try {
+        const { tournamentId } = req.params;
+        const { userId } = req.body;
+
+        if (!userId) {
+            return res.status(400).json({ error: 'userId required' });
+        }
+
+        const tournament = await db.query('SELECT * FROM tournaments WHERE id = $1', [parseInt(tournamentId)]);
+
+        if (tournament.rows.length === 0) {
+            return res.status(404).json({ error: 'Tournament not found' });
+        }
+
+        if (tournament.rows[0].status !== 'registration') {
+            return res.status(400).json({ error: 'Tournament registration is closed' });
+        }
+
+        if (new Date() > new Date(tournament.rows[0].registration_deadline)) {
+            return res.status(400).json({ error: 'Registration deadline passed' });
+        }
+
+        const participantsCount = await db.query(
+            'SELECT COUNT(*) FROM tournament_participants WHERE tournament_id = $1',
+            [parseInt(tournamentId)]
+        );
+
+        if (parseInt(participantsCount.rows[0].count) >= tournament.rows[0].max_participants) {
+            return res.status(400).json({ error: 'Tournament is full' });
+        }
+
+        await db.query(`
+            INSERT INTO tournament_participants (tournament_id, user_id)
+            VALUES ($1, $2)
+            ON CONFLICT (tournament_id, user_id) DO NOTHING
+        `, [parseInt(tournamentId), parseInt(userId)]);
+
+        res.json({ success: true, message: 'Registered successfully' });
+    } catch (err) {
+        console.error('Error registering for tournament:', err);
+        res.status(500).json({ error: err.message });
+    }
+});
+
+// Unregister from tournament
+app.delete('/api/tournaments/:tournamentId/unregister', async (req, res) => {
+    try {
+        const { tournamentId } = req.params;
+        const { userId } = req.body;
+
+        if (!userId) {
+            return res.status(400).json({ error: 'userId required' });
+        }
+
+        const tournament = await db.query('SELECT status FROM tournaments WHERE id = $1', [parseInt(tournamentId)]);
+
+        if (tournament.rows.length === 0) {
+            return res.status(404).json({ error: 'Tournament not found' });
+        }
+
+        if (tournament.rows[0].status !== 'registration') {
+            return res.status(400).json({ error: 'Cannot unregister after tournament started' });
+        }
+
+        await db.query(`
+            DELETE FROM tournament_participants
+            WHERE tournament_id = $1 AND user_id = $2
+        `, [parseInt(tournamentId), parseInt(userId)]);
+
+        res.json({ success: true, message: 'Unregistered successfully' });
+    } catch (err) {
+        console.error('Error unregistering from tournament:', err);
+        res.status(500).json({ error: err.message });
+    }
+});
+
+// Get tournament bracket
+app.get('/api/tournaments/:tournamentId/bracket', async (req, res) => {
+    try {
+        const { tournamentId } = req.params;
+
+        const matches = await db.query(`
+            SELECT tm.*,
+                   u1.username as player1_username,
+                   u2.username as player2_username
+            FROM tournament_matches tm
+            LEFT JOIN users u1 ON tm.player1_id = u1.id
+            LEFT JOIN users u2 ON tm.player2_id = u2.id
+            WHERE tm.tournament_id = $1
+            ORDER BY tm.round_number ASC, tm.match_number ASC
+        `, [parseInt(tournamentId)]);
+
+        res.json({ matches: matches.rows });
+    } catch (err) {
+        console.error('Error getting bracket:', err);
+        res.status(500).json({ error: err.message });
+    }
+});
+
+// Get tournament participants
+app.get('/api/tournaments/:tournamentId/participants', async (req, res) => {
+    try {
+        const { tournamentId } = req.params;
+
+        const participants = await db.query(`
+            SELECT tp.*, u.username, u.avatar_url, us.level, us.total_xp
+            FROM tournament_participants tp
+            JOIN users u ON tp.user_id = u.id
+            JOIN user_stats us ON tp.user_id = us.user_id
+            WHERE tp.tournament_id = $1
+            ORDER BY tp.seed ASC NULLS LAST, tp.registered_at ASC
+        `, [parseInt(tournamentId)]);
+
+        res.json({ participants: participants.rows });
+    } catch (err) {
+        console.error('Error getting participants:', err);
+        res.status(500).json({ error: err.message });
+    }
+});
+
+// Create tournament (admin)
+app.post('/api/admin/tournaments/create', async (req, res) => {
+    try {
+        const { adminKey, title, description, tournament_type, bracket_type, start_date, end_date, registration_deadline, max_participants, prizes } = req.body;
+
+        if (adminKey !== process.env.ADMIN_KEY && adminKey !== 'dev-admin-key-12345') {
+            return res.status(403).json({ error: 'Unauthorized' });
+        }
+
+        const result = await db.query(`
+            INSERT INTO tournaments (title, description, tournament_type, bracket_type, start_date, end_date, registration_deadline, max_participants,
+                                   prize_1st_coins, prize_1st_gems, prize_2nd_coins, prize_2nd_gems, prize_3rd_coins, prize_3rd_gems)
+            VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9, $10, $11, $12, $13, $14)
+            RETURNING *
+        `, [title, description, tournament_type, bracket_type, start_date, end_date, registration_deadline, max_participants || 64,
+            prizes?.first?.coins || 500, prizes?.first?.gems || 50,
+            prizes?.second?.coins || 300, prizes?.second?.gems || 30,
+            prizes?.third?.coins || 150, prizes?.third?.gems || 15
+        ]);
+
+        res.json({ success: true, tournament: result.rows[0] });
+    } catch (err) {
+        console.error('Error creating tournament:', err);
+        res.status(500).json({ error: err.message });
+    }
+});
+
+// Generate bracket (admin)
+app.post('/api/admin/tournaments/:tournamentId/generate-bracket', async (req, res) => {
+    try {
+        const { tournamentId } = req.params;
+        const { adminKey } = req.body;
+
+        if (adminKey !== process.env.ADMIN_KEY && adminKey !== 'dev-admin-key-12345') {
+            return res.status(403).json({ error: 'Unauthorized' });
+        }
+
+        const tournament = await db.query('SELECT * FROM tournaments WHERE id = $1', [parseInt(tournamentId)]);
+
+        if (tournament.rows.length === 0) {
+            return res.status(404).json({ error: 'Tournament not found' });
+        }
+
+        const participants = await db.query(`
+            SELECT tp.*, us.total_xp
+            FROM tournament_participants tp
+            JOIN user_stats us ON tp.user_id = us.user_id
+            WHERE tp.tournament_id = $1
+            ORDER BY us.total_xp DESC
+        `, [parseInt(tournamentId)]);
+
+        if (participants.rows.length < 2) {
+            return res.status(400).json({ error: 'Need at least 2 participants' });
+        }
+
+        const playerCount = participants.rows.length;
+        const nextPowerOf2 = Math.pow(2, Math.ceil(Math.log2(playerCount)));
+
+        for (let i = 0; i < participants.rows.length; i++) {
+            await db.query('UPDATE tournament_participants SET seed = $1 WHERE id = $2', [i + 1, participants.rows[i].id]);
+        }
+
+        const round1Matches = Math.floor(nextPowerOf2 / 2);
+        const matchesCreated = [];
+
+        for (let i = 0; i < round1Matches; i++) {
+            const highSeed = i;
+            const lowSeed = playerCount - 1 - i;
+
+            const player1 = highSeed < playerCount ? participants.rows[highSeed].user_id : null;
+            const player2 = lowSeed >= 0 && lowSeed < playerCount ? participants.rows[lowSeed].user_id : null;
+
+            if (player1 && player2) {
+                const match = await db.query(`
+                    INSERT INTO tournament_matches (tournament_id, round_number, match_number, player1_id, player2_id)
+                    VALUES ($1, 1, $2, $3, $4)
+                    RETURNING *
+                `, [parseInt(tournamentId), i + 1, player1, player2]);
+                matchesCreated.push(match.rows[0]);
+            } else if (player1) {
+                await db.query(`
+                    UPDATE tournament_participants SET current_round = 2 WHERE tournament_id = $1 AND user_id = $2
+                `, [parseInt(tournamentId), player1]);
+            }
+        }
+
+        await db.query('UPDATE tournaments SET status = $1 WHERE id = $2', ['in_progress', parseInt(tournamentId)]);
+
+        res.json({ success: true, matches_created: matchesCreated.length, bracket_size: nextPowerOf2 });
+    } catch (err) {
+        console.error('Error generating bracket:', err);
         res.status(500).json({ error: err.message });
     }
 });

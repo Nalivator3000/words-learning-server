@@ -1,120 +1,133 @@
-# ТЕКУЩАЯ ЗАДАЧА: Leagues System (Лиги)
+# ТЕКУЩАЯ ЗАДАЧА: Group Tournaments (Групповые турниры)
 
 ## КОНТЕКСТ
-Gamification система активно развивается (XP, levels, achievements, currency, streaks). Нужна рейтинговая система с лигами для конкуренции между игроками.
+Социальные и соревновательные фичи развиваются (friends, duels 1v1, leagues). Нужна система групповых турниров для массового вовлечения.
 
 ## ЦЕЛЬ
-Создать систему лиг с автоматическим повышением/понижением по итогам недели.
+Создать систему еженедельных турниров с bracket-структурой и призами для топ-3.
 
 ## ЧТО НУЖНО СДЕЛАТЬ
 
-### 1. Таблица league_tiers (конфигурация лиг)
+### 1. Таблица tournaments (конфигурация турниров)
 ```sql
-CREATE TABLE IF NOT EXISTS league_tiers (
+CREATE TABLE IF NOT EXISTS tournaments (
     id SERIAL PRIMARY KEY,
-    tier_name VARCHAR(50) UNIQUE NOT NULL,
-    tier_level INTEGER UNIQUE NOT NULL,
-    min_weekly_xp INTEGER NOT NULL,
-    icon VARCHAR(10),
-    color_hex VARCHAR(7),
-    promotion_bonus_coins INTEGER DEFAULT 0,
-    promotion_bonus_gems INTEGER DEFAULT 0
-);
-```
-
-Лиги (от низшей к высшей):
-1. Bronze (tier_level: 1, min_weekly_xp: 0, bonus: 50 coins)
-2. Silver (tier_level: 2, min_weekly_xp: 500, bonus: 100 coins)
-3. Gold (tier_level: 3, min_weekly_xp: 1000, bonus: 200 coins + 5 gems)
-4. Platinum (tier_level: 4, min_weekly_xp: 2000, bonus: 400 coins + 10 gems)
-5. Diamond (tier_level: 5, min_weekly_xp: 3500, bonus: 800 coins + 25 gems)
-6. Master (tier_level: 6, min_weekly_xp: 5000, bonus: 1500 coins + 50 gems)
-7. Grandmaster (tier_level: 7, min_weekly_xp: 7500, bonus: 3000 coins + 100 gems)
-
-### 2. Таблица user_leagues (текущая лига пользователя)
-```sql
-CREATE TABLE IF NOT EXISTS user_leagues (
-    id SERIAL PRIMARY KEY,
-    user_id INTEGER UNIQUE REFERENCES users(id) ON DELETE CASCADE,
-    current_tier_id INTEGER REFERENCES league_tiers(id),
-    weekly_xp INTEGER DEFAULT 0,
-    week_start_date DATE NOT NULL,
-    promotion_count INTEGER DEFAULT 0,
-    demotion_count INTEGER DEFAULT 0,
-    highest_tier_reached INTEGER DEFAULT 1,
-    created_at TIMESTAMP DEFAULT NOW(),
-    updated_at TIMESTAMP DEFAULT NOW()
-);
-```
-
-### 3. Таблица league_history (история переходов)
-```sql
-CREATE TABLE IF NOT EXISTS league_history (
-    id SERIAL PRIMARY KEY,
-    user_id INTEGER REFERENCES users(id) ON DELETE CASCADE,
-    from_tier_id INTEGER REFERENCES league_tiers(id),
-    to_tier_id INTEGER REFERENCES league_tiers(id),
-    week_start_date DATE NOT NULL,
-    week_end_date DATE NOT NULL,
-    weekly_xp_earned INTEGER NOT NULL,
-    action_type VARCHAR(20) NOT NULL, -- 'promotion', 'demotion', 'same'
-    reward_coins INTEGER DEFAULT 0,
-    reward_gems INTEGER DEFAULT 0,
+    title VARCHAR(255) NOT NULL,
+    description TEXT,
+    tournament_type VARCHAR(50) NOT NULL, -- 'weekly', 'monthly', 'special'
+    bracket_type VARCHAR(50) NOT NULL, -- 'single_elimination', 'double_elimination', 'round_robin'
+    language_pair_id INTEGER REFERENCES language_pairs(id),
+    start_date TIMESTAMP NOT NULL,
+    end_date TIMESTAMP NOT NULL,
+    registration_deadline TIMESTAMP NOT NULL,
+    max_participants INTEGER DEFAULT 64,
+    status VARCHAR(50) DEFAULT 'registration', -- 'registration', 'in_progress', 'completed', 'cancelled'
+    prize_1st_coins INTEGER DEFAULT 0,
+    prize_1st_gems INTEGER DEFAULT 0,
+    prize_2nd_coins INTEGER DEFAULT 0,
+    prize_2nd_gems INTEGER DEFAULT 0,
+    prize_3rd_coins INTEGER DEFAULT 0,
+    prize_3rd_gems INTEGER DEFAULT 0,
     created_at TIMESTAMP DEFAULT NOW()
 );
 ```
 
-### 4. Weekly XP Reset Mechanism
-- Каждую неделю (по понедельникам 00:00 UTC) сбрасывается weekly_xp
-- Анализ прогресса пользователя за прошедшую неделю
-- Повышение/понижение/удержание лиги
-- Начисление наград
+### 2. Таблица tournament_participants (участники)
+```sql
+CREATE TABLE IF NOT EXISTS tournament_participants (
+    id SERIAL PRIMARY KEY,
+    tournament_id INTEGER REFERENCES tournaments(id) ON DELETE CASCADE,
+    user_id INTEGER REFERENCES users(id) ON DELETE CASCADE,
+    seed INTEGER, -- позиция в bracket (определяется рейтингом)
+    current_round INTEGER DEFAULT 1,
+    is_eliminated BOOLEAN DEFAULT false,
+    final_position INTEGER,
+    total_score INTEGER DEFAULT 0,
+    registered_at TIMESTAMP DEFAULT NOW(),
+    UNIQUE(tournament_id, user_id)
+);
+```
 
-### 5. API Endpoints (7)
-- GET `/api/leagues/tiers` - все лиги с описанием
-- GET `/api/leagues/:userId/current` - текущая лига пользователя (tier, weekly_xp, position)
-- GET `/api/leagues/:userId/history` - история переходов (последние 10 недель)
-- GET `/api/leagues/:tierId/leaderboard` - топ-100 в текущей лиге (по weekly_xp)
-- GET `/api/leagues/:userId/progress` - прогресс до следующей лиги (XP needed, percentage)
-- POST `/api/admin/leagues/process-week-end` - ручная обработка конца недели (admin only)
-- POST `/api/leagues/:userId/award-weekly-xp` - начислить weekly XP (интеграция с XP system)
+### 3. Таблица tournament_matches (матчи bracket)
+```sql
+CREATE TABLE IF NOT EXISTS tournament_matches (
+    id SERIAL PRIMARY KEY,
+    tournament_id INTEGER REFERENCES tournaments(id) ON DELETE CASCADE,
+    round_number INTEGER NOT NULL,
+    match_number INTEGER NOT NULL,
+    player1_id INTEGER REFERENCES users(id),
+    player2_id INTEGER REFERENCES users(id),
+    player1_score INTEGER DEFAULT 0,
+    player2_score INTEGER DEFAULT 0,
+    winner_id INTEGER REFERENCES users(id),
+    status VARCHAR(50) DEFAULT 'pending', -- 'pending', 'in_progress', 'completed', 'walkover'
+    scheduled_at TIMESTAMP,
+    started_at TIMESTAMP,
+    completed_at TIMESTAMP,
+    UNIQUE(tournament_id, round_number, match_number)
+);
+```
 
-### 6. Promotion/Demotion Logic
-**Promotion (повышение):**
-- Если weekly_xp >= min_weekly_xp следующей лиги
-- Только на 1 tier вверх за неделю
-- Награда: coins + gems по текущей лиге
+### 4. API Endpoints (8)
+- GET `/api/tournaments` - список всех турниров (upcoming, active, past)
+- GET `/api/tournaments/:tournamentId` - детали турнира
+- POST `/api/tournaments/:tournamentId/register` - регистрация на турнир
+- DELETE `/api/tournaments/:tournamentId/unregister` - отмена регистрации
+- GET `/api/tournaments/:tournamentId/bracket` - текущая bracket-структура
+- GET `/api/tournaments/:tournamentId/participants` - список участников
+- POST `/api/admin/tournaments/create` - создать турнир (admin only)
+- POST `/api/admin/tournaments/:tournamentId/generate-bracket` - сгенерировать bracket (admin only)
 
-**Demotion (понижение):**
-- Если weekly_xp < 50% от min_weekly_xp текущей лиги
-- Только на 1 tier вниз за неделю
-- Нельзя опуститься ниже Bronze
+### 5. Bracket Generation Logic
+**Single Elimination (8/16/32/64 участников):**
+- Round 1: N/2 matches (например, 32 → 16 матчей)
+- Round 2: N/4 matches (например, 16 → 8 матчей)
+- Round 3 (Quarter-finals): N/8 matches
+- Round 4 (Semi-finals): N/16 matches
+- Round 5 (Finals): 1 match
 
-**Same tier:**
-- Если weekly_xp >= min_weekly_xp текущей лиги, но < следующей
-- Небольшая награда: 25 coins
+**Seeding:**
+- Участники сортируются по user_stats.total_xp
+- Seed 1 vs Seed N, Seed 2 vs Seed N-1, etc.
 
-### 7. Integration с XP System
-Модифицировать POST `/api/xp/award`:
-- После начисления XP также обновлять `user_leagues.weekly_xp`
-- При достижении weekly_xp >= следующей лиги отправлять уведомление
+**Bye mechanism:**
+- Если участников не степень 2 (например, 13), добавить "bye"
+- Высшие seeds автоматически проходят в следующий раунд
 
-### 8. Auto-population league_tiers
-При первом запуске сервера создать 7 лиг с иконками и цветами:
-- Bronze: 🥉 #CD7F32
-- Silver: 🥈 #C0C0C0
-- Gold: 🥇 #FFD700
-- Platinum: 💎 #E5E4E2
-- Diamond: 💠 #B9F2FF
-- Master: ⭐ #FF6B6B
-- Grandmaster: 👑 #9B59B6
+### 6. Prize Distribution
+**1st место:**
+- Weekly: 500 coins + 50 gems
+- Monthly: 2000 coins + 200 gems
+
+**2nd место:**
+- Weekly: 300 coins + 30 gems
+- Monthly: 1200 coins + 120 gems
+
+**3rd место:**
+- Weekly: 150 coins + 15 gems
+- Monthly: 600 coins + 60 gems
+
+### 7. Auto-Creation Weekly Tournaments
+При запуске сервера создать турнир на текущую неделю (если не существует):
+- Title: "Weekly Tournament - Week {N}"
+- Start: Monday 00:00 UTC
+- End: Sunday 23:59 UTC
+- Registration deadline: Friday 23:59 UTC
+- Max participants: 64
+- Bracket: single_elimination
+
+### 8. Match Format (для будущей интеграции)
+Матч = duel с 5 вопросами:
+- Используется существующая система duels
+- Winner = больше правильных ответов
+- При равенстве = меньшее avg time wins
 
 ## ПРИОРИТЕТ
-HIGH (core gamification feature)
+MEDIUM (social gamification feature)
 
 ## ОЖИДАЕМЫЙ РЕЗУЛЬТАТ
-- Полноценная система лиг с автоматическими переходами
-- Еженедельная конкуренция между игроками
-- Награды за продвижение
-- Leaderboard по текущей лиге
+- Полноценная система турниров с bracket
+- Автогенерация еженедельных турниров
+- Призы для топ-3
 - Ready for frontend integration
+- Интеграция с duels system (в будущем)

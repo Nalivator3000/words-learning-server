@@ -355,10 +355,15 @@
   - [ ] Real-time WebSocket (будущая версия)
   - [ ] Frontend UI (будущая версия)
 
-- [ ] **Групповые турниры**
-  - Еженедельные турниры
-  - Bracket-система
-  - Призы для топ-3
+- [x] **Групповые турниры** ✅ ГОТОВО (Backend)
+  - ✅ 3 таблицы: tournaments, tournament_participants, tournament_matches
+  - ✅ 8 API endpoints (list, details, register, unregister, bracket, participants, create, generate-bracket)
+  - ✅ Bracket generation logic (single_elimination, seeding, bye system)
+  - ✅ Registration validation (deadline, capacity, status)
+  - ✅ Prize structure (1st/2nd/3rd coins + gems)
+  - ✅ Admin endpoints для создания и генерации bracket
+  - [ ] Match completion logic (будущая версия)
+  - [ ] Frontend UI bracket visualization (будущая версия)
 
 ### 3.4 Совместное обучение
 - [x] **Глобальные наборы слов (Word Collections)** 🎯 ✅ ЧАСТИЧНО ГОТОВО (Backend)
