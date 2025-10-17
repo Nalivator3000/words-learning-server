@@ -246,3 +246,61 @@ curl http://localhost:3001/api/streak-freeze/1/history
 - Achievement "Ice Guardian" за 10 uses
 
 ---
+
+### Iteration 6 - COMPLETED ✅
+**Date:** 2025-10-17
+**Task:** Achievements /recent endpoint
+**Status:** [x] COMPLETED
+
+**Implementation:**
+- ✅ `GET /api/gamification/achievements/:userId/recent` endpoint
+- `server-postgresql.js:1725-1756` (32 lines)
+
+---
+
+### Iteration 7 - COMPLETED ✅
+**Date:** 2025-10-17
+**Task:** Weekly Challenges verification
+**Status:** [x] COMPLETED (already implemented)
+
+**Findings:**
+- ✅ Weekly challenges system fully implemented
+- ✅ 5 endpoints working
+
+---
+
+### Iteration 8 - COMPLETED ✅
+**Date:** 2025-10-17
+**Task:** Public Profiles verification
+**Status:** [x] COMPLETED (already implemented)
+
+**Findings:**
+- ✅ Profile system at `server-postgresql.js:4570-4619`
+
+---
+
+### Iteration 9 - COMPLETED ✅
+**Date:** 2025-10-17
+**Task:** Friends System
+**Status:** [x] COMPLETED
+
+**Implementation:**
+1. **Existing (9 endpoints):**
+   - POST `/api/friends/request`, `/api/friends/accept/:id`, `/api/friends/decline/:id`
+   - DELETE `/api/friends/:id`
+   - GET `/api/friends/:userId`, `/api/friends/requests/received/:userId`, `/api/friends/requests/sent/:userId`
+   - GET `/api/friends/search`, `/api/friends/activities/:userId`
+
+2. **Added (3 endpoints):**
+   - POST `/api/friends/block`
+   - GET `/api/friends/blocked/:userId`
+   - GET `/api/users/search` (universal search)
+
+3. **Files:**
+   - `server-postgresql.js:4315-4425` (111 lines added)
+
+**Features:**
+- Bidirectional tracking, status flow (pending/accepted/rejected/blocked)
+- Activity feed, security validation
+
+---

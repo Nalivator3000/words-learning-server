@@ -4312,6 +4312,118 @@ app.get('/api/friends/activities/:userId', async (req, res) => {
     }
 });
 
+// Block user
+app.post('/api/friends/block', async (req, res) => {
+    try {
+        const { userId, blockedUserId } = req.body;
+
+        if (!userId || !blockedUserId) {
+            return res.status(400).json({ error: 'Missing required fields: userId, blockedUserId' });
+        }
+
+        if (parseInt(userId) === parseInt(blockedUserId)) {
+            return res.status(400).json({ error: 'Cannot block yourself' });
+        }
+
+        // Check if friendship exists
+        const existingFriendship = await db.query(
+            'SELECT * FROM friendships WHERE (user_id = $1 AND friend_id = $2) OR (user_id = $2 AND friend_id = $1)',
+            [parseInt(userId), parseInt(blockedUserId)]
+        );
+
+        if (existingFriendship.rows.length > 0) {
+            // Update existing friendship to blocked
+            await db.query(`
+                UPDATE friendships
+                SET status = 'blocked'
+                WHERE id = $1
+            `, [existingFriendship.rows[0].id]);
+        } else {
+            // Create new blocked entry
+            await db.query(`
+                INSERT INTO friendships (user_id, friend_id, status)
+                VALUES ($1, $2, 'blocked')
+            `, [parseInt(userId), parseInt(blockedUserId)]);
+        }
+
+        res.json({ success: true, message: 'User blocked successfully' });
+    } catch (err) {
+        console.error('Error blocking user:', err);
+        res.status(500).json({ error: err.message });
+    }
+});
+
+// Get blocked users list
+app.get('/api/friends/blocked/:userId', async (req, res) => {
+    try {
+        const { userId } = req.params;
+
+        const blockedUsers = await db.query(`
+            SELECT
+                f.id as friendship_id,
+                u.id as user_id,
+                u.name,
+                u.email,
+                f.requestedAt as blocked_at
+            FROM friendships f
+            INNER JOIN users u ON u.id = f.friend_id
+            WHERE f.user_id = $1 AND f.status = 'blocked'
+            ORDER BY f.requestedAt DESC
+        `, [parseInt(userId)]);
+
+        res.json(blockedUsers.rows);
+    } catch (err) {
+        console.error('Error getting blocked users:', err);
+        res.status(500).json({ error: err.message });
+    }
+});
+
+// Search users (universal search endpoint)
+app.get('/api/users/search', async (req, res) => {
+    try {
+        const { query, userId, limit = 20 } = req.query;
+
+        if (!query || query.length < 2) {
+            return res.status(400).json({ error: 'Query must be at least 2 characters' });
+        }
+
+        const users = await db.query(`
+            SELECT
+                u.id as user_id,
+                u.name as username,
+                u.email,
+                u.avatar_url,
+                us.level,
+                us.total_xp,
+                CASE
+                    WHEN f1.id IS NOT NULL AND f1.status = 'accepted' THEN 'accepted'
+                    WHEN f2.id IS NOT NULL AND f2.status = 'pending' THEN 'pending'
+                    WHEN f3.id IS NOT NULL AND f3.status = 'pending' THEN 'pending'
+                    WHEN f4.id IS NOT NULL AND f4.status = 'blocked' THEN 'blocked'
+                    ELSE 'none'
+                END as friendship_status
+            FROM users u
+            LEFT JOIN user_stats us ON u.id = us.user_id
+            LEFT JOIN friendships f1 ON ((f1.user_id = $2 AND f1.friend_id = u.id) OR (f1.friend_id = $2 AND f1.user_id = u.id)) AND f1.status = 'accepted'
+            LEFT JOIN friendships f2 ON f2.user_id = $2 AND f2.friend_id = u.id AND f2.status = 'pending'
+            LEFT JOIN friendships f3 ON f3.friend_id = $2 AND f3.user_id = u.id AND f3.status = 'pending'
+            LEFT JOIN friendships f4 ON f4.user_id = $2 AND f4.friend_id = u.id AND f4.status = 'blocked'
+            WHERE (LOWER(u.name) LIKE LOWER($1) OR LOWER(u.email) LIKE LOWER($1) OR LOWER(u.username) LIKE LOWER($1))
+              AND u.id != $2
+            ORDER BY us.total_xp DESC NULLS LAST
+            LIMIT $3
+        `, [`%${query}%`, userId ? parseInt(userId) : 0, parseInt(limit)]);
+
+        res.json({
+            users: users.rows,
+            total: users.rows.length
+        });
+    } catch (err) {
+        console.error('Error searching users:', err);
+        res.status(500).json({ error: err.message });
+    }
+});
+
 // ========================================
 // ACHIEVEMENTS SYSTEM ENDPOINTS
 // ========================================
