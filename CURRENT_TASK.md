@@ -1,298 +1,223 @@
-# ТЕКУЩАЯ ЗАДАЧА: Система друзей (Friends System)
+# ТЕКУЩАЯ ЗАДАЧА: 1-на-1 Дуэли (Duels System)
 
 ## КОНТЕКСТ
-Нужна полноценная система друзей для социальных функций приложения.
+Система соревнований между друзьями в реальном времени.
 
 ## ЦЕЛЬ
-Реализовать backend API для системы друзей с возможностью поиска, добавления друзей, управления запросами и просмотра ленты активности друзей.
+Реализовать backend для 1-на-1 дуэлей с WebSocket поддержкой для real-time батлов.
 
 ## ЧТО НУЖНО СДЕЛАТЬ
 
 ### 1. Таблицы БД
 
 ```sql
--- Таблица друзей (friendships)
-CREATE TABLE IF NOT EXISTS friendships (
+-- Дуэли
+CREATE TABLE IF NOT EXISTS duels (
     id SERIAL PRIMARY KEY,
-    user_id INTEGER NOT NULL REFERENCES users(id) ON DELETE CASCADE,
-    friend_id INTEGER NOT NULL REFERENCES users(id) ON DELETE CASCADE,
-    status VARCHAR(20) NOT NULL CHECK (status IN ('pending', 'accepted', 'rejected', 'blocked')),
-    requested_at TIMESTAMP DEFAULT NOW(),
-    responded_at TIMESTAMP,
-    UNIQUE(user_id, friend_id),
-    CHECK (user_id != friend_id)
+    challenger_id INTEGER NOT NULL REFERENCES users(id),
+    opponent_id INTEGER NOT NULL REFERENCES users(id),
+    language_pair_id INTEGER REFERENCES language_pairs(id),
+    status VARCHAR(20) DEFAULT 'pending' CHECK (status IN ('pending', 'active', 'completed', 'cancelled', 'declined')),
+    winner_id INTEGER REFERENCES users(id),
+    questions_count INTEGER DEFAULT 10,
+    time_limit_seconds INTEGER DEFAULT 120,
+    created_at TIMESTAMP DEFAULT NOW(),
+    started_at TIMESTAMP,
+    completed_at TIMESTAMP
 );
 
-CREATE INDEX IF NOT EXISTS idx_friendships_user ON friendships(user_id);
-CREATE INDEX IF NOT EXISTS idx_friendships_friend ON friendships(friend_id);
-CREATE INDEX IF NOT EXISTS idx_friendships_status ON friendships(status);
+-- Ответы участников
+CREATE TABLE IF NOT EXISTS duel_answers (
+    id SERIAL PRIMARY KEY,
+    duel_id INTEGER REFERENCES duels(id) ON DELETE CASCADE,
+    user_id INTEGER REFERENCES users(id),
+    word_id INTEGER REFERENCES words(id),
+    answer TEXT,
+    is_correct BOOLEAN,
+    answered_at TIMESTAMP DEFAULT NOW(),
+    time_taken_ms INTEGER
+);
+
+-- Результаты
+CREATE TABLE IF NOT EXISTS duel_results (
+    id SERIAL PRIMARY KEY,
+    duel_id INTEGER UNIQUE REFERENCES duels(id) ON DELETE CASCADE,
+    challenger_score INTEGER DEFAULT 0,
+    opponent_score INTEGER DEFAULT 0,
+    challenger_avg_time_ms INTEGER,
+    opponent_avg_time_ms INTEGER,
+    created_at TIMESTAMP DEFAULT NOW()
+);
+
+CREATE INDEX idx_duels_challenger ON duels(challenger_id);
+CREATE INDEX idx_duels_opponent ON duels(opponent_id);
+CREATE INDEX idx_duels_status ON duels(status);
+CREATE INDEX idx_duel_answers_duel ON duel_answers(duel_id);
 ```
 
 ### 2. API Endpoints
 
-#### 2.1 Поиск пользователей
-**GET /api/users/search?query=username&limit=20**
-
-Response:
+#### 2.1 Создать вызов
+**POST /api/duels/challenge**
 ```json
 {
-  "users": [
-    {
-      "user_id": 5,
-      "username": "alex_polyglot",
-      "avatar_url": "https://...",
-      "level": 12,
-      "total_xp": 2500,
-      "friendship_status": "none|pending|accepted|blocked"
-    }
-  ],
-  "total": 15
+  "challengerId": 1,
+  "opponentId": 2,
+  "languagePairId": 1,
+  "questionsCount": 10,
+  "timeLimitSeconds": 120
 }
 ```
 
-#### 2.2 Отправить запрос в друзья
-**POST /api/friends/request**
-
-Body:
+#### 2.2 Принять/отклонить вызов
+**POST /api/duels/:duelId/respond**
 ```json
 {
-  "user_id": 1,
-  "friend_id": 5
+  "userId": 2,
+  "action": "accept|decline"
 }
 ```
 
-Response:
+#### 2.3 Начать дуэль
+**POST /api/duels/:duelId/start**
+Возвращает список слов для квиза
+
+#### 2.4 Отправить ответ
+**POST /api/duels/:duelId/answer**
 ```json
 {
-  "success": true,
-  "message": "Friend request sent!",
-  "friendship_id": 42
+  "userId": 1,
+  "wordId": 15,
+  "answer": "Hund",
+  "timeTakenMs": 1250
 }
 ```
 
-#### 2.3 Ответить на запрос
-**POST /api/friends/respond**
+#### 2.5 Завершить дуэль
+**POST /api/duels/:duelId/complete**
+Автоматически вызывается когда оба ответили на все вопросы
 
-Body:
+#### 2.6 Получить статус дуэли
+**GET /api/duels/:duelId**
+
+#### 2.7 История дуэлей
+**GET /api/duels/history/:userId?limit=20**
+
+#### 2.8 Активные дуэли
+**GET /api/duels/active/:userId**
+
+#### 2.9 Статистика дуэлей
+**GET /api/duels/stats/:userId**
 ```json
 {
-  "friendship_id": 42,
-  "action": "accept|reject"
+  "total_duels": 50,
+  "wins": 32,
+  "losses": 15,
+  "draws": 3,
+  "win_rate": 0.64,
+  "avg_score": 8.5,
+  "best_streak": 7
 }
 ```
 
-#### 2.4 Удалить из друзей
-**DELETE /api/friends/:friendshipId**
+### 3. WebSocket Events (для real-time)
 
-#### 2.5 Заблокировать пользователя
-**POST /api/friends/block**
+```javascript
+// Server Events
+socket.on('duel:join', (duelId, userId))
+socket.on('duel:answer', (duelId, userId, answer))
+socket.on('duel:leave', (duelId, userId))
 
-Body:
-```json
-{
-  "user_id": 1,
-  "blocked_user_id": 5
+// Client Events (broadcast)
+socket.emit('duel:opponent_joined', { opponentId, opponentName })
+socket.emit('duel:opponent_answered', { questionIndex, isCorrect })
+socket.emit('duel:opponent_left', { opponentId })
+socket.emit('duel:completed', { winnerId, results })
+```
+
+### 4. Бизнес-логика
+
+```javascript
+// Выбор слов для дуэли
+async function selectDuelWords(languagePairId, count = 10) {
+  // Выбрать слова со статусом 'learned' или 'reviewing'
+  // Разнообразие сложности (30% easy, 50% medium, 20% hard)
+  // Исключить слова, повторяющиеся за последние 24 часа
+  const words = await db.query(`
+    SELECT * FROM words
+    WHERE language_pair_id = $1
+      AND status IN ('learned', 'reviewing')
+    ORDER BY RANDOM()
+    LIMIT $2
+  `, [languagePairId, count]);
+  return words.rows;
+}
+
+// Проверка ответа
+function checkAnswer(userAnswer, correctTranslation) {
+  const normalize = (str) => str.toLowerCase().trim();
+  return normalize(userAnswer) === normalize(correctTranslation);
+}
+
+// Подсчет результатов
+async function calculateDuelResults(duelId) {
+  const answers = await db.query(`
+    SELECT user_id, is_correct, time_taken_ms
+    FROM duel_answers
+    WHERE duel_id = $1
+  `, [duelId]);
+
+  const challenger_answers = answers.rows.filter(a => a.user_id === challengerId);
+  const opponent_answers = answers.rows.filter(a => a.user_id === opponentId);
+
+  const challenger_score = challenger_answers.filter(a => a.is_correct).length;
+  const opponent_score = opponent_answers.filter(a => a.is_correct).length;
+
+  let winner_id = null;
+  if (challenger_score > opponent_score) winner_id = challengerId;
+  else if (opponent_score > challenger_score) winner_id = opponentId;
+  // else draw
+
+  return { challenger_score, opponent_score, winner_id };
 }
 ```
 
-#### 2.6 Получить список друзей
-**GET /api/friends/:userId?status=accepted&limit=50&offset=0**
+### 5. Rewards System
 
-Response:
-```json
-{
-  "friends": [
-    {
-      "friendship_id": 42,
-      "user_id": 5,
-      "username": "alex_polyglot",
-      "avatar_url": "https://...",
-      "level": 12,
-      "total_xp": 2500,
-      "current_streak": 15,
-      "status": "accepted",
-      "since": "2025-09-01"
-    }
-  ],
-  "total": 24
+```javascript
+// После завершения дуэли
+async function awardDuelRewards(duelId, winnerId) {
+  const rewardXP = 50; // Победитель
+  const participationXP = 20; // Участник
+
+  if (winnerId) {
+    await db.query(`
+      INSERT INTO xp_log (user_id, activity_type, xp_amount)
+      VALUES ($1, 'duel_won', $2)
+    `, [winnerId, rewardXP]);
+  }
+
+  // Participation XP для обоих
+  // Achievement unlocks
+  // Update stats
 }
 ```
 
-#### 2.7 Получить входящие запросы
-**GET /api/friends/:userId/requests/incoming**
+### 6. Security & Validation
 
-#### 2.8 Получить исходящие запросы
-**GET /api/friends/:userId/requests/outgoing**
+- Проверка: оба пользователя друзья
+- Проверка: opponent не в duel с кем-то еще
+- Rate limiting: не более 10 вызовов в день
+- Validation: answers только от участников дуэли
+- Timeout handling: auto-cancel после 5 минут без ответа
 
-#### 2.9 Получить заблокированных пользователей
-**GET /api/friends/:userId/blocked**
+### 7. Расширения (будущее)
 
-#### 2.10 Лента активности друзей
-**GET /api/friends/:userId/activity?limit=20**
-
-Response:
-```json
-{
-  "activities": [
-    {
-      "user_id": 5,
-      "username": "alex_polyglot",
-      "avatar_url": "https://...",
-      "activity_type": "achievement_unlocked|level_up|milestone_reached|streak_milestone",
-      "activity_data": {
-        "achievement_name": "Word Master",
-        "achievement_icon": "📚"
-      },
-      "timestamp": "2025-10-17T10:30:00Z",
-      "time_ago": "2 часа назад"
-    }
-  ],
-  "total": 45
-}
-```
-
-### 3. SQL Queries примеры
-
-#### Поиск пользователей с проверкой статуса дружбы
-```sql
-SELECT
-  u.id as user_id,
-  u.name as username,
-  us.level,
-  us.total_xp,
-  COALESCE(f1.status, f2.status, 'none') as friendship_status
-FROM users u
-LEFT JOIN user_stats us ON u.id = us.user_id
-LEFT JOIN friendships f1 ON (f1.user_id = $1 AND f1.friend_id = u.id)
-LEFT JOIN friendships f2 ON (f2.user_id = u.id AND f2.friend_id = $1)
-WHERE u.name ILIKE $2 AND u.id != $1
-ORDER BY us.total_xp DESC
-LIMIT $3
-```
-
-#### Получить друзей с их статистикой
-```sql
-SELECT
-  f.id as friendship_id,
-  u.id as user_id,
-  u.name as username,
-  us.level,
-  us.total_xp,
-  us.current_streak,
-  f.status,
-  f.responded_at as since
-FROM friendships f
-JOIN users u ON (
-  CASE
-    WHEN f.user_id = $1 THEN u.id = f.friend_id
-    WHEN f.friend_id = $1 THEN u.id = f.user_id
-  END
-)
-LEFT JOIN user_stats us ON u.id = us.user_id
-WHERE (f.user_id = $1 OR f.friend_id = $1)
-  AND f.status = $2
-ORDER BY us.total_xp DESC
-LIMIT $3 OFFSET $4
-```
-
-#### Лента активности друзей (за последние 7 дней)
-```sql
--- Достижения друзей
-SELECT
-  u.id as user_id,
-  u.name as username,
-  'achievement_unlocked' as activity_type,
-  json_build_object(
-    'achievement_name', a.name,
-    'achievement_icon', a.icon,
-    'xp_reward', a.xp_reward
-  ) as activity_data,
-  ua.unlocked_at as timestamp
-FROM user_achievements ua
-JOIN users u ON ua.user_id = u.id
-JOIN achievements a ON ua.achievement_id = a.id
-WHERE ua.user_id IN (
-  SELECT CASE
-    WHEN f.user_id = $1 THEN f.friend_id
-    ELSE f.user_id
-  END
-  FROM friendships f
-  WHERE (f.user_id = $1 OR f.friend_id = $1) AND f.status = 'accepted'
-)
-AND ua.unlocked_at >= NOW() - INTERVAL '7 days'
-
-UNION ALL
-
--- Level ups (из xp_log)
-SELECT
-  u.id as user_id,
-  u.name as username,
-  'level_up' as activity_type,
-  json_build_object(
-    'new_level', us.level
-  ) as activity_data,
-  us.last_level_up_at as timestamp
-FROM user_stats us
-JOIN users u ON us.user_id = u.id
-WHERE us.user_id IN (...)
-AND us.last_level_up_at >= NOW() - INTERVAL '7 days'
-
-ORDER BY timestamp DESC
-LIMIT $2
-```
-
-### 4. Безопасность
-
-- Проверка, что user_id != friend_id (нельзя добавить себя в друзья)
-- Проверка на дубликаты запросов (UNIQUE constraint)
-- Проверка прав доступа (пользователь может управлять только своими друзьями)
-- Rate limiting для поиска (не более 10 запросов в минуту)
-
-### 5. Валидация
-
-- username для поиска: минимум 2 символа
-- Проверка существования пользователей перед отправкой запроса
-- Проверка статуса дружбы перед действиями
-- Нельзя принять/отклонить чужие запросы
-
-### 6. Тестирование
-
-```bash
-# Поиск пользователей
-curl http://localhost:3001/api/users/search?query=alex&limit=5
-
-# Отправить запрос в друзья
-curl -X POST http://localhost:3001/api/friends/request \
-  -H "Content-Type: application/json" \
-  -d '{"user_id": 1, "friend_id": 2}'
-
-# Принять запрос
-curl -X POST http://localhost:3001/api/friends/respond \
-  -H "Content-Type: application/json" \
-  -d '{"friendship_id": 1, "action": "accept"}'
-
-# Список друзей
-curl http://localhost:3001/api/friends/1?status=accepted
-
-# Входящие запросы
-curl http://localhost:3001/api/friends/1/requests/incoming
-
-# Лента активности
-curl http://localhost:3001/api/friends/1/activity?limit=10
-```
-
-## ГОТОВО КОГДА
-
-- [ ] Таблица friendships создана
-- [ ] 10 API endpoints реализованы
-- [ ] Поиск пользователей работает
-- [ ] Отправка/принятие/отклонение запросов работает
-- [ ] Блокировка работает
-- [ ] Лента активности друзей работает
-- [ ] Все endpoints протестированы
-- [ ] PLAN.md обновлен
-- [ ] EXECUTION_LOG.md обновлен
-- [ ] Закоммичено
+- [ ] Ранжированные дуэли (ranked mode)
+- [ ] Турниры (bracket system)
+- [ ] Spectator mode (друзья смотрят)
+- [ ] Replay system
+- [ ] Powerups (подсказки, заморозка времени)
 
 ## ПРИОРИТЕТ
-HIGH - необходимо для социальных функций
+MEDIUM - нужна интеграция WebSocket

@@ -337,11 +337,16 @@
   - [ ] Сравнение прогресса (будущая версия)
 
 ### 3.3 Соревнования
-- [ ] **1-на-1 дуэли**
-  - Вызов друга на квиз
-  - Real-time батл
-  - Таймер и одновременные вопросы
-  - Результаты и победитель
+- [x] **1-на-1 дуэли** ✅ ГОТОВО (Backend REST API)
+  - ✅ Вызов друга на квиз (POST /api/duels/challenge)
+  - ✅ Принятие/отклонение вызовов
+  - ✅ 9 API endpoints (challenge, respond, start, answer, complete, status, history, active, stats)
+  - ✅ Таблицы: duels, duel_answers, duel_results
+  - ✅ Random word selection, answer validation, score calculation
+  - ✅ XP rewards system
+  - ✅ Win/loss/draw statistics
+  - [ ] Real-time WebSocket (будущая версия)
+  - [ ] Frontend UI (будущая версия)
 
 - [ ] **Групповые турниры**
   - Еженедельные турниры

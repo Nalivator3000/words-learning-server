@@ -304,3 +304,45 @@ curl http://localhost:3001/api/streak-freeze/1/history
 - Activity feed, security validation
 
 ---
+
+### Iteration 10 - COMPLETED ✅
+**Date:** 2025-10-17
+**Task:** 1-на-1 Дуэли (Duels System)
+**Status:** [x] COMPLETED
+
+**Implementation:**
+1. **Таблицы БД (3):**
+   - duels (id, challenger_id, opponent_id, language_pair_id, status, winner_id, questions_count, time_limit_seconds, timestamps)
+   - duel_answers (duel_id, user_id, word_id, answer, is_correct, answered_at, time_taken_ms)
+   - duel_results (duel_id, challenger_score, opponent_score, avg_time_ms)
+
+2. **API Endpoints (9):**
+   - POST `/api/duels/challenge` - создать вызов
+   - POST `/api/duels/:duelId/respond` - принять/отклонить
+   - POST `/api/duels/:duelId/start` - начать дуэль (получить слова)
+   - POST `/api/duels/:duelId/answer` - отправить ответ
+   - POST `/api/duels/:duelId/complete` - завершить (результаты)
+   - GET `/api/duels/:duelId` - статус дуэли
+   - GET `/api/duels/history/:userId` - история
+   - GET `/api/duels/active/:userId` - активные дуэли
+   - GET `/api/duels/stats/:userId` - статистика (wins/losses/draws/win_rate)
+
+3. **Features:**
+   - Friends-only duels (security check)
+   - Random word selection from learned/reviewing status
+   - Answer validation (case-insensitive)
+   - Score calculation with avg response time
+   - XP rewards (winner: 50 XP, participants: 20 XP each)
+   - Win/loss/draw tracking
+
+4. **Files:**
+   - `server-postgresql.js:373-422` - Tables (50 lines)
+   - `server-postgresql.js:4478-4842` - Endpoints (365 lines)
+
+**Limitations (future):**
+- No WebSocket/real-time (REST API only)
+- No ranked mode
+- No tournaments
+- No spectator mode
+
+---

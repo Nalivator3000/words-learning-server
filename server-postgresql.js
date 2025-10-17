@@ -370,6 +370,57 @@ async function initDatabase() {
             )
         `);
 
+        // Duels System: Duels table
+        await db.query(`
+            CREATE TABLE IF NOT EXISTS duels (
+                id SERIAL PRIMARY KEY,
+                challenger_id INTEGER NOT NULL REFERENCES users(id) ON DELETE CASCADE,
+                opponent_id INTEGER NOT NULL REFERENCES users(id) ON DELETE CASCADE,
+                language_pair_id INTEGER REFERENCES language_pairs(id),
+                status VARCHAR(20) DEFAULT 'pending' CHECK (status IN ('pending', 'active', 'completed', 'cancelled', 'declined')),
+                winner_id INTEGER REFERENCES users(id),
+                questions_count INTEGER DEFAULT 10,
+                time_limit_seconds INTEGER DEFAULT 120,
+                created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+                started_at TIMESTAMP,
+                completed_at TIMESTAMP,
+                CHECK (challenger_id != opponent_id)
+            )
+        `);
+
+        await db.query(`CREATE INDEX IF NOT EXISTS idx_duels_challenger ON duels(challenger_id)`);
+        await db.query(`CREATE INDEX IF NOT EXISTS idx_duels_opponent ON duels(opponent_id)`);
+        await db.query(`CREATE INDEX IF NOT EXISTS idx_duels_status ON duels(status)`);
+
+        // Duels System: Duel answers
+        await db.query(`
+            CREATE TABLE IF NOT EXISTS duel_answers (
+                id SERIAL PRIMARY KEY,
+                duel_id INTEGER REFERENCES duels(id) ON DELETE CASCADE,
+                user_id INTEGER REFERENCES users(id) ON DELETE CASCADE,
+                word_id INTEGER REFERENCES words(id) ON DELETE SET NULL,
+                answer TEXT,
+                is_correct BOOLEAN,
+                answered_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+                time_taken_ms INTEGER
+            )
+        `);
+
+        await db.query(`CREATE INDEX IF NOT EXISTS idx_duel_answers_duel ON duel_answers(duel_id)`);
+
+        // Duels System: Duel results
+        await db.query(`
+            CREATE TABLE IF NOT EXISTS duel_results (
+                id SERIAL PRIMARY KEY,
+                duel_id INTEGER UNIQUE REFERENCES duels(id) ON DELETE CASCADE,
+                challenger_score INTEGER DEFAULT 0,
+                opponent_score INTEGER DEFAULT 0,
+                challenger_avg_time_ms INTEGER,
+                opponent_avg_time_ms INTEGER,
+                created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+            )
+        `);
+
         // Achievements System: Achievement definitions
         await db.query(`
             CREATE TABLE IF NOT EXISTS achievements (
@@ -4420,6 +4471,372 @@ app.get('/api/users/search', async (req, res) => {
         });
     } catch (err) {
         console.error('Error searching users:', err);
+        res.status(500).json({ error: err.message });
+    }
+});
+
+// ========================================
+// DUELS SYSTEM ENDPOINTS
+// ========================================
+
+// Create duel challenge
+app.post('/api/duels/challenge', async (req, res) => {
+    try {
+        const { challengerId, opponentId, languagePairId, questionsCount = 10, timeLimitSeconds = 120 } = req.body;
+
+        if (!challengerId || !opponentId) {
+            return res.status(400).json({ error: 'Missing required fields' });
+        }
+
+        if (parseInt(challengerId) === parseInt(opponentId)) {
+            return res.status(400).json({ error: 'Cannot challenge yourself' });
+        }
+
+        // Check if users are friends
+        const friendship = await db.query(`
+            SELECT * FROM friendships
+            WHERE ((user_id = $1 AND friend_id = $2) OR (user_id = $2 AND friend_id = $1))
+              AND status = 'accepted'
+        `, [parseInt(challengerId), parseInt(opponentId)]);
+
+        if (friendship.rows.length === 0) {
+            return res.status(403).json({ error: 'You can only challenge friends' });
+        }
+
+        // Create duel
+        const duel = await db.query(`
+            INSERT INTO duels (challenger_id, opponent_id, language_pair_id, questions_count, time_limit_seconds)
+            VALUES ($1, $2, $3, $4, $5)
+            RETURNING *
+        `, [parseInt(challengerId), parseInt(opponentId), languagePairId ? parseInt(languagePairId) : null,
+            parseInt(questionsCount), parseInt(timeLimitSeconds)]);
+
+        // Log activity
+        await db.query(`
+            INSERT INTO friend_activities (user_id, activity_type, activity_data)
+            VALUES ($1, 'duel_challenge', $2)
+        `, [parseInt(challengerId), JSON.stringify({ opponent_id: parseInt(opponentId), duel_id: duel.rows[0].id })]);
+
+        res.json({ success: true, duel: duel.rows[0] });
+    } catch (err) {
+        console.error('Error creating duel:', err);
+        res.status(500).json({ error: err.message });
+    }
+});
+
+// Respond to duel (accept/decline)
+app.post('/api/duels/:duelId/respond', async (req, res) => {
+    try {
+        const { duelId } = req.params;
+        const { userId, action } = req.body;
+
+        const duel = await db.query('SELECT * FROM duels WHERE id = $1', [parseInt(duelId)]);
+        if (duel.rows.length === 0) {
+            return res.status(404).json({ error: 'Duel not found' });
+        }
+
+        const duelData = duel.rows[0];
+        if (duelData.opponent_id !== parseInt(userId)) {
+            return res.status(403).json({ error: 'Only the opponent can respond' });
+        }
+
+        if (duelData.status !== 'pending') {
+            return res.status(400).json({ error: 'Duel already responded to' });
+        }
+
+        if (action === 'accept') {
+            await db.query(`UPDATE duels SET status = 'active', started_at = NOW() WHERE id = $1`, [parseInt(duelId)]);
+            res.json({ success: true, message: 'Duel accepted', status: 'active' });
+        } else if (action === 'decline') {
+            await db.query(`UPDATE duels SET status = 'declined' WHERE id = $1`, [parseInt(duelId)]);
+            res.json({ success: true, message: 'Duel declined', status: 'declined' });
+        } else {
+            return res.status(400).json({ error: 'Invalid action' });
+        }
+    } catch (err) {
+        console.error('Error responding to duel:', err);
+        res.status(500).json({ error: err.message });
+    }
+});
+
+// Start duel (get words)
+app.post('/api/duels/:duelId/start', async (req, res) => {
+    try {
+        const { duelId } = req.params;
+        const { userId } = req.body;
+
+        const duel = await db.query('SELECT * FROM duels WHERE id = $1', [parseInt(duelId)]);
+        if (duel.rows.length === 0) {
+            return res.status(404).json({ error: 'Duel not found' });
+        }
+
+        const duelData = duel.rows[0];
+        if (duelData.challenger_id !== parseInt(userId) && duelData.opponent_id !== parseInt(userId)) {
+            return res.status(403).json({ error: 'Not a participant' });
+        }
+
+        if (duelData.status !== 'active') {
+            return res.status(400).json({ error: 'Duel not active' });
+        }
+
+        // Select random words for duel
+        const words = await db.query(`
+            SELECT id, word, translation
+            FROM words
+            WHERE language_pair_id = $1
+              AND status IN ('learned', 'reviewing')
+            ORDER BY RANDOM()
+            LIMIT $2
+        `, [duelData.language_pair_id, duelData.questions_count]);
+
+        res.json({
+            success: true,
+            duel_id: duelData.id,
+            questions_count: duelData.questions_count,
+            time_limit_seconds: duelData.time_limit_seconds,
+            words: words.rows
+        });
+    } catch (err) {
+        console.error('Error starting duel:', err);
+        res.status(500).json({ error: err.message });
+    }
+});
+
+// Submit duel answer
+app.post('/api/duels/:duelId/answer', async (req, res) => {
+    try {
+        const { duelId } = req.params;
+        const { userId, wordId, answer, timeTakenMs } = req.body;
+
+        // Verify participant
+        const duel = await db.query('SELECT * FROM duels WHERE id = $1', [parseInt(duelId)]);
+        if (duel.rows.length === 0) {
+            return res.status(404).json({ error: 'Duel not found' });
+        }
+
+        const duelData = duel.rows[0];
+        if (duelData.challenger_id !== parseInt(userId) && duelData.opponent_id !== parseInt(userId)) {
+            return res.status(403).json({ error: 'Not a participant' });
+        }
+
+        // Get correct answer
+        const word = await db.query('SELECT translation FROM words WHERE id = $1', [parseInt(wordId)]);
+        if (word.rows.length === 0) {
+            return res.status(404).json({ error: 'Word not found' });
+        }
+
+        const correctAnswer = word.rows[0].translation.toLowerCase().trim();
+        const userAnswer = answer.toLowerCase().trim();
+        const isCorrect = userAnswer === correctAnswer;
+
+        // Save answer
+        await db.query(`
+            INSERT INTO duel_answers (duel_id, user_id, word_id, answer, is_correct, time_taken_ms)
+            VALUES ($1, $2, $3, $4, $5, $6)
+        `, [parseInt(duelId), parseInt(userId), parseInt(wordId), answer, isCorrect, parseInt(timeTakenMs)]);
+
+        res.json({ success: true, is_correct: isCorrect });
+    } catch (err) {
+        console.error('Error submitting duel answer:', err);
+        res.status(500).json({ error: err.message });
+    }
+});
+
+// Complete duel (calculate results)
+app.post('/api/duels/:duelId/complete', async (req, res) => {
+    try {
+        const { duelId } = req.params;
+
+        const duel = await db.query('SELECT * FROM duels WHERE id = $1', [parseInt(duelId)]);
+        if (duel.rows.length === 0) {
+            return res.status(404).json({ error: 'Duel not found' });
+        }
+
+        const duelData = duel.rows[0];
+
+        // Get all answers
+        const answers = await db.query(`
+            SELECT user_id, is_correct, time_taken_ms
+            FROM duel_answers
+            WHERE duel_id = $1
+        `, [parseInt(duelId)]);
+
+        const challengerAnswers = answers.rows.filter(a => a.user_id === duelData.challenger_id);
+        const opponentAnswers = answers.rows.filter(a => a.user_id === duelData.opponent_id);
+
+        const challengerScore = challengerAnswers.filter(a => a.is_correct).length;
+        const opponentScore = opponentAnswers.filter(a => a.is_correct).length;
+
+        const challengerAvgTime = challengerAnswers.length > 0
+            ? Math.round(challengerAnswers.reduce((sum, a) => sum + a.time_taken_ms, 0) / challengerAnswers.length)
+            : 0;
+        const opponentAvgTime = opponentAnswers.length > 0
+            ? Math.round(opponentAnswers.reduce((sum, a) => sum + a.time_taken_ms, 0) / opponentAnswers.length)
+            : 0;
+
+        let winnerId = null;
+        if (challengerScore > opponentScore) {
+            winnerId = duelData.challenger_id;
+        } else if (opponentScore > challengerScore) {
+            winnerId = duelData.opponent_id;
+        }
+
+        // Update duel
+        await db.query(`
+            UPDATE duels
+            SET status = 'completed', winner_id = $1, completed_at = NOW()
+            WHERE id = $2
+        `, [winnerId, parseInt(duelId)]);
+
+        // Save results
+        await db.query(`
+            INSERT INTO duel_results (duel_id, challenger_score, opponent_score, challenger_avg_time_ms, opponent_avg_time_ms)
+            VALUES ($1, $2, $3, $4, $5)
+        `, [parseInt(duelId), challengerScore, opponentScore, challengerAvgTime, opponentAvgTime]);
+
+        // Award XP
+        if (winnerId) {
+            await db.query(`
+                INSERT INTO xp_log (user_id, activity_type, xp_amount, createdat)
+                VALUES ($1, 'duel_won', 50, NOW())
+            `, [winnerId]);
+        }
+
+        // Participation XP
+        await db.query(`
+            INSERT INTO xp_log (user_id, activity_type, xp_amount, createdat)
+            VALUES ($1, 'duel_participated', 20, NOW()), ($2, 'duel_participated', 20, NOW())
+        `, [duelData.challenger_id, duelData.opponent_id]);
+
+        res.json({
+            success: true,
+            winner_id: winnerId,
+            results: {
+                challenger_score: challengerScore,
+                opponent_score: opponentScore,
+                challenger_avg_time_ms: challengerAvgTime,
+                opponent_avg_time_ms: opponentAvgTime
+            }
+        });
+    } catch (err) {
+        console.error('Error completing duel:', err);
+        res.status(500).json({ error: err.message });
+    }
+});
+
+// Get duel status
+app.get('/api/duels/:duelId', async (req, res) => {
+    try {
+        const { duelId } = req.params;
+
+        const duel = await db.query(`
+            SELECT d.*,
+                   u1.name as challenger_name,
+                   u2.name as opponent_name,
+                   dr.challenger_score,
+                   dr.opponent_score
+            FROM duels d
+            LEFT JOIN users u1 ON d.challenger_id = u1.id
+            LEFT JOIN users u2 ON d.opponent_id = u2.id
+            LEFT JOIN duel_results dr ON d.id = dr.duel_id
+            WHERE d.id = $1
+        `, [parseInt(duelId)]);
+
+        if (duel.rows.length === 0) {
+            return res.status(404).json({ error: 'Duel not found' });
+        }
+
+        res.json(duel.rows[0]);
+    } catch (err) {
+        console.error('Error getting duel:', err);
+        res.status(500).json({ error: err.message });
+    }
+});
+
+// Get duel history
+app.get('/api/duels/history/:userId', async (req, res) => {
+    try {
+        const { userId } = req.params;
+        const { limit = 20 } = req.query;
+
+        const duels = await db.query(`
+            SELECT d.*,
+                   u1.name as challenger_name,
+                   u2.name as opponent_name,
+                   dr.challenger_score,
+                   dr.opponent_score
+            FROM duels d
+            LEFT JOIN users u1 ON d.challenger_id = u1.id
+            LEFT JOIN users u2 ON d.opponent_id = u2.id
+            LEFT JOIN duel_results dr ON d.id = dr.duel_id
+            WHERE (d.challenger_id = $1 OR d.opponent_id = $1)
+              AND d.status IN ('completed', 'cancelled', 'declined')
+            ORDER BY d.created_at DESC
+            LIMIT $2
+        `, [parseInt(userId), parseInt(limit)]);
+
+        res.json(duels.rows);
+    } catch (err) {
+        console.error('Error getting duel history:', err);
+        res.status(500).json({ error: err.message });
+    }
+});
+
+// Get active duels
+app.get('/api/duels/active/:userId', async (req, res) => {
+    try {
+        const { userId } = req.params;
+
+        const duels = await db.query(`
+            SELECT d.*,
+                   u1.name as challenger_name,
+                   u2.name as opponent_name
+            FROM duels d
+            LEFT JOIN users u1 ON d.challenger_id = u1.id
+            LEFT JOIN users u2 ON d.opponent_id = u2.id
+            WHERE (d.challenger_id = $1 OR d.opponent_id = $1)
+              AND d.status IN ('pending', 'active')
+            ORDER BY d.created_at DESC
+        `, [parseInt(userId)]);
+
+        res.json(duels.rows);
+    } catch (err) {
+        console.error('Error getting active duels:', err);
+        res.status(500).json({ error: err.message });
+    }
+});
+
+// Get duel stats
+app.get('/api/duels/stats/:userId', async (req, res) => {
+    try {
+        const { userId } = req.params;
+
+        const stats = await db.query(`
+            SELECT
+                COUNT(*) as total_duels,
+                SUM(CASE WHEN winner_id = $1 THEN 1 ELSE 0 END) as wins,
+                SUM(CASE WHEN winner_id IS NOT NULL AND winner_id != $1 THEN 1 ELSE 0 END) as losses,
+                SUM(CASE WHEN winner_id IS NULL AND status = 'completed' THEN 1 ELSE 0 END) as draws
+            FROM duels
+            WHERE (challenger_id = $1 OR opponent_id = $1) AND status = 'completed'
+        `, [parseInt(userId)]);
+
+        const totalDuels = parseInt(stats.rows[0].total_duels) || 0;
+        const wins = parseInt(stats.rows[0].wins) || 0;
+        const losses = parseInt(stats.rows[0].losses) || 0;
+        const draws = parseInt(stats.rows[0].draws) || 0;
+
+        const winRate = totalDuels > 0 ? (wins / totalDuels).toFixed(2) : 0;
+
+        res.json({
+            total_duels: totalDuels,
+            wins,
+            losses,
+            draws,
+            win_rate: parseFloat(winRate)
+        });
+    } catch (err) {
+        console.error('Error getting duel stats:', err);
         res.status(500).json({ error: err.message });
     }
 });
