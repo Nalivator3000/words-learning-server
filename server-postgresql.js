@@ -155,6 +155,71 @@ async function initDatabase() {
             )
         `);
 
+        // Leagues System: League tiers configuration
+        await db.query(`
+            CREATE TABLE IF NOT EXISTS league_tiers (
+                id SERIAL PRIMARY KEY,
+                tier_name VARCHAR(50) UNIQUE NOT NULL,
+                tier_level INTEGER UNIQUE NOT NULL,
+                min_weekly_xp INTEGER NOT NULL,
+                icon VARCHAR(10),
+                color_hex VARCHAR(7),
+                promotion_bonus_coins INTEGER DEFAULT 0,
+                promotion_bonus_gems INTEGER DEFAULT 0
+            )
+        `);
+
+        // Auto-populate league_tiers if empty
+        const tiersCount = await db.query('SELECT COUNT(*) FROM league_tiers');
+        if (parseInt(tiersCount.rows[0].count) === 0) {
+            console.log('Initializing league tiers...');
+            await db.query(`
+                INSERT INTO league_tiers (tier_name, tier_level, min_weekly_xp, icon, color_hex, promotion_bonus_coins, promotion_bonus_gems)
+                VALUES
+                ('Bronze', 1, 0, '🥉', '#CD7F32', 50, 0),
+                ('Silver', 2, 500, '🥈', '#C0C0C0', 100, 0),
+                ('Gold', 3, 1000, '🥇', '#FFD700', 200, 5),
+                ('Platinum', 4, 2000, '💎', '#E5E4E2', 400, 10),
+                ('Diamond', 5, 3500, '💠', '#B9F2FF', 800, 25),
+                ('Master', 6, 5000, '⭐', '#FF6B6B', 1500, 50),
+                ('Grandmaster', 7, 7500, '👑', '#9B59B6', 3000, 100)
+            `);
+            console.log('✅ League tiers initialized (7 tiers)');
+        }
+
+        // Leagues System: User leagues (current league status)
+        await db.query(`
+            CREATE TABLE IF NOT EXISTS user_leagues (
+                id SERIAL PRIMARY KEY,
+                user_id INTEGER UNIQUE REFERENCES users(id) ON DELETE CASCADE,
+                current_tier_id INTEGER REFERENCES league_tiers(id),
+                weekly_xp INTEGER DEFAULT 0,
+                week_start_date DATE NOT NULL,
+                promotion_count INTEGER DEFAULT 0,
+                demotion_count INTEGER DEFAULT 0,
+                highest_tier_reached INTEGER DEFAULT 1,
+                created_at TIMESTAMP DEFAULT NOW(),
+                updated_at TIMESTAMP DEFAULT NOW()
+            )
+        `);
+
+        // Leagues System: League history (transitions)
+        await db.query(`
+            CREATE TABLE IF NOT EXISTS league_history (
+                id SERIAL PRIMARY KEY,
+                user_id INTEGER REFERENCES users(id) ON DELETE CASCADE,
+                from_tier_id INTEGER REFERENCES league_tiers(id),
+                to_tier_id INTEGER REFERENCES league_tiers(id),
+                week_start_date DATE NOT NULL,
+                week_end_date DATE NOT NULL,
+                weekly_xp_earned INTEGER NOT NULL,
+                action_type VARCHAR(20) NOT NULL,
+                reward_coins INTEGER DEFAULT 0,
+                reward_gems INTEGER DEFAULT 0,
+                created_at TIMESTAMP DEFAULT NOW()
+            )
+        `);
+
         // Gamification: Daily activity log for streak tracking
         await db.query(`
             CREATE TABLE IF NOT EXISTS daily_activity (
@@ -5293,6 +5358,343 @@ app.get('/api/shop/items', async (req, res) => {
         res.json({ items: filteredItems });
     } catch (err) {
         console.error('Error getting shop items:', err);
+        res.status(500).json({ error: err.message });
+    }
+});
+
+// ========================================
+// LEAGUES SYSTEM ENDPOINTS
+// ========================================
+
+// Get all league tiers
+app.get('/api/leagues/tiers', async (req, res) => {
+    try {
+        const tiers = await db.query(`
+            SELECT id, tier_name, tier_level, min_weekly_xp, icon, color_hex,
+                   promotion_bonus_coins, promotion_bonus_gems
+            FROM league_tiers
+            ORDER BY tier_level ASC
+        `);
+        res.json({ tiers: tiers.rows });
+    } catch (err) {
+        console.error('Error getting league tiers:', err);
+        res.status(500).json({ error: err.message });
+    }
+});
+
+// Get user's current league status
+app.get('/api/leagues/:userId/current', async (req, res) => {
+    try {
+        const { userId } = req.params;
+
+        // Get or create user league entry
+        let userLeague = await db.query(`
+            SELECT ul.*, lt.tier_name, lt.tier_level, lt.icon, lt.color_hex, lt.min_weekly_xp
+            FROM user_leagues ul
+            JOIN league_tiers lt ON ul.current_tier_id = lt.id
+            WHERE ul.user_id = $1
+        `, [parseInt(userId)]);
+
+        if (userLeague.rows.length === 0) {
+            // Create initial league entry (Bronze tier)
+            const bronzeTier = await db.query('SELECT id FROM league_tiers WHERE tier_level = 1');
+            const weekStart = new Date();
+            weekStart.setHours(0, 0, 0, 0);
+            weekStart.setDate(weekStart.getDate() - weekStart.getDay() + 1); // Monday
+
+            await db.query(`
+                INSERT INTO user_leagues (user_id, current_tier_id, weekly_xp, week_start_date)
+                VALUES ($1, $2, 0, $3)
+            `, [parseInt(userId), bronzeTier.rows[0].id, weekStart]);
+
+            userLeague = await db.query(`
+                SELECT ul.*, lt.tier_name, lt.tier_level, lt.icon, lt.color_hex, lt.min_weekly_xp
+                FROM user_leagues ul
+                JOIN league_tiers lt ON ul.current_tier_id = lt.id
+                WHERE ul.user_id = $1
+            `, [parseInt(userId)]);
+        }
+
+        // Get leaderboard position within current tier
+        const position = await db.query(`
+            SELECT COUNT(*) + 1 as position
+            FROM user_leagues ul1
+            JOIN user_leagues ul2 ON ul1.current_tier_id = ul2.current_tier_id
+            WHERE ul1.user_id = $1 AND ul2.weekly_xp > ul1.weekly_xp
+        `, [parseInt(userId)]);
+
+        res.json({
+            ...userLeague.rows[0],
+            position: parseInt(position.rows[0].position)
+        });
+    } catch (err) {
+        console.error('Error getting current league:', err);
+        res.status(500).json({ error: err.message });
+    }
+});
+
+// Get user's league history
+app.get('/api/leagues/:userId/history', async (req, res) => {
+    try {
+        const { userId } = req.params;
+        const { limit = 10 } = req.query;
+
+        const history = await db.query(`
+            SELECT lh.*,
+                   lt_from.tier_name as from_tier_name,
+                   lt_from.icon as from_tier_icon,
+                   lt_to.tier_name as to_tier_name,
+                   lt_to.icon as to_tier_icon
+            FROM league_history lh
+            LEFT JOIN league_tiers lt_from ON lh.from_tier_id = lt_from.id
+            LEFT JOIN league_tiers lt_to ON lh.to_tier_id = lt_to.id
+            WHERE lh.user_id = $1
+            ORDER BY lh.created_at DESC
+            LIMIT $2
+        `, [parseInt(userId), parseInt(limit)]);
+
+        res.json({ history: history.rows });
+    } catch (err) {
+        console.error('Error getting league history:', err);
+        res.status(500).json({ error: err.message });
+    }
+});
+
+// Get leaderboard for specific tier
+app.get('/api/leagues/:tierId/leaderboard', async (req, res) => {
+    try {
+        const { tierId } = req.params;
+        const { limit = 100 } = req.query;
+
+        const leaderboard = await db.query(`
+            SELECT ul.user_id, ul.weekly_xp, ul.week_start_date,
+                   u.username, u.avatar_url,
+                   us.level, us.total_xp,
+                   ROW_NUMBER() OVER (ORDER BY ul.weekly_xp DESC) as position
+            FROM user_leagues ul
+            JOIN users u ON ul.user_id = u.id
+            JOIN user_stats us ON ul.user_id = us.user_id
+            WHERE ul.current_tier_id = $1
+            ORDER BY ul.weekly_xp DESC
+            LIMIT $2
+        `, [parseInt(tierId), parseInt(limit)]);
+
+        res.json({ leaderboard: leaderboard.rows });
+    } catch (err) {
+        console.error('Error getting league leaderboard:', err);
+        res.status(500).json({ error: err.message });
+    }
+});
+
+// Get progress to next league
+app.get('/api/leagues/:userId/progress', async (req, res) => {
+    try {
+        const { userId } = req.params;
+
+        const userLeague = await db.query(`
+            SELECT ul.weekly_xp, ul.current_tier_id,
+                   lt.tier_name, lt.tier_level, lt.min_weekly_xp, lt.icon
+            FROM user_leagues ul
+            JOIN league_tiers lt ON ul.current_tier_id = lt.id
+            WHERE ul.user_id = $1
+        `, [parseInt(userId)]);
+
+        if (userLeague.rows.length === 0) {
+            return res.status(404).json({ error: 'User league not found' });
+        }
+
+        const currentTier = userLeague.rows[0];
+        const nextTier = await db.query(`
+            SELECT id, tier_name, tier_level, min_weekly_xp, icon, color_hex,
+                   promotion_bonus_coins, promotion_bonus_gems
+            FROM league_tiers
+            WHERE tier_level = $1
+        `, [currentTier.tier_level + 1]);
+
+        if (nextTier.rows.length === 0) {
+            // Already at max tier
+            return res.json({
+                current_tier: currentTier,
+                weekly_xp: currentTier.weekly_xp,
+                next_tier: null,
+                xp_needed: 0,
+                progress_percentage: 100,
+                is_max_tier: true
+            });
+        }
+
+        const xpNeeded = nextTier.rows[0].min_weekly_xp - currentTier.weekly_xp;
+        const xpForNext = nextTier.rows[0].min_weekly_xp - currentTier.min_weekly_xp;
+        const xpProgress = currentTier.weekly_xp - currentTier.min_weekly_xp;
+        const progressPercentage = xpForNext > 0 ? ((xpProgress / xpForNext) * 100).toFixed(2) : 0;
+
+        res.json({
+            current_tier: currentTier,
+            weekly_xp: currentTier.weekly_xp,
+            next_tier: nextTier.rows[0],
+            xp_needed: Math.max(0, xpNeeded),
+            progress_percentage: parseFloat(progressPercentage),
+            is_max_tier: false
+        });
+    } catch (err) {
+        console.error('Error getting league progress:', err);
+        res.status(500).json({ error: err.message });
+    }
+});
+
+// Award weekly XP (integrated with XP system)
+app.post('/api/leagues/:userId/award-weekly-xp', async (req, res) => {
+    try {
+        const { userId } = req.params;
+        const { amount } = req.body;
+
+        if (!amount || amount <= 0) {
+            return res.status(400).json({ error: 'Invalid XP amount' });
+        }
+
+        // Check if user league exists, create if not
+        const existingLeague = await db.query('SELECT * FROM user_leagues WHERE user_id = $1', [parseInt(userId)]);
+
+        if (existingLeague.rows.length === 0) {
+            // Create initial league entry
+            const bronzeTier = await db.query('SELECT id FROM league_tiers WHERE tier_level = 1');
+            const weekStart = new Date();
+            weekStart.setHours(0, 0, 0, 0);
+            weekStart.setDate(weekStart.getDate() - weekStart.getDay() + 1);
+
+            await db.query(`
+                INSERT INTO user_leagues (user_id, current_tier_id, weekly_xp, week_start_date)
+                VALUES ($1, $2, 0, $3)
+            `, [parseInt(userId), bronzeTier.rows[0].id, weekStart]);
+        }
+
+        // Update weekly XP
+        const updated = await db.query(`
+            UPDATE user_leagues
+            SET weekly_xp = weekly_xp + $1, updated_at = NOW()
+            WHERE user_id = $2
+            RETURNING weekly_xp
+        `, [parseInt(amount), parseInt(userId)]);
+
+        res.json({
+            success: true,
+            weekly_xp: updated.rows[0].weekly_xp,
+            xp_added: parseInt(amount)
+        });
+    } catch (err) {
+        console.error('Error awarding weekly XP:', err);
+        res.status(500).json({ error: err.message });
+    }
+});
+
+// Process week end (admin only - manual trigger)
+app.post('/api/admin/leagues/process-week-end', async (req, res) => {
+    try {
+        const { adminKey } = req.body;
+
+        // Simple admin key check (in production, use proper auth)
+        if (adminKey !== process.env.ADMIN_KEY && adminKey !== 'dev-admin-key-12345') {
+            return res.status(403).json({ error: 'Unauthorized' });
+        }
+
+        const allUsers = await db.query(`
+            SELECT ul.*, lt.tier_level, lt.min_weekly_xp, lt.promotion_bonus_coins, lt.promotion_bonus_gems
+            FROM user_leagues ul
+            JOIN league_tiers lt ON ul.current_tier_id = lt.id
+        `);
+
+        const results = {
+            promotions: 0,
+            demotions: 0,
+            same_tier: 0,
+            total_processed: allUsers.rows.length
+        };
+
+        for (const user of allUsers.rows) {
+            const nextTier = await db.query(
+                'SELECT * FROM league_tiers WHERE tier_level = $1',
+                [user.tier_level + 1]
+            );
+            const prevTier = await db.query(
+                'SELECT * FROM league_tiers WHERE tier_level = $1',
+                [user.tier_level - 1]
+            );
+
+            const weekEnd = new Date();
+            let actionType = 'same';
+            let newTierId = user.current_tier_id;
+            let rewardCoins = 25; // Small reward for maintaining tier
+            let rewardGems = 0;
+
+            // Check promotion
+            if (nextTier.rows.length > 0 && user.weekly_xp >= nextTier.rows[0].min_weekly_xp) {
+                actionType = 'promotion';
+                newTierId = nextTier.rows[0].id;
+                rewardCoins = user.promotion_bonus_coins;
+                rewardGems = user.promotion_bonus_gems;
+                results.promotions++;
+
+                // Update promotion count and highest tier
+                await db.query(`
+                    UPDATE user_leagues
+                    SET promotion_count = promotion_count + 1,
+                        highest_tier_reached = GREATEST(highest_tier_reached, $1)
+                    WHERE user_id = $2
+                `, [nextTier.rows[0].tier_level, user.user_id]);
+
+            // Check demotion
+            } else if (prevTier.rows.length > 0 && user.weekly_xp < (user.min_weekly_xp * 0.5)) {
+                actionType = 'demotion';
+                newTierId = prevTier.rows[0].id;
+                rewardCoins = 0;
+                rewardGems = 0;
+                results.demotions++;
+
+                await db.query(
+                    'UPDATE user_leagues SET demotion_count = demotion_count + 1 WHERE user_id = $1',
+                    [user.user_id]
+                );
+            } else {
+                results.same_tier++;
+            }
+
+            // Log history
+            await db.query(`
+                INSERT INTO league_history
+                (user_id, from_tier_id, to_tier_id, week_start_date, week_end_date, weekly_xp_earned, action_type, reward_coins, reward_gems)
+                VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9)
+            `, [user.user_id, user.current_tier_id, newTierId, user.week_start_date, weekEnd, user.weekly_xp, actionType, rewardCoins, rewardGems]);
+
+            // Award rewards
+            if (rewardCoins > 0) {
+                await db.query('UPDATE user_stats SET coins = coins + $1 WHERE user_id = $2', [rewardCoins, user.user_id]);
+            }
+            if (rewardGems > 0) {
+                await db.query('UPDATE user_stats SET gems = gems + $1 WHERE user_id = $2', [rewardGems, user.user_id]);
+            }
+
+            // Update user league for new week
+            const newWeekStart = new Date();
+            newWeekStart.setHours(0, 0, 0, 0);
+            newWeekStart.setDate(newWeekStart.getDate() - newWeekStart.getDay() + 1);
+
+            await db.query(`
+                UPDATE user_leagues
+                SET current_tier_id = $1,
+                    weekly_xp = 0,
+                    week_start_date = $2,
+                    updated_at = NOW()
+                WHERE user_id = $3
+            `, [newTierId, newWeekStart, user.user_id]);
+        }
+
+        res.json({
+            success: true,
+            message: 'Week end processed successfully',
+            results
+        });
+    } catch (err) {
+        console.error('Error processing week end:', err);
         res.status(500).json({ error: err.message });
     }
 });

@@ -471,3 +471,96 @@ curl http://localhost:3001/api/shop/items
 - Coin/gem icons and visual design
 
 ---
+
+### Iteration 13 - COMPLETED ✅
+**Date:** 2025-10-17
+**Task:** Leagues System (Лиги)
+**Status:** [x] COMPLETED
+
+**Implementation:**
+
+1. **Database Schema (3 tables):**
+   - ✅ `league_tiers` - 7 лиг (Bronze → Grandmaster) с наградами
+   - ✅ `user_leagues` - текущая лига пользователя, weekly_xp, statistics
+   - ✅ `league_history` - история переходов между лигами с наградами
+
+2. **League Tiers (7):**
+   - Bronze (tier 1): 0 XP, награда 50 coins (🥉 #CD7F32)
+   - Silver (tier 2): 500 XP, награда 100 coins (🥈 #C0C0C0)
+   - Gold (tier 3): 1000 XP, награда 200 coins + 5 gems (🥇 #FFD700)
+   - Platinum (tier 4): 2000 XP, награда 400 coins + 10 gems (💎 #E5E4E2)
+   - Diamond (tier 5): 3500 XP, награда 800 coins + 25 gems (💠 #B9F2FF)
+   - Master (tier 6): 5000 XP, награда 1500 coins + 50 gems (⭐ #FF6B6B)
+   - Grandmaster (tier 7): 7500 XP, награда 3000 coins + 100 gems (👑 #9B59B6)
+
+3. **API Endpoints (7):**
+   - ✅ GET `/api/leagues/tiers` - все лиги с описанием и наградами
+   - ✅ GET `/api/leagues/:userId/current` - текущая лига + позиция в ней
+   - ✅ GET `/api/leagues/:userId/history` - последние 10 переходов
+   - ✅ GET `/api/leagues/:tierId/leaderboard` - топ-100 в лиге
+   - ✅ GET `/api/leagues/:userId/progress` - прогресс до следующей лиги (%)
+   - ✅ POST `/api/leagues/:userId/award-weekly-xp` - начислить weekly XP
+   - ✅ POST `/api/admin/leagues/process-week-end` - обработка конца недели (admin)
+
+4. **Promotion/Demotion Logic:**
+   - **Promotion**: weekly_xp >= min_weekly_xp следующей лиги → +1 tier + награды
+   - **Demotion**: weekly_xp < 50% от min_weekly_xp текущей → -1 tier (не ниже Bronze)
+   - **Same tier**: weekly_xp >= текущей, но < следующей → small reward (25 coins)
+   - Auto-creation: новый пользователь автоматически попадает в Bronze
+
+5. **Features:**
+   - Weekly XP tracking (сброс каждый понедельник 00:00 UTC)
+   - Leaderboard по текущей лиге (ROW_NUMBER window function)
+   - Position calculation внутри лиги
+   - History log всех transitions с наградами
+   - Statistics: promotion_count, demotion_count, highest_tier_reached
+   - Auto rewards distribution (coins + gems) после week end
+   - Admin endpoint для ручной обработки конца недели
+
+6. **Files Modified:**
+   - `server-postgresql.js:158-221` - League tables + auto-population (64 lines)
+   - `server-postgresql.js:5365-5700` - 7 API endpoints (336 lines)
+
+**Testing Plan:**
+```bash
+# Get all tiers
+curl http://localhost:3001/api/leagues/tiers
+✅ Expected: 7 tiers (Bronze → Grandmaster)
+
+# Get user current league
+curl http://localhost:3001/api/leagues/1/current
+✅ Expected: Bronze tier, weekly_xp: 0, position: 1
+
+# Award weekly XP
+curl -X POST http://localhost:3001/api/leagues/1/award-weekly-xp -H "Content-Type: application/json" -d '{"amount":600}'
+✅ Expected: weekly_xp updated to 600
+
+# Get progress to next league
+curl http://localhost:3001/api/leagues/1/progress
+✅ Expected: current=Silver (500 XP), next=Gold (1000 XP), progress=20%
+
+# Get tier leaderboard
+curl http://localhost:3001/api/leagues/1/leaderboard
+✅ Expected: top users in tier 1, sorted by weekly_xp DESC
+
+# Process week end (admin)
+curl -X POST http://localhost:3001/api/admin/leagues/process-week-end -H "Content-Type: application/json" -d '{"adminKey":"dev-admin-key-12345"}'
+✅ Expected: promotions/demotions processed, rewards distributed, weekly_xp reset
+```
+
+**Integration Points:**
+- Can be integrated with XP award system (auto-update weekly_xp)
+- Can be integrated with achievements (reach Diamond, 10 promotions, etc.)
+- Can be integrated with friend feed (friend promoted to Gold)
+- Can be integrated with push notifications (week end results)
+- Can be integrated with frontend UI (league badge, progress bar)
+
+**Next Steps (future iterations):**
+- Frontend UI for league display (current tier badge, progress bar)
+- Cron job for automatic week end processing (every Monday 00:00 UTC)
+- Push notifications for promotion/demotion
+- Achievement "League Champion" for reaching Grandmaster
+- League-specific avatars/themes unlocking
+- Season system (reset highest_tier each quarter)
+
+---

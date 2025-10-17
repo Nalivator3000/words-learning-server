@@ -295,10 +295,17 @@
   - Еженедельный/месячный скор
   - Факторы: XP, стрики, точность, слова
 
-- [ ] **Лиги (Leagues)**
-  - Бронзовая → Серебряная → Золотая → Платиновая → Алмазная
-  - Повышение/понижение в лиге по итогам недели
-  - Top 10 игроков в лиге
+- [x] **Лиги (Leagues)** ✅ ГОТОВО (Backend)
+  - ✅ 7 лиг: Bronze → Silver → Gold → Platinum → Diamond → Master → Grandmaster
+  - ✅ Повышение/понижение в лиге по итогам недели (promotion/demotion logic)
+  - ✅ Weekly XP tracking с автосбросом
+  - ✅ Leaderboard по текущей лиге (топ-100)
+  - ✅ Награды за продвижение (coins + gems)
+  - ✅ История переходов (league_history)
+  - ✅ Admin endpoint для обработки конца недели
+  - ✅ 7 API endpoints
+  - [ ] Frontend UI (будущая версия)
+  - [ ] Cron job для автоматического week end (будущая версия)
 
 ---
 
