@@ -1,51 +1,81 @@
-# ТЕКУЩАЯ ЗАДАЧА: XP & Levels System Enhancement
+# ТЕКУЩАЯ ЗАДАЧА: Внутриигровая валюта (Coins/Gems)
 
 ## КОНТЕКСТ
-XP система частично работает через xp_log и user_stats. Нужно улучшить логику и добавить прогрессивную систему уровней.
+Gamification система частично работает (XP, levels, achievements, streaks). Нужна внутриигровая валюта для экономики приложения.
 
 ## ЦЕЛЬ
-Стандартизировать начисление XP, добавить прогрессивные уровни 1-100 с титулами.
+Создать систему двойной валюты (Coins + Gems) с заработком и тратой.
 
 ## ЧТО НУЖНО СДЕЛАТЬ
 
-### 1. Таблица уровней
+### 1. Добавить колонки в user_stats
 ```sql
-CREATE TABLE IF NOT EXISTS level_config (
-    level INTEGER PRIMARY KEY,
-    xp_required INTEGER NOT NULL,
-    title VARCHAR(50)
+ALTER TABLE user_stats ADD COLUMN IF NOT EXISTS coins INTEGER DEFAULT 0;
+ALTER TABLE user_stats ADD COLUMN IF NOT EXISTS gems INTEGER DEFAULT 0;
+```
+
+### 2. Таблица истории транзакций
+```sql
+CREATE TABLE IF NOT EXISTS currency_transactions (
+    id SERIAL PRIMARY KEY,
+    user_id INTEGER REFERENCES users(id) ON DELETE CASCADE,
+    currency_type VARCHAR(10) NOT NULL, -- 'coins' or 'gems'
+    amount INTEGER NOT NULL,
+    transaction_type VARCHAR(50) NOT NULL, -- 'earned' or 'spent'
+    source VARCHAR(100) NOT NULL, -- 'daily_goal', 'achievement', 'shop_purchase', etc.
+    metadata JSONB,
+    created_at TIMESTAMP DEFAULT NOW()
 );
 ```
 
-### 2. XP константы
-```javascript
-const XP_REWARDS = {
-  WORD_LEARNED: 10,
-  QUIZ_CORRECT: 5,
-  REVIEW_WORD: 3,
-  DUEL_WON: 50,
-  DUEL_PARTICIPATED: 20,
-  CHALLENGE_EASY: 20,
-  CHALLENGE_MEDIUM: 30,
-  CHALLENGE_HARD: 50,
-  STREAK_BONUS_MULTIPLIER: 1.5
-};
-```
+### 3. Источники заработка Coins
+- Выполнение ежедневных целей: +50 coins
+- Завершение daily challenge: +20/30/50 coins (по сложности)
+- Разблокировка achievement: +10-100 coins (по редкости)
+- Streak milestones: 7 дней = +100 coins, 30 дней = +500 coins
+- Level up: level * 10 coins (level 5 = 50 coins, level 10 = 100 coins)
+- Выигрыш в duel: +30 coins (участие: +10 coins)
 
-### 3. API Endpoints (3)
-- GET /api/levels/config - таблица уровней
-- GET /api/users/:userId/level-progress - прогресс уровня
-- POST /api/xp/award - начислить XP с проверкой level up
+### 4. Источники заработка Gems (premium currency)
+- Weekly challenge completion: +3 gems
+- Rare achievement unlock: +5 gems
+- Perfect week (7-day streak): +10 gems
+- Level milestones (10, 25, 50, 100): +20 gems
 
-### 4. Титулы
-Level 1-4: Новичок
-Level 5-9: Ученик
-Level 10-19: Знаток
-Level 20-29: Мастер
-Level 30-49: Эксперт
-Level 50-74: Гуру
-Level 75-99: Легенда
-Level 100+: Бессмертный
+### 5. Трата Coins (уже частично реализовано в shop)
+- Streak freeze (1 day): 50 coins
+- Streak freeze (3 days): 120 coins
+- Streak freeze (7 days): 250 coins
+- Hint in quiz: 10 coins
+- Theme unlock: 100 coins
+
+### 6. Трата Gems
+- Premium avatar: 50 gems
+- Exclusive theme: 100 gems
+- Double XP boost (1 day): 30 gems
+- Extra challenge slot: 25 gems
+
+### 7. API Endpoints (5)
+- GET /api/users/:userId/currency - получить текущий баланс (coins + gems)
+- POST /api/currency/award - начислить валюту (с проверкой источника)
+- POST /api/currency/spend - потратить валюту (с валидацией баланса)
+- GET /api/currency/transactions/:userId - история транзакций (пагинация)
+- GET /api/shop/items - список доступных покупок
+
+### 8. Shop Items (расширение существующей системы)
+Добавить новые item_type:
+- hint_pack_5 (50 coins)
+- hint_pack_20 (180 coins)
+- theme_dark_purple (100 coins)
+- theme_ocean_blue (100 coins)
+- avatar_premium_1 (50 gems)
+- xp_boost_1day (30 gems)
 
 ## ПРИОРИТЕТ
-MEDIUM
+HIGH (core gamification feature)
+
+## ОЖИДАЕМЫЙ РЕЗУЛЬТАТ
+- Полноценная экономика с Coins/Gems
+- Интеграция с существующими системами (achievements, challenges, duels, levels)
+- Transaction log для аудита
+- Ready for frontend integration

@@ -121,6 +121,40 @@ async function initDatabase() {
             )
         `);
 
+        // Currency System: Add coins and gems columns to user_stats if they don't exist
+        await db.query(`
+            DO $$
+            BEGIN
+                IF NOT EXISTS (
+                    SELECT 1 FROM information_schema.columns
+                    WHERE table_name = 'user_stats' AND column_name = 'coins'
+                ) THEN
+                    ALTER TABLE user_stats ADD COLUMN coins INTEGER DEFAULT 0;
+                END IF;
+
+                IF NOT EXISTS (
+                    SELECT 1 FROM information_schema.columns
+                    WHERE table_name = 'user_stats' AND column_name = 'gems'
+                ) THEN
+                    ALTER TABLE user_stats ADD COLUMN gems INTEGER DEFAULT 0;
+                END IF;
+            END $$;
+        `);
+
+        // Currency System: Transaction log
+        await db.query(`
+            CREATE TABLE IF NOT EXISTS currency_transactions (
+                id SERIAL PRIMARY KEY,
+                user_id INTEGER REFERENCES users(id) ON DELETE CASCADE,
+                currency_type VARCHAR(10) NOT NULL,
+                amount INTEGER NOT NULL,
+                transaction_type VARCHAR(50) NOT NULL,
+                source VARCHAR(100) NOT NULL,
+                metadata JSONB,
+                created_at TIMESTAMP DEFAULT NOW()
+            )
+        `);
+
         // Gamification: Daily activity log for streak tracking
         await db.query(`
             CREATE TABLE IF NOT EXISTS daily_activity (
@@ -5023,6 +5057,242 @@ app.post('/api/xp/award', async (req, res) => {
         });
     } catch (err) {
         console.error('Error awarding XP:', err);
+        res.status(500).json({ error: err.message });
+    }
+});
+
+// ========================================
+// CURRENCY SYSTEM ENDPOINTS (Coins & Gems)
+// ========================================
+
+// Get user currency balance
+app.get('/api/users/:userId/currency', async (req, res) => {
+    try {
+        const { userId } = req.params;
+
+        const result = await db.query(`
+            SELECT coins, gems
+            FROM user_stats
+            WHERE user_id = $1
+        `, [parseInt(userId)]);
+
+        if (result.rows.length === 0) {
+            return res.status(404).json({ error: 'User not found' });
+        }
+
+        res.json({
+            user_id: parseInt(userId),
+            coins: result.rows[0].coins || 0,
+            gems: result.rows[0].gems || 0
+        });
+    } catch (err) {
+        console.error('Error getting currency:', err);
+        res.status(500).json({ error: err.message });
+    }
+});
+
+// Award currency (coins or gems)
+app.post('/api/currency/award', async (req, res) => {
+    try {
+        const { userId, currencyType, amount, source, metadata = {} } = req.body;
+
+        if (!userId || !currencyType || !amount || !source) {
+            return res.status(400).json({ error: 'Missing required fields: userId, currencyType, amount, source' });
+        }
+
+        if (currencyType !== 'coins' && currencyType !== 'gems') {
+            return res.status(400).json({ error: 'Invalid currency type. Must be "coins" or "gems"' });
+        }
+
+        if (amount <= 0) {
+            return res.status(400).json({ error: 'Amount must be positive' });
+        }
+
+        // Update user balance
+        const updateQuery = currencyType === 'coins'
+            ? 'UPDATE user_stats SET coins = coins + $1 WHERE user_id = $2 RETURNING coins, gems'
+            : 'UPDATE user_stats SET gems = gems + $1 WHERE user_id = $2 RETURNING coins, gems';
+
+        const updateResult = await db.query(updateQuery, [parseInt(amount), parseInt(userId)]);
+
+        if (updateResult.rows.length === 0) {
+            return res.status(404).json({ error: 'User not found' });
+        }
+
+        // Log transaction
+        await db.query(`
+            INSERT INTO currency_transactions (user_id, currency_type, amount, transaction_type, source, metadata)
+            VALUES ($1, $2, $3, 'earned', $4, $5)
+        `, [parseInt(userId), currencyType, parseInt(amount), source, JSON.stringify(metadata)]);
+
+        res.json({
+            success: true,
+            currency_type: currencyType,
+            amount_awarded: parseInt(amount),
+            new_balance: {
+                coins: updateResult.rows[0].coins || 0,
+                gems: updateResult.rows[0].gems || 0
+            },
+            source
+        });
+    } catch (err) {
+        console.error('Error awarding currency:', err);
+        res.status(500).json({ error: err.message });
+    }
+});
+
+// Spend currency
+app.post('/api/currency/spend', async (req, res) => {
+    try {
+        const { userId, currencyType, amount, source, metadata = {} } = req.body;
+
+        if (!userId || !currencyType || !amount || !source) {
+            return res.status(400).json({ error: 'Missing required fields: userId, currencyType, amount, source' });
+        }
+
+        if (currencyType !== 'coins' && currencyType !== 'gems') {
+            return res.status(400).json({ error: 'Invalid currency type. Must be "coins" or "gems"' });
+        }
+
+        if (amount <= 0) {
+            return res.status(400).json({ error: 'Amount must be positive' });
+        }
+
+        // Check current balance
+        const balanceCheck = await db.query(`
+            SELECT coins, gems FROM user_stats WHERE user_id = $1
+        `, [parseInt(userId)]);
+
+        if (balanceCheck.rows.length === 0) {
+            return res.status(404).json({ error: 'User not found' });
+        }
+
+        const currentBalance = currencyType === 'coins'
+            ? balanceCheck.rows[0].coins || 0
+            : balanceCheck.rows[0].gems || 0;
+
+        if (currentBalance < amount) {
+            return res.status(400).json({
+                error: 'Insufficient balance',
+                current_balance: currentBalance,
+                required: amount
+            });
+        }
+
+        // Deduct currency
+        const updateQuery = currencyType === 'coins'
+            ? 'UPDATE user_stats SET coins = coins - $1 WHERE user_id = $2 RETURNING coins, gems'
+            : 'UPDATE user_stats SET gems = gems - $1 WHERE user_id = $2 RETURNING coins, gems';
+
+        const updateResult = await db.query(updateQuery, [parseInt(amount), parseInt(userId)]);
+
+        // Log transaction
+        await db.query(`
+            INSERT INTO currency_transactions (user_id, currency_type, amount, transaction_type, source, metadata)
+            VALUES ($1, $2, $3, 'spent', $4, $5)
+        `, [parseInt(userId), currencyType, parseInt(amount), source, JSON.stringify(metadata)]);
+
+        res.json({
+            success: true,
+            currency_type: currencyType,
+            amount_spent: parseInt(amount),
+            new_balance: {
+                coins: updateResult.rows[0].coins || 0,
+                gems: updateResult.rows[0].gems || 0
+            },
+            source
+        });
+    } catch (err) {
+        console.error('Error spending currency:', err);
+        res.status(500).json({ error: err.message });
+    }
+});
+
+// Get currency transaction history
+app.get('/api/currency/transactions/:userId', async (req, res) => {
+    try {
+        const { userId } = req.params;
+        const { limit = 50, offset = 0, currencyType, transactionType } = req.query;
+
+        let query = `
+            SELECT id, currency_type, amount, transaction_type, source, metadata, created_at
+            FROM currency_transactions
+            WHERE user_id = $1
+        `;
+        const params = [parseInt(userId)];
+        let paramCount = 1;
+
+        if (currencyType) {
+            paramCount++;
+            query += ` AND currency_type = $${paramCount}`;
+            params.push(currencyType);
+        }
+
+        if (transactionType) {
+            paramCount++;
+            query += ` AND transaction_type = $${paramCount}`;
+            params.push(transactionType);
+        }
+
+        query += ` ORDER BY created_at DESC LIMIT $${paramCount + 1} OFFSET $${paramCount + 2}`;
+        params.push(parseInt(limit), parseInt(offset));
+
+        const result = await db.query(query, params);
+
+        // Get total count
+        let countQuery = 'SELECT COUNT(*) FROM currency_transactions WHERE user_id = $1';
+        const countParams = [parseInt(userId)];
+
+        if (currencyType) {
+            countQuery += ' AND currency_type = $2';
+            countParams.push(currencyType);
+        }
+
+        const countResult = await db.query(countQuery, countParams);
+
+        res.json({
+            transactions: result.rows,
+            total_count: parseInt(countResult.rows[0].count),
+            limit: parseInt(limit),
+            offset: parseInt(offset)
+        });
+    } catch (err) {
+        console.error('Error getting transaction history:', err);
+        res.status(500).json({ error: err.message });
+    }
+});
+
+// Get shop items
+app.get('/api/shop/items', async (req, res) => {
+    try {
+        const { currencyType } = req.query;
+
+        const shopItems = [
+            // Coins items
+            { id: 'streak_freeze_1', name: 'Streak Freeze (1 day)', currency: 'coins', price: 50, category: 'streak', icon: '❄️' },
+            { id: 'streak_freeze_3', name: 'Streak Freeze (3 days)', currency: 'coins', price: 120, category: 'streak', icon: '❄️' },
+            { id: 'streak_freeze_7', name: 'Streak Freeze (7 days)', currency: 'coins', price: 250, category: 'streak', icon: '❄️' },
+            { id: 'hint_pack_5', name: 'Hint Pack (5 hints)', currency: 'coins', price: 50, category: 'hints', icon: '💡' },
+            { id: 'hint_pack_20', name: 'Hint Pack (20 hints)', currency: 'coins', price: 180, category: 'hints', icon: '💡' },
+            { id: 'theme_dark_purple', name: 'Dark Purple Theme', currency: 'coins', price: 100, category: 'themes', icon: '🎨' },
+            { id: 'theme_ocean_blue', name: 'Ocean Blue Theme', currency: 'coins', price: 100, category: 'themes', icon: '🎨' },
+
+            // Gems items
+            { id: 'avatar_premium_1', name: 'Premium Avatar Pack', currency: 'gems', price: 50, category: 'avatars', icon: '👤' },
+            { id: 'xp_boost_1day', name: 'Double XP (1 day)', currency: 'gems', price: 30, category: 'boosts', icon: '⚡' },
+            { id: 'xp_boost_3days', name: 'Double XP (3 days)', currency: 'gems', price: 75, category: 'boosts', icon: '⚡' },
+            { id: 'extra_challenge_slot', name: 'Extra Challenge Slot', currency: 'gems', price: 25, category: 'features', icon: '🎯' },
+            { id: 'theme_premium_gold', name: 'Premium Gold Theme', currency: 'gems', price: 100, category: 'themes', icon: '🎨' }
+        ];
+
+        let filteredItems = shopItems;
+        if (currencyType) {
+            filteredItems = shopItems.filter(item => item.currency === currencyType);
+        }
+
+        res.json({ items: filteredItems });
+    } catch (err) {
+        console.error('Error getting shop items:', err);
         res.status(500).json({ error: err.message });
     }
 });

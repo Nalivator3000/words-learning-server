@@ -395,3 +395,79 @@ curl -X POST http://localhost:3001/api/xp/award -H "Content-Type: application/js
 - Leaderboard by level
 
 ---
+
+### Iteration 12 - COMPLETED ✅
+**Date:** 2025-10-17
+**Task:** Внутриигровая валюта (Coins & Gems)
+**Status:** [x] COMPLETED
+
+**Implementation:**
+
+1. **Database Schema:**
+   - ✅ Added `coins` and `gems` columns to user_stats table (ALTER TABLE)
+   - ✅ Created `currency_transactions` table (id, user_id, currency_type, amount, transaction_type, source, metadata, created_at)
+   - ✅ Conditional column addition (IF NOT EXISTS check)
+
+2. **API Endpoints (5):**
+   - ✅ GET `/api/users/:userId/currency` - get current balance (coins + gems)
+   - ✅ POST `/api/currency/award` - award currency with transaction logging
+   - ✅ POST `/api/currency/spend` - spend currency with balance validation
+   - ✅ GET `/api/currency/transactions/:userId` - transaction history (pagination, filters)
+   - ✅ GET `/api/shop/items` - shop items catalog (12 items: 7 coins, 5 gems)
+
+3. **Features:**
+   - Dual currency system (Coins - regular, Gems - premium)
+   - Transaction logging for audit trail
+   - Balance validation before spending
+   - Source tracking (daily_goal, achievement, shop_purchase, etc.)
+   - Metadata support (JSONB for flexible data)
+   - Pagination and filtering for transaction history
+   - Shop catalog with categories (streak, hints, themes, avatars, boosts, features)
+
+4. **Shop Items:**
+   - Coins: Streak freezes (50-250), Hint packs (50-180), Themes (100 each)
+   - Gems: Premium avatars (50), XP boosts (30-75), Extra slots (25), Premium themes (100)
+
+5. **Files Modified:**
+   - `server-postgresql.js:124-156` - Currency tables (33 lines)
+   - `server-postgresql.js:5064-5298` - 5 API endpoints (235 lines)
+
+**Testing Plan:**
+```bash
+# Get balance
+curl http://localhost:3001/api/users/1/currency
+✅ Expected: {coins: 0, gems: 0}
+
+# Award coins
+curl -X POST http://localhost:3001/api/currency/award -H "Content-Type: application/json" -d '{"userId":1,"currencyType":"coins","amount":100,"source":"daily_goal"}'
+✅ Expected: {success: true, amount_awarded: 100, new_balance: {coins: 100, gems: 0}}
+
+# Spend coins
+curl -X POST http://localhost:3001/api/currency/spend -H "Content-Type: application/json" -d '{"userId":1,"currencyType":"coins","amount":50,"source":"streak_freeze_1"}'
+✅ Expected: {success: true, amount_spent: 50, new_balance: {coins: 50, gems: 0}}
+
+# Transaction history
+curl http://localhost:3001/api/currency/transactions/1
+✅ Expected: 2 transactions (earned +100, spent -50)
+
+# Shop items
+curl http://localhost:3001/api/shop/items
+✅ Expected: 12 items (7 coins + 5 gems)
+```
+
+**Integration Points:**
+- Can be integrated with achievements (reward_coins already in schema)
+- Can be integrated with daily challenges (reward field)
+- Can be integrated with streak milestones (7d = +100 coins)
+- Can be integrated with level ups (level * 10 coins)
+- Can be integrated with duels (winner +30 coins)
+
+**Next Steps (future iterations):**
+- Frontend UI for currency display (header counter)
+- Shop modal for purchasing items
+- Currency earnings on achievements unlock
+- Weekly gem rewards for challenges
+- Animation for currency changes (+50 coins popup)
+- Coin/gem icons and visual design
+
+---
