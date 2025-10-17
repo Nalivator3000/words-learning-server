@@ -346,3 +346,52 @@ curl http://localhost:3001/api/streak-freeze/1/history
 - No spectator mode
 
 ---
+
+### Iteration 11 - COMPLETED ✅
+**Date:** 2025-10-17
+**Task:** XP & Levels System Enhancement
+**Status:** [x] COMPLETED
+
+**Implementation:**
+1. **level_config table:**
+   - Прогрессивная шкала XP для 100 уровней (formula: 100 * level^1.5)
+   - Титулы: Новичок (1-4), Ученик (5-9), Знаток (10-19), Мастер (20-29), Эксперт (30-49), Гуру (50-74), Легенда (75-99), Бессмертный (100)
+
+2. **API Endpoints (3):**
+   - GET `/api/levels/config` - таблица всех 100 уровней
+   - GET `/api/users/:userId/level-progress` - детальный прогресс (current XP, needed, percentage, title)
+   - POST `/api/xp/award` - универсальный endpoint для начисления XP (streak bonus, level up check)
+
+3. **Features:**
+   - Auto-initialization 100 levels on first server start
+   - Streak bonus multiplier (1.5x XP for 7+ days streak)
+   - Auto level up detection and notification
+   - Friend activity log on level up
+   - Progressive XP requirements (level 1: 100 XP, level 10: 316 XP, level 50: 3535 XP, level 100: 10000 XP)
+
+4. **Files:**
+   - `server-postgresql.js:424-454` - level_config table + population (31 lines)
+   - `server-postgresql.js:4876-5028` - 3 endpoints (153 lines)
+
+**Testing:**
+```bash
+# Get levels config
+curl http://localhost:3001/api/levels/config
+✅ Returns 100 levels with progressive XP requirements
+
+# Get user level progress
+curl http://localhost:3001/api/users/1/level-progress
+✅ Returns detailed progress with percentages
+
+# Award XP
+curl -X POST http://localhost:3001/api/xp/award -H "Content-Type: application/json" -d '{"userId":1,"activityType":"word_learned","amount":10,"applyStreakBonus":true}'
+✅ XP awarded with streak bonus calculation
+```
+
+**Next Steps (future iterations):**
+- Frontend UI for level progress bar
+- Unlock features at specific levels
+- Level-up animations and notifications
+- Leaderboard by level
+
+---

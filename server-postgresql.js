@@ -421,6 +421,38 @@ async function initDatabase() {
             )
         `);
 
+        // XP & Levels System: Level configuration table
+        await db.query(`
+            CREATE TABLE IF NOT EXISTS level_config (
+                level INTEGER PRIMARY KEY,
+                xp_required INTEGER NOT NULL,
+                title VARCHAR(50) NOT NULL
+            )
+        `);
+
+        // Populate level_config if empty
+        const levelsCount = await db.query('SELECT COUNT(*) FROM level_config');
+        if (parseInt(levelsCount.rows[0].count) === 0) {
+            console.log('Initializing level configuration (1-100)...');
+            const levels = [];
+            for (let level = 1; level <= 100; level++) {
+                const xpRequired = Math.floor(100 * Math.pow(level, 1.5));
+                let title = 'Новичок';
+                if (level >= 5 && level < 10) title = 'Ученик';
+                else if (level >= 10 && level < 20) title = 'Знаток';
+                else if (level >= 20 && level < 30) title = 'Мастер';
+                else if (level >= 30 && level < 50) title = 'Эксперт';
+                else if (level >= 50 && level < 75) title = 'Гуру';
+                else if (level >= 75 && level < 100) title = 'Легенда';
+                else if (level === 100) title = 'Бессмертный';
+
+                levels.push(`(${level}, ${xpRequired}, '${title}')`);
+            }
+
+            await db.query(`INSERT INTO level_config (level, xp_required, title) VALUES ${levels.join(', ')}`);
+            console.log('✅ Level configuration initialized (100 levels)');
+        }
+
         // Achievements System: Achievement definitions
         await db.query(`
             CREATE TABLE IF NOT EXISTS achievements (
@@ -4837,6 +4869,160 @@ app.get('/api/duels/stats/:userId', async (req, res) => {
         });
     } catch (err) {
         console.error('Error getting duel stats:', err);
+        res.status(500).json({ error: err.message });
+    }
+});
+
+// ========================================
+// XP & LEVELS SYSTEM ENDPOINTS
+// ========================================
+
+// Get all levels configuration
+app.get('/api/levels/config', async (req, res) => {
+    try {
+        const levels = await db.query('SELECT * FROM level_config ORDER BY level ASC');
+        res.json(levels.rows);
+    } catch (err) {
+        console.error('Error getting levels config:', err);
+        res.status(500).json({ error: err.message });
+    }
+});
+
+// Get user level progress
+app.get('/api/users/:userId/level-progress', async (req, res) => {
+    try {
+        const { userId } = req.params;
+
+        const userStats = await db.query(`
+            SELECT level, total_xp
+            FROM user_stats
+            WHERE user_id = $1
+        `, [parseInt(userId)]);
+
+        if (userStats.rows.length === 0) {
+            return res.status(404).json({ error: 'User not found' });
+        }
+
+        const { level, total_xp } = userStats.rows[0];
+
+        const currentLevelInfo = await db.query(`
+            SELECT xp_required, title
+            FROM level_config
+            WHERE level = $1
+        `, [level]);
+
+        const nextLevelInfo = await db.query(`
+            SELECT xp_required, title
+            FROM level_config
+            WHERE level = $1
+        `, [level + 1]);
+
+        const currentLevelXP = level === 1 ? 0 : currentLevelInfo.rows[0].xp_required;
+        const nextLevelXP = nextLevelInfo.rows.length > 0 ? nextLevelInfo.rows[0].xp_required : total_xp;
+
+        const xpProgress = total_xp - currentLevelXP;
+        const xpNeeded = nextLevelXP - total_xp;
+        const progressPercentage = nextLevelInfo.rows.length > 0
+            ? ((xpProgress / (nextLevelXP - currentLevelXP)) * 100).toFixed(2)
+            : 100;
+
+        res.json({
+            current_level: level,
+            current_xp: total_xp,
+            xp_for_current_level: currentLevelXP,
+            xp_for_next_level: nextLevelXP,
+            xp_progress: xpProgress,
+            xp_needed: xpNeeded > 0 ? xpNeeded : 0,
+            progress_percentage: parseFloat(progressPercentage),
+            title: currentLevelInfo.rows[0].title,
+            next_title: nextLevelInfo.rows.length > 0 ? nextLevelInfo.rows[0].title : 'Max Level'
+        });
+    } catch (err) {
+        console.error('Error getting level progress:', err);
+        res.status(500).json({ error: err.message });
+    }
+});
+
+// Award XP with streak bonus and level up check
+app.post('/api/xp/award', async (req, res) => {
+    try {
+        const { userId, activityType, amount, applyStreakBonus = false } = req.body;
+
+        if (!userId || !activityType || !amount) {
+            return res.status(400).json({ error: 'Missing required fields' });
+        }
+
+        let finalAmount = parseInt(amount);
+
+        // Apply streak bonus if requested
+        if (applyStreakBonus) {
+            const streak = await db.query(
+                'SELECT current_streak FROM user_stats WHERE user_id = $1',
+                [parseInt(userId)]
+            );
+
+            if (streak.rows.length > 0 && streak.rows[0].current_streak >= 7) {
+                finalAmount = Math.floor(finalAmount * 1.5);
+            }
+        }
+
+        // Award XP
+        await db.query(`
+            INSERT INTO xp_log (user_id, activity_type, xp_amount, createdat)
+            VALUES ($1, $2, $3, NOW())
+        `, [parseInt(userId), activityType, finalAmount]);
+
+        // Update total XP
+        await db.query(`
+            UPDATE user_stats
+            SET total_xp = total_xp + $1
+            WHERE user_id = $2
+        `, [finalAmount, parseInt(userId)]);
+
+        // Check for level up
+        const userStats = await db.query(`
+            SELECT total_xp, level
+            FROM user_stats
+            WHERE user_id = $1
+        `, [parseInt(userId)]);
+
+        const { total_xp, level } = userStats.rows[0];
+
+        const nextLevel = await db.query(`
+            SELECT xp_required
+            FROM level_config
+            WHERE level = $1
+        `, [level + 1]);
+
+        let leveledUp = false;
+        let newLevel = level;
+
+        if (nextLevel.rows.length > 0 && total_xp >= nextLevel.rows[0].xp_required) {
+            newLevel = level + 1;
+            await db.query(`
+                UPDATE user_stats
+                SET level = $1, last_level_up_at = NOW()
+                WHERE user_id = $2
+            `, [newLevel, parseInt(userId)]);
+
+            // Log activity
+            await db.query(`
+                INSERT INTO friend_activities (user_id, activity_type, activity_data)
+                VALUES ($1, 'level_up', $2)
+            `, [parseInt(userId), JSON.stringify({ new_level: newLevel })]);
+
+            leveledUp = true;
+        }
+
+        res.json({
+            success: true,
+            xp_awarded: finalAmount,
+            total_xp,
+            leveled_up: leveledUp,
+            new_level: leveledUp ? newLevel : level
+        });
+    } catch (err) {
+        console.error('Error awarding XP:', err);
         res.status(500).json({ error: err.message });
     }
 });
