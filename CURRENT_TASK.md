@@ -1,221 +1,122 @@
-# ТЕКУЩАЯ ЗАДАЧА: Недельные челленджи (Weekly Challenges)
+# ТЕКУЩАЯ ЗАДАЧА: Публичные профили пользователей
 
 ## КОНТЕКСТ
-Ежедневные челленджи уже реализованы. Нужна система недельных челленджей с более сложными заданиями и большими наградами.
+Нужна система публичных профилей для социальных функций (просмотр профиля друга, лидерборд, и т.д.).
 
 ## ЦЕЛЬ
-Добавить API endpoints для недельных челленджей (более долгосрочные цели).
+Добавить API endpoint для публичного профиля пользователя.
 
 ## ЧТО НУЖНО СДЕЛАТЬ
 
-### 1. Таблица БД
+### 1. API Endpoint
 
-```sql
-CREATE TABLE IF NOT EXISTS weekly_challenges (
-    id SERIAL PRIMARY KEY,
-    user_id INTEGER REFERENCES users(id) ON DELETE CASCADE,
-    week_start_date DATE NOT NULL,
-    challenge_type VARCHAR(50) NOT NULL,
-    target_value INTEGER NOT NULL,
-    current_progress INTEGER DEFAULT 0,
-    reward_xp INTEGER DEFAULT 0,
-    reward_coins INTEGER DEFAULT 0,
-    is_completed BOOLEAN DEFAULT false,
-    completed_at TIMESTAMP,
-    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
-    UNIQUE(user_id, week_start_date, challenge_type)
-);
-```
+**GET /api/users/:userId/profile/public**
 
-### 2. Типы недельных челленджей
-
-```javascript
-const WEEKLY_CHALLENGE_TEMPLATES = [
-  {
-    type: 'words_learned_week',
-    title: 'Словарный марафон',
-    description: 'Выучить 50 новых слов за неделю',
-    target: 50,
-    reward_xp: 200,
-    reward_coins: 50,
-    icon: '📚'
-  },
-  {
-    type: 'streak_maintained_week',
-    title: 'Недельный воин',
-    description: 'Сохранить стрик всю неделю (7 дней подряд)',
-    target: 7,
-    reward_xp: 300,
-    reward_coins: 75,
-    icon: '🔥'
-  },
-  {
-    type: 'quizzes_week',
-    title: 'Квиз-мастер',
-    description: 'Пройти 20 квизов за неделю',
-    target: 20,
-    reward_xp: 250,
-    reward_coins: 60,
-    icon: '🎯'
-  },
-  {
-    type: 'xp_week',
-    title: 'XP Чемпион',
-    description: 'Заработать 500 XP за неделю',
-    target: 500,
-    reward_xp: 150,
-    reward_coins: 40,
-    icon: '⭐'
-  }
-];
-```
-
-### 3. API Endpoints
-
-**a) GET /api/weekly-challenges/:userId**
-Получить челленджи текущей недели.
+Публичная информация о пользователе (без приватных данных).
 
 Response:
 ```json
 {
-  "week_start": "2025-10-14",
-  "week_end": "2025-10-20",
-  "challenges": [
+  "user_id": 1,
+  "username": "alex_polyglot",
+  "display_name": "Alex",
+  "avatar_url": "https://example.com/avatars/1.png",
+  "bio": "Learning German and Spanish",
+  "joined_date": "2025-01-15",
+  "learning_languages": ["Немецкий", "Испанский"],
+  "stats": {
+    "level": 15,
+    "total_xp": 3500,
+    "total_words": 450,
+    "current_streak": 12,
+    "longest_streak": 45,
+    "total_quizzes": 120
+  },
+  "badges": [
     {
-      "id": 1,
-      "type": "words_learned_week",
-      "title": "Словарный марафон",
-      "description": "Выучить 50 новых слов за неделю",
-      "target": 50,
-      "current_progress": 23,
-      "progress_percentage": 46,
-      "reward_xp": 200,
-      "reward_coins": 50,
-      "is_completed": false,
+      "id": "streak_warrior",
+      "name": "Воин стрика",
+      "icon": "🔥",
+      "unlocked_at": "2025-03-10"
+    }
+  ],
+  "top_achievements": [
+    {
+      "id": "word_master",
+      "name": "Мастер слов",
       "icon": "📚"
     }
   ],
-  "completed_count": 0,
-  "total_count": 4
+  "is_public": true
 }
 ```
 
-**b) POST /api/weekly-challenges/:userId/claim**
-Забрать награду за завершенный челлендж.
+### 2. Проверить существующие таблицы
 
-Request:
-```json
-{
-  "challenge_id": 1
-}
+- `users` - есть базовая информация
+- `user_stats` или gamification tables - stats
+- `user_achievements` - achievements
+- Возможно нужно добавить колонки: `bio`, `avatar_url`, `is_public`
+
+### 3. SQL Query
+
+```sql
+SELECT
+  u.id as user_id,
+  u.name as username,
+  u.email, -- не включать в public response
+  us.level,
+  us.total_xp,
+  us.total_words_learned,
+  us.current_streak,
+  us.longest_streak,
+  us.total_quizzes_completed,
+  u.createdat as joined_date
+FROM users u
+LEFT JOIN user_stats us ON u.id = us.user_id
+WHERE u.id = $1
 ```
 
-Response:
-```json
-{
-  "success": true,
-  "reward_xp": 200,
-  "reward_coins": 50,
-  "message": "Награда получена!"
-}
+### 4. Безопасность
+
+- НЕ возвращать: email, пароль, phone
+- Проверка `is_public` флага (если false - ограничить данные)
+- Возвращать только базовые stats если профиль приватный
+
+### 5. Дополнительные поля (опционально)
+
+Если времени хватит, добавить в таблицу users:
+```sql
+ALTER TABLE users ADD COLUMN IF NOT EXISTS bio TEXT;
+ALTER TABLE users ADD COLUMN IF NOT EXISTS avatar_url TEXT;
+ALTER TABLE users ADD COLUMN IF NOT EXISTS is_public BOOLEAN DEFAULT true;
 ```
-
-**c) GET /api/weekly-challenges/:userId/history**
-История прошлых недель.
-
-Response:
-```json
-{
-  "history": [
-    {
-      "week_start": "2025-10-07",
-      "week_end": "2025-10-13",
-      "completed_count": 3,
-      "total_count": 4,
-      "total_xp_earned": 750,
-      "total_coins_earned": 185
-    }
-  ]
-}
-```
-
-### 4. Бизнес-логика
-
-**Автогенерация челленджей:**
-- Каждый понедельник в 00:00 создаются 4 новых недельных челленджа
-- Используются predefined templates
-- Прогресс отслеживается автоматически (триггеры или cron job)
-
-**Расчет прогресса:**
-```javascript
-async function updateWeeklyChallengeProgress(userId, challengeType) {
-  const weekStart = getWeekStart(new Date()); // Понедельник текущей недели
-
-  let currentProgress = 0;
-
-  switch(challengeType) {
-    case 'words_learned_week':
-      currentProgress = await db.query(`
-        SELECT COUNT(*) FROM words
-        WHERE user_id = $1 AND created_at >= $2
-      `, [userId, weekStart]);
-      break;
-    case 'streak_maintained_week':
-      // Check if user maintained streak all 7 days
-      break;
-    // ... и т.д.
-  }
-
-  await db.query(`
-    UPDATE weekly_challenges
-    SET current_progress = $1,
-        is_completed = (current_progress >= target)
-    WHERE user_id = $2 AND challenge_type = $3 AND week_start_date = $4
-  `, [currentProgress, userId, challengeType, weekStart]);
-}
-```
-
-### 5. Интеграция
-
-- При добавлении нового слова → обновить progress для `words_learned_week`
-- При прохождении квиза → обновить `quizzes_week`
-- При заработке XP → обновить `xp_week`
-- При daily streak update → проверить `streak_maintained_week`
 
 ### 6. Тестирование
 
 ```bash
-# 1. Получить текущие челленджи
-curl http://localhost:3001/api/weekly-challenges/1
+# Get public profile
+curl http://localhost:3001/api/users/1/profile/public
 
-# 2. Забрать награду
-curl -X POST http://localhost:3001/api/weekly-challenges/1/claim \
-  -H "Content-Type: application/json" \
-  -d '{"challenge_id": 1}'
-
-# 3. История
-curl http://localhost:3001/api/weekly-challenges/1/history
+# Should not include sensitive data (email, password)
 ```
 
 ## ВАЖНО
-1. Week start = Понедельник (ISO week standard)
-2. Челленджи НЕ сбрасываются если не завершены (просто истекают)
-3. Reward можно забрать только 1 раз
-4. Прогресс обновляется автоматически (не вручную)
+1. Не возвращать приватные данные (email, password)
+2. Использовать существующие таблицы (не создавать новые)
+3. Проверить is_public флаг (если добавлен)
+4. JOIN с user_stats для статистики
 
 ## ГОТОВО КОГДА
-- [ ] Таблица weekly_challenges создана
-- [ ] 3 endpoints реализованы (get, claim, history)
-- [ ] Template система для челленджей
-- [ ] Автогенерация в начале недели (базовая версия)
-- [ ] Прогресс рассчитывается корректно
-- [ ] Тестирование всех endpoints
+- [ ] Endpoint `/api/users/:userId/profile/public` создан
+- [ ] Возвращает публичные данные (без email/password)
+- [ ] Включает статистику из user_stats
+- [ ] Включает top 3 achievements (если есть)
+- [ ] Протестировано
 - [ ] PLAN.md обновлен
-- [ ] Код закоммичен
+- [ ] Закоммичено
 
-## УПРОЩЕННАЯ ВЕРСИЯ (для быстроты)
-Если времени мало - сделать только:
-1. Таблица weekly_challenges
-2. GET endpoint (с mock данными)
-3. Manual progress update (без автоматики)
-Автогенерацию и интеграцию оставить на следующую итерацию.
+## УПРОЩЕННАЯ ВЕРСИЯ
+Если мало времени - сделать только базовый endpoint:
+- Username, level, XP, streak
+- Без achievements/badges (оставить на следующую итерацию)
