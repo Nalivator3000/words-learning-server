@@ -1,157 +1,92 @@
-# ТЕКУЩАЯ ЗАДАЧА: Level-based Feature Unlocking (Iteration 17)
+# ТЕКУЩАЯ ЗАДАЧА: Feature Access Integration (Iteration 18)
 
 ## ЦЕЛЬ
-Реализовать систему разблокировки функций при достижении определённых уровней.
+Интегрировать проверки доступа к features в существующие endpoints для обеспечения level-based restrictions.
 
 ## SCOPE
 
-### 1. Features Unlock Table
-Создать таблицу БД `level_features`:
-```sql
-CREATE TABLE level_features (
-    id SERIAL PRIMARY KEY,
-    level_required INTEGER NOT NULL,
-    feature_key VARCHAR(100) NOT NULL UNIQUE,
-    feature_name VARCHAR(255) NOT NULL,
-    feature_description TEXT,
-    feature_category VARCHAR(50), -- 'social', 'gamification', 'customization', 'advanced'
-    icon VARCHAR(50),
-    created_at TIMESTAMP DEFAULT NOW()
-);
-```
-
-### 2. Feature Definitions (Predefined List)
-Автоматически инициализировать features при старте сервера:
-
-**Social Features:**
-- Level 5: `friend_requests` - Отправка запросов в друзья
-- Level 10: `duel_challenges` - Участие в 1-на-1 дуэлях
-- Level 15: `tournament_participation` - Регистрация на турниры
-- Level 20: `global_feed_posting` - Ручная публикация в ленте
-
-**Gamification:**
-- Level 3: `daily_challenges` - Доступ к ежедневным заданиям
-- Level 7: `weekly_challenges` - Доступ к недельным заданиям
-- Level 12: `league_participation` - Участие в системе лиг
-- Level 18: `achievement_tracking` - Доступ к системе достижений
-
-**Customization:**
-- Level 8: `theme_unlocking` - Покупка кастомных тем
-- Level 14: `avatar_customization` - Кастомные аватары
-- Level 25: `profile_bio` - Редактирование био профиля
-
-**Advanced:**
-- Level 30: `import_google_sheets` - Импорт из Google Sheets
-- Level 40: `word_collections_create` - Создание публичных наборов слов
-- Level 50: `mentor_program` - Участие в программе менторства
-
-### 3. API Endpoints
-
-#### GET /api/levels/features
-Получить все features с unlock requirements:
-```json
-{
-  "features": [
-    {
-      "level_required": 5,
-      "feature_key": "friend_requests",
-      "feature_name": "Запросы в друзья",
-      "feature_description": "Отправляйте запросы и добавляйте друзей",
-      "feature_category": "social",
-      "icon": "👥"
-    }
-  ]
-}
-```
-
-#### GET /api/users/:userId/unlocked-features
-Получить разблокированные features для пользователя:
-```json
-{
-  "current_level": 12,
-  "unlocked_features": [
-    { "feature_key": "daily_challenges", "unlocked_at_level": 3 },
-    { "feature_key": "friend_requests", "unlocked_at_level": 5 }
-  ],
-  "locked_features": [
-    { "feature_key": "tournament_participation", "unlocks_at_level": 15, "levels_remaining": 3 }
-  ]
-}
-```
-
-#### GET /api/users/:userId/can-use-feature/:featureKey
-Проверка доступа к feature:
-```json
-{
-  "can_use": true,
-  "feature_key": "duel_challenges",
-  "current_level": 12,
-  "required_level": 10
-}
-```
-
-### 4. Integration Points
-
-Добавить проверки доступа к features в существующие endpoints:
+### 1. Endpoints для интеграции проверок (8 endpoints)
 
 **Friends System:**
-- POST /api/friends/request → check `friend_requests`
+- POST `/api/friends/request` → check `friend_requests` (level 5)
 
 **Duels:**
-- POST /api/duels/challenge → check `duel_challenges`
+- POST `/api/duels/challenge` → check `duel_challenges` (level 10)
 
 **Tournaments:**
-- POST /api/tournaments/:id/register → check `tournament_participation`
+- POST `/api/tournaments/:id/register` → check `tournament_participation` (level 15)
 
 **Challenges:**
-- GET /api/daily-challenges/:userId → check `daily_challenges`
-- GET /api/weekly-challenges/:userId → check `weekly_challenges`
+- GET `/api/daily-challenges/:userId` → check `daily_challenges` (level 3)
+- GET `/api/weekly-challenges/:userId` → check `weekly_challenges` (level 7)
 
 **Global Feed:**
-- POST /api/feed/create → check `global_feed_posting`
+- POST `/api/feed/create` → check `global_feed_posting` (level 20)
 
 **Leagues:**
-- POST /api/leagues/:userId/award-weekly-xp → check `league_participation`
+- POST `/api/leagues/:userId/award-weekly-xp` → check `league_participation` (level 12)
 
-### 5. Helper Function
+**Achievements:**
+- GET `/api/achievements/unlocked/:userId` → check `achievement_tracking` (level 18)
 
-Создать `checkFeatureAccess(userId, featureKey)`:
+### 2. Интеграция паттерн
+
+Для каждого endpoint:
+
 ```javascript
-async function checkFeatureAccess(userId, featureKey) {
-    // Get user level
-    const userStats = await db.query('SELECT level FROM user_stats WHERE user_id = $1', [userId]);
-    if (!userStats.rows.length) return { hasAccess: false, error: 'User not found' };
+// В начале endpoint handler (после валидации параметров)
+const featureAccess = await checkFeatureAccess(userId, 'feature_key');
 
-    const userLevel = userStats.rows[0].level;
+if (!featureAccess.hasAccess) {
+    return res.status(403).json({
+        error: 'Feature locked',
+        message: `You need level ${featureAccess.requiredLevel} to use this feature`,
+        feature_name: featureAccess.featureName,
+        current_level: featureAccess.currentLevel,
+        levels_remaining: featureAccess.levelsRemaining
+    });
+}
 
-    // Get feature requirement
-    const feature = await db.query('SELECT level_required FROM level_features WHERE feature_key = $1', [featureKey]);
-    if (!feature.rows.length) return { hasAccess: true }; // Feature not restricted
+// Продолжение обычной логики endpoint...
+```
 
-    const requiredLevel = feature.rows[0].level_required;
+### 3. Response формат для locked features
 
-    return {
-        hasAccess: userLevel >= requiredLevel,
-        currentLevel: userLevel,
-        requiredLevel: requiredLevel,
-        levelsRemaining: Math.max(0, requiredLevel - userLevel)
-    };
+```json
+{
+  "error": "Feature locked",
+  "message": "You need level 10 to use this feature",
+  "feature_name": "Дуэли",
+  "current_level": 5,
+  "levels_remaining": 5
 }
 ```
+
+HTTP Status: **403 Forbidden**
+
+### 4. Список endpoints и их feature keys
+
+| Endpoint | Feature Key | Level Required |
+|----------|-------------|----------------|
+| POST /api/friends/request | friend_requests | 5 |
+| POST /api/duels/challenge | duel_challenges | 10 |
+| POST /api/tournaments/:id/register | tournament_participation | 15 |
+| GET /api/daily-challenges/:userId | daily_challenges | 3 |
+| GET /api/weekly-challenges/:userId | weekly_challenges | 7 |
+| POST /api/feed/create | global_feed_posting | 20 |
+| POST /api/leagues/:userId/award-weekly-xp | league_participation | 12 |
+| GET /api/achievements/unlocked/:userId | achievement_tracking | 18 |
 
 ## ФАЙЛЫ ДЛЯ ИЗМЕНЕНИЯ
 
 1. **server-postgresql.js**
-   - Добавить таблицу `level_features` (после level_config)
-   - Добавить инициализацию features
-   - Добавить helper function `checkFeatureAccess`
-   - Добавить 3 новых endpoint
-   - Интегрировать проверки в 8 существующих endpoints
+   - Найти 8 endpoints (grep для точного поиска)
+   - Добавить проверку checkFeatureAccess в начало каждого
+   - Добавить error handling для locked features
 
 ## КРИТЕРИИ УСПЕХА
-- ✅ Таблица level_features создана
-- ✅ 14+ features автоинициализированы
-- ✅ 3 новых API endpoints работают
-- ✅ 8 существующих endpoints защищены проверками
+- ✅ 8 endpoints интегрированы с проверками доступа
+- ✅ Единообразный error response (403 + message)
 - ✅ Сервер успешно стартует
+- ✅ Проверка работы: тестовый запрос с низким уровнем возвращает 403
 - ✅ Изменения закоммичены и запушены

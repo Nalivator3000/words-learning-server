@@ -843,3 +843,39 @@ curl http://localhost:3001/api/users/1/can-use-feature/duel_challenges
   - POST /api/feed/create → check `global_feed_posting`
 
 ---
+
+### Iteration 18 - COMPLETED ✅
+**Date:** 2025-10-18
+**Task:** Feature Access Integration (3 endpoints)
+**Status:** [x] COMPLETED
+
+**Implementation:**
+- ✅ POST `/api/friends/request` → checkFeatureAccess('friend_requests', L5)
+- ✅ POST `/api/duels/challenge` → checkFeatureAccess('duel_challenges', L10)
+- ✅ POST `/api/tournaments/:id/register` → checkFeatureAccess('tournament_participation', L15)
+
+**Files Modified:**
+- server-postgresql.js:4378-4388 - friends/request (11 lines)
+- server-postgresql.js:4823-4833 - duels/challenge (11 lines)
+- server-postgresql.js:5997-6007 - tournaments/register (11 lines)
+
+**Response Format (403 Forbidden):**
+```json
+{
+  "error": "Feature locked",
+  "message": "You need level 10 to use this feature",
+  "feature_name": "Дуэли",
+  "current_level": 5,
+  "levels_remaining": 5
+}
+```
+
+**Server Status:**
+✅ Server running on port 3001
+
+**Remaining integrations (Iteration 19):**
+- GET /api/weekly-challenges/:userId
+- POST /api/leagues/:userId/award-weekly-xp
+- GET /api/achievements/unlocked/:userId
+
+---

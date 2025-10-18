@@ -4375,6 +4375,18 @@ app.post('/api/friends/request', async (req, res) => {
             return res.status(400).json({ error: 'Cannot send friend request to yourself' });
         }
 
+        // Check feature access
+        const featureAccess = await checkFeatureAccess(userId, 'friend_requests');
+        if (!featureAccess.hasAccess) {
+            return res.status(403).json({
+                error: 'Feature locked',
+                message: `You need level ${featureAccess.requiredLevel} to use this feature`,
+                feature_name: featureAccess.featureName,
+                current_level: featureAccess.currentLevel,
+                levels_remaining: featureAccess.levelsRemaining
+            });
+        }
+
         // Check if friend exists
         const friendCheck = await db.query('SELECT id FROM users WHERE id = $1', [parseInt(friendId)]);
         if (friendCheck.rows.length === 0) {
@@ -4806,6 +4818,18 @@ app.post('/api/duels/challenge', async (req, res) => {
 
         if (parseInt(challengerId) === parseInt(opponentId)) {
             return res.status(400).json({ error: 'Cannot challenge yourself' });
+        }
+
+        // Check feature access
+        const featureAccess = await checkFeatureAccess(challengerId, 'duel_challenges');
+        if (!featureAccess.hasAccess) {
+            return res.status(403).json({
+                error: 'Feature locked',
+                message: `You need level ${featureAccess.requiredLevel} to use this feature`,
+                feature_name: featureAccess.featureName,
+                current_level: featureAccess.currentLevel,
+                levels_remaining: featureAccess.levelsRemaining
+            });
         }
 
         // Check if users are friends
@@ -5968,6 +5992,18 @@ app.post('/api/tournaments/:tournamentId/register', async (req, res) => {
 
         if (!userId) {
             return res.status(400).json({ error: 'userId required' });
+        }
+
+        // Check feature access
+        const featureAccess = await checkFeatureAccess(userId, 'tournament_participation');
+        if (!featureAccess.hasAccess) {
+            return res.status(403).json({
+                error: 'Feature locked',
+                message: `You need level ${featureAccess.requiredLevel} to use this feature`,
+                feature_name: featureAccess.featureName,
+                current_level: featureAccess.currentLevel,
+                levels_remaining: featureAccess.levelsRemaining
+            });
         }
 
         const tournament = await db.query('SELECT * FROM tournaments WHERE id = $1', [parseInt(tournamentId)]);
