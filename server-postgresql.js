@@ -5769,6 +5769,18 @@ app.post('/api/leagues/:userId/award-weekly-xp', async (req, res) => {
             return res.status(400).json({ error: 'Invalid XP amount' });
         }
 
+        // Check feature access
+        const featureAccess = await checkFeatureAccess(userId, 'league_participation');
+        if (!featureAccess.hasAccess) {
+            return res.status(403).json({
+                error: 'Feature locked',
+                message: `You need level ${featureAccess.requiredLevel} to use this feature`,
+                feature_name: featureAccess.featureName,
+                current_level: featureAccess.currentLevel,
+                levels_remaining: featureAccess.levelsRemaining
+            });
+        }
+
         // Check if user league exists, create if not
         const existingLeague = await db.query('SELECT * FROM user_leagues WHERE user_id = $1', [parseInt(userId)]);
 
@@ -6464,6 +6476,18 @@ app.get('/api/achievements', async (req, res) => {
 app.get('/api/achievements/unlocked/:userId', async (req, res) => {
     try {
         const { userId } = req.params;
+
+        // Check feature access
+        const featureAccess = await checkFeatureAccess(userId, 'achievement_tracking');
+        if (!featureAccess.hasAccess) {
+            return res.status(403).json({
+                error: 'Feature locked',
+                message: `You need level ${featureAccess.requiredLevel} to use this feature`,
+                feature_name: featureAccess.featureName,
+                current_level: featureAccess.currentLevel,
+                levels_remaining: featureAccess.levelsRemaining
+            });
+        }
 
         const unlocked = await db.query(`
             SELECT ua.*, a.title, a.description, a.icon, a.category, a.difficulty, a.reward_xp, a.reward_coins
@@ -8861,6 +8885,18 @@ app.post('/api/inventory/cleanup-expired', async (req, res) => {
 app.get('/api/weekly-challenges/:userId', async (req, res) => {
     try {
         const { userId } = req.params;
+
+        // Check feature access
+        const featureAccess = await checkFeatureAccess(userId, 'weekly_challenges');
+        if (!featureAccess.hasAccess) {
+            return res.status(403).json({
+                error: 'Feature locked',
+                message: `You need level ${featureAccess.requiredLevel} to use this feature`,
+                feature_name: featureAccess.featureName,
+                current_level: featureAccess.currentLevel,
+                levels_remaining: featureAccess.levelsRemaining
+            });
+        }
 
         // Get current week start (Monday)
         const now = new Date();
