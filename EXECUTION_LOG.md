@@ -779,3 +779,67 @@ curl -X POST http://localhost:3001/api/achievements/progress -d '{"userId":1,"ac
 ⚠️ Pre-existing achievement errors (column "title") - not blocking, non-critical
 
 ---
+
+### Iteration 17 - COMPLETED ✅
+**Date:** 2025-10-18
+**Task:** Level-based Feature Unlocking System
+**Status:** [x] COMPLETED
+
+**Implementation:**
+
+1. **Database Schema:**
+   - ✅ `level_features` table created (`server-postgresql.js:631-644`)
+   - Columns: id, level_required, feature_key (UNIQUE), feature_name, feature_description, feature_category, icon
+   - Index on level_required for performance
+
+2. **Feature Initialization (14 features):**
+   - ✅ Social Features (4): friend_requests (L5), duel_challenges (L10), tournament_participation (L15), global_feed_posting (L20)
+   - ✅ Gamification Features (4): daily_challenges (L3), weekly_challenges (L7), league_participation (L12), achievement_tracking (L18)
+   - ✅ Customization Features (3): theme_unlocking (L8), avatar_customization (L14), profile_bio (L25)
+   - ✅ Advanced Features (3): import_google_sheets (L30), word_collections_create (L40), mentor_program (L50)
+   - Auto-initialized on server start (`server-postgresql.js:669-703`)
+
+3. **Helper Function:**
+   - ✅ `checkFeatureAccess(userId, featureKey)` - проверка доступа к feature (`server-postgresql.js:1362-1395`)
+   - Returns: { hasAccess, currentLevel, requiredLevel, levelsRemaining, featureName }
+
+4. **API Endpoints (3):**
+   - ✅ GET `/api/levels/features` - список всех features с requirements (`server-postgresql.js:10521-10535`)
+   - ✅ GET `/api/users/:userId/unlocked-features` - unlocked + locked features для пользователя (`server-postgresql.js:10537-10592`)
+   - ✅ GET `/api/users/:userId/can-use-feature/:featureKey` - проверка доступа к конкретной feature (`server-postgresql.js:10594-10617`)
+
+**Files Modified:**
+- `server-postgresql.js:631-644` - level_features table (14 lines)
+- `server-postgresql.js:669-703` - feature initialization (35 lines)
+- `server-postgresql.js:1362-1395` - checkFeatureAccess helper (34 lines)
+- `server-postgresql.js:10521-10617` - 3 API endpoints (97 lines)
+
+**Testing:**
+```bash
+# Get all features
+curl http://localhost:3001/api/levels/features
+✅ Expected: array of 14 features sorted by level_required
+
+# Get user's unlocked/locked features
+curl http://localhost:3001/api/users/1/unlocked-features
+✅ Expected: {current_level, unlocked_features[], locked_features[]}
+
+# Check if user can use specific feature
+curl http://localhost:3001/api/users/1/can-use-feature/duel_challenges
+✅ Expected: {can_use: true/false, current_level, required_level, levels_remaining}
+```
+
+**Server Status:**
+✅ Server started successfully on port 3001
+✅ Level features initialized (14 features)
+⚠️ Pre-existing achievement errors (column "title") - not blocking, non-critical
+
+**Future Integration (Iteration 18):**
+- Add feature access checks to existing endpoints:
+  - POST /api/friends/request → check `friend_requests`
+  - POST /api/duels/challenge → check `duel_challenges`
+  - POST /api/tournaments/:id/register → check `tournament_participation`
+  - GET /api/daily-challenges/:userId → check `daily_challenges`
+  - POST /api/feed/create → check `global_feed_posting`
+
+---

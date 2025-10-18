@@ -628,6 +628,21 @@ async function initDatabase() {
             )
         `);
 
+        // XP & Levels System: Feature unlocking table
+        await db.query(`
+            CREATE TABLE IF NOT EXISTS level_features (
+                id SERIAL PRIMARY KEY,
+                level_required INTEGER NOT NULL,
+                feature_key VARCHAR(100) NOT NULL UNIQUE,
+                feature_name VARCHAR(255) NOT NULL,
+                feature_description TEXT,
+                feature_category VARCHAR(50),
+                icon VARCHAR(50),
+                created_at TIMESTAMP DEFAULT NOW()
+            )
+        `);
+        await db.query(`CREATE INDEX IF NOT EXISTS idx_level_features_level ON level_features(level_required)`);
+
         // Populate level_config if empty
         const levelsCount = await db.query('SELECT COUNT(*) FROM level_config');
         if (parseInt(levelsCount.rows[0].count) === 0) {
@@ -649,6 +664,42 @@ async function initDatabase() {
 
             await db.query(`INSERT INTO level_config (level, xp_required, title) VALUES ${levels.join(', ')}`);
             console.log('✅ Level configuration initialized (100 levels)');
+        }
+
+        // Populate level_features if empty
+        const featuresCount = await db.query('SELECT COUNT(*) FROM level_features');
+        if (parseInt(featuresCount.rows[0].count) === 0) {
+            console.log('Initializing level features...');
+            const features = [
+                // Social Features
+                { level: 5, key: 'friend_requests', name: 'Запросы в друзья', desc: 'Отправляйте запросы и добавляйте друзей', cat: 'social', icon: '👥' },
+                { level: 10, key: 'duel_challenges', name: 'Дуэли', desc: 'Участие в 1-на-1 дуэлях с друзьями', cat: 'social', icon: '⚔️' },
+                { level: 15, key: 'tournament_participation', name: 'Турниры', desc: 'Регистрация на еженедельные турниры', cat: 'social', icon: '🏆' },
+                { level: 20, key: 'global_feed_posting', name: 'Публикации в ленте', desc: 'Ручная публикация постов в глобальную ленту', cat: 'social', icon: '📢' },
+                // Gamification Features
+                { level: 3, key: 'daily_challenges', name: 'Ежедневные задания', desc: 'Доступ к ежедневным челленджам', cat: 'gamification', icon: '🎯' },
+                { level: 7, key: 'weekly_challenges', name: 'Недельные задания', desc: 'Доступ к недельным челленджам', cat: 'gamification', icon: '📅' },
+                { level: 12, key: 'league_participation', name: 'Лиги', desc: 'Участие в системе лиг и соревнований', cat: 'gamification', icon: '🥇' },
+                { level: 18, key: 'achievement_tracking', name: 'Достижения', desc: 'Доступ к системе достижений', cat: 'gamification', icon: '🏅' },
+                // Customization Features
+                { level: 8, key: 'theme_unlocking', name: 'Кастомные темы', desc: 'Покупка и установка кастомных тем', cat: 'customization', icon: '🎨' },
+                { level: 14, key: 'avatar_customization', name: 'Кастомные аватары', desc: 'Загрузка собственных аватаров', cat: 'customization', icon: '🖼️' },
+                { level: 25, key: 'profile_bio', name: 'Био профиля', desc: 'Редактирование био и статуса профиля', cat: 'customization', icon: '✏️' },
+                // Advanced Features
+                { level: 30, key: 'import_google_sheets', name: 'Импорт из Google Sheets', desc: 'Импорт словарных наборов из Google Таблиц', cat: 'advanced', icon: '📊' },
+                { level: 40, key: 'word_collections_create', name: 'Публичные наборы', desc: 'Создание и публикация собственных наборов слов', cat: 'advanced', icon: '📚' },
+                { level: 50, key: 'mentor_program', name: 'Программа менторства', desc: 'Участие в программе менторства', cat: 'advanced', icon: '🎓' }
+            ];
+
+            for (const f of features) {
+                await db.query(`
+                    INSERT INTO level_features (level_required, feature_key, feature_name, feature_description, feature_category, icon)
+                    VALUES ($1, $2, $3, $4, $5, $6)
+                    ON CONFLICT (feature_key) DO NOTHING
+                `, [f.level, f.key, f.name, f.desc, f.cat, f.icon]);
+            }
+
+            console.log('✅ Level features initialized (14 features)');
         }
 
         // Achievements System: Achievement definitions
@@ -1306,6 +1357,41 @@ async function getUserStats(userId) {
     }
 
     return stats.rows[0];
+}
+
+// Level Features: Check if user has access to a feature
+async function checkFeatureAccess(userId, featureKey) {
+    try {
+        // Get user level
+        const userStats = await db.query('SELECT level FROM user_stats WHERE user_id = $1', [parseInt(userId)]);
+        if (!userStats.rows.length) {
+            return { hasAccess: false, error: 'User not found', currentLevel: 0, requiredLevel: 0 };
+        }
+
+        const userLevel = userStats.rows[0].level || 1;
+
+        // Get feature requirement
+        const feature = await db.query('SELECT level_required, feature_name FROM level_features WHERE feature_key = $1', [featureKey]);
+
+        // If feature doesn't exist in restrictions, allow access
+        if (!feature.rows.length) {
+            return { hasAccess: true, currentLevel: userLevel, requiredLevel: 0, levelsRemaining: 0 };
+        }
+
+        const requiredLevel = feature.rows[0].level_required;
+        const hasAccess = userLevel >= requiredLevel;
+
+        return {
+            hasAccess,
+            currentLevel: userLevel,
+            requiredLevel,
+            levelsRemaining: Math.max(0, requiredLevel - userLevel),
+            featureName: feature.rows[0].feature_name
+        };
+    } catch (err) {
+        console.error('Error checking feature access:', err);
+        return { hasAccess: false, error: err.message, currentLevel: 0, requiredLevel: 0 };
+    }
 }
 
 // Achievements: Initialize predefined achievements
@@ -10428,6 +10514,104 @@ app.post('/api/migrate/user', async (req, res) => {
         });
     } catch (err) {
         console.error('Migration error:', err);
+        res.status(500).json({ error: err.message });
+    }
+});
+
+// Level Features: Get all features with unlock requirements
+app.get('/api/levels/features', async (req, res) => {
+    try {
+        const features = await db.query(`
+            SELECT level_required, feature_key, feature_name, feature_description, feature_category, icon
+            FROM level_features
+            ORDER BY level_required ASC
+        `);
+
+        res.json({ features: features.rows });
+    } catch (err) {
+        console.error('Error getting level features:', err);
+        res.status(500).json({ error: err.message });
+    }
+});
+
+// Level Features: Get unlocked and locked features for a user
+app.get('/api/users/:userId/unlocked-features', async (req, res) => {
+    try {
+        const { userId } = req.params;
+
+        // Get user level
+        const userStats = await db.query('SELECT level FROM user_stats WHERE user_id = $1', [parseInt(userId)]);
+        if (!userStats.rows.length) {
+            return res.status(404).json({ error: 'User not found' });
+        }
+
+        const currentLevel = userStats.rows[0].level || 1;
+
+        // Get all features
+        const allFeatures = await db.query(`
+            SELECT level_required, feature_key, feature_name, feature_description, feature_category, icon
+            FROM level_features
+            ORDER BY level_required ASC
+        `);
+
+        const unlocked = [];
+        const locked = [];
+
+        for (const f of allFeatures.rows) {
+            if (currentLevel >= f.level_required) {
+                unlocked.push({
+                    feature_key: f.feature_key,
+                    feature_name: f.feature_name,
+                    feature_description: f.feature_description,
+                    feature_category: f.feature_category,
+                    icon: f.icon,
+                    unlocked_at_level: f.level_required
+                });
+            } else {
+                locked.push({
+                    feature_key: f.feature_key,
+                    feature_name: f.feature_name,
+                    feature_description: f.feature_description,
+                    feature_category: f.feature_category,
+                    icon: f.icon,
+                    unlocks_at_level: f.level_required,
+                    levels_remaining: f.level_required - currentLevel
+                });
+            }
+        }
+
+        res.json({
+            current_level: currentLevel,
+            unlocked_features: unlocked,
+            locked_features: locked
+        });
+    } catch (err) {
+        console.error('Error getting user unlocked features:', err);
+        res.status(500).json({ error: err.message });
+    }
+});
+
+// Level Features: Check if user can use a specific feature
+app.get('/api/users/:userId/can-use-feature/:featureKey', async (req, res) => {
+    try {
+        const { userId, featureKey } = req.params;
+
+        const access = await checkFeatureAccess(userId, featureKey);
+
+        if (access.error) {
+            return res.status(404).json({ error: access.error });
+        }
+
+        res.json({
+            can_use: access.hasAccess,
+            feature_key: featureKey,
+            feature_name: access.featureName || null,
+            current_level: access.currentLevel,
+            required_level: access.requiredLevel,
+            levels_remaining: access.levelsRemaining
+        });
+    } catch (err) {
+        console.error('Error checking feature access:', err);
         res.status(500).json({ error: err.message });
     }
 });
