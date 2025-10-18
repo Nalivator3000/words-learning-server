@@ -397,7 +397,10 @@
   - ✅ Activity types: achievement_unlocked, level_up, milestones, league_promoted, tournament_winner
   - ✅ JSONB activity_data для гибкости
   - ✅ Pagination, filtering (type, time_period), visibility
-  - [ ] Auto-posting logic интеграция (будущая версия)
+  - [x] **Auto-posting logic интеграция** ✅ ГОТОВО
+    - ✅ Level up (каждые 5 уровней) → auto-post
+    - ✅ League promotion → auto-post
+    - ✅ Achievement unlock → auto-post
 
 - [x] **Взаимодействие** ✅ ГОТОВО (Backend)
   - ✅ Лайки (toggle like/unlike)

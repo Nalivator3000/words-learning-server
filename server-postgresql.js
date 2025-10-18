@@ -5209,6 +5209,14 @@ app.post('/api/xp/award', async (req, res) => {
                 VALUES ($1, 'level_up', $2)
             `, [parseInt(userId), JSON.stringify({ new_level: newLevel })]);
 
+            // Auto-post to global feed (every 5 levels)
+            if (newLevel % 5 === 0) {
+                await db.query(`
+                    INSERT INTO global_feed (user_id, activity_type, activity_data, visibility)
+                    VALUES ($1, 'level_up', $2, 'public')
+                `, [parseInt(userId), JSON.stringify({ old_level: level, new_level: newLevel, total_xp })]);
+            }
+
             leveledUp = true;
         }
 
@@ -5740,6 +5748,17 @@ app.post('/api/admin/leagues/process-week-end', async (req, res) => {
                         highest_tier_reached = GREATEST(highest_tier_reached, $1)
                     WHERE user_id = $2
                 `, [nextTier.rows[0].tier_level, user.user_id]);
+
+                // Auto-post to global feed
+                const currentTier = await db.query('SELECT tier_name FROM league_tiers WHERE id = $1', [user.current_tier_id]);
+                await db.query(`
+                    INSERT INTO global_feed (user_id, activity_type, activity_data, visibility)
+                    VALUES ($1, 'league_promoted', $2, 'public')
+                `, [user.user_id, JSON.stringify({
+                    from_tier: currentTier.rows[0].tier_name,
+                    to_tier: nextTier.rows[0].tier_name,
+                    weekly_xp: user.weekly_xp
+                })]);
 
             // Check demotion
             } else if (prevTier.rows.length > 0 && user.weekly_xp < (user.min_weekly_xp * 0.5)) {
@@ -6429,6 +6448,17 @@ app.post('/api/achievements/progress', async (req, res) => {
                     VALUES ($1, $2, 'earn', 'achievement', $3, $4)
                 `, [parseInt(userId), ach.reward_coins, `Achievement: ${ach.title}`, newBalance]);
             }
+
+            // Auto-post to global feed
+            await db.query(`
+                INSERT INTO global_feed (user_id, activity_type, activity_data, visibility)
+                VALUES ($1, 'achievement_unlocked', $2, 'public')
+            `, [parseInt(userId), JSON.stringify({
+                achievement_title: ach.title,
+                achievement_description: ach.description,
+                reward_xp: ach.reward_xp,
+                reward_coins: ach.reward_coins
+            })]);
 
             await db.query('COMMIT');
 
