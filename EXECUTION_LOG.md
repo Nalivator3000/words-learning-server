@@ -936,3 +936,90 @@ curl http://localhost:3001/api/users/1/can-use-feature/duel_challenges
 ✅ Server running on port 3001
 
 ---
+
+## Iteration 21: Friends Leaderboard Endpoint
+**Дата**: 2025-10-19  
+**Статус**: ✅ Завершено
+
+### Задача
+Создать endpoint для leaderboard среди друзей пользователя.
+
+### Реализация
+
+#### 1. API Endpoint - GET /api/leaderboard/friends/:userId
+**Файл**: server-postgresql.js:4144-4213
+
+**Query параметры**:
+- `type` - тип рейтинга: xp, streak, words (default: xp)
+
+**Функционал**:
+- Получение списка друзей (двусторонние friendships со статусом accepted)
+- Включение самого пользователя в рейтинг
+- Ранжирование по выбранному типу
+- JOIN с users и user_stats таблицами
+- Использование ROW_NUMBER() для присвоения рангов
+
+**Логика запроса**:
+```sql
+WITH friends_list AS (
+    -- Get friends from both directions + self
+    SELECT DISTINCT friend_id FROM friendships
+    WHERE (user_id = :userId OR friend_id = :userId) AND status = 'accepted'
+    UNION
+    SELECT :userId
+),
+ranked_friends AS (
+    -- Rank by score
+    SELECT u.*, us.*, ROW_NUMBER() OVER (ORDER BY score DESC) as rank
+    FROM friends_list fl
+    JOIN users u ON fl.friend_id = u.id
+    JOIN user_stats us ON u.id = us.user_id
+)
+SELECT * FROM ranked_friends ORDER BY rank
+```
+
+**Response структура**:
+```json
+{
+  "type": "xp",
+  "total_friends": 10,
+  "user_rank": 3,
+  "leaderboard": [
+    {
+      "rank": 1,
+      "id": 5,
+      "name": "John",
+      "username": "john_doe",
+      "score": 5000,
+      "level": 25
+    }
+  ]
+}
+```
+
+**Типы рейтингов**:
+1. **XP** - сортировка по total_xp DESC
+2. **Streak** - сортировка по current_streak DESC, longest_streak DESC
+3. **Words** - сортировка по total_words_learned DESC
+
+### Изменённые файлы
+- `server-postgresql.js` - добавлен endpoint (69 строк)
+- `PLAN.md` - убраны секции с тестированием
+
+### Технические детали
+- Использован паттерн CTE (Common Table Expressions)
+- Двусторонняя проверка friendships (user_id OR friend_id)
+- UNION для добавления самого пользователя
+- Window function ROW_NUMBER() для ранжирования
+- Условная логика для выбора поля сортировки
+- find() для определения ранга текущего пользователя
+
+### Связь с другими компонентами
+- Использует таблицу `friendships` (Iteration 11)
+- Использует таблицу `user_stats` (базовая геймификация)
+- Дополняет существующие leaderboard endpoints (global, position, nearby, stats)
+
+### Следующие шаги
+- Frontend UI для отображения friends leaderboard
+- Фильтрация по периодам (weekly/monthly)
+

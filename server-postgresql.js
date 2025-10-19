@@ -4141,6 +4141,77 @@ app.get('/api/leaderboard/stats', async (req, res) => {
     }
 });
 
+// Get friends leaderboard (ranking among friends)
+app.get('/api/leaderboard/friends/:userId', async (req, res) => {
+    try {
+        const { userId } = req.params;
+        const { type = 'xp' } = req.query; // xp, streak, words
+
+        let query, scoreField, orderBy;
+
+        if (type === 'xp') {
+            scoreField = 'us.total_xp';
+            orderBy = 'us.total_xp DESC';
+        } else if (type === 'streak') {
+            scoreField = 'us.current_streak';
+            orderBy = 'us.current_streak DESC, us.longest_streak DESC';
+        } else if (type === 'words') {
+            scoreField = 'us.total_words_learned';
+            orderBy = 'us.total_words_learned DESC';
+        } else {
+            return res.status(400).json({ error: 'Invalid leaderboard type. Use: xp, streak, or words' });
+        }
+
+        // Get friends list (both directions) + include self
+        query = `
+            WITH friends_list AS (
+                SELECT DISTINCT
+                    CASE
+                        WHEN f.user_id = $1 THEN f.friend_id
+                        WHEN f.friend_id = $1 THEN f.user_id
+                    END as friend_id
+                FROM friendships f
+                WHERE (f.user_id = $1 OR f.friend_id = $1) AND f.status = 'accepted'
+
+                UNION
+
+                SELECT $1 as friend_id
+            ),
+            ranked_friends AS (
+                SELECT
+                    u.id,
+                    u.name,
+                    u.email,
+                    u.username,
+                    ${scoreField} as score,
+                    us.level,
+                    ${type === 'streak' ? 'us.longest_streak,' : ''}
+                    ROW_NUMBER() OVER (ORDER BY ${orderBy}) as rank
+                FROM friends_list fl
+                INNER JOIN users u ON fl.friend_id = u.id
+                INNER JOIN user_stats us ON u.id = us.user_id
+            )
+            SELECT * FROM ranked_friends
+            ORDER BY rank ASC
+        `;
+
+        const leaderboard = await db.query(query, [parseInt(userId)]);
+
+        // Find user's rank in the list
+        const userRank = leaderboard.rows.find(row => row.id === parseInt(userId));
+
+        res.json({
+            type,
+            total_friends: leaderboard.rows.length - 1, // Exclude self
+            user_rank: userRank ? parseInt(userRank.rank) : null,
+            leaderboard: leaderboard.rows
+        });
+    } catch (err) {
+        console.error('Error getting friends leaderboard:', err);
+        res.status(500).json({ error: err.message });
+    }
+});
+
 // ========================================
 // COINS ECONOMY SYSTEM ENDPOINTS
 // ========================================

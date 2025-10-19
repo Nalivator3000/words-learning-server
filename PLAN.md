@@ -62,14 +62,12 @@
   - Автоматический DATABASE_URL
   - Достаточно для коммерческого продукта
 
-- [x] **Тестирование PostgreSQL** ✅ ГОТОВО
-  - ✅ Протестировано 31 API endpoint (все работают)
+- [x] **PostgreSQL endpoints** ✅ ГОТОВО
   - ✅ Auth: register, login (с JWT)
   - ✅ Language Pairs: CRUD операции
   - ✅ Words: CRUD, прогресс, bulk операции, экспорт
   - ✅ Gamification: XP, levels, achievements, leaderboards, daily goals
   - ✅ Import/Export: CSV, Google Sheets, миграция
-  - ✅ Сервер работает на порту 3001
 
 ---
 
@@ -769,21 +767,6 @@
   - Account lockout после неудачных попыток
   - 2FA (будущая версия)
 
-### 9.5 Тестирование
-- [ ] **Unit тесты**
-  - Backend functions (80%+ coverage)
-  - Frontend utilities
-  - Database queries
-
-- [ ] **Integration тесты**
-  - API endpoints (все критичные routes)
-  - Authentication flow
-  - Gamification system
-
-- [ ] **E2E тесты**
-  - User registration → login → word import → quiz flow
-  - Critical user journeys
-  - Playwright/Cypress
 
 ### 9.6 DevOps и деплой
 - [ ] **CI/CD pipeline**
