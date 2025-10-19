@@ -10932,6 +10932,108 @@ app.get('/api/users/:userId/can-use-feature/:featureKey', async (req, res) => {
     }
 });
 
+// ========================================
+// SPACED REPETITION SYSTEM (SRS) ENDPOINTS
+// ========================================
+
+// Get words due for review
+app.get('/api/srs/:userId/due-words', async (req, res) => {
+    try {
+        const { userId } = req.params;
+        const { limit = 20, include_new = 'true' } = req.query;
+
+        const now = new Date();
+
+        // Get words that are due for review
+        const dueWords = await db.query(`
+            SELECT
+                w.id as word_id,
+                w.word,
+                w.translation,
+                w.languagepairid,
+                srs.easiness_factor,
+                srs.interval_days,
+                srs.repetitions,
+                srs.next_review_date,
+                srs.last_review_date,
+                srs.last_quality_rating,
+                srs.total_reviews,
+                srs.mature,
+                CASE
+                    WHEN srs.next_review_date < $1 THEN 'overdue'
+                    WHEN srs.next_review_date::DATE = $1::DATE THEN 'due_today'
+                    ELSE 'future'
+                END as due_status
+            FROM word_srs_data srs
+            INNER JOIN words w ON srs.word_id = w.id
+            WHERE srs.user_id = $2
+              AND srs.suspended = false
+              AND srs.next_review_date <= $1
+            ORDER BY
+                CASE
+                    WHEN srs.next_review_date < $1 THEN 1
+                    ELSE 2
+                END,
+                srs.next_review_date ASC
+            LIMIT $3
+        `, [now, parseInt(userId), parseInt(limit)]);
+
+        let newWords = [];
+
+        // If include_new is true and we haven't reached limit, get new words
+        if (include_new === 'true' && dueWords.rows.length < parseInt(limit)) {
+            const remaining = parseInt(limit) - dueWords.rows.length;
+
+            newWords = await db.query(`
+                SELECT
+                    w.id as word_id,
+                    w.word,
+                    w.translation,
+                    w.languagepairid,
+                    2.5 as easiness_factor,
+                    1 as interval_days,
+                    0 as repetitions,
+                    NULL as next_review_date,
+                    NULL as last_review_date,
+                    NULL as last_quality_rating,
+                    0 as total_reviews,
+                    false as mature,
+                    'new' as due_status
+                FROM words w
+                WHERE w.user_id = $1
+                  AND w.id NOT IN (
+                      SELECT word_id FROM word_srs_data WHERE user_id = $1
+                  )
+                LIMIT $2
+            `, [parseInt(userId), remaining]);
+        }
+
+        const allWords = [...dueWords.rows, ...newWords.rows];
+
+        // Get counts
+        const counts = await db.query(`
+            SELECT
+                COUNT(*) FILTER (WHERE srs.next_review_date < $1) as overdue,
+                COUNT(*) FILTER (WHERE srs.next_review_date::DATE = $1::DATE) as due_today,
+                COUNT(*) FILTER (WHERE srs.mature = true) as mature_cards,
+                (SELECT COUNT(*) FROM words WHERE user_id = $2 AND id NOT IN (
+                    SELECT word_id FROM word_srs_data WHERE user_id = $2
+                )) as new_words
+            FROM word_srs_data srs
+            WHERE srs.user_id = $2 AND srs.suspended = false
+        `, [now, parseInt(userId)]);
+
+        res.json({
+            words: allWords,
+            total_returned: allWords.length,
+            statistics: counts.rows[0] || { overdue: 0, due_today: 0, mature_cards: 0, new_words: 0 }
+        });
+    } catch (err) {
+        console.error('Error getting due words:', err);
+        res.status(500).json({ error: err.message });
+    }
+});
+
 // Serve main page
 app.get('/', (req, res) => {
     res.sendFile(path.join(__dirname, 'public', 'index.html'));

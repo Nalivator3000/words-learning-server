@@ -1103,3 +1103,94 @@ SELECT * FROM ranked_friends ORDER BY rank
 - Iteration 24: POST /api/srs/:userId/review endpoint (SM-2 calculation)
 - Iteration 25: GET /api/srs/:userId/statistics endpoint
 
+
+## Iteration 23: SRS Due Words Endpoint
+**Дата**: 2025-10-19  
+**Статус**: ✅ Завершено
+
+### Задача
+Создать GET /api/srs/:userId/due-words endpoint для получения слов на повторение.
+
+### Реализация
+
+#### API Endpoint - GET /api/srs/:userId/due-words
+**Файл**: server-postgresql.js:10935-11035 (101 строка)
+
+**Query параметры**:
+- `limit` - количество слов (default: 20)
+- `include_new` - включать новые слова (default: 'true')
+
+**Логика работы**:
+1. **Получение слов на повторение**:
+   - JOIN word_srs_data с words
+   - Фильтрация: next_review_date <= NOW(), suspended = false
+   - Сортировка: overdue (просроченные) → due_today (на сегодня)
+   - LIMIT по параметру
+
+2. **Классификация статуса**:
+   - `overdue` - next_review_date < NOW()
+   - `due_today` - next_review_date::DATE = NOW()::DATE
+   - `future` - запланировано на будущее
+
+3. **Добавление новых слов** (если include_new = true):
+   - Если due words < limit, добираем новые слова
+   - Новые слова = words БЕЗ записей в word_srs_data
+   - Default SRS values: EF=2.5, interval=1, reps=0
+
+4. **Статистика**:
+   - `overdue` - количество просроченных
+   - `due_today` - количество на сегодня
+   - `mature_cards` - зрелые карточки (interval > 21 день)
+   - `new_words` - слова без SRS данных
+
+**Response структура**:
+```json
+{
+  "words": [
+    {
+      "word_id": 123,
+      "word": "Hallo",
+      "translation": "Привет",
+      "languagepairid": 1,
+      "easiness_factor": 2.5,
+      "interval_days": 3,
+      "repetitions": 2,
+      "next_review_date": "2025-10-19T10:00:00Z",
+      "last_review_date": "2025-10-16T10:00:00Z",
+      "last_quality_rating": 4,
+      "total_reviews": 5,
+      "mature": false,
+      "due_status": "due_today"
+    }
+  ],
+  "total_returned": 15,
+  "statistics": {
+    "overdue": 3,
+    "due_today": 12,
+    "mature_cards": 45,
+    "new_words": 128
+  }
+}
+```
+
+### Технические детали
+- Использован FILTER clause для подсчета категорий в одном запросе
+- NOT IN subquery для фильтрации новых слов
+- CASE expression для определения статуса слова
+- Сортировка по приоритету (overdue первыми)
+- Array spread для объединения due + new words
+
+### Оптимизации
+- Индекс на (user_id, next_review_date) ускоряет поиск due words
+- LIMIT применяется до JOIN для минимизации данных
+- Статистика рассчитывается одним запросом с FILTER
+
+### Связь с другими компонентами
+- Использует word_srs_data таблицу (Iteration 22)
+- Использует words таблицу (базовая схема)
+- Подготовка к review endpoint (Iteration 24)
+
+### Следующие шаги
+- Iteration 24: POST /api/srs/:userId/review (SM-2 calculation)
+- Iteration 25: GET /api/srs/:userId/statistics
+
