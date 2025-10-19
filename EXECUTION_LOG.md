@@ -1931,3 +1931,154 @@ new Date(now.getFullYear(), now.getMonth(), 1)
 - Password change endpoint (с текущим паролем)
 - Email change endpoint (с email верификацией)
 
+
+## Iteration 30: Leech Detection Endpoint
+**Дата**: 2025-10-19
+**Статус**: ✅ Завершено
+
+### Задача
+Создать GET /api/srs/:userId/leeches endpoint для обнаружения "пиявок" (слов, которые постоянно забываются).
+
+### Реализация
+
+#### API Endpoint - GET /api/srs/:userId/leeches
+**Файл**: server-postgresql.js:11778-11879 (102 строки)
+
+**Query параметры**:
+- `threshold` - минимум failed reviews для leech статуса (default: 8)
+- `minReviews` - минимум total reviews для анализа (default: 5)
+
+**Определение Leech**:
+Слово считается "пиявкой" если:
+1. Общее количество повторений >= minReviews (по умолчанию 5)
+2. Количество неудачных попыток >= threshold (по умолчанию 8)
+3. Неудачная попытка = quality_rating < 3
+
+**Логика работы**:
+
+1. **Main Query** (слова с высоким failure rate):
+   - JOIN srs_review_log с words и word_srs_data
+   - GROUP BY word_id для агрегации статистики
+   - FILTER clause для подсчета failed/successful reviews
+   - Вычисление failure_rate = (failed / total) * 100
+   - Сортировка по failed_reviews DESC, failure_rate DESC
+
+2. **Recent Review Patterns**:
+   - Для каждого leech: последние 10 reviews
+   - Анализ паттерна: текущая борьба (3+ failures в последних 5)
+   - Определение difficulty_level
+
+3. **Recommendations** (на основе failure_rate):
+   - **>70% failure**: мнемоника + примеры в контексте
+   - **>50% failure**: визуальные примеры + предложения
+   - **avg_quality <2.0**: приостановка + группировка с похожими
+
+4. **Difficulty Level Classification**:
+   - `very_hard` - failure_rate > 70%
+   - `hard` - failure_rate > 50%
+   - `moderate` - остальные
+
+**Response Structure**:
+```json
+{
+  "leeches": [
+    {
+      "word_id": 123,
+      "word": "Geschwindigkeit",
+      "translation": "скорость",
+      "languagepairid": 1,
+      "total_reviews": 12,
+      "failed_reviews": 9,
+      "successful_reviews": 3,
+      "failure_rate": 75.0,
+      "avg_quality": 1.83,
+      "last_review": "2025-10-19T10:00:00Z",
+      "first_review": "2025-09-15T14:30:00Z",
+      "easiness_factor": 1.30,
+      "interval_days": 1,
+      "repetitions": 0,
+      "recent_reviews": [
+        {
+          "quality_rating": 2,
+          "review_date": "2025-10-19T10:00:00Z",
+          "review_type": "relearn"
+        }
+      ],
+      "recommendations": [
+        "Попробуйте создать мнемоническую ассоциацию для этого слова",
+        "Изучите примеры использования в контексте"
+      ],
+      "is_currently_struggling": true,
+      "difficulty_level": "very_hard"
+    }
+  ],
+  "statistics": {
+    "total_leeches": 5,
+    "avg_failure_rate": "68.4",
+    "currently_struggling": 3,
+    "very_hard_words": 2,
+    "hard_words": 2,
+    "moderate_words": 1
+  },
+  "threshold_used": 8,
+  "min_reviews_used": 5
+}
+```
+
+### Технические детали
+- **FILTER clause** для эффективного подсчета категорий
+- **Promise.all()** для параллельной загрузки recent reviews
+- **AVG::NUMERIC(3,2)** для точности average quality
+- **Array.filter()** для определения currently_struggling
+- **ROUND()** для failure_rate с 1 знаком после запятой
+- **LEFT JOIN** с word_srs_data (может не существовать для новых слов)
+
+### Рекомендации по категориям
+
+#### Very Hard Words (>70% failures):
+1. "Попробуйте создать мнемоническую ассоциацию для этого слова"
+2. "Изучите примеры использования в контексте"
+
+#### Hard Words (>50% failures):
+1. "Посмотрите визуальные примеры или изображения"
+2. "Практикуйте слово в предложениях"
+
+#### Low Quality (avg_quality <2.0):
+1. "Рассмотрите возможность временно приостановить это слово"
+2. "Попробуйте изучать его вместе со схожими словами"
+
+### Use Cases
+- **Leech Management Dashboard**: список всех problem words
+- **Focused Practice**: специальный режим для leeches
+- **Alternative Learning Methods**: переключение на mnemonic mode
+- **Temporary Suspension**: убрать из SRS до лучшего понимания
+- **Progress Tracking**: мониторинг improvement для leeches
+
+### UI Интеграция
+- **"Problem Words" Section** в SRS dashboard
+- **Red Badge** на словах с leech статусом
+- **Recommendation Cards** для каждого leech
+- **Action Buttons**: Suspend / Reset / Practice
+- **Difficulty Color Coding**: red (very_hard), orange (hard), yellow (moderate)
+- **Progress Chart**: failure_rate over time
+
+### Оптимизации
+- Индекс на (user_id, review_date) в srs_review_log
+- HAVING clause фильтрует до агрегации
+- Параллельная загрузка recent reviews (Promise.all)
+- Клиентский расчет statistics (избегаем доп. запросов)
+
+### Связь с другими компонентами
+- Использует srs_review_log (Iteration 22)
+- Использует words таблицу (base schema)
+- Использует word_srs_data (Iteration 22)
+- Дополняет SRS statistics (Iteration 25)
+- Интеграция с suspend endpoint (Iteration 26)
+
+### Следующие шаги
+- Frontend UI для leech management dashboard
+- Mnemonic practice mode для leeches
+- Auto-suspend после 15+ failures
+- Achievement "Leech Hunter" за решение 10 leeches
+- Email digest "Your weekly leeches"
+

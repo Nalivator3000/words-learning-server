@@ -11775,6 +11775,109 @@ app.get('/api/users/:userId/settings', async (req, res) => {
     }
 });
 
+// 🐛 SRS: Get leech words (difficult words that are frequently forgotten)
+app.get('/api/srs/:userId/leeches', async (req, res) => {
+    try {
+        const { userId } = req.params;
+        const { threshold = 8, minReviews = 5 } = req.query;
+
+        // Find words with high failure rate
+        const leeches = await db.query(`
+            SELECT
+                w.id as word_id,
+                w.word,
+                w.translation,
+                w.languagepairid,
+                COUNT(*) as total_reviews,
+                COUNT(*) FILTER (WHERE srl.quality_rating < 3) as failed_reviews,
+                COUNT(*) FILTER (WHERE srl.quality_rating >= 3) as successful_reviews,
+                ROUND(
+                    (COUNT(*) FILTER (WHERE srl.quality_rating < 3)::DECIMAL / COUNT(*)) * 100,
+                    1
+                ) as failure_rate,
+                AVG(srl.quality_rating)::NUMERIC(3,2) as avg_quality,
+                MAX(srl.review_date) as last_review,
+                MIN(srl.review_date) as first_review,
+                srs.easiness_factor,
+                srs.interval_days,
+                srs.repetitions
+            FROM srs_review_log srl
+            INNER JOIN words w ON srl.word_id = w.id
+            LEFT JOIN word_srs_data srs ON srs.word_id = w.id AND srs.user_id = srl.user_id
+            WHERE srl.user_id = $1
+            GROUP BY w.id, w.word, w.translation, w.languagepairid,
+                     srs.easiness_factor, srs.interval_days, srs.repetitions
+            HAVING COUNT(*) >= $3
+                AND COUNT(*) FILTER (WHERE srl.quality_rating < 3) >= $2
+            ORDER BY failed_reviews DESC, failure_rate DESC
+        `, [parseInt(userId), parseInt(threshold), parseInt(minReviews)]);
+
+        // Get recent review patterns for each leech
+        const leechesWithPatterns = await Promise.all(leeches.rows.map(async (leech) => {
+            // Get last 10 reviews to analyze pattern
+            const recentReviews = await db.query(`
+                SELECT quality_rating, review_date, review_type
+                FROM srs_review_log
+                WHERE word_id = $1 AND user_id = $2
+                ORDER BY review_date DESC
+                LIMIT 10
+            `, [leech.word_id, parseInt(userId)]);
+
+            // Generate recommendations based on patterns
+            const recommendations = [];
+
+            if (leech.failure_rate > 70) {
+                recommendations.push('Попробуйте создать мнемоническую ассоциацию для этого слова');
+                recommendations.push('Изучите примеры использования в контексте');
+            } else if (leech.failure_rate > 50) {
+                recommendations.push('Посмотрите визуальные примеры или изображения');
+                recommendations.push('Практикуйте слово в предложениях');
+            }
+
+            if (parseFloat(leech.avg_quality) < 2.0) {
+                recommendations.push('Рассмотрите возможность временно приостановить это слово');
+                recommendations.push('Попробуйте изучать его вместе со схожими словами');
+            }
+
+            // Check if recently struggling (last 5 reviews mostly failures)
+            const lastFiveReviews = recentReviews.rows.slice(0, 5);
+            const recentFailures = lastFiveReviews.filter(r => r.quality_rating < 3).length;
+            const isCurrentlyStruggling = recentFailures >= 3;
+
+            return {
+                ...leech,
+                recent_reviews: recentReviews.rows,
+                recommendations,
+                is_currently_struggling: isCurrentlyStruggling,
+                difficulty_level: leech.failure_rate > 70 ? 'very_hard' :
+                                 leech.failure_rate > 50 ? 'hard' : 'moderate'
+            };
+        }));
+
+        // Calculate overall statistics
+        const statistics = {
+            total_leeches: leechesWithPatterns.length,
+            avg_failure_rate: leechesWithPatterns.length > 0
+                ? (leechesWithPatterns.reduce((sum, l) => sum + parseFloat(l.failure_rate), 0) / leechesWithPatterns.length).toFixed(1)
+                : 0,
+            currently_struggling: leechesWithPatterns.filter(l => l.is_currently_struggling).length,
+            very_hard_words: leechesWithPatterns.filter(l => l.difficulty_level === 'very_hard').length,
+            hard_words: leechesWithPatterns.filter(l => l.difficulty_level === 'hard').length,
+            moderate_words: leechesWithPatterns.filter(l => l.difficulty_level === 'moderate').length
+        };
+
+        res.json({
+            leeches: leechesWithPatterns,
+            statistics,
+            threshold_used: parseInt(threshold),
+            min_reviews_used: parseInt(minReviews)
+        });
+    } catch (err) {
+        console.error('Error getting leech words:', err);
+        res.status(500).json({ error: err.message });
+    }
+});
+
 // Serve main page
 app.get('/', (req, res) => {
     res.sendFile(path.join(__dirname, 'public', 'index.html'));
