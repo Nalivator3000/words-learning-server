@@ -1099,6 +1099,34 @@ async function initDatabase() {
             END $$;
         `);
 
+        // Local Leaderboards: Add country and city to users table
+        await db.query(`
+            DO $$
+            BEGIN
+                IF NOT EXISTS (
+                    SELECT 1 FROM information_schema.columns
+                    WHERE table_name = 'users' AND column_name = 'country'
+                ) THEN
+                    ALTER TABLE users ADD COLUMN country VARCHAR(100);
+                END IF;
+            END $$;
+        `);
+
+        await db.query(`
+            DO $$
+            BEGIN
+                IF NOT EXISTS (
+                    SELECT 1 FROM information_schema.columns
+                    WHERE table_name = 'users' AND column_name = 'city'
+                ) THEN
+                    ALTER TABLE users ADD COLUMN city VARCHAR(100);
+                END IF;
+            END $$;
+        `);
+
+        await db.query(`CREATE INDEX IF NOT EXISTS idx_users_country ON users(country)`);
+        await db.query(`CREATE INDEX IF NOT EXISTS idx_users_city ON users(city)`);
+
         // Coins System: Transactions history
         await db.query(`
             CREATE TABLE IF NOT EXISTS coin_transactions (
@@ -11520,6 +11548,130 @@ app.get('/api/rating/:userId/personal', async (req, res) => {
         });
     } catch (err) {
         console.error('Error getting personal rating:', err);
+        res.status(500).json({ error: err.message });
+    }
+});
+
+// ========================================
+// LOCAL LEADERBOARDS (COUNTRY/CITY)
+// ========================================
+
+// Get country leaderboard
+app.get('/api/leaderboard/country/:country/:type', async (req, res) => {
+    try {
+        const { country, type } = req.params;
+        const { limit = 100 } = req.query;
+
+        let query, params;
+
+        if (type === 'xp') {
+            query = `
+                SELECT u.id, u.name, u.email, u.country, us.total_xp as score, us.level
+                FROM users u
+                INNER JOIN user_stats us ON u.id = us.user_id
+                WHERE u.country = $1
+                ORDER BY us.total_xp DESC
+                LIMIT $2
+            `;
+            params = [country, parseInt(limit)];
+        } else if (type === 'streak') {
+            query = `
+                SELECT u.id, u.name, u.email, u.country, us.current_streak as score, us.longest_streak
+                FROM users u
+                INNER JOIN user_stats us ON u.id = us.user_id
+                WHERE u.country = $1 AND us.current_streak > 0
+                ORDER BY us.current_streak DESC, us.longest_streak DESC
+                LIMIT $2
+            `;
+            params = [country, parseInt(limit)];
+        } else if (type === 'words') {
+            query = `
+                SELECT u.id, u.name, u.email, u.country, us.total_words_learned as score
+                FROM users u
+                INNER JOIN user_stats us ON u.id = us.user_id
+                WHERE u.country = $1 AND us.total_words_learned > 0
+                ORDER BY us.total_words_learned DESC
+                LIMIT $2
+            `;
+            params = [country, parseInt(limit)];
+        } else {
+            return res.status(400).json({ error: 'Invalid type. Use: xp, streak, or words' });
+        }
+
+        const leaderboard = await db.query(query, params);
+
+        const rankedLeaderboard = leaderboard.rows.map((user, index) => ({
+            rank: index + 1,
+            ...user
+        }));
+
+        res.json({
+            country,
+            type,
+            leaderboard: rankedLeaderboard
+        });
+    } catch (err) {
+        console.error('Error getting country leaderboard:', err);
+        res.status(500).json({ error: err.message });
+    }
+});
+
+// Get city leaderboard
+app.get('/api/leaderboard/city/:city/:type', async (req, res) => {
+    try {
+        const { city, type } = req.params;
+        const { limit = 100 } = req.query;
+
+        let query, params;
+
+        if (type === 'xp') {
+            query = `
+                SELECT u.id, u.name, u.email, u.city, u.country, us.total_xp as score, us.level
+                FROM users u
+                INNER JOIN user_stats us ON u.id = us.user_id
+                WHERE u.city = $1
+                ORDER BY us.total_xp DESC
+                LIMIT $2
+            `;
+            params = [city, parseInt(limit)];
+        } else if (type === 'streak') {
+            query = `
+                SELECT u.id, u.name, u.email, u.city, u.country, us.current_streak as score, us.longest_streak
+                FROM users u
+                INNER JOIN user_stats us ON u.id = us.user_id
+                WHERE u.city = $1 AND us.current_streak > 0
+                ORDER BY us.current_streak DESC, us.longest_streak DESC
+                LIMIT $2
+            `;
+            params = [city, parseInt(limit)];
+        } else if (type === 'words') {
+            query = `
+                SELECT u.id, u.name, u.email, u.city, u.country, us.total_words_learned as score
+                FROM users u
+                INNER JOIN user_stats us ON u.id = us.user_id
+                WHERE u.city = $1 AND us.total_words_learned > 0
+                ORDER BY us.total_words_learned DESC
+                LIMIT $2
+            `;
+            params = [city, parseInt(limit)];
+        } else {
+            return res.status(400).json({ error: 'Invalid type. Use: xp, streak, or words' });
+        }
+
+        const leaderboard = await db.query(query, params);
+
+        const rankedLeaderboard = leaderboard.rows.map((user, index) => ({
+            rank: index + 1,
+            ...user
+        }));
+
+        res.json({
+            city,
+            type,
+            leaderboard: rankedLeaderboard
+        });
+    } catch (err) {
+        console.error('Error getting city leaderboard:', err);
         res.status(500).json({ error: err.message });
     }
 });

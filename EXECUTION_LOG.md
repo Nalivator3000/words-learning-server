@@ -1674,3 +1674,135 @@ new Date(now.getFullYear(), now.getMonth(), 1)
 - Iteration 28: Country/City Leaderboards
 - Iteration 29: Mentorship Program endpoints
 
+
+## Iteration 28: Country & City Leaderboards
+**Дата**: 2025-10-19  
+**Статус**: ✅ Завершено
+
+### Задача
+Создать локальные рейтинги по странам и городам для конкуренции внутри региона.
+
+### Реализация
+
+#### 1. Database Schema Updates
+**Файл**: server-postgresql.js:1102-1128
+
+**ALTER TABLE users**:
+- `country` VARCHAR(100) - страна пользователя
+- `city` VARCHAR(100) - город пользователя
+- Индексы: idx_users_country, idx_users_city
+
+**Миграция**:
+- Использован DO $$ блок для проверки существования
+- IF NOT EXISTS для безопасного добавления колонок
+- CREATE INDEX IF NOT EXISTS для оптимизации поиска
+
+#### 2. GET /api/leaderboard/country/:country/:type
+**Файл**: server-postgresql.js:11527-11589 (63 строки)
+
+**URL параметры**:
+- `:country` - название страны (Russia, USA, Germany, etc.)
+- `:type` - тип рейтинга: xp, streak, words
+
+**Query параметры**:
+- `limit` - количество пользователей (default: 100)
+
+**Логика**:
+- JOIN users с user_stats
+- WHERE u.country = :country
+- ORDER BY score DESC
+- Автоматическая нумерация (rank: 1, 2, 3...)
+
+**Response**:
+```json
+{
+  "country": "Russia",
+  "type": "xp",
+  "leaderboard": [
+    {
+      "rank": 1,
+      "id": 45,
+      "name": "Ivan",
+      "email": "ivan@mail.ru",
+      "country": "Russia",
+      "score": 15234,
+      "level": 23
+    }
+  ]
+}
+```
+
+#### 3. GET /api/leaderboard/city/:city/:type
+**Файл**: server-postgresql.js:11591-11649 (59 строк)
+
+**URL параметры**:
+- `:city` - название города (Moscow, New York, Berlin, etc.)
+- `:type` - тип рейтинга: xp, streak, words
+
+**Query параметры**:
+- `limit` - количество пользователей (default: 100)
+
+**Логика**:
+- Идентична country endpoint
+- WHERE u.city = :city
+- Включает both city и country в response
+
+**Response**:
+```json
+{
+  "city": "Moscow",
+  "type": "words",
+  "leaderboard": [
+    {
+      "rank": 1,
+      "id": 67,
+      "name": "Anna",
+      "city": "Moscow",
+      "country": "Russia",
+      "score": 1234
+    }
+  ]
+}
+```
+
+### Типы рейтингов (type)
+1. **xp** - по total_xp (с level)
+2. **streak** - по current_streak (с longest_streak)
+3. **words** - по total_words_learned
+
+### Технические детали
+- **VARCHAR(100)** для country/city (международные названия)
+- **Индексы на country/city** для быстрых WHERE lookups
+- **map((user, index))** для автоматического присвоения rank
+- **Валидация type** с 400 error для invalid типов
+- **Идентичная структура** с global leaderboard endpoints
+
+### Use Cases
+- **"Best in my country"** motivation
+- **Local competitions** (city challenges)
+- **Regional tournaments** organization
+- **Cultural comparison** (which country learns most)
+- **Friend discovery** (find locals learning same language)
+
+### UI Интеграция
+- **Country tab** в leaderboard view
+- **City tab** в leaderboard view
+- **Auto-detect** user's location (геолокация)
+- **Flag icons** для стран
+- **"Near you"** badge для локальных пользователей
+
+### Оптимизации
+- Индексы на (country) и (city) для WHERE фильтрации
+- LIMIT для pagination
+- Одиночные JOIN queries (без subqueries)
+- Shared code pattern с global leaderboards
+
+### Связь с другими компонентами
+- Расширяет существующие leaderboard endpoints (Iteration 9)
+- Использует user_stats (gamification core)
+- Дополняет friends leaderboard (Iteration 21)
+
+### Следующие шаги
+- Iteration 29: User settings endpoint (для обновления country/city)
+- Iteration 30: Mentorship program endpoints
+
