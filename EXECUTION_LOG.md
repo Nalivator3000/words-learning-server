@@ -1806,3 +1806,128 @@ new Date(now.getFullYear(), now.getMonth(), 1)
 - Iteration 29: User settings endpoint (для обновления country/city)
 - Iteration 30: Mentorship program endpoints
 
+
+## Iteration 29: User Settings Endpoints
+**Дата**: 2025-10-19  
+**Статус**: ✅ Завершено
+
+### Задача
+Создать endpoints для управления настройками профиля пользователя.
+
+### Реализация
+
+#### 1. PUT /api/users/:userId/settings
+**Файл**: server-postgresql.js:11679-11755 (77 строк)
+
+**Request Body** (все поля опциональны):
+```json
+{
+  "username": "newusername",
+  "bio": "Learning German and Spanish",
+  "avatar_url": "https://example.com/avatar.jpg",
+  "country": "Russia",
+  "city": "Moscow"
+}
+```
+
+**Функционал**:
+- Dynamic query building (только указанные поля обновляются)
+- Username uniqueness check (проверка что username не занят)
+- 400 error если username уже существует
+- 400 error если нет полей для обновления
+- 404 error если пользователь не найден
+- updatedat автоматически обновляется
+- RETURNING clause возвращает обновленные данные
+
+**Response**:
+```json
+{
+  "success": true,
+  "user": {
+    "id": 1,
+    "name": "John Doe",
+    "email": "john@example.com",
+    "username": "newusername",
+    "bio": "Learning German and Spanish",
+    "avatar_url": "https://example.com/avatar.jpg",
+    "country": "Russia",
+    "city": "Moscow",
+    "createdat": "2025-10-01T10:00:00Z",
+    "updatedat": "2025-10-19T15:30:00Z"
+  }
+}
+```
+
+#### 2. GET /api/users/:userId/settings
+**Файл**: server-postgresql.js:11757-11776 (20 строк)
+
+**Функционал**:
+- Получение всех настроек пользователя
+- Включает is_beta_tester флаг
+- 404 error если пользователь не найден
+
+**Response**:
+```json
+{
+  "id": 1,
+  "name": "John Doe",
+  "email": "john@example.com",
+  "username": "johndoe",
+  "bio": "Learning German",
+  "avatar_url": "https://example.com/avatar.jpg",
+  "country": "Russia",
+  "city": "Moscow",
+  "createdat": "2025-10-01T10:00:00Z",
+  "updatedat": "2025-10-19T15:30:00Z",
+  "is_beta_tester": true
+}
+```
+
+### Технические детали
+- **Dynamic query building**: строится SQL динамически на основе предоставленных полей
+- **Параметризованные запросы**: защита от SQL injection
+- **Username validation**: SELECT перед UPDATE для проверки уникальности
+- **Atomicity**: одна транзакция для проверки и обновления
+- **Partial updates**: можно обновить только одно поле (например, только country)
+- **RETURNING clause**: возвращает обновленные данные без дополнительного SELECT
+
+### Поддерживаемые поля
+1. **username** - имя пользователя (с проверкой уникальности)
+2. **bio** - описание профиля (TEXT)
+3. **avatar_url** - URL аватара
+4. **country** - страна (для local leaderboards)
+5. **city** - город (для local leaderboards)
+
+### Use Cases
+- **Profile settings page**: форма редактирования профиля
+- **Onboarding**: первичная настройка country/city
+- **Avatar upload**: сохранение URL загруженного аватара
+- **Username change**: смена отображаемого имени
+- **Location update**: переезд пользователя в другой город
+
+### Валидация
+- ✅ Username uniqueness (400 error если занят)
+- ✅ User existence (404 error если нет)
+- ✅ At least one field required (400 error если пустой body)
+- ⏳ Frontend validation (length, format) - будущая версия
+
+### Связь с другими компонентами
+- Обновляет users таблицу (base schema)
+- country/city используются в local leaderboards (Iteration 28)
+- username используется в друзьях и лидербордах
+- avatar_url используется в профиле и лентах
+- Дополняет comprehensive profile endpoint (Iteration 20)
+
+### Безопасность
+- Параметризованные запросы (SQL injection protected)
+- Username collision check перед UPDATE
+- No password update (должен быть отдельный endpoint с подтверждением)
+- No email update (должен быть отдельный endpoint с верификацией)
+
+### Следующие шаги
+- Frontend UI для settings page
+- Username length/format validation (3-20 chars, alphanumeric+underscore)
+- Avatar upload endpoint (файловая загрузка)
+- Password change endpoint (с текущим паролем)
+- Email change endpoint (с email верификацией)
+

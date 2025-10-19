@@ -11676,6 +11676,105 @@ app.get('/api/leaderboard/city/:city/:type', async (req, res) => {
     }
 });
 
+// ========================================
+// USER SETTINGS ENDPOINTS
+// ========================================
+
+// Update user profile settings
+app.put('/api/users/:userId/settings', async (req, res) => {
+    try {
+        const { userId } = req.params;
+        const { username, bio, avatar_url, country, city } = req.body;
+
+        // Build update query dynamically based on provided fields
+        const updates = [];
+        const values = [];
+        let paramIndex = 1;
+
+        if (username !== undefined) {
+            // Check if username is already taken
+            const existing = await db.query(
+                'SELECT id FROM users WHERE username = $1 AND id != $2',
+                [username, parseInt(userId)]
+            );
+            if (existing.rows.length > 0) {
+                return res.status(400).json({ error: 'Username already taken' });
+            }
+            updates.push(`username = $${paramIndex++}`);
+            values.push(username);
+        }
+
+        if (bio !== undefined) {
+            updates.push(`bio = $${paramIndex++}`);
+            values.push(bio);
+        }
+
+        if (avatar_url !== undefined) {
+            updates.push(`avatar_url = $${paramIndex++}`);
+            values.push(avatar_url);
+        }
+
+        if (country !== undefined) {
+            updates.push(`country = $${paramIndex++}`);
+            values.push(country);
+        }
+
+        if (city !== undefined) {
+            updates.push(`city = $${paramIndex++}`);
+            values.push(city);
+        }
+
+        if (updates.length === 0) {
+            return res.status(400).json({ error: 'No fields to update' });
+        }
+
+        updates.push(`updatedat = NOW()`);
+        values.push(parseInt(userId));
+
+        const query = `
+            UPDATE users
+            SET ${updates.join(', ')}
+            WHERE id = $${paramIndex}
+            RETURNING id, name, email, username, bio, avatar_url, country, city, createdat, updatedat
+        `;
+
+        const result = await db.query(query, values);
+
+        if (result.rows.length === 0) {
+            return res.status(404).json({ error: 'User not found' });
+        }
+
+        res.json({
+            success: true,
+            user: result.rows[0]
+        });
+    } catch (err) {
+        console.error('Error updating user settings:', err);
+        res.status(500).json({ error: err.message });
+    }
+});
+
+// Get user settings
+app.get('/api/users/:userId/settings', async (req, res) => {
+    try {
+        const { userId } = req.params;
+
+        const user = await db.query(
+            'SELECT id, name, email, username, bio, avatar_url, country, city, createdat, updatedat, is_beta_tester FROM users WHERE id = $1',
+            [parseInt(userId)]
+        );
+
+        if (user.rows.length === 0) {
+            return res.status(404).json({ error: 'User not found' });
+        }
+
+        res.json(user.rows[0]);
+    } catch (err) {
+        console.error('Error getting user settings:', err);
+        res.status(500).json({ error: err.message });
+    }
+});
+
 // Serve main page
 app.get('/', (req, res) => {
     res.sendFile(path.join(__dirname, 'public', 'index.html'));
