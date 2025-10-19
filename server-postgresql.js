@@ -2772,6 +2772,131 @@ app.get('/api/users/:userId/beta-tester', async (req, res) => {
     }
 });
 
+// Get comprehensive user profile
+app.get('/api/users/:userId/profile', async (req, res) => {
+    try {
+        const { userId } = req.params;
+
+        // Get user basic info
+        const userResult = await db.query(
+            'SELECT id, name, email, username, bio, avatar_url, is_beta_tester, createdat FROM users WHERE id = $1',
+            [parseInt(userId)]
+        );
+
+        if (userResult.rows.length === 0) {
+            return res.status(404).json({ error: 'User not found' });
+        }
+
+        const user = userResult.rows[0];
+
+        // Get stats
+        const stats = await getUserStats(parseInt(userId));
+
+        // Get league info
+        const leagueResult = await db.query(`
+            SELECT ul.weekly_xp, lt.tier_name, lt.tier_level
+            FROM user_leagues ul
+            JOIN league_tiers lt ON ul.current_tier_id = lt.id
+            WHERE ul.user_id = $1
+        `, [parseInt(userId)]);
+
+        const league = leagueResult.rows.length > 0 ? {
+            current_tier: leagueResult.rows[0].tier_name,
+            weekly_xp: leagueResult.rows[0].weekly_xp,
+            tier_level: leagueResult.rows[0].tier_level
+        } : null;
+
+        // Get achievements count
+        const achievementsCount = await db.query(`
+            SELECT
+                COUNT(*) FILTER (WHERE is_unlocked = true) as unlocked_count,
+                COUNT(*) as total_count
+            FROM user_achievements WHERE user_id = $1
+        `, [parseInt(userId)]);
+
+        const achievements = {
+            unlocked_count: parseInt(achievementsCount.rows[0]?.unlocked_count || 0),
+            total_count: parseInt(achievementsCount.rows[0]?.total_count || 0)
+        };
+
+        // Get profile data
+        const profileResult = await db.query(
+            'SELECT bio, avatar_url, showcase_achievements FROM user_profiles WHERE user_id = $1',
+            [parseInt(userId)]
+        );
+
+        const profile = profileResult.rows.length > 0 ? profileResult.rows[0] : {
+            bio: user.bio,
+            avatar_url: user.avatar_url,
+            showcase_achievements: []
+        };
+
+        // Calculate level progress
+        const currentLevel = stats.level || 1;
+        const currentXP = stats.total_xp || 0;
+
+        const nextLevelResult = await db.query(
+            'SELECT xp_required FROM level_config WHERE level = $1',
+            [currentLevel + 1]
+        );
+
+        const xpForNextLevel = nextLevelResult.rows.length > 0 ? nextLevelResult.rows[0].xp_required : 0;
+
+        const currentLevelResult = await db.query(
+            'SELECT xp_required FROM level_config WHERE level = $1',
+            [currentLevel]
+        );
+
+        const xpForCurrentLevel = currentLevelResult.rows.length > 0 ? currentLevelResult.rows[0].xp_required : 0;
+
+        const xpNeeded = Math.max(0, xpForNextLevel - currentXP);
+        const xpRange = xpForNextLevel - xpForCurrentLevel;
+        const xpProgress = currentXP - xpForCurrentLevel;
+        const progressPercentage = xpRange > 0 ? ((xpProgress / xpRange) * 100).toFixed(1) : 0;
+
+        const levelProgress = {
+            current_xp: currentXP,
+            xp_for_next_level: xpForNextLevel,
+            xp_needed: xpNeeded,
+            progress_percentage: parseFloat(progressPercentage)
+        };
+
+        // Get recent activity
+        const recentActivity = await db.query(`
+            SELECT activity_type, activity_data, created_at
+            FROM global_feed
+            WHERE user_id = $1
+            ORDER BY created_at DESC
+            LIMIT 5
+        `, [parseInt(userId)]);
+
+        res.json({
+            user: {
+                id: user.id,
+                username: user.username || user.name,
+                email: user.email,
+                created_at: user.createdat,
+                is_beta_tester: user.is_beta_tester || false
+            },
+            stats: {
+                level: stats.level || 1,
+                total_xp: stats.total_xp || 0,
+                current_streak: stats.current_streak || 0,
+                total_words_learned: stats.total_words_learned || 0,
+                total_quizzes_completed: stats.total_quizzes_completed || 0
+            },
+            league,
+            achievements,
+            profile,
+            level_progress: levelProgress,
+            recent_activity: recentActivity.rows
+        });
+    } catch (err) {
+        console.error('Error getting user profile:', err);
+        res.status(500).json({ error: err.message });
+    }
+});
+
 // Create new report
 app.post('/api/reports', upload.array('screenshots', 5), async (req, res) => {
     try {

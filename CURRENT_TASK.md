@@ -1,92 +1,69 @@
-# ТЕКУЩАЯ ЗАДАЧА: Feature Access Integration (Iteration 18)
+# ТЕКУЩАЯ ЗАДАЧА: User Profile Endpoint (Iteration 20)
 
 ## ЦЕЛЬ
-Интегрировать проверки доступа к features в существующие endpoints для обеспечения level-based restrictions.
+Создать comprehensive endpoint для получения полного профиля пользователя с объединённой информацией.
 
 ## SCOPE
 
-### 1. Endpoints для интеграции проверок (8 endpoints)
+### 1. Endpoint: GET /api/users/:userId/profile
 
-**Friends System:**
-- POST `/api/friends/request` → check `friend_requests` (level 5)
+Возвращает полную информацию о пользователе в одном запросе:
+- Basic info (username, email, createdat)
+- Stats (level, total_xp, streak, words learned)
+- League info (current tier, weekly_xp)
+- Achievements count (unlocked/total)
+- Profile data (bio, avatar_url, showcase_achievements)
+- Level progress (current XP, XP to next level, percentage)
+- Recent activity (last 5 feed posts or friend activities)
 
-**Duels:**
-- POST `/api/duels/challenge` → check `duel_challenges` (level 10)
-
-**Tournaments:**
-- POST `/api/tournaments/:id/register` → check `tournament_participation` (level 15)
-
-**Challenges:**
-- GET `/api/daily-challenges/:userId` → check `daily_challenges` (level 3)
-- GET `/api/weekly-challenges/:userId` → check `weekly_challenges` (level 7)
-
-**Global Feed:**
-- POST `/api/feed/create` → check `global_feed_posting` (level 20)
-
-**Leagues:**
-- POST `/api/leagues/:userId/award-weekly-xp` → check `league_participation` (level 12)
-
-**Achievements:**
-- GET `/api/achievements/unlocked/:userId` → check `achievement_tracking` (level 18)
-
-### 2. Интеграция паттерн
-
-Для каждого endpoint:
-
-```javascript
-// В начале endpoint handler (после валидации параметров)
-const featureAccess = await checkFeatureAccess(userId, 'feature_key');
-
-if (!featureAccess.hasAccess) {
-    return res.status(403).json({
-        error: 'Feature locked',
-        message: `You need level ${featureAccess.requiredLevel} to use this feature`,
-        feature_name: featureAccess.featureName,
-        current_level: featureAccess.currentLevel,
-        levels_remaining: featureAccess.levelsRemaining
-    });
-}
-
-// Продолжение обычной логики endpoint...
-```
-
-### 3. Response формат для locked features
-
+### 2. Response Format
 ```json
 {
-  "error": "Feature locked",
-  "message": "You need level 10 to use this feature",
-  "feature_name": "Дуэли",
-  "current_level": 5,
-  "levels_remaining": 5
+  "user": {
+    "id": 1,
+    "username": "john_doe",
+    "email": "john@example.com",
+    "created_at": "2025-01-15",
+    "is_beta_tester": false
+  },
+  "stats": {
+    "level": 12,
+    "total_xp": 2500,
+    "current_streak": 15,
+    "total_words_learned": 250,
+    "total_quizzes_completed": 85
+  },
+  "league": {
+    "current_tier": "Silver",
+    "weekly_xp": 450,
+    "tier_level": 2
+  },
+  "achievements": {
+    "unlocked_count": 8,
+    "total_count": 15
+  },
+  "profile": {
+    "bio": "Learning German!",
+    "avatar_url": null,
+    "showcase_achievements": [1, 5, 8]
+  },
+  "level_progress": {
+    "current_xp": 2500,
+    "xp_for_next_level": 3000,
+    "xp_needed": 500,
+    "progress_percentage": 83.3
+  },
+  "recent_activity": [...]
 }
 ```
 
-HTTP Status: **403 Forbidden**
-
-### 4. Список endpoints и их feature keys
-
-| Endpoint | Feature Key | Level Required |
-|----------|-------------|----------------|
-| POST /api/friends/request | friend_requests | 5 |
-| POST /api/duels/challenge | duel_challenges | 10 |
-| POST /api/tournaments/:id/register | tournament_participation | 15 |
-| GET /api/daily-challenges/:userId | daily_challenges | 3 |
-| GET /api/weekly-challenges/:userId | weekly_challenges | 7 |
-| POST /api/feed/create | global_feed_posting | 20 |
-| POST /api/leagues/:userId/award-weekly-xp | league_participation | 12 |
-| GET /api/achievements/unlocked/:userId | achievement_tracking | 18 |
-
-## ФАЙЛЫ ДЛЯ ИЗМЕНЕНИЯ
-
-1. **server-postgresql.js**
-   - Найти 8 endpoints (grep для точного поиска)
-   - Добавить проверку checkFeatureAccess в начало каждого
-   - Добавить error handling для locked features
+### 3. Оптимизация
+- Использовать JOIN'ы для минимизации запросов к БД
+- Кешировать результат на 5 минут (optional)
+- Возвращать 404 если пользователь не найден
 
 ## КРИТЕРИИ УСПЕХА
-- ✅ 8 endpoints интегрированы с проверками доступа
-- ✅ Единообразный error response (403 + message)
+- ✅ Endpoint создан
+- ✅ Все поля корректно заполняются
 - ✅ Сервер успешно стартует
-- ✅ Проверка работы: тестовый запрос с низким уровнем возвращает 403
-- ✅ Изменения закоммичены и запушены
+- ✅ Изменения закоммичены

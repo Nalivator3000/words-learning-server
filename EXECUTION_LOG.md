@@ -904,3 +904,35 @@ curl http://localhost:3001/api/users/1/can-use-feature/duel_challenges
 - Weekly Challenges (L7), Leagues (L12), Achievements (L18)
 
 ---
+
+### Iteration 20 - COMPLETED ✅
+**Date:** 2025-10-19
+**Task:** User Profile Comprehensive Endpoint
+**Status:** [x] COMPLETED
+
+**Implementation:**
+- ✅ GET `/api/users/:userId/profile` - comprehensive profile endpoint (123 lines)
+
+**Response includes:**
+- Basic user info (id, username, email, created_at, is_beta_tester)
+- Stats (level, total_xp, current_streak, words learned, quizzes completed)
+- League info (current tier, weekly_xp, tier_level)
+- Achievements count (unlocked/total)
+- Profile data (bio, avatar_url, showcase_achievements)
+- Level progress (current_xp, xp_for_next_level, xp_needed, progress_percentage)
+- Recent activity (last 5 global feed posts)
+
+**Features:**
+- Single endpoint for complete user profile
+- Optimized with JOINs
+- Handles missing data gracefully
+- Returns 404 if user not found
+- Calculates level progress percentage
+
+**Files Modified:**
+- server-postgresql.js:2775-2898 - profile endpoint (124 lines)
+
+**Server Status:**
+✅ Server running on port 3001
+
+---
