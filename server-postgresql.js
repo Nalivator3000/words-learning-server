@@ -1175,6 +1175,54 @@ async function initDatabase() {
 
         // Initialize badges
         await initializeBadges();
+
+        // ========================================
+        // SPACED REPETITION SYSTEM (SRS)
+        // ========================================
+
+        // SRS: Word-specific SRS data (SM-2 algorithm)
+        await db.query(`
+            CREATE TABLE IF NOT EXISTS word_srs_data (
+                id SERIAL PRIMARY KEY,
+                word_id INTEGER REFERENCES words(id) ON DELETE CASCADE,
+                user_id INTEGER REFERENCES users(id) ON DELETE CASCADE,
+                easiness_factor DECIMAL(3,2) DEFAULT 2.5,
+                interval_days INTEGER DEFAULT 1,
+                repetitions INTEGER DEFAULT 0,
+                next_review_date TIMESTAMP NOT NULL,
+                last_review_date TIMESTAMP,
+                last_quality_rating INTEGER,
+                total_reviews INTEGER DEFAULT 0,
+                mature BOOLEAN DEFAULT FALSE,
+                suspended BOOLEAN DEFAULT FALSE,
+                created_at TIMESTAMP DEFAULT NOW(),
+                updated_at TIMESTAMP DEFAULT NOW(),
+                UNIQUE(word_id, user_id)
+            )
+        `);
+        await db.query(`CREATE INDEX IF NOT EXISTS idx_word_srs_next_review ON word_srs_data(user_id, next_review_date)`);
+        await db.query(`CREATE INDEX IF NOT EXISTS idx_word_srs_mature ON word_srs_data(user_id, mature)`);
+
+        // SRS: Review history log
+        await db.query(`
+            CREATE TABLE IF NOT EXISTS srs_review_log (
+                id SERIAL PRIMARY KEY,
+                word_id INTEGER REFERENCES words(id) ON DELETE CASCADE,
+                user_id INTEGER REFERENCES users(id) ON DELETE CASCADE,
+                review_date TIMESTAMP DEFAULT NOW(),
+                quality_rating INTEGER NOT NULL,
+                time_taken_ms INTEGER,
+                previous_interval INTEGER,
+                new_interval INTEGER,
+                previous_ef DECIMAL(3,2),
+                new_ef DECIMAL(3,2),
+                review_type VARCHAR(20)
+            )
+        `);
+        await db.query(`CREATE INDEX IF NOT EXISTS idx_srs_review_log_user ON srs_review_log(user_id, review_date)`);
+
+        console.log('✅ SRS tables initialized');
+
     } catch (err) {
         console.error('Database initialization error:', err);
     }

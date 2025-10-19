@@ -1023,3 +1023,83 @@ SELECT * FROM ranked_friends ORDER BY rank
 - Frontend UI для отображения friends leaderboard
 - Фильтрация по периодам (weekly/monthly)
 
+
+## Iteration 22: SRS Database Tables & Learning Mode Design
+**Дата**: 2025-10-19  
+**Статус**: ✅ Завершено
+
+### Задача
+Создать таблицы для Spaced Repetition System и описать Learning Mode в плане.
+
+### Реализация
+
+#### 1. SRS Database Tables
+**Файл**: server-postgresql.js:1179-1224
+
+**Таблица word_srs_data** (SM-2 Algorithm Data):
+- `id` - PRIMARY KEY
+- `word_id` - FOREIGN KEY → words(id)
+- `user_id` - FOREIGN KEY → users(id)
+- `easiness_factor` - DECIMAL(3,2) DEFAULT 2.5 (EF: 1.3-2.5+)
+- `interval_days` - INTEGER (интервал до следующего повторения)
+- `repetitions` - INTEGER (успешные повторения подряд)
+- `next_review_date` - TIMESTAMP (когда показать слово снова)
+- `last_review_date` - TIMESTAMP
+- `last_quality_rating` - INTEGER (0-5)
+- `total_reviews` - INTEGER (общее количество повторений)
+- `mature` - BOOLEAN (interval > 21 день)
+- `suspended` - BOOLEAN (приостановлено пользователем)
+- UNIQUE(word_id, user_id)
+- INDEX на (user_id, next_review_date)
+- INDEX на (user_id, mature)
+
+**Таблица srs_review_log** (История повторений):
+- `id` - PRIMARY KEY
+- `word_id`, `user_id` - FOREIGN KEYS
+- `review_date` - TIMESTAMP
+- `quality_rating` - INTEGER NOT NULL (0-5)
+- `time_taken_ms` - INTEGER (время на ответ)
+- `previous_interval`, `new_interval` - INTEGER (старый/новый интервал)
+- `previous_ef`, `new_ef` - DECIMAL(3,2) (старый/новый EF)
+- `review_type` - VARCHAR(20) (learn/review/relearn)
+- INDEX на (user_id, review_date)
+
+#### 2. PLAN.md Updates
+
+**Learning Mode Specification (4.9)**:
+- Ускоренное изучение новых слов ПЕРЕД переходом в SRS
+- Пользователь угадывает слово 2-5 раз в одной сессии
+- Количество повторений зависит от типа упражнения:
+  - Flashcards: 2 правильных → в SRS
+  - Multiple choice: 3 правильных → в SRS
+  - Typing: 5 правильных → в SRS
+- После learning mode → SRS с EF=2.5, interval=1 день
+- Неправильные ответы сбрасывают счетчик
+- Tracking table: `word_learning_progress`
+
+**XP Values ×3 Multiplier**:
+- Изучение новых слов: 10 → **30 XP**
+- Правильный ответ в квизе: 5 → **15 XP**
+- Повторение слов: 3 → **9 XP**
+- SRS rating 5: 5 → **15 XP**
+- SRS rating 4: 4 → **12 XP**
+- SRS rating 3: 3 → **9 XP**
+- SRS rating 2: 1 → **3 XP**
+
+### Технические детали
+- Использован SM-2 алгоритм (SuperMemo 2) как основа SRS
+- DECIMAL(3,2) для хранения Easiness Factor с точностью до сотых
+- Индексы оптимизированы для частых запросов (next_review_date lookup)
+- CASCADE deletion - при удалении слова/пользователя удаляются связанные SRS данные
+- UNIQUE constraint предотвращает дубликаты (word_id + user_id)
+
+### Связь с другими компонентами
+- Интеграция с существующей таблицей `words`
+- Интеграция с таблицей `users`
+- Подготовка к реализации SRS API endpoints (Iteration 23+)
+
+### Следующие шаги
+- Iteration 23: GET /api/srs/:userId/due-words endpoint
+- Iteration 24: POST /api/srs/:userId/review endpoint (SM-2 calculation)
+- Iteration 25: GET /api/srs/:userId/statistics endpoint
+
