@@ -2316,3 +2316,222 @@ new Date(now.getFullYear(), now.getMonth(), 1)
 - Achievement "Quick Learner" за 50 graduated words
 - Statistics dashboard для learning mode
 
+
+## Iteration 32: User Learning Profile System
+**Дата**: 2025-10-19
+**Статус**: ✅ Завершено
+
+### Задача
+Создать систему персонализации алгоритма обучения на основе анализа пользовательских паттернов.
+
+### Реализация
+
+#### 1. Database Schema - user_learning_profile
+**Файл**: server-postgresql.js:1254-1270 (17 строк)
+
+**Таблица user_learning_profile**:
+- `id` - PRIMARY KEY
+- `user_id` - FOREIGN KEY → users(id) ON DELETE CASCADE UNIQUE
+- `best_study_hour` - INTEGER (час с наивысшим retention rate)
+- `avg_retention_rate` - DECIMAL(5,2) (общий % правильных ответов)
+- `preferred_interval_modifier` - DECIMAL(3,2) DEFAULT 1.0 (модификатор интервалов)
+- `difficulty_preference` - VARCHAR(20) DEFAULT 'balanced' (easy/balanced/hard)
+- `avg_session_duration_minutes` - INTEGER (средняя длительность сессии)
+- `total_study_sessions` - INTEGER DEFAULT 0 (всего сессий обучения)
+- `hourly_performance` - JSONB DEFAULT '{}' (производительность по часам)
+- `created_at`, `updated_at` - TIMESTAMP
+
+#### 2. API Endpoints (2)
+
+##### GET /api/profile/:userId/learning-profile
+**Файл**: server-postgresql.js:12169-12381 (213 строк)
+
+**Query параметры**:
+- `analyze` - 'true'/'false' (пересчитать профиль из данных, default: 'true')
+
+**Функционал при analyze=true**:
+
+1. **Best Study Hour Analysis**:
+   - GROUP BY EXTRACT(HOUR FROM review_date)
+   - Retention rate = (quality >= 3) / total * 100 по каждому часу
+   - Выбор часа с максимальным retention_rate
+
+2. **Hourly Performance JSONB**:
+   ```json
+   {
+     "9": { "review_count": 45, "avg_quality": 3.8, "retention_rate": 82.5 },
+     "14": { "review_count": 38, "avg_quality": 3.2, "retention_rate": 71.2 }
+   }
+   ```
+
+3. **Overall Retention Rate**:
+   - Подсчет успешных reviews (quality >= 3) / total reviews * 100
+
+4. **Average Session Duration**:
+   - GROUP BY DATE(createdat) from xp_history
+   - Heuristic: actions_count * 2 minutes
+   - AVG по всем daily sessions
+
+5. **Difficulty Preference Detection**:
+   - AVG(easiness_factor) для слов с 3+ reviews
+   - avgEF >= 2.3 → 'easy' (пользователь предпочитает легкие слова)
+   - avgEF <= 1.7 → 'hard' (предпочитает сложные)
+   - Иначе → 'balanced'
+
+6. **Preferred Interval Modifier**:
+   - AVG(new_interval / previous_interval) для successful reviews
+   - <0.9 → склонность быстро забывать (decrease intervals)
+   - >1.3 → excellent retention (can increase intervals)
+   - ~1.0 → standard SM-2 works well
+
+**Upsert Logic**:
+- Если профиль не существует → INSERT
+- Если существует → UPDATE с новыми значениями
+
+**Recommendations Generation**:
+
+1. **Optimal Time** (high priority):
+   - "Ваше лучшее время для изучения: 14:00"
+
+2. **Retention Improvement** (high priority if <60%):
+   - "Ваш показатель запоминания ниже среднего. Попробуйте увеличить частоту повторений."
+
+3. **Interval Adjustment** (medium priority):
+   - modifier <0.9: "Рекомендуем уменьшить интервалы - вы склонны забывать слова быстрее."
+   - modifier >1.3: "Вы запоминаете слова лучше среднего! Можете увеличить интервалы."
+
+4. **Difficulty Challenge** (low priority):
+   - preference='easy': "Попробуйте добавить более сложные слова."
+   - preference='hard': "Вы предпочитаете сложные слова - отличная стратегия!"
+
+5. **Session Length** (medium priority if <10 min):
+   - "Увеличьте продолжительность сессий до 15-20 минут."
+
+**Response**:
+```json
+{
+  "profile": {
+    "user_id": 1,
+    "best_study_hour": 14,
+    "avg_retention_rate": 75.3,
+    "preferred_interval_modifier": 1.15,
+    "difficulty_preference": "balanced",
+    "avg_session_duration_minutes": 18,
+    "total_study_sessions": 42,
+    "hourly_performance": { "9": {...}, "14": {...} },
+    "updated_at": "2025-10-19T15:30:00Z"
+  },
+  "recommendations": [
+    {
+      "type": "optimal_time",
+      "message": "Ваше лучшее время для изучения: 14:00",
+      "priority": "high"
+    },
+    {
+      "type": "interval_adjustment",
+      "message": "Вы запоминаете слова лучше среднего!...",
+      "priority": "low"
+    }
+  ],
+  "analyzed": true
+}
+```
+
+##### PUT /api/profile/:userId/learning-profile
+**Файл**: server-postgresql.js:12383-12447 (65 строк)
+
+**Request Body** (оба optional):
+```json
+{
+  "difficultyPreference": "hard",
+  "preferredIntervalModifier": 0.85
+}
+```
+
+**Функционал**:
+- Dynamic query building для partial updates
+- Upsert: создает профиль если не существует
+- UPDATE only specified fields + updated_at
+- Validation: difficultyPreference in ['easy', 'balanced', 'hard']
+
+**Response**:
+```json
+{
+  "success": true,
+  "profile": {
+    "id": 1,
+    "user_id": 1,
+    "difficulty_preference": "hard",
+    "preferred_interval_modifier": 0.85,
+    "updated_at": "2025-10-19T15:35:00Z"
+  }
+}
+```
+
+### Технические детали
+- **EXTRACT(HOUR FROM timestamp)** для анализа по часам
+- **FILTER clause** для category counting (quality >= 3)
+- **JSONB** для flexible hourly_performance storage
+- **Dynamic SQL** с paramIndex counter для partial updates
+- **Upsert pattern**: SELECT → conditional INSERT/UPDATE
+- **NULL-safe calculations** с NULLIF и optional chaining (?.)
+- **Heuristic formulas** для session duration estimation
+
+### Use Cases
+
+1. **Auto Profile Generation**:
+   - Пользователь делает 20+ reviews → автоматический анализ профиля
+   - Dashboard показывает "Ваше лучшее время: 15:00"
+
+2. **Manual Interval Adjustment**:
+   - Пользователь чувствует, что слова забываются быстро
+   - Устанавливает preferredIntervalModifier = 0.8 → интервалы уменьшены на 20%
+
+3. **Difficulty Preference**:
+   - Продвинутый пользователь: difficultyPreference = 'hard' → система предлагает больше сложных слов
+   - Новичок: difficultyPreference = 'easy' → щадящий режим
+
+4. **Time-of-Day Optimization**:
+   - Система замечает retention_rate[14] = 85%, retention_rate[22] = 62%
+   - Рекомендация: "Учитесь днем для лучших результатов"
+
+5. **Session Length Insights**:
+   - avg_session_duration = 7 min → recommendation: увеличить до 15-20 мин
+   - avg_session_duration = 35 min → encouragement: отличная концентрация!
+
+### Интеграция с SRS
+В будущем можно использовать:
+- `preferred_interval_modifier` → multiply SM-2 intervals
+- `difficulty_preference` → filter word selection (mature vs new cards)
+- `best_study_hour` → send push notifications
+
+### Примеры SQL запросов
+
+**Hourly Analysis**:
+```sql
+SELECT
+  EXTRACT(HOUR FROM review_date) as hour,
+  COUNT(*) as review_count,
+  AVG(quality_rating)::NUMERIC(4,2) as avg_quality,
+  COUNT(*) FILTER (WHERE quality_rating >= 3)::DECIMAL / COUNT(*) * 100 as retention_rate
+FROM srs_review_log
+WHERE user_id = 1
+GROUP BY EXTRACT(HOUR FROM review_date)
+ORDER BY retention_rate DESC;
+```
+
+**Interval Growth Rate**:
+```sql
+SELECT
+  AVG(new_interval::DECIMAL / NULLIF(previous_interval, 0)) as interval_growth_rate
+FROM srs_review_log
+WHERE user_id = 1 AND quality_rating >= 3 AND previous_interval > 0;
+```
+
+### Следующие шаги
+- Frontend UI для отображения learning profile
+- Автоматическое применение preferred_interval_modifier в SM-2
+- Difficulty-based word selection в due words endpoint
+- Push notifications в best_study_hour
+- Achievement "Data-Driven Learner" за первый анализ профиля
+

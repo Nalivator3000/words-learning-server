@@ -1251,6 +1251,24 @@ async function initDatabase() {
         await db.query(`CREATE INDEX IF NOT EXISTS idx_learning_progress_user ON word_learning_progress(user_id, graduated_to_srs)`);
         await db.query(`CREATE INDEX IF NOT EXISTS idx_learning_progress_word ON word_learning_progress(word_id, user_id)`);
 
+        // User Learning Profile: Персонализированные настройки и паттерны обучения
+        await db.query(`
+            CREATE TABLE IF NOT EXISTS user_learning_profile (
+                id SERIAL PRIMARY KEY,
+                user_id INTEGER REFERENCES users(id) ON DELETE CASCADE UNIQUE,
+                best_study_hour INTEGER,
+                avg_retention_rate DECIMAL(5,2),
+                preferred_interval_modifier DECIMAL(3,2) DEFAULT 1.0,
+                difficulty_preference VARCHAR(20) DEFAULT 'balanced',
+                avg_session_duration_minutes INTEGER,
+                total_study_sessions INTEGER DEFAULT 0,
+                hourly_performance JSONB DEFAULT '{}',
+                created_at TIMESTAMP DEFAULT NOW(),
+                updated_at TIMESTAMP DEFAULT NOW()
+            )
+        `);
+        await db.query(`CREATE INDEX IF NOT EXISTS idx_user_learning_profile_user ON user_learning_profile(user_id)`);
+
         // SRS: Review history log
         await db.query(`
             CREATE TABLE IF NOT EXISTS srs_review_log (
@@ -12144,6 +12162,286 @@ app.post('/api/learning/:userId/reset-word/:wordId', async (req, res) => {
         });
     } catch (err) {
         console.error('Error resetting learning progress:', err);
+        res.status(500).json({ error: err.message });
+    }
+});
+
+// 🧠 USER LEARNING PROFILE: Get or analyze user learning profile
+app.get('/api/profile/:userId/learning-profile', async (req, res) => {
+    try {
+        const { userId } = req.params;
+        const { analyze = 'true' } = req.query;
+
+        // Get existing profile
+        let profile = await db.query(
+            'SELECT * FROM user_learning_profile WHERE user_id = $1',
+            [parseInt(userId)]
+        );
+
+        // If analyze=true, recalculate profile from historical data
+        if (analyze === 'true') {
+            // Analyze best study hour (hour with highest retention rate)
+            const hourlyAnalysis = await db.query(`
+                SELECT
+                    EXTRACT(HOUR FROM review_date) as hour,
+                    COUNT(*) as review_count,
+                    AVG(quality_rating)::NUMERIC(4,2) as avg_quality,
+                    COUNT(*) FILTER (WHERE quality_rating >= 3)::DECIMAL / COUNT(*) * 100 as retention_rate
+                FROM srs_review_log
+                WHERE user_id = $1
+                GROUP BY EXTRACT(HOUR FROM review_date)
+                ORDER BY retention_rate DESC
+            `, [parseInt(userId)]);
+
+            const bestStudyHour = hourlyAnalysis.rows.length > 0
+                ? parseInt(hourlyAnalysis.rows[0].hour)
+                : null;
+
+            // Build hourly_performance JSON
+            const hourlyPerformance = {};
+            hourlyAnalysis.rows.forEach(row => {
+                hourlyPerformance[row.hour] = {
+                    review_count: parseInt(row.review_count),
+                    avg_quality: parseFloat(row.avg_quality),
+                    retention_rate: parseFloat(row.retention_rate)
+                };
+            });
+
+            // Calculate overall retention rate
+            const overallRetention = await db.query(`
+                SELECT
+                    COUNT(*) FILTER (WHERE quality_rating >= 3)::DECIMAL / COUNT(*) * 100 as retention_rate
+                FROM srs_review_log
+                WHERE user_id = $1
+            `, [parseInt(userId)]);
+            const avgRetentionRate = overallRetention.rows[0]?.retention_rate || null;
+
+            // Calculate average session duration (from XP history grouping by day)
+            const sessionDuration = await db.query(`
+                SELECT
+                    AVG(session_duration)::INTEGER as avg_duration
+                FROM (
+                    SELECT
+                        DATE(createdat) as study_date,
+                        COUNT(*) as actions_count,
+                        (COUNT(*) * 2) as session_duration
+                    FROM xp_history
+                    WHERE user_id = $1
+                    GROUP BY DATE(createdat)
+                    HAVING COUNT(*) > 3
+                ) daily_sessions
+            `, [parseInt(userId)]);
+            const avgSessionDuration = sessionDuration.rows[0]?.avg_duration || null;
+
+            // Count total study sessions
+            const sessionCount = await db.query(`
+                SELECT COUNT(DISTINCT DATE(createdat)) as total_sessions
+                FROM xp_history
+                WHERE user_id = $1
+            `, [parseInt(userId)]);
+            const totalStudySessions = parseInt(sessionCount.rows[0]?.total_sessions) || 0;
+
+            // Determine difficulty preference (analyze word interval progression)
+            const difficultyAnalysis = await db.query(`
+                SELECT
+                    AVG(easiness_factor)::NUMERIC(3,2) as avg_ef,
+                    AVG(interval_days)::INTEGER as avg_interval
+                FROM word_srs_data
+                WHERE user_id = $1 AND total_reviews > 3
+            `, [parseInt(userId)]);
+
+            let difficultyPreference = 'balanced';
+            const avgEF = parseFloat(difficultyAnalysis.rows[0]?.avg_ef);
+            if (avgEF >= 2.3) {
+                difficultyPreference = 'easy'; // User prefers easier words (high EF)
+            } else if (avgEF <= 1.7) {
+                difficultyPreference = 'hard'; // User prefers challenging words (low EF)
+            }
+
+            // Calculate preferred interval modifier (how user performance differs from standard)
+            const intervalAnalysis = await db.query(`
+                SELECT
+                    AVG(new_interval::DECIMAL / NULLIF(previous_interval, 0)) as interval_growth_rate
+                FROM srs_review_log
+                WHERE user_id = $1 AND quality_rating >= 3 AND previous_interval > 0
+            `, [parseInt(userId)]);
+            const preferredIntervalModifier = parseFloat(intervalAnalysis.rows[0]?.interval_growth_rate) || 1.0;
+
+            // Update or insert profile
+            if (profile.rows.length === 0) {
+                profile = await db.query(`
+                    INSERT INTO user_learning_profile
+                    (user_id, best_study_hour, avg_retention_rate, preferred_interval_modifier,
+                     difficulty_preference, avg_session_duration_minutes, total_study_sessions, hourly_performance, updated_at)
+                    VALUES ($1, $2, $3, $4, $5, $6, $7, $8, NOW())
+                    RETURNING *
+                `, [
+                    parseInt(userId),
+                    bestStudyHour,
+                    avgRetentionRate,
+                    preferredIntervalModifier,
+                    difficultyPreference,
+                    avgSessionDuration,
+                    totalStudySessions,
+                    JSON.stringify(hourlyPerformance)
+                ]);
+            } else {
+                profile = await db.query(`
+                    UPDATE user_learning_profile
+                    SET best_study_hour = $2,
+                        avg_retention_rate = $3,
+                        preferred_interval_modifier = $4,
+                        difficulty_preference = $5,
+                        avg_session_duration_minutes = $6,
+                        total_study_sessions = $7,
+                        hourly_performance = $8,
+                        updated_at = NOW()
+                    WHERE user_id = $1
+                    RETURNING *
+                `, [
+                    parseInt(userId),
+                    bestStudyHour,
+                    avgRetentionRate,
+                    preferredIntervalModifier,
+                    difficultyPreference,
+                    avgSessionDuration,
+                    totalStudySessions,
+                    JSON.stringify(hourlyPerformance)
+                ]);
+            }
+        }
+
+        // Generate recommendations based on profile
+        const recommendations = [];
+        const currentProfile = profile.rows[0];
+
+        if (currentProfile) {
+            if (currentProfile.best_study_hour !== null) {
+                recommendations.push({
+                    type: 'optimal_time',
+                    message: `Ваше лучшее время для изучения: ${currentProfile.best_study_hour}:00`,
+                    priority: 'high'
+                });
+            }
+
+            if (currentProfile.avg_retention_rate < 60) {
+                recommendations.push({
+                    type: 'retention_improvement',
+                    message: 'Ваш показатель запоминания ниже среднего. Попробуйте увеличить частоту повторений.',
+                    priority: 'high'
+                });
+            }
+
+            if (currentProfile.preferred_interval_modifier < 0.9) {
+                recommendations.push({
+                    type: 'interval_adjustment',
+                    message: 'Рекомендуем уменьшить интервалы повторений - вы склонны забывать слова быстрее.',
+                    priority: 'medium'
+                });
+            } else if (currentProfile.preferred_interval_modifier > 1.3) {
+                recommendations.push({
+                    type: 'interval_adjustment',
+                    message: 'Вы запоминаете слова лучше среднего! Можете увеличить интервалы для экономии времени.',
+                    priority: 'low'
+                });
+            }
+
+            if (currentProfile.difficulty_preference === 'easy') {
+                recommendations.push({
+                    type: 'challenge',
+                    message: 'Попробуйте добавить более сложные слова - это ускорит ваш прогресс!',
+                    priority: 'low'
+                });
+            } else if (currentProfile.difficulty_preference === 'hard') {
+                recommendations.push({
+                    type: 'encouragement',
+                    message: 'Вы предпочитаете сложные слова - отличная стратегия для быстрого прогресса!',
+                    priority: 'low'
+                });
+            }
+
+            if (currentProfile.avg_session_duration_minutes && currentProfile.avg_session_duration_minutes < 10) {
+                recommendations.push({
+                    type: 'session_length',
+                    message: 'Увеличьте продолжительность сессий до 15-20 минут для лучших результатов.',
+                    priority: 'medium'
+                });
+            }
+        }
+
+        res.json({
+            profile: currentProfile || { message: 'Profile not yet created. Set analyze=true to generate.' },
+            recommendations,
+            analyzed: analyze === 'true'
+        });
+    } catch (err) {
+        console.error('Error getting learning profile:', err);
+        res.status(500).json({ error: err.message });
+    }
+});
+
+// 🧠 USER LEARNING PROFILE: Update profile preferences
+app.put('/api/profile/:userId/learning-profile', async (req, res) => {
+    try {
+        const { userId } = req.params;
+        const { difficultyPreference, preferredIntervalModifier } = req.body;
+
+        const updates = [];
+        const values = [];
+        let paramIndex = 1;
+
+        if (difficultyPreference) {
+            updates.push(`difficulty_preference = $${paramIndex++}`);
+            values.push(difficultyPreference);
+        }
+
+        if (preferredIntervalModifier !== undefined) {
+            updates.push(`preferred_interval_modifier = $${paramIndex++}`);
+            values.push(parseFloat(preferredIntervalModifier));
+        }
+
+        if (updates.length === 0) {
+            return res.status(400).json({ error: 'No fields to update' });
+        }
+
+        updates.push(`updated_at = NOW()`);
+        values.push(parseInt(userId));
+
+        // Upsert profile
+        const existingProfile = await db.query(
+            'SELECT id FROM user_learning_profile WHERE user_id = $1',
+            [parseInt(userId)]
+        );
+
+        let result;
+        if (existingProfile.rows.length === 0) {
+            // Insert with defaults
+            result = await db.query(`
+                INSERT INTO user_learning_profile
+                (user_id, difficulty_preference, preferred_interval_modifier, updated_at)
+                VALUES ($1, $2, $3, NOW())
+                RETURNING *
+            `, [
+                parseInt(userId),
+                difficultyPreference || 'balanced',
+                parseFloat(preferredIntervalModifier) || 1.0
+            ]);
+        } else {
+            // Update existing
+            result = await db.query(`
+                UPDATE user_learning_profile
+                SET ${updates.join(', ')}
+                WHERE user_id = $${paramIndex}
+                RETURNING *
+            `, values);
+        }
+
+        res.json({
+            success: true,
+            profile: result.rows[0]
+        });
+    } catch (err) {
+        console.error('Error updating learning profile:', err);
         res.status(500).json({ error: err.message });
     }
 });
