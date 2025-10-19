@@ -1194,3 +1194,133 @@ SELECT * FROM ranked_friends ORDER BY rank
 - Iteration 24: POST /api/srs/:userId/review (SM-2 calculation)
 - Iteration 25: GET /api/srs/:userId/statistics
 
+
+## Iteration 24: SRS Review Endpoint (SM-2 Algorithm)
+**Дата**: 2025-10-19  
+**Статус**: ✅ Завершено
+
+### Задача
+Создать POST /api/srs/:userId/review endpoint с полной реализацией SM-2 алгоритма.
+
+### Реализация
+
+#### API Endpoint - POST /api/srs/:userId/review
+**Файл**: server-postgresql.js:11037-11200 (164 строки)
+
+**Request Body**:
+```json
+{
+  "wordId": 123,
+  "qualityRating": 4,  // 0-5
+  "timeTaken": 2500    // milliseconds (optional)
+}
+```
+
+**SM-2 Algorithm Implementation**:
+
+1. **Easiness Factor (EF) Update**:
+   ```javascript
+   newEF = currentEF + (0.1 - (5 - quality) * (0.08 + (5 - quality) * 0.02))
+   if (newEF < 1.3) newEF = 1.3  // Minimum EF
+   ```
+
+2. **Interval Calculation**:
+   - **Quality < 3 (incorrect)**: Reset to interval = 1, reps = 0
+   - **Quality >= 3 (correct)**:
+     - First repetition (reps = 0): interval = 1 день
+     - Second repetition (reps = 1): interval = 6 дней
+     - Subsequent (reps >= 2): interval = round(previous_interval * EF)
+
+3. **Repetition Counter**:
+   - Increment on correct answers (quality >= 3)
+   - Reset to 0 on incorrect answers (quality < 3)
+
+4. **Next Review Date**:
+   ```javascript
+   nextReviewDate = NOW() + interval_days
+   ```
+
+5. **Mature Card Detection**:
+   ```javascript
+   isMature = interval_days > 21
+   ```
+
+6. **Review Type Classification**:
+   - `learn` - новое слово (first review)
+   - `review` - стандартное повторение
+   - `relearn` - неправильный ответ после успешных повторений
+
+**Database Operations**:
+
+1. **INSERT (new word)**:
+   - Create word_srs_data record with SM-2 calculated values
+   - Set total_reviews = 1
+
+2. **UPDATE (existing word)**:
+   - Update EF, interval, reps, next_review_date
+   - Increment total_reviews counter
+   - Update mature flag
+
+3. **LOG (review history)**:
+   - Insert into srs_review_log with full details
+   - Track previous vs new EF/interval
+   - Record time_taken for analysis
+
+**XP Rewards** (×3 multiplier applied):
+- Rating 5 → 15 XP (perfect recall)
+- Rating 4 → 12 XP (correct with hesitation)
+- Rating 3 → 9 XP (correct but difficult)
+- Rating 2 → 3 XP (incorrect but recalled)
+- Rating 0-1 → 0 XP
+
+**Bonuses**:
+- Mature cards (interval > 21): ×1.5 XP multiplier
+- Future: Streak bonus ×1.2 (not implemented yet)
+
+**Response Structure**:
+```json
+{
+  "success": true,
+  "review_type": "review",
+  "xp_earned": 18,
+  "srs_data": {
+    "easiness_factor": 2.6,
+    "interval_days": 15,
+    "repetitions": 4,
+    "next_review_date": "2025-11-03T10:00:00Z",
+    "is_mature": false
+  },
+  "xp_result": {
+    "xp_awarded": 18,
+    "new_total_xp": 1523,
+    "new_level": 12
+  }
+}
+```
+
+### Технические детали
+- Валидация quality rating (0-5)
+- parseFloat для EF чтобы избежать ошибок округления
+- Math.round для interval чтобы получить целые дни
+- Conditional INSERT vs UPDATE на основе существования SRS данных
+- Полное логирование с previous/new values для анализа
+- Integration с awardXP функцией для начисления опыта
+
+### Математика SM-2
+**Пример прогрессии** (качество 4-5):
+- Review 1: interval = 1 день, EF = 2.5
+- Review 2: interval = 6 дней, EF = 2.6
+- Review 3: interval = 16 дней (6 * 2.6), EF = 2.7
+- Review 4: interval = 43 дня (16 * 2.7), EF = 2.8
+- Review 5: interval = 120 дней (43 * 2.8), EF = 2.9
+
+### Связь с другими компонентами
+- Использует word_srs_data (Iteration 22)
+- Использует srs_review_log (Iteration 22)
+- Integration с awardXP gamification function
+- Подготовка к statistics endpoint (Iteration 25)
+
+### Следующие шаги
+- Iteration 25: GET /api/srs/:userId/statistics
+- Iteration 26: PUT /api/srs/:userId/word/:wordId/suspend
+

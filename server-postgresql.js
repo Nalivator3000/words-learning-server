@@ -11034,6 +11034,171 @@ app.get('/api/srs/:userId/due-words', async (req, res) => {
     }
 });
 
+// Submit review for a word (SM-2 algorithm)
+app.post('/api/srs/:userId/review', async (req, res) => {
+    try {
+        const { userId } = req.params;
+        const { wordId, qualityRating, timeTaken } = req.body;
+
+        // Validate quality rating (0-5)
+        if (qualityRating < 0 || qualityRating > 5) {
+            return res.status(400).json({ error: 'Quality rating must be between 0 and 5' });
+        }
+
+        const now = new Date();
+
+        // Get current SRS data or create new entry
+        let srsData = await db.query(
+            'SELECT * FROM word_srs_data WHERE word_id = $1 AND user_id = $2',
+            [parseInt(wordId), parseInt(userId)]
+        );
+
+        let currentEF, currentInterval, currentReps, previousEF, previousInterval;
+        let isNew = false;
+
+        if (srsData.rows.length === 0) {
+            // New word - initialize with defaults
+            currentEF = 2.5;
+            currentInterval = 1;
+            currentReps = 0;
+            isNew = true;
+            previousEF = null;
+            previousInterval = null;
+        } else {
+            // Existing word
+            const data = srsData.rows[0];
+            currentEF = parseFloat(data.easiness_factor);
+            currentInterval = data.interval_days;
+            currentReps = data.repetitions;
+            previousEF = currentEF;
+            previousInterval = currentInterval;
+        }
+
+        // SM-2 Algorithm Calculation
+        let newEF = currentEF;
+        let newInterval = currentInterval;
+        let newReps = currentReps;
+
+        // Update Easiness Factor
+        newEF = currentEF + (0.1 - (5 - qualityRating) * (0.08 + (5 - qualityRating) * 0.02));
+        if (newEF < 1.3) newEF = 1.3; // Minimum EF
+
+        // Update interval based on quality
+        if (qualityRating < 3) {
+            // Incorrect answer - restart
+            newReps = 0;
+            newInterval = 1;
+        } else {
+            // Correct answer - progress
+            if (currentReps === 0) {
+                newInterval = 1;
+            } else if (currentReps === 1) {
+                newInterval = 6;
+            } else {
+                newInterval = Math.round(currentInterval * newEF);
+            }
+            newReps = currentReps + 1;
+        }
+
+        // Calculate next review date
+        const nextReviewDate = new Date(now);
+        nextReviewDate.setDate(nextReviewDate.getDate() + newInterval);
+
+        // Check if card is mature (interval > 21 days)
+        const isMature = newInterval > 21;
+
+        // Determine review type
+        let reviewType = 'review';
+        if (isNew) {
+            reviewType = 'learn';
+        } else if (qualityRating < 3 && currentReps > 0) {
+            reviewType = 'relearn';
+        }
+
+        // Insert or update SRS data
+        if (isNew) {
+            await db.query(`
+                INSERT INTO word_srs_data (
+                    word_id, user_id, easiness_factor, interval_days, repetitions,
+                    next_review_date, last_review_date, last_quality_rating,
+                    total_reviews, mature, updated_at
+                ) VALUES ($1, $2, $3, $4, $5, $6, $7, $8, 1, $9, $10)
+            `, [
+                parseInt(wordId), parseInt(userId), newEF, newInterval, newReps,
+                nextReviewDate, now, qualityRating, isMature, now
+            ]);
+        } else {
+            await db.query(`
+                UPDATE word_srs_data
+                SET easiness_factor = $1,
+                    interval_days = $2,
+                    repetitions = $3,
+                    next_review_date = $4,
+                    last_review_date = $5,
+                    last_quality_rating = $6,
+                    total_reviews = total_reviews + 1,
+                    mature = $7,
+                    updated_at = $8
+                WHERE word_id = $9 AND user_id = $10
+            `, [
+                newEF, newInterval, newReps, nextReviewDate, now,
+                qualityRating, isMature, now, parseInt(wordId), parseInt(userId)
+            ]);
+        }
+
+        // Log the review
+        await db.query(`
+            INSERT INTO srs_review_log (
+                word_id, user_id, review_date, quality_rating, time_taken_ms,
+                previous_interval, new_interval, previous_ef, new_ef, review_type
+            ) VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9, $10)
+        `, [
+            parseInt(wordId), parseInt(userId), now, qualityRating, timeTaken || null,
+            previousInterval, newInterval, previousEF, newEF, reviewType
+        ]);
+
+        // Award XP based on quality rating (×3 multiplier applied)
+        const xpMap = {
+            5: 15, // Perfect recall
+            4: 12, // Correct with hesitation
+            3: 9,  // Correct but difficult
+            2: 3,  // Incorrect but recalled
+            1: 0,  // Incorrect
+            0: 0   // Complete blackout
+        };
+
+        let xpEarned = xpMap[qualityRating] || 0;
+
+        // Bonus for mature cards (×1.5)
+        if (isMature && qualityRating >= 3) {
+            xpEarned = Math.round(xpEarned * 1.5);
+        }
+
+        // Award XP if earned
+        let xpResult = null;
+        if (xpEarned > 0) {
+            xpResult = await awardXP(parseInt(userId), 'srs_review', xpEarned, `Reviewed word`);
+        }
+
+        res.json({
+            success: true,
+            review_type: reviewType,
+            xp_earned: xpEarned,
+            srs_data: {
+                easiness_factor: newEF,
+                interval_days: newInterval,
+                repetitions: newReps,
+                next_review_date: nextReviewDate,
+                is_mature: isMature
+            },
+            xp_result: xpResult
+        });
+    } catch (err) {
+        console.error('Error submitting review:', err);
+        res.status(500).json({ error: err.message });
+    }
+});
+
 // Serve main page
 app.get('/', (req, res) => {
     res.sendFile(path.join(__dirname, 'public', 'index.html'));
