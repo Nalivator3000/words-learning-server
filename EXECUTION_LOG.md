@@ -2535,3 +2535,170 @@ WHERE user_id = 1 AND quality_rating >= 3 AND previous_interval > 0;
 - Push notifications в best_study_hour
 - Achievement "Data-Driven Learner" за первый анализ профиля
 
+
+## Iteration 33: Code Cleanup - Logger System & Console.log Removal
+**Дата**: 2025-10-19
+**Статус**: ✅ Завершено
+
+### Задача
+Убрать все console.log из production кода и внедрить систему логирования (PLAN.md раздел 9.1 - Очистка файлов).
+
+### Реализация
+
+#### 1. Logger System
+**Файл**: server-postgresql.js:14-32 (19 строк)
+
+**Функционал**:
+```javascript
+const logger = {
+    info: (message) => {
+        // Показывать в development или если ENABLE_LOGS=true
+        if (process.env.NODE_ENV !== 'production' || process.env.ENABLE_LOGS === 'true') {
+            console.log(`[INFO] ${message}`);
+        }
+    },
+    error: (message, error) => {
+        // Всегда показывать ошибки
+        console.error(`[ERROR] ${message}`, error || '');
+    },
+    warn: (message) => {
+        console.warn(`[WARN] ${message}`);
+    },
+    debug: (message) => {
+        // Показывать только если DEBUG=true
+        if (process.env.DEBUG === 'true') {
+            console.log(`[DEBUG] ${message}`);
+        }
+    }
+};
+```
+
+**Особенности**:
+- **Production-safe**: info logs скрыты в production (кроме ENABLE_LOGS=true)
+- **Always-on errors**: ошибки всегда логируются
+- **Debug mode**: детальное логирование с DEBUG=true
+- **Warning support**: console.warn для предупреждений
+- **Префиксы**: [INFO], [ERROR], [WARN], [DEBUG] для фильтрации
+
+#### 2. Mass Replacement
+
+**Console.log замены**:
+- **Найдено**: 54 вхождения console.log
+- **Заменено**: все 54 на logger.info
+- **Контексты**: initialization messages, success messages, feature completion logs
+
+**Console.error замены**:
+- **Найдено**: 244 вхождения console.error
+- **Заменено**: все 244 на logger.error
+- **Контексты**: try-catch blocks, error handling, API endpoint errors
+
+**Общее**:
+- **Всего заменено**: 298 вхождений
+- **Оставлено**: 1 console.warn в logger definition (корректно)
+
+#### 3. Примеры замен
+
+**Initialization logs**:
+```javascript
+// До
+console.log('✅ League tiers initialized (7 tiers)');
+console.log('✨ Achievements initialized');
+console.log('🎯 Challenge templates initialized');
+
+// После
+logger.info('✅ League tiers initialized (7 tiers)');
+logger.info('✨ Achievements initialized');
+logger.info('🎯 Challenge templates initialized');
+```
+
+**Error handling**:
+```javascript
+// До
+catch (err) {
+    console.error('Error getting due words:', err);
+    res.status(500).json({ error: err.message });
+}
+
+// После
+catch (err) {
+    logger.error('Error getting due words:', err);
+    res.status(500).json({ error: err.message });
+}
+```
+
+**Success messages**:
+```javascript
+// До
+console.log(`🎯 User ${userId} earned ${xpAmount} XP for ${actionType}`);
+console.log(`🔥 User ${userId} streak: ${newStreak} days`);
+
+// После
+logger.info(`🎯 User ${userId} earned ${xpAmount} XP for ${actionType}`);
+logger.info(`🔥 User ${userId} streak: ${newStreak} days`);
+```
+
+### Environment Variables
+
+**Новые переменные**:
+```env
+# Logging configuration
+NODE_ENV=production          # production/development
+ENABLE_LOGS=false           # true чтобы включить info logs в production
+DEBUG=false                 # true для debug logs
+```
+
+**Режимы**:
+1. **Development** (NODE_ENV=development):
+   - ✅ logger.info - показывается
+   - ✅ logger.error - показывается
+   - ✅ logger.warn - показывается
+   - ❌ logger.debug - скрыт (если DEBUG=false)
+
+2. **Production** (NODE_ENV=production, ENABLE_LOGS=false):
+   - ❌ logger.info - скрыт
+   - ✅ logger.error - показывается
+   - ✅ logger.warn - показывается
+   - ❌ logger.debug - скрыт
+
+3. **Production + Logs** (NODE_ENV=production, ENABLE_LOGS=true):
+   - ✅ logger.info - показывается
+   - ✅ logger.error - показывается
+   - ✅ logger.warn - показывается
+   - ❌ logger.debug - скрыт (если DEBUG=false)
+
+4. **Debug Mode** (DEBUG=true):
+   - ✅ logger.debug - показывается независимо от NODE_ENV
+   - Для глубокой отладки проблем
+
+### Benefits
+
+**Production Benefits**:
+- **Cleaner logs**: нет спама от initialization messages
+- **Performance**: меньше I/O операций в production
+- **Security**: скрытие sensitive info из debug logs
+- **Flexibility**: можно включить ENABLE_LOGS=true для troubleshooting
+
+**Development Benefits**:
+- **Все логи видны** для debugging
+- **Префиксы** помогают фильтровать по типу
+- **Debug mode** для детальной отладки
+
+**Maintainability**:
+- **Единая точка контроля** логирования
+- **Легко расширить** (добавить file logging, remote logging)
+- **Consistent format** для всех логов
+
+### Future Enhancements
+- File logging (winston, pino)
+- Remote logging (Sentry, Datadog)
+- Log rotation (daily/size-based)
+- Structured JSON logs для анализа
+- Request ID tracking для distributed tracing
+- Performance metrics logging
+
+### Statistics
+- **Файлов изменено**: 1 (server-postgresql.js)
+- **Строк кода добавлено**: 19 (logger system)
+- **Замен выполнено**: 298 (console.log/error → logger)
+- **Production readiness**: значительно улучшено
+

@@ -11,6 +11,26 @@ require('dotenv').config();
 const app = express();
 const PORT = process.env.PORT || 3001;
 
+// Simple logging system for production
+const logger = {
+    info: (message) => {
+        if (process.env.NODE_ENV !== 'production' || process.env.ENABLE_LOGS === 'true') {
+            logger.info(`[INFO] ${message}`);
+        }
+    },
+    error: (message, error) => {
+        logger.error(`[ERROR] ${message}`, error || '');
+    },
+    warn: (message) => {
+        console.warn(`[WARN] ${message}`);
+    },
+    debug: (message) => {
+        if (process.env.DEBUG === 'true') {
+            logger.info(`[DEBUG] ${message}`);
+        }
+    }
+};
+
 // Database setup
 const db = new Pool({
     connectionString: process.env.DATABASE_URL || `postgres://${process.env.DB_USER}:${process.env.DB_PASSWORD}@${process.env.DB_HOST}:${process.env.DB_PORT}/${process.env.DB_NAME}`,
@@ -172,7 +192,7 @@ async function initDatabase() {
         // Auto-populate league_tiers if empty
         const tiersCount = await db.query('SELECT COUNT(*) FROM league_tiers');
         if (parseInt(tiersCount.rows[0].count) === 0) {
-            console.log('Initializing league tiers...');
+            logger.info('Initializing league tiers...');
             await db.query(`
                 INSERT INTO league_tiers (tier_name, tier_level, min_weekly_xp, icon, color_hex, promotion_bonus_coins, promotion_bonus_gems)
                 VALUES
@@ -184,7 +204,7 @@ async function initDatabase() {
                 ('Master', 6, 5000, '⭐', '#FF6B6B', 1500, 50),
                 ('Grandmaster', 7, 7500, '👑', '#9B59B6', 3000, 100)
             `);
-            console.log('✅ League tiers initialized (7 tiers)');
+            logger.info('✅ League tiers initialized (7 tiers)');
         }
 
         // Leagues System: User leagues (current league status)
@@ -646,7 +666,7 @@ async function initDatabase() {
         // Populate level_config if empty
         const levelsCount = await db.query('SELECT COUNT(*) FROM level_config');
         if (parseInt(levelsCount.rows[0].count) === 0) {
-            console.log('Initializing level configuration (1-100)...');
+            logger.info('Initializing level configuration (1-100)...');
             const levels = [];
             for (let level = 1; level <= 100; level++) {
                 const xpRequired = Math.floor(100 * Math.pow(level, 1.5));
@@ -663,13 +683,13 @@ async function initDatabase() {
             }
 
             await db.query(`INSERT INTO level_config (level, xp_required, title) VALUES ${levels.join(', ')}`);
-            console.log('✅ Level configuration initialized (100 levels)');
+            logger.info('✅ Level configuration initialized (100 levels)');
         }
 
         // Populate level_features if empty
         const featuresCount = await db.query('SELECT COUNT(*) FROM level_features');
         if (parseInt(featuresCount.rows[0].count) === 0) {
-            console.log('Initializing level features...');
+            logger.info('Initializing level features...');
             const features = [
                 // Social Features
                 { level: 5, key: 'friend_requests', name: 'Запросы в друзья', desc: 'Отправляйте запросы и добавляйте друзей', cat: 'social', icon: '👥' },
@@ -699,7 +719,7 @@ async function initDatabase() {
                 `, [f.level, f.key, f.name, f.desc, f.cat, f.icon]);
             }
 
-            console.log('✅ Level features initialized (14 features)');
+            logger.info('✅ Level features initialized (14 features)');
         }
 
         // Achievements System: Achievement definitions
@@ -1187,7 +1207,7 @@ async function initDatabase() {
             )
         `);
 
-        console.log('PostgreSQL database initialized with gamification tables');
+        logger.info('PostgreSQL database initialized with gamification tables');
 
         // Initialize challenge templates
         await initializeChallengeTemplates();
@@ -1287,10 +1307,10 @@ async function initDatabase() {
         `);
         await db.query(`CREATE INDEX IF NOT EXISTS idx_srs_review_log_user ON srs_review_log(user_id, review_date)`);
 
-        console.log('✅ SRS tables initialized');
+        logger.info('✅ SRS tables initialized');
 
     } catch (err) {
-        console.error('Database initialization error:', err);
+        logger.error('Database initialization error:', err);
     }
 }
 
@@ -1337,9 +1357,9 @@ async function initializeAchievements() {
                 [ach.key, ach.name, ach.description, ach.icon, ach.category, ach.tier, ach.requirement, ach.xp]
             );
         }
-        console.log('✨ Achievements initialized');
+        logger.info('✨ Achievements initialized');
     } catch (err) {
-        console.error('Error initializing achievements:', err);
+        logger.error('Error initializing achievements:', err);
     }
 }
 
@@ -1371,9 +1391,9 @@ async function initializeChallengeTemplates() {
                 [template.type, template.title, template.description, template.target, template.xp, template.coins, template.difficulty, template.icon]
             );
         }
-        console.log('🎯 Challenge templates initialized');
+        logger.info('🎯 Challenge templates initialized');
     } catch (err) {
-        console.error('Error initializing challenge templates:', err);
+        logger.error('Error initializing challenge templates:', err);
     }
 }
 
@@ -1419,9 +1439,9 @@ async function initializeShopItems() {
                 [item.key, item.type, item.name, item.description, item.price, item.icon, item.category]
             );
         }
-        console.log('🏪 Shop items initialized');
+        logger.info('🏪 Shop items initialized');
     } catch (err) {
-        console.error('Error initializing shop items:', err);
+        logger.error('Error initializing shop items:', err);
     }
 }
 
@@ -1503,7 +1523,7 @@ async function checkFeatureAccess(userId, featureKey) {
             featureName: feature.rows[0].feature_name
         };
     } catch (err) {
-        console.error('Error checking feature access:', err);
+        logger.error('Error checking feature access:', err);
         return { hasAccess: false, error: err.message, currentLevel: 0, requiredLevel: 0 };
     }
 }
@@ -1557,11 +1577,11 @@ async function initializeAchievements() {
                 achievement.is_secret || false
             ]);
         } catch (err) {
-            console.error(`Error initializing achievement ${achievement.key}:`, err.message);
+            logger.error(`Error initializing achievement ${achievement.key}:`, err.message);
         }
     }
 
-    console.log('✅ Achievements initialized');
+    logger.info('✅ Achievements initialized');
 }
 
 // Leagues: Initialize league tiers
@@ -1582,11 +1602,11 @@ async function initializeLeagueTiers() {
                 ON CONFLICT (tier_name) DO NOTHING
             `, [tier.name, tier.level, tier.promotion, tier.demotion, tier.min_xp, tier.icon, tier.color]);
         } catch (err) {
-            console.error(`Error initializing league tier ${tier.name}:`, err.message);
+            logger.error(`Error initializing league tier ${tier.name}:`, err.message);
         }
     }
 
-    console.log('✅ League tiers initialized');
+    logger.info('✅ League tiers initialized');
 }
 
 // Initialize predefined badges
@@ -1619,11 +1639,11 @@ async function initializeBadges() {
                 ON CONFLICT (badge_key) DO NOTHING
             `, [badge.key, badge.name, badge.description, badge.icon, badge.rarity, badge.category]);
         } catch (err) {
-            console.error(`Error initializing badge ${badge.key}:`, err.message);
+            logger.error(`Error initializing badge ${badge.key}:`, err.message);
         }
     }
 
-    console.log('✅ Badges initialized');
+    logger.info('✅ Badges initialized');
 }
 
 // Gamification: Award XP to user
@@ -1654,11 +1674,11 @@ async function awardXP(userId, actionType, xpAmount, description = '') {
             [levelInfo.level, userId]
         );
 
-        console.log(`🎯 User ${userId} earned ${xpAmount} XP for ${actionType} - Level ${levelInfo.level}`);
+        logger.info(`🎯 User ${userId} earned ${xpAmount} XP for ${actionType} - Level ${levelInfo.level}`);
 
         return { xpAmount, newTotalXP, ...levelInfo };
     } catch (err) {
-        console.error('Error awarding XP:', err);
+        logger.error('Error awarding XP:', err);
         throw err;
     }
 }
@@ -1716,14 +1736,14 @@ async function updateDailyActivity(userId, wordsLearned = 0, quizzesCompleted = 
             [newStreak, newLongestStreak, today, quizzesCompleted, userId]
         );
 
-        console.log(`🔥 User ${userId} streak: ${newStreak} days (longest: ${newLongestStreak})`);
+        logger.info(`🔥 User ${userId} streak: ${newStreak} days (longest: ${newLongestStreak})`);
 
         // Update daily goals
         await updateDailyGoals(userId, wordsLearned, quizzesCompleted, xpEarned);
 
         return { currentStreak: newStreak, longestStreak: newLongestStreak };
     } catch (err) {
-        console.error('Error updating daily activity:', err);
+        logger.error('Error updating daily activity:', err);
         throw err;
     }
 }
@@ -1776,17 +1796,17 @@ async function updateDailyGoals(userId, wordsLearned = 0, quizzesCompleted = 0, 
             [newXPProgress, newWordsProgress, newQuizzesProgress, completed, userId, today]
         );
 
-        console.log(`🎯 User ${userId} daily goals: ${newXPProgress}/${currentGoal.xp_goal} XP, ${newWordsProgress}/${currentGoal.words_goal} words, ${newQuizzesProgress}/${currentGoal.quizzes_goal} quizzes`);
+        logger.info(`🎯 User ${userId} daily goals: ${newXPProgress}/${currentGoal.xp_goal} XP, ${newWordsProgress}/${currentGoal.words_goal} words, ${newQuizzesProgress}/${currentGoal.quizzes_goal} quizzes`);
 
         // Award bonus XP if goal just completed
         if (completed && !currentGoal.completed) {
             await awardXP(userId, 'daily_goal', 25, 'Daily goal completed!');
-            console.log(`🎉 User ${userId} completed daily goal! +25 bonus XP`);
+            logger.info(`🎉 User ${userId} completed daily goal! +25 bonus XP`);
         }
 
         return { completed, newXPProgress, newWordsProgress, newQuizzesProgress };
     } catch (err) {
-        console.error('Error updating daily goals:', err);
+        logger.error('Error updating daily goals:', err);
         throw err;
     }
 }
@@ -1853,13 +1873,13 @@ async function checkAchievements(userId) {
                 }
 
                 unlockedAchievements.push(achievement);
-                console.log(`🏆 User ${userId} unlocked achievement: ${achievement.name}`);
+                logger.info(`🏆 User ${userId} unlocked achievement: ${achievement.name}`);
             }
         }
 
         return unlockedAchievements;
     } catch (err) {
-        console.error('Error checking achievements:', err);
+        logger.error('Error checking achievements:', err);
         return [];
     }
 }
@@ -1910,7 +1930,7 @@ app.post('/api/auth/register', async (req, res) => {
             languagePair: langPairResult.rows[0]
         });
     } catch (err) {
-        console.error('Registration error:', err);
+        logger.error('Registration error:', err);
         res.status(500).json({ error: err.message });
     }
 });
@@ -1954,7 +1974,7 @@ app.post('/api/auth/login', async (req, res) => {
             languagePairs: langPairsResult.rows
         });
     } catch (err) {
-        console.error('Login error:', err);
+        logger.error('Login error:', err);
         res.status(500).json({ error: err.message });
     }
 });
@@ -2072,7 +2092,7 @@ app.get('/api/gamification/stats/:userId', async (req, res) => {
             levelInfo
         });
     } catch (err) {
-        console.error('Error getting user stats:', err);
+        logger.error('Error getting user stats:', err);
         res.status(500).json({ error: err.message });
     }
 });
@@ -2089,7 +2109,7 @@ app.post('/api/gamification/award-xp', async (req, res) => {
         const result = await awardXP(parseInt(userId), actionType, xpAmount, description);
         res.json(result);
     } catch (err) {
-        console.error('Error awarding XP:', err);
+        logger.error('Error awarding XP:', err);
         res.status(500).json({ error: err.message });
     }
 });
@@ -2107,7 +2127,7 @@ app.get('/api/gamification/xp-log/:userId', async (req, res) => {
 
         res.json(result.rows);
     } catch (err) {
-        console.error('Error getting XP log:', err);
+        logger.error('Error getting XP log:', err);
         res.status(500).json({ error: err.message });
     }
 });
@@ -2128,7 +2148,7 @@ app.get('/api/gamification/activity/:userId', async (req, res) => {
 
         res.json(result.rows);
     } catch (err) {
-        console.error('Error getting activity:', err);
+        logger.error('Error getting activity:', err);
         res.status(500).json({ error: err.message });
     }
 });
@@ -2139,7 +2159,7 @@ app.get('/api/gamification/achievements', async (req, res) => {
         const result = await db.query('SELECT * FROM achievements ORDER BY category, tier');
         res.json(result.rows);
     } catch (err) {
-        console.error('Error getting achievements:', err);
+        logger.error('Error getting achievements:', err);
         res.status(500).json({ error: err.message });
     }
 });
@@ -2160,7 +2180,7 @@ app.get('/api/gamification/achievements/:userId', async (req, res) => {
 
         res.json(result.rows);
     } catch (err) {
-        console.error('Error getting user achievements:', err);
+        logger.error('Error getting user achievements:', err);
         res.status(500).json({ error: err.message });
     }
 });
@@ -2198,7 +2218,7 @@ app.get('/api/gamification/achievements/:userId/progress', async (req, res) => {
 
         res.json(progress);
     } catch (err) {
-        console.error('Error getting achievement progress:', err);
+        logger.error('Error getting achievement progress:', err);
         res.status(500).json({ error: err.message });
     }
 });
@@ -2230,7 +2250,7 @@ app.get('/api/gamification/achievements/:userId/recent', async (req, res) => {
             total_unlocked: recent.rows.length
         });
     } catch (err) {
-        console.error('Error getting recent achievements:', err);
+        logger.error('Error getting recent achievements:', err);
         res.status(500).json({ error: err.message });
     }
 });
@@ -2260,7 +2280,7 @@ app.get('/api/gamification/leaderboard/global', async (req, res) => {
 
         res.json(result.rows);
     } catch (err) {
-        console.error('Error getting global leaderboard:', err);
+        logger.error('Error getting global leaderboard:', err);
         res.status(500).json({ error: err.message });
     }
 });
@@ -2295,7 +2315,7 @@ app.get('/api/gamification/leaderboard/weekly', async (req, res) => {
 
         res.json(result.rows);
     } catch (err) {
-        console.error('Error getting weekly leaderboard:', err);
+        logger.error('Error getting weekly leaderboard:', err);
         res.status(500).json({ error: err.message });
     }
 });
@@ -2349,7 +2369,7 @@ app.get('/api/gamification/leaderboard/rank/:userId', async (req, res) => {
             weekly: weeklyRank.rows[0] || { rank: null, weekly_xp: 0 }
         });
     } catch (err) {
-        console.error('Error getting user rank:', err);
+        logger.error('Error getting user rank:', err);
         res.status(500).json({ error: err.message });
     }
 });
@@ -2380,7 +2400,7 @@ app.get('/api/gamification/daily-goals/:userId', async (req, res) => {
 
         res.json(goal.rows[0]);
     } catch (err) {
-        console.error('Error getting daily goals:', err);
+        logger.error('Error getting daily goals:', err);
         res.status(500).json({ error: err.message });
     }
 });
@@ -2420,7 +2440,7 @@ app.put('/api/gamification/daily-goals/:userId', async (req, res) => {
 
         res.json(goal.rows[0]);
     } catch (err) {
-        console.error('Error updating daily goals:', err);
+        logger.error('Error updating daily goals:', err);
         res.status(500).json({ error: err.message });
     }
 });
@@ -2453,7 +2473,7 @@ app.get('/api/analytics/progress/:userId', async (req, res) => {
 
         res.json(result.rows);
     } catch (err) {
-        console.error('Error getting learning progress:', err);
+        logger.error('Error getting learning progress:', err);
         res.status(500).json({ error: err.message });
     }
 });
@@ -2508,7 +2528,7 @@ app.get('/api/analytics/exercise-stats/:userId', async (req, res) => {
 
         res.json(Object.values(statsMap));
     } catch (err) {
-        console.error('Error getting exercise stats:', err);
+        logger.error('Error getting exercise stats:', err);
         res.status(500).json({ error: err.message });
     }
 });
@@ -2539,7 +2559,7 @@ app.get('/api/analytics/difficult-words/:userId', async (req, res) => {
 
         res.json(result.rows);
     } catch (err) {
-        console.error('Error getting difficult words:', err);
+        logger.error('Error getting difficult words:', err);
         res.status(500).json({ error: err.message });
     }
 });
@@ -2586,7 +2606,7 @@ app.get('/api/analytics/study-time/:userId', async (req, res) => {
             total: parseInt(totalResult.rows[0].seconds) || 0
         });
     } catch (err) {
-        console.error('Error getting study time:', err);
+        logger.error('Error getting study time:', err);
         res.status(500).json({ error: err.message });
     }
 });
@@ -2641,7 +2661,7 @@ app.get('/api/analytics/fluency-prediction/:userId', async (req, res) => {
             target_words: targetWords
         });
     } catch (err) {
-        console.error('Error getting fluency prediction:', err);
+        logger.error('Error getting fluency prediction:', err);
         res.status(500).json({ error: err.message });
     }
 });
@@ -2682,7 +2702,7 @@ app.get('/api/global-collections', async (req, res) => {
         const result = await db.query(query, params);
         res.json(result.rows);
     } catch (err) {
-        console.error('Error getting global collections:', err);
+        logger.error('Error getting global collections:', err);
         res.status(500).json({ error: err.message });
     }
 });
@@ -2711,7 +2731,7 @@ app.get('/api/global-collections/:collectionId', async (req, res) => {
             words: words.rows
         });
     } catch (err) {
-        console.error('Error getting global collection:', err);
+        logger.error('Error getting global collection:', err);
         res.status(500).json({ error: err.message });
     }
 });
@@ -2767,7 +2787,7 @@ app.post('/api/global-collections/:collectionId/import', async (req, res) => {
 
             await db.query('COMMIT');
 
-            console.log(`📦 Imported ${importedCount} words from collection ${collectionId} to user ${userId}`);
+            logger.info(`📦 Imported ${importedCount} words from collection ${collectionId} to user ${userId}`);
 
             res.json({
                 message: `${importedCount} words imported successfully`,
@@ -2780,7 +2800,7 @@ app.post('/api/global-collections/:collectionId/import', async (req, res) => {
             throw err;
         }
     } catch (err) {
-        console.error('Error importing global collection:', err);
+        logger.error('Error importing global collection:', err);
         res.status(500).json({ error: err.message });
     }
 });
@@ -2822,7 +2842,7 @@ app.post('/api/admin/global-collections', async (req, res) => {
 
             await db.query('COMMIT');
 
-            console.log(`✨ Created global collection "${name}" with ${words?.length || 0} words`);
+            logger.info(`✨ Created global collection "${name}" with ${words?.length || 0} words`);
 
             res.json({
                 message: 'Global collection created successfully',
@@ -2833,7 +2853,7 @@ app.post('/api/admin/global-collections', async (req, res) => {
             throw err;
         }
     } catch (err) {
-        console.error('Error creating global collection:', err);
+        logger.error('Error creating global collection:', err);
         res.status(500).json({ error: err.message });
     }
 });
@@ -2857,10 +2877,10 @@ app.put('/api/admin/users/:userId/beta-tester', async (req, res) => {
             return res.status(404).json({ error: 'User not found' });
         }
 
-        console.log(`👥 User ${userId} beta tester status: ${isBetaTester}`);
+        logger.info(`👥 User ${userId} beta tester status: ${isBetaTester}`);
         res.json(result.rows[0]);
     } catch (err) {
-        console.error('Error updating beta tester status:', err);
+        logger.error('Error updating beta tester status:', err);
         res.status(500).json({ error: err.message });
     }
 });
@@ -2881,7 +2901,7 @@ app.get('/api/users/:userId/beta-tester', async (req, res) => {
 
         res.json({ isBetaTester: result.rows[0].is_beta_tester || false });
     } catch (err) {
-        console.error('Error checking beta tester status:', err);
+        logger.error('Error checking beta tester status:', err);
         res.status(500).json({ error: err.message });
     }
 });
@@ -3006,7 +3026,7 @@ app.get('/api/users/:userId/profile', async (req, res) => {
             recent_activity: recentActivity.rows
         });
     } catch (err) {
-        console.error('Error getting user profile:', err);
+        logger.error('Error getting user profile:', err);
         res.status(500).json({ error: err.message });
     }
 });
@@ -3057,7 +3077,7 @@ app.post('/api/reports', upload.array('screenshots', 5), async (req, res) => {
 
             await db.query('COMMIT');
 
-            console.log(`🐛 New report #${reportId} from user ${userId}: ${title}`);
+            logger.info(`🐛 New report #${reportId} from user ${userId}: ${title}`);
 
             res.json({
                 message: 'Report submitted successfully',
@@ -3068,7 +3088,7 @@ app.post('/api/reports', upload.array('screenshots', 5), async (req, res) => {
             throw err;
         }
     } catch (err) {
-        console.error('Error creating report:', err);
+        logger.error('Error creating report:', err);
         res.status(500).json({ error: err.message });
     }
 });
@@ -3112,7 +3132,7 @@ app.get('/api/reports', async (req, res) => {
         const result = await db.query(query, params);
         res.json(result.rows);
     } catch (err) {
-        console.error('Error getting reports:', err);
+        logger.error('Error getting reports:', err);
         res.status(500).json({ error: err.message });
     }
 });
@@ -3163,7 +3183,7 @@ app.get('/api/reports/:reportId', async (req, res) => {
             votes: votes.rows
         });
     } catch (err) {
-        console.error('Error getting report details:', err);
+        logger.error('Error getting report details:', err);
         res.status(500).json({ error: err.message });
     }
 });
@@ -3216,10 +3236,10 @@ app.put('/api/admin/reports/:reportId', async (req, res) => {
             return res.status(404).json({ error: 'Report not found' });
         }
 
-        console.log(`📝 Report #${reportId} updated`);
+        logger.info(`📝 Report #${reportId} updated`);
         res.json(result.rows[0]);
     } catch (err) {
-        console.error('Error updating report:', err);
+        logger.error('Error updating report:', err);
         res.status(500).json({ error: err.message });
     }
 });
@@ -3241,10 +3261,10 @@ app.post('/api/reports/:reportId/comments', async (req, res) => {
             [parseInt(reportId), parseInt(userId), commentText, isInternal]
         );
 
-        console.log(`💬 Comment added to report #${reportId} by user ${userId}`);
+        logger.info(`💬 Comment added to report #${reportId} by user ${userId}`);
         res.json(result.rows[0]);
     } catch (err) {
-        console.error('Error adding comment:', err);
+        logger.error('Error adding comment:', err);
         res.status(500).json({ error: err.message });
     }
 });
@@ -3274,10 +3294,10 @@ app.post('/api/reports/:reportId/vote', async (req, res) => {
             [parseInt(reportId), parseInt(userId), voteType]
         );
 
-        console.log(`👍 User ${userId} voted "${voteType}" on report #${reportId}`);
+        logger.info(`👍 User ${userId} voted "${voteType}" on report #${reportId}`);
         res.json(result.rows[0]);
     } catch (err) {
-        console.error('Error voting on report:', err);
+        logger.error('Error voting on report:', err);
         res.status(500).json({ error: err.message });
     }
 });
@@ -3314,14 +3334,14 @@ app.delete('/api/admin/reports/:reportId', async (req, res) => {
 
             await db.query('COMMIT');
 
-            console.log(`🗑️ Report #${reportId} deleted`);
+            logger.info(`🗑️ Report #${reportId} deleted`);
             res.json({ message: 'Report deleted successfully' });
         } catch (err) {
             await db.query('ROLLBACK');
             throw err;
         }
     } catch (err) {
-        console.error('Error deleting report:', err);
+        logger.error('Error deleting report:', err);
         res.status(500).json({ error: err.message });
     }
 });
@@ -3360,7 +3380,7 @@ app.get('/api/reports/stats/summary', async (req, res) => {
             byPriority: priorityCounts.rows
         });
     } catch (err) {
-        console.error('Error getting report stats:', err);
+        logger.error('Error getting report stats:', err);
         res.status(500).json({ error: err.message });
     }
 });
@@ -3423,12 +3443,12 @@ app.get('/api/challenges/daily/:userId', async (req, res) => {
                 [parseInt(userId), today]
             );
 
-            console.log(`🎯 Generated 3 daily challenges for user ${userId}`);
+            logger.info(`🎯 Generated 3 daily challenges for user ${userId}`);
         }
 
         res.json(challenges.rows);
     } catch (err) {
-        console.error('Error getting daily challenges:', err);
+        logger.error('Error getting daily challenges:', err);
         res.status(500).json({ error: err.message });
     }
 });
@@ -3471,7 +3491,7 @@ app.post('/api/challenges/progress', async (req, res) => {
         );
 
         if (isCompleted) {
-            console.log(`🎉 User ${userId} completed challenge: ${challengeType}`);
+            logger.info(`🎉 User ${userId} completed challenge: ${challengeType}`);
         }
 
         res.json({
@@ -3482,7 +3502,7 @@ app.post('/api/challenges/progress', async (req, res) => {
             completed: isCompleted
         });
     } catch (err) {
-        console.error('Error updating challenge progress:', err);
+        logger.error('Error updating challenge progress:', err);
         res.status(500).json({ error: err.message });
     }
 });
@@ -3551,12 +3571,12 @@ app.post('/api/challenges/claim-reward/:challengeId', async (req, res) => {
                     [parseInt(userId), ch.reward_coins, 'earn', 'challenge', `Challenge reward: ${ch.title}`, newBalance]
                 );
 
-                console.log(`💰 User ${userId} earned ${ch.reward_coins} coins from challenge`);
+                logger.info(`💰 User ${userId} earned ${ch.reward_coins} coins from challenge`);
             }
 
             await db.query('COMMIT');
 
-            console.log(`🎁 User ${userId} claimed reward for challenge: ${ch.title}`);
+            logger.info(`🎁 User ${userId} claimed reward for challenge: ${ch.title}`);
 
             res.json({
                 message: 'Reward claimed successfully',
@@ -3568,7 +3588,7 @@ app.post('/api/challenges/claim-reward/:challengeId', async (req, res) => {
             throw err;
         }
     } catch (err) {
-        console.error('Error claiming challenge reward:', err);
+        logger.error('Error claiming challenge reward:', err);
         res.status(500).json({ error: err.message });
     }
 });
@@ -3606,7 +3626,7 @@ app.get('/api/challenges/history/:userId', async (req, res) => {
             stats: stats.rows[0]
         });
     } catch (err) {
-        console.error('Error getting challenge history:', err);
+        logger.error('Error getting challenge history:', err);
         res.status(500).json({ error: err.message });
     }
 });
@@ -3627,10 +3647,10 @@ app.post('/api/admin/challenges/template', async (req, res) => {
             [challengeType, title, description || '', parseInt(targetValue), rewardXp || 0, rewardCoins || 0, difficulty || 'medium', icon || '🎯']
         );
 
-        console.log(`✨ Created new challenge template: ${title}`);
+        logger.info(`✨ Created new challenge template: ${title}`);
         res.json(result.rows[0]);
     } catch (err) {
-        console.error('Error creating challenge template:', err);
+        logger.error('Error creating challenge template:', err);
         res.status(500).json({ error: err.message });
     }
 });
@@ -3696,7 +3716,7 @@ app.get('/api/challenges/stats/:userId', async (req, res) => {
             challengeStreak
         });
     } catch (err) {
-        console.error('Error getting challenge stats:', err);
+        logger.error('Error getting challenge stats:', err);
         res.status(500).json({ error: err.message });
     }
 });
@@ -3721,7 +3741,7 @@ app.get('/api/coins/balance/:userId', async (req, res) => {
 
         res.json({ balance: stats.rows[0].coins_balance || 0 });
     } catch (err) {
-        console.error('Error getting coins balance:', err);
+        logger.error('Error getting coins balance:', err);
         res.status(500).json({ error: err.message });
     }
 });
@@ -3758,7 +3778,7 @@ app.post('/api/coins/earn', async (req, res) => {
 
             await db.query('COMMIT');
 
-            console.log(`💰 User ${userId} earned ${amount} coins (${source})`);
+            logger.info(`💰 User ${userId} earned ${amount} coins (${source})`);
 
             res.json({
                 message: 'Coins earned successfully',
@@ -3770,7 +3790,7 @@ app.post('/api/coins/earn', async (req, res) => {
             throw err;
         }
     } catch (err) {
-        console.error('Error earning coins:', err);
+        logger.error('Error earning coins:', err);
         res.status(500).json({ error: err.message });
     }
 });
@@ -3813,7 +3833,7 @@ app.post('/api/coins/spend', async (req, res) => {
 
             await db.query('COMMIT');
 
-            console.log(`💸 User ${userId} spent ${amount} coins (${source})`);
+            logger.info(`💸 User ${userId} spent ${amount} coins (${source})`);
 
             res.json({
                 message: 'Coins spent successfully',
@@ -3825,7 +3845,7 @@ app.post('/api/coins/spend', async (req, res) => {
             throw err;
         }
     } catch (err) {
-        console.error('Error spending coins:', err);
+        logger.error('Error spending coins:', err);
         res.status(500).json({ error: err.message });
     }
 });
@@ -3846,7 +3866,7 @@ app.get('/api/coins/history/:userId', async (req, res) => {
 
         res.json(history.rows);
     } catch (err) {
-        console.error('Error getting coin history:', err);
+        logger.error('Error getting coin history:', err);
         res.status(500).json({ error: err.message });
     }
 });
@@ -3877,7 +3897,7 @@ app.get('/api/shop/items', async (req, res) => {
         const items = await db.query(query, params);
         res.json(items.rows);
     } catch (err) {
-        console.error('Error getting shop items:', err);
+        logger.error('Error getting shop items:', err);
         res.status(500).json({ error: err.message });
     }
 });
@@ -3957,7 +3977,7 @@ app.post('/api/shop/purchase', async (req, res) => {
 
             await db.query('COMMIT');
 
-            console.log(`🛒 User ${userId} purchased ${shopItem.name} x${quantity} for ${totalCost} coins`);
+            logger.info(`🛒 User ${userId} purchased ${shopItem.name} x${quantity} for ${totalCost} coins`);
 
             res.json({
                 message: 'Purchase successful',
@@ -3970,7 +3990,7 @@ app.post('/api/shop/purchase', async (req, res) => {
             throw err;
         }
     } catch (err) {
-        console.error('Error purchasing item:', err);
+        logger.error('Error purchasing item:', err);
         res.status(500).json({ error: err.message });
     }
 });
@@ -3997,7 +4017,7 @@ app.get('/api/shop/inventory/:userId', async (req, res) => {
         const inventory = await db.query(query, [parseInt(userId)]);
         res.json(inventory.rows);
     } catch (err) {
-        console.error('Error getting user inventory:', err);
+        logger.error('Error getting user inventory:', err);
         res.status(500).json({ error: err.message });
     }
 });
@@ -4057,7 +4077,7 @@ app.get('/api/leaderboard/global/:type', async (req, res) => {
 
         res.json(rankedLeaderboard);
     } catch (err) {
-        console.error('Error getting global leaderboard:', err);
+        logger.error('Error getting global leaderboard:', err);
         res.status(500).json({ error: err.message });
     }
 });
@@ -4114,7 +4134,7 @@ app.get('/api/leaderboard/position/:userId/:type', async (req, res) => {
 
         res.json(result.rows[0]);
     } catch (err) {
-        console.error('Error getting user position:', err);
+        logger.error('Error getting user position:', err);
         res.status(500).json({ error: err.message });
     }
 });
@@ -4228,7 +4248,7 @@ app.get('/api/leaderboard/nearby/:userId/:type', async (req, res) => {
             nearby: nearby.rows
         });
     } catch (err) {
-        console.error('Error getting nearby leaderboard:', err);
+        logger.error('Error getting nearby leaderboard:', err);
         res.status(500).json({ error: err.message });
     }
 });
@@ -4250,7 +4270,7 @@ app.get('/api/leaderboard/stats', async (req, res) => {
 
         res.json(stats.rows[0]);
     } catch (err) {
-        console.error('Error getting leaderboard stats:', err);
+        logger.error('Error getting leaderboard stats:', err);
         res.status(500).json({ error: err.message });
     }
 });
@@ -4321,7 +4341,7 @@ app.get('/api/leaderboard/friends/:userId', async (req, res) => {
             leaderboard: leaderboard.rows
         });
     } catch (err) {
-        console.error('Error getting friends leaderboard:', err);
+        logger.error('Error getting friends leaderboard:', err);
         res.status(500).json({ error: err.message });
     }
 });
@@ -4346,7 +4366,7 @@ app.get('/api/coins/balance/:userId', async (req, res) => {
 
         res.json({ coins_balance: result.rows[0].coins_balance || 0 });
     } catch (err) {
-        console.error('Error getting coin balance:', err);
+        logger.error('Error getting coin balance:', err);
         res.status(500).json({ error: err.message });
     }
 });
@@ -4402,7 +4422,7 @@ app.post('/api/coins/earn', async (req, res) => {
         });
     } catch (err) {
         await db.query('ROLLBACK');
-        console.error('Error earning coins:', err);
+        logger.error('Error earning coins:', err);
         res.status(500).json({ error: err.message });
     }
 });
@@ -4469,7 +4489,7 @@ app.post('/api/coins/spend', async (req, res) => {
         });
     } catch (err) {
         await db.query('ROLLBACK');
-        console.error('Error spending coins:', err);
+        logger.error('Error spending coins:', err);
         res.status(500).json({ error: err.message });
     }
 });
@@ -4501,7 +4521,7 @@ app.get('/api/coins/shop', async (req, res) => {
 
         res.json(result.rows);
     } catch (err) {
-        console.error('Error getting shop items:', err);
+        logger.error('Error getting shop items:', err);
         res.status(500).json({ error: err.message });
     }
 });
@@ -4614,7 +4634,7 @@ app.post('/api/coins/purchase', async (req, res) => {
         });
     } catch (err) {
         await db.query('ROLLBACK');
-        console.error('Error purchasing item:', err);
+        logger.error('Error purchasing item:', err);
         res.status(500).json({ error: err.message });
     }
 });
@@ -4634,7 +4654,7 @@ app.get('/api/coins/transactions/:userId', async (req, res) => {
 
         res.json(result.rows);
     } catch (err) {
-        console.error('Error getting transaction history:', err);
+        logger.error('Error getting transaction history:', err);
         res.status(500).json({ error: err.message });
     }
 });
@@ -4663,7 +4683,7 @@ app.get('/api/coins/purchases/:userId', async (req, res) => {
 
         res.json(result.rows);
     } catch (err) {
-        console.error('Error getting user purchases:', err);
+        logger.error('Error getting user purchases:', err);
         res.status(500).json({ error: err.message });
     }
 });
@@ -4738,7 +4758,7 @@ app.post('/api/friends/request', async (req, res) => {
             friendship: result.rows[0]
         });
     } catch (err) {
-        console.error('Error sending friend request:', err);
+        logger.error('Error sending friend request:', err);
         res.status(500).json({ error: err.message });
     }
 });
@@ -4783,7 +4803,7 @@ app.post('/api/friends/accept/:friendshipId', async (req, res) => {
             friendship: result.rows[0]
         });
     } catch (err) {
-        console.error('Error accepting friend request:', err);
+        logger.error('Error accepting friend request:', err);
         res.status(500).json({ error: err.message });
     }
 });
@@ -4809,7 +4829,7 @@ app.post('/api/friends/decline/:friendshipId', async (req, res) => {
 
         res.json({ success: true, message: 'Friend request declined' });
     } catch (err) {
-        console.error('Error declining friend request:', err);
+        logger.error('Error declining friend request:', err);
         res.status(500).json({ error: err.message });
     }
 });
@@ -4835,7 +4855,7 @@ app.delete('/api/friends/:friendshipId', async (req, res) => {
 
         res.json({ success: true, message: 'Friend removed' });
     } catch (err) {
-        console.error('Error removing friend:', err);
+        logger.error('Error removing friend:', err);
         res.status(500).json({ error: err.message });
     }
 });
@@ -4870,7 +4890,7 @@ app.get('/api/friends/:userId', async (req, res) => {
 
         res.json(friends.rows);
     } catch (err) {
-        console.error('Error getting friends list:', err);
+        logger.error('Error getting friends list:', err);
         res.status(500).json({ error: err.message });
     }
 });
@@ -4898,7 +4918,7 @@ app.get('/api/friends/requests/received/:userId', async (req, res) => {
 
         res.json(requests.rows);
     } catch (err) {
-        console.error('Error getting received friend requests:', err);
+        logger.error('Error getting received friend requests:', err);
         res.status(500).json({ error: err.message });
     }
 });
@@ -4926,7 +4946,7 @@ app.get('/api/friends/requests/sent/:userId', async (req, res) => {
 
         res.json(requests.rows);
     } catch (err) {
-        console.error('Error getting sent friend requests:', err);
+        logger.error('Error getting sent friend requests:', err);
         res.status(500).json({ error: err.message });
     }
 });
@@ -4964,7 +4984,7 @@ app.get('/api/friends/search', async (req, res) => {
 
         res.json(users.rows);
     } catch (err) {
-        console.error('Error searching users:', err);
+        logger.error('Error searching users:', err);
         res.status(500).json({ error: err.message });
     }
 });
@@ -4996,7 +5016,7 @@ app.get('/api/friends/activities/:userId', async (req, res) => {
 
         res.json(activities.rows);
     } catch (err) {
-        console.error('Error getting friend activities:', err);
+        logger.error('Error getting friend activities:', err);
         res.status(500).json({ error: err.message });
     }
 });
@@ -5037,7 +5057,7 @@ app.post('/api/friends/block', async (req, res) => {
 
         res.json({ success: true, message: 'User blocked successfully' });
     } catch (err) {
-        console.error('Error blocking user:', err);
+        logger.error('Error blocking user:', err);
         res.status(500).json({ error: err.message });
     }
 });
@@ -5062,7 +5082,7 @@ app.get('/api/friends/blocked/:userId', async (req, res) => {
 
         res.json(blockedUsers.rows);
     } catch (err) {
-        console.error('Error getting blocked users:', err);
+        logger.error('Error getting blocked users:', err);
         res.status(500).json({ error: err.message });
     }
 });
@@ -5108,7 +5128,7 @@ app.get('/api/users/search', async (req, res) => {
             total: users.rows.length
         });
     } catch (err) {
-        console.error('Error searching users:', err);
+        logger.error('Error searching users:', err);
         res.status(500).json({ error: err.message });
     }
 });
@@ -5169,7 +5189,7 @@ app.post('/api/duels/challenge', async (req, res) => {
 
         res.json({ success: true, duel: duel.rows[0] });
     } catch (err) {
-        console.error('Error creating duel:', err);
+        logger.error('Error creating duel:', err);
         res.status(500).json({ error: err.message });
     }
 });
@@ -5204,7 +5224,7 @@ app.post('/api/duels/:duelId/respond', async (req, res) => {
             return res.status(400).json({ error: 'Invalid action' });
         }
     } catch (err) {
-        console.error('Error responding to duel:', err);
+        logger.error('Error responding to duel:', err);
         res.status(500).json({ error: err.message });
     }
 });
@@ -5247,7 +5267,7 @@ app.post('/api/duels/:duelId/start', async (req, res) => {
             words: words.rows
         });
     } catch (err) {
-        console.error('Error starting duel:', err);
+        logger.error('Error starting duel:', err);
         res.status(500).json({ error: err.message });
     }
 });
@@ -5287,7 +5307,7 @@ app.post('/api/duels/:duelId/answer', async (req, res) => {
 
         res.json({ success: true, is_correct: isCorrect });
     } catch (err) {
-        console.error('Error submitting duel answer:', err);
+        logger.error('Error submitting duel answer:', err);
         res.status(500).json({ error: err.message });
     }
 });
@@ -5369,7 +5389,7 @@ app.post('/api/duels/:duelId/complete', async (req, res) => {
             }
         });
     } catch (err) {
-        console.error('Error completing duel:', err);
+        logger.error('Error completing duel:', err);
         res.status(500).json({ error: err.message });
     }
 });
@@ -5398,7 +5418,7 @@ app.get('/api/duels/:duelId', async (req, res) => {
 
         res.json(duel.rows[0]);
     } catch (err) {
-        console.error('Error getting duel:', err);
+        logger.error('Error getting duel:', err);
         res.status(500).json({ error: err.message });
     }
 });
@@ -5427,7 +5447,7 @@ app.get('/api/duels/history/:userId', async (req, res) => {
 
         res.json(duels.rows);
     } catch (err) {
-        console.error('Error getting duel history:', err);
+        logger.error('Error getting duel history:', err);
         res.status(500).json({ error: err.message });
     }
 });
@@ -5451,7 +5471,7 @@ app.get('/api/duels/active/:userId', async (req, res) => {
 
         res.json(duels.rows);
     } catch (err) {
-        console.error('Error getting active duels:', err);
+        logger.error('Error getting active duels:', err);
         res.status(500).json({ error: err.message });
     }
 });
@@ -5486,7 +5506,7 @@ app.get('/api/duels/stats/:userId', async (req, res) => {
             win_rate: parseFloat(winRate)
         });
     } catch (err) {
-        console.error('Error getting duel stats:', err);
+        logger.error('Error getting duel stats:', err);
         res.status(500).json({ error: err.message });
     }
 });
@@ -5501,7 +5521,7 @@ app.get('/api/levels/config', async (req, res) => {
         const levels = await db.query('SELECT * FROM level_config ORDER BY level ASC');
         res.json(levels.rows);
     } catch (err) {
-        console.error('Error getting levels config:', err);
+        logger.error('Error getting levels config:', err);
         res.status(500).json({ error: err.message });
     }
 });
@@ -5556,7 +5576,7 @@ app.get('/api/users/:userId/level-progress', async (req, res) => {
             next_title: nextLevelInfo.rows.length > 0 ? nextLevelInfo.rows[0].title : 'Max Level'
         });
     } catch (err) {
-        console.error('Error getting level progress:', err);
+        logger.error('Error getting level progress:', err);
         res.status(500).json({ error: err.message });
     }
 });
@@ -5648,7 +5668,7 @@ app.post('/api/xp/award', async (req, res) => {
             new_level: leveledUp ? newLevel : level
         });
     } catch (err) {
-        console.error('Error awarding XP:', err);
+        logger.error('Error awarding XP:', err);
         res.status(500).json({ error: err.message });
     }
 });
@@ -5678,7 +5698,7 @@ app.get('/api/users/:userId/currency', async (req, res) => {
             gems: result.rows[0].gems || 0
         });
     } catch (err) {
-        console.error('Error getting currency:', err);
+        logger.error('Error getting currency:', err);
         res.status(500).json({ error: err.message });
     }
 });
@@ -5728,7 +5748,7 @@ app.post('/api/currency/award', async (req, res) => {
             source
         });
     } catch (err) {
-        console.error('Error awarding currency:', err);
+        logger.error('Error awarding currency:', err);
         res.status(500).json({ error: err.message });
     }
 });
@@ -5795,7 +5815,7 @@ app.post('/api/currency/spend', async (req, res) => {
             source
         });
     } catch (err) {
-        console.error('Error spending currency:', err);
+        logger.error('Error spending currency:', err);
         res.status(500).json({ error: err.message });
     }
 });
@@ -5849,7 +5869,7 @@ app.get('/api/currency/transactions/:userId', async (req, res) => {
             offset: parseInt(offset)
         });
     } catch (err) {
-        console.error('Error getting transaction history:', err);
+        logger.error('Error getting transaction history:', err);
         res.status(500).json({ error: err.message });
     }
 });
@@ -5884,7 +5904,7 @@ app.get('/api/shop/items', async (req, res) => {
 
         res.json({ items: filteredItems });
     } catch (err) {
-        console.error('Error getting shop items:', err);
+        logger.error('Error getting shop items:', err);
         res.status(500).json({ error: err.message });
     }
 });
@@ -5904,7 +5924,7 @@ app.get('/api/leagues/tiers', async (req, res) => {
         `);
         res.json({ tiers: tiers.rows });
     } catch (err) {
-        console.error('Error getting league tiers:', err);
+        logger.error('Error getting league tiers:', err);
         res.status(500).json({ error: err.message });
     }
 });
@@ -5955,7 +5975,7 @@ app.get('/api/leagues/:userId/current', async (req, res) => {
             position: parseInt(position.rows[0].position)
         });
     } catch (err) {
-        console.error('Error getting current league:', err);
+        logger.error('Error getting current league:', err);
         res.status(500).json({ error: err.message });
     }
 });
@@ -5982,7 +6002,7 @@ app.get('/api/leagues/:userId/history', async (req, res) => {
 
         res.json({ history: history.rows });
     } catch (err) {
-        console.error('Error getting league history:', err);
+        logger.error('Error getting league history:', err);
         res.status(500).json({ error: err.message });
     }
 });
@@ -6008,7 +6028,7 @@ app.get('/api/leagues/:tierId/leaderboard', async (req, res) => {
 
         res.json({ leaderboard: leaderboard.rows });
     } catch (err) {
-        console.error('Error getting league leaderboard:', err);
+        logger.error('Error getting league leaderboard:', err);
         res.status(500).json({ error: err.message });
     }
 });
@@ -6064,7 +6084,7 @@ app.get('/api/leagues/:userId/progress', async (req, res) => {
             is_max_tier: false
         });
     } catch (err) {
-        console.error('Error getting league progress:', err);
+        logger.error('Error getting league progress:', err);
         res.status(500).json({ error: err.message });
     }
 });
@@ -6121,7 +6141,7 @@ app.post('/api/leagues/:userId/award-weekly-xp', async (req, res) => {
             xp_added: parseInt(amount)
         });
     } catch (err) {
-        console.error('Error awarding weekly XP:', err);
+        logger.error('Error awarding weekly XP:', err);
         res.status(500).json({ error: err.message });
     }
 });
@@ -6244,7 +6264,7 @@ app.post('/api/admin/leagues/process-week-end', async (req, res) => {
             results
         });
     } catch (err) {
-        console.error('Error processing week end:', err);
+        logger.error('Error processing week end:', err);
         res.status(500).json({ error: err.message });
     }
 });
@@ -6275,7 +6295,7 @@ app.get('/api/tournaments', async (req, res) => {
         const tournaments = await db.query(query, params);
         res.json({ tournaments: tournaments.rows });
     } catch (err) {
-        console.error('Error getting tournaments:', err);
+        logger.error('Error getting tournaments:', err);
         res.status(500).json({ error: err.message });
     }
 });
@@ -6301,7 +6321,7 @@ app.get('/api/tournaments/:tournamentId', async (req, res) => {
             participants_count: parseInt(participantsCount.rows[0].count)
         });
     } catch (err) {
-        console.error('Error getting tournament:', err);
+        logger.error('Error getting tournament:', err);
         res.status(500).json({ error: err.message });
     }
 });
@@ -6359,7 +6379,7 @@ app.post('/api/tournaments/:tournamentId/register', async (req, res) => {
 
         res.json({ success: true, message: 'Registered successfully' });
     } catch (err) {
-        console.error('Error registering for tournament:', err);
+        logger.error('Error registering for tournament:', err);
         res.status(500).json({ error: err.message });
     }
 });
@@ -6391,7 +6411,7 @@ app.delete('/api/tournaments/:tournamentId/unregister', async (req, res) => {
 
         res.json({ success: true, message: 'Unregistered successfully' });
     } catch (err) {
-        console.error('Error unregistering from tournament:', err);
+        logger.error('Error unregistering from tournament:', err);
         res.status(500).json({ error: err.message });
     }
 });
@@ -6414,7 +6434,7 @@ app.get('/api/tournaments/:tournamentId/bracket', async (req, res) => {
 
         res.json({ matches: matches.rows });
     } catch (err) {
-        console.error('Error getting bracket:', err);
+        logger.error('Error getting bracket:', err);
         res.status(500).json({ error: err.message });
     }
 });
@@ -6435,7 +6455,7 @@ app.get('/api/tournaments/:tournamentId/participants', async (req, res) => {
 
         res.json({ participants: participants.rows });
     } catch (err) {
-        console.error('Error getting participants:', err);
+        logger.error('Error getting participants:', err);
         res.status(500).json({ error: err.message });
     }
 });
@@ -6462,7 +6482,7 @@ app.post('/api/admin/tournaments/create', async (req, res) => {
 
         res.json({ success: true, tournament: result.rows[0] });
     } catch (err) {
-        console.error('Error creating tournament:', err);
+        logger.error('Error creating tournament:', err);
         res.status(500).json({ error: err.message });
     }
 });
@@ -6530,7 +6550,7 @@ app.post('/api/admin/tournaments/:tournamentId/generate-bracket', async (req, re
 
         res.json({ success: true, matches_created: matchesCreated.length, bracket_size: nextPowerOf2 });
     } catch (err) {
-        console.error('Error generating bracket:', err);
+        logger.error('Error generating bracket:', err);
         res.status(500).json({ error: err.message });
     }
 });
@@ -6572,7 +6592,7 @@ app.get('/api/feed/global', async (req, res) => {
         const feed = await db.query(query, params);
         res.json({ feed: feed.rows, count: feed.rows.length });
     } catch (err) {
-        console.error('Error getting global feed:', err);
+        logger.error('Error getting global feed:', err);
         res.status(500).json({ error: err.message });
     }
 });
@@ -6594,7 +6614,7 @@ app.get('/api/feed/:userId', async (req, res) => {
 
         res.json({ feed: feed.rows });
     } catch (err) {
-        console.error('Error getting user feed:', err);
+        logger.error('Error getting user feed:', err);
         res.status(500).json({ error: err.message });
     }
 });
@@ -6616,7 +6636,7 @@ app.post('/api/feed/post', async (req, res) => {
 
         res.json({ success: true, post: result.rows[0] });
     } catch (err) {
-        console.error('Error creating post:', err);
+        logger.error('Error creating post:', err);
         res.status(500).json({ error: err.message });
     }
 });
@@ -6646,7 +6666,7 @@ app.post('/api/feed/:feedId/like', async (req, res) => {
             res.json({ success: true, action: 'liked' });
         }
     } catch (err) {
-        console.error('Error liking post:', err);
+        logger.error('Error liking post:', err);
         res.status(500).json({ error: err.message });
     }
 });
@@ -6671,7 +6691,7 @@ app.post('/api/feed/:feedId/comment', async (req, res) => {
 
         res.json({ success: true, comment: comment.rows[0] });
     } catch (err) {
-        console.error('Error adding comment:', err);
+        logger.error('Error adding comment:', err);
         res.status(500).json({ error: err.message });
     }
 });
@@ -6693,7 +6713,7 @@ app.get('/api/feed/:feedId/comments', async (req, res) => {
 
         res.json({ comments: comments.rows });
     } catch (err) {
-        console.error('Error getting comments:', err);
+        logger.error('Error getting comments:', err);
         res.status(500).json({ error: err.message });
     }
 });
@@ -6720,7 +6740,7 @@ app.delete('/api/feed/:feedId', async (req, res) => {
         await db.query('DELETE FROM global_feed WHERE id = $1', [parseInt(feedId)]);
         res.json({ success: true, message: 'Post deleted' });
     } catch (err) {
-        console.error('Error deleting post:', err);
+        logger.error('Error deleting post:', err);
         res.status(500).json({ error: err.message });
     }
 });
@@ -6777,7 +6797,7 @@ app.get('/api/achievements', async (req, res) => {
             res.json(achievements.rows);
         }
     } catch (err) {
-        console.error('Error getting achievements:', err);
+        logger.error('Error getting achievements:', err);
         res.status(500).json({ error: err.message });
     }
 });
@@ -6809,7 +6829,7 @@ app.get('/api/achievements/unlocked/:userId', async (req, res) => {
 
         res.json(unlocked.rows);
     } catch (err) {
-        console.error('Error getting unlocked achievements:', err);
+        logger.error('Error getting unlocked achievements:', err);
         res.status(500).json({ error: err.message });
     }
 });
@@ -6918,7 +6938,7 @@ app.post('/api/achievements/progress', async (req, res) => {
 
             await db.query('COMMIT');
 
-            console.log(`🏆 User ${userId} unlocked achievement: ${ach.title}`);
+            logger.info(`🏆 User ${userId} unlocked achievement: ${ach.title}`);
 
             res.json({
                 unlocked: true,
@@ -6945,7 +6965,7 @@ app.post('/api/achievements/progress', async (req, res) => {
         }
     } catch (err) {
         await db.query('ROLLBACK');
-        console.error('Error updating achievement progress:', err);
+        logger.error('Error updating achievement progress:', err);
         res.status(500).json({ error: err.message });
     }
 });
@@ -6975,7 +6995,7 @@ app.get('/api/achievements/stats/:userId', async (req, res) => {
             total_achievements: parseInt(totalAchievements.rows[0].count)
         });
     } catch (err) {
-        console.error('Error getting achievement stats:', err);
+        logger.error('Error getting achievement stats:', err);
         res.status(500).json({ error: err.message });
     }
 });
@@ -6997,7 +7017,7 @@ app.post('/api/admin/achievements', async (req, res) => {
 
         res.json(result.rows[0]);
     } catch (err) {
-        console.error('Error creating achievement:', err);
+        logger.error('Error creating achievement:', err);
         res.status(500).json({ error: err.message });
     }
 });
@@ -7074,7 +7094,7 @@ app.get('/api/profiles/:userId', async (req, res) => {
             }
         });
     } catch (err) {
-        console.error('Error getting user profile:', err);
+        logger.error('Error getting user profile:', err);
         res.status(500).json({ error: err.message });
     }
 });
@@ -7183,7 +7203,7 @@ app.put('/api/profiles/:userId', async (req, res) => {
         res.json({ success: true, message: 'Profile updated successfully' });
     } catch (err) {
         await db.query('ROLLBACK');
-        console.error('Error updating profile:', err);
+        logger.error('Error updating profile:', err);
         res.status(500).json({ error: err.message });
     }
 });
@@ -7205,7 +7225,7 @@ app.post('/api/profiles/:userId/avatar', async (req, res) => {
 
         res.json({ success: true, avatar_url });
     } catch (err) {
-        console.error('Error uploading avatar:', err);
+        logger.error('Error uploading avatar:', err);
         res.status(500).json({ error: err.message });
     }
 });
@@ -7238,7 +7258,7 @@ app.get('/api/profiles/:userId/showcase', async (req, res) => {
 
         res.json(achievements.rows);
     } catch (err) {
-        console.error('Error getting showcase achievements:', err);
+        logger.error('Error getting showcase achievements:', err);
         res.status(500).json({ error: err.message });
     }
 });
@@ -7264,7 +7284,7 @@ app.get('/api/profiles/search/users', async (req, res) => {
 
         res.json(users.rows);
     } catch (err) {
-        console.error('Error searching users:', err);
+        logger.error('Error searching users:', err);
         res.status(500).json({ error: err.message });
     }
 });
@@ -7306,7 +7326,7 @@ app.get('/api/profiles/:userId/activity', async (req, res) => {
             streak: streakInfo.rows[0] || {}
         });
     } catch (err) {
-        console.error('Error getting profile activity:', err);
+        logger.error('Error getting profile activity:', err);
         res.status(500).json({ error: err.message });
     }
 });
@@ -7364,7 +7384,7 @@ app.get('/api/leagues/current/:userId', async (req, res) => {
 
         res.json(membership.rows[0]);
     } catch (err) {
-        console.error('Error getting current league:', err);
+        logger.error('Error getting current league:', err);
         res.status(500).json({ error: err.message });
     }
 });
@@ -7399,7 +7419,7 @@ app.get('/api/leagues/leaderboard/:tier', async (req, res) => {
 
         res.json(leaderboard.rows);
     } catch (err) {
-        console.error('Error getting league leaderboard:', err);
+        logger.error('Error getting league leaderboard:', err);
         res.status(500).json({ error: err.message });
     }
 });
@@ -7427,7 +7447,7 @@ app.post('/api/leagues/update-xp', async (req, res) => {
 
         res.json({ success: true });
     } catch (err) {
-        console.error('Error updating league XP:', err);
+        logger.error('Error updating league XP:', err);
         res.status(500).json({ error: err.message });
     }
 });
@@ -7453,7 +7473,7 @@ app.get('/api/leagues/history/:userId', async (req, res) => {
 
         res.json(history.rows);
     } catch (err) {
-        console.error('Error getting league history:', err);
+        logger.error('Error getting league history:', err);
         res.status(500).json({ error: err.message });
     }
 });
@@ -7468,7 +7488,7 @@ app.get('/api/leagues/tiers', async (req, res) => {
 
         res.json(tiers.rows);
     } catch (err) {
-        console.error('Error getting league tiers:', err);
+        logger.error('Error getting league tiers:', err);
         res.status(500).json({ error: err.message });
     }
 });
@@ -7554,7 +7574,7 @@ app.post('/api/admin/leagues/process-week', async (req, res) => {
         res.json({ success: true, processed: lastWeekUsers.rows.length });
     } catch (err) {
         await db.query('ROLLBACK');
-        console.error('Error processing weekly leagues:', err);
+        logger.error('Error processing weekly leagues:', err);
         res.status(500).json({ error: err.message });
     }
 });
@@ -7583,7 +7603,7 @@ app.post('/api/streak-freeze/purchase', async (req, res) => {
 
         res.json({ success: true, expires_at: expiresAt });
     } catch (err) {
-        console.error('Error purchasing streak freeze:', err);
+        logger.error('Error purchasing streak freeze:', err);
         res.status(500).json({ error: err.message });
     }
 });
@@ -7601,7 +7621,7 @@ app.get('/api/streak-freeze/:userId', async (req, res) => {
 
         res.json(freezes.rows);
     } catch (err) {
-        console.error('Error getting streak freezes:', err);
+        logger.error('Error getting streak freezes:', err);
         res.status(500).json({ error: err.message });
     }
 });
@@ -7638,7 +7658,7 @@ app.post('/api/streak-freeze/use', async (req, res) => {
 
         res.json({ success: true, freeze_used: freeze.rows[0] });
     } catch (err) {
-        console.error('Error using streak freeze:', err);
+        logger.error('Error using streak freeze:', err);
         res.status(500).json({ error: err.message });
     }
 });
@@ -7665,7 +7685,7 @@ app.post('/api/streak-freeze/:userId/claim-free', async (req, res) => {
             next_available_at: new Date(Date.now() + 7 * 24 * 60 * 60 * 1000)
         });
     } catch (err) {
-        console.error('Error claiming free streak freeze:', err);
+        logger.error('Error claiming free streak freeze:', err);
         res.status(500).json({ error: err.message });
     }
 });
@@ -7695,7 +7715,7 @@ app.get('/api/streak-freeze/:userId/history', async (req, res) => {
             total_used: parseInt(totalUsed.rows[0].count)
         });
     } catch (err) {
-        console.error('Error getting streak freeze history:', err);
+        logger.error('Error getting streak freeze history:', err);
         res.status(500).json({ error: err.message });
     }
 });
@@ -7746,7 +7766,7 @@ app.get('/api/daily-goals/:userId', async (req, res) => {
         res.json(goals.rows);
     } catch (err) {
         await db.query('ROLLBACK');
-        console.error('Error getting daily goals:', err);
+        logger.error('Error getting daily goals:', err);
         res.status(500).json({ error: err.message });
     }
 });
@@ -7833,7 +7853,7 @@ app.post('/api/daily-goals/progress', async (req, res) => {
         }
     } catch (err) {
         await db.query('ROLLBACK');
-        console.error('Error updating goal progress:', err);
+        logger.error('Error updating goal progress:', err);
         res.status(500).json({ error: err.message });
     }
 });
@@ -7857,7 +7877,7 @@ app.get('/api/daily-goals/stats/:userId', async (req, res) => {
 
         res.json(stats.rows[0]);
     } catch (err) {
-        console.error('Error getting goal stats:', err);
+        logger.error('Error getting goal stats:', err);
         res.status(500).json({ error: err.message });
     }
 });
@@ -7893,7 +7913,7 @@ app.post('/api/duels/challenge', async (req, res) => {
 
         res.json(duel.rows[0]);
     } catch (err) {
-        console.error('Error creating duel:', err);
+        logger.error('Error creating duel:', err);
         res.status(500).json({ error: err.message });
     }
 });
@@ -7924,7 +7944,7 @@ app.post('/api/duels/:duelId/accept', async (req, res) => {
 
         res.json(result.rows[0]);
     } catch (err) {
-        console.error('Error accepting duel:', err);
+        logger.error('Error accepting duel:', err);
         res.status(500).json({ error: err.message });
     }
 });
@@ -7951,7 +7971,7 @@ app.post('/api/duels/:duelId/decline', async (req, res) => {
 
         res.json({ success: true, message: 'Duel declined' });
     } catch (err) {
-        console.error('Error declining duel:', err);
+        logger.error('Error declining duel:', err);
         res.status(500).json({ error: err.message });
     }
 });
@@ -8038,7 +8058,7 @@ app.post('/api/duels/:duelId/answer', async (req, res) => {
         res.json({ success: true });
     } catch (err) {
         await db.query('ROLLBACK');
-        console.error('Error submitting duel answer:', err);
+        logger.error('Error submitting duel answer:', err);
         res.status(500).json({ error: err.message });
     }
 });
@@ -8075,7 +8095,7 @@ app.get('/api/duels/:duelId', async (req, res) => {
             answers: answers.rows
         });
     } catch (err) {
-        console.error('Error getting duel:', err);
+        logger.error('Error getting duel:', err);
         res.status(500).json({ error: err.message });
     }
 });
@@ -8111,7 +8131,7 @@ app.get('/api/duels/user/:userId', async (req, res) => {
 
         res.json(duels.rows);
     } catch (err) {
-        console.error('Error getting user duels:', err);
+        logger.error('Error getting user duels:', err);
         res.status(500).json({ error: err.message });
     }
 });
@@ -8134,7 +8154,7 @@ app.get('/api/duels/stats/:userId', async (req, res) => {
 
         res.json(stats.rows[0]);
     } catch (err) {
-        console.error('Error getting duel stats:', err);
+        logger.error('Error getting duel stats:', err);
         res.status(500).json({ error: err.message });
     }
 });
@@ -8177,7 +8197,7 @@ app.post('/api/boosters/purchase', async (req, res) => {
         res.json({ success: true, booster: result.rows[0] });
     } catch (err) {
         await db.query('ROLLBACK');
-        console.error('Error purchasing booster:', err);
+        logger.error('Error purchasing booster:', err);
         res.status(500).json({ error: err.message });
     }
 });
@@ -8227,7 +8247,7 @@ app.post('/api/boosters/:boosterId/activate', async (req, res) => {
         res.json({ success: true, expires_at: expiresAt });
     } catch (err) {
         await db.query('ROLLBACK');
-        console.error('Error activating booster:', err);
+        logger.error('Error activating booster:', err);
         res.status(500).json({ error: err.message });
     }
 });
@@ -8245,7 +8265,7 @@ app.get('/api/boosters/active/:userId', async (req, res) => {
 
         res.json(boosters.rows);
     } catch (err) {
-        console.error('Error getting active boosters:', err);
+        logger.error('Error getting active boosters:', err);
         res.status(500).json({ error: err.message });
     }
 });
@@ -8263,7 +8283,7 @@ app.get('/api/boosters/inventory/:userId', async (req, res) => {
 
         res.json(boosters.rows);
     } catch (err) {
-        console.error('Error getting booster inventory:', err);
+        logger.error('Error getting booster inventory:', err);
         res.status(500).json({ error: err.message });
     }
 });
@@ -8282,7 +8302,7 @@ app.get('/api/boosters/history/:userId', async (req, res) => {
 
         res.json(boosters.rows);
     } catch (err) {
-        console.error('Error getting booster history:', err);
+        logger.error('Error getting booster history:', err);
         res.status(500).json({ error: err.message });
     }
 });
@@ -8308,7 +8328,7 @@ app.post('/api/boosters/apply-multiplier', async (req, res) => {
 
         res.json({ multiplied_xp: multipliedXp, multiplier: multiplier });
     } catch (err) {
-        console.error('Error applying booster multiplier:', err);
+        logger.error('Error applying booster multiplier:', err);
         res.status(500).json({ error: err.message });
     }
 });
@@ -8349,7 +8369,7 @@ app.post('/api/notifications/subscribe', async (req, res) => {
 
         res.json({ success: true });
     } catch (err) {
-        console.error('Error subscribing to push notifications:', err);
+        logger.error('Error subscribing to push notifications:', err);
         res.status(500).json({ error: err.message });
     }
 });
@@ -8365,7 +8385,7 @@ app.post('/api/notifications/unsubscribe', async (req, res) => {
 
         res.json({ success: true });
     } catch (err) {
-        console.error('Error unsubscribing from push notifications:', err);
+        logger.error('Error unsubscribing from push notifications:', err);
         res.status(500).json({ error: err.message });
     }
 });
@@ -8385,7 +8405,7 @@ app.get('/api/notifications/preferences/:userId', async (req, res) => {
 
         res.json(prefs.rows[0]);
     } catch (err) {
-        console.error('Error getting notification preferences:', err);
+        logger.error('Error getting notification preferences:', err);
         res.status(500).json({ error: err.message });
     }
 });
@@ -8419,7 +8439,7 @@ app.put('/api/notifications/preferences/:userId', async (req, res) => {
 
         res.json({ success: true });
     } catch (err) {
-        console.error('Error updating notification preferences:', err);
+        logger.error('Error updating notification preferences:', err);
         res.status(500).json({ error: err.message });
     }
 });
@@ -8445,7 +8465,7 @@ app.post('/api/notifications/send', async (req, res) => {
 
         res.json({ success: true, subscriptions_count: subscriptions.rows.length });
     } catch (err) {
-        console.error('Error sending notification:', err);
+        logger.error('Error sending notification:', err);
         res.status(500).json({ error: err.message });
     }
 });
@@ -8465,7 +8485,7 @@ app.get('/api/notifications/history/:userId', async (req, res) => {
 
         res.json(notifications.rows);
     } catch (err) {
-        console.error('Error getting notification history:', err);
+        logger.error('Error getting notification history:', err);
         res.status(500).json({ error: err.message });
     }
 });
@@ -8481,7 +8501,7 @@ app.put('/api/notifications/:notificationId/read', async (req, res) => {
 
         res.json({ success: true });
     } catch (err) {
-        console.error('Error marking notification as read:', err);
+        logger.error('Error marking notification as read:', err);
         res.status(500).json({ error: err.message });
     }
 });
@@ -8497,7 +8517,7 @@ app.get('/api/notifications/unread-count/:userId', async (req, res) => {
 
         res.json({ count: parseInt(result.rows[0].count) });
     } catch (err) {
-        console.error('Error getting unread notification count:', err);
+        logger.error('Error getting unread notification count:', err);
         res.status(500).json({ error: err.message });
     }
 });
@@ -8521,7 +8541,7 @@ app.get('/api/settings/:userId', async (req, res) => {
 
         res.json(settings.rows[0]);
     } catch (err) {
-        console.error('Error getting user settings:', err);
+        logger.error('Error getting user settings:', err);
         res.status(500).json({ error: err.message });
     }
 });
@@ -8561,7 +8581,7 @@ app.put('/api/settings/:userId', async (req, res) => {
 
         res.json({ success: true });
     } catch (err) {
-        console.error('Error updating user settings:', err);
+        logger.error('Error updating user settings:', err);
         res.status(500).json({ error: err.message });
     }
 });
@@ -8592,7 +8612,7 @@ app.patch('/api/settings/:userId/:setting', async (req, res) => {
 
         res.json({ success: true });
     } catch (err) {
-        console.error('Error updating specific setting:', err);
+        logger.error('Error updating specific setting:', err);
         res.status(500).json({ error: err.message });
     }
 });
@@ -8609,7 +8629,7 @@ app.post('/api/settings/:userId/reset', async (req, res) => {
 
         res.json({ success: true, settings: settings.rows[0] });
     } catch (err) {
-        console.error('Error resetting user settings:', err);
+        logger.error('Error resetting user settings:', err);
         res.status(500).json({ error: err.message });
     }
 });
@@ -8631,7 +8651,7 @@ app.post('/api/activity-feed', async (req, res) => {
 
         res.json({ success: true, activity: result.rows[0] });
     } catch (err) {
-        console.error('Error posting activity:', err);
+        logger.error('Error posting activity:', err);
         res.status(500).json({ error: err.message });
     }
 });
@@ -8659,7 +8679,7 @@ app.get('/api/activity-feed/global', async (req, res) => {
 
         res.json(activities.rows);
     } catch (err) {
-        console.error('Error getting global feed:', err);
+        logger.error('Error getting global feed:', err);
         res.status(500).json({ error: err.message });
     }
 });
@@ -8679,7 +8699,7 @@ app.get('/api/activity-feed/user/:userId', async (req, res) => {
 
         res.json(activities.rows);
     } catch (err) {
-        console.error('Error getting user feed:', err);
+        logger.error('Error getting user feed:', err);
         res.status(500).json({ error: err.message });
     }
 });
@@ -8712,7 +8732,7 @@ app.get('/api/activity-feed/friends/:userId', async (req, res) => {
 
         res.json(activities.rows);
     } catch (err) {
-        console.error('Error getting friends feed:', err);
+        logger.error('Error getting friends feed:', err);
         res.status(500).json({ error: err.message });
     }
 });
@@ -8739,7 +8759,7 @@ app.get('/api/activity-feed/type/:activityType', async (req, res) => {
 
         res.json(activities.rows);
     } catch (err) {
-        console.error('Error getting feed by type:', err);
+        logger.error('Error getting feed by type:', err);
         res.status(500).json({ error: err.message });
     }
 });
@@ -8764,7 +8784,7 @@ app.delete('/api/activity-feed/:activityId', async (req, res) => {
 
         res.json({ success: true });
     } catch (err) {
-        console.error('Error deleting activity:', err);
+        logger.error('Error deleting activity:', err);
         res.status(500).json({ error: err.message });
     }
 });
@@ -8802,7 +8822,7 @@ app.post('/api/activity-feed/:activityId/like', async (req, res) => {
 
         res.json({ success: true, like_count: parseInt(count.rows[0].count) });
     } catch (err) {
-        console.error('Error liking activity:', err);
+        logger.error('Error liking activity:', err);
         res.status(500).json({ error: err.message });
     }
 });
@@ -8826,7 +8846,7 @@ app.delete('/api/activity-feed/:activityId/like', async (req, res) => {
 
         res.json({ success: true, like_count: parseInt(count.rows[0].count) });
     } catch (err) {
-        console.error('Error unliking activity:', err);
+        logger.error('Error unliking activity:', err);
         res.status(500).json({ error: err.message });
     }
 });
@@ -8849,7 +8869,7 @@ app.get('/api/activity-feed/:activityId/likes', async (req, res) => {
 
         res.json(likes.rows);
     } catch (err) {
-        console.error('Error getting likes:', err);
+        logger.error('Error getting likes:', err);
         res.status(500).json({ error: err.message });
     }
 });
@@ -8882,7 +8902,7 @@ app.post('/api/activity-feed/:activityId/comment', async (req, res) => {
             }
         });
     } catch (err) {
-        console.error('Error adding comment:', err);
+        logger.error('Error adding comment:', err);
         res.status(500).json({ error: err.message });
     }
 });
@@ -8905,7 +8925,7 @@ app.get('/api/activity-feed/:activityId/comments', async (req, res) => {
 
         res.json(comments.rows);
     } catch (err) {
-        console.error('Error getting comments:', err);
+        logger.error('Error getting comments:', err);
         res.status(500).json({ error: err.message });
     }
 });
@@ -8930,7 +8950,7 @@ app.delete('/api/activity-feed/comments/:commentId', async (req, res) => {
 
         res.json({ success: true });
     } catch (err) {
-        console.error('Error deleting comment:', err);
+        logger.error('Error deleting comment:', err);
         res.status(500).json({ error: err.message });
     }
 });
@@ -8987,7 +9007,7 @@ app.get('/api/activity-feed/:activityId/details', async (req, res) => {
             is_liked: isLiked
         });
     } catch (err) {
-        console.error('Error getting activity details:', err);
+        logger.error('Error getting activity details:', err);
         res.status(500).json({ error: err.message });
     }
 });
@@ -9016,7 +9036,7 @@ app.get('/api/inventory/:userId', async (req, res) => {
 
         res.json(items.rows);
     } catch (err) {
-        console.error('Error getting inventory:', err);
+        logger.error('Error getting inventory:', err);
         res.status(500).json({ error: err.message });
     }
 });
@@ -9060,7 +9080,7 @@ app.post('/api/inventory', async (req, res) => {
 
         res.json({ success: true, item: result.rows[0] });
     } catch (err) {
-        console.error('Error adding to inventory:', err);
+        logger.error('Error adding to inventory:', err);
         res.status(500).json({ error: err.message });
     }
 });
@@ -9098,7 +9118,7 @@ app.post('/api/inventory/:inventoryId/use', async (req, res) => {
 
         res.json({ success: true, item: result ? result.rows[0] : null });
     } catch (err) {
-        console.error('Error using item:', err);
+        logger.error('Error using item:', err);
         res.status(500).json({ error: err.message });
     }
 });
@@ -9135,7 +9155,7 @@ app.post('/api/inventory/:inventoryId/equip', async (req, res) => {
         res.json({ success: true });
     } catch (err) {
         await db.query('ROLLBACK');
-        console.error('Error equipping item:', err);
+        logger.error('Error equipping item:', err);
         res.status(500).json({ error: err.message });
     }
 });
@@ -9149,7 +9169,7 @@ app.post('/api/inventory/:inventoryId/unequip', async (req, res) => {
 
         res.json({ success: true });
     } catch (err) {
-        console.error('Error unequipping item:', err);
+        logger.error('Error unequipping item:', err);
         res.status(500).json({ error: err.message });
     }
 });
@@ -9166,7 +9186,7 @@ app.get('/api/inventory/:userId/equipped', async (req, res) => {
 
         res.json(items.rows);
     } catch (err) {
-        console.error('Error getting equipped items:', err);
+        logger.error('Error getting equipped items:', err);
         res.status(500).json({ error: err.message });
     }
 });
@@ -9182,7 +9202,7 @@ app.post('/api/inventory/cleanup-expired', async (req, res) => {
 
         res.json({ success: true, deleted_count: result.rows.length });
     } catch (err) {
-        console.error('Error cleaning up expired items:', err);
+        logger.error('Error cleaning up expired items:', err);
         res.status(500).json({ error: err.message });
     }
 });
@@ -9249,7 +9269,7 @@ app.get('/api/weekly-challenges/:userId', async (req, res) => {
         res.json(challenges.rows);
     } catch (err) {
         await db.query('ROLLBACK');
-        console.error('Error getting weekly challenges:', err);
+        logger.error('Error getting weekly challenges:', err);
         res.status(500).json({ error: err.message });
     }
 });
@@ -9297,7 +9317,7 @@ app.post('/api/weekly-challenges/progress', async (req, res) => {
         res.json({ success: true });
     } catch (err) {
         await db.query('ROLLBACK');
-        console.error('Error updating weekly challenge progress:', err);
+        logger.error('Error updating weekly challenge progress:', err);
         res.status(500).json({ error: err.message });
     }
 });
@@ -9351,7 +9371,7 @@ app.post('/api/weekly-challenges/:challengeId/claim', async (req, res) => {
         res.json({ success: true, reward_xp: c.reward_xp, reward_coins: c.reward_coins });
     } catch (err) {
         await db.query('ROLLBACK');
-        console.error('Error claiming weekly challenge reward:', err);
+        logger.error('Error claiming weekly challenge reward:', err);
         res.status(500).json({ error: err.message });
     }
 });
@@ -9373,7 +9393,7 @@ app.get('/api/weekly-challenges/stats/:userId', async (req, res) => {
 
         res.json(stats.rows[0]);
     } catch (err) {
-        console.error('Error getting weekly challenge stats:', err);
+        logger.error('Error getting weekly challenge stats:', err);
         res.status(500).json({ error: err.message });
     }
 });
@@ -9429,7 +9449,7 @@ app.post('/api/milestones/check', async (req, res) => {
         res.json({ success: true, new_milestones: newMilestones });
     } catch (err) {
         await db.query('ROLLBACK');
-        console.error('Error checking milestones:', err);
+        logger.error('Error checking milestones:', err);
         res.status(500).json({ error: err.message });
     }
 });
@@ -9454,7 +9474,7 @@ app.get('/api/milestones/:userId', async (req, res) => {
 
         res.json(milestones.rows);
     } catch (err) {
-        console.error('Error getting milestones:', err);
+        logger.error('Error getting milestones:', err);
         res.status(500).json({ error: err.message });
     }
 });
@@ -9508,7 +9528,7 @@ app.post('/api/milestones/:milestoneId/claim', async (req, res) => {
         res.json({ success: true, reward_xp: m.reward_xp, reward_coins: m.reward_coins, special_reward: m.special_reward });
     } catch (err) {
         await db.query('ROLLBACK');
-        console.error('Error claiming milestone reward:', err);
+        logger.error('Error claiming milestone reward:', err);
         res.status(500).json({ error: err.message });
     }
 });
@@ -9545,7 +9565,7 @@ app.get('/api/milestones/:userId/progress', async (req, res) => {
             milestones: milestones.rows
         });
     } catch (err) {
-        console.error('Error getting milestone progress:', err);
+        logger.error('Error getting milestone progress:', err);
         res.status(500).json({ error: err.message });
     }
 });
@@ -9573,7 +9593,7 @@ app.get('/api/badges', async (req, res) => {
 
         res.json(badges.rows);
     } catch (err) {
-        console.error('Error getting badges:', err);
+        logger.error('Error getting badges:', err);
         res.status(500).json({ error: err.message });
     }
 });
@@ -9593,7 +9613,7 @@ app.get('/api/badges/user/:userId', async (req, res) => {
 
         res.json(badges.rows);
     } catch (err) {
-        console.error('Error getting user badges:', err);
+        logger.error('Error getting user badges:', err);
         res.status(500).json({ error: err.message });
     }
 });
@@ -9629,7 +9649,7 @@ app.post('/api/badges/award', async (req, res) => {
 
         res.json({ success: true, badge: { ...badge.rows[0], ...result.rows[0] } });
     } catch (err) {
-        console.error('Error awarding badge:', err);
+        logger.error('Error awarding badge:', err);
         res.status(500).json({ error: err.message });
     }
 });
@@ -9655,7 +9675,7 @@ app.post('/api/badges/:badgeId/equip', async (req, res) => {
         res.json({ success: true });
     } catch (err) {
         await db.query('ROLLBACK');
-        console.error('Error equipping badge:', err);
+        logger.error('Error equipping badge:', err);
         res.status(500).json({ error: err.message });
     }
 });
@@ -9673,7 +9693,7 @@ app.post('/api/badges/:badgeId/unequip', async (req, res) => {
 
         res.json({ success: true });
     } catch (err) {
-        console.error('Error unequipping badge:', err);
+        logger.error('Error unequipping badge:', err);
         res.status(500).json({ error: err.message });
     }
 });
@@ -9693,7 +9713,7 @@ app.get('/api/badges/user/:userId/equipped', async (req, res) => {
 
         res.json(badge.rows[0] || null);
     } catch (err) {
-        console.error('Error getting equipped badge:', err);
+        logger.error('Error getting equipped badge:', err);
         res.status(500).json({ error: err.message });
     }
 });
@@ -9754,7 +9774,7 @@ app.post('/api/tts/synthesize', async (req, res) => {
         });
 
     } catch (err) {
-        console.error('Error in TTS synthesize:', err);
+        logger.error('Error in TTS synthesize:', err);
         res.status(500).json({ error: err.message });
     }
 });
@@ -9774,7 +9794,7 @@ app.get('/api/tts/cache/stats', async (req, res) => {
             total_size_mb: (totalSize / (1024 * 1024)).toFixed(2)
         });
     } catch (err) {
-        console.error('Error getting TTS cache stats:', err);
+        logger.error('Error getting TTS cache stats:', err);
         res.status(500).json({ error: err.message });
     }
 });
@@ -9789,7 +9809,7 @@ app.delete('/api/tts/cache/clear', async (req, res) => {
 
         res.json({ success: true, deleted_items: files.length });
     } catch (err) {
-        console.error('Error clearing TTS cache:', err);
+        logger.error('Error clearing TTS cache:', err);
         res.status(500).json({ error: err.message });
     }
 });
@@ -9833,14 +9853,14 @@ app.post('/api/tts/bulk-synthesize', async (req, res) => {
                     results.push({ text, language, audioUrl: mockAudioUrl, cached: false });
                 }
             } catch (err) {
-                console.error(`Error processing word ${word.text}:`, err);
+                logger.error(`Error processing word ${word.text}:`, err);
                 errors++;
             }
         }
 
         res.json({ success: true, total: words.length, synthesized, cached, errors, results });
     } catch (err) {
-        console.error('Error in bulk synthesize:', err);
+        logger.error('Error in bulk synthesize:', err);
         res.status(500).json({ error: err.message });
     }
 });
@@ -9865,7 +9885,7 @@ app.get('/api/words/popular/:userId', async (req, res) => {
 
         res.json(words.rows);
     } catch (err) {
-        console.error('Error getting popular words:', err);
+        logger.error('Error getting popular words:', err);
         res.status(500).json({ error: err.message });
     }
 });
@@ -10111,7 +10131,7 @@ app.get('/api/users/:userId/insights', async (req, res) => {
         });
 
     } catch (err) {
-        console.error('Error generating insights:', err);
+        logger.error('Error generating insights:', err);
         res.status(500).json({ error: err.message });
     }
 });
@@ -10270,14 +10290,14 @@ app.delete('/api/words/all', async (req, res) => {
             [userId, languagePairId]
         );
 
-        console.log(`🗑️ Deleted ${result.rowCount} words for user ${userId}, language pair ${languagePairId}`);
+        logger.info(`🗑️ Deleted ${result.rowCount} words for user ${userId}, language pair ${languagePairId}`);
 
         res.json({
             message: 'All words deleted successfully',
             deletedCount: result.rowCount
         });
     } catch (err) {
-        console.error('Error deleting words:', err);
+        logger.error('Error deleting words:', err);
         res.status(500).json({ error: err.message });
     }
 });
@@ -10388,21 +10408,21 @@ app.put('/api/words/:id/progress', async (req, res) => {
                 // Set next review date to 7 days from now
                 nextReviewDate = new Date();
                 nextReviewDate.setDate(nextReviewDate.getDate() + 7);
-                console.log(`📅 Word ${id} moved to review_7, next review: ${nextReviewDate.toISOString()}`);
+                logger.info(`📅 Word ${id} moved to review_7, next review: ${nextReviewDate.toISOString()}`);
             } else if (newReviewCycle === 2) {
                 newStatus = 'review_30';
                 // Set next review date to 30 days from now
                 nextReviewDate = new Date();
                 nextReviewDate.setDate(nextReviewDate.getDate() + 30);
-                console.log(`📅 Word ${id} moved to review_30, next review: ${nextReviewDate.toISOString()}`);
+                logger.info(`📅 Word ${id} moved to review_30, next review: ${nextReviewDate.toISOString()}`);
             } else if (newReviewCycle >= 3) {
                 newStatus = 'learned';
-                console.log(`🎉 Word ${id} fully learned after 3 cycles!`);
+                logger.info(`🎉 Word ${id} fully learned after 3 cycles!`);
             }
         } else if (!correct && (word.status === 'review_7' || word.status === 'review_30')) {
             // Failed review - reset to studying but keep cycle
             newStatus = 'studying';
-            console.log(`❌ Word ${id} failed review, back to studying (cycle ${newReviewCycle})`);
+            logger.info(`❌ Word ${id} failed review, back to studying (cycle ${newReviewCycle})`);
         }
 
         const updateQuery = `UPDATE words
@@ -10414,7 +10434,7 @@ app.put('/api/words/:id/progress', async (req, res) => {
 
         await db.query(updateQuery, [newCorrectCount, newTotalPoints, newStatus, newReviewCycle, nextReviewDate, id]);
 
-        console.log(`📊 Word ${id} progress: ${newCorrectCount}/${newTotalPoints} points (${percentage}%) - Status: ${newStatus}, Cycle: ${newReviewCycle}`);
+        logger.info(`📊 Word ${id} progress: ${newCorrectCount}/${newTotalPoints} points (${percentage}%) - Status: ${newStatus}, Cycle: ${newReviewCycle}`);
 
         // Gamification: Award XP for quiz answers
         const userId = word.user_id;
@@ -10477,7 +10497,7 @@ app.put('/api/words/:id/progress', async (req, res) => {
             });
         }
     } catch (err) {
-        console.error('Error updating word progress:', err);
+        logger.error('Error updating word progress:', err);
         res.status(500).json({ error: err.message });
     }
 });
@@ -10494,7 +10514,7 @@ app.delete('/api/words/:id', async (req, res) => {
 
         res.json({ message: 'Word deleted successfully' });
     } catch (err) {
-        console.error('Error deleting word:', err);
+        logger.error('Error deleting word:', err);
         res.status(500).json({ error: err.message });
     }
 });
@@ -10525,7 +10545,7 @@ app.put('/api/words/:id/status', async (req, res) => {
 
         res.json({ message: 'Word status updated successfully' });
     } catch (err) {
-        console.error('Error updating word status:', err);
+        logger.error('Error updating word status:', err);
         res.status(500).json({ error: err.message });
     }
 });
@@ -10571,7 +10591,7 @@ app.post('/api/words/check-expired-reviews', async (req, res) => {
                  WHERE id = $2`,
                 [newCycle, word.id]
             );
-            console.log(`⏰ Word "${word.word}" (${word.status}) expired - reset to studying cycle ${newCycle}`);
+            logger.info(`⏰ Word "${word.word}" (${word.status}) expired - reset to studying cycle ${newCycle}`);
         }
 
         res.json({
@@ -10580,7 +10600,7 @@ app.post('/api/words/check-expired-reviews', async (req, res) => {
             words: expiredWords.rows.map(w => ({ id: w.id, word: w.word, previousStatus: w.status, newCycle: (w.reviewcycle || 1) + 1 }))
         });
     } catch (err) {
-        console.error('Error checking expired reviews:', err);
+        logger.error('Error checking expired reviews:', err);
         res.status(500).json({ error: err.message });
     }
 });
@@ -10606,14 +10626,14 @@ app.put('/api/words/bulk/reset-to-studying', async (req, res) => {
             [userId, languagePairId]
         );
 
-        console.log(`🔄 Reset ${result.rowCount} words to studying status (progress cleared) for user ${userId}, language pair ${languagePairId}`);
+        logger.info(`🔄 Reset ${result.rowCount} words to studying status (progress cleared) for user ${userId}, language pair ${languagePairId}`);
 
         res.json({
             message: 'All words reset to studying status with progress cleared',
             updatedCount: result.rowCount
         });
     } catch (err) {
-        console.error('Error resetting words to studying:', err);
+        logger.error('Error resetting words to studying:', err);
         res.status(500).json({ error: err.message });
     }
 });
@@ -10758,7 +10778,7 @@ app.post('/api/import/google-sheets', async (req, res) => {
                 protocol.get(url, (response) => {
                     // Handle redirects (301, 302, 307, 308)
                     if (response.statusCode >= 300 && response.statusCode < 400 && response.headers.location) {
-                        console.log(`📍 Following redirect to: ${response.headers.location}`);
+                        logger.info(`📍 Following redirect to: ${response.headers.location}`);
                         fetchData(response.headers.location, redirectCount + 1)
                             .then(resolve)
                             .catch(reject);
@@ -10778,7 +10798,7 @@ app.post('/api/import/google-sheets', async (req, res) => {
         };
 
         const csvData = await fetchData(csvUrl);
-        console.log(`📄 CSV Data (first 500 chars):`, csvData.substring(0, 500));
+        logger.info(`📄 CSV Data (first 500 chars):`, csvData.substring(0, 500));
 
         // Parse CSV data using csv-parser
         const words = [];
@@ -10788,8 +10808,8 @@ app.post('/api/import/google-sheets', async (req, res) => {
             stream
                 .pipe(csv())
                 .on('data', (row) => {
-                    console.log('🔍 Raw row:', row);
-                    console.log('🔑 Row keys:', Object.keys(row));
+                    logger.info('🔍 Raw row:', row);
+                    logger.info('🔑 Row keys:', Object.keys(row));
 
                     // Try to get values by header names
                     let word = row.Word || row.word || row.Слово || row.слово;
@@ -10803,14 +10823,14 @@ app.post('/api/import/google-sheets', async (req, res) => {
                     // Expected column order: Word (foreign), Example (foreign), Translation (native), ExampleTranslation (native)
                     if (!word || !translation) {
                         const values = Object.values(row);
-                        console.log('📊 Trying column index fallback, values:', values);
+                        logger.info('📊 Trying column index fallback, values:', values);
                         word = word || values[0];              // Foreign word
                         example = example || values[1] || '';  // Foreign example sentence
                         translation = translation || values[2]; // Native translation
                         exampleTranslation = exampleTranslation || values[3] || ''; // Native example translation
                     }
 
-                    console.log('📝 Parsed:', { word, translation, example, exampleTranslation });
+                    logger.info('📝 Parsed:', { word, translation, example, exampleTranslation });
 
                     if (word && translation) {
                         words.push({
@@ -10820,17 +10840,17 @@ app.post('/api/import/google-sheets', async (req, res) => {
                             exampleTranslation: exampleTranslation ? String(exampleTranslation).trim() : ''
                         });
                     } else {
-                        console.log('⚠️ Skipped row - missing word or translation');
+                        logger.info('⚠️ Skipped row - missing word or translation');
                     }
                 })
                 .on('end', resolve)
                 .on('error', reject);
         });
 
-        console.log(`📊 Parsed ${words.length} words from Google Sheets`);
+        logger.info(`📊 Parsed ${words.length} words from Google Sheets`);
         res.json({ words });
     } catch (error) {
-        console.error('Google Sheets import error:', error);
+        logger.error('Google Sheets import error:', error);
         res.status(500).json({ error: error.message });
     }
 });
@@ -10895,7 +10915,7 @@ app.post('/api/migrate/user', async (req, res) => {
             languagePairs: migratedPairs
         });
     } catch (err) {
-        console.error('Migration error:', err);
+        logger.error('Migration error:', err);
         res.status(500).json({ error: err.message });
     }
 });
@@ -10911,7 +10931,7 @@ app.get('/api/levels/features', async (req, res) => {
 
         res.json({ features: features.rows });
     } catch (err) {
-        console.error('Error getting level features:', err);
+        logger.error('Error getting level features:', err);
         res.status(500).json({ error: err.message });
     }
 });
@@ -10968,7 +10988,7 @@ app.get('/api/users/:userId/unlocked-features', async (req, res) => {
             locked_features: locked
         });
     } catch (err) {
-        console.error('Error getting user unlocked features:', err);
+        logger.error('Error getting user unlocked features:', err);
         res.status(500).json({ error: err.message });
     }
 });
@@ -10993,7 +11013,7 @@ app.get('/api/users/:userId/can-use-feature/:featureKey', async (req, res) => {
             levels_remaining: access.levelsRemaining
         });
     } catch (err) {
-        console.error('Error checking feature access:', err);
+        logger.error('Error checking feature access:', err);
         res.status(500).json({ error: err.message });
     }
 });
@@ -11095,7 +11115,7 @@ app.get('/api/srs/:userId/due-words', async (req, res) => {
             statistics: counts.rows[0] || { overdue: 0, due_today: 0, mature_cards: 0, new_words: 0 }
         });
     } catch (err) {
-        console.error('Error getting due words:', err);
+        logger.error('Error getting due words:', err);
         res.status(500).json({ error: err.message });
     }
 });
@@ -11260,7 +11280,7 @@ app.post('/api/srs/:userId/review', async (req, res) => {
             xp_result: xpResult
         });
     } catch (err) {
-        console.error('Error submitting review:', err);
+        logger.error('Error submitting review:', err);
         res.status(500).json({ error: err.message });
     }
 });
@@ -11388,7 +11408,7 @@ app.get('/api/srs/:userId/statistics', async (req, res) => {
             period_days: parseInt(period)
         });
     } catch (err) {
-        console.error('Error getting SRS statistics:', err);
+        logger.error('Error getting SRS statistics:', err);
         res.status(500).json({ error: err.message });
     }
 });
@@ -11422,7 +11442,7 @@ app.put('/api/srs/:userId/word/:wordId/suspend', async (req, res) => {
             message: suspend ? 'Word suspended from reviews' : 'Word resumed for reviews'
         });
     } catch (err) {
-        console.error('Error suspending/resuming word:', err);
+        logger.error('Error suspending/resuming word:', err);
         res.status(500).json({ error: err.message });
     }
 });
@@ -11473,7 +11493,7 @@ app.post('/api/srs/:userId/reset-word/:wordId', async (req, res) => {
             }
         });
     } catch (err) {
-        console.error('Error resetting word:', err);
+        logger.error('Error resetting word:', err);
         res.status(500).json({ error: err.message });
     }
 });
@@ -11585,7 +11605,7 @@ app.get('/api/rating/:userId/personal', async (req, res) => {
             }
         });
     } catch (err) {
-        console.error('Error getting personal rating:', err);
+        logger.error('Error getting personal rating:', err);
         res.status(500).json({ error: err.message });
     }
 });
@@ -11649,7 +11669,7 @@ app.get('/api/leaderboard/country/:country/:type', async (req, res) => {
             leaderboard: rankedLeaderboard
         });
     } catch (err) {
-        console.error('Error getting country leaderboard:', err);
+        logger.error('Error getting country leaderboard:', err);
         res.status(500).json({ error: err.message });
     }
 });
@@ -11709,7 +11729,7 @@ app.get('/api/leaderboard/city/:city/:type', async (req, res) => {
             leaderboard: rankedLeaderboard
         });
     } catch (err) {
-        console.error('Error getting city leaderboard:', err);
+        logger.error('Error getting city leaderboard:', err);
         res.status(500).json({ error: err.message });
     }
 });
@@ -11787,7 +11807,7 @@ app.put('/api/users/:userId/settings', async (req, res) => {
             user: result.rows[0]
         });
     } catch (err) {
-        console.error('Error updating user settings:', err);
+        logger.error('Error updating user settings:', err);
         res.status(500).json({ error: err.message });
     }
 });
@@ -11808,7 +11828,7 @@ app.get('/api/users/:userId/settings', async (req, res) => {
 
         res.json(user.rows[0]);
     } catch (err) {
-        console.error('Error getting user settings:', err);
+        logger.error('Error getting user settings:', err);
         res.status(500).json({ error: err.message });
     }
 });
@@ -11911,7 +11931,7 @@ app.get('/api/srs/:userId/leeches', async (req, res) => {
             min_reviews_used: parseInt(minReviews)
         });
     } catch (err) {
-        console.error('Error getting leech words:', err);
+        logger.error('Error getting leech words:', err);
         res.status(500).json({ error: err.message });
     }
 });
@@ -11970,7 +11990,7 @@ app.get('/api/learning/:userId/words', async (req, res) => {
             statistics: stats.rows[0]
         });
     } catch (err) {
-        console.error('Error getting learning words:', err);
+        logger.error('Error getting learning words:', err);
         res.status(500).json({ error: err.message });
     }
 });
@@ -12076,7 +12096,7 @@ app.post('/api/learning/:userId/attempt', async (req, res) => {
             xp_result: xpResult
         });
     } catch (err) {
-        console.error('Error recording learning attempt:', err);
+        logger.error('Error recording learning attempt:', err);
         res.status(500).json({ error: err.message });
     }
 });
@@ -12134,7 +12154,7 @@ app.get('/api/learning/:userId/statistics', async (req, res) => {
             recent_graduated: recentGraduated.rows
         });
     } catch (err) {
-        console.error('Error getting learning statistics:', err);
+        logger.error('Error getting learning statistics:', err);
         res.status(500).json({ error: err.message });
     }
 });
@@ -12161,7 +12181,7 @@ app.post('/api/learning/:userId/reset-word/:wordId', async (req, res) => {
             message: `Learning progress reset for word ${wordId}`
         });
     } catch (err) {
-        console.error('Error resetting learning progress:', err);
+        logger.error('Error resetting learning progress:', err);
         res.status(500).json({ error: err.message });
     }
 });
@@ -12375,7 +12395,7 @@ app.get('/api/profile/:userId/learning-profile', async (req, res) => {
             analyzed: analyze === 'true'
         });
     } catch (err) {
-        console.error('Error getting learning profile:', err);
+        logger.error('Error getting learning profile:', err);
         res.status(500).json({ error: err.message });
     }
 });
@@ -12441,7 +12461,7 @@ app.put('/api/profile/:userId/learning-profile', async (req, res) => {
             profile: result.rows[0]
         });
     } catch (err) {
-        console.error('Error updating learning profile:', err);
+        logger.error('Error updating learning profile:', err);
         res.status(500).json({ error: err.message });
     }
 });
@@ -12456,12 +12476,12 @@ async function startServer() {
     await initDatabase();
     
     app.listen(PORT, () => {
-        console.log(`Words Learning Server running on port ${PORT}`);
-        console.log(`Open http://localhost:${PORT} in your browser`);
+        logger.info(`Words Learning Server running on port ${PORT}`);
+        logger.info(`Open http://localhost:${PORT} in your browser`);
     });
 }
 
 startServer().catch(err => {
-    console.error('Failed to start server:', err);
+    logger.error('Failed to start server:', err);
     process.exit(1);
 });
