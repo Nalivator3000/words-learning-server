@@ -11327,6 +11327,91 @@ app.get('/api/srs/:userId/statistics', async (req, res) => {
     }
 });
 
+// Suspend or resume a word
+app.put('/api/srs/:userId/word/:wordId/suspend', async (req, res) => {
+    try {
+        const { userId, wordId } = req.params;
+        const { suspend = true } = req.body;
+
+        // Check if word exists in SRS
+        const srsData = await db.query(
+            'SELECT * FROM word_srs_data WHERE word_id = $1 AND user_id = $2',
+            [parseInt(wordId), parseInt(userId)]
+        );
+
+        if (srsData.rows.length === 0) {
+            return res.status(404).json({ error: 'Word not found in SRS system' });
+        }
+
+        // Update suspended status
+        await db.query(
+            'UPDATE word_srs_data SET suspended = $1, updated_at = NOW() WHERE word_id = $2 AND user_id = $3',
+            [suspend, parseInt(wordId), parseInt(userId)]
+        );
+
+        res.json({
+            success: true,
+            word_id: parseInt(wordId),
+            suspended: suspend,
+            message: suspend ? 'Word suspended from reviews' : 'Word resumed for reviews'
+        });
+    } catch (err) {
+        console.error('Error suspending/resuming word:', err);
+        res.status(500).json({ error: err.message });
+    }
+});
+
+// Reset SRS progress for a word
+app.post('/api/srs/:userId/reset-word/:wordId', async (req, res) => {
+    try {
+        const { userId, wordId } = req.params;
+
+        // Check if word exists in SRS
+        const srsData = await db.query(
+            'SELECT * FROM word_srs_data WHERE word_id = $1 AND user_id = $2',
+            [parseInt(wordId), parseInt(userId)]
+        );
+
+        if (srsData.rows.length === 0) {
+            return res.status(404).json({ error: 'Word not found in SRS system' });
+        }
+
+        // Reset to default values
+        const nextReviewDate = new Date();
+        nextReviewDate.setDate(nextReviewDate.getDate() + 1); // Tomorrow
+
+        await db.query(`
+            UPDATE word_srs_data
+            SET easiness_factor = 2.5,
+                interval_days = 1,
+                repetitions = 0,
+                next_review_date = $1,
+                last_review_date = NULL,
+                last_quality_rating = NULL,
+                total_reviews = 0,
+                mature = false,
+                suspended = false,
+                updated_at = NOW()
+            WHERE word_id = $2 AND user_id = $3
+        `, [nextReviewDate, parseInt(wordId), parseInt(userId)]);
+
+        res.json({
+            success: true,
+            word_id: parseInt(wordId),
+            message: 'Word SRS progress reset to defaults',
+            reset_data: {
+                easiness_factor: 2.5,
+                interval_days: 1,
+                repetitions: 0,
+                next_review_date: nextReviewDate
+            }
+        });
+    } catch (err) {
+        console.error('Error resetting word:', err);
+        res.status(500).json({ error: err.message });
+    }
+});
+
 // Serve main page
 app.get('/', (req, res) => {
     res.sendFile(path.join(__dirname, 'public', 'index.html'));
