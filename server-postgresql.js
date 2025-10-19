@@ -11199,6 +11199,134 @@ app.post('/api/srs/:userId/review', async (req, res) => {
     }
 });
 
+// Get SRS statistics for user
+app.get('/api/srs/:userId/statistics', async (req, res) => {
+    try {
+        const { userId } = req.params;
+        const { period = 30 } = req.query; // days
+
+        const now = new Date();
+
+        // Get card counts
+        const cardCounts = await db.query(`
+            SELECT
+                COUNT(*) as total_cards,
+                COUNT(*) FILTER (WHERE next_review_date < $1) as overdue,
+                COUNT(*) FILTER (WHERE next_review_date::DATE = $1::DATE) as due_today,
+                COUNT(*) FILTER (WHERE mature = true) as mature_cards,
+                COUNT(*) FILTER (WHERE suspended = true) as suspended_cards,
+                AVG(easiness_factor)::NUMERIC(3,2) as average_ease,
+                AVG(interval_days)::INTEGER as average_interval
+            FROM word_srs_data
+            WHERE user_id = $2
+        `, [now, parseInt(userId)]);
+
+        // Get new words count
+        const newWordsResult = await db.query(`
+            SELECT COUNT(*) as new_words
+            FROM words
+            WHERE user_id = $1
+              AND id NOT IN (SELECT word_id FROM word_srs_data WHERE user_id = $1)
+        `, [parseInt(userId)]);
+
+        // Get retention rate (last N days)
+        const periodDate = new Date(now);
+        periodDate.setDate(periodDate.getDate() - parseInt(period));
+
+        const retentionData = await db.query(`
+            SELECT
+                COUNT(*) as total_reviews,
+                COUNT(*) FILTER (WHERE quality_rating >= 3) as correct_reviews,
+                CASE
+                    WHEN COUNT(*) > 0 THEN
+                        ROUND((COUNT(*) FILTER (WHERE quality_rating >= 3)::NUMERIC / COUNT(*)) * 100, 1)
+                    ELSE 0
+                END as retention_rate
+            FROM srs_review_log
+            WHERE user_id = $1 AND review_date >= $2
+        `, [parseInt(userId), periodDate]);
+
+        // Get 7-day forecast (upcoming due cards)
+        const forecast = [];
+        for (let i = 0; i < 7; i++) {
+            const forecastDate = new Date(now);
+            forecastDate.setDate(forecastDate.getDate() + i);
+            const nextDate = new Date(forecastDate);
+            nextDate.setDate(nextDate.getDate() + 1);
+
+            const dayCount = await db.query(`
+                SELECT COUNT(*) as due_count
+                FROM word_srs_data
+                WHERE user_id = $1
+                  AND suspended = false
+                  AND next_review_date >= $2
+                  AND next_review_date < $3
+            `, [parseInt(userId), forecastDate, nextDate]);
+
+            forecast.push({
+                date: forecastDate.toISOString().split('T')[0],
+                due_count: parseInt(dayCount.rows[0].due_count)
+            });
+        }
+
+        // Get review activity (last 30 days)
+        const activityData = await db.query(`
+            SELECT
+                DATE(review_date) as review_day,
+                COUNT(*) as review_count,
+                AVG(quality_rating)::NUMERIC(3,1) as avg_quality
+            FROM srs_review_log
+            WHERE user_id = $1 AND review_date >= $2
+            GROUP BY DATE(review_date)
+            ORDER BY review_day DESC
+            LIMIT 30
+        `, [parseInt(userId), periodDate]);
+
+        // Get interval distribution
+        const intervalDist = await db.query(`
+            SELECT
+                CASE
+                    WHEN interval_days = 1 THEN '1 day'
+                    WHEN interval_days <= 7 THEN '2-7 days'
+                    WHEN interval_days <= 21 THEN '8-21 days'
+                    WHEN interval_days <= 60 THEN '22-60 days'
+                    WHEN interval_days <= 180 THEN '61-180 days'
+                    ELSE '180+ days'
+                END as interval_range,
+                COUNT(*) as card_count
+            FROM word_srs_data
+            WHERE user_id = $1 AND suspended = false
+            GROUP BY interval_range
+            ORDER BY MIN(interval_days)
+        `, [parseInt(userId)]);
+
+        res.json({
+            cards: {
+                total: parseInt(cardCounts.rows[0].total_cards) || 0,
+                overdue: parseInt(cardCounts.rows[0].overdue) || 0,
+                due_today: parseInt(cardCounts.rows[0].due_today) || 0,
+                mature: parseInt(cardCounts.rows[0].mature_cards) || 0,
+                suspended: parseInt(cardCounts.rows[0].suspended_cards) || 0,
+                new_words: parseInt(newWordsResult.rows[0].new_words) || 0
+            },
+            statistics: {
+                average_ease: parseFloat(cardCounts.rows[0].average_ease) || 2.5,
+                average_interval: parseInt(cardCounts.rows[0].average_interval) || 0,
+                retention_rate: parseFloat(retentionData.rows[0].retention_rate) || 0,
+                total_reviews_period: parseInt(retentionData.rows[0].total_reviews) || 0,
+                correct_reviews_period: parseInt(retentionData.rows[0].correct_reviews) || 0
+            },
+            forecast: forecast,
+            recent_activity: activityData.rows,
+            interval_distribution: intervalDist.rows,
+            period_days: parseInt(period)
+        });
+    } catch (err) {
+        console.error('Error getting SRS statistics:', err);
+        res.status(500).json({ error: err.message });
+    }
+});
+
 // Serve main page
 app.get('/', (req, res) => {
     res.sendFile(path.join(__dirname, 'public', 'index.html'));

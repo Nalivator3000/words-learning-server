@@ -1324,3 +1324,129 @@ SELECT * FROM ranked_friends ORDER BY rank
 - Iteration 25: GET /api/srs/:userId/statistics
 - Iteration 26: PUT /api/srs/:userId/word/:wordId/suspend
 
+
+## Iteration 25: SRS Statistics Endpoint
+**Дата**: 2025-10-19  
+**Статус**: ✅ Завершено
+
+### Задача
+Создать GET /api/srs/:userId/statistics endpoint для получения полной статистики SRS.
+
+### Реализация
+
+#### API Endpoint - GET /api/srs/:userId/statistics
+**Файл**: server-postgresql.js:11202-11328 (127 строк)
+
+**Query параметры**:
+- `period` - период для retention rate (default: 30 дней)
+
+**Статистика включает 5 основных секций**:
+
+#### 1. Cards Summary (состояние карточек):
+- `total_cards` - всего карточек в SRS
+- `overdue` - просроченные (next_review_date < NOW)
+- `due_today` - на сегодня (next_review_date = TODAY)
+- `mature` - зрелые карточки (interval > 21 день)
+- `suspended` - приостановленные пользователем
+- `new_words` - слова без SRS данных (еще не начали изучать)
+
+#### 2. Statistics (агрегированные показатели):
+- `average_ease` - средний Easiness Factor всех карточек
+- `average_interval` - средний интервал повторения (дни)
+- `retention_rate` - % правильных ответов за период (quality >= 3)
+- `total_reviews_period` - всего повторений за period
+- `correct_reviews_period` - правильных ответов за period
+
+**Формула retention rate**:
+```sql
+retention_rate = (correct_reviews / total_reviews) * 100
+WHERE correct = quality_rating >= 3
+```
+
+#### 3. Forecast (прогноз на 7 дней):
+Массив с количеством карточек due для каждого дня:
+```json
+[
+  { "date": "2025-10-19", "due_count": 15 },
+  { "date": "2025-10-20", "due_count": 8 },
+  ...
+]
+```
+
+#### 4. Recent Activity (активность за period):
+История повторений по дням:
+```json
+[
+  {
+    "review_day": "2025-10-18",
+    "review_count": 23,
+    "avg_quality": 4.2
+  }
+]
+```
+
+#### 5. Interval Distribution (распределение карточек):
+Группировка карточек по интервалам:
+- 1 day (новички)
+- 2-7 days (начинающие)
+- 8-21 days (промежуточные)
+- 22-60 days (зрелые)
+- 61-180 days (долгосрочные)
+- 180+ days (мастера)
+
+### Технические детали
+- **6 отдельных запросов** для разных типов статистики
+- FILTER clause для эффективного подсчета категорий
+- NOT IN subquery для new_words
+- DATE() function для группировки по дням
+- CASE expression для interval_distribution bucketing
+- Loop для forecast (7 итераций, каждая с отдельным запросом)
+
+### Оптимизации
+- Индексы на (user_id, next_review_date) и (user_id, review_date)
+- AVG с NUMERIC cast для точности
+- LIMIT 30 для recent_activity
+- Default values (|| 0, || 2.5) для empty results
+
+### Response Structure
+```json
+{
+  "cards": {
+    "total": 245,
+    "overdue": 12,
+    "due_today": 18,
+    "mature": 87,
+    "suspended": 3,
+    "new_words": 128
+  },
+  "statistics": {
+    "average_ease": 2.64,
+    "average_interval": 15,
+    "retention_rate": 87.3,
+    "total_reviews_period": 234,
+    "correct_reviews_period": 204
+  },
+  "forecast": [...],
+  "recent_activity": [...],
+  "interval_distribution": [...],
+  "period_days": 30
+}
+```
+
+### Связь с другими компонентами
+- Использует word_srs_data (Iteration 22)
+- Использует srs_review_log (Iteration 22)
+- Использует words таблицу (base schema)
+- Дополняет due-words endpoint (Iteration 23)
+
+### UI Use Cases
+- Dashboard виджет "Due Today: 18 cards"
+- Retention rate график (тренд за 30 дней)
+- Heatmap calendar (forecast на неделю)
+- Pie chart interval distribution
+- Activity streak visualization
+
+### Следующие шаги
+- Iteration 26: PUT /api/srs/:userId/word/:wordId/suspend
+- Iteration 27: POST /api/srs/:userId/reset-word/:wordId
+
