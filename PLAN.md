@@ -293,9 +293,13 @@
   - [ ] Frontend UI для отображения инсайтов (будущая версия)
 
 ### 2.7 Рейтинговая система
-- [ ] **Персональный рейтинг**
-  - Еженедельный/месячный скор
-  - Факторы: XP, стрики, точность, слова
+- [x] **Персональный рейтинг** ✅ ГОТОВО (Backend)
+  - ✅ GET /api/rating/:userId/personal - weekly/monthly XP history
+  - ✅ Last 12 weeks or 12 months data
+  - ✅ TO_CHAR grouping by period (YYYY-IW, YYYY-MM)
+  - ✅ Statistics: total XP, avg per period, max period, current period XP, best period
+  - ✅ Current period calculation (Monday start for weeks, 1st for months)
+  - [ ] Frontend UI (будущая версия)
 
 - [x] **Лиги (Leagues)** ✅ ГОТОВО (Backend)
   - ✅ 7 лиг: Bronze → Silver → Gold → Platinum → Diamond → Master → Grandmaster
@@ -422,10 +426,15 @@
   - [ ] UI для отображения лидерборда (будущая версия)
   - [ ] Weekly/Monthly periods (будущая версия)
 
-- [ ] **Локальные рейтинги**
-  - Рейтинг среди друзей
-  - Рейтинг по стране/городу
-  - Рейтинг по учебному заведению
+- [x] **Локальные рейтинги** ✅ ГОТОВО (Backend)
+  - ✅ GET /api/leaderboard/friends/:userId - рейтинг среди друзей (Iteration 21)
+  - ✅ GET /api/leaderboard/country/:country/:type - рейтинг по стране (Iteration 28)
+  - ✅ GET /api/leaderboard/city/:city/:type - рейтинг по городу (Iteration 28)
+  - ✅ ALTER TABLE users ADD country, city fields
+  - ✅ Indexes on country, city columns
+  - ✅ Types: xp, streak, words
+  - [ ] Frontend UI (будущая версия)
+  - [ ] Рейтинг по учебному заведению (будущая версия)
 
 ### 3.7 Менторство и комьюнити
 - [ ] **Программа менторов**
@@ -452,24 +461,25 @@
 ## 4. 🧠 Система интервального повторения (Spaced Repetition System - SRS)
 
 ### 4.1 Кривая забывания Эббингауза
-- [ ] **Научная основа алгоритма повторения** 🎯 ВЫСОКИЙ ПРИОРИТЕТ
-  - Реализация кривой забывания (Ebbinghaus Forgetting Curve)
-  - Формула: R(t) = e^(-t/S) где R - retention, t - время, S - strength памяти
-  - Интервалы повторения: 1 день → 3 дня → 7 дней → 14 дней → 30 дней → 90 дней
-  - Адаптивная корректировка интервалов на основе успешности ответов
-  - Учет индивидуальных особенностей запоминания (персонализация кривой)
+- [x] **Научная основа алгоритма повторения** ✅ ГОТОВО (Backend - Iteration 22-26)
+  - ✅ Реализация кривой забывания (Ebbinghaus Forgetting Curve)
+  - ✅ Формула SM-2: R(t) = e^(-t/S) где R - retention, t - время, S - strength памяти
+  - ✅ Интервалы повторения: 1 день → 6 дней → EF*interval
+  - ✅ Адаптивная корректировка интервалов на основе успешности ответов (quality 0-5)
+  - ✅ Персонализация через Easiness Factor (1.3-2.5+)
 
 ### 4.2 Алгоритм SM-2 (SuperMemo 2)
-- [ ] **Реализация SM-2 алгоритма**
-  - Easiness Factor (EF) - коэффициент легкости для каждого слова
-  - Interval - интервал до следующего повторения (в днях)
-  - Repetition - количество успешных повторений подряд
-  - Формула расчета нового интервала на основе качества ответа (0-5)
-  - Автоматическая корректировка EF при неправильных ответах
-  - Минимальный интервал: 1 день, максимальный: 365 дней
+- [x] **Реализация SM-2 алгоритма** ✅ ГОТОВО (Iteration 24)
+  - ✅ Easiness Factor (EF) - коэффициент легкости для каждого слова
+  - ✅ Interval - интервал до следующего повторения (в днях)
+  - ✅ Repetition - количество успешных повторений подряд
+  - ✅ Формула расчета: EF = EF + (0.1 - (5-q) * (0.08 + (5-q) * 0.02))
+  - ✅ Автоматическая корректировка EF при неправильных ответах (quality < 3)
+  - ✅ Минимальный EF: 1.3, минимальный interval: 1 день
+  - ✅ Reset to interval=1 on incorrect answers
 
 ### 4.3 База данных для SRS
-- [ ] **Таблица word_srs_data**
+- [x] **Таблица word_srs_data** ✅ ГОТОВО (Iteration 22)
   ```sql
   CREATE TABLE word_srs_data (
     id SERIAL PRIMARY KEY,
@@ -492,7 +502,7 @@
   CREATE INDEX idx_word_srs_mature ON word_srs_data(user_id, mature);
   ```
 
-- [ ] **Таблица srs_review_log**
+- [x] **Таблица srs_review_log** ✅ ГОТОВО (Iteration 22)
   ```sql
   CREATE TABLE srs_review_log (
     id SERIAL PRIMARY KEY,
@@ -511,29 +521,40 @@
   ```
 
 ### 4.4 API Endpoints для SRS
-- [ ] **GET /api/srs/:userId/due-words** - получить слова для повторения
-  - Параметры: limit (default: 20), include_new (true/false)
-  - Сортировка по приоритету: просроченные → сегодня → новые слова
-  - Response: массив слов с SRS метаданными
+- [x] **GET /api/srs/:userId/due-words** ✅ ГОТОВО (Iteration 23)
+  - ✅ Параметры: limit (default: 20), include_new (true/false)
+  - ✅ Сортировка по приоритету: overdue → due_today → new words
+  - ✅ Response: массив слов с SRS метаданными
+  - ✅ Statistics: overdue, due_today, mature_cards, new_words counts
+  - ✅ Status classification: overdue/due_today/future/new
 
-- [ ] **POST /api/srs/:userId/review** - зафиксировать результат повторения
-  - Body: { wordId, qualityRating (0-5), timeTaken }
-  - Пересчет EF, interval, next_review_date по алгоритму SM-2
-  - Логирование в srs_review_log
-  - XP награда: +3 XP (базово) + бонус за качество ответа
+- [x] **POST /api/srs/:userId/review** ✅ ГОТОВО (Iteration 24)
+  - ✅ Body: { wordId, qualityRating (0-5), timeTaken }
+  - ✅ Пересчет EF, interval, next_review_date по алгоритму SM-2
+  - ✅ Логирование в srs_review_log (previous/new values)
+  - ✅ XP награда: +9-15 XP (× quality rating) + mature card bonus ×1.5
+  - ✅ Review type classification: learn/review/relearn
+  - ✅ Mature card detection (interval > 21)
 
-- [ ] **GET /api/srs/:userId/statistics** - статистика SRS
-  - due_today: сколько слов на сегодня
-  - overdue: просроченные слова
-  - new_words: новые слова для изучения
-  - mature_cards: зрелые карточки (interval > 21 день)
-  - retention_rate: % правильных ответов за period
-  - average_ease: средний EF всех слов
-  - forecast: прогноз нагрузки на 7 дней вперед
+- [x] **GET /api/srs/:userId/statistics** ✅ ГОТОВО (Iteration 25)
+  - ✅ Cards: due_today, overdue, new_words, mature, suspended, total
+  - ✅ Statistics: average_ease, average_interval, retention_rate, total/correct reviews
+  - ✅ 7-day forecast (upcoming due cards per day)
+  - ✅ Recent activity (last 30 days with avg quality)
+  - ✅ Interval distribution (6 buckets: 1d, 2-7d, 8-21d, 22-60d, 61-180d, 180+d)
+  - ✅ Period parameter (default 30 days)
 
-- [ ] **PUT /api/srs/:userId/word/:wordId/suspend** - приостановить/возобновить слово
+- [x] **PUT /api/srs/:userId/word/:wordId/suspend** ✅ ГОТОВО (Iteration 26)
+  - ✅ Body: { suspend: true/false }
+  - ✅ Suspend = exclude from due words
+  - ✅ Resume = restore to rotation
+  - ✅ Preserves all SRS data (EF, interval, reps)
 
-- [ ] **POST /api/srs/:userId/reset-word/:wordId** - сбросить прогресс слова
+- [x] **POST /api/srs/:userId/reset-word/:wordId** ✅ ГОТОВО (Iteration 26)
+  - ✅ Complete progress reset to defaults
+  - ✅ EF=2.5, interval=1, reps=0, next_review=tomorrow
+  - ✅ Auto-resume (suspended=false)
+  - ✅ Irreversible operation
 
 ### 4.5 Расчет качества ответа (Quality Rating)
 - [ ] **Шкала оценки ответа (0-5)**
