@@ -1231,6 +1231,26 @@ async function initDatabase() {
         await db.query(`CREATE INDEX IF NOT EXISTS idx_word_srs_next_review ON word_srs_data(user_id, next_review_date)`);
         await db.query(`CREATE INDEX IF NOT EXISTS idx_word_srs_mature ON word_srs_data(user_id, mature)`);
 
+        // Learning Mode: Track progress before entering SRS
+        await db.query(`
+            CREATE TABLE IF NOT EXISTS word_learning_progress (
+                id SERIAL PRIMARY KEY,
+                word_id INTEGER REFERENCES words(id) ON DELETE CASCADE,
+                user_id INTEGER REFERENCES users(id) ON DELETE CASCADE,
+                exercise_type VARCHAR(50) NOT NULL,
+                correct_count INTEGER DEFAULT 0,
+                required_count INTEGER NOT NULL,
+                learn_attempts INTEGER DEFAULT 0,
+                last_attempt_date TIMESTAMP,
+                graduated_to_srs BOOLEAN DEFAULT FALSE,
+                created_at TIMESTAMP DEFAULT NOW(),
+                updated_at TIMESTAMP DEFAULT NOW(),
+                UNIQUE(word_id, user_id, exercise_type)
+            )
+        `);
+        await db.query(`CREATE INDEX IF NOT EXISTS idx_learning_progress_user ON word_learning_progress(user_id, graduated_to_srs)`);
+        await db.query(`CREATE INDEX IF NOT EXISTS idx_learning_progress_word ON word_learning_progress(word_id, user_id)`);
+
         // SRS: Review history log
         await db.query(`
             CREATE TABLE IF NOT EXISTS srs_review_log (
@@ -11874,6 +11894,256 @@ app.get('/api/srs/:userId/leeches', async (req, res) => {
         });
     } catch (err) {
         console.error('Error getting leech words:', err);
+        res.status(500).json({ error: err.message });
+    }
+});
+
+// 📚 LEARNING MODE: Get words in learning mode for user
+app.get('/api/learning/:userId/words', async (req, res) => {
+    try {
+        const { userId } = req.params;
+        const { exerciseType, limit = 20 } = req.query;
+
+        let query = `
+            SELECT
+                w.id as word_id,
+                w.word,
+                w.translation,
+                w.languagepairid,
+                lp.exercise_type,
+                lp.correct_count,
+                lp.required_count,
+                lp.learn_attempts,
+                lp.last_attempt_date,
+                lp.graduated_to_srs,
+                ROUND((lp.correct_count::DECIMAL / lp.required_count) * 100, 1) as progress_percentage
+            FROM word_learning_progress lp
+            INNER JOIN words w ON lp.word_id = w.id
+            WHERE lp.user_id = $1 AND lp.graduated_to_srs = false
+        `;
+
+        const params = [parseInt(userId)];
+        let paramIndex = 2;
+
+        if (exerciseType) {
+            query += ` AND lp.exercise_type = $${paramIndex}`;
+            params.push(exerciseType);
+            paramIndex++;
+        }
+
+        query += ` ORDER BY lp.last_attempt_date ASC NULLS FIRST LIMIT $${paramIndex}`;
+        params.push(parseInt(limit));
+
+        const words = await db.query(query, params);
+
+        // Get statistics
+        const stats = await db.query(`
+            SELECT
+                COUNT(*) as total_learning,
+                COUNT(*) FILTER (WHERE correct_count >= required_count) as ready_for_srs,
+                AVG(correct_count::DECIMAL / required_count * 100)::NUMERIC(5,1) as avg_progress
+            FROM word_learning_progress
+            WHERE user_id = $1 AND graduated_to_srs = false
+        `, [parseInt(userId)]);
+
+        res.json({
+            words: words.rows,
+            total_returned: words.rows.length,
+            statistics: stats.rows[0]
+        });
+    } catch (err) {
+        console.error('Error getting learning words:', err);
+        res.status(500).json({ error: err.message });
+    }
+});
+
+// 📚 LEARNING MODE: Record learning attempt
+app.post('/api/learning/:userId/attempt', async (req, res) => {
+    try {
+        const { userId } = req.params;
+        const { wordId, exerciseType, isCorrect } = req.body;
+
+        // Define required counts by exercise type
+        const requiredCounts = {
+            'flashcards': 2,
+            'multiple_choice': 3,
+            'typing': 5,
+            'default': 3
+        };
+        const requiredCount = requiredCounts[exerciseType] || requiredCounts['default'];
+
+        const now = new Date();
+
+        // Get or create learning progress
+        let progress = await db.query(`
+            SELECT * FROM word_learning_progress
+            WHERE word_id = $1 AND user_id = $2 AND exercise_type = $3
+        `, [parseInt(wordId), parseInt(userId), exerciseType]);
+
+        if (progress.rows.length === 0) {
+            // Create new learning progress
+            progress = await db.query(`
+                INSERT INTO word_learning_progress
+                (word_id, user_id, exercise_type, correct_count, required_count, learn_attempts, last_attempt_date, graduated_to_srs)
+                VALUES ($1, $2, $3, $4, $5, 1, $6, false)
+                RETURNING *
+            `, [parseInt(wordId), parseInt(userId), exerciseType, isCorrect ? 1 : 0, requiredCount, now]);
+        } else {
+            // Update existing progress
+            const currentCorrect = progress.rows[0].correct_count;
+            const newCorrect = isCorrect ? currentCorrect + 1 : 0; // Reset on incorrect
+
+            progress = await db.query(`
+                UPDATE word_learning_progress
+                SET correct_count = $1,
+                    learn_attempts = learn_attempts + 1,
+                    last_attempt_date = $2,
+                    updated_at = $2
+                WHERE word_id = $3 AND user_id = $4 AND exercise_type = $5
+                RETURNING *
+            `, [newCorrect, now, parseInt(wordId), parseInt(userId), exerciseType]);
+        }
+
+        const currentProgress = progress.rows[0];
+        const isCompleted = currentProgress.correct_count >= currentProgress.required_count;
+
+        // If completed, graduate to SRS
+        let srsData = null;
+        let xpResult = null;
+
+        if (isCompleted && !currentProgress.graduated_to_srs) {
+            // Mark as graduated
+            await db.query(`
+                UPDATE word_learning_progress
+                SET graduated_to_srs = true, updated_at = NOW()
+                WHERE id = $1
+            `, [currentProgress.id]);
+
+            // Create SRS entry
+            const nextReview = new Date(now);
+            nextReview.setDate(nextReview.getDate() + 1); // Tomorrow
+
+            await db.query(`
+                INSERT INTO word_srs_data
+                (word_id, user_id, easiness_factor, interval_days, repetitions, next_review_date, last_review_date, total_reviews, mature, suspended)
+                VALUES ($1, $2, 2.5, 1, 0, $3, $4, 0, false, false)
+                ON CONFLICT (word_id, user_id) DO NOTHING
+            `, [parseInt(wordId), parseInt(userId), nextReview, now]);
+
+            srsData = {
+                graduated: true,
+                next_review_date: nextReview,
+                easiness_factor: 2.5,
+                interval_days: 1
+            };
+
+            // Award XP for graduating to SRS (30 XP)
+            xpResult = await awardXP(parseInt(userId), 'word_learned', 30, `Graduated word to SRS (${exerciseType})`);
+        } else if (isCorrect) {
+            // Award small XP for correct learning attempt (9 XP)
+            xpResult = await awardXP(parseInt(userId), 'learning_attempt', 9, `Learning attempt (${exerciseType})`);
+        }
+
+        res.json({
+            success: true,
+            is_correct: isCorrect,
+            progress: {
+                correct_count: currentProgress.correct_count,
+                required_count: currentProgress.required_count,
+                learn_attempts: currentProgress.learn_attempts + 1,
+                progress_percentage: Math.round((currentProgress.correct_count / currentProgress.required_count) * 100),
+                is_completed: isCompleted
+            },
+            srs_data: srsData,
+            xp_result: xpResult
+        });
+    } catch (err) {
+        console.error('Error recording learning attempt:', err);
+        res.status(500).json({ error: err.message });
+    }
+});
+
+// 📚 LEARNING MODE: Get learning statistics
+app.get('/api/learning/:userId/statistics', async (req, res) => {
+    try {
+        const { userId } = req.params;
+
+        // Overall statistics
+        const overall = await db.query(`
+            SELECT
+                COUNT(*) as total_words_learning,
+                COUNT(*) FILTER (WHERE graduated_to_srs = true) as graduated_to_srs_count,
+                COUNT(*) FILTER (WHERE graduated_to_srs = false) as still_learning,
+                SUM(learn_attempts) as total_attempts,
+                SUM(correct_count) as total_correct,
+                AVG(learn_attempts)::NUMERIC(5,1) as avg_attempts_per_word
+            FROM word_learning_progress
+            WHERE user_id = $1
+        `, [parseInt(userId)]);
+
+        // By exercise type
+        const byType = await db.query(`
+            SELECT
+                exercise_type,
+                COUNT(*) as word_count,
+                COUNT(*) FILTER (WHERE graduated_to_srs = true) as graduated_count,
+                AVG(learn_attempts)::NUMERIC(5,1) as avg_attempts,
+                AVG(correct_count::DECIMAL / required_count * 100)::NUMERIC(5,1) as avg_progress
+            FROM word_learning_progress
+            WHERE user_id = $1
+            GROUP BY exercise_type
+            ORDER BY word_count DESC
+        `, [parseInt(userId)]);
+
+        // Recent activity (last 10 words graduated)
+        const recentGraduated = await db.query(`
+            SELECT
+                w.word,
+                w.translation,
+                lp.exercise_type,
+                lp.learn_attempts,
+                lp.updated_at as graduated_at
+            FROM word_learning_progress lp
+            INNER JOIN words w ON lp.word_id = w.id
+            WHERE lp.user_id = $1 AND lp.graduated_to_srs = true
+            ORDER BY lp.updated_at DESC
+            LIMIT 10
+        `, [parseInt(userId)]);
+
+        res.json({
+            overall: overall.rows[0],
+            by_exercise_type: byType.rows,
+            recent_graduated: recentGraduated.rows
+        });
+    } catch (err) {
+        console.error('Error getting learning statistics:', err);
+        res.status(500).json({ error: err.message });
+    }
+});
+
+// 📚 LEARNING MODE: Reset word learning progress
+app.post('/api/learning/:userId/reset-word/:wordId', async (req, res) => {
+    try {
+        const { userId, wordId } = req.params;
+        const { exerciseType } = req.body;
+
+        let query = 'DELETE FROM word_learning_progress WHERE word_id = $1 AND user_id = $2';
+        const params = [parseInt(wordId), parseInt(userId)];
+
+        if (exerciseType) {
+            query += ' AND exercise_type = $3';
+            params.push(exerciseType);
+        }
+
+        const result = await db.query(query, params);
+
+        res.json({
+            success: true,
+            deleted_count: result.rowCount,
+            message: `Learning progress reset for word ${wordId}`
+        });
+    } catch (err) {
+        console.error('Error resetting learning progress:', err);
         res.status(500).json({ error: err.message });
     }
 });

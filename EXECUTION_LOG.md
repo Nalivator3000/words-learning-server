@@ -2082,3 +2082,237 @@ new Date(now.getFullYear(), now.getMonth(), 1)
 - Achievement "Leech Hunter" за решение 10 leeches
 - Email digest "Your weekly leeches"
 
+
+## Iteration 31: Learning Mode System
+**Дата**: 2025-10-19
+**Статус**: ✅ Завершено
+
+### Задача
+Создать Learning Mode систему для ускоренного изучения новых слов перед переходом в SRS.
+
+### Реализация
+
+#### 1. Database Schema - word_learning_progress
+**Файл**: server-postgresql.js:1234-1252 (19 строк)
+
+**Таблица word_learning_progress**:
+- `id` - PRIMARY KEY
+- `word_id` - FOREIGN KEY → words(id) ON DELETE CASCADE
+- `user_id` - FOREIGN KEY → users(id) ON DELETE CASCADE
+- `exercise_type` - VARCHAR(50) NOT NULL (flashcards/multiple_choice/typing)
+- `correct_count` - INTEGER DEFAULT 0 (текущий счетчик правильных ответов)
+- `required_count` - INTEGER NOT NULL (цель для graduation)
+- `learn_attempts` - INTEGER DEFAULT 0 (всего попыток)
+- `last_attempt_date` - TIMESTAMP
+- `graduated_to_srs` - BOOLEAN DEFAULT FALSE (флаг завершения learning mode)
+- `created_at`, `updated_at` - TIMESTAMP
+- UNIQUE(word_id, user_id, exercise_type) - один прогресс на слово+упражнение
+- Indexes: (user_id, graduated_to_srs), (word_id, user_id)
+
+#### 2. Required Counts by Exercise Type
+- **flashcards**: 2 правильных ответа → graduation
+- **multiple_choice**: 3 правильных → graduation
+- **typing**: 5 правильных → graduation
+- **default**: 3 (fallback)
+
+#### 3. API Endpoints (4)
+
+##### GET /api/learning/:userId/words
+**Файл**: server-postgresql.js:11902-11958 (57 строк)
+
+**Query параметры**:
+- `exerciseType` - фильтр по типу упражнения (optional)
+- `limit` - количество слов (default: 20)
+
+**Функционал**:
+- Получение слов в learning mode (graduated_to_srs = false)
+- JOIN с words table для word/translation
+- Сортировка: last_attempt_date ASC NULLS FIRST (приоритет неначатым)
+- Progress percentage: (correct_count / required_count) * 100
+- Statistics: total_learning, ready_for_srs, avg_progress
+
+**Response**:
+```json
+{
+  "words": [
+    {
+      "word_id": 45,
+      "word": "Apfel",
+      "translation": "яблоко",
+      "languagepairid": 1,
+      "exercise_type": "flashcards",
+      "correct_count": 1,
+      "required_count": 2,
+      "learn_attempts": 3,
+      "progress_percentage": 50.0
+    }
+  ],
+  "total_returned": 15,
+  "statistics": {
+    "total_learning": 25,
+    "ready_for_srs": 8,
+    "avg_progress": 64.5
+  }
+}
+```
+
+##### POST /api/learning/:userId/attempt
+**Файл**: server-postgresql.js:11960-12064 (105 строк)
+
+**Request Body**:
+```json
+{
+  "wordId": 45,
+  "exerciseType": "flashcards",
+  "isCorrect": true
+}
+```
+
+**Логика работы**:
+1. **Получение/создание прогресса**:
+   - SELECT existing progress или INSERT new (correct_count = isCorrect ? 1 : 0)
+   - Increment learn_attempts
+
+2. **Обновление счетчика**:
+   - Если isCorrect: correct_count +1
+   - Если НЕ isCorrect: correct_count → 0 (reset!)
+
+3. **Graduation to SRS** (если correct_count >= required_count):
+   - Mark graduated_to_srs = true
+   - INSERT into word_srs_data (EF=2.5, interval=1, next_review=tomorrow)
+   - Award 30 XP (×3 multiplier) за graduation
+   - Return srs_data в response
+
+4. **Partial progress XP**:
+   - Если isCorrect (но не graduated): +9 XP за learning attempt
+
+**Response**:
+```json
+{
+  "success": true,
+  "is_correct": true,
+  "progress": {
+    "correct_count": 2,
+    "required_count": 2,
+    "learn_attempts": 4,
+    "progress_percentage": 100,
+    "is_completed": true
+  },
+  "srs_data": {
+    "graduated": true,
+    "next_review_date": "2025-10-20T10:00:00Z",
+    "easiness_factor": 2.5,
+    "interval_days": 1
+  },
+  "xp_result": {
+    "xp_awarded": 30,
+    "new_total_xp": 1350,
+    "new_level": 15
+  }
+}
+```
+
+##### GET /api/learning/:userId/statistics
+**Файл**: server-postgresql.js:12066-12122 (57 строк)
+
+**Функционал**:
+- **Overall statistics**: total words, graduated count, still_learning, total/correct attempts, avg attempts per word
+- **By exercise type**: word_count, graduated_count, avg_attempts, avg_progress (GROUP BY exercise_type)
+- **Recent graduated**: last 10 words that graduated to SRS (with word/translation, exercise_type, attempts, date)
+
+**Response**:
+```json
+{
+  "overall": {
+    "total_words_learning": 45,
+    "graduated_to_srs_count": 28,
+    "still_learning": 17,
+    "total_attempts": 235,
+    "total_correct": 180,
+    "avg_attempts_per_word": 5.2
+  },
+  "by_exercise_type": [
+    {
+      "exercise_type": "flashcards",
+      "word_count": 20,
+      "graduated_count": 15,
+      "avg_attempts": 3.5,
+      "avg_progress": 87.5
+    }
+  ],
+  "recent_graduated": [
+    {
+      "word": "Haus",
+      "translation": "дом",
+      "exercise_type": "typing",
+      "learn_attempts": 7,
+      "graduated_at": "2025-10-19T14:30:00Z"
+    }
+  ]
+}
+```
+
+##### POST /api/learning/:userId/reset-word/:wordId
+**Файл**: server-postgresql.js:12124-12149 (26 строк)
+
+**Request Body** (optional):
+```json
+{
+  "exerciseType": "flashcards"  // optional: reset specific type only
+}
+```
+
+**Функционал**:
+- DELETE learning progress for word
+- Если exerciseType указан: только для этого типа
+- Если нет: все типы упражнений для слова
+
+**Response**:
+```json
+{
+  "success": true,
+  "deleted_count": 1,
+  "message": "Learning progress reset for word 45"
+}
+```
+
+### Технические детали
+- **UNIQUE constraint** на (word_id, user_id, exercise_type) - предотвращает дубликаты
+- **Reset on incorrect** - неправильный ответ сбрасывает correct_count к 0 (strict learning)
+- **Conditional INSERT/UPDATE** - создает запись если нет, обновляет если есть
+- **ON CONFLICT DO NOTHING** для SRS insertion (защита от race conditions)
+- **FILTER clause** для category counting в statistics
+- **Indexes** для оптимизации lookups
+
+### Workflow пользователя
+1. **New word added** → no entry in word_learning_progress
+2. **First attempt** → INSERT progress (correct_count = 0 or 1, required_count = 2-5)
+3. **Correct answers accumulate** → correct_count increments (1 → 2 → 3...)
+4. **Incorrect answer** → correct_count resets to 0 (start over!)
+5. **Reach required_count** → graduated_to_srs = true → INSERT into word_srs_data → Award 30 XP
+6. **Word enters SRS** → follows SM-2 algorithm (Iteration 24)
+
+### XP Rewards
+- **Graduation to SRS**: 30 XP (слово "выучено")
+- **Correct learning attempt**: 9 XP (промежуточный прогресс)
+- **Incorrect attempt**: 0 XP (no reward, reset progress)
+
+### Связь с другими компонентами
+- Интеграция с word_srs_data (Iteration 22) - auto-create on graduation
+- Интеграция с awardXP function (gamification core)
+- Подготовка к frontend learning mode UI
+
+### Use Cases
+- **Learn New Words mode**: пользователь практикует слово 2-5 раз перед SRS
+- **Flashcards**: быстрое изучение (2 раза)
+- **Multiple choice**: средняя сложность (3 раза)
+- **Typing**: максимальная сложность (5 раз, полное запоминание spelling)
+- **Reset progress**: если пользователь забыл слово, можно начать learning mode заново
+
+### Следующие шаги
+- Frontend UI для Learning Mode (practice session interface)
+- Визуализация прогресса (progress bar per word)
+- Auto-selection logic (какие слова давать в learning mode)
+- Achievement "Quick Learner" за 50 graduated words
+- Statistics dashboard для learning mode
+
