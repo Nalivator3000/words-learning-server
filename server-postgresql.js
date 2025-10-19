@@ -11412,6 +11412,118 @@ app.post('/api/srs/:userId/reset-word/:wordId', async (req, res) => {
     }
 });
 
+// ========================================
+// PERSONAL RATING SYSTEM ENDPOINTS
+// ========================================
+
+// Get personal rating (weekly/monthly XP history)
+app.get('/api/rating/:userId/personal', async (req, res) => {
+    try {
+        const { userId } = req.params;
+        const { period = 'weekly' } = req.query; // weekly or monthly
+
+        const now = new Date();
+        let startDate;
+        let groupFormat;
+        let periodCount;
+
+        if (period === 'weekly') {
+            // Last 12 weeks
+            startDate = new Date(now);
+            startDate.setDate(startDate.getDate() - (12 * 7));
+            groupFormat = 'YYYY-IW'; // ISO week format
+            periodCount = 12;
+        } else {
+            // Last 12 months
+            startDate = new Date(now);
+            startDate.setMonth(startDate.getMonth() - 12);
+            groupFormat = 'YYYY-MM';
+            periodCount = 12;
+        }
+
+        // Get XP history grouped by period
+        const xpHistory = await db.query(`
+            SELECT
+                TO_CHAR(createdat, $1) as period,
+                SUM(xp_amount) as total_xp,
+                COUNT(*) as activity_count,
+                MIN(createdat) as period_start,
+                MAX(createdat) as period_end
+            FROM xp_history
+            WHERE user_id = $2 AND createdat >= $3
+            GROUP BY TO_CHAR(createdat, $1)
+            ORDER BY period ASC
+        `, [groupFormat, parseInt(userId), startDate]);
+
+        // Calculate statistics
+        const totalXP = xpHistory.rows.reduce((sum, row) => sum + parseInt(row.total_xp), 0);
+        const avgXPPerPeriod = xpHistory.rows.length > 0 ? Math.round(totalXP / xpHistory.rows.length) : 0;
+        const maxXPPeriod = xpHistory.rows.length > 0
+            ? Math.max(...xpHistory.rows.map(r => parseInt(r.total_xp)))
+            : 0;
+
+        // Find best period
+        let bestPeriod = null;
+        if (xpHistory.rows.length > 0) {
+            const best = xpHistory.rows.reduce((prev, curr) =>
+                parseInt(curr.total_xp) > parseInt(prev.total_xp) ? curr : prev
+            );
+            bestPeriod = {
+                period: best.period,
+                xp: parseInt(best.total_xp),
+                activities: parseInt(best.activity_count)
+            };
+        }
+
+        // Calculate current period XP
+        let currentPeriodStart;
+        if (period === 'weekly') {
+            // Start of current week (Monday)
+            currentPeriodStart = new Date(now);
+            const day = currentPeriodStart.getDay();
+            const diff = currentPeriodStart.getDate() - day + (day === 0 ? -6 : 1);
+            currentPeriodStart.setDate(diff);
+            currentPeriodStart.setHours(0, 0, 0, 0);
+        } else {
+            // Start of current month
+            currentPeriodStart = new Date(now.getFullYear(), now.getMonth(), 1);
+        }
+
+        const currentPeriodXP = await db.query(`
+            SELECT COALESCE(SUM(xp_amount), 0) as current_xp
+            FROM xp_history
+            WHERE user_id = $1 AND createdat >= $2
+        `, [parseInt(userId), currentPeriodStart]);
+
+        // Get user's current stats
+        const userStats = await db.query('SELECT total_xp, level FROM user_stats WHERE user_id = $1', [parseInt(userId)]);
+
+        res.json({
+            period_type: period,
+            periods_shown: periodCount,
+            history: xpHistory.rows.map(row => ({
+                period: row.period,
+                total_xp: parseInt(row.total_xp),
+                activity_count: parseInt(row.activity_count),
+                period_start: row.period_start,
+                period_end: row.period_end
+            })),
+            statistics: {
+                total_xp_all_time: userStats.rows.length > 0 ? userStats.rows[0].total_xp : 0,
+                current_level: userStats.rows.length > 0 ? userStats.rows[0].level : 1,
+                total_xp_period_range: totalXP,
+                avg_xp_per_period: avgXPPerPeriod,
+                max_xp_period: maxXPPeriod,
+                current_period_xp: parseInt(currentPeriodXP.rows[0].current_xp),
+                best_period: bestPeriod
+            }
+        });
+    } catch (err) {
+        console.error('Error getting personal rating:', err);
+        res.status(500).json({ error: err.message });
+    }
+});
+
 // Serve main page
 app.get('/', (req, res) => {
     res.sendFile(path.join(__dirname, 'public', 'index.html'));

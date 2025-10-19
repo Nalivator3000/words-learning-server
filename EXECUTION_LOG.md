@@ -1556,3 +1556,121 @@ WHERE correct = quality_rating >= 3
 - Iteration 27: Personal Rating System endpoints
 - Iteration 28: Country/City Leaderboards
 
+
+## Iteration 27: Personal Rating System
+**Дата**: 2025-10-19  
+**Статус**: ✅ Завершено
+
+### Задача
+Создать Personal Rating endpoint для отслеживания еженедельного/ежемесячного прогресса XP.
+
+### Реализация
+
+#### API Endpoint - GET /api/rating/:userId/personal
+**Файл**: server-postgresql.js:11415-11525 (111 строк)
+
+**Query параметры**:
+- `period` - тип периода: 'weekly' или 'monthly' (default: 'weekly')
+
+**Логика работы**:
+
+1. **Weekly Mode** (последние 12 недель):
+   - Группировка по ISO week (YYYY-IW format)
+   - Стартовая дата: NOW - 84 дня (12 × 7)
+   - Текущая неделя: начало с понедельника
+
+2. **Monthly Mode** (последние 12 месяцев):
+   - Группировка по месяцам (YYYY-MM format)
+   - Стартовая дата: NOW - 12 месяцев
+   - Текущий месяц: 1-е число
+
+**Данные из xp_history**:
+- `period` - идентификатор периода (2025-42 или 2025-10)
+- `total_xp` - сумма XP за период
+- `activity_count` - количество XP транзакций
+- `period_start` - первая активность в периоде
+- `period_end` - последняя активность в периоде
+
+**Статистика**:
+- `total_xp_all_time` - весь XP пользователя
+- `current_level` - текущий уровень
+- `total_xp_period_range` - сумма XP за показанные периоды
+- `avg_xp_per_period` - средний XP за период
+- `max_xp_period` - максимальный XP в одном периоде
+- `current_period_xp` - XP в текущем периоде (неделя/месяц)
+- `best_period` - лучший период (period, xp, activities)
+
+**Response Structure**:
+```json
+{
+  "period_type": "weekly",
+  "periods_shown": 12,
+  "history": [
+    {
+      "period": "2025-40",
+      "total_xp": 1250,
+      "activity_count": 45,
+      "period_start": "2025-10-01T10:00:00Z",
+      "period_end": "2025-10-07T22:30:00Z"
+    }
+  ],
+  "statistics": {
+    "total_xp_all_time": 15234,
+    "current_level": 23,
+    "total_xp_period_range": 8450,
+    "avg_xp_per_period": 704,
+    "max_xp_period": 1450,
+    "current_period_xp": 320,
+    "best_period": {
+      "period": "2025-38",
+      "xp": 1450,
+      "activities": 67
+    }
+  }
+}
+```
+
+### Технические детали
+- **TO_CHAR()** для группировки по периодам
+  - YYYY-IW = ISO week (Monday start)
+  - YYYY-MM = Year-Month
+- **Array.reduce()** для подсчета total/avg/max
+- **Date манипуляции** для current period границ
+- **COALESCE()** для default 0 в current_period_xp
+- **GROUP BY + ORDER BY** для хронологической сортировки
+
+### Вычисление текущего периода
+**Weekly** (понедельник - воскресенье):
+```javascript
+const day = currentDate.getDay();
+const diff = currentDate.getDate() - day + (day === 0 ? -6 : 1);
+currentPeriodStart.setDate(diff);  // Понедельник
+```
+
+**Monthly** (1-е число):
+```javascript
+new Date(now.getFullYear(), now.getMonth(), 1)
+```
+
+### UI Use Cases
+- **Line Chart**: XP trend за 12 недель/месяцев
+- **Bar Chart**: Activity count comparison
+- **Progress Card**: Current period XP with goal
+- **Badge**: Best period highlight
+- **Streak Indicator**: Consecutive active periods
+
+### Оптимизации
+- Один запрос для всей истории (GROUP BY)
+- Index на (user_id, createdat) в xp_history
+- Клиентский расчет statistics (избегаем доп. запросов)
+- COALESCE для безопасности от NULL
+
+### Связь с другими компонентами
+- Использует xp_history таблицу (gamification core)
+- Использует user_stats для all_time XP
+- Дополняет leaderboard endpoints
+
+### Следующие шаги
+- Iteration 28: Country/City Leaderboards
+- Iteration 29: Mentorship Program endpoints
+
