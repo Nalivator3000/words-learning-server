@@ -11455,6 +11455,216 @@ app.post('/api/srs/:userId/review', async (req, res) => {
     }
 });
 
+// 📦 Batch review multiple words
+app.post('/api/srs/:userId/batch-review', async (req, res) => {
+    try {
+        const { userId } = req.params;
+        const { reviews } = req.body; // Array of { wordId, qualityRating, timeTaken }
+
+        if (!Array.isArray(reviews) || reviews.length === 0) {
+            return res.status(400).json({ error: 'reviews must be a non-empty array' });
+        }
+
+        if (reviews.length > 100) {
+            return res.status(400).json({ error: 'Maximum 100 reviews per batch' });
+        }
+
+        // Validate all reviews
+        for (const review of reviews) {
+            if (!review.wordId || review.qualityRating === undefined) {
+                return res.status(400).json({
+                    error: 'Each review must have wordId and qualityRating'
+                });
+            }
+            if (review.qualityRating < 0 || review.qualityRating > 5) {
+                return res.status(400).json({
+                    error: `Quality rating must be 0-5, got ${review.qualityRating} for word ${review.wordId}`
+                });
+            }
+        }
+
+        // Get user's learning profile once for all reviews
+        const learningProfile = await db.query(
+            'SELECT preferred_interval_modifier FROM user_learning_profile WHERE user_id = $1',
+            [parseInt(userId)]
+        );
+
+        const intervalModifier = learningProfile.rows.length > 0
+            && learningProfile.rows[0].preferred_interval_modifier
+            ? parseFloat(learningProfile.rows[0].preferred_interval_modifier)
+            : 1.0;
+
+        const results = [];
+        let totalXP = 0;
+        let successCount = 0;
+        let errorCount = 0;
+
+        // Process each review
+        for (const review of reviews) {
+            try {
+                const { wordId, qualityRating, timeTaken } = review;
+                const now = new Date();
+
+                // Get current SRS data
+                let srsData = await db.query(
+                    'SELECT * FROM word_srs_data WHERE word_id = $1 AND user_id = $2',
+                    [parseInt(wordId), parseInt(userId)]
+                );
+
+                let currentEF, currentInterval, currentReps, previousEF, previousInterval;
+                let isNew = false;
+
+                if (srsData.rows.length === 0) {
+                    currentEF = 2.5;
+                    currentInterval = 1;
+                    currentReps = 0;
+                    isNew = true;
+                    previousEF = null;
+                    previousInterval = null;
+                } else {
+                    const data = srsData.rows[0];
+                    currentEF = parseFloat(data.easiness_factor);
+                    currentInterval = data.interval_days;
+                    currentReps = data.repetitions;
+                    previousEF = currentEF;
+                    previousInterval = currentInterval;
+                }
+
+                // SM-2 Algorithm
+                let newEF = currentEF + (0.1 - (5 - qualityRating) * (0.08 + (5 - qualityRating) * 0.02));
+                if (newEF < 1.3) newEF = 1.3;
+
+                let newInterval, newReps;
+
+                if (qualityRating < 3) {
+                    newReps = 0;
+                    newInterval = 1;
+                } else {
+                    if (currentReps === 0) {
+                        newInterval = 1;
+                    } else if (currentReps === 1) {
+                        newInterval = 6;
+                    } else {
+                        newInterval = Math.round(currentInterval * newEF * intervalModifier);
+                        if (newInterval < 1) newInterval = 1;
+                    }
+                    newReps = currentReps + 1;
+                }
+
+                const nextReviewDate = new Date(now);
+                nextReviewDate.setDate(nextReviewDate.getDate() + newInterval);
+
+                const isMature = newInterval > 21;
+
+                let reviewType = 'review';
+                if (isNew) {
+                    reviewType = 'learn';
+                } else if (qualityRating < 3 && currentReps > 0) {
+                    reviewType = 'relearn';
+                }
+
+                // Update or insert SRS data
+                if (isNew) {
+                    await db.query(`
+                        INSERT INTO word_srs_data (
+                            word_id, user_id, easiness_factor, interval_days, repetitions,
+                            next_review_date, last_review_date, last_quality_rating,
+                            total_reviews, mature, updated_at
+                        ) VALUES ($1, $2, $3, $4, $5, $6, $7, $8, 1, $9, $10)
+                    `, [
+                        parseInt(wordId), parseInt(userId), newEF, newInterval, newReps,
+                        nextReviewDate, now, qualityRating, isMature, now
+                    ]);
+                } else {
+                    await db.query(`
+                        UPDATE word_srs_data
+                        SET easiness_factor = $1,
+                            interval_days = $2,
+                            repetitions = $3,
+                            next_review_date = $4,
+                            last_review_date = $5,
+                            last_quality_rating = $6,
+                            total_reviews = total_reviews + 1,
+                            mature = $7,
+                            updated_at = $8
+                        WHERE word_id = $9 AND user_id = $10
+                    `, [
+                        newEF, newInterval, newReps, nextReviewDate, now,
+                        qualityRating, isMature, now, parseInt(wordId), parseInt(userId)
+                    ]);
+                }
+
+                // Log review
+                await db.query(`
+                    INSERT INTO srs_review_log (
+                        word_id, user_id, review_date, quality_rating, time_taken_ms,
+                        previous_interval, new_interval, previous_ef, new_ef, review_type
+                    ) VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9, $10)
+                `, [
+                    parseInt(wordId), parseInt(userId), now, qualityRating, timeTaken || null,
+                    previousInterval, newInterval, previousEF, newEF, reviewType
+                ]);
+
+                // Calculate XP
+                const xpMap = { 5: 15, 4: 12, 3: 9, 2: 3, 1: 0, 0: 0 };
+                let xpEarned = xpMap[qualityRating] || 0;
+
+                if (isMature && qualityRating >= 3) {
+                    xpEarned = Math.round(xpEarned * 1.5);
+                }
+
+                totalXP += xpEarned;
+
+                results.push({
+                    word_id: parseInt(wordId),
+                    success: true,
+                    review_type: reviewType,
+                    xp_earned: xpEarned,
+                    srs_data: {
+                        easiness_factor: newEF,
+                        interval_days: newInterval,
+                        repetitions: newReps,
+                        next_review_date: nextReviewDate,
+                        is_mature: isMature
+                    }
+                });
+
+                successCount++;
+
+            } catch (reviewErr) {
+                logger.error(`Error processing review for word ${review.wordId}:`, reviewErr);
+                results.push({
+                    word_id: parseInt(review.wordId),
+                    success: false,
+                    error: reviewErr.message
+                });
+                errorCount++;
+            }
+        }
+
+        // Award total XP once
+        let xpResult = null;
+        if (totalXP > 0) {
+            xpResult = await awardXP(parseInt(userId), 'batch_srs_review', totalXP, `Batch reviewed ${successCount} words`);
+        }
+
+        res.json({
+            success: true,
+            total_reviews: reviews.length,
+            successful: successCount,
+            failed: errorCount,
+            total_xp_earned: totalXP,
+            interval_modifier_applied: intervalModifier,
+            results,
+            xp_result: xpResult
+        });
+
+    } catch (err) {
+        logger.error('Error in batch review:', err);
+        res.status(500).json({ error: err.message });
+    }
+});
+
 // Get SRS statistics for user
 app.get('/api/srs/:userId/statistics', async (req, res) => {
     try {
