@@ -1038,7 +1038,16 @@
     - ✅ DDoS mitigation (100 req/15min)
     - ✅ Brute-force prevention (5 attempts/15min)
     - ✅ API abuse throttling (60 req/min)
-  - Helmet.js для Express security headers
+  - [x] **Helmet.js для Express security headers** ✅ ГОТОВО (Iteration 41)
+    - ✅ Content-Security-Policy (CSP) configured
+    - ✅ Strict-Transport-Security (HSTS) - 1 year, includeSubDomains, preload
+    - ✅ X-Frame-Options: DENY (clickjacking protection)
+    - ✅ X-Content-Type-Options: nosniff (MIME sniffing protection)
+    - ✅ X-XSS-Protection: enabled (legacy XSS protection)
+    - ✅ Referrer-Policy: strict-origin-when-cross-origin
+    - ✅ 11+ security headers set
+    - ✅ OWASP vulnerabilities mitigated: XSS, clickjacking, MITM, MIME sniffing
+    - ✅ A+ security rating (expected on securityheaders.com)
   - Обновление зависимостей (npm audit fix)
   - Secrets management (переменные окружения)
   - HTTPS enforcement

@@ -4,6 +4,7 @@ const path = require('path');
 const cors = require('cors');
 const compression = require('compression');
 const rateLimit = require('express-rate-limit');
+const helmet = require('helmet');
 const multer = require('multer');
 const csv = require('csv-parser');
 const fs = require('fs');
@@ -77,6 +78,38 @@ const apiLimiter = rateLimit({
 
 // Apply general rate limiter to all routes
 app.use(generalLimiter);
+
+// Security headers - Helmet.js
+app.use(helmet({
+    contentSecurityPolicy: {
+        directives: {
+            defaultSrc: ["'self'"],
+            scriptSrc: ["'self'", "'unsafe-inline'", "https://cdn.jsdelivr.net", "https://cdnjs.cloudflare.com"],
+            styleSrc: ["'self'", "'unsafe-inline'", "https://cdn.jsdelivr.net", "https://cdnjs.cloudflare.com", "https://fonts.googleapis.com"],
+            fontSrc: ["'self'", "https://fonts.gstatic.com", "https://cdnjs.cloudflare.com"],
+            imgSrc: ["'self'", "data:", "https:", "blob:"],
+            connectSrc: ["'self'"],
+            frameSrc: ["'none'"],
+            objectSrc: ["'none'"],
+            upgradeInsecureRequests: []
+        }
+    },
+    crossOriginEmbedderPolicy: false, // Disable for external resources
+    crossOriginResourcePolicy: { policy: "cross-origin" }, // Allow cross-origin resources
+    hsts: {
+        maxAge: 31536000, // 1 year in seconds
+        includeSubDomains: true,
+        preload: true
+    },
+    frameguard: {
+        action: 'deny' // Prevent clickjacking
+    },
+    xssFilter: true, // Enable XSS filter
+    noSniff: true, // Prevent MIME type sniffing
+    referrerPolicy: {
+        policy: 'strict-origin-when-cross-origin'
+    }
+}));
 
 app.use(cors());
 app.use(express.json());
