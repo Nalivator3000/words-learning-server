@@ -1016,6 +1016,103 @@
   - Account lockout после неудачных попыток
   - 2FA (будущая версия)
 
+### 9.5 Auth0 Integration 🔐
+- [ ] **Миграция на Auth0** 🎯 ВЫСОКИЙ ПРИОРИТЕТ
+  - Universal Login (готовый UI для входа/регистрации)
+  - Social Connections:
+    - Google OAuth 2.0
+    - Facebook Login
+    - GitHub OAuth
+    - Twitter/X OAuth
+    - VKontakte (для RU аудитории)
+    - Apple Sign In
+  - Passwordless Authentication:
+    - Email Magic Link (вход по ссылке из письма)
+    - SMS OTP (одноразовый код в SMS)
+  - Multi-Factor Authentication (MFA):
+    - SMS MFA
+    - Authenticator apps (Google Authenticator, Authy)
+    - Email MFA
+    - Push notifications (Guardian)
+  - Security Features:
+    - Brute-force Protection (автоблокировка при множественных попытках)
+    - Breached Password Detection (проверка по базам утечек)
+    - Bot Detection (защита от ботов)
+    - Anomaly Detection (подозрительные входы)
+  - User Management:
+    - User Dashboard (управление пользователями)
+    - User Search & Filtering
+    - User Metadata (custom fields)
+    - User Impersonation (для support)
+  - Token Management:
+    - Access Tokens (JWT)
+    - Refresh Tokens (long-lived)
+    - ID Tokens (user info)
+  - Customization:
+    - Custom Login Page (брендинг)
+    - Custom Email Templates
+    - Custom SMS Templates
+    - Localization (RU, EN, DE, ES, FR, IT)
+
+- [ ] **Backend Integration**
+  - Auth0 SDK установка (auth0-node)
+  - Middleware для проверки JWT
+  - Замена текущей auth логики на Auth0
+  - Миграция существующих пользователей
+  - Синхронизация user metadata (level, XP, stats)
+  - Webhook handlers для Auth0 events:
+    - post-login (auto-create user_stats)
+    - post-registration (onboarding trigger)
+    - password-reset (logging)
+  - Rate limiting integration
+
+- [ ] **Frontend Integration**
+  - Auth0 Lock UI (готовый виджет)
+  - Auth0 SPA SDK (для Single Page Apps)
+  - Login/Logout flow
+  - Profile management
+  - Session management (refresh tokens)
+  - Social login buttons (Google, Facebook, etc.)
+  - Passwordless UI (email/SMS)
+
+- [ ] **Migration Strategy**
+  - Export существующих users из PostgreSQL
+  - Auth0 Management API для bulk import
+  - Password hash migration (bcrypt → Auth0)
+  - User ID mapping (old DB id → Auth0 user_id)
+  - Rollback plan (на случай проблем)
+
+- [ ] **Testing**
+  - Login flow testing
+  - Social login testing
+  - Passwordless testing
+  - MFA testing
+  - Token refresh testing
+  - Security testing (OWASP)
+
+- [ ] **Monitoring & Analytics**
+  - Auth0 Logs streaming (к Sentry/Datadog)
+  - Login analytics (успешные/неуспешные попытки)
+  - User activity tracking
+  - Security alerts (brute-force, anomalies)
+
+- [ ] **Compliance**
+  - GDPR compliance (user data export/delete)
+  - Password policies (strength requirements)
+  - Privacy policy integration
+  - Terms of service
+
+**Benefits of Auth0**:
+- ✅ Enterprise-grade security out of the box
+- ✅ Множество social providers без настройки
+- ✅ Passwordless - современный UX
+- ✅ MFA - дополнительная защита
+- ✅ Brute-force & Bot protection - автоматически
+- ✅ Anomaly detection - AI-powered
+- ✅ User management UI - не нужно делать свою админку
+- ✅ Scalability - миллионы пользователей
+- ✅ Compliance - GDPR, SOC2, HIPAA ready
+
 
 ### 9.6 DevOps и деплой
 - [ ] **CI/CD pipeline**
