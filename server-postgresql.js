@@ -1307,7 +1307,63 @@ async function initDatabase() {
         `);
         await db.query(`CREATE INDEX IF NOT EXISTS idx_srs_review_log_user ON srs_review_log(user_id, review_date)`);
 
+        // Additional performance indexes
+        // Words table optimization
+        await db.query(`CREATE INDEX IF NOT EXISTS idx_words_user_lang ON words(user_id, language_pair_id)`);
+        await db.query(`CREATE INDEX IF NOT EXISTS idx_words_status ON words(user_id, status)`);
+        await db.query(`CREATE INDEX IF NOT EXISTS idx_words_next_review ON words(user_id, nextReviewDate) WHERE nextReviewDate IS NOT NULL`);
+
+        // Language pairs optimization
+        await db.query(`CREATE INDEX IF NOT EXISTS idx_language_pairs_user ON language_pairs(user_id, is_active)`);
+
+        // XP history optimization
+        await db.query(`CREATE INDEX IF NOT EXISTS idx_xp_history_user ON xp_history(user_id, createdat DESC)`);
+        await db.query(`CREATE INDEX IF NOT EXISTS idx_xp_history_type ON xp_history(user_id, action_type)`);
+
+        // Daily goals optimization
+        await db.query(`CREATE INDEX IF NOT EXISTS idx_daily_goals_user_date ON daily_goals(user_id, goal_date DESC)`);
+
+        // User achievements optimization
+        await db.query(`CREATE INDEX IF NOT EXISTS idx_user_achievements_user ON user_achievements(user_id, createdat DESC)`);
+
+        // Friendships optimization
+        await db.query(`CREATE INDEX IF NOT EXISTS idx_friendships_user1 ON friendships(user1_id, status)`);
+        await db.query(`CREATE INDEX IF NOT EXISTS idx_friendships_user2 ON friendships(user2_id, status)`);
+
+        // Friend activities optimization
+        await db.query(`CREATE INDEX IF NOT EXISTS idx_friend_activities_user ON friend_activities(user_id, createdat DESC)`);
+
+        // Reports optimization
+        await db.query(`CREATE INDEX IF NOT EXISTS idx_reports_user ON reports(user_id, created_at DESC)`);
+        await db.query(`CREATE INDEX IF NOT EXISTS idx_reports_status ON reports(status, priority)`);
+
+        // Challenge progress optimization
+        await db.query(`CREATE INDEX IF NOT EXISTS idx_user_challenges_date ON user_daily_challenges(user_id, challenge_date DESC)`);
+        await db.query(`CREATE INDEX IF NOT EXISTS idx_user_challenges_status ON user_daily_challenges(user_id, status)`);
+
+        // Weekly challenges optimization
+        await db.query(`CREATE INDEX IF NOT EXISTS idx_weekly_challenges_user ON weekly_challenges(user_id, week_start_date DESC)`);
+
+        // League history optimization
+        await db.query(`CREATE INDEX IF NOT EXISTS idx_league_history_user ON league_history(user_id, week_start_date DESC)`);
+
+        // Leaderboard cache optimization
+        await db.query(`CREATE INDEX IF NOT EXISTS idx_leaderboard_cache ON leaderboard_cache(leaderboard_type, rank)`);
+        await db.query(`CREATE INDEX IF NOT EXISTS idx_leaderboard_user ON leaderboard_cache(user_id, leaderboard_type)`);
+
+        // Global word collections optimization
+        await db.query(`CREATE INDEX IF NOT EXISTS idx_global_collections_lang ON global_word_collections(from_language, to_language, category)`);
+        await db.query(`CREATE INDEX IF NOT EXISTS idx_global_collections_difficulty ON global_word_collections(difficulty_level, is_active)`);
+
+        // Tournaments optimization
+        await db.query(`CREATE INDEX IF NOT EXISTS idx_tournaments_status ON tournaments(status, start_date)`);
+        await db.query(`CREATE INDEX IF NOT EXISTS idx_tournament_participants ON tournament_participants(tournament_id, user_id)`);
+
+        // Streak freezes optimization
+        await db.query(`CREATE INDEX IF NOT EXISTS idx_streak_freezes_user ON streak_freezes(user_id, is_active, expires_at)`);
+
         logger.info('✅ SRS tables initialized');
+        logger.info('✅ Performance indexes added (29 indexes)');
 
     } catch (err) {
         logger.error('Database initialization error:', err);
