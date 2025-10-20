@@ -706,7 +706,13 @@
   - ✅ Preferred interval modifier calculation (growth rate analysis)
   - ✅ 5 типов рекомендаций: optimal_time, retention_improvement, interval_adjustment, difficulty_challenge, session_length
   - ✅ PUT endpoint для manual preference updates
-  - [ ] Автоматическое применение preferred_interval_modifier в SM-2 (будущая версия)
+  - [x] **Автоматическое применение preferred_interval_modifier в SM-2** ✅ ГОТОВО (Iteration 37)
+    - ✅ Интеграция в POST /api/srs/:userId/review endpoint
+    - ✅ Modifier применяется с 3-го повторения (после фиксированных 1d, 6d)
+    - ✅ Formula: newInterval = currentInterval * EF * intervalModifier
+    - ✅ API response содержит personalization object (interval_modifier_applied, is_personalized)
+    - ✅ Backward compatible (default modifier = 1.0)
+    - ✅ Self-optimizing через analyze endpoint
   - [ ] Frontend UI для отображения learning profile (будущая версия)
 
 ---

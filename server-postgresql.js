@@ -11312,6 +11312,16 @@ app.post('/api/srs/:userId/review', async (req, res) => {
             previousInterval = currentInterval;
         }
 
+        // Get user's learning profile for interval modifier
+        const learningProfile = await db.query(
+            'SELECT preferred_interval_modifier FROM user_learning_profile WHERE user_id = $1',
+            [parseInt(userId)]
+        );
+
+        const intervalModifier = learningProfile.rows.length > 0 && learningProfile.rows[0].preferred_interval_modifier
+            ? parseFloat(learningProfile.rows[0].preferred_interval_modifier)
+            : 1.0; // Default to 1.0 if no profile
+
         // SM-2 Algorithm Calculation
         let newEF = currentEF;
         let newInterval = currentInterval;
@@ -11333,7 +11343,11 @@ app.post('/api/srs/:userId/review', async (req, res) => {
             } else if (currentReps === 1) {
                 newInterval = 6;
             } else {
-                newInterval = Math.round(currentInterval * newEF);
+                // Apply personalized interval modifier
+                newInterval = Math.round(currentInterval * newEF * intervalModifier);
+
+                // Ensure minimum interval of 1 day
+                if (newInterval < 1) newInterval = 1;
             }
             newReps = currentReps + 1;
         }
@@ -11428,6 +11442,10 @@ app.post('/api/srs/:userId/review', async (req, res) => {
                 repetitions: newReps,
                 next_review_date: nextReviewDate,
                 is_mature: isMature
+            },
+            personalization: {
+                interval_modifier_applied: intervalModifier,
+                is_personalized: intervalModifier !== 1.0
             },
             xp_result: xpResult
         });
