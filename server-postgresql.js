@@ -2,6 +2,7 @@ const express = require('express');
 const { Pool } = require('pg');
 const path = require('path');
 const cors = require('cors');
+const compression = require('compression');
 const multer = require('multer');
 const csv = require('csv-parser');
 const fs = require('fs');
@@ -38,6 +39,19 @@ const db = new Pool({
 });
 
 // Middleware
+// Response compression (gzip/brotli) - reduces bandwidth by ~70-90%
+app.use(compression({
+    filter: (req, res) => {
+        // Compress all text-based responses (JSON, HTML, CSS, JS)
+        if (req.headers['x-no-compression']) {
+            return false;
+        }
+        return compression.filter(req, res);
+    },
+    level: 6, // Compression level (0-9, default 6 is balanced)
+    threshold: 1024 // Only compress responses larger than 1KB
+}));
+
 app.use(cors());
 app.use(express.json());
 app.use(express.static(path.join(__dirname, 'public')));
