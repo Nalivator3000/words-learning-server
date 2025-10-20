@@ -657,10 +657,16 @@
   - [ ] Frontend UI для leech management dashboard (будущая версия)
   - [ ] Auto-suspend после 15+ failures (будущая версия)
 
-- [ ] **Siblings и Context**
-  - Группировка слов одной тематики (siblings)
-  - Избегать review siblings в одной сессии (чтобы не путать)
-  - Контекстуальные подсказки (примеры использования в предложениях)
+- [x] **Siblings и Context** ✅ ГОТОВО (Iteration 35)
+  - ✅ Группировка слов одной тематики (siblings) - 6 relationship types
+  - ✅ Избегать review siblings в одной сессии (smart due words endpoint)
+  - ✅ Контекстуальные подсказки (примеры использования в предложениях)
+  - ✅ 3 таблицы: word_siblings, word_contexts, srs_session_tracking
+  - ✅ 11 API endpoints (3 siblings, 5 contexts, 3 session)
+  - ✅ Bidirectional sibling queries, array operations, session tracking
+  - [ ] Auto-sibling detection (ML) - будущая версия
+  - [ ] Context generation via AI - будущая версия
+  - [ ] Frontend UI - будущая версия
 
 - [x] **Режимы обучения** 🎯 ✅ ГОТОВО (Iteration 31)
   - ✅ **Learn mode (новые слова)** - ускоренное изучение:

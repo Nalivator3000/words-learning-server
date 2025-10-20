@@ -1289,6 +1289,62 @@ async function initDatabase() {
         `);
         await db.query(`CREATE INDEX IF NOT EXISTS idx_user_learning_profile_user ON user_learning_profile(user_id)`);
 
+        // Word Siblings: Группировка схожих/связанных слов
+        await db.query(`
+            CREATE TABLE IF NOT EXISTS word_siblings (
+                id SERIAL PRIMARY KEY,
+                word_id_1 INTEGER REFERENCES words(id) ON DELETE CASCADE,
+                word_id_2 INTEGER REFERENCES words(id) ON DELETE CASCADE,
+                relationship_type VARCHAR(50) NOT NULL,
+                similarity_score DECIMAL(3,2),
+                created_by INTEGER REFERENCES users(id),
+                created_at TIMESTAMP DEFAULT NOW(),
+                UNIQUE(word_id_1, word_id_2),
+                CHECK (word_id_1 < word_id_2)
+            )
+        `);
+        await db.query(`CREATE INDEX IF NOT EXISTS idx_word_siblings_word1 ON word_siblings(word_id_1)`);
+        await db.query(`CREATE INDEX IF NOT EXISTS idx_word_siblings_word2 ON word_siblings(word_id_2)`);
+        await db.query(`CREATE INDEX IF NOT EXISTS idx_word_siblings_type ON word_siblings(relationship_type)`);
+
+        // Word Context: Примеры использования слов в контексте
+        await db.query(`
+            CREATE TABLE IF NOT EXISTS word_contexts (
+                id SERIAL PRIMARY KEY,
+                word_id INTEGER REFERENCES words(id) ON DELETE CASCADE,
+                user_id INTEGER REFERENCES users(id) ON DELETE CASCADE,
+                context_type VARCHAR(50) NOT NULL,
+                source_sentence TEXT NOT NULL,
+                translation_sentence TEXT,
+                source_language VARCHAR(10),
+                context_tags TEXT[],
+                difficulty_level VARCHAR(20),
+                usage_count INTEGER DEFAULT 0,
+                is_public BOOLEAN DEFAULT FALSE,
+                created_at TIMESTAMP DEFAULT NOW(),
+                updated_at TIMESTAMP DEFAULT NOW()
+            )
+        `);
+        await db.query(`CREATE INDEX IF NOT EXISTS idx_word_contexts_word ON word_contexts(word_id, user_id)`);
+        await db.query(`CREATE INDEX IF NOT EXISTS idx_word_contexts_type ON word_contexts(context_type)`);
+        await db.query(`CREATE INDEX IF NOT EXISTS idx_word_contexts_public ON word_contexts(is_public, word_id) WHERE is_public = true`);
+
+        // SRS Session Siblings Tracking: Предотвращение review siblings в одной сессии
+        await db.query(`
+            CREATE TABLE IF NOT EXISTS srs_session_tracking (
+                id SERIAL PRIMARY KEY,
+                user_id INTEGER REFERENCES users(id) ON DELETE CASCADE,
+                session_id VARCHAR(100) NOT NULL,
+                word_ids INTEGER[] NOT NULL,
+                session_start TIMESTAMP DEFAULT NOW(),
+                session_end TIMESTAMP,
+                words_reviewed INTEGER DEFAULT 0,
+                avg_quality DECIMAL(3,2)
+            )
+        `);
+        await db.query(`CREATE INDEX IF NOT EXISTS idx_srs_session_user ON srs_session_tracking(user_id, session_start DESC)`);
+        await db.query(`CREATE INDEX IF NOT EXISTS idx_srs_session_id ON srs_session_tracking(session_id)`);
+
         // SRS: Review history log
         await db.query(`
             CREATE TABLE IF NOT EXISTS srs_review_log (
@@ -12518,6 +12574,594 @@ app.put('/api/profile/:userId/learning-profile', async (req, res) => {
         });
     } catch (err) {
         logger.error('Error updating learning profile:', err);
+        res.status(500).json({ error: err.message });
+    }
+});
+
+// ============================================================================
+// 🔗 SIBLINGS & CONTEXT SYSTEM
+// ============================================================================
+
+// 🔗 Add sibling relationship between two words
+app.post('/api/siblings', async (req, res) => {
+    try {
+        const { wordId1, wordId2, relationshipType, similarityScore, createdBy } = req.body;
+
+        // Validation
+        if (!wordId1 || !wordId2 || !relationshipType) {
+            return res.status(400).json({ error: 'wordId1, wordId2, and relationshipType are required' });
+        }
+
+        if (wordId1 === wordId2) {
+            return res.status(400).json({ error: 'Cannot create sibling relationship with the same word' });
+        }
+
+        // Ensure word_id_1 < word_id_2 for uniqueness constraint
+        const [smallerId, largerId] = wordId1 < wordId2 ? [wordId1, wordId2] : [wordId2, wordId1];
+
+        const result = await db.query(`
+            INSERT INTO word_siblings
+            (word_id_1, word_id_2, relationship_type, similarity_score, created_by)
+            VALUES ($1, $2, $3, $4, $5)
+            ON CONFLICT (word_id_1, word_id_2)
+            DO UPDATE SET
+                relationship_type = EXCLUDED.relationship_type,
+                similarity_score = EXCLUDED.similarity_score
+            RETURNING *
+        `, [
+            parseInt(smallerId),
+            parseInt(largerId),
+            relationshipType,
+            similarityScore ? parseFloat(similarityScore) : null,
+            createdBy ? parseInt(createdBy) : null
+        ]);
+
+        res.json({
+            success: true,
+            sibling: result.rows[0]
+        });
+    } catch (err) {
+        logger.error('Error adding sibling relationship:', err);
+        res.status(500).json({ error: err.message });
+    }
+});
+
+// 🔗 Get siblings for a word
+app.get('/api/siblings/:wordId', async (req, res) => {
+    try {
+        const { wordId } = req.params;
+        const { type } = req.query;
+
+        let typeFilter = '';
+        const params = [parseInt(wordId)];
+
+        if (type) {
+            typeFilter = 'AND ws.relationship_type = $2';
+            params.push(type);
+        }
+
+        // Query siblings (both directions)
+        const siblings = await db.query(`
+            SELECT
+                ws.id as sibling_id,
+                ws.relationship_type,
+                ws.similarity_score,
+                ws.created_at,
+                CASE
+                    WHEN ws.word_id_1 = $1 THEN ws.word_id_2
+                    ELSE ws.word_id_1
+                END as related_word_id,
+                w.word,
+                w.translation,
+                w.language_pair_id,
+                wsd.easiness_factor,
+                wsd.interval_days,
+                wsd.next_review_date
+            FROM word_siblings ws
+            INNER JOIN words w ON (
+                CASE
+                    WHEN ws.word_id_1 = $1 THEN w.id = ws.word_id_2
+                    ELSE w.id = ws.word_id_1
+                END
+            )
+            LEFT JOIN word_srs_data wsd ON wsd.word_id = w.id
+            WHERE (ws.word_id_1 = $1 OR ws.word_id_2 = $1)
+            ${typeFilter}
+            ORDER BY ws.similarity_score DESC NULLS LAST, ws.created_at DESC
+        `, params);
+
+        // Group by relationship type
+        const grouped = {};
+        siblings.rows.forEach(sibling => {
+            const type = sibling.relationship_type;
+            if (!grouped[type]) {
+                grouped[type] = [];
+            }
+            grouped[type].push({
+                sibling_id: sibling.sibling_id,
+                related_word_id: sibling.related_word_id,
+                word: sibling.word,
+                translation: sibling.translation,
+                similarity_score: sibling.similarity_score ? parseFloat(sibling.similarity_score) : null,
+                srs_data: sibling.easiness_factor ? {
+                    easiness_factor: parseFloat(sibling.easiness_factor),
+                    interval_days: sibling.interval_days,
+                    next_review_date: sibling.next_review_date
+                } : null
+            });
+        });
+
+        res.json({
+            word_id: parseInt(wordId),
+            siblings: siblings.rows,
+            grouped_by_type: grouped,
+            total_siblings: siblings.rows.length
+        });
+    } catch (err) {
+        logger.error('Error getting siblings:', err);
+        res.status(500).json({ error: err.message });
+    }
+});
+
+// 🔗 Delete sibling relationship
+app.delete('/api/siblings/:siblingId', async (req, res) => {
+    try {
+        const { siblingId } = req.params;
+
+        const result = await db.query(
+            'DELETE FROM word_siblings WHERE id = $1 RETURNING *',
+            [parseInt(siblingId)]
+        );
+
+        if (result.rows.length === 0) {
+            return res.status(404).json({ error: 'Sibling relationship not found' });
+        }
+
+        res.json({
+            success: true,
+            deleted: result.rows[0]
+        });
+    } catch (err) {
+        logger.error('Error deleting sibling relationship:', err);
+        res.status(500).json({ error: err.message });
+    }
+});
+
+// 📝 Add context example for a word
+app.post('/api/context', async (req, res) => {
+    try {
+        const {
+            wordId,
+            userId,
+            contextType,
+            sourceSentence,
+            translationSentence,
+            sourceLanguage,
+            contextTags,
+            difficultyLevel,
+            isPublic
+        } = req.body;
+
+        // Validation
+        if (!wordId || !userId || !contextType || !sourceSentence) {
+            return res.status(400).json({
+                error: 'wordId, userId, contextType, and sourceSentence are required'
+            });
+        }
+
+        const result = await db.query(`
+            INSERT INTO word_contexts
+            (word_id, user_id, context_type, source_sentence, translation_sentence,
+             source_language, context_tags, difficulty_level, is_public)
+            VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9)
+            RETURNING *
+        `, [
+            parseInt(wordId),
+            parseInt(userId),
+            contextType,
+            sourceSentence,
+            translationSentence || null,
+            sourceLanguage || null,
+            contextTags || null,
+            difficultyLevel || null,
+            isPublic !== undefined ? isPublic : false
+        ]);
+
+        res.json({
+            success: true,
+            context: result.rows[0]
+        });
+    } catch (err) {
+        logger.error('Error adding context:', err);
+        res.status(500).json({ error: err.message });
+    }
+});
+
+// 📝 Get context examples for a word
+app.get('/api/context/:wordId', async (req, res) => {
+    try {
+        const { wordId } = req.params;
+        const { userId, type, includePublic = 'true' } = req.query;
+
+        let whereConditions = ['wc.word_id = $1'];
+        const params = [parseInt(wordId)];
+        let paramIndex = 2;
+
+        // Include user's own contexts + public contexts
+        if (userId) {
+            if (includePublic === 'true') {
+                whereConditions.push(`(wc.user_id = $${paramIndex} OR wc.is_public = true)`);
+                params.push(parseInt(userId));
+                paramIndex++;
+            } else {
+                whereConditions.push(`wc.user_id = $${paramIndex}`);
+                params.push(parseInt(userId));
+                paramIndex++;
+            }
+        } else {
+            // Only public contexts
+            whereConditions.push('wc.is_public = true');
+        }
+
+        if (type) {
+            whereConditions.push(`wc.context_type = $${paramIndex}`);
+            params.push(type);
+            paramIndex++;
+        }
+
+        const contexts = await db.query(`
+            SELECT
+                wc.*,
+                u.username as created_by_username
+            FROM word_contexts wc
+            LEFT JOIN users u ON wc.user_id = u.id
+            WHERE ${whereConditions.join(' AND ')}
+            ORDER BY wc.is_public DESC, wc.usage_count DESC, wc.created_at DESC
+        `, params);
+
+        // Group by context type
+        const grouped = {};
+        contexts.rows.forEach(ctx => {
+            const type = ctx.context_type;
+            if (!grouped[type]) {
+                grouped[type] = [];
+            }
+            grouped[type].push(ctx);
+        });
+
+        res.json({
+            word_id: parseInt(wordId),
+            contexts: contexts.rows,
+            grouped_by_type: grouped,
+            total_contexts: contexts.rows.length
+        });
+    } catch (err) {
+        logger.error('Error getting contexts:', err);
+        res.status(500).json({ error: err.message });
+    }
+});
+
+// 📝 Update context (increment usage, edit)
+app.put('/api/context/:contextId', async (req, res) => {
+    try {
+        const { contextId } = req.params;
+        const {
+            sourceSentence,
+            translationSentence,
+            contextTags,
+            difficultyLevel,
+            isPublic,
+            incrementUsage
+        } = req.body;
+
+        const updates = [];
+        const values = [];
+        let paramIndex = 1;
+
+        if (sourceSentence) {
+            updates.push(`source_sentence = $${paramIndex++}`);
+            values.push(sourceSentence);
+        }
+        if (translationSentence !== undefined) {
+            updates.push(`translation_sentence = $${paramIndex++}`);
+            values.push(translationSentence);
+        }
+        if (contextTags) {
+            updates.push(`context_tags = $${paramIndex++}`);
+            values.push(contextTags);
+        }
+        if (difficultyLevel) {
+            updates.push(`difficulty_level = $${paramIndex++}`);
+            values.push(difficultyLevel);
+        }
+        if (isPublic !== undefined) {
+            updates.push(`is_public = $${paramIndex++}`);
+            values.push(isPublic);
+        }
+        if (incrementUsage) {
+            updates.push(`usage_count = usage_count + 1`);
+        }
+
+        if (updates.length === 0) {
+            return res.status(400).json({ error: 'No fields to update' });
+        }
+
+        updates.push(`updated_at = NOW()`);
+        values.push(parseInt(contextId));
+
+        const result = await db.query(`
+            UPDATE word_contexts
+            SET ${updates.join(', ')}
+            WHERE id = $${paramIndex}
+            RETURNING *
+        `, values);
+
+        if (result.rows.length === 0) {
+            return res.status(404).json({ error: 'Context not found' });
+        }
+
+        res.json({
+            success: true,
+            context: result.rows[0]
+        });
+    } catch (err) {
+        logger.error('Error updating context:', err);
+        res.status(500).json({ error: err.message });
+    }
+});
+
+// 📝 Delete context
+app.delete('/api/context/:contextId', async (req, res) => {
+    try {
+        const { contextId } = req.params;
+        const { userId } = req.query;
+
+        // Only allow deletion by the creator (or admin)
+        const whereConditions = ['id = $1'];
+        const params = [parseInt(contextId)];
+
+        if (userId) {
+            whereConditions.push('user_id = $2');
+            params.push(parseInt(userId));
+        }
+
+        const result = await db.query(`
+            DELETE FROM word_contexts
+            WHERE ${whereConditions.join(' AND ')}
+            RETURNING *
+        `, params);
+
+        if (result.rows.length === 0) {
+            return res.status(404).json({
+                error: 'Context not found or you do not have permission to delete it'
+            });
+        }
+
+        res.json({
+            success: true,
+            deleted: result.rows[0]
+        });
+    } catch (err) {
+        logger.error('Error deleting context:', err);
+        res.status(500).json({ error: err.message });
+    }
+});
+
+// 🎯 Get SRS due words with sibling avoidance
+app.get('/api/srs/:userId/due-words-smart', async (req, res) => {
+    try {
+        const { userId } = req.params;
+        const { limit = 20, sessionId } = req.query;
+
+        // Get words already reviewed in this session
+        let reviewedWordIds = [];
+        if (sessionId) {
+            const session = await db.query(
+                'SELECT word_ids FROM srs_session_tracking WHERE session_id = $1 AND user_id = $2',
+                [sessionId, parseInt(userId)]
+            );
+            if (session.rows.length > 0) {
+                reviewedWordIds = session.rows[0].word_ids || [];
+            }
+        }
+
+        // Get siblings of already reviewed words (to avoid)
+        let siblingsToAvoid = [];
+        if (reviewedWordIds.length > 0) {
+            const siblings = await db.query(`
+                SELECT
+                    CASE
+                        WHEN word_id_1 = ANY($1::int[]) THEN word_id_2
+                        ELSE word_id_1
+                    END as sibling_word_id
+                FROM word_siblings
+                WHERE word_id_1 = ANY($1::int[]) OR word_id_2 = ANY($1::int[])
+            `, [reviewedWordIds]);
+            siblingsToAvoid = siblings.rows.map(r => r.sibling_word_id);
+        }
+
+        // Combine exclusion list
+        const excludeIds = [...reviewedWordIds, ...siblingsToAvoid];
+
+        // Get due words (excluding siblings)
+        let excludeFilter = '';
+        const params = [parseInt(userId), parseInt(limit)];
+
+        if (excludeIds.length > 0) {
+            excludeFilter = 'AND wsd.word_id <> ALL($3::int[])';
+            params.push(excludeIds);
+        }
+
+        const dueWords = await db.query(`
+            SELECT
+                w.id,
+                w.word,
+                w.translation,
+                w.language_pair_id,
+                wsd.easiness_factor,
+                wsd.interval_days,
+                wsd.repetitions,
+                wsd.next_review_date,
+                wsd.last_review_date,
+                wsd.mature,
+                CASE
+                    WHEN wsd.next_review_date < NOW() THEN 'overdue'
+                    WHEN wsd.next_review_date::date = CURRENT_DATE THEN 'due_today'
+                    ELSE 'future'
+                END as status,
+                EXTRACT(EPOCH FROM (NOW() - wsd.next_review_date))/3600 as hours_overdue
+            FROM word_srs_data wsd
+            INNER JOIN words w ON wsd.word_id = w.id
+            WHERE wsd.user_id = $1
+                AND wsd.suspended = false
+                AND wsd.next_review_date <= NOW() + INTERVAL '1 day'
+                ${excludeFilter}
+            ORDER BY
+                CASE
+                    WHEN wsd.next_review_date < NOW() THEN 1
+                    WHEN wsd.next_review_date::date = CURRENT_DATE THEN 2
+                    ELSE 3
+                END,
+                wsd.next_review_date ASC
+            LIMIT $2
+        `, params);
+
+        res.json({
+            words: dueWords.rows,
+            session_id: sessionId || null,
+            reviewed_in_session: reviewedWordIds.length,
+            siblings_avoided: siblingsToAvoid.length,
+            total_excluded: excludeIds.length
+        });
+    } catch (err) {
+        logger.error('Error getting smart due words:', err);
+        res.status(500).json({ error: err.message });
+    }
+});
+
+// 🎯 Start/Update SRS session tracking
+app.post('/api/srs/session', async (req, res) => {
+    try {
+        const { userId, sessionId, wordId, qualityRating } = req.body;
+
+        if (!userId || !sessionId) {
+            return res.status(400).json({ error: 'userId and sessionId are required' });
+        }
+
+        // Check if session exists
+        const existingSession = await db.query(
+            'SELECT * FROM srs_session_tracking WHERE session_id = $1 AND user_id = $2',
+            [sessionId, parseInt(userId)]
+        );
+
+        if (existingSession.rows.length === 0) {
+            // Create new session
+            await db.query(`
+                INSERT INTO srs_session_tracking
+                (user_id, session_id, word_ids, words_reviewed, avg_quality)
+                VALUES ($1, $2, $3, 0, 0)
+            `, [
+                parseInt(userId),
+                sessionId,
+                wordId ? [parseInt(wordId)] : []
+            ]);
+
+            return res.json({
+                success: true,
+                session_id: sessionId,
+                action: 'created'
+            });
+        } else {
+            // Update existing session
+            if (wordId) {
+                const currentWordIds = existingSession.rows[0].word_ids || [];
+                const currentWordsReviewed = existingSession.rows[0].words_reviewed || 0;
+                const currentAvgQuality = parseFloat(existingSession.rows[0].avg_quality) || 0;
+
+                // Add word to list if not already present
+                const newWordIds = currentWordIds.includes(parseInt(wordId))
+                    ? currentWordIds
+                    : [...currentWordIds, parseInt(wordId)];
+
+                // Update average quality if rating provided
+                let newAvgQuality = currentAvgQuality;
+                if (qualityRating !== undefined) {
+                    const newCount = currentWordsReviewed + 1;
+                    newAvgQuality = ((currentAvgQuality * currentWordsReviewed) + parseInt(qualityRating)) / newCount;
+                }
+
+                await db.query(`
+                    UPDATE srs_session_tracking
+                    SET word_ids = $1,
+                        words_reviewed = words_reviewed + 1,
+                        avg_quality = $2
+                    WHERE session_id = $3 AND user_id = $4
+                `, [
+                    newWordIds,
+                    newAvgQuality,
+                    sessionId,
+                    parseInt(userId)
+                ]);
+
+                return res.json({
+                    success: true,
+                    session_id: sessionId,
+                    action: 'updated',
+                    words_reviewed: currentWordsReviewed + 1,
+                    avg_quality: newAvgQuality.toFixed(2)
+                });
+            }
+
+            return res.json({
+                success: true,
+                session_id: sessionId,
+                action: 'exists'
+            });
+        }
+    } catch (err) {
+        logger.error('Error managing SRS session:', err);
+        res.status(500).json({ error: err.message });
+    }
+});
+
+// 🎯 End SRS session
+app.post('/api/srs/session/end', async (req, res) => {
+    try {
+        const { userId, sessionId } = req.body;
+
+        if (!userId || !sessionId) {
+            return res.status(400).json({ error: 'userId and sessionId are required' });
+        }
+
+        const result = await db.query(`
+            UPDATE srs_session_tracking
+            SET session_end = NOW()
+            WHERE session_id = $1 AND user_id = $2
+            RETURNING *
+        `, [sessionId, parseInt(userId)]);
+
+        if (result.rows.length === 0) {
+            return res.status(404).json({ error: 'Session not found' });
+        }
+
+        const session = result.rows[0];
+        const durationMinutes = session.session_end && session.session_start
+            ? Math.round((new Date(session.session_end) - new Date(session.session_start)) / 1000 / 60)
+            : null;
+
+        res.json({
+            success: true,
+            session: {
+                session_id: session.session_id,
+                words_reviewed: session.words_reviewed,
+                avg_quality: session.avg_quality ? parseFloat(session.avg_quality).toFixed(2) : null,
+                duration_minutes: durationMinutes,
+                started_at: session.session_start,
+                ended_at: session.session_end
+            }
+        });
+    } catch (err) {
+        logger.error('Error ending SRS session:', err);
         res.status(500).json({ error: err.message });
     }
 });

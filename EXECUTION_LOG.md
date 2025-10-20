@@ -2884,3 +2884,471 @@ REINDEX TABLE table_name;
 - **Таблиц оптимизировано**: 15
 - **Expected performance gain**: 10-100x для частых запросов
 
+
+## Iteration 35: Siblings & Context System
+**Дата**: 2025-10-20
+**Статус**: ✅ Завершено
+
+### Задача
+Реализовать систему Siblings & Context для SRS (PLAN.md раздел 4.9 - Дополнительные оптимизации):
+- Группировка схожих/связанных слов (siblings)
+- Избегание review siblings в одной сессии
+- Контекстуальные подсказки (примеры использования в предложениях)
+
+### Анализ проблемы
+
+**Проблема с похожими словами**:
+Когда пользователь изучает похожие слова (например, "kaufen" и "einkaufen", "der Hund" и "die Hunde"), их повторение в одной сессии может вызывать:
+- **Confusion** - путаницу между похожими словами
+- **Interference effect** - негативное влияние на запоминание
+- **Reduced retention** - снижение эффективности обучения
+
+**Отсутствие контекста**:
+Изучение слов без примеров использования приводит к:
+- Пониманию слова в изоляции, но не в реальной речи
+- Неспособности использовать слово в правильном контексте
+- Отсутствию понимания коллокаций и устойчивых выражений
+
+### Реализация
+
+#### 1. Database Schema (3 новые таблицы)
+
+**word_siblings** - связи между похожими словами:
+```sql
+CREATE TABLE word_siblings (
+    id SERIAL PRIMARY KEY,
+    word_id_1 INTEGER REFERENCES words(id) ON DELETE CASCADE,
+    word_id_2 INTEGER REFERENCES words(id) ON DELETE CASCADE,
+    relationship_type VARCHAR(50) NOT NULL,  -- synonym, antonym, similar_form, plural, conjugation, derived
+    similarity_score DECIMAL(3,2),           -- 0.0-1.0 (автоматический расчет схожести)
+    created_by INTEGER REFERENCES users(id), -- кто добавил связь
+    created_at TIMESTAMP DEFAULT NOW(),
+    UNIQUE(word_id_1, word_id_2),
+    CHECK (word_id_1 < word_id_2)            -- предотвращение дублирования
+);
+```
+
+**word_contexts** - примеры использования слов:
+```sql
+CREATE TABLE word_contexts (
+    id SERIAL PRIMARY KEY,
+    word_id INTEGER REFERENCES words(id) ON DELETE CASCADE,
+    user_id INTEGER REFERENCES users(id) ON DELETE CASCADE,
+    context_type VARCHAR(50) NOT NULL,       -- sentence, phrase, idiom, dialogue, quote
+    source_sentence TEXT NOT NULL,           -- оригинальное предложение
+    translation_sentence TEXT,               -- перевод предложения
+    source_language VARCHAR(10),             -- язык оригинала
+    context_tags TEXT[],                     -- теги для категоризации
+    difficulty_level VARCHAR(20),            -- beginner, intermediate, advanced
+    usage_count INTEGER DEFAULT 0,           -- сколько раз показан пользователю
+    is_public BOOLEAN DEFAULT FALSE,         -- публичный пример (доступен всем)
+    created_at TIMESTAMP DEFAULT NOW(),
+    updated_at TIMESTAMP DEFAULT NOW()
+);
+```
+
+**srs_session_tracking** - отслеживание сессий review:
+```sql
+CREATE TABLE srs_session_tracking (
+    id SERIAL PRIMARY KEY,
+    user_id INTEGER REFERENCES users(id) ON DELETE CASCADE,
+    session_id VARCHAR(100) NOT NULL,        -- UUID сессии
+    word_ids INTEGER[] NOT NULL,             -- массив ID слов, повторенных в сессии
+    session_start TIMESTAMP DEFAULT NOW(),
+    session_end TIMESTAMP,
+    words_reviewed INTEGER DEFAULT 0,
+    avg_quality DECIMAL(3,2)                 -- средняя оценка качества в сессии
+);
+```
+
+**Индексы**:
+```sql
+-- Siblings
+CREATE INDEX idx_word_siblings_word1 ON word_siblings(word_id_1);
+CREATE INDEX idx_word_siblings_word2 ON word_siblings(word_id_2);
+CREATE INDEX idx_word_siblings_type ON word_siblings(relationship_type);
+
+-- Contexts
+CREATE INDEX idx_word_contexts_word ON word_contexts(word_id, user_id);
+CREATE INDEX idx_word_contexts_type ON word_contexts(context_type);
+CREATE INDEX idx_word_contexts_public ON word_contexts(is_public, word_id) WHERE is_public = true;
+
+-- Session tracking
+CREATE INDEX idx_srs_session_user ON srs_session_tracking(user_id, session_start DESC);
+CREATE INDEX idx_srs_session_id ON srs_session_tracking(session_id);
+```
+
+#### 2. API Endpoints (11 новых endpoints)
+
+##### Siblings Management (3 endpoints)
+
+**POST /api/siblings** - создание связи между словами:
+```javascript
+// Request
+{
+    "wordId1": 123,
+    "wordId2": 456,
+    "relationshipType": "synonym",
+    "similarityScore": 0.85,
+    "createdBy": 1
+}
+
+// Response
+{
+    "success": true,
+    "sibling": {
+        "id": 1,
+        "word_id_1": 123,
+        "word_id_2": 456,
+        "relationship_type": "synonym",
+        "similarity_score": 0.85
+    }
+}
+```
+
+**Relationship types**:
+- `synonym` - синонимы (beautiful ↔ gorgeous)
+- `antonym` - антонимы (hot ↔ cold)
+- `similar_form` - похожая форма (affect ↔ effect)
+- `plural` - множественное число (dog ↔ dogs)
+- `conjugation` - спряжение (go ↔ went ↔ gone)
+- `derived` - производное слово (happy ↔ happiness)
+
+**GET /api/siblings/:wordId** - получить siblings слова:
+```javascript
+// Response
+{
+    "word_id": 123,
+    "siblings": [
+        {
+            "sibling_id": 1,
+            "related_word_id": 456,
+            "word": "beautiful",
+            "translation": "красивый",
+            "similarity_score": 0.85,
+            "relationship_type": "synonym",
+            "srs_data": {
+                "easiness_factor": 2.3,
+                "interval_days": 7,
+                "next_review_date": "2025-10-27T12:00:00Z"
+            }
+        }
+    ],
+    "grouped_by_type": {
+        "synonym": [...],
+        "antonym": [...]
+    },
+    "total_siblings": 5
+}
+```
+
+**DELETE /api/siblings/:siblingId** - удалить связь:
+```javascript
+{
+    "success": true,
+    "deleted": { "id": 1, ... }
+}
+```
+
+##### Context Management (5 endpoints)
+
+**POST /api/context** - добавить пример использования:
+```javascript
+// Request
+{
+    "wordId": 123,
+    "userId": 1,
+    "contextType": "sentence",
+    "sourceSentence": "Das Haus ist sehr schön.",
+    "translationSentence": "Дом очень красивый.",
+    "sourceLanguage": "de",
+    "contextTags": ["architecture", "adjectives"],
+    "difficultyLevel": "beginner",
+    "isPublic": true
+}
+
+// Response
+{
+    "success": true,
+    "context": {
+        "id": 1,
+        "word_id": 123,
+        "source_sentence": "Das Haus ist sehr schön.",
+        "translation_sentence": "Дом очень красивый.",
+        "usage_count": 0
+    }
+}
+```
+
+**Context types**:
+- `sentence` - предложение
+- `phrase` - фраза
+- `idiom` - идиома
+- `dialogue` - диалог
+- `quote` - цитата
+
+**GET /api/context/:wordId** - получить примеры для слова:
+- Query params: `userId`, `type`, `includePublic=true`
+- Возвращает user's own contexts + public contexts
+- Группировка по context_type
+- Сортировка: public → usage_count → created_at
+
+**PUT /api/context/:contextId** - обновить пример:
+- Поддержка `incrementUsage` (увеличить usage_count)
+- Редактирование всех полей
+- Auto-update `updated_at`
+
+**DELETE /api/context/:contextId** - удалить пример:
+- Permission check: только создатель может удалить
+
+##### Smart SRS Session (3 endpoints)
+
+**GET /api/srs/:userId/due-words-smart** - получить due words с sibling avoidance:
+```javascript
+// Request
+GET /api/srs/1/due-words-smart?limit=20&sessionId=abc-123
+
+// Algorithm:
+// 1. Получить слова из текущей сессии (session_id)
+// 2. Найти siblings этих слов
+// 3. Exclude reviewed words + their siblings
+// 4. Return due words
+
+// Response
+{
+    "words": [ ... ],  // слова для повторения
+    "session_id": "abc-123",
+    "reviewed_in_session": 5,     // уже повторено в сессии
+    "siblings_avoided": 3,         // siblings исключено
+    "total_excluded": 8            // всего исключено
+}
+```
+
+**Sibling avoidance logic**:
+```sql
+-- Шаг 1: Получить siblings для уже повторенных слов
+SELECT
+    CASE
+        WHEN word_id_1 IN (reviewed_words) THEN word_id_2
+        ELSE word_id_1
+    END as sibling_word_id
+FROM word_siblings
+WHERE word_id_1 IN (reviewed_words) OR word_id_2 IN (reviewed_words);
+
+-- Шаг 2: Исключить siblings из due words
+WHERE word_id <> ALL(exclude_ids);
+```
+
+**POST /api/srs/session** - создать/обновить сессию:
+```javascript
+// Create session
+{
+    "userId": 1,
+    "sessionId": "abc-123",
+    "wordId": 456,           // optional (add to session)
+    "qualityRating": 4       // optional (update avg)
+}
+
+// Response
+{
+    "success": true,
+    "session_id": "abc-123",
+    "action": "created" | "updated" | "exists",
+    "words_reviewed": 5,
+    "avg_quality": "4.20"
+}
+```
+
+**POST /api/srs/session/end** - завершить сессию:
+```javascript
+{
+    "userId": 1,
+    "sessionId": "abc-123"
+}
+
+// Response
+{
+    "success": true,
+    "session": {
+        "session_id": "abc-123",
+        "words_reviewed": 15,
+        "avg_quality": "4.13",
+        "duration_minutes": 12,
+        "started_at": "2025-10-20T10:00:00Z",
+        "ended_at": "2025-10-20T10:12:00Z"
+    }
+}
+```
+
+### Технические детали
+
+**1. Bidirectional sibling query**:
+```sql
+-- Siblings хранятся с word_id_1 < word_id_2 (CHECK constraint)
+-- Но нужно искать в обе стороны:
+WHERE (ws.word_id_1 = $1 OR ws.word_id_2 = $1)
+
+-- Получить related_word_id:
+CASE
+    WHEN ws.word_id_1 = $1 THEN ws.word_id_2
+    ELSE ws.word_id_1
+END as related_word_id
+```
+
+**2. Array operations для session tracking**:
+```sql
+-- PostgreSQL INTEGER[] type
+word_ids INTEGER[] NOT NULL
+
+-- Check if word already in array (JavaScript)
+const newWordIds = currentWordIds.includes(parseInt(wordId))
+    ? currentWordIds
+    : [...currentWordIds, parseInt(wordId)];
+
+-- Array operations в SQL
+WHERE word_id <> ALL($1::int[])
+WHERE word_id_1 = ANY($1::int[])
+```
+
+**3. Dynamic filtering в GET /api/context/:wordId**:
+```javascript
+let whereConditions = ['wc.word_id = $1'];
+const params = [parseInt(wordId)];
+let paramIndex = 2;
+
+if (userId) {
+    if (includePublic === 'true') {
+        whereConditions.push(`(wc.user_id = $${paramIndex} OR wc.is_public = true)`);
+        params.push(parseInt(userId));
+        paramIndex++;
+    }
+}
+
+const query = `WHERE ${whereConditions.join(' AND ')}`;
+```
+
+**4. Partial index для public contexts**:
+```sql
+-- Индексирует только is_public = true строки
+CREATE INDEX idx_word_contexts_public
+ON word_contexts(is_public, word_id)
+WHERE is_public = true;
+```
+
+### Use Cases
+
+**1. Synonym avoidance**:
+```
+User reviews: "beautiful" (word_id: 123)
+Siblings: "gorgeous" (456), "pretty" (789)
+
+Next due words query excludes: 456, 789
+→ Prevents confusion between synonyms in same session
+```
+
+**2. Plural/singular separation**:
+```
+User reviews: "dog" (word_id: 100)
+Sibling: "dogs" (101)
+
+→ Prevents mixing singular/plural forms in one session
+```
+
+**3. Context examples**:
+```
+Word: "schön"
+
+Contexts:
+- Sentence: "Das Wetter ist heute schön." → "Погода сегодня хорошая."
+- Idiom: "Schön und gut, aber..." → "Это хорошо, но..."
+- Phrase: "Schönen Tag noch!" → "Хорошего дня!"
+
+→ User sees word in different contexts
+→ Improves understanding of usage
+```
+
+**4. Session statistics**:
+```
+Session: abc-123
+- Started: 10:00
+- Ended: 10:15
+- Duration: 15 minutes
+- Words reviewed: 20
+- Avg quality: 4.25
+- Siblings avoided: 7
+
+→ Analytics for learning efficiency
+```
+
+### Future Enhancements
+
+**1. Auto-sibling detection** (ML):
+```javascript
+// Использовать Levenshtein distance для автоматического нахождения похожих слов
+function calculateSimilarity(word1, word2) {
+    const distance = levenshteinDistance(word1, word2);
+    const maxLength = Math.max(word1.length, word2.length);
+    return 1 - (distance / maxLength);
+}
+
+// Auto-suggest siblings с similarity > 0.7
+```
+
+**2. Context generation via AI**:
+```javascript
+// Использовать GPT API для генерации контекстных примеров
+const prompt = `Generate 3 example sentences using the German word "${word}" in different contexts.`;
+```
+
+**3. Sibling groups**:
+```sql
+-- Расширить до групп слов (не только парные связи)
+CREATE TABLE word_groups (
+    id SERIAL PRIMARY KEY,
+    group_name VARCHAR(100),
+    group_type VARCHAR(50),  -- conjugation_group, synonym_group
+    word_ids INTEGER[]
+);
+```
+
+**4. Context difficulty auto-detection**:
+```javascript
+// Анализировать sentence complexity для auto-set difficulty_level
+function detectDifficulty(sentence) {
+    const wordCount = sentence.split(' ').length;
+    const avgWordLength = sentence.replace(/\s/g, '').length / wordCount;
+
+    if (wordCount < 5 && avgWordLength < 6) return 'beginner';
+    if (wordCount < 10 && avgWordLength < 8) return 'intermediate';
+    return 'advanced';
+}
+```
+
+**5. Session recommendations**:
+```javascript
+// Рекомендации по завершении сессии
+if (session.avg_quality < 3.0) {
+    recommendation = "Попробуйте уменьшить количество слов в сессии";
+} else if (session.duration_minutes < 10) {
+    recommendation = "Увеличьте продолжительность сессии до 15-20 минут";
+}
+```
+
+### Benefits
+
+✅ **Improved retention**: Sibling avoidance reduces interference effect
+✅ **Better context understanding**: Real examples show word usage
+✅ **Optimized learning**: Smart session tracking prevents confusion
+✅ **Community-driven**: Public contexts shared between users
+✅ **Analytics**: Session statistics for learning pattern analysis
+✅ **Scalable**: Array operations efficient for 1000s of siblings
+
+### Statistics
+- **Файлов изменено**: 1 (server-postgresql.js)
+- **Таблиц создано**: 3 (word_siblings, word_contexts, srs_session_tracking)
+- **API endpoints**: 11 (3 siblings, 5 contexts, 3 session)
+- **Строк кода**: ~590 (schema + endpoints)
+- **Индексов добавлено**: 8
+- **Relationship types**: 6 (synonym, antonym, similar_form, plural, conjugation, derived)
+- **Context types**: 5 (sentence, phrase, idiom, dialogue, quote)
+
