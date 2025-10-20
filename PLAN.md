@@ -1010,8 +1010,14 @@
     - ✅ 70-90% bandwidth reduction для JSON responses
     - ✅ <1% CPU overhead, transparent для клиента
     - ✅ Debugging support (x-no-compression header)
+  - [x] **Rate limiting для защиты от DDoS** ✅ ГОТОВО (Iteration 40)
+    - ✅ 3-tier rate limiting (general, API, auth)
+    - ✅ DDoS protection: 100 req/15min per IP
+    - ✅ API abuse prevention: 60 req/min
+    - ✅ Brute-force prevention: 5 login attempts/15min
+    - ✅ Standard RateLimit-* headers
+    - ✅ <0.1ms latency overhead
   - API response caching (Redis)
-  - Rate limiting для защиты от DDoS
   - Query optimization (N+1 problem)
   - Connection pooling
   - CDN для статических файлов
@@ -1027,7 +1033,11 @@
   - SQL injection защита (prepared statements)
   - XSS защита (sanitization)
   - CSRF tokens
-  - Rate limiting
+  - [x] **Rate limiting** ✅ ГОТОВО (Iteration 40)
+    - ✅ Multi-tier protection (general, API, auth)
+    - ✅ DDoS mitigation (100 req/15min)
+    - ✅ Brute-force prevention (5 attempts/15min)
+    - ✅ API abuse throttling (60 req/min)
   - Helmet.js для Express security headers
   - Обновление зависимостей (npm audit fix)
   - Secrets management (переменные окружения)

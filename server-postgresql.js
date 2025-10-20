@@ -3,6 +3,7 @@ const { Pool } = require('pg');
 const path = require('path');
 const cors = require('cors');
 const compression = require('compression');
+const rateLimit = require('express-rate-limit');
 const multer = require('multer');
 const csv = require('csv-parser');
 const fs = require('fs');
@@ -51,6 +52,31 @@ app.use(compression({
     level: 6, // Compression level (0-9, default 6 is balanced)
     threshold: 1024 // Only compress responses larger than 1KB
 }));
+
+// Rate limiting - DDoS protection
+const generalLimiter = rateLimit({
+    windowMs: 15 * 60 * 1000, // 15 minutes
+    max: 100, // Limit each IP to 100 requests per windowMs
+    message: 'Too many requests from this IP, please try again later.',
+    standardHeaders: true, // Return rate limit info in the `RateLimit-*` headers
+    legacyHeaders: false, // Disable the `X-RateLimit-*` headers
+});
+
+const authLimiter = rateLimit({
+    windowMs: 15 * 60 * 1000, // 15 minutes
+    max: 5, // Limit each IP to 5 login attempts per windowMs
+    message: 'Too many login attempts from this IP, please try again after 15 minutes.',
+    skipSuccessfulRequests: true, // Don't count successful requests
+});
+
+const apiLimiter = rateLimit({
+    windowMs: 1 * 60 * 1000, // 1 minute
+    max: 60, // Limit each IP to 60 requests per minute
+    message: 'Too many API requests, please slow down.',
+});
+
+// Apply general rate limiter to all routes
+app.use(generalLimiter);
 
 app.use(cors());
 app.use(express.json());
@@ -2052,8 +2078,16 @@ async function checkAchievements(userId) {
 
 // API Routes
 
+// Apply API rate limiter to all /api/* routes (except auth which has stricter limits)
+app.use('/api', (req, res, next) => {
+    if (req.path.startsWith('/auth/register') || req.path.startsWith('/auth/login')) {
+        return next(); // Skip apiLimiter for auth routes (they use authLimiter)
+    }
+    return apiLimiter(req, res, next);
+});
+
 // Authentication endpoints
-app.post('/api/auth/register', async (req, res) => {
+app.post('/api/auth/register', authLimiter, async (req, res) => {
     try {
         const { name, email, password } = req.body;
 
@@ -2101,7 +2135,7 @@ app.post('/api/auth/register', async (req, res) => {
     }
 });
 
-app.post('/api/auth/login', async (req, res) => {
+app.post('/api/auth/login', authLimiter, async (req, res) => {
     try {
         const { email, password } = req.body;
 
