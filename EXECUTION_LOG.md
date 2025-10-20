@@ -3352,3 +3352,478 @@ if (session.avg_quality < 3.0) {
 - **Relationship types**: 6 (synonym, antonym, similar_form, plural, conjugation, derived)
 - **Context types**: 5 (sentence, phrase, idiom, dialogue, quote)
 
+
+## Iteration 36: Cramming Mode - Emergency Learning System
+**Дата**: 2025-10-20
+**Статус**: ✅ Завершено
+
+### Задача
+Реализовать Cramming Mode для экстренного запоминания (PLAN.md раздел 4.9 - Режимы обучения):
+- Короткие интервалы повторения (10 мин → 1 час → 4 часа → 1 день)
+- Не влияет на EF и долгосрочный SRS прогресс
+- Используется перед экзаменом/презентацией для быстрого запоминания большого объема
+
+### Анализ проблемы
+
+**Use Case - Cramming before exam**:
+Пользователю нужно выучить 50 слов перед экзаменом через 2 дня. Обычный SRS с интервалами 1→6→15 дней не подходит.
+
+**Требования**:
+- **Короткие интервалы** - повторение в течение дня (10 мин, 1 час, 4 часа, 1 день)
+- **Изоляция от SRS** - cramming не должен влиять на основной EF и interval в word_srs_data
+- **Stage progression** - 4 стадии cramming, reset при неправильном ответе
+- **Session management** - создание cramming сессий с целевой датой (exam_date)
+- **Completion tracking** - статистика по словам (mastered/in_progress)
+
+### Реализация
+
+#### 1. Database Schema (2 новые таблицы)
+
+**cramming_sessions** - cramming сессии:
+```sql
+CREATE TABLE cramming_sessions (
+    id SERIAL PRIMARY KEY,
+    user_id INTEGER REFERENCES users(id) ON DELETE CASCADE,
+    session_name VARCHAR(255),              -- название сессии (напр. "German Exam Prep")
+    target_date DATE,                       -- целевая дата (для планирования)
+    word_ids INTEGER[] NOT NULL,            -- массив ID слов в сессии
+    session_status VARCHAR(20) DEFAULT 'active',  -- active, completed, abandoned
+    total_words INTEGER DEFAULT 0,
+    completed_words INTEGER DEFAULT 0,      -- слова, прошедшие все 4 стадии
+    current_stage INTEGER DEFAULT 1,        -- средняя стадия всех слов
+    created_at TIMESTAMP DEFAULT NOW(),
+    completed_at TIMESTAMP,
+    exam_date TIMESTAMP                     -- дата экзамена (optional)
+);
+```
+
+**cramming_progress** - прогресс по каждому слову:
+```sql
+CREATE TABLE cramming_progress (
+    id SERIAL PRIMARY KEY,
+    cramming_session_id INTEGER REFERENCES cramming_sessions(id) ON DELETE CASCADE,
+    word_id INTEGER REFERENCES words(id) ON DELETE CASCADE,
+    user_id INTEGER REFERENCES users(id) ON DELETE CASCADE,
+    stage INTEGER DEFAULT 1,                -- текущая стадия (1-4)
+    last_review_at TIMESTAMP,
+    next_review_at TIMESTAMP NOT NULL,      -- когда следующее повторение
+    review_count INTEGER DEFAULT 0,         -- всего reviews
+    correct_count INTEGER DEFAULT 0,        -- правильных ответов
+    is_mastered BOOLEAN DEFAULT FALSE,      -- прошло все 4 стадии
+    created_at TIMESTAMP DEFAULT NOW(),
+    UNIQUE(cramming_session_id, word_id)
+);
+```
+
+**Индексы**:
+```sql
+-- Sessions
+CREATE INDEX idx_cramming_sessions_user ON cramming_sessions(user_id, session_status);
+CREATE INDEX idx_cramming_sessions_date ON cramming_sessions(target_date);
+
+-- Progress
+CREATE INDEX idx_cramming_progress_session ON cramming_progress(cramming_session_id, is_mastered);
+CREATE INDEX idx_cramming_progress_next ON cramming_progress(user_id, next_review_at)
+    WHERE is_mastered = false;  -- partial index для due words
+```
+
+#### 2. API Endpoints (6 новых)
+
+**POST /api/cramming/create** - создать cramming сессию:
+```javascript
+// Request
+{
+    "userId": 1,
+    "sessionName": "German Exam Prep",
+    "wordIds": [123, 456, 789],  // массив word IDs для cramming
+    "targetDate": "2025-10-25",
+    "examDate": "2025-10-25T14:00:00Z"
+}
+
+// Response
+{
+    "success": true,
+    "session": {
+        "id": 1,
+        "user_id": 1,
+        "session_name": "German Exam Prep",
+        "total_words": 3,
+        "completed_words": 0,
+        "session_status": "active"
+    },
+    "message": "Cramming session created. First review in 10 minutes!"
+}
+```
+
+**Logic**:
+- Insert cramming_sessions row
+- For each wordId, insert cramming_progress row with stage=1, next_review_at=NOW()+10min
+- Return session details
+
+**GET /api/cramming/:userId/sessions** - получить cramming сессии:
+- Query params: `status=active|completed|all`
+- Returns array of sessions with completion statistics
+- Aggregates: mastered_count, completion_percentage
+
+**GET /api/cramming/:sessionId/due-words** - получить слова для повторения:
+```javascript
+// Response
+{
+    "session": { /* session details */ },
+    "words": [
+        {
+            "id": 123,
+            "word": "der Hund",
+            "translation": "собака",
+            "stage": 2,
+            "next_review_at": "2025-10-20T11:30:00Z",
+            "review_count": 3,
+            "correct_count": 2,
+            "is_mastered": false,
+            "status": "due_now"  // due_now, due_soon, future
+        }
+    ],
+    "total_due": 5
+}
+```
+
+**Filtering**:
+- WHERE is_mastered = false
+- AND next_review_at <= NOW() + INTERVAL '1 hour'
+- ORDER BY next_review_at ASC
+
+**POST /api/cramming/:sessionId/review** - повторить слово:
+```javascript
+// Request
+{
+    "userId": 1,
+    "wordId": 123,
+    "isCorrect": true
+}
+
+// Response
+{
+    "success": true,
+    "is_correct": true,
+    "progress": { /* updated cramming_progress */ },
+    "stage_advanced": true,     // перешел на следующую стадию
+    "mastered": false,          // завершил все 4 стадии
+    "next_review_in_minutes": 60,  // следующее повторение через 60 минут
+    "xp_awarded": 5
+}
+```
+
+**Stage Progression Logic**:
+```javascript
+const stageIntervals = {
+    1: 10,      // 10 minutes
+    2: 60,      // 1 hour
+    3: 240,     // 4 hours
+    4: 1440     // 1 day (24 hours)
+};
+
+if (isCorrect) {
+    if (currentStage < 4) {
+        newStage = currentStage + 1;
+        nextReviewAt = NOW() + stageIntervals[newStage] minutes;
+    } else {
+        // Completed all 4 stages
+        is_mastered = true;
+        nextReviewAt = NOW() + 24 hours;
+    }
+} else {
+    // Incorrect answer - reset to stage 1
+    newStage = 1;
+    correct_count = 0;
+    nextReviewAt = NOW() + 10 minutes;
+}
+```
+
+**XP Rewards**:
+- Correct answer: +5 XP per stage
+- Mastered (stage 4): +20 XP
+- Perfect session: +50 XP (all words mastered)
+
+**GET /api/cramming/:sessionId/stats** - статистика сессии:
+```javascript
+{
+    "session": { /* session details */ },
+    "statistics": {
+        "total_words": 50,
+        "mastered_words": 12,
+        "in_progress_words": 38,
+        "stage_1_count": 15,
+        "stage_2_count": 10,
+        "stage_3_count": 8,
+        "stage_4_count": 5,
+        "avg_stage": 2.14,
+        "total_reviews": 127,
+        "total_correct": 95,
+        "accuracy_rate": 74.8
+    },
+    "upcoming_reviews": {
+        "overdue": 5,
+        "next_10_min": 10,
+        "next_hour": 15,
+        "next_4_hours": 8,
+        "later": 0
+    }
+}
+```
+
+**POST /api/cramming/:sessionId/complete** - завершить сессию:
+- Updates session_status to 'completed'
+- Sets completed_at timestamp
+- Awards bonus XP:
+  - Perfect completion (all words mastered): +50 XP
+  - Partial completion (some words mastered): +25 XP
+
+**DELETE /api/cramming/:sessionId** - удалить сессию:
+- Requires userId verification
+- Deletes cramming_sessions row
+- CASCADE deletes all cramming_progress rows
+
+### Технические детали
+
+**1. Stage progression**:
+```javascript
+// 4 stages with exponential intervals
+Stage 1: +10 minutes   (short-term memory)
+Stage 2: +1 hour       (consolidation)
+Stage 3: +4 hours      (intermediate memory)
+Stage 4: +1 day        (pre-long-term)
+
+// Reset on incorrect answer
+if (!isCorrect) {
+    stage = 1;
+    correct_count = 0;
+    next_review_at = NOW() + 10 min;
+}
+```
+
+**2. Session statistics aggregation**:
+```sql
+SELECT
+    COUNT(*) as total_words,
+    COUNT(*) FILTER (WHERE is_mastered = true) as mastered_words,
+    COUNT(*) FILTER (WHERE stage = 1) as stage_1_count,
+    AVG(stage)::NUMERIC(3,2) as avg_stage,
+    SUM(review_count) as total_reviews,
+    ROUND(
+        (SUM(correct_count)::DECIMAL / NULLIF(SUM(review_count), 0)) * 100,
+        1
+    ) as accuracy_rate
+FROM cramming_progress
+WHERE cramming_session_id = $1;
+```
+
+**3. Upcoming reviews time brackets**:
+```sql
+CASE
+    WHEN next_review_at <= NOW() THEN 'overdue'
+    WHEN next_review_at <= NOW() + INTERVAL '10 minutes' THEN 'next_10_min'
+    WHEN next_review_at <= NOW() + INTERVAL '1 hour' THEN 'next_hour'
+    WHEN next_review_at <= NOW() + INTERVAL '4 hours' THEN 'next_4_hours'
+    ELSE 'later'
+END as time_bracket
+```
+
+**4. CASCADE deletion**:
+```sql
+-- При удалении cramming_sessions
+-- автоматически удаляются все связанные cramming_progress строки
+cramming_session_id INTEGER REFERENCES cramming_sessions(id) ON DELETE CASCADE
+```
+
+**5. Partial index для performance**:
+```sql
+-- Индексирует только слова, еще не mastered
+CREATE INDEX idx_cramming_progress_next
+ON cramming_progress(user_id, next_review_at)
+WHERE is_mastered = false;
+```
+
+### Use Cases
+
+**1. Exam Preparation**:
+```
+Scenario: User has German exam in 2 days, needs to learn 50 new words
+
+Step 1: Create cramming session
+POST /api/cramming/create
+{
+    "userId": 1,
+    "sessionName": "German B2 Exam Prep",
+    "wordIds": [1, 2, ..., 50],
+    "examDate": "2025-10-22T09:00:00Z"
+}
+
+Step 2: Review words (10 min later)
+GET /api/cramming/1/due-words → returns 50 words
+Review each word → POST /api/cramming/1/review
+
+Step 3: Second round (1 hour later)
+GET /api/cramming/1/due-words → returns stage 2 words
+Continue reviewing...
+
+Step 4: Monitor progress
+GET /api/cramming/1/stats
+→ mastered: 35/50, avg_stage: 3.2
+
+Step 5: Complete before exam
+POST /api/cramming/1/complete
+→ Awards +50 XP bonus (if all mastered)
+```
+
+**2. Presentation Prep**:
+```
+User: business presentation in German tomorrow
+Session: 20 business vocabulary words
+Timeline:
+- 10:00 - Create session, first review
+- 10:10 - Stage 1 review (all 20 words)
+- 11:10 - Stage 2 review (15 words mastered stage 1)
+- 15:10 - Stage 3 review (10 words mastered stage 2)
+- 10:00 next day - Stage 4 review (7 words mastered stage 3)
+```
+
+**3. Quick Revision**:
+```
+User: forgot some words, wants quick refresh
+Session: 10 difficult words
+Goal: master in 1 day
+Result: all 10 words go through 4 stages in ~15 hours
+```
+
+### Differences from normal SRS
+
+| Feature | Normal SRS | Cramming Mode |
+|---------|-----------|---------------|
+| **Intervals** | 1d → 6d → EF*interval | 10min → 1h → 4h → 1d |
+| **EF modification** | Yes, EF changes based on quality | No EF modification |
+| **word_srs_data** | Updates EF, interval, reps | Not touched at all |
+| **Purpose** | Long-term retention | Short-term cramming |
+| **XP rewards** | 9-15 XP per review | 5 XP per stage, 20 XP mastery |
+| **Reset on incorrect** | interval=1, but EF persists | stage=1, correct_count=0 |
+| **Completion** | Never "completes" (lifelong) | Session ends when mastered |
+
+### Benefits
+
+✅ **Fast learning** - 4 stages in < 1 day vs SRS's weeks
+✅ **Isolated** - doesn't mess with long-term SRS progress
+✅ **Flexible** - create sessions for any purpose (exam, presentation, trip)
+✅ **Trackable** - detailed statistics per session
+✅ **Gamified** - XP rewards, completion bonuses
+✅ **Practical** - real-world use case (exams, deadlines)
+
+### Future Enhancements
+
+**1. Smart scheduling**:
+```javascript
+// Auto-calculate optimal cramming schedule based on exam_date
+function generateCrammingSchedule(examDate, wordCount) {
+    const hoursUntilExam = (examDate - NOW()) / 3600000;
+
+    if (hoursUntilExam < 6) {
+        // Ultra-cramming: 5min → 15min → 30min → 1h
+    } else if (hoursUntilExam < 24) {
+        // Standard cramming: 10min → 1h → 4h → 1d
+    } else {
+        // Relaxed cramming: 30min → 2h → 8h → 1d
+    }
+}
+```
+
+**2. Spaced repetition within cramming**:
+```javascript
+// Instead of fixed 10min → 1h → 4h → 1d
+// Use adaptive intervals based on performance
+if (accuracy_rate > 90%) {
+    interval *= 1.5;  // faster progression
+} else if (accuracy_rate < 60%) {
+    interval *= 0.7;  // slower progression
+}
+```
+
+**3. Cramming mode integration with normal SRS**:
+```javascript
+// After cramming session completes
+// Optionally graduate cramming words to normal SRS
+if (user_preference === 'graduate_to_srs') {
+    for (word in mastered_words) {
+        INSERT INTO word_srs_data (word_id, user_id, easiness_factor, interval)
+        VALUES (word.id, userId, 2.5, 6);  // start at day 6
+    }
+}
+```
+
+**4. Pre-session difficulty estimation**:
+```javascript
+// Analyze words before cramming
+function estimateCrammingDuration(wordIds, userId) {
+    // Check if words have been reviewed before in SRS
+    const knownWords = wordIds.filter(id => hasBeenReviewed(id, userId));
+    const unknownWords = wordIds.filter(id => !hasBeenReviewed(id, userId));
+
+    const estimatedTime = {
+        known: knownWords.length * 3,    // 3 min per known word
+        unknown: unknownWords.length * 5  // 5 min per unknown word
+    };
+
+    return estimatedTime;
+}
+```
+
+**5. Session templates**:
+```javascript
+// Predefined cramming templates
+const templates = {
+    'ultra_cramming': {  // last 6 hours before exam
+        intervals: [5, 15, 30, 60],
+        description: 'Emergency cramming for last-minute prep'
+    },
+    'one_day_cramming': {
+        intervals: [10, 60, 240, 1440],
+        description: 'Standard one-day cramming'
+    },
+    'relaxed_cramming': {
+        intervals: [30, 120, 480, 1440],
+        description: 'Gradual cramming over 2-3 days'
+    }
+};
+```
+
+**6. Cramming achievements**:
+```javascript
+// New achievements for cramming
+achievements = [
+    {
+        id: 'cram_master',
+        name: 'Cram Master',
+        description: 'Complete a cramming session with 100% mastery',
+        xp_reward: 100
+    },
+    {
+        id: 'speed_learner',
+        name: 'Speed Learner',
+        description: 'Master 50 words in cramming mode in one day',
+        xp_reward: 150
+    },
+    {
+        id: 'exam_ready',
+        name: 'Exam Ready',
+        description: 'Complete 5 cramming sessions before exams',
+        xp_reward: 200
+    }
+];
+```
+
+### Statistics
+- **Файлов изменено**: 1 (server-postgresql.js)
+- **Таблиц создано**: 2 (cramming_sessions, cramming_progress)
+- **API endpoints**: 6 (create, sessions, due-words, review, stats, complete, delete)
+- **Строк кода**: ~400 (schema + endpoints)
+- **Индексов добавлено**: 4
+- **Stages**: 4 (10min → 1h → 4h → 1d)
+- **XP rewards**: 5 per stage, 20 mastery, 50 perfect session
+

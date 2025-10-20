@@ -1345,6 +1345,46 @@ async function initDatabase() {
         await db.query(`CREATE INDEX IF NOT EXISTS idx_srs_session_user ON srs_session_tracking(user_id, session_start DESC)`);
         await db.query(`CREATE INDEX IF NOT EXISTS idx_srs_session_id ON srs_session_tracking(session_id)`);
 
+        // Cramming Mode: Экстренное запоминание с короткими интервалами
+        await db.query(`
+            CREATE TABLE IF NOT EXISTS cramming_sessions (
+                id SERIAL PRIMARY KEY,
+                user_id INTEGER REFERENCES users(id) ON DELETE CASCADE,
+                session_name VARCHAR(255),
+                target_date DATE,
+                word_ids INTEGER[] NOT NULL,
+                session_status VARCHAR(20) DEFAULT 'active',
+                total_words INTEGER DEFAULT 0,
+                completed_words INTEGER DEFAULT 0,
+                current_stage INTEGER DEFAULT 1,
+                created_at TIMESTAMP DEFAULT NOW(),
+                completed_at TIMESTAMP,
+                exam_date TIMESTAMP
+            )
+        `);
+        await db.query(`CREATE INDEX IF NOT EXISTS idx_cramming_sessions_user ON cramming_sessions(user_id, session_status)`);
+        await db.query(`CREATE INDEX IF NOT EXISTS idx_cramming_sessions_date ON cramming_sessions(target_date)`);
+
+        // Cramming Progress: Отслеживание прогресса cramming сессий
+        await db.query(`
+            CREATE TABLE IF NOT EXISTS cramming_progress (
+                id SERIAL PRIMARY KEY,
+                cramming_session_id INTEGER REFERENCES cramming_sessions(id) ON DELETE CASCADE,
+                word_id INTEGER REFERENCES words(id) ON DELETE CASCADE,
+                user_id INTEGER REFERENCES users(id) ON DELETE CASCADE,
+                stage INTEGER DEFAULT 1,
+                last_review_at TIMESTAMP,
+                next_review_at TIMESTAMP NOT NULL,
+                review_count INTEGER DEFAULT 0,
+                correct_count INTEGER DEFAULT 0,
+                is_mastered BOOLEAN DEFAULT FALSE,
+                created_at TIMESTAMP DEFAULT NOW(),
+                UNIQUE(cramming_session_id, word_id)
+            )
+        `);
+        await db.query(`CREATE INDEX IF NOT EXISTS idx_cramming_progress_session ON cramming_progress(cramming_session_id, is_mastered)`);
+        await db.query(`CREATE INDEX IF NOT EXISTS idx_cramming_progress_next ON cramming_progress(user_id, next_review_at) WHERE is_mastered = false`);
+
         // SRS: Review history log
         await db.query(`
             CREATE TABLE IF NOT EXISTS srs_review_log (
@@ -13162,6 +13202,408 @@ app.post('/api/srs/session/end', async (req, res) => {
         });
     } catch (err) {
         logger.error('Error ending SRS session:', err);
+        res.status(500).json({ error: err.message });
+    }
+});
+
+// ============================================================================
+// 🚀 CRAMMING MODE SYSTEM
+// ============================================================================
+
+// 🚀 Create cramming session
+app.post('/api/cramming/create', async (req, res) => {
+    try {
+        const { userId, sessionName, wordIds, targetDate, examDate } = req.body;
+
+        // Validation
+        if (!userId || !wordIds || !Array.isArray(wordIds) || wordIds.length === 0) {
+            return res.status(400).json({ error: 'userId and wordIds array are required' });
+        }
+
+        // Create cramming session
+        const session = await db.query(`
+            INSERT INTO cramming_sessions
+            (user_id, session_name, target_date, word_ids, total_words, exam_date)
+            VALUES ($1, $2, $3, $4, $5, $6)
+            RETURNING *
+        `, [
+            parseInt(userId),
+            sessionName || 'Cramming Session',
+            targetDate || null,
+            wordIds.map(id => parseInt(id)),
+            wordIds.length,
+            examDate || null
+        ]);
+
+        const sessionId = session.rows[0].id;
+
+        // Initialize cramming_progress for each word
+        // Stage 1: 10 min, Stage 2: 1 hour, Stage 3: 4 hours, Stage 4: 1 day
+        const now = new Date();
+        const stage1Time = new Date(now.getTime() + 10 * 60 * 1000); // +10 min
+
+        const progressInserts = wordIds.map(wordId =>
+            db.query(`
+                INSERT INTO cramming_progress
+                (cramming_session_id, word_id, user_id, stage, next_review_at)
+                VALUES ($1, $2, $3, 1, $4)
+            `, [sessionId, parseInt(wordId), parseInt(userId), stage1Time])
+        );
+
+        await Promise.all(progressInserts);
+
+        res.json({
+            success: true,
+            session: session.rows[0],
+            message: 'Cramming session created. First review in 10 minutes!'
+        });
+    } catch (err) {
+        logger.error('Error creating cramming session:', err);
+        res.status(500).json({ error: err.message });
+    }
+});
+
+// 🚀 Get active cramming sessions
+app.get('/api/cramming/:userId/sessions', async (req, res) => {
+    try {
+        const { userId } = req.params;
+        const { status = 'active' } = req.query;
+
+        const sessions = await db.query(`
+            SELECT
+                cs.*,
+                COUNT(cp.id) FILTER (WHERE cp.is_mastered = true) as mastered_count,
+                COUNT(cp.id) as total_progress,
+                ROUND(
+                    (COUNT(cp.id) FILTER (WHERE cp.is_mastered = true)::DECIMAL / NULLIF(COUNT(cp.id), 0)) * 100,
+                    1
+                ) as completion_percentage
+            FROM cramming_sessions cs
+            LEFT JOIN cramming_progress cp ON cs.id = cp.cramming_session_id
+            WHERE cs.user_id = $1
+                AND ($2 = 'all' OR cs.session_status = $2)
+            GROUP BY cs.id
+            ORDER BY cs.created_at DESC
+        `, [parseInt(userId), status]);
+
+        res.json({
+            sessions: sessions.rows,
+            total: sessions.rows.length
+        });
+    } catch (err) {
+        logger.error('Error getting cramming sessions:', err);
+        res.status(500).json({ error: err.message });
+    }
+});
+
+// 🚀 Get due words for cramming session
+app.get('/api/cramming/:sessionId/due-words', async (req, res) => {
+    try {
+        const { sessionId } = req.params;
+        const { limit = 20 } = req.query;
+
+        const dueWords = await db.query(`
+            SELECT
+                w.id,
+                w.word,
+                w.translation,
+                cp.stage,
+                cp.next_review_at,
+                cp.review_count,
+                cp.correct_count,
+                cp.is_mastered,
+                CASE
+                    WHEN cp.next_review_at <= NOW() THEN 'due_now'
+                    WHEN cp.next_review_at <= NOW() + INTERVAL '10 minutes' THEN 'due_soon'
+                    ELSE 'future'
+                END as status
+            FROM cramming_progress cp
+            INNER JOIN words w ON cp.word_id = w.id
+            WHERE cp.cramming_session_id = $1
+                AND cp.is_mastered = false
+                AND cp.next_review_at <= NOW() + INTERVAL '1 hour'
+            ORDER BY cp.next_review_at ASC
+            LIMIT $2
+        `, [parseInt(sessionId), parseInt(limit)]);
+
+        // Get session info
+        const sessionInfo = await db.query(
+            'SELECT * FROM cramming_sessions WHERE id = $1',
+            [parseInt(sessionId)]
+        );
+
+        res.json({
+            session: sessionInfo.rows[0] || null,
+            words: dueWords.rows,
+            total_due: dueWords.rows.length
+        });
+    } catch (err) {
+        logger.error('Error getting cramming due words:', err);
+        res.status(500).json({ error: err.message });
+    }
+});
+
+// 🚀 Review word in cramming session
+app.post('/api/cramming/:sessionId/review', async (req, res) => {
+    try {
+        const { sessionId } = req.params;
+        const { userId, wordId, isCorrect } = req.body;
+
+        if (!userId || !wordId || isCorrect === undefined) {
+            return res.status(400).json({ error: 'userId, wordId, and isCorrect are required' });
+        }
+
+        // Get current progress
+        const currentProgress = await db.query(
+            'SELECT * FROM cramming_progress WHERE cramming_session_id = $1 AND word_id = $2',
+            [parseInt(sessionId), parseInt(wordId)]
+        );
+
+        if (currentProgress.rows.length === 0) {
+            return res.status(404).json({ error: 'Word not found in cramming session' });
+        }
+
+        const progress = currentProgress.rows[0];
+        const currentStage = progress.stage;
+        const currentCorrectCount = progress.correct_count || 0;
+        const currentReviewCount = progress.review_count || 0;
+
+        // Cramming stage intervals
+        const stageIntervals = {
+            1: 10,      // 10 minutes
+            2: 60,      // 1 hour
+            3: 240,     // 4 hours
+            4: 1440     // 1 day (24 hours)
+        };
+
+        let newStage = currentStage;
+        let newCorrectCount = currentCorrectCount;
+        let isMastered = false;
+        let nextReviewAt = new Date();
+
+        if (isCorrect) {
+            newCorrectCount++;
+
+            // If answered correctly, move to next stage
+            if (currentStage < 4) {
+                newStage = currentStage + 1;
+                const minutesToAdd = stageIntervals[newStage];
+                nextReviewAt = new Date(Date.now() + minutesToAdd * 60 * 1000);
+            } else {
+                // Completed all 4 stages
+                isMastered = true;
+                nextReviewAt = new Date(Date.now() + 24 * 60 * 60 * 1000); // +1 day
+            }
+        } else {
+            // Incorrect answer - reset to stage 1
+            newStage = 1;
+            newCorrectCount = 0;
+            nextReviewAt = new Date(Date.now() + stageIntervals[1] * 60 * 1000);
+        }
+
+        // Update progress
+        const updatedProgress = await db.query(`
+            UPDATE cramming_progress
+            SET stage = $1,
+                review_count = review_count + 1,
+                correct_count = $2,
+                is_mastered = $3,
+                last_review_at = NOW(),
+                next_review_at = $4
+            WHERE cramming_session_id = $5 AND word_id = $6
+            RETURNING *
+        `, [
+            newStage,
+            newCorrectCount,
+            isMastered,
+            nextReviewAt,
+            parseInt(sessionId),
+            parseInt(wordId)
+        ]);
+
+        // Update session completed_words count
+        const masteredCount = await db.query(
+            'SELECT COUNT(*) as count FROM cramming_progress WHERE cramming_session_id = $1 AND is_mastered = true',
+            [parseInt(sessionId)]
+        );
+
+        await db.query(`
+            UPDATE cramming_sessions
+            SET completed_words = $1,
+                current_stage = (
+                    SELECT COALESCE(AVG(stage)::INTEGER, 1)
+                    FROM cramming_progress
+                    WHERE cramming_session_id = $2 AND is_mastered = false
+                )
+            WHERE id = $2
+        `, [parseInt(masteredCount.rows[0].count), parseInt(sessionId)]);
+
+        // Award XP (less than normal SRS)
+        let xpAmount = 0;
+        if (isCorrect) {
+            if (isMastered) {
+                xpAmount = 20; // Completed cramming for this word
+            } else {
+                xpAmount = 5; // Correct answer in cramming
+            }
+
+            await awardXP(parseInt(userId), 'cramming_review', xpAmount, `Cramming: Stage ${newStage}`);
+        }
+
+        res.json({
+            success: true,
+            is_correct: isCorrect,
+            progress: updatedProgress.rows[0],
+            stage_advanced: isCorrect && !isMastered,
+            mastered: isMastered,
+            next_review_in_minutes: Math.round((nextReviewAt - new Date()) / 60000),
+            xp_awarded: xpAmount
+        });
+    } catch (err) {
+        logger.error('Error reviewing cramming word:', err);
+        res.status(500).json({ error: err.message });
+    }
+});
+
+// 🚀 Get cramming session statistics
+app.get('/api/cramming/:sessionId/stats', async (req, res) => {
+    try {
+        const { sessionId } = req.params;
+
+        const session = await db.query(
+            'SELECT * FROM cramming_sessions WHERE id = $1',
+            [parseInt(sessionId)]
+        );
+
+        if (session.rows.length === 0) {
+            return res.status(404).json({ error: 'Session not found' });
+        }
+
+        // Get detailed statistics
+        const stats = await db.query(`
+            SELECT
+                COUNT(*) as total_words,
+                COUNT(*) FILTER (WHERE is_mastered = true) as mastered_words,
+                COUNT(*) FILTER (WHERE is_mastered = false) as in_progress_words,
+                COUNT(*) FILTER (WHERE stage = 1) as stage_1_count,
+                COUNT(*) FILTER (WHERE stage = 2) as stage_2_count,
+                COUNT(*) FILTER (WHERE stage = 3) as stage_3_count,
+                COUNT(*) FILTER (WHERE stage = 4) as stage_4_count,
+                AVG(stage)::NUMERIC(3,2) as avg_stage,
+                SUM(review_count) as total_reviews,
+                SUM(correct_count) as total_correct,
+                ROUND(
+                    (SUM(correct_count)::DECIMAL / NULLIF(SUM(review_count), 0)) * 100,
+                    1
+                ) as accuracy_rate
+            FROM cramming_progress
+            WHERE cramming_session_id = $1
+        `, [parseInt(sessionId)]);
+
+        // Get upcoming reviews
+        const upcomingReviews = await db.query(`
+            SELECT
+                CASE
+                    WHEN next_review_at <= NOW() THEN 'overdue'
+                    WHEN next_review_at <= NOW() + INTERVAL '10 minutes' THEN 'next_10_min'
+                    WHEN next_review_at <= NOW() + INTERVAL '1 hour' THEN 'next_hour'
+                    WHEN next_review_at <= NOW() + INTERVAL '4 hours' THEN 'next_4_hours'
+                    ELSE 'later'
+                END as time_bracket,
+                COUNT(*) as count
+            FROM cramming_progress
+            WHERE cramming_session_id = $1 AND is_mastered = false
+            GROUP BY time_bracket
+        `, [parseInt(sessionId)]);
+
+        const upcomingBrackets = {};
+        upcomingReviews.rows.forEach(row => {
+            upcomingBrackets[row.time_bracket] = parseInt(row.count);
+        });
+
+        res.json({
+            session: session.rows[0],
+            statistics: stats.rows[0],
+            upcoming_reviews: upcomingBrackets
+        });
+    } catch (err) {
+        logger.error('Error getting cramming stats:', err);
+        res.status(500).json({ error: err.message });
+    }
+});
+
+// 🚀 Complete cramming session
+app.post('/api/cramming/:sessionId/complete', async (req, res) => {
+    try {
+        const { sessionId } = req.params;
+        const { userId } = req.body;
+
+        // Update session status
+        const result = await db.query(`
+            UPDATE cramming_sessions
+            SET session_status = 'completed',
+                completed_at = NOW()
+            WHERE id = $1 AND user_id = $2
+            RETURNING *
+        `, [parseInt(sessionId), parseInt(userId)]);
+
+        if (result.rows.length === 0) {
+            return res.status(404).json({ error: 'Session not found' });
+        }
+
+        // Get final statistics
+        const stats = await db.query(`
+            SELECT
+                COUNT(*) FILTER (WHERE is_mastered = true) as mastered_count,
+                COUNT(*) as total_words
+            FROM cramming_progress
+            WHERE cramming_session_id = $1
+        `, [parseInt(sessionId)]);
+
+        const finalStats = stats.rows[0];
+
+        // Bonus XP for completing session
+        if (finalStats.mastered_count === finalStats.total_words) {
+            // Perfect completion bonus
+            await awardXP(parseInt(userId), 'cramming_complete', 50, 'Perfect cramming session!');
+        } else if (finalStats.mastered_count > 0) {
+            // Partial completion
+            await awardXP(parseInt(userId), 'cramming_complete', 25, 'Cramming session completed');
+        }
+
+        res.json({
+            success: true,
+            session: result.rows[0],
+            statistics: finalStats,
+            perfect_completion: finalStats.mastered_count === finalStats.total_words
+        });
+    } catch (err) {
+        logger.error('Error completing cramming session:', err);
+        res.status(500).json({ error: err.message });
+    }
+});
+
+// 🚀 Delete cramming session
+app.delete('/api/cramming/:sessionId', async (req, res) => {
+    try {
+        const { sessionId } = req.params;
+        const { userId } = req.query;
+
+        const result = await db.query(
+            'DELETE FROM cramming_sessions WHERE id = $1 AND user_id = $2 RETURNING *',
+            [parseInt(sessionId), parseInt(userId)]
+        );
+
+        if (result.rows.length === 0) {
+            return res.status(404).json({ error: 'Session not found or unauthorized' });
+        }
+
+        res.json({
+            success: true,
+            deleted: result.rows[0]
+        });
+    } catch (err) {
+        logger.error('Error deleting cramming session:', err);
         res.status(500).json({ error: err.message });
     }
 });

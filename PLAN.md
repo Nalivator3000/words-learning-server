@@ -684,10 +684,17 @@
     - Применяется к словам, уже прошедшим learning mode
     - Полноценный SRS алгоритм с интервалами повторения
     - Оценка качества ответа (0-5) влияет на следующий интервал
-  - [ ] **Cramming mode (перед экзаменом)** - будущая версия:
-    - Короткие интервалы повторения (10 мин → 1 час → 4 часа → 1 день)
-    - Не влияет на EF и долгосрочный SRS прогресс
-    - Используется для экстренного запоминания большого объема
+  - [x] **Cramming mode (перед экзаменом)** ✅ ГОТОВО (Iteration 36)
+    - ✅ Короткие интервалы повторения (10 мин → 1 час → 4 часа → 1 день)
+    - ✅ Не влияет на EF и долгосрочный SRS прогресс
+    - ✅ Используется для экстренного запоминания большого объема
+    - ✅ 2 таблицы: cramming_sessions, cramming_progress
+    - ✅ 6 API endpoints (create, sessions, due-words, review, stats, complete)
+    - ✅ 4 stages with reset on incorrect answer
+    - ✅ Session management with exam_date
+    - ✅ XP rewards: 5/stage, 20 mastery, 50 perfect session
+    - [ ] Frontend UI - будущая версия
+    - [ ] Smart scheduling based on exam_date - будущая версия
 
 ### 4.10 Персонализация алгоритма
 - [x] **User Learning Profile** ✅ ГОТОВО (Iteration 32)
