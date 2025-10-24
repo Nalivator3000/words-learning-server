@@ -10,6 +10,7 @@
     "dev:json": "nodemon server.js",
     "build:css": "tailwindcss -i ./public/css/tailwind-input.css -o ./public/css/tailwind-output.css --minify",
     "watch:css": "tailwindcss -i ./public/css/tailwind-input.css -o ./public/css/tailwind-output.css --watch",
+    "generate:icons": "node generate-icons.js",
     "version": "node update-version.js",
     "precommit": "npm run version && git add public/index.html"
   },
@@ -29,6 +30,7 @@
     "autoprefixer": "^10.4.21",
     "nodemon": "^3.0.1",
     "postcss": "^8.5.6",
+    "sharp": "^0.34.4",
     "tailwindcss": "^4.1.14"
   },
   "engines": {

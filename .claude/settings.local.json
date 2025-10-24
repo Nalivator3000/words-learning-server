@@ -49,7 +49,16 @@
       "Bash(if [ -d \"c:/Users/Nalivator3000/words-learning-server/public/icons\" ])",
       "Bash(then ls \"c:/Users/Nalivator3000/words-learning-server/public/icons\")",
       "Bash(else echo \"Directory not found\")",
-      "Bash(fi)"
+      "Bash(fi)",
+      "Bash(TELEGRAM_API_ID=15133796 TELEGRAM_API_HASH=03e35ea1a82c1475da83551d2f415781 TELEGRAM_SESSION_STRING=\"1ApWapzMBuyEHs5sLLYGhG-2scGPopwkBw0xIA6PSw9jDwmS5Hh7_iHwrMSF3qM-q1dxjUT9tRDIICrGpcN3cThRHQ3F46jimkjRL4tnehcjB3IfyHq0E-gf00GCiFCi1pjj0QjDZYMq_c3LVCizS5bgsYk1mh2DhTaQFQO_m-8_Az9Xl15JJEq_hLWmhsXcrdXSRlSqlljHXa7Z-Q04sjhS4abnmhZ5y-YvN_3HeFIlWJ_zvUy48Hp2-5obn1LylPboNkL8MwfFSx-KnHzm86S0GaeMWgB3GdCx39EYGfvePQRkDFsauPayQReVQIho_Y4CEbKkSJMXlIhy7i8rG4pmMcXKXWUY=\" /c/Users/Nalivator3000/.local/bin/uv.exe run:*)",
+      "Bash(claude mcp list:*)",
+      "Bash(claude mcp get:*)",
+      "Bash(claude mcp remove:*)",
+      "Bash(/c/Users/Nalivator3000/.local/bin/uv.exe:*)",
+      "Bash(TELEGRAM_API_ID=15133796 TELEGRAM_API_HASH=03e35ea1a82c1475da83551d2f415781 TELEGRAM_SESSION_STRING=\"1ApWapzMBuyEHs5sLLYGhG-2scGPopwkBw0xIA6PSw9jDwmS5Hh7_iHwrMSF3qM-q1dxjUT9tRDIICrGpcN3cThRHQ3F46jimkjRL4tnehcjB3IfyHq0E-gf00GCiFCi1pjj0QjDZYMq_c3LVCizS5bgsYk1mh2DhTaQFQO_m-8_Az9Xl15JJEq_hLWmhsXcrdXSRlSqlljHXa7Z-Q04sjhS4abnmhZ5y-YvN_3HeFIlWJ_zvUy48Hp2-5obn1LylPboNkL8MwfFSx-KnHzm86S0GaeMWgB3GdCx39EYGfvePQRkDFsauPayQReVQIho_Y4CEbKkSJMXlIhy7i8rG4pmMcXKXWUY=\" /c/Users/Nalivator3000/.local/bin/uv.exe run main.py)",
+      "Bash(mkdir:*)",
+      "Bash(mv:*)",
+      "Bash(env)"
     ],
     "deny": [],
     "ask": []
