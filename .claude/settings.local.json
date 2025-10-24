@@ -37,7 +37,19 @@
       "Bash(set PORT=3001)",
       "Bash(npx tailwindcss:*)",
       "Bash(npm run build:css:*)",
-      "Bash(pkill:*)"
+      "Bash(pkill:*)",
+      "Bash(git clone:*)",
+      "Read(//c/Users/Nalivator3000/**)",
+      "Bash(where:*)",
+      "Bash(/c/Users/Nalivator3000/.local/bin/uv.exe sync:*)",
+      "Bash(claude mcp add:*)",
+      "Bash(/c/Users/Nalivator3000/.local/bin/uv.exe run:*)",
+      "Bash(ls:*)",
+      "Bash(dir:*)",
+      "Bash(if [ -d \"c:/Users/Nalivator3000/words-learning-server/public/icons\" ])",
+      "Bash(then ls \"c:/Users/Nalivator3000/words-learning-server/public/icons\")",
+      "Bash(else echo \"Directory not found\")",
+      "Bash(fi)"
     ],
     "deny": [],
     "ask": []

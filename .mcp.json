@@ -1,0 +1,15 @@
+{
+  "mcpServers": {
+    "telegram": {
+      "type": "stdio",
+      "command": "C:/Users/Nalivator3000/.local/bin/uv.exe",
+      "args": [
+        "--directory",
+        "C:/Users/Nalivator3000/telegram-mcp",
+        "run",
+        "main.py"
+      ],
+      "env": {}
+    }
+  }
+}

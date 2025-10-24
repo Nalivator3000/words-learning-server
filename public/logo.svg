@@ -1,0 +1,37 @@
+<svg width="512" height="512" viewBox="0 0 512 512" xmlns="http://www.w3.org/2000/svg">
+  <!-- Background gradient -->
+  <defs>
+    <linearGradient id="bg-gradient" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" style="stop-color:#6366f1;stop-opacity:1" />
+      <stop offset="100%" style="stop-color:#8b5cf6;stop-opacity:1" />
+    </linearGradient>
+    <linearGradient id="letter-gradient" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" style="stop-color:#ffffff;stop-opacity:1" />
+      <stop offset="100%" style="stop-color:#e0e7ff;stop-opacity:1" />
+    </linearGradient>
+  </defs>
+
+  <!-- Background rounded square -->
+  <rect width="512" height="512" rx="110" fill="url(#bg-gradient)"/>
+
+  <!-- Letter "F" for FluentFlow -->
+  <g transform="translate(256, 256)">
+    <!-- Main vertical bar -->
+    <rect x="-80" y="-160" width="60" height="320" rx="10" fill="url(#letter-gradient)"/>
+
+    <!-- Top horizontal bar -->
+    <rect x="-80" y="-160" width="180" height="60" rx="10" fill="url(#letter-gradient)"/>
+
+    <!-- Middle horizontal bar (shorter) -->
+    <rect x="-80" y="-30" width="140" height="55" rx="10" fill="url(#letter-gradient)"/>
+
+    <!-- Decorative flow wave -->
+    <path d="M 80 -100 Q 120 -80 140 -60 T 180 -20"
+          stroke="#fbbf24" stroke-width="8" fill="none"
+          stroke-linecap="round" opacity="0.8"/>
+    <circle cx="180" cy="-20" r="6" fill="#fbbf24" opacity="0.8"/>
+  </g>
+
+  <!-- Subtle shadow effect -->
+  <ellipse cx="256" cy="480" rx="180" ry="20" fill="#000000" opacity="0.1"/>
+</svg>
