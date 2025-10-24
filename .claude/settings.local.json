@@ -59,7 +59,8 @@
       "Bash(mkdir:*)",
       "Bash(mv:*)",
       "Bash(env)",
-      "Bash(npm run build:*)"
+      "Bash(npm run build:*)",
+      "Bash(npm pkg set:*)"
     ],
     "deny": [],
     "ask": []
