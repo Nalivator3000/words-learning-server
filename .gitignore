@@ -12,3 +12,4 @@ uploads/
 # Claude logs (local only)
 .claude/action-log.md
 .claude/log-helper.md
+dist/
