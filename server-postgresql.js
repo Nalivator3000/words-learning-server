@@ -18,18 +18,18 @@ const PORT = process.env.PORT || 3001;
 const logger = {
     info: (message) => {
         if (process.env.NODE_ENV !== 'production' || process.env.ENABLE_LOGS === 'true') {
-            logger.info(`[INFO] ${message}`);
+            console.log(`[INFO] ${message}`);
         }
     },
     error: (message, error) => {
-        logger.error(`[ERROR] ${message}`, error || '');
+        console.error(`[ERROR] ${message}`, error || '');
     },
     warn: (message) => {
         console.warn(`[WARN] ${message}`);
     },
     debug: (message) => {
         if (process.env.DEBUG === 'true') {
-            logger.info(`[DEBUG] ${message}`);
+            console.log(`[DEBUG] ${message}`);
         }
     }
 };
