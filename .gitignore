@@ -13,3 +13,12 @@ uploads/
 .claude/action-log.md
 .claude/log-helper.md
 dist/
+
+# Android build files
+android.keystore
+*.keystore
+twa-manifest.json
+app-release*.apk
+app-release*.aab
+android/
+.bubblewrap/
