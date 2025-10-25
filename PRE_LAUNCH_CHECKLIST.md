@@ -55,11 +55,13 @@ npm run generate:screenshots  # Auto-capture screenshots (requires Puppeteer)
 ```
 ✅ Phase 0: Critical Prep      [████████████] 100%
 ✅ Phase 1: TWA Setup           [████████████] 100%
-🟢 Phase 2: Store Assets        [████████░░░░]  75%
+🟢 Phase 2: Store Assets        [█████████░░░]  75% (⭐ Demo activity added!)
 ⚠️  Phase 3: Testing            [█░░░░░░░░░░░]  10%
 ❌ Phase 4: Google Play Setup   [░░░░░░░░░░░░]   0%
 ❌ Phase 5: Launch              [░░░░░░░░░░░░]   0%
 ```
+
+**Latest Update:** Demo account now has realistic activity (Level 4, 350 XP, 5-day streak) for professional screenshots! ✨
 
 ---
 
