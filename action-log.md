@@ -2,6 +2,110 @@
 
 ## 2025-10-25
 
+### Google Play Store Preparation - Complete Documentation Package
+**Commit:** 🏪 GOOGLE PLAY: Complete store listing + setup guide + content rating
+
+**Изменения:**
+
+**1. GOOGLE_PLAY_LISTING.md (Updated):**
+- Обновлены все URL на production Railway deployment
+- Актуализирована информация о package name
+- Проверены все descriptions и character limits:
+  - Title: 37/50 chars ✅
+  - Short description: 72/80 chars ✅
+  - Full description: ~3,200/4,000 chars ✅
+- Русская локализация готова для будущего релиза
+- Keywords и tags для SEO оптимизации
+
+**2. GOOGLE_PLAY_SETUP_GUIDE.md (New - 650+ lines):**
+Полное пошаговое руководство по созданию Google Play аккаунта и публикации:
+
+**Фазы:**
+- Phase 1: Create Developer Account (30 min)
+  - $25 USD registration fee
+  - Identity verification (2-3 days)
+  - Developer profile setup
+- Phase 2: Create App Listing (1 hour)
+  - Store listing fields
+  - Asset uploads
+  - Categorization & tags
+- Phase 3: Content Rating (15 min)
+  - IARC questionnaire with answers
+  - Expected: Everyone (3+)
+- Phase 4: Privacy Policy & Data Safety (20 min)
+  - Data collection disclosure
+  - User data handling
+- Phase 5: Upload App Bundle (30 min)
+  - TWA/Bubblewrap build instructions
+  - Release notes template
+- Phase 6: Pricing & Distribution (10 min)
+  - Country selection (201 countries)
+  - Free app setup
+- Phase 7: Review & Submit (15 min)
+  - Pre-launch report
+  - Final checklist
+  - Submission process
+
+**Дополнительно:**
+- Post-submission tracking (3-7 days review)
+- First week monitoring guide
+- Common issues & solutions
+- Important reminders (keystore, package name)
+
+**3. CONTENT_RATING_ANSWERS.md (New - 400+ lines):**
+Ready-to-use ответы для IARC Content Rating questionnaire:
+
+**12 секций с детальными ответами:**
+1. Violence: NO
+2. Sexual Content: NO
+3. Profanity: NO
+4. Drugs/Alcohol/Tobacco: NO
+5. Gambling: NO
+6. Fear/Scary Content: NO
+7. User Interaction: YES (leaderboards only)
+8. Location Sharing: NO
+9. Misleading Content: NO
+10. Privacy & Data: YES (name, email for auth)
+11. Internet Access: YES (with offline mode)
+12. Realistic Weapons: NO
+
+**Ожидаемые рейтинги:**
+- ESRB (USA): Everyone (3+)
+- PEGI (Europe): PEGI 3
+- USK (Germany): USK 0
+- All other regions: 3+
+
+**Data Safety Declaration:**
+- Personal info: name (optional), email (required)
+- App activity: study progress, achievements
+- App performance: crash logs
+- All data encrypted (HTTPS)
+- GDPR/CCPA compliant
+- No third-party sharing
+
+**Файлы:**
+- [GOOGLE_PLAY_LISTING.md](GOOGLE_PLAY_LISTING.md) - store listing materials (updated)
+- [GOOGLE_PLAY_SETUP_GUIDE.md](GOOGLE_PLAY_SETUP_GUIDE.md) - 650+ lines setup guide (new)
+- [CONTENT_RATING_ANSWERS.md](CONTENT_RATING_ANSWERS.md) - 400+ lines rating answers (new)
+
+**Результат:**
+- ✅ Phase 4 подготовка на 80% завершена
+- 📋 Все тексты для Google Play готовы (EN + RU)
+- 📝 Content Rating заполнение займёт 15 минут (все ответы готовы)
+- 🎯 Готово к созданию Developer аккаунта ($25)
+- 📱 Ждём только APK/AAB файл (Bubblewrap build)
+
+**Что осталось для Phase 4:**
+- [ ] Создать Google Play Developer аккаунт ($25)
+- [ ] Пройти верификацию (2-3 дня)
+- [ ] Сбилдить APK/AAB через Bubblewrap
+- [ ] Загрузить в Play Console
+- [ ] Запустить на review (3-7 дней)
+
+**Estimated time to launch:** 7-14 days (после начала процесса)
+
+---
+
 ### Screenshot Generation Infrastructure + Puppeteer Automation
 **Commit:** 📸 SCREENSHOTS: Automated generator + manual guide
 
