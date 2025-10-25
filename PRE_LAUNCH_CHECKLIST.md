@@ -12,30 +12,41 @@
 **What was accomplished:**
 - ✅ Created **create-test-account.js** - автоматическое создание демо-аккаунта
 - ✅ Created **delete-test-account.js** - удаление демо-аккаунта
+- ✅ Created **add-demo-activity.js** - добавление реалистичной активности ⭐ NEW!
 - ✅ Fixed Railway PostgreSQL schema compatibility (createdat/updatedat)
 - ✅ Fixed password hashing algorithm (matches server-postgresql.js)
 - ✅ Test account created and verified in production database
+- ✅ Demo activity added: Level 4, 350 XP, 5-day streak, 25/50 words with progress
 
 **Demo Account Details:**
 ```
 URL:      https://words-learning-server-copy-production.up.railway.app/
 Email:    demo@fluentflow.app
 Password: DemoPassword123!
-Words:    50 German words with translations and examples
-Status:   ✅ READY FOR SCREENSHOTS
+Words:    50 German words (10 mastered, 15 learning, 8 due)
+Stats:    Level 4, 350 XP, 5-day streak, 120 coins, 25 gems
+Status:   ✅ READY FOR PROFESSIONAL SCREENSHOTS
 ```
 
 **Available Scripts:**
 ```bash
 node create-test-account.js   # Create demo account
+node add-demo-activity.js     # Add realistic activity (⭐ makes screenshots look better!)
 node delete-test-account.js   # Delete demo account
 npm run generate:screenshots  # Auto-capture screenshots (requires Puppeteer)
 ```
 
-**Git Commits:**
-- `1f4dae3` - Test account script + checklist updates
-- `a3e8f77` - Password hash fix
+**Git Commits (10 total):**
+- `af864b3` - Quick Reference update with activity script
+- `8ae2298` - **Demo Activity Script** (⭐ NEW!)
+- `6ae9376` - Quick Reference with screenshot guide
+- `f7bc2d1` - Screenshot infrastructure & instructions
+- `c771976` - Quick Reference guide created
+- `025eb32` - Session summary
+- `275e17a` - Enhanced checklist
 - `fd65e27` - Action log update
+- `a3e8f77` - Password hash fix
+- `1f4dae3` - Test account script
 
 ---
 
