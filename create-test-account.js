@@ -13,9 +13,15 @@ const pool = new Pool({
     ssl: { rejectUnauthorized: false }
 });
 
-// Simple password hash (matches server logic)
+// Simple password hash (matches server logic in server-postgresql.js:1674)
 function hashPassword(password) {
-    return crypto.createHash('sha256').update(password).digest('hex');
+    let hash = 0;
+    for (let i = 0; i < password.length; i++) {
+        const char = password.charCodeAt(i);
+        hash = ((hash << 5) - hash) + char;
+        hash = hash & hash;
+    }
+    return hash.toString();
 }
 
 async function createTestAccount() {
