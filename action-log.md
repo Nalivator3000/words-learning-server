@@ -1,5 +1,46 @@
 # Action Log - Words Learning Server
 
+## 2025-10-25
+
+### Complete Multi-Language Support (i18n)
+**Commit:** 🌍 i18n: Complete translations for all supported languages
+
+**Изменения:**
+- Добавлены полные переводы для 3 недостающих языков:
+  - **Испанский (ES):** 44 ключа перевода
+  - **Французский (FR):** 44 ключа перевода
+  - **Итальянский (IT):** 44 ключа перевода
+- Исправлен отсутствующий ключ 'appTitle' в немецком языке (DE)
+
+**Файл:**
+- [public/language-manager.js](public/language-manager.js) - языковой менеджер с полными переводами
+
+**Категории переводов (44 ключа для каждого языка):**
+- App (1): appTitle
+- Navigation (6): home, import, study, review, statistics, settings
+- Auth (8): welcome, login, register, name, email, password, confirmPassword, loginWithGoogle, logout
+- Home (5): studyingWords, reviewWords, learnedWords, quickStudy, quickReview
+- Study modes (5): selectMode, multipleChoice, reverseChoice, wordBuilding, typing, complexMode
+- Quiz (9): question, of, next, finish, correct, incorrect, correctAnswer, showAnswer, answer, clear
+- Settings (7): languagePairs, studySettings, wordsPerLesson, addLanguagePair, sync, select, delete
+- Import (4): importWords, fromCSV, fromGoogleSheets, selectFile
+- Language dialog (3): studyingLanguage, nativeLanguage, pairName
+- Messages (4): noWords, syncComplete, syncError, syncing
+
+**Поддерживаемые языки (6):**
+- ✅ Русский (RU) - 44/44 ключа
+- ✅ Английский (EN) - 44/44 ключа
+- ✅ Немецкий (DE) - 44/44 ключа
+- ✅ Испанский (ES) - 44/44 ключа ⭐ НОВЫЙ
+- ✅ Французский (FR) - 44/44 ключа ⭐ НОВЫЙ
+- ✅ Итальянский (IT) - 44/44 ключа ⭐ НОВЫЙ
+
+**Зачем это нужно:**
+- Подготовка к скриншотам для Google Play Store (требуется английский интерфейс)
+- Полная интернационализация приложения
+- Поддержка всех заявленных языков в приложении
+- Возможность переключения языка интерфейса без багов
+
 ## 2025-10-14
 
 ### Weekly Challenges System (Backend)

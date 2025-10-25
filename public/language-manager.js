@@ -177,6 +177,9 @@ class LanguageManager {
             },
             
             'de': {
+                // App
+                'appTitle': 'FluentFlow',
+
                 // Navigation
                 'home': 'Startseite',
                 'import': 'Importieren',
@@ -249,6 +252,240 @@ class LanguageManager {
                 'syncComplete': 'Synchronisation erfolgreich abgeschlossen',
                 'syncError': 'Synchronisationsfehler',
                 'syncing': 'Synchronisiere...'
+            },
+
+            'es': {
+                // App
+                'appTitle': 'FluentFlow',
+
+                // Navigation
+                'home': 'Inicio',
+                'import': 'Importar',
+                'study': 'Estudiar',
+                'review': 'Repasar',
+                'statistics': 'Estadísticas',
+                'settings': 'Configuración',
+
+                // Auth
+                'welcome': '¡Bienvenido!',
+                'login': 'Iniciar sesión',
+                'register': 'Registrarse',
+                'name': 'Nombre',
+                'email': 'Correo electrónico',
+                'password': 'Contraseña',
+                'confirmPassword': 'Confirmar contraseña',
+                'loginWithGoogle': 'Iniciar sesión con Google',
+                'logout': 'Cerrar sesión',
+
+                // Home
+                'studyingWords': 'Palabras en estudio',
+                'reviewWords': 'Palabras para repasar',
+                'learnedWords': 'Aprendidas',
+                'quickStudy': 'Estudio rápido',
+                'quickReview': 'Repaso rápido',
+
+                // Study modes
+                'selectMode': 'Seleccionar modo de estudio:',
+                'multipleChoice': 'Opción múltiple',
+                'reverseChoice': 'Opción inversa',
+                'wordBuilding': 'Construcción de palabras',
+                'typing': 'Escritura',
+                'complexMode': 'Modo complejo',
+
+                // Quiz
+                'question': 'Pregunta',
+                'of': 'de',
+                'next': 'Siguiente',
+                'finish': 'Terminar',
+                'correct': '¡Correcto!',
+                'incorrect': 'Incorrecto.',
+                'correctAnswer': 'Respuesta correcta:',
+                'showAnswer': 'Mostrar respuesta',
+                'answer': 'Responder',
+                'clear': 'Limpiar',
+
+                // Settings
+                'languagePairs': 'Pares de idiomas',
+                'studySettings': 'Configuración de estudio',
+                'wordsPerLesson': 'Palabras por lección:',
+                'addLanguagePair': 'Agregar par de idiomas',
+                'sync': 'Sincronizar con servidor',
+                'select': 'Seleccionar',
+                'delete': 'Eliminar',
+
+                // Import
+                'importWords': 'Importar palabras',
+                'fromCSV': 'Desde archivo CSV',
+                'fromGoogleSheets': 'Desde Google Sheets',
+                'selectFile': 'Seleccionar archivo',
+                'import': 'Importar',
+
+                // Language creation dialog
+                'studyingLanguage': 'Idioma a estudiar:',
+                'nativeLanguage': 'Idioma nativo:',
+                'pairName': 'Nombre del par:',
+
+                // Messages
+                'noWords': 'Sin palabras',
+                'syncComplete': 'Sincronización completada exitosamente',
+                'syncError': 'Error de sincronización',
+                'syncing': 'Sincronizando...'
+            },
+
+            'fr': {
+                // App
+                'appTitle': 'FluentFlow',
+
+                // Navigation
+                'home': 'Accueil',
+                'import': 'Importer',
+                'study': 'Étudier',
+                'review': 'Réviser',
+                'statistics': 'Statistiques',
+                'settings': 'Paramètres',
+
+                // Auth
+                'welcome': 'Bienvenue !',
+                'login': 'Se connecter',
+                'register': 'S\'inscrire',
+                'name': 'Nom',
+                'email': 'Email',
+                'password': 'Mot de passe',
+                'confirmPassword': 'Confirmer le mot de passe',
+                'loginWithGoogle': 'Se connecter avec Google',
+                'logout': 'Se déconnecter',
+
+                // Home
+                'studyingWords': 'Mots à étudier',
+                'reviewWords': 'Mots à réviser',
+                'learnedWords': 'Appris',
+                'quickStudy': 'Étude rapide',
+                'quickReview': 'Révision rapide',
+
+                // Study modes
+                'selectMode': 'Sélectionner le mode d\'étude :',
+                'multipleChoice': 'Choix multiple',
+                'reverseChoice': 'Choix inverse',
+                'wordBuilding': 'Construction de mots',
+                'typing': 'Saisie',
+                'complexMode': 'Mode complexe',
+
+                // Quiz
+                'question': 'Question',
+                'of': 'de',
+                'next': 'Suivant',
+                'finish': 'Terminer',
+                'correct': 'Correct !',
+                'incorrect': 'Incorrect.',
+                'correctAnswer': 'Réponse correcte :',
+                'showAnswer': 'Afficher la réponse',
+                'answer': 'Répondre',
+                'clear': 'Effacer',
+
+                // Settings
+                'languagePairs': 'Paires de langues',
+                'studySettings': 'Paramètres d\'étude',
+                'wordsPerLesson': 'Mots par leçon :',
+                'addLanguagePair': 'Ajouter une paire de langues',
+                'sync': 'Synchroniser avec le serveur',
+                'select': 'Sélectionner',
+                'delete': 'Supprimer',
+
+                // Import
+                'importWords': 'Importer des mots',
+                'fromCSV': 'Depuis un fichier CSV',
+                'fromGoogleSheets': 'Depuis Google Sheets',
+                'selectFile': 'Sélectionner un fichier',
+                'import': 'Importer',
+
+                // Language creation dialog
+                'studyingLanguage': 'Langue à étudier :',
+                'nativeLanguage': 'Langue maternelle :',
+                'pairName': 'Nom de la paire :',
+
+                // Messages
+                'noWords': 'Aucun mot',
+                'syncComplete': 'Synchronisation réussie',
+                'syncError': 'Erreur de synchronisation',
+                'syncing': 'Synchronisation en cours...'
+            },
+
+            'it': {
+                // App
+                'appTitle': 'FluentFlow',
+
+                // Navigation
+                'home': 'Home',
+                'import': 'Importa',
+                'study': 'Studia',
+                'review': 'Ripassa',
+                'statistics': 'Statistiche',
+                'settings': 'Impostazioni',
+
+                // Auth
+                'welcome': 'Benvenuto!',
+                'login': 'Accedi',
+                'register': 'Registrati',
+                'name': 'Nome',
+                'email': 'Email',
+                'password': 'Password',
+                'confirmPassword': 'Conferma password',
+                'loginWithGoogle': 'Accedi con Google',
+                'logout': 'Esci',
+
+                // Home
+                'studyingWords': 'Parole da studiare',
+                'reviewWords': 'Parole da ripassare',
+                'learnedWords': 'Apprese',
+                'quickStudy': 'Studio rapido',
+                'quickReview': 'Ripasso rapido',
+
+                // Study modes
+                'selectMode': 'Seleziona modalità di studio:',
+                'multipleChoice': 'Scelta multipla',
+                'reverseChoice': 'Scelta inversa',
+                'wordBuilding': 'Costruzione di parole',
+                'typing': 'Digitazione',
+                'complexMode': 'Modalità complessa',
+
+                // Quiz
+                'question': 'Domanda',
+                'of': 'di',
+                'next': 'Avanti',
+                'finish': 'Fine',
+                'correct': 'Corretto!',
+                'incorrect': 'Sbagliato.',
+                'correctAnswer': 'Risposta corretta:',
+                'showAnswer': 'Mostra risposta',
+                'answer': 'Rispondi',
+                'clear': 'Cancella',
+
+                // Settings
+                'languagePairs': 'Coppie di lingue',
+                'studySettings': 'Impostazioni di studio',
+                'wordsPerLesson': 'Parole per lezione:',
+                'addLanguagePair': 'Aggiungi coppia di lingue',
+                'sync': 'Sincronizza con il server',
+                'select': 'Seleziona',
+                'delete': 'Elimina',
+
+                // Import
+                'importWords': 'Importa parole',
+                'fromCSV': 'Da file CSV',
+                'fromGoogleSheets': 'Da Google Sheets',
+                'selectFile': 'Seleziona file',
+                'import': 'Importa',
+
+                // Language creation dialog
+                'studyingLanguage': 'Lingua da studiare:',
+                'nativeLanguage': 'Lingua madre:',
+                'pairName': 'Nome della coppia:',
+
+                // Messages
+                'noWords': 'Nessuna parola',
+                'syncComplete': 'Sincronizzazione completata con successo',
+                'syncError': 'Errore di sincronizzazione',
+                'syncing': 'Sincronizzazione in corso...'
             }
         };
     }
