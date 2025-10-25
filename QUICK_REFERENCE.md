@@ -23,6 +23,15 @@ node delete-test-account.js
 ```
 Removes demo account and all data (for re-runs)
 
+### Add Demo Activity ⭐ NEW!
+```bash
+node add-demo-activity.js
+```
+Adds realistic activity to demo account:
+- Level 4, 350 XP, 5-day streak
+- 10 mastered words, 15 learning, 8 due
+- Makes screenshots look professional!
+
 ### Generate Screenshots (if Puppeteer installed)
 ```bash
 npm run generate:screenshots
@@ -63,10 +72,11 @@ Phase 5: Launch             ░░░░░░░░░░░░   0% ❌
 - [x] Test account automation scripts
 - [x] Demo account created
 - [x] 50 German words imported
+- [x] **Demo activity added** (Level 4, streak, progress) ⭐
 - [x] Screenshot infrastructure prepared
 - [x] SCREENSHOT_INSTRUCTIONS.md created
 - [x] Documentation updated
-- [x] 7 commits pushed
+- [x] 9 commits pushed
 
 ## 🎯 Next Steps
 
@@ -90,6 +100,8 @@ Phase 5: Launch             ░░░░░░░░░░░░   0% ❌
 ## 📦 Recent Commits
 
 ```
+8ae2298  ✨ ADD: Demo Activity Script for Better Screenshots
+6ae9376  📝 UPDATE: Quick Reference with Screenshot Guide
 f7bc2d1  📸 PREPARE: Screenshot Infrastructure & Instructions
 c771976  📝 ADD: Quick Reference Guide
 025eb32  📊 SESSION SUMMARY: Test Account Automation Complete
@@ -102,9 +114,10 @@ a3e8f77  🔧 FIX: Use Correct Password Hash
 ## 🔗 Important Files
 
 - [PRE_LAUNCH_CHECKLIST.md](PRE_LAUNCH_CHECKLIST.md) - Main checklist
-- [SCREENSHOT_INSTRUCTIONS.md](SCREENSHOT_INSTRUCTIONS.md) - **NEW!** Screenshot guide
+- [SCREENSHOT_INSTRUCTIONS.md](SCREENSHOT_INSTRUCTIONS.md) - Screenshot guide
 - [SESSION_SUMMARY_2025-10-25.md](SESSION_SUMMARY_2025-10-25.md) - Session details
 - [create-test-account.js](create-test-account.js) - Account creator
+- [add-demo-activity.js](add-demo-activity.js) - **NEW!** Add realistic activity
 - [delete-test-account.js](delete-test-account.js) - Account cleanup
 - [action-log.md](action-log.md) - Full history
 
