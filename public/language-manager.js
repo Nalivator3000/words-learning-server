@@ -95,7 +95,14 @@ class LanguageManager {
                 'noWords': 'Нет слов',
                 'syncComplete': 'Синхронизация завершена успешно',
                 'syncError': 'Ошибка синхронизации',
-                'syncing': 'Синхронизация...'
+                'syncing': 'Синхронизация...',
+
+                // Additional UI elements
+                'uiLanguage': 'Язык интерфейса',
+                'leaderboard': 'Рейтинг',
+                'dashboard': 'Панель управления',
+                'survivalMode': 'Режим выживания',
+                'startReview': 'Начать повторение'
             },
             
             'en': {
@@ -173,7 +180,14 @@ class LanguageManager {
                 'noWords': 'No words',
                 'syncComplete': 'Sync completed successfully',
                 'syncError': 'Sync error',
-                'syncing': 'Syncing...'
+                'syncing': 'Syncing...',
+
+                // Additional UI elements
+                'uiLanguage': 'UI Language',
+                'leaderboard': 'Leaderboard',
+                'dashboard': 'Dashboard',
+                'survivalMode': 'Survival Mode',
+                'startReview': 'Start Review'
             },
             
             'de': {
@@ -251,7 +265,14 @@ class LanguageManager {
                 'noWords': 'Keine Wörter',
                 'syncComplete': 'Synchronisation erfolgreich abgeschlossen',
                 'syncError': 'Synchronisationsfehler',
-                'syncing': 'Synchronisiere...'
+                'syncing': 'Synchronisiere...',
+
+                // Additional UI elements
+                'uiLanguage': 'Benutzeroberflächensprache',
+                'leaderboard': 'Bestenliste',
+                'dashboard': 'Dashboard',
+                'survivalMode': 'Überlebensmodus',
+                'startReview': 'Wiederholung starten'
             },
 
             'es': {
@@ -329,7 +350,14 @@ class LanguageManager {
                 'noWords': 'Sin palabras',
                 'syncComplete': 'Sincronización completada exitosamente',
                 'syncError': 'Error de sincronización',
-                'syncing': 'Sincronizando...'
+                'syncing': 'Sincronizando...',
+
+                // Additional UI elements
+                'uiLanguage': 'Idioma de interfaz',
+                'leaderboard': 'Tabla de clasificación',
+                'dashboard': 'Panel de control',
+                'survivalMode': 'Modo supervivencia',
+                'startReview': 'Comenzar repaso'
             },
 
             'fr': {
@@ -407,7 +435,14 @@ class LanguageManager {
                 'noWords': 'Aucun mot',
                 'syncComplete': 'Synchronisation réussie',
                 'syncError': 'Erreur de synchronisation',
-                'syncing': 'Synchronisation en cours...'
+                'syncing': 'Synchronisation en cours...',
+
+                // Additional UI elements
+                'uiLanguage': 'Langue de l\'interface',
+                'leaderboard': 'Classement',
+                'dashboard': 'Tableau de bord',
+                'survivalMode': 'Mode survie',
+                'startReview': 'Commencer la révision'
             },
 
             'it': {
@@ -485,7 +520,14 @@ class LanguageManager {
                 'noWords': 'Nessuna parola',
                 'syncComplete': 'Sincronizzazione completata con successo',
                 'syncError': 'Errore di sincronizzazione',
-                'syncing': 'Sincronizzazione in corso...'
+                'syncing': 'Sincronizzazione in corso...',
+
+                // Additional UI elements
+                'uiLanguage': 'Lingua dell\'interfaccia',
+                'leaderboard': 'Classifica',
+                'dashboard': 'Pannello di controllo',
+                'survivalMode': 'Modalità sopravvivenza',
+                'startReview': 'Inizia ripasso'
             }
         };
     }

@@ -146,34 +146,34 @@
         <main>
             <!-- Home Section -->
             <section id="homeSection" class="section active">
-                <h2>German Words Learning Dashboard</h2>
+                <h2 data-translate="dashboard">German Words Learning Dashboard</h2>
 
                 <!-- Daily Goals -->
                 <div id="dailyGoalsContainer"></div>
 
                 <div class="stats-grid">
                     <div class="stat-card">
-                        <h3>Изучаемые слова</h3>
+                        <h3 data-translate="studyingWords">Изучаемые слова</h3>
                         <p id="studyingCount">0</p>
                     </div>
                     <div class="stat-card">
-                        <h3>На повторении</h3>
+                        <h3 data-translate="reviewWords">На повторении</h3>
                         <p id="reviewCount">0</p>
                     </div>
                     <div class="stat-card">
-                        <h3>Изучено</h3>
+                        <h3 data-translate="learnedWords">Изучено</h3>
                         <p id="learnedCount">0</p>
                     </div>
                 </div>
                 <div class="quick-actions">
-                    <button id="quickStudyBtn" class="action-btn">Быстрое изучение</button>
-                    <button id="quickReviewBtn" class="action-btn">Быстрое повторение</button>
+                    <button id="quickStudyBtn" class="action-btn" data-translate="quickStudy">Быстрое изучение</button>
+                    <button id="quickReviewBtn" class="action-btn" data-translate="quickReview">Быстрое повторение</button>
                 </div>
             </section>
 
             <!-- Import Section -->
             <section id="importSection" class="section">
-                <h2>Импорт слов</h2>
+                <h2 data-translate="importWords">Импорт слов</h2>
 
                 <!-- CSV Template Download -->
                 <div class="template-download">
@@ -209,17 +209,17 @@
 
             <!-- Study Section -->
             <section id="studySection" class="section">
-                <h2>Изучение</h2>
+                <h2 data-translate="study">Изучение</h2>
                 <div class="quiz-container">
                     <div id="studyModeSelect" class="mode-select">
-                        <h3>Выберите режим изучения:</h3>
+                        <h3 data-translate="selectMode">Выберите режим изучения:</h3>
                         <div class="mode-grid">
-                            <button id="multipleChoiceBtn" class="mode-btn">Выбор из вариантов<br><small>(родной → изучаемый)</small></button>
-                            <button id="reverseMultipleChoiceBtn" class="mode-btn">Обратный выбор<br><small>(изучаемый → родной)</small></button>
-                            <button id="wordBuildingBtn" class="mode-btn">Составление слова<br><small>из букв</small></button>
-                            <button id="typingBtn" class="mode-btn">Ввод с клавиатуры<br><small>(родной → изучаемый)</small></button>
-                            <button id="survivalBtn" class="mode-btn survival-mode">Режим выживания<br><small>5 сек на ответ, до 3 ошибок</small></button>
-                            <button id="complexModeBtn" class="mode-btn complex-mode">Комплексный режим<br><small>все типы подряд</small></button>
+                            <button id="multipleChoiceBtn" class="mode-btn"><span data-translate="multipleChoice">Выбор из вариантов</span><br><small>(родной → изучаемый)</small></button>
+                            <button id="reverseMultipleChoiceBtn" class="mode-btn"><span data-translate="reverseChoice">Обратный выбор</span><br><small>(изучаемый → родной)</small></button>
+                            <button id="wordBuildingBtn" class="mode-btn"><span data-translate="wordBuilding">Составление слова</span><br><small>из букв</small></button>
+                            <button id="typingBtn" class="mode-btn"><span data-translate="typing">Ввод с клавиатуры</span><br><small>(родной → изучаемый)</small></button>
+                            <button id="survivalBtn" class="mode-btn survival-mode"><span data-translate="survivalMode">Режим выживания</span><br><small>5 сек на ответ, до 3 ошибок</small></button>
+                            <button id="complexModeBtn" class="mode-btn complex-mode"><span data-translate="complexMode">Комплексный режим</span><br><small>все типы подряд</small></button>
                         </div>
                     </div>
                     <div id="quizArea" class="quiz-area hidden">
@@ -281,9 +281,9 @@
 
             <!-- Review Section -->
             <section id="reviewSection" class="section">
-                <h2>Повторение</h2>
+                <h2 data-translate="review">Повторение</h2>
                 <div class="review-info">
-                    <p>Слова на повторение:</p>
+                    <p data-translate="reviewWords">Слова на повторение:</p>
                     <div class="review-stats">
                         <span>7 дней: <span id="review7Count">0</span></span>
                         <span>30 дней: <span id="review30Count">0</span></span>
@@ -291,7 +291,7 @@
                 </div>
                 <div class="quiz-container">
                     <div id="reviewModeSelect" class="mode-select">
-                        <button id="startReviewBtn" class="action-btn">Начать повторение</button>
+                        <button id="startReviewBtn" class="action-btn" data-translate="startReview">Начать повторение</button>
                     </div>
                     <div id="reviewQuizArea" class="quiz-area hidden">
                         <div class="progress-bar">
@@ -421,11 +421,14 @@
                 <h2 data-translate="settings">Настройки</h2>
                 <div class="settings-content">
                     <div class="settings-group">
-                        <h3>Язык интерфейса</h3>
+                        <h3 data-translate="uiLanguage">Язык интерфейса</h3>
                         <select id="uiLanguageSelect" class="language-select">
-                            <option value="ru">Русский</option>
+                            <option value="ru">Русский (Russian)</option>
                             <option value="en">English</option>
-                            <option value="de">Deutsch</option>
+                            <option value="de">Deutsch (German)</option>
+                            <option value="es">Español (Spanish)</option>
+                            <option value="fr">Français (French)</option>
+                            <option value="it">Italiano (Italian)</option>
                         </select>
                     </div>
 

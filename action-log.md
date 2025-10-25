@@ -2,44 +2,70 @@
 
 ## 2025-10-25
 
-### Complete Multi-Language Support (i18n)
-**Commit:** 🌍 i18n: Complete translations for all supported languages
+### Complete Multi-Language Support (i18n) + HTML Translation Attributes
+**Commit:** 🌍 i18n: Complete translations + HTML data-translate attributes
 
 **Изменения:**
+
+**1. Language Manager (language-manager.js):**
 - Добавлены полные переводы для 3 недостающих языков:
-  - **Испанский (ES):** 44 ключа перевода
-  - **Французский (FR):** 44 ключа перевода
-  - **Итальянский (IT):** 44 ключа перевода
+  - **Испанский (ES):** 49 ключей перевода
+  - **Французский (FR):** 49 ключей перевода
+  - **Итальянский (IT):** 49 ключей перевода
 - Исправлен отсутствующий ключ 'appTitle' в немецком языке (DE)
+- Добавлены дополнительные UI ключи (5 новых):
+  - `uiLanguage` - "Язык интерфейса" / "UI Language"
+  - `leaderboard` - "Рейтинг" / "Leaderboard"
+  - `dashboard` - "Панель управления" / "Dashboard"
+  - `survivalMode` - "Режим выживания" / "Survival Mode"
+  - `startReview` - "Начать повторение" / "Start Review"
 
-**Файл:**
-- [public/language-manager.js](public/language-manager.js) - языковой менеджер с полными переводами
+**2. HTML Translation Attributes (index.html):**
+- Добавлены `data-translate` атрибуты для всех ключевых элементов:
+  - **Home Section:** dashboard, studyingWords, reviewWords, learnedWords, quickStudy, quickReview
+  - **Study Section:** study, selectMode, все кнопки режимов (multipleChoice, reverseChoice, wordBuilding, typing, survivalMode, complexMode)
+  - **Review Section:** review, reviewWords, startReview
+  - **Import Section:** importWords
+  - **Settings Section:** uiLanguage
+- Обновлён селектор языка интерфейса - теперь все 6 языков:
+  - 🇷🇺 Русский (Russian)
+  - 🇬🇧 English
+  - 🇩🇪 Deutsch (German)
+  - 🇪🇸 Español (Spanish) ⭐ НОВЫЙ
+  - 🇫🇷 Français (French) ⭐ НОВЫЙ
+  - 🇮🇹 Italiano (Italian) ⭐ НОВЫЙ
 
-**Категории переводов (44 ключа для каждого языка):**
+**Файлы:**
+- [public/language-manager.js](public/language-manager.js) - языковой менеджер (49 ключей × 6 языков = 294 переводов)
+- [public/index.html](public/index.html) - HTML с data-translate атрибутами
+
+**Категории переводов (49 ключей для каждого языка):**
 - App (1): appTitle
 - Navigation (6): home, import, study, review, statistics, settings
 - Auth (8): welcome, login, register, name, email, password, confirmPassword, loginWithGoogle, logout
 - Home (5): studyingWords, reviewWords, learnedWords, quickStudy, quickReview
-- Study modes (5): selectMode, multipleChoice, reverseChoice, wordBuilding, typing, complexMode
+- Study modes (6): selectMode, multipleChoice, reverseChoice, wordBuilding, typing, complexMode, survivalMode
 - Quiz (9): question, of, next, finish, correct, incorrect, correctAnswer, showAnswer, answer, clear
 - Settings (7): languagePairs, studySettings, wordsPerLesson, addLanguagePair, sync, select, delete
 - Import (4): importWords, fromCSV, fromGoogleSheets, selectFile
 - Language dialog (3): studyingLanguage, nativeLanguage, pairName
 - Messages (4): noWords, syncComplete, syncError, syncing
+- Additional UI (5): uiLanguage, leaderboard, dashboard, survivalMode, startReview
 
 **Поддерживаемые языки (6):**
-- ✅ Русский (RU) - 44/44 ключа
-- ✅ Английский (EN) - 44/44 ключа
-- ✅ Немецкий (DE) - 44/44 ключа
-- ✅ Испанский (ES) - 44/44 ключа ⭐ НОВЫЙ
-- ✅ Французский (FR) - 44/44 ключа ⭐ НОВЫЙ
-- ✅ Итальянский (IT) - 44/44 ключа ⭐ НОВЫЙ
+- ✅ Русский (RU) - 49/49 ключей
+- ✅ Английский (EN) - 49/49 ключей
+- ✅ Немецкий (DE) - 49/49 ключей
+- ✅ Испанский (ES) - 49/49 ключей ⭐ НОВЫЙ
+- ✅ Французский (FR) - 49/49 ключей ⭐ НОВЫЙ
+- ✅ Итальянский (IT) - 49/49 ключей ⭐ НОВЫЙ
 
 **Зачем это нужно:**
 - Подготовка к скриншотам для Google Play Store (требуется английский интерфейс)
 - Полная интернационализация приложения
 - Поддержка всех заявленных языков в приложении
-- Возможность переключения языка интерфейса без багов
+- Корректное переключение языка интерфейса без багов
+- Все критичные UI элементы теперь переводятся автоматически
 
 ## 2025-10-14
 
