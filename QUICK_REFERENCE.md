@@ -32,15 +32,16 @@ Auto-captures 8 screenshots at 1080x2400
 ## 📸 Screenshot Checklist
 
 **Resolution:** 1080 x 2400 (Chrome DevTools)
+**📋 Full Guide:** [SCREENSHOT_INSTRUCTIONS.md](SCREENSHOT_INSTRUCTIONS.md) (200+ lines, step-by-step)
 
-1. ☐ Home/Dashboard - показать streak, XP, level
-2. ☐ Study Mode - карточка со словом
-3. ☐ SRS Review - due words
-4. ☐ Statistics - графики, прогресс
-5. ☐ Achievements - разблокированные достижения
-6. ☐ Leaderboard - топ пользователей
-7. ☐ Dark Mode - любой экран в темной теме
-8. ☐ Settings/Profile - настройки пользователя
+1. ☐ `01-home-dashboard.png` - Main dashboard with stats
+2. ☐ `02-study-mode.png` - Learning interface
+3. ☐ `03-srs-review.png` - Spaced repetition review
+4. ☐ `04-statistics.png` - Progress charts
+5. ☐ `05-achievements.png` - Gamification badges
+6. ☐ `06-leaderboard.png` - Global rankings
+7. ☐ `07-dark-mode.png` - Dark theme showcase
+8. ☐ `08-settings-profile.png` - User settings
 
 **Save to:** `public/store-assets/screenshots/`
 
@@ -62,8 +63,10 @@ Phase 5: Launch             ░░░░░░░░░░░░   0% ❌
 - [x] Test account automation scripts
 - [x] Demo account created
 - [x] 50 German words imported
+- [x] Screenshot infrastructure prepared
+- [x] SCREENSHOT_INSTRUCTIONS.md created
 - [x] Documentation updated
-- [x] 5 commits pushed
+- [x] 7 commits pushed
 
 ## 🎯 Next Steps
 
@@ -87,6 +90,8 @@ Phase 5: Launch             ░░░░░░░░░░░░   0% ❌
 ## 📦 Recent Commits
 
 ```
+f7bc2d1  📸 PREPARE: Screenshot Infrastructure & Instructions
+c771976  📝 ADD: Quick Reference Guide
 025eb32  📊 SESSION SUMMARY: Test Account Automation Complete
 275e17a  📋 UPDATE: Enhanced Pre-Launch Checklist
 fd65e27  📝 DOCS: Update action-log
@@ -97,6 +102,7 @@ a3e8f77  🔧 FIX: Use Correct Password Hash
 ## 🔗 Important Files
 
 - [PRE_LAUNCH_CHECKLIST.md](PRE_LAUNCH_CHECKLIST.md) - Main checklist
+- [SCREENSHOT_INSTRUCTIONS.md](SCREENSHOT_INSTRUCTIONS.md) - **NEW!** Screenshot guide
 - [SESSION_SUMMARY_2025-10-25.md](SESSION_SUMMARY_2025-10-25.md) - Session details
 - [create-test-account.js](create-test-account.js) - Account creator
 - [delete-test-account.js](delete-test-account.js) - Account cleanup
