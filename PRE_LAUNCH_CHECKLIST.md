@@ -1,8 +1,8 @@
 # ✅ Pre-Launch Checklist - FluentFlow Android
 
 **Target Launch Date**: TBD
-**Current Status**: Phase 1 Complete
-**Last Updated**: 2025-10-24
+**Current Status**: Phase 2 in Progress (Test Account Created!)
+**Last Updated**: 2025-10-25
 
 ---
 
@@ -11,8 +11,8 @@
 ```
 ✅ Phase 0: Critical Prep      [████████████] 100%
 ✅ Phase 1: TWA Setup           [████████████] 100%
-⚠️  Phase 2: Store Assets       [████░░░░░░░░]  30%
-❌ Phase 3: Testing             [░░░░░░░░░░░░]   0%
+🟢 Phase 2: Store Assets        [████████░░░░]  75%
+⚠️  Phase 3: Testing            [█░░░░░░░░░░░]  10%
 ❌ Phase 4: Google Play Setup   [░░░░░░░░░░░░]   0%
 ❌ Phase 5: Launch              [░░░░░░░░░░░░]   0%
 ```
@@ -87,7 +87,7 @@
 
 ---
 
-## ❌ PHASE 2: Store Assets Creation (30% COMPLETE)
+## 🟢 PHASE 2: Store Assets Creation (75% COMPLETE)
 
 ### Store Listing Text (DONE ✅)
 - [x] App title (50 chars): "FluentFlow: Language Learning & SRS"
@@ -96,13 +96,22 @@
 - [x] Content rating answers prepared
 - [x] Tags/keywords selected
 
-### Visual Assets (NEED TO CREATE ⚠️)
+### Visual Assets (MOSTLY DONE ✅)
 - [x] App icon 512x512 (icon-512x512.png) ✅
-- [ ] **Feature graphic 1024x500** ← NEED TO CREATE
-  - Use Canva, Figma, or PhotoPea
-  - Template: FluentFlow logo + tagline
-  - See: GOOGLE_PLAY_LISTING.md for specs
-- [ ] **Screenshots (min 2, rec 8)** ← NEED TO CREATE
+- [x] **Feature graphic 1024x500** ✅
+  - Generated: public/store-assets/feature-graphic.png
+  - Generated: public/store-assets/feature-graphic.jpg
+  - Script: npm run generate:feature-graphic
+- [x] **Test account created** ✅ NEW!
+  - Email: demo@fluentflow.app
+  - Password: DemoPassword123!
+  - 50 German words imported
+  - Ready for screenshots
+  - Script: create-test-account.js
+- [x] **Screenshot automation script** ✅
+  - Script: generate-screenshots.js
+  - Guide: SCREENSHOTS_GUIDE.md
+- [ ] **Capture 8 screenshots** ← IN PROGRESS
   - 1. Home/Dashboard (with stats, streak)
   - 2. Study Mode (word card, multiple choice)
   - 3. SRS Review (due words)
@@ -112,7 +121,7 @@
   - 7. Dark Mode example
   - 8. Settings/Profile
   - Resolution: 1080x2400 (9:16 phone)
-  - Tool: Chrome DevTools Device Emulation
+  - Tool: Chrome DevTools Device Emulation OR npm run generate:screenshots
 
 ### Optional Assets
 - [ ] Promo video (30-120 seconds)
@@ -122,10 +131,15 @@
 
 ---
 
-## ❌ PHASE 3: Testing (0% COMPLETE)
+## ⚠️ PHASE 3: Testing (10% COMPLETE)
 
-### Local Testing
-- [ ] Run production build: `npm run build`
+### Documentation & Setup (DONE ✅)
+- [x] Testing guide created (TESTING_GUIDE.md - 350+ lines, 8 phases)
+- [x] Test account ready (demo@fluentflow.app)
+- [x] Production deployment verified (Railway)
+
+### Local Testing (IN PROGRESS ⚠️)
+- [x] Run production build: `npm run build` ✅
 - [ ] Test all core features:
   - [ ] Registration / Login
   - [ ] Import words (CSV, manual)
@@ -322,11 +336,11 @@
 
 ### HIGH PRIORITY:
 1. ⚠️ **Domain not purchased** - Need fluentflow.app or alternative
-2. ⚠️ **Not deployed to production** - App only on localhost
+2. ✅ **Deployed to production** - Railway: https://words-learning-server-copy-production.up.railway.app/
 3. ⚠️ **JDK not installed** - Can't build Android APK
 4. ⚠️ **Android SDK not installed** - Can't build Android APK
-5. ⚠️ **Feature graphic missing** - Required for Google Play
-6. ⚠️ **Screenshots missing** - Required for Google Play (min 2)
+5. ✅ **Feature graphic created** - public/store-assets/feature-graphic.png
+6. ⚠️ **Screenshots missing** - Required for Google Play (min 2) - Test account ready!
 
 ### MEDIUM PRIORITY:
 7. ⚠️ **Google Play account not created** - $25 fee + 2-3 days verification
@@ -368,8 +382,8 @@
 1. [ ] Purchase domain (fluentflow.app or alternative)
 2. [ ] Install JDK 17+ (15 minutes)
 3. [ ] Install Android Command Line Tools (30 minutes)
-4. [ ] Create feature graphic with Canva (1 hour)
-5. [ ] Take 2 screenshots minimum (30 minutes)
+4. [x] Create feature graphic ✅ DONE (automated script)
+5. [ ] Take 8 screenshots (login to demo@fluentflow.app and capture screens)
 
 ### **TOMORROW (1-2 hours):**
 6. [ ] Deploy app to production domain with HTTPS
