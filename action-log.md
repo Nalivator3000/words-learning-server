@@ -821,3 +821,54 @@ c708a37 ✨ ANIMATIONS: Complete micro-animations system with stagger & pulse ef
 - Background Bash 460545: node server-postgresql.js (running)
 - Background Bash 6d7e27: node server-postgresql.js (running)
 - Background Bash 07baee: node server-postgresql.js (running)
+
+## 2025-10-25
+
+### Test Account Creation System (Android Release Prep)
+**Commits:** 
+- 1f4dae3: ✅ TEST DATA: Create Demo Account Script
+- a3e8f77: 🔧 FIX: Use Correct Password Hash Algorithm
+
+**Изменения:**
+- Скрипты автоматизации:
+  - `create-test-account.js` - создание тестового аккаунта с данными
+  - `delete-test-account.js` - удаление тестового аккаунта
+- Railway PostgreSQL direct access через pg library
+- Исправлена схема базы данных (createdat/updatedat вместо created_at/updated_at)
+- Исправлен алгоритм хеширования паролей (простой JS hash вместо SHA256)
+
+**Файлы:**
+- [create-test-account.js](create-test-account.js) - создание аккаунта
+- [delete-test-account.js](delete-test-account.js) - удаление аккаунта
+- [PRE_LAUNCH_CHECKLIST.md](PRE_LAUNCH_CHECKLIST.md) - обновлен прогресс
+
+**Функциональность:**
+- Создание пользователя: demo@fluentflow.app / DemoPassword123!
+- Автоматический импорт 50 немецких слов с примерами
+- Инициализация language_pairs (German → English)
+- Инициализация user_stats (XP, level, streak, coins, gems)
+- Правильный password hash: matches server-postgresql.js:1674
+
+**База данных (Railway PostgreSQL):**
+```sql
+-- Созданные записи:
+- users: ID 5 (demo@fluentflow.app)
+- language_pairs: ID 6 (German → English, active)
+- words: 50 записей (der Apfel, das Buch, die Katze, etc.)
+- user_stats: начальные значения (level 1, XP 0, streak 0)
+```
+
+**Прогресс по чеклисту:**
+- Phase 2 (Store Assets): 30% → 75% ✅
+- Phase 3 (Testing): 0% → 10% ✅
+- Critical blocker снят: Feature graphic created ✅
+- Critical blocker снят: Production deployed ✅
+
+**Production URL:**
+https://words-learning-server-copy-production.up.railway.app/
+
+**Следующие шаги:**
+1. Войти в production с demo@fluentflow.app
+2. Захватить 8 скриншотов для Google Play Store (1080x2400px)
+3. Phase 2 будет 100% готова после скриншотов
+
