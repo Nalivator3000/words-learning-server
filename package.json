@@ -19,7 +19,8 @@
     "generate:screenshots": "node generate-screenshots.js",
     "generate:store-assets": "npm run generate:icons && npm run generate:feature-graphic",
     "test": "node test-production.js",
-    "test:api": "node test-api-endpoints.js"
+    "test:api": "node test-api-endpoints.js",
+    "test:validate": "node test-validation.js"
   },
   "dependencies": {
     "compression": "^1.8.1",
