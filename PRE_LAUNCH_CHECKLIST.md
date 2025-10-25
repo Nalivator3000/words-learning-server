@@ -1,8 +1,41 @@
 # ✅ Pre-Launch Checklist - FluentFlow Android
 
 **Target Launch Date**: TBD
-**Current Status**: Phase 2 in Progress (Test Account Created!)
-**Last Updated**: 2025-10-25
+**Current Status**: Phase 2 Ready for Screenshots! ✨
+**Last Updated**: 2025-10-25 (Session: Test Account Automation Complete)
+
+---
+
+## 🆕 Latest Updates (2025-10-25)
+
+### ✅ Test Account Automation Complete!
+**What was accomplished:**
+- ✅ Created **create-test-account.js** - автоматическое создание демо-аккаунта
+- ✅ Created **delete-test-account.js** - удаление демо-аккаунта
+- ✅ Fixed Railway PostgreSQL schema compatibility (createdat/updatedat)
+- ✅ Fixed password hashing algorithm (matches server-postgresql.js)
+- ✅ Test account created and verified in production database
+
+**Demo Account Details:**
+```
+URL:      https://words-learning-server-copy-production.up.railway.app/
+Email:    demo@fluentflow.app
+Password: DemoPassword123!
+Words:    50 German words with translations and examples
+Status:   ✅ READY FOR SCREENSHOTS
+```
+
+**Available Scripts:**
+```bash
+node create-test-account.js   # Create demo account
+node delete-test-account.js   # Delete demo account
+npm run generate:screenshots  # Auto-capture screenshots (requires Puppeteer)
+```
+
+**Git Commits:**
+- `1f4dae3` - Test account script + checklist updates
+- `a3e8f77` - Password hash fix
+- `fd65e27` - Action log update
 
 ---
 
@@ -16,6 +49,44 @@
 ❌ Phase 4: Google Play Setup   [░░░░░░░░░░░░]   0%
 ❌ Phase 5: Launch              [░░░░░░░░░░░░]   0%
 ```
+
+---
+
+## 🚀 IMMEDIATE NEXT STEPS (YOU CAN DO NOW!)
+
+### Step 1: Login to Production & Test (5 minutes)
+```
+1. Open: https://words-learning-server-copy-production.up.railway.app/
+2. Login with: demo@fluentflow.app / DemoPassword123!
+3. Verify 50 German words are loaded
+4. Test all features work (Study, Review, Stats)
+```
+
+### Step 2: Capture 8 Screenshots (30-60 minutes)
+**Option A: Manual (Chrome DevTools)**
+1. Open Chrome DevTools (F12)
+2. Enable Device Toolbar (Ctrl+Shift+M)
+3. Set Responsive dimensions: **1080 x 2400**
+4. Capture each screen:
+   - Home/Dashboard (показать streak, XP, level)
+   - Study Mode (карточка со словом)
+   - SRS Review (due words)
+   - Statistics (графики, прогресс)
+   - Achievements (разблокированные достижения)
+   - Leaderboard (топ пользователей)
+   - Dark Mode (любой экран в темной теме)
+   - Settings/Profile
+5. Save to: `public/store-assets/screenshots/`
+
+**Option B: Automatic (if Puppeteer installed)**
+```bash
+npm run generate:screenshots
+```
+
+### Step 3: Update Checklist
+After screenshots are done:
+- Phase 2: 75% → 100% ✅
+- Ready for Phase 3 (Testing)!
 
 ---
 
@@ -339,8 +410,8 @@
 2. ✅ **Deployed to production** - Railway: https://words-learning-server-copy-production.up.railway.app/
 3. ⚠️ **JDK not installed** - Can't build Android APK
 4. ⚠️ **Android SDK not installed** - Can't build Android APK
-5. ✅ **Feature graphic created** - public/store-assets/feature-graphic.png
-6. ⚠️ **Screenshots missing** - Required for Google Play (min 2) - Test account ready!
+5. ✅ **Feature graphic created** - public/store-assets/feature-graphic.png (PNG + JPG)
+6. 🎯 **Screenshots missing** - NEXT TASK! Demo account ready (demo@fluentflow.app)
 
 ### MEDIUM PRIORITY:
 7. ⚠️ **Google Play account not created** - $25 fee + 2-3 days verification
