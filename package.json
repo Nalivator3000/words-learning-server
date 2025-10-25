@@ -17,6 +17,7 @@
     "precommit": "npm run version && git add public/index.html",
     "generate:feature-graphic": "node generate-feature-graphic.js",
     "generate:screenshots": "node generate-screenshots.js",
+    "generate:screenshots:prod": "node generate-screenshots-production.js",
     "generate:store-assets": "npm run generate:icons && npm run generate:feature-graphic",
     "test": "node test-production.js",
     "test:api": "node test-api-endpoints.js",
@@ -40,6 +41,7 @@
     "autoprefixer": "^10.4.21",
     "nodemon": "^3.0.1",
     "postcss": "^8.5.6",
+    "puppeteer": "^24.26.1",
     "sharp": "^0.34.4",
     "tailwindcss": "^4.1.14"
   },

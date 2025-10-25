@@ -2,6 +2,59 @@
 
 ## 2025-10-25
 
+### Screenshot Generation Infrastructure + Puppeteer Automation
+**Commit:** 📸 SCREENSHOTS: Automated generator + manual guide
+
+**Изменения:**
+
+**1. Automated Screenshot Generator (generate-screenshots-production.js):**
+- Создан полностью автоматический генератор скриншотов
+- Использует Puppeteer для работы с production URL
+- Автоматический логин в demo аккаунт
+- Попытка установки английского языка
+- 8 скриншотов с автонавигацией (частично работает)
+- Размер viewport: 1080x2400px (Google Play стандарт)
+- Сохранение в `public/store-assets/screenshots/`
+
+**2. Manual Screenshots Guide (MANUAL_SCREENSHOTS_GUIDE.md):**
+- Пошаговое руководство для создания 8 скриншотов вручную
+- Детальные инструкции для каждого скриншота
+- Chrome DevTools setup (1080x2400, DPR 2-3x)
+- Чеклист качества (разрешение, язык, чистота UI)
+- Альтернативный метод для первого релиза
+
+**3. Package.json:**
+- Добавлен Puppeteer в devDependencies (v24.26.1)
+- Новый npm script: `npm run generate:screenshots:prod`
+- Автоматическая установка Chromium (~170-300 MB)
+
+**Файлы:**
+- [generate-screenshots-production.js](generate-screenshots-production.js) - автоматический генератор
+- [MANUAL_SCREENSHOTS_GUIDE.md](MANUAL_SCREENSHOTS_GUIDE.md) - руководство для ручного создания
+- [package.json](package.json) - обновлены зависимости и скрипты
+
+**Результат:**
+- ✅ 1/8 скриншотов сгенерирован автоматически (01-home-dashboard.png, 215 KB)
+- ⚠️  7/8 скриншотов требуют ручного создания (ошибки навигации)
+- 📋 Готово подробное руководство для ручного создания
+- 🎯 Готово для Phase 2 → 100% после создания всех скриншотов
+
+**Screenshot List (8 required):**
+1. ✅ Home Dashboard with Stats (automated)
+2. ⏳ Study Mode - Multiple Choice (manual)
+3. ⏳ Review Section (manual)
+4. ⏳ Statistics & Analytics (manual)
+5. ⏳ Leaderboard Rankings (manual)
+6. ⏳ Achievements & Gamification (manual)
+7. ⏳ Dark Mode Theme (manual)
+8. ⏳ Settings & Preferences (manual)
+
+**Следующий шаг:**
+- Создать оставшиеся 7 скриншотов вручную (30-60 минут)
+- Либо отладить автоматическую навигацию в Puppeteer скрипте
+
+---
+
 ### Complete Multi-Language Support (i18n) + HTML Translation Attributes
 **Commit:** 🌍 i18n: Complete translations + HTML data-translate attributes
 

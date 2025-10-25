@@ -60,7 +60,8 @@
       "Bash(mv:*)",
       "Bash(env)",
       "Bash(npm run build:*)",
-      "Bash(npm pkg set:*)"
+      "Bash(npm pkg set:*)",
+      "Bash(npm test:*)"
     ],
     "deny": [],
     "ask": []
