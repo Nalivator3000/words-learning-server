@@ -1,7 +1,7 @@
 {
-  "name": "words-learning-server",
+  "name": "lexibooster-server",
   "version": "5.0.0",
-  "description": "Server version of German words learning app",
+  "description": "LexiBooster - Language learning app with SRS and gamification",
   "main": "server-postgresql.js",
   "scripts": {
     "start": "node server-postgresql.js",

@@ -1,4 +1,4 @@
-# 🏪 Google Play Console Setup Guide - FluentFlow
+# 🏪 Google Play Console Setup Guide - LexiBooster
 
 ## 📋 Prerequisites Checklist
 
@@ -37,7 +37,7 @@ Before starting, ensure you have:
 
 #### Step 1.3: Complete Developer Profile
 
-1. **Developer name**: `FluentFlow Team` or your name
+1. **Developer name**: `LexiBooster Team` or your name
 2. **Email**: Your contact email (public, visible to users)
 3. **Website** (optional but recommended):
    ```
@@ -68,7 +68,7 @@ Google requires identity verification for all new developers:
 
 **App Details:**
 ```
-App name: FluentFlow
+App name: LexiBooster
 Default language: English (United States)
 App or game: App
 Free or paid: Free
@@ -84,7 +84,7 @@ Navigate to: **Grow → Store presence → Main store listing**
 
 **App name:**
 ```
-FluentFlow: Language Learning & SRS
+LexiBooster: Language Learning & SRS
 ```
 (37 characters, max 50)
 
@@ -177,7 +177,7 @@ Navigate to: **Policy → App content → Content ratings**
 
 Click "Start questionnaire"
 
-#### IARC Questionnaire Answers for FluentFlow:
+#### IARC Questionnaire Answers for LexiBooster:
 
 **Section 1: General Questions**
 
@@ -241,7 +241,7 @@ Navigate to: **Policy → App content → Data safety**
 
 This section requires detailed answers about data collection.
 
-**For FluentFlow:**
+**For LexiBooster:**
 
 1. **Does your app collect or share any of the required user data types?**
    - Yes
@@ -334,9 +334,9 @@ Initial Release - v1.0.0
 
 **Release notes:**
 ```
-🎉 Welcome to FluentFlow!
+🎉 Welcome to LexiBooster!
 
-FluentFlow is now available on Google Play! Master any language with:
+LexiBooster is now available on Google Play! Master any language with:
 
 ✨ Features:
 • Spaced Repetition System (SRS) for optimal learning
@@ -465,10 +465,10 @@ Navigate to: **Dashboard → View release** to see missing items
 
 1. **App goes live** on Google Play Store
 2. You'll receive email confirmation
-3. Search for "FluentFlow" on Play Store
+3. Search for "LexiBooster" on Play Store
 4. Share the link:
    ```
-   https://play.google.com/store/apps/details?id=com.fluentflow.app
+   https://play.google.com/store/apps/details?id=com.LexiBooster.app
    ```
 
 ### If Rejected ❌
@@ -550,7 +550,7 @@ Navigate to: **Dashboard → View release** to see missing items
 
 2. **Package name is permanent**
    - Once set, you cannot change it
-   - Choose carefully: `com.fluentflow.app`
+   - Choose carefully: `com.LexiBooster.app`
 
 3. **$25 fee is one-time**
    - You can publish unlimited apps
@@ -571,7 +571,7 @@ Navigate to: **Dashboard → View release** to see missing items
 Once your app is live, you've successfully:
 - ✅ Created a Google Play Developer account
 - ✅ Published your first Android app
-- ✅ Made FluentFlow available to billions of Android users worldwide
+- ✅ Made LexiBooster available to billions of Android users worldwide
 
 **Next steps:**
 - Monitor metrics and reviews
@@ -587,7 +587,7 @@ Once your app is live, you've successfully:
 - Help Center: https://support.google.com/googleplay/android-developer
 - Policy Center: https://play.google.com/about/developer-content-policy/
 
-**FluentFlow Resources:**
+**LexiBooster Resources:**
 - Repository: https://github.com/Nalivator3000/words-learning-server
 - Privacy Policy: https://words-learning-server-copy-production.up.railway.app/privacy.html
 - Terms: https://words-learning-server-copy-production.up.railway.app/terms.html

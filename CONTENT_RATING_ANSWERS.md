@@ -1,4 +1,4 @@
-# 🔞 Content Rating Questionnaire - FluentFlow
+# 🔞 Content Rating Questionnaire - LexiBooster
 
 ## Quick Reference for IARC Content Rating
 
@@ -8,7 +8,7 @@ Use these answers when filling out the Google Play Console Content Rating questi
 
 ## 📋 General Information
 
-**App Name:** FluentFlow
+**App Name:** LexiBooster
 **Category:** Education, Reference, or News
 **Developer Email:** (Your email)
 **Expected Rating:** Everyone (3+) or Everyone 10+
@@ -198,7 +198,7 @@ Use these answers when filling out the Google Play Console Content Rating questi
 
 ## 📊 Expected Content Ratings
 
-Based on the answers above, FluentFlow should receive:
+Based on the answers above, LexiBooster should receive:
 
 ### Global Ratings:
 
@@ -274,7 +274,7 @@ Based on the answers above, FluentFlow should receive:
 
 4. **COPPA Compliance:**
    - If targeting children under 13, additional requirements apply
-   - FluentFlow is NOT specifically designed for children (safe answer)
+   - LexiBooster is NOT specifically designed for children (safe answer)
 
 ---
 
@@ -320,11 +320,11 @@ Update content rating if you add:
 - ✅ Ads (especially if third-party)
 - ✅ Access to sensitive permissions (camera, contacts, etc.)
 
-For FluentFlow's current feature set, **no updates needed** for foreseeable future.
+For LexiBooster's current feature set, **no updates needed** for foreseeable future.
 
 ---
 
 **Created:** 2025-10-25
-**App:** FluentFlow v1.0
+**App:** LexiBooster v1.0
 **Status:** Ready for submission
 **Last Reviewed:** 2025-10-25

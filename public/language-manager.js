@@ -22,7 +22,7 @@ class LanguageManager {
         this.translations = {
             'ru': {
                 // App
-                'appTitle': 'FluentFlow',
+                'appTitle': 'LexiBooster',
 
                 // Navigation
                 'home': 'Главная',
@@ -107,7 +107,7 @@ class LanguageManager {
             
             'en': {
                 // App
-                'appTitle': 'FluentFlow',
+                'appTitle': 'LexiBooster',
 
                 // Navigation
                 'home': 'Home',
@@ -192,7 +192,7 @@ class LanguageManager {
             
             'de': {
                 // App
-                'appTitle': 'FluentFlow',
+                'appTitle': 'LexiBooster',
 
                 // Navigation
                 'home': 'Startseite',
@@ -277,7 +277,7 @@ class LanguageManager {
 
             'es': {
                 // App
-                'appTitle': 'FluentFlow',
+                'appTitle': 'LexiBooster',
 
                 // Navigation
                 'home': 'Inicio',
@@ -362,7 +362,7 @@ class LanguageManager {
 
             'fr': {
                 // App
-                'appTitle': 'FluentFlow',
+                'appTitle': 'LexiBooster',
 
                 // Navigation
                 'home': 'Accueil',
@@ -447,7 +447,7 @@ class LanguageManager {
 
             'it': {
                 // App
-                'appTitle': 'FluentFlow',
+                'appTitle': 'LexiBooster',
 
                 // Navigation
                 'home': 'Home',

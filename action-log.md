@@ -1,5 +1,44 @@
 # Action Log - Words Learning Server
 
+## 2025-10-26
+
+### App Rebranding: FluentFlow → LexiBooster
+**Действие:** Полный ребрендинг приложения с FluentFlow на LexiBooster
+
+**Измененные файлы:**
+
+**1. Основные файлы приложения:**
+- `public/manifest.json`:
+  - name: "LexiBooster - Language Learning & SRS"
+  - short_name: "LexiBooster"
+- `public/language-manager.js`:
+  - Обновлены appTitle во всех 6 языках (ru, en, de, es, fr, it)
+- `package.json`:
+  - name: "lexibooster-server"
+  - description обновлен
+
+**2. Документация Google Play:**
+- `GOOGLE_PLAY_LISTING.md`:
+  - Все упоминания FluentFlow → LexiBooster
+  - Package name: com.lexibooster.app (было com.fluentflow.app)
+  - Support email: support@lexibooster.app
+- `GOOGLE_PLAY_SETUP_GUIDE.md`:
+  - Обновлены все примеры и инструкции
+  - Developer name: LexiBooster Team
+- `CONTENT_RATING_ANSWERS.md`:
+  - App name: LexiBooster во всех секциях
+- `TWA_BUILD_GUIDE.md`:
+  - Package name: com.lexibooster.app
+  - Все примеры команд обновлены
+
+**Причина ребрендинга:**
+Новое название LexiBooster лучше отражает суть приложения - "буст" для лексики (словарного запаса).
+
+**Важно:**
+⚠️ Ребрендинг выполнен ДО создания build и публикации в Google Play, так как package name нельзя изменить после первой загрузки в магазин.
+
+---
+
 ## 2025-10-25
 
 ### Google Play Store Preparation - Complete Documentation Package

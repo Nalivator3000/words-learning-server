@@ -1,6 +1,6 @@
 {
-  "name": "FluentFlow - Language Learning & SRS",
-  "short_name": "FluentFlow",
+  "name": "LexiBooster - Language Learning & SRS",
+  "short_name": "LexiBooster",
   "description": "Master languages with spaced repetition, gamification & streak tracking",
   "start_url": "/?source=pwa",
   "scope": "/",
