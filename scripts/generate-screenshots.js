@@ -11,10 +11,10 @@ const MOBILE_VIEWPORT = {
   deviceScaleFactor: 2
 };
 
-// Test user credentials (using test account from BACKEND_RELEASE_PREP.md)
+// Test user credentials (demo account created by create-test-account.js)
 const TEST_USER = {
-  username: 'test_user',
-  password: 'test123'
+  email: 'demo@fluentflow.app',
+  password: 'DemoPassword123!'
 };
 
 // Create screenshots directory if it doesn't exist
@@ -24,32 +24,36 @@ if (!fs.existsSync(SCREENSHOT_DIR)) {
 
 async function login(page) {
   console.log('🔐 Logging in...');
-  await page.goto(APP_URL, {
-    waitUntil: 'domcontentloaded',
-    timeout: 60000
-  });
 
-  // Wait for login form
-  await page.waitForSelector('#loginEmail', { timeout: 10000 });
-  await page.type('#loginEmail', TEST_USER.username);
-  await page.type('#loginPassword', TEST_USER.password);
+  try {
+    await page.goto(APP_URL, {
+      waitUntil: 'load',  // Just wait for page load, not network idle
+      timeout: 120000  // 2 minutes for initial page load (Railway cold start)
+    });
 
-  // Click login button
-  await page.click('#loginBtn');
+    console.log('   Page loaded, waiting for login form...');
 
-  // Wait for auth modal to disappear (login is handled by JS, no page reload)
-  await page.waitForFunction(
-    () => {
-      const modal = document.getElementById('authModal');
-      return modal && modal.style.display === 'none';
-    },
-    { timeout: 10000 }
-  );
+    // Wait for login form to appear
+    await page.waitForSelector('#loginEmail', { timeout: 20000 });
 
-  // Wait a bit more for home screen to fully load
-  await page.waitForTimeout(1000);
+    console.log('   Filling in credentials...');
+    await page.type('#loginEmail', TEST_USER.email, { delay: 50 });
+    await page.type('#loginPassword', TEST_USER.password, { delay: 50 });
 
-  console.log('✅ Logged in successfully');
+    console.log('   Clicking login button...');
+    await page.click('#loginBtn');
+
+    // Wait for home screen elements to appear (instead of waiting for modal to hide)
+    await page.waitForSelector('#homeBtn', { timeout: 20000 });
+
+    console.log('   Waiting for app to fully load...');
+    await page.waitForTimeout(3000);  // Give app time to initialize
+
+    console.log('✅ Logged in successfully');
+  } catch (error) {
+    console.error('❌ Login failed:', error.message);
+    throw error;
+  }
 }
 
 async function takeScreenshot(page, name, description) {
@@ -73,12 +77,16 @@ async function generateScreenshots() {
 
   const browser = await puppeteer.launch({
     headless: 'new',
-    args: ['--no-sandbox', '--disable-setuid-sandbox']
+    args: ['--no-sandbox', '--disable-setuid-sandbox'],
+    protocolTimeout: 180000  // 3 minutes protocol timeout
   });
 
   try {
     const page = await browser.newPage();
     await page.setViewport(MOBILE_VIEWPORT);
+
+    // Set longer default timeout for all operations
+    page.setDefaultTimeout(60000);
 
     // Login first
     await login(page);
