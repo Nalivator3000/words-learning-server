@@ -101,7 +101,7 @@ class Analytics {
                 labels: labels,
                 datasets: [
                     {
-                        label: 'XP заработано',
+                        label: 'XP Earned',
                         data: xpData,
                         borderColor: 'rgba(139, 92, 246, 1)',
                         backgroundColor: 'rgba(139, 92, 246, 0.1)',
@@ -110,7 +110,7 @@ class Analytics {
                         yAxisID: 'y'
                     },
                     {
-                        label: 'Слов выучено',
+                        label: 'Words Learned',
                         data: wordsData,
                         borderColor: 'rgba(16, 185, 129, 1)',
                         backgroundColor: 'rgba(16, 185, 129, 0.1)',
@@ -162,7 +162,7 @@ class Analytics {
                         position: 'right',
                         title: {
                             display: true,
-                            text: 'Слова'
+                            text: 'Words'
                         },
                         grid: {
                             drawOnChartArea: false,
@@ -208,7 +208,7 @@ class Analytics {
             data: {
                 labels: labels,
                 datasets: [{
-                    label: 'Процент успешности',
+                    label: 'Success Rate',
                     data: successRates,
                     backgroundColor: colors,
                     borderColor: colors.map(c => c.replace('0.8', '1')),
@@ -231,10 +231,10 @@ class Analytics {
                                 const stat = exerciseStats[context.dataIndex];
                                 const total = stat.correct_count + stat.incorrect_count;
                                 return [
-                                    `Успешность: ${context.parsed.y}%`,
-                                    `Правильно: ${stat.correct_count}`,
-                                    `Неправильно: ${stat.incorrect_count}`,
-                                    `Всего: ${total}`
+                                    `Success: ${context.parsed.y}%`,
+                                    `Correct: ${stat.correct_count}`,
+                                    `Incorrect: ${stat.incorrect_count}`,
+                                    `Total: ${total}`
                                 ];
                             }
                         }
@@ -246,7 +246,7 @@ class Analytics {
                         max: 100,
                         title: {
                             display: true,
-                            text: 'Процент успешности (%)'
+                            text: 'Success Rate (%)'
                         },
                         grid: {
                             color: 'rgba(0, 0, 0, 0.05)'
@@ -268,7 +268,7 @@ class Analytics {
         if (!container) return;
 
         if (!difficultWords || difficultWords.length === 0) {
-            container.innerHTML = '<p class="no-data">Нет данных о сложных словах</p>';
+            container.innerHTML = '<p class="no-data">No data on difficult words</p>';
             return;
         }
 
@@ -293,18 +293,18 @@ class Analytics {
                         <div class="word-stats">
                             <span class="word-stat">
                                 <span class="stat-icon">❌</span>
-                                ${word.error_count} ошибок
+                                ${word.error_count} errors
                             </span>
                             <span class="word-stat">
                                 <span class="stat-icon">📊</span>
-                                ${word.total_attempts} попыток
+                                ${word.total_attempts} attempts
                             </span>
                             <span class="word-stat error-rate">
-                                ${errorRate}% ошибок
+                                ${errorRate}% errors
                             </span>
                         </div>
                     </div>
-                    <button class="practice-word-btn" data-word-id="${word.id}" title="Отработать это слово">
+                    <button class="practice-word-btn" data-word-id="${word.id}" title="Practice this word">
                         🎯
                     </button>
                 </div>
@@ -339,23 +339,23 @@ class Analytics {
             <div class="study-time-cards">
                 <div class="time-card">
                     <div class="time-icon">⏱️</div>
-                    <div class="time-value">${todayMinutes} мин</div>
-                    <div class="time-label">Сегодня</div>
+                    <div class="time-value">${todayMinutes} min</div>
+                    <div class="time-label">Today</div>
                 </div>
                 <div class="time-card">
                     <div class="time-icon">📅</div>
-                    <div class="time-value">${weekMinutes} мин</div>
-                    <div class="time-label">За неделю</div>
+                    <div class="time-value">${weekMinutes} min</div>
+                    <div class="time-label">This Week</div>
                 </div>
                 <div class="time-card">
                     <div class="time-icon">📈</div>
-                    <div class="time-value">${avgDailyMinutes} мин</div>
-                    <div class="time-label">В среднем в день</div>
+                    <div class="time-value">${avgDailyMinutes} min</div>
+                    <div class="time-label">Average per Day</div>
                 </div>
                 <div class="time-card highlight">
                     <div class="time-icon">🕐</div>
-                    <div class="time-value">${totalHours}ч ${totalMinutes}м</div>
-                    <div class="time-label">Всего времени</div>
+                    <div class="time-value">${totalHours}h ${totalMinutes}m</div>
+                    <div class="time-label">Total Time</div>
                 </div>
             </div>
             <div class="time-insight">
@@ -374,8 +374,8 @@ class Analytics {
                 <div class="fluency-prediction no-prediction">
                     <div class="prediction-icon">🔮</div>
                     <div class="prediction-message">
-                        <h4>Прогноз беглости недоступен</h4>
-                        <p>Продолжайте учиться, чтобы получить прогноз!</p>
+                        <h4>Fluency Forecast unavailable</h4>
+                        <p>Keep learning to get a forecast!</p>
                     </div>
                 </div>
             `;
@@ -392,22 +392,22 @@ class Analytics {
             <div class="fluency-prediction ${confidenceClass}">
                 <div class="prediction-header">
                     <div class="prediction-icon">🎯</div>
-                    <h3>Прогноз достижения беглости</h3>
+                    <h3>Fluency Achievement Forecast</h3>
                 </div>
                 <div class="prediction-content">
                     <div class="prediction-date">
-                        <div class="date-label">Ожидаемая дата</div>
+                        <div class="date-label">Ожидаеmая дата</div>
                         <div class="date-value">${estimatedDate.toLocaleDateString('ru-RU', {
                             year: 'numeric',
                             month: 'long',
                             day: 'numeric'
                         })}</div>
                         <div class="days-remaining">
-                            ${daysRemaining > 0 ? `Осталось ${daysRemaining} дней` : 'Цель достигнута!'}
+                            ${daysRemaining > 0 ? `Remaining ${daysRemaining} days` : 'Goal achieved!'}
                         </div>
                     </div>
                     <div class="prediction-progress">
-                        <div class="progress-label">Текущий прогресс</div>
+                        <div class="progress-label">Current Progress</div>
                         <div class="progress-bar-large">
                             <div class="progress-bar-fill" style="width: ${progressPercent}%;"></div>
                             <span class="progress-text">${progressPercent}%</span>
@@ -415,12 +415,12 @@ class Analytics {
                     </div>
                     <div class="prediction-stats">
                         <div class="prediction-stat">
-                            <span class="stat-label">Уверенность модели</span>
+                            <span class="stat-label">Уверенность mодели</span>
                             <span class="stat-value">${Math.round(prediction.confidence * 100)}%</span>
                         </div>
                         <div class="prediction-stat">
-                            <span class="stat-label">Текущий темп</span>
-                            <span class="stat-value">${prediction.words_per_week || 0} слов/нед</span>
+                            <span class="stat-label">Текущий теmп</span>
+                            <span class="stat-value">${prediction.words_per_week || 0} words/week</span>
                         </div>
                     </div>
                     <div class="prediction-recommendation">
@@ -434,11 +434,11 @@ class Analytics {
     // Get exercise type label in Russian
     getExerciseTypeLabel(type) {
         const labels = {
-            'multiple_choice': 'Множественный выбор',
-            'word_building': 'Составление слова',
-            'typing': 'Набор текста',
-            'flashcard': 'Карточки',
-            'listening': 'Аудирование'
+            'multiple_choice': 'Multiple Choice',
+            'word_building': 'Word Building',
+            'typing': 'Typing',
+            'flashcard': 'Flashcards',
+            'listening': 'Listening'
         };
         return labels[type] || type;
     }
@@ -446,36 +446,36 @@ class Analytics {
     // Get study time insight message
     getStudyTimeInsight(todayMinutes, avgDailyMinutes) {
         if (todayMinutes === 0) {
-            return '💭 <strong>Начните занятие сегодня!</strong> Всего 15 минут в день помогут достичь больших результатов.';
+            return '💭 <strong>Начните занятие сегодня!</strong> Всего 15 minут в день поmогут достичь больших результатов.';
         }
         if (todayMinutes >= avgDailyMinutes * 1.5) {
-            return '🎉 <strong>Отличная работа!</strong> Сегодня вы занимались больше обычного!';
+            return '🎉 <strong>Great work!</strong> Today вы заниmались больше обычного!';
         }
         if (todayMinutes < avgDailyMinutes * 0.5 && avgDailyMinutes > 0) {
-            return '⚡ <strong>Ещё немного!</strong> Попробуйте достичь вашего среднего показателя.';
+            return '⚡ <strong>Ещё неmного!</strong> Попробуйте достичь вашего среднего показателя.';
         }
-        return '✨ <strong>Хороший темп!</strong> Продолжайте в том же духе.';
+        return '✨ <strong>Хороший теmп!</strong> Продолжайте в тоm же духе.';
     }
 
     // Get fluency recommendation
     getFluencyRecommendation(daysRemaining, wordsPerWeek) {
         if (daysRemaining <= 0) {
-            return 'Поздравляем! Вы достигли цели беглости. Продолжайте практиковаться для поддержания уровня.';
+            return 'Поздравляеm! Вы достигли цели беглости. Продолжайте практиковаться для поддержания уровня.';
         }
         if (wordsPerWeek < 20) {
-            return 'Увеличьте темп обучения до 20-30 слов в неделю для достижения цели быстрее.';
+            return 'Увеличьте теmп обучения до 20-30 слов в неделю для достижения цели быстрее.';
         }
         if (wordsPerWeek >= 50) {
-            return 'Отличный темп! При таком прогрессе вы достигнете беглости раньше прогноза.';
+            return 'Отличный теmп! При такоm прогрессе вы достигнете беглости раньше прогноза.';
         }
-        return 'Хороший темп обучения! Старайтесь заниматься регулярно для достижения цели.';
+        return 'Хороший теmп обучения! Старайтесь заниmаться регулярно для достижения цели.';
     }
 
     // Practice specific difficult word
     practiceWord(wordId) {
         // Trigger study mode with specific word
         if (window.toast) {
-            window.toast.info('Функция будет добавлена в следующем обновлении');
+            window.toast.info('Функция будет добавлена в следующеm обновлении');
         }
         console.log('Practice word:', wordId);
     }

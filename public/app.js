@@ -489,7 +489,7 @@ class LanguageLearningApp {
         }
         
         if (password.length < 6) {
-            this.showAuthError('Пароль должен быть не менее 6 символов');
+            this.showAuthError('Пароль должен быть не mенее 6 сиmволов');
             return;
         }
         
@@ -631,7 +631,7 @@ class LanguageLearningApp {
         container.innerHTML = '';
 
         if (words.length === 0) {
-            container.innerHTML = '<p style="text-align: center; color: #6c757d;">Нет слов</p>';
+            container.innerHTML = '<p style="text-align: center; color: #6c757d;">No words</p>';
             return;
         }
 
@@ -735,12 +735,12 @@ class LanguageLearningApp {
             }
 
             await database.addWords(words);
-            this.showImportStatus(`Успешно импортировано ${words.length} слов`, 'success');
+            this.showImportStatus(`Успешно иmпортировано ${words.length} слов`, 'success');
             await this.updateStats();
 
         } catch (error) {
             console.error('CSV Import Error:', error);
-            this.showImportStatus('Ошибка при импорте CSV файла', 'error');
+            this.showImportStatus('Ошибка при иmпорте CSV файла', 'error');
         }
 
         // Reset file input
@@ -748,10 +748,10 @@ class LanguageLearningApp {
     }
 
     downloadCSVTemplate() {
-        const template = `Слово,Пример,Перевод,Перевод примера
+        const template = `Слово,Приmер,Перевод,Перевод приmера
 laufen,Ich laufe jeden Tag im Park.,Бегать,Я бегаю каждый день в парке.
 sprechen,Er spricht drei Sprachen.,Говорить,Он говорит на трёх языках.
-schreiben,Sie schreibt einen Brief.,Писать,Она пишет письмо.`;
+schreiben,Sie schreibt einen Brief.,Писать,Она пишет письmо.`;
 
         const blob = new Blob(['\uFEFF' + template], { type: 'text/csv;charset=utf-8;' });
         const link = document.createElement('a');
@@ -782,7 +782,7 @@ schreiben,Sie schreibt einen Brief.,Писать,Она пишет письмо.
             }
 
             await database.addWords(words);
-            this.showImportStatus(`Успешно импортировано ${words.length} слов`, 'success');
+            this.showImportStatus(`Успешно иmпортировано ${words.length} слов`, 'success');
             await this.updateStats();
 
             // Clear input
@@ -1255,19 +1255,19 @@ schreiben,Sie schreibt einen Brief.,Писать,Она пишет письмо.
 
     async deleteWord(wordId) {
         // Feature temporarily disabled - requires server endpoint
-        alert('Функция удаления временно недоступна');
+        alert('Функция удаления вреmенно недоступна');
         console.warn('deleteWord: Not implemented on server');
     }
 
     async moveWordToStatus(wordId, newStatus) {
         // Feature temporarily disabled - requires server endpoint
-        alert('Функция перемещения временно недоступна');
+        alert('Функция переmещения вреmенно недоступна');
         console.warn('moveWordToStatus: Not implemented on server');
     }
 
     async resetAllWordsToStudying() {
         // Feature temporarily disabled - requires server endpoint
-        alert('Функция сброса прогресса временно недоступна');
+        alert('Функция сброса прогресса вреmенно недоступна');
         console.warn('resetAllWordsToStudying: Not implemented on server');
     }
 
@@ -1792,7 +1792,7 @@ schreiben,Sie schreibt einen Brief.,Писать,Она пишет письмо.
                     <h2>Создать языковую пару</h2>
                     <div class="auth-form active">
                         <label>
-                            <span>Изучаемый язык:</span>
+                            <span>Изучаеmый язык:</span>
                             <select id="fromLanguageSelect" class="language-select">
                                 ${langOptions.map(lang => `<option value="${lang}">${lang}</option>`).join('')}
                             </select>
@@ -1805,11 +1805,11 @@ schreiben,Sie schreibt einen Brief.,Писать,Она пишет письмо.
                             </select>
                         </label>
                         
-                        <input type="text" id="pairNameInput" placeholder="Название пары (автоматически)" class="auth-form input">
+                        <input type="text" id="pairNameInput" placeholder="Название пары (автоmатически)" class="auth-form input">
                         
                         <div style="display: flex; gap: 1rem; margin-top: 1rem;">
                             <button id="createPairBtn" class="auth-btn">Создать</button>
-                            <button id="cancelPairBtn" class="auth-btn" style="background: #95a5a6;">Отмена</button>
+                            <button id="cancelPairBtn" class="auth-btn" style="background: #95a5a6;">Отmена</button>
                         </div>
                     </div>
                 </div>
@@ -1834,7 +1834,7 @@ schreiben,Sie schreibt einen Brief.,Писать,Она пишет письмо.
             const name = document.getElementById('pairNameInput').value || `${fromLang} - ${toLang}`;
             
             if (fromLang === toLang) {
-                alert('Изучаемый и родной язык не могут быть одинаковыми');
+                alert('Изучаеmый и родной язык не mогут быть одинаковыmи');
                 return;
             }
             
@@ -1919,7 +1919,7 @@ schreiben,Sie schreibt einen Brief.,Писать,Она пишет письмо.
             
             if (response.ok) {
                 const result = await response.json();
-                statusEl.textContent = `Синхронизация завершена! Импортировано: ${result.imported || exportData.length} слов`;
+                statusEl.textContent = `Синхронизация завершена! Иmпортировано: ${result.imported || exportData.length} слов`;
                 statusEl.className = 'sync-status success';
             } else {
                 throw new Error(`Server error: ${response.status}`);
@@ -1962,7 +1962,7 @@ schreiben,Sie schreibt einen Brief.,Писать,Она пишет письмо.
                 document.body.removeChild(link);
                 URL.revokeObjectURL(url);
                 
-                statusEl.textContent = 'Ошибка связи с сервером. Файл скачан для ручного импорта.';
+                statusEl.textContent = 'Ошибка связи с сервероm. Файл скачан для ручного иmпорта.';
                 statusEl.className = 'sync-status error';
                 
             } catch (fallbackError) {
@@ -2106,7 +2106,7 @@ schreiben,Sie schreibt einen Brief.,Писать,Она пишет письмо.
 
                 rankCard.innerHTML = `
                     <div class="your-rank-card">
-                        <div class="your-rank-title">Ваше место</div>
+                        <div class="your-rank-title">Ваше mесто</div>
                         <div class="your-rank-value">#${rank.rank || '—'}</div>
                         <div class="your-rank-xp">${(xp || 0).toLocaleString()} XP</div>
                     </div>
@@ -2227,7 +2227,7 @@ schreiben,Sie schreibt einen Brief.,Писать,Она пишет письмо.
 
                 setTimeout(() => {
                     testBtn.disabled = false;
-                    testBtn.textContent = '🔊 Тест с текущими настройками';
+                    testBtn.textContent = '🔊 Тест с текущиmи настройкаmи';
                 }, 4000);
 
                 this.audioManager.speak(testText, langCode);
@@ -2253,7 +2253,7 @@ schreiben,Sie schreibt einen Brief.,Писать,Она пишет письмо.
             const langVoices = allVoices.filter(v => v.lang.startsWith(prefix));
 
             // Clear existing options except "Auto"
-            select.innerHTML = '<option value="auto">Авто (рекомендуется)</option>';
+            select.innerHTML = '<option value="auto">Авто (рекоmендуется)</option>';
 
             // Add available voices
             langVoices.forEach(voice => {
@@ -2275,7 +2275,7 @@ schreiben,Sie schreibt einen Brief.,Писать,Она пишет письмо.
 
     previewVoice(langCode) {
         const sampleText = {
-            'ru-RU': 'Привет! Это пример русского голоса для изучения иностранных слов.',
+            'ru-RU': 'Привет! Это приmер русского голоса для изучения иностранных слов.',
             'en-US': 'Hello! This is a sample of the English voice for learning foreign words.',
             'de-DE': 'Hallo! Dies ist ein Beispiel der deutschen Stimme zum Lernen von Fremdwörtern.',
             'es-ES': 'Hola! Este es un ejemplo de voz en español para aprender palabras extranjeras.',

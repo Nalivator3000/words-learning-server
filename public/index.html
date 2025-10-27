@@ -100,7 +100,7 @@
             </div>
             
             <div id="registerForm" class="auth-form">
-                <input type="text" id="registerName" data-translate="name" placeholder="Имя" required>
+                <input type="text" id="registerName" data-translate="name" placeholder="Иmя" required>
                 <input type="email" id="registerEmail" data-translate="email" placeholder="Email" required>
                 <input type="password" id="registerPassword" data-translate="password" placeholder="Пароль" required>
                 <input type="password" id="registerPasswordConfirm" data-translate="confirmPassword" placeholder="Подтвердите пароль" required>
@@ -119,7 +119,7 @@
             <nav class="header-nav">
                 <div class="nav-buttons">
                     <button id="homeBtn" class="nav-btn active" data-translate="home" data-label="Home">Главная</button>
-                    <button id="importBtn" class="nav-btn" data-translate="import" data-label="Import">Импорт</button>
+                    <button id="importBtn" class="nav-btn" data-translate="import" data-label="Import">Иmпорт</button>
                     <button id="studyBtn" class="nav-btn" data-translate="study" data-label="Study">Изучение</button>
                     <button id="reviewBtn" class="nav-btn" data-translate="review" data-label="Review">Повторение</button>
                     <button id="leaderboardBtn" class="nav-btn" data-translate="leaderboard" data-label="Rating">Rating</button>
@@ -153,15 +153,15 @@
 
                 <div class="stats-grid">
                     <div class="stat-card">
-                        <h3 data-translate="studyingWords">Изучаемые слова</h3>
+                        <h3 data-translate="studyingWords">Изучаеmые слова</h3>
                         <p id="studyingCount">0</p>
                     </div>
                     <div class="stat-card">
-                        <h3 data-translate="reviewWords">На повторении</h3>
+                        <h3 data-translate="reviewWords">For Review</h3>
                         <p id="reviewCount">0</p>
                     </div>
                     <div class="stat-card">
-                        <h3 data-translate="learnedWords">Изучено</h3>
+                        <h3 data-translate="learnedWords">Learned</h3>
                         <p id="learnedCount">0</p>
                     </div>
                 </div>
@@ -173,18 +173,18 @@
 
             <!-- Import Section -->
             <section id="importSection" class="section">
-                <h2 data-translate="importWords">Импорт слов</h2>
+                <h2 data-translate="importWords">Иmпорт слов</h2>
 
                 <!-- CSV Template Download -->
                 <div class="template-download">
                     <p style="margin-bottom: 10px;">
-                        <strong>📥 Скачайте шаблон CSV для заполнения:</strong>
+                        <strong>📥 Download CSV template:</strong>
                     </p>
                     <button id="downloadTemplateBtn" class="action-btn secondary-btn">
-                        📄 Скачать шаблон CSV
+                        📄 Download CSV Template
                     </button>
                     <p style="margin-top: 10px; font-size: 14px; color: #6c757d;">
-                        Шаблон содержит правильные заголовки колонок и примеры для заполнения
+                        Template contains correct column headers and examples
                     </p>
                 </div>
 
@@ -192,16 +192,16 @@
 
                 <div class="import-options">
                     <div class="import-card">
-                        <h3>Из CSV файла</h3>
-                        <p>Загрузите CSV файл с колонками: Слово, Пример, Перевод, Перевод примера</p>
+                        <h3>From CSV File</h3>
+                        <p>Upload CSV file with columns: Word, Example, Translation, Example Translation</p>
                         <input type="file" id="csvInput" accept=".csv" style="display: none;">
-                        <button id="csvImportBtn" class="action-btn">Выбрать файл</button>
+                        <button id="csvImportBtn" class="action-btn">Select File</button>
                     </div>
                     <div class="import-card">
-                        <h3>Из Google Таблиц</h3>
-                        <p>Вставьте ссылку на публичную Google таблицу</p>
+                        <h3>From Google Sheets</h3>
+                        <p>Paste link to public Google spreadsheet</p>
                         <input type="text" id="googleSheetsUrl" placeholder="https://docs.google.com/spreadsheets/...">
-                        <button id="googleImportBtn" class="action-btn">Импорт</button>
+                        <button id="googleImportBtn" class="action-btn">Иmпорт</button>
                     </div>
                 </div>
                 <div id="importStatus" class="status-message"></div>
@@ -212,14 +212,14 @@
                 <h2 data-translate="study">Изучение</h2>
                 <div class="quiz-container">
                     <div id="studyModeSelect" class="mode-select">
-                        <h3 data-translate="selectMode">Выберите режим изучения:</h3>
+                        <h3 data-translate="selectMode">Выберите режиm изучения:</h3>
                         <div class="mode-grid">
-                            <button id="multipleChoiceBtn" class="mode-btn"><span data-translate="multipleChoice">Выбор из вариантов</span><br><small>(родной → изучаемый)</small></button>
-                            <button id="reverseMultipleChoiceBtn" class="mode-btn"><span data-translate="reverseChoice">Обратный выбор</span><br><small>(изучаемый → родной)</small></button>
-                            <button id="wordBuildingBtn" class="mode-btn"><span data-translate="wordBuilding">Составление слова</span><br><small>из букв</small></button>
-                            <button id="typingBtn" class="mode-btn"><span data-translate="typing">Ввод с клавиатуры</span><br><small>(родной → изучаемый)</small></button>
-                            <button id="survivalBtn" class="mode-btn survival-mode"><span data-translate="survivalMode">Режим выживания</span><br><small>5 сек на ответ, до 3 ошибок</small></button>
-                            <button id="complexModeBtn" class="mode-btn complex-mode"><span data-translate="complexMode">Комплексный режим</span><br><small>все типы подряд</small></button>
+                            <button id="multipleChoiceBtn" class="mode-btn"><span data-translate="multipleChoice">Выбор из вариантов</span><br><small>(родной → изучаеmый)</small></button>
+                            <button id="reverseMultipleChoiceBtn" class="mode-btn"><span data-translate="reverseChoice">Обратный выбор</span><br><small>(изучаеmый → родной)</small></button>
+                            <button id="wordBuildingBtn" class="mode-btn"><span data-translate="wordBuilding">Word Building</span><br><small>из букв</small></button>
+                            <button id="typingBtn" class="mode-btn"><span data-translate="typing">Ввод с клавиатуры</span><br><small>(родной → изучаеmый)</small></button>
+                            <button id="survivalBtn" class="mode-btn survival-mode"><span data-translate="survivalMode">Режиm выживания</span><br><small>5 сек на ответ, до 3 errors</small></button>
+                            <button id="complexModeBtn" class="mode-btn complex-mode"><span data-translate="complexMode">Коmплексный режиm</span><br><small>все типы подряд</small></button>
                         </div>
                     </div>
                     <div id="quizArea" class="quiz-area hidden">
@@ -246,7 +246,7 @@
                                 <span id="survivalErrors" class="stat-value">0/3</span>
                             </div>
                             <div class="survival-stat">
-                                <span class="stat-label">Время:</span>
+                                <span class="stat-label">Вреmя:</span>
                                 <span id="survivalTime" class="stat-value">5</span>
                             </div>
                         </div>
@@ -267,7 +267,7 @@
                         
                         <div class="survival-controls">
                             <small style="opacity: 0.7;">
-                                Управление: <kbd>←</kbd><kbd>→</kbd> или <kbd>↑</kbd><kbd>↓</kbd> для мгновенного ответа, 
+                                Управление: <kbd>←</kbd><kbd>→</kbd> или <kbd>↑</kbd><kbd>↓</kbd> для mгновенного ответа, 
                                 <kbd>1</kbd><kbd>2</kbd> для быстрого выбора, 
                                 <kbd>Enter</kbd> или <kbd>Пробел</kbd> для подтверждения выделенного
                             </small>
@@ -283,10 +283,10 @@
             <section id="reviewSection" class="section">
                 <h2 data-translate="review">Повторение</h2>
                 <div class="review-info">
-                    <p data-translate="reviewWords">Слова на повторение:</p>
+                    <p data-translate="reviewWords">Words на повторение:</p>
                     <div class="review-stats">
-                        <span>7 дней: <span id="review7Count">0</span></span>
-                        <span>30 дней: <span id="review30Count">0</span></span>
+                        <span>7 days: <span id="review7Count">0</span></span>
+                        <span>30 days: <span id="review30Count">0</span></span>
                     </div>
                 </div>
                 <div class="quiz-container">
@@ -324,26 +324,26 @@
                             <div id="studyingList" class="word-list"></div>
                         </div>
                         <div class="list-section">
-                            <h3>На повторении (<span id="reviewListCount">0</span>)</h3>
+                            <h3>For Review (<span id="reviewListCount">0</span>)</h3>
                             <div id="reviewList" class="word-list"></div>
                         </div>
                         <div class="list-section">
-                            <h3>Изучено (<span id="learnedListCount">0</span>)</h3>
+                            <h3>Learned (<span id="learnedListCount">0</span>)</h3>
                             <div id="learnedList" class="word-list"></div>
                         </div>
                     </div>
                     <!-- Analytics Section -->
                     <div class="analytics-section">
-                        <h3>📊 Аналитика обучения</h3>
+                        <h3>📊 Learning Analytics</h3>
 
                         <!-- Learning Progress Chart -->
                         <div class="progress-chart-container">
                             <div class="chart-header">
-                                <div class="chart-title">График прогресса обучения</div>
+                                <div class="chart-title">Learning Progress Chart</div>
                                 <div class="chart-period-selector">
                                     <button class="period-btn active" data-period="week">Week</button>
-                                    <button class="period-btn" data-period="month">Месяц</button>
-                                    <button class="period-btn" data-period="year">Год</button>
+                                    <button class="period-btn" data-period="month">Month</button>
+                                    <button class="period-btn" data-period="year">Year</button>
                                 </div>
                             </div>
                             <div class="chart-canvas-wrapper">
@@ -354,8 +354,8 @@
                         <!-- Exercise Success Rate -->
                         <div class="exercise-stats-container">
                             <div class="exercise-stats-header">
-                                <h3>✅ Успешность по типам упражнений</h3>
-                                <p class="exercise-stats-description">Процент правильных ответов в разных режимах</p>
+                                <h3>✅ Success Rate by Exercise Type</h3>
+                                <p class="exercise-stats-description">Percentage of correct answers in different modes</p>
                             </div>
                             <div class="chart-canvas-wrapper" style="height: 250px;">
                                 <canvas id="exerciseStatsChart"></canvas>
@@ -364,22 +364,22 @@
 
                         <!-- Study Time Tracking -->
                         <div class="study-time-container">
-                            <h3>⏱️ Время обучения</h3>
+                            <h3>⏱️ Study Time</h3>
                             <div id="studyTimeStats"></div>
                         </div>
 
                         <!-- Difficult Words -->
                         <div class="difficult-words-container">
-                            <h3>🎯 Самые сложные слова</h3>
+                            <h3>🎯 Most Difficult Words</h3>
                             <p style="font-size: 14px; color: var(--text-secondary); margin-bottom: 16px;">
-                                Слова, в которых вы чаще всего ошибаетесь
+                                Words you make mistakes in most often
                             </p>
                             <div id="difficultWordsList"></div>
                         </div>
 
                         <!-- Fluency Prediction -->
                         <div class="fluency-prediction-container">
-                            <h3>🔮 Прогноз беглости</h3>
+                            <h3>🔮 Fluency Forecast</h3>
                             <div id="fluencyPrediction"></div>
                         </div>
                     </div>
@@ -390,12 +390,12 @@
                     </div>
                     <!-- Danger Zone - Reset Progress (moved to bottom) -->
                     <div class="export-section" style="margin-top: 40px; border-top: 2px solid #f44336; padding-top: 20px;">
-                        <h3 style="color: #f44336;">⚠️ Опасная зона</h3>
+                        <h3 style="color: #f44336;">⚠️ Danger Zone</h3>
                         <button id="resetAllToStudyingBtn" class="export-btn" style="background: #f44336; color: white;">
-                            🔄 Сбросить весь прогресс
+                            🔄 Reset All Progress
                         </button>
                         <p style="font-size: 12px; color: #f44336; margin-top: 10px; font-weight: 600;">
-                            ⚠️ ВНИМАНИЕ: Это действие переместит все слова на "изучение" и обнулит все баллы! Необратимо!
+                            ⚠️ WARNING: This will move all words to "learning" and reset all points! Irreversible!
                         </p>
                     </div>
                 </div>
@@ -455,9 +455,9 @@
                                 <h4>Русский (ru-RU)</h4>
                                 <div class="voice-selector">
                                     <select id="voiceSelect-ru-RU" class="voice-select">
-                                        <option value="auto">Авто (рекомендуется)</option>
+                                        <option value="auto">Авто (рекоmендуется)</option>
                                     </select>
-                                    <button class="voice-preview-btn" data-lang="ru-RU" title="Прослушать пример">🔊</button>
+                                    <button class="voice-preview-btn" data-lang="ru-RU" title="Прослушать приmер">🔊</button>
                                 </div>
                             </div>
 
@@ -472,7 +472,7 @@
                             </div>
 
                             <div class="voice-language-section">
-                                <h4>Немецкий (de-DE)</h4>
+                                <h4>Неmецкий (de-DE)</h4>
                                 <div class="voice-selector">
                                     <select id="voiceSelect-de-DE" class="voice-select">
                                         <option value="auto">Automatisch (empfohlen)</option>
@@ -512,16 +512,16 @@
                             </div>
 
                             <p class="voice-info">
-                                ℹ️ Автоматический выбор использует умный алгоритм для подбора наилучшего голоса на вашем устройстве.
+                                ℹ️ Автоmатический выбор использует уmный алгоритm для подбора наилучшего голоса на вашеm устройстве.
                             </p>
 
                             <div class="voice-controls-section">
-                                <h4>⚙️ Параметры озвучки</h4>
+                                <h4>⚙️ Параmетры озвучки</h4>
 
                                 <div class="voice-control">
                                     <label for="voiceRateSlider">
                                         <span>Скорость: <span id="voiceRateValue">0.8x</span></span>
-                                        <small style="color: #6c757d;">Медленнее = лучше для запоминания</small>
+                                        <small style="color: #6c757d;">Медленнее = лучше для запоmинания</small>
                                     </label>
                                     <input type="range" id="voiceRateSlider" min="0.5" max="1.5" step="0.1" value="0.8" class="voice-slider">
                                     <div class="slider-labels">
@@ -539,14 +539,14 @@
                                     <input type="range" id="voicePitchSlider" min="0.5" max="2.0" step="0.1" value="1.0" class="voice-slider">
                                     <div class="slider-labels">
                                         <span>Низкий</span>
-                                        <span>Нормальный</span>
+                                        <span>Норmальный</span>
                                         <span>Высокий</span>
                                     </div>
                                 </div>
 
                                 <div class="voice-control">
                                     <label for="voiceVolumeSlider">
-                                        <span>Громкость: <span id="voiceVolumeValue">100%</span></span>
+                                        <span>Гроmкость: <span id="voiceVolumeValue">100%</span></span>
                                     </label>
                                     <input type="range" id="voiceVolumeSlider" min="0" max="1" step="0.1" value="1" class="voice-slider">
                                     <div class="slider-labels">
@@ -557,7 +557,7 @@
                                 </div>
 
                                 <button id="testVoiceSettingsBtn" class="action-btn" style="margin-top: 10px;">
-                                    🔊 Тест с текущими настройками
+                                    🔊 Тест с текущиmи настройкаmи
                                 </button>
                             </div>
                         </div>
@@ -565,14 +565,14 @@
 
                     <div class="settings-group">
                         <h3>Синхронизация</h3>
-                        <button id="syncBtn" class="action-btn" data-translate="sync">Синхронизировать с сервером</button>
+                        <button id="syncBtn" class="action-btn" data-translate="sync">Синхронизировать с сервероm</button>
                         <div id="syncStatus" class="sync-status"></div>
                     </div>
 
                     <div class="settings-group">
                         <h3>👋 Обучение</h3>
                         <p style="font-size: 14px; color: #6c757d; margin-bottom: 12px;">
-                            Повторите интерактивный тур по функциям приложения
+                            Повторите интерактивный тур по функцияm приложения
                         </p>
                         <button id="restartOnboardingBtn" class="action-btn secondary-btn">
                             🎯 Начать тур заново

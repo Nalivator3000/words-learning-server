@@ -235,7 +235,7 @@ class Gamification {
                         <div class="stat-item">
                             <span class="stat-icon">📚</span>
                             <span class="stat-value">${totalWordsLearned}</span>
-                            <span class="stat-label">Слов выучено</span>
+                            <span class="stat-label">Words Learned</span>
                         </div>
                         <div class="stat-item">
                             <span class="stat-icon">✅</span>
@@ -377,7 +377,7 @@ class Gamification {
         // Group by category
         const categories = {
             'streak': { name: '🔥 Стрики', achievements: [] },
-            'words': { name: '📚 Слова', achievements: [] },
+            'words': { name: '📚 Words', achievements: [] },
             'level': { name: '⬆️ Уровни', achievements: [] },
             'quiz': { name: '✏️ Упражнения', achievements: [] },
             'special': { name: '⭐ Особые', achievements: [] }
@@ -517,7 +517,7 @@ class Gamification {
                     <div class="goal-item ${goals.words_progress >= goals.words_goal ? 'completed' : ''}">
                         <div class="goal-icon">📚</div>
                         <div class="goal-info">
-                            <div class="goal-label">Слов выучено</div>
+                            <div class="goal-label">Words Learned</div>
                             <div class="goal-progress-text">${goals.words_progress} / ${goals.words_goal}</div>
                         </div>
                         <div class="goal-progress-bar">

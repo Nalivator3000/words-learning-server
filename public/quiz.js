@@ -24,7 +24,7 @@ class QuizManager {
         }
 
         if (words.length === 0) {
-            throw new Error('Нет слов для изучения');
+            throw new Error('No words для изучения');
         }
 
         // Prepare questions

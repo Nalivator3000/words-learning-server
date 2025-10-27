@@ -192,7 +192,7 @@ class APIDatabase {
     convertToCSV(words) {
         if (!words || words.length === 0) return '';
 
-        const headers = ['Слово', 'Пример', 'Перевод', 'Перевод примера', 'Статус', 'Правильных ответов', 'Неправильных ответов', 'Дата добавления', 'Последнее изучение'];
+        const headers = ['Слово', 'Приmер', 'Перевод', 'Перевод приmера', 'Статус', 'Правильных ответов', 'Неправильных ответов', 'Дата добавления', 'Последнее изучение'];
 
         const rows = words.map(word => [
             word.word,
@@ -216,9 +216,9 @@ class APIDatabase {
     getStatusText(status) {
         const statusMap = {
             'studying': 'Изучается',
-            'review_7': 'Повторение 7 дней',
-            'review_30': 'Повторение 30 дней',
-            'learned': 'Изучено'
+            'review_7': 'Повторение 7 days',
+            'review_30': 'Повторение 30 days',
+            'learned': 'Learned'
         };
         return statusMap[status] || status;
     }

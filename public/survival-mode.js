@@ -22,7 +22,7 @@ class SurvivalMode {
             this.words = await database.getWordsByStatus('studying');
             
             if (this.words.length < 4) {
-                throw new Error('Нужно минимум 4 слова для режима выживания');
+                throw new Error('Нужно minиmуm 4 слова для режиmа выживания');
             }
 
             this.isActive = true;
@@ -199,7 +199,7 @@ class SurvivalMode {
 
     timeUp() {
         this.stopTimer();
-        this.handleIncorrectAnswer('Время вышло!', 'timeout');
+        this.handleIncorrectAnswer('Вреmя вышло!', 'timeout');
     }
 
     handleAnswer(choice) {
@@ -355,7 +355,7 @@ class SurvivalMode {
                     <span id="survivalErrors" class="stat-value">0/3</span>
                 </div>
                 <div class="survival-stat">
-                    <span class="stat-label">Время:</span>
+                    <span class="stat-label">Вреmя:</span>
                     <span id="survivalTime" class="stat-value">5</span>
                 </div>
             </div>

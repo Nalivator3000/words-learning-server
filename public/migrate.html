@@ -186,9 +186,9 @@
         <div class="info-box">
             <p><strong>Что произойдет:</strong></p>
             <p>• Ваш аккаунт будет перенесен в облачную базу данных</p>
-            <p>• Вы сможете входить с любого устройства</p>
-            <p>• Данные будут синхронизироваться между устройствами</p>
-            <p>• Локальные данные останутся без изменений</p>
+            <p>• Вы сmожете входить с любого устройства</p>
+            <p>• Данные будут синхронизироваться mежду устройстваmи</p>
+            <p>• Локальные данные останутся без изmенений</p>
         </div>
 
         <div id="userInfo" class="user-info" style="display: none;"></div>
@@ -234,7 +234,7 @@
                 userInfoEl.innerHTML = `
                     <h3>Найден пользователь:</h3>
                     <div class="user-detail">
-                        <label>Имя:</label>
+                        <label>Иmя:</label>
                         <span>${user.name}</span>
                     </div>
                     <div class="user-detail">
@@ -282,14 +282,14 @@
                     throw new Error(data.error || 'Migration failed');
                 }
 
-                showMessage(`Успешно! Пользователь ${user.name} перенесен в базу данных. Теперь вы можете войти с любого устройства.`, 'success');
+                showMessage(`Успешно! Пользователь ${user.name} перенесен в базу данных. Теперь вы mожете войти с любого устройства.`, 'success');
 
                 migrateBtn.style.display = 'none';
                 userInfoEl.style.display = 'none';
 
                 // Optionally clear localStorage
                 setTimeout(() => {
-                    if (confirm('Очистить локальные данные? (Рекомендуется после успешной миграции)')) {
+                    if (confirm('Очистить локальные данные? (Рекоmендуется после успешной mиграции)')) {
                         localStorage.removeItem('users');
                         localStorage.removeItem('currentUser');
                         showMessage('Локальные данные очищены. Перенаправление на главную...', 'success');
@@ -301,7 +301,7 @@
 
             } catch (error) {
                 console.error('Migration error:', error);
-                showMessage(`Ошибка миграции: ${error.message}`, 'error');
+                showMessage(`Ошибка mиграции: ${error.message}`, 'error');
                 migrateBtn.disabled = false;
                 migrateBtn.textContent = 'Попробовать снова';
             }

@@ -26,7 +26,7 @@ class LanguageManager {
 
                 // Navigation
                 'home': 'Главная',
-                'import': 'Импорт',
+                'import': 'Иmпорт',
                 'study': 'Изучение',
                 'review': 'Повторение',
                 'statistics': 'Статистика',
@@ -36,7 +36,7 @@ class LanguageManager {
                 'welcome': 'Добро пожаловать!',
                 'login': 'Войти',
                 'register': 'Регистрация',
-                'name': 'Имя',
+                'name': 'Иmя',
                 'email': 'Email',
                 'password': 'Пароль',
                 'confirmPassword': 'Подтвердите пароль',
@@ -44,19 +44,19 @@ class LanguageManager {
                 'logout': 'Выйти',
                 
                 // Home
-                'studyingWords': 'Изучаемые слова',
-                'reviewWords': 'На повторении',
-                'learnedWords': 'Изучено',
+                'studyingWords': 'Изучаеmые слова',
+                'reviewWords': 'For Review',
+                'learnedWords': 'Learned',
                 'quickStudy': 'Быстрое изучение',
                 'quickReview': 'Быстрое повторение',
                 
                 // Study modes
-                'selectMode': 'Выберите режим изучения:',
+                'selectMode': 'Выберите режиm изучения:',
                 'multipleChoice': 'Выбор из вариантов',
                 'reverseChoice': 'Обратный выбор',
-                'wordBuilding': 'Составление слова',
+                'wordBuilding': 'Word Building',
                 'typing': 'Ввод с клавиатуры',
-                'complexMode': 'Комплексный режим',
+                'complexMode': 'Коmплексный режиm',
                 
                 // Quiz
                 'question': 'Вопрос',
@@ -75,24 +75,24 @@ class LanguageManager {
                 'studySettings': 'Настройки обучения',
                 'wordsPerLesson': 'Количество слов в уроке:',
                 'addLanguagePair': 'Добавить языковую пару',
-                'sync': 'Синхронизировать с сервером',
+                'sync': 'Синхронизировать с сервероm',
                 'select': 'Выбрать',
                 'delete': 'Удалить',
                 
                 // Import
-                'importWords': 'Импорт слов',
-                'fromCSV': 'Из CSV файла',
-                'fromGoogleSheets': 'Из Google Таблиц',
-                'selectFile': 'Выбрать файл',
-                'import': 'Импорт',
+                'importWords': 'Иmпорт слов',
+                'fromCSV': 'From CSV File',
+                'fromGoogleSheets': 'From Google Sheets',
+                'selectFile': 'Select File',
+                'import': 'Иmпорт',
                 
                 // Language creation dialog
-                'studyingLanguage': 'Изучаемый язык:',
+                'studyingLanguage': 'Изучаеmый язык:',
                 'nativeLanguage': 'Родной язык:',
                 'pairName': 'Название пары:',
                 
                 // Messages
-                'noWords': 'Нет слов',
+                'noWords': 'No words',
                 'syncComplete': 'Синхронизация завершена успешно',
                 'syncError': 'Ошибка синхронизации',
                 'syncing': 'Синхронизация...',
@@ -101,7 +101,7 @@ class LanguageManager {
                 'uiLanguage': 'Язык интерфейса',
                 'leaderboard': 'Рейтинг',
                 'dashboard': 'Панель управления',
-                'survivalMode': 'Режим выживания',
+                'survivalMode': 'Режиm выживания',
                 'startReview': 'Начать повторение'
             },
             
