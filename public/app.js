@@ -2300,7 +2300,90 @@ schreiben,Sie schreibt einen Brief.,Писать,Она пишет письмо.
     }
 }
 
+// ========================================
+// GESTURE SWIPE HANDLER (2025 UX Feature)
+// ========================================
+
+class SwipeHandler {
+    constructor() {
+        this.touchStartX = 0;
+        this.touchEndX = 0;
+        this.touchStartY = 0;
+        this.touchEndY = 0;
+        this.minSwipeDistance = 50;
+        this.maxVerticalDistance = 100;
+        this.init();
+    }
+
+    init() {
+        // Add swipe listeners to quiz areas
+        const swipeAreas = [
+            document.getElementById('quizArea'),
+            document.getElementById('reviewQuizArea'),
+            document.getElementById('survivalArea')
+        ];
+
+        swipeAreas.forEach(area => {
+            if (area) {
+                area.addEventListener('touchstart', (e) => this.handleTouchStart(e), { passive: true });
+                area.addEventListener('touchend', (e) => this.handleTouchEnd(e), { passive: true });
+            }
+        });
+    }
+
+    handleTouchStart(e) {
+        this.touchStartX = e.changedTouches[0].screenX;
+        this.touchStartY = e.changedTouches[0].screenY;
+    }
+
+    handleTouchEnd(e) {
+        this.touchEndX = e.changedTouches[0].screenX;
+        this.touchEndY = e.changedTouches[0].screenY;
+        this.handleSwipe();
+    }
+
+    handleSwipe() {
+        const horizontalDistance = this.touchEndX - this.touchStartX;
+        const verticalDistance = Math.abs(this.touchEndY - this.touchStartY);
+
+        // Ignore vertical scrolls
+        if (verticalDistance > this.maxVerticalDistance) {
+            return;
+        }
+
+        // Swipe Right (Next)
+        if (horizontalDistance < -this.minSwipeDistance) {
+            this.triggerNext();
+        }
+
+        // Swipe Left (Previous - if applicable)
+        if (horizontalDistance > this.minSwipeDistance) {
+            // Optional: add previous question functionality
+            console.log('👈 Swipe left detected');
+        }
+    }
+
+    triggerNext() {
+        console.log('👉 Swipe right detected - triggering next');
+
+        // Find visible next button and click it
+        const nextBtn = document.getElementById('nextBtn');
+        const reviewNextBtn = document.getElementById('reviewNextBtn');
+        const survivalNext = document.getElementById('survivalNext');
+
+        if (nextBtn && !nextBtn.classList.contains('hidden') && !nextBtn.disabled) {
+            nextBtn.click();
+        } else if (reviewNextBtn && !reviewNextBtn.classList.contains('hidden') && !reviewNextBtn.disabled) {
+            reviewNextBtn.click();
+        } else if (survivalNext && !survivalNext.classList.contains('hidden') && !survivalNext.disabled) {
+            survivalNext.click();
+        }
+    }
+}
+
 // Initialize app when DOM is loaded
 document.addEventListener('DOMContentLoaded', () => {
     window.app = new LanguageLearningApp();
+    window.swipeHandler = new SwipeHandler();
+    console.log('👆 Swipe gestures enabled! Swipe right to go to next question.');
 });
