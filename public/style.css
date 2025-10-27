@@ -1007,10 +1007,7 @@ textarea {
 .nav-btn.active {
     background: var(--gradient-primary);
     color: white;
-    box-shadow: var(--shadow-3d-sm),
-                0 0 0 0 rgba(124, 58, 237, 0.7);
-    animation: pulse 2s cubic-bezier(0.4, 0, 0.6, 1) infinite;
-    z-index: 1;
+    /* Removed box-shadow, animation, and z-index to prevent overlap */
 }
 
 /* Subtle pulse animation for active nav button */

@@ -1,6 +1,6 @@
 class LanguageManager {
     constructor() {
-        this.currentUILanguage = 'ru';
+        this.currentUILanguage = 'en'  // Changed to English for screenshots;
         this.supportedLanguages = {
             'ru': 'Russian',
             'en': 'English',
