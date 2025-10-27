@@ -989,10 +989,10 @@ textarea {
     background: transparent;
     border: none;
     color: var(--neutral-700);
-    padding: var(--space-2) var(--space-4);
+    padding: 0.25rem 0.5rem;
     border-radius: var(--radius-lg);
     font-weight: 600;
-    font-size: var(--text-sm);
+    font-size: 0.688rem;
     cursor: pointer;
     transition: var(--transition-base);
     white-space: nowrap;

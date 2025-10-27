@@ -97,7 +97,7 @@ class PWAInstallManager {
             this.deferredPrompt = e;
 
             // Show custom install button
-            this.showInstallButton();
+            //             this.showInstallButton();
         });
 
         // Listen for app installed event
