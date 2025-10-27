@@ -2761,6 +2761,107 @@ input:focus, textarea:focus, select:focus {
         font-size: var(--text-3xl);
     }
 
+    /* Quiz/Exercise mobile optimization - FIT TO SCREEN */
+    .quiz-area {
+        padding: var(--space-4);
+        max-height: calc(100vh - 180px);
+        overflow-y: auto;
+        display: flex;
+        flex-direction: column;
+    }
+
+    .question {
+        font-size: var(--text-xl);
+        margin-bottom: var(--space-4);
+        line-height: 1.2;
+    }
+
+    .counter {
+        font-size: var(--text-sm);
+        margin-bottom: var(--space-3);
+    }
+
+    .progress-bar {
+        margin-bottom: var(--space-3);
+    }
+
+    .answer-area {
+        margin-bottom: var(--space-4);
+        flex: 1;
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+    }
+
+    .answer-options {
+        grid-template-columns: 1fr;
+        gap: var(--space-3);
+    }
+
+    .answer-option {
+        padding: var(--space-3) var(--space-4);
+        font-size: var(--text-base);
+        min-height: 50px;
+    }
+
+    /* Word building mobile - compact layout */
+    .letter-btn {
+        padding: var(--space-2);
+        font-size: var(--text-lg);
+        min-width: 40px;
+        min-height: 40px;
+    }
+
+    .word-display {
+        min-height: 50px;
+        font-size: var(--text-xl);
+        padding: var(--space-3);
+        margin-bottom: var(--space-3);
+    }
+
+    /* Typing mode mobile */
+    .typing-input {
+        font-size: var(--text-lg);
+        padding: var(--space-3);
+        margin-bottom: var(--space-3);
+    }
+
+    .feedback {
+        font-size: var(--text-sm);
+        padding: var(--space-3);
+        margin-top: var(--space-3);
+    }
+
+    #nextBtn,
+    #finishStudyBtn,
+    #reviewNextBtn,
+    #finishReviewBtn {
+        padding: var(--space-3) var(--space-5);
+        font-size: var(--text-base);
+        margin-top: var(--space-3);
+    }
+
+    /* Survival mode mobile */
+    .survival-area {
+        padding: var(--space-4);
+        max-height: calc(100vh - 180px);
+    }
+
+    .survival-stats {
+        gap: var(--space-2);
+        margin-bottom: var(--space-3);
+    }
+
+    .survival-stat {
+        font-size: var(--text-sm);
+        padding: var(--space-2);
+    }
+
+    .survival-timer {
+        font-size: var(--text-2xl);
+        margin-bottom: var(--space-3);
+    }
+
     .section {
         padding: var(--space-6);
     }
