@@ -200,7 +200,7 @@ class Gamification {
                                 <div class="xp-bar-fill" style="width: ${progress}%;"></div>
                                 <span class="xp-bar-text">${currentLevelXP} / ${xpForNextLevel} XP</span>
                             </div>
-                            <p class="xp-total">Всего опыта: <strong>${totalXP} XP</strong></p>
+                            <p class="xp-total">Total XP: <strong>${totalXP} XP</strong></p>
                         </div>
                     </div>
                 </section>
@@ -438,7 +438,7 @@ class Gamification {
             return;
         }
 
-        const title = type === 'global' ? '🌍 Глобальный рейтинг' : '📅 Рейтинг недели';
+        const title = type === 'global' ? '🌍 Global Leaderboard' : '📅 Weekly Leaderboard';
         const xpField = type === 'global' ? 'total_xp' : 'weekly_xp';
 
         let html = `
@@ -464,7 +464,7 @@ class Gamification {
                     <div class="leaderboard-user-info">
                         <div class="leaderboard-username">
                             ${user.name}
-                            ${isCurrentUser ? '<span class="you-badge">Вы</span>' : ''}
+                            ${isCurrentUser ? '<span class="you-badge">You</span>' : ''}
                         </div>
                         <div class="leaderboard-stats">
                             Ур. ${user.level} • ${user.current_streak || 0}🔥

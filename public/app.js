@@ -299,19 +299,19 @@ class LanguageLearningApp {
             text = `Не изучено 🌱`;
         } else if (score >= 90) {
             className = 'score-complete';
-            text = `${correctCount}/100 баллов (${score}%) ✅`;
+            text = `${correctCount}/100 points (${score}%) ✅`;
         } else if (score >= 70) {
             className = 'score-high';
-            text = `${correctCount}/100 баллов (${score}%) 🔥`;
+            text = `${correctCount}/100 points (${score}%) 🔥`;
         } else if (score >= 50) {
             className = 'score-medium';
-            text = `${correctCount}/100 баллов (${score}%) ⚡`;
+            text = `${correctCount}/100 points (${score}%) ⚡`;
         } else if (score >= 30) {
             className = 'score-low';
-            text = `${correctCount}/100 баллов (${score}%) 📚`;
+            text = `${correctCount}/100 points (${score}%) 📚`;
         } else {
             className = 'score-very-low';
-            text = `${correctCount}/100 баллов (${score}%) 🌱`;
+            text = `${correctCount}/100 points (${score}%) 🌱`;
         }
 
         return { className, text };
@@ -679,7 +679,7 @@ class LanguageLearningApp {
             const dateAdded = createdAt ? new Date(createdAt).toLocaleDateString('ru-RU') : 'N/A';
             const dateStudied = lastReviewed ? new Date(lastReviewed).toLocaleDateString('ru-RU') : 'Не изучалось';
 
-            metaDiv.innerHTML = `📅 Добавлено: ${dateAdded} | 📚 Изучалось: ${dateStudied}`;
+            metaDiv.innerHTML = `📅 Added: ${dateAdded} | 📚 Studied: ${dateStudied}`;
 
             wordContent.appendChild(wordMain);
             wordContent.appendChild(metaDiv);
