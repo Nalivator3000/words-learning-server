@@ -1869,7 +1869,7 @@ schreiben,Sie schreibt einen Brief.,Писать,Она пишет письмо.
 
     async syncWithServer() {
         const statusEl = document.getElementById('syncStatus');
-        statusEl.textContent = 'Экспорт данных...';
+        statusEl.textContent = 'Exporting data...';
         statusEl.className = 'sync-status info';
         statusEl.style.display = 'block';
         
