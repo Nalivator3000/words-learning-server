@@ -989,10 +989,10 @@ textarea {
     background: transparent;
     border: none;
     color: var(--neutral-700);
-    padding: 0.25rem 0.5rem;
+    padding: var(--space-2) var(--space-3);
     border-radius: var(--radius-lg);
     font-weight: 600;
-    font-size: 0.688rem;
+    font-size: var(--text-sm);
     cursor: pointer;
     transition: var(--transition-base);
     white-space: nowrap;
@@ -1007,7 +1007,8 @@ textarea {
 .nav-btn.active {
     background: var(--gradient-primary);
     color: white;
-    /* Removed box-shadow, animation, and z-index to prevent overlap */
+    box-shadow: 0 4px 12px rgba(124, 58, 237, 0.4);
+    transform: translateY(-1px);
 }
 
 /* Subtle pulse animation for active nav button */
