@@ -282,6 +282,36 @@
     background: linear-gradient(135deg, var(--primary-500) 0%, var(--primary-600) 100%);
 }
 
+/* Dark theme navigation buttons */
+[data-theme="dark"] .nav-btn {
+    color: var(--neutral-200);
+    background: transparent;
+}
+
+[data-theme="dark"] .nav-btn:hover {
+    background: rgba(99, 102, 241, 0.2);
+    color: var(--primary-300);
+}
+
+[data-theme="dark"] .nav-btn.active {
+    background: var(--gradient-primary);
+    color: white;
+}
+
+/* Dark theme cards and sections */
+[data-theme="dark"] .stat-card,
+[data-theme="dark"] .mode-btn,
+[data-theme="dark"] .word-card {
+    background: rgba(31, 41, 55, 0.8);
+    border: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+[data-theme="dark"] .stat-card:hover,
+[data-theme="dark"] .mode-btn:hover {
+    background: rgba(55, 65, 81, 0.9);
+    border-color: rgba(255, 255, 255, 0.2);
+}
+
 [data-theme="dark"] input,
 [data-theme="dark"] textarea,
 [data-theme="dark"] select {
@@ -924,7 +954,7 @@ body {
     box-shadow: var(--shadow-3d-sm),
                 0 0 0 0 rgba(124, 58, 237, 0.7);
     animation: pulse 2s cubic-bezier(0.4, 0, 0.6, 1) infinite;
-    position: relative;
+    z-index: 1;
 }
 
 /* Subtle pulse animation for active nav button */
