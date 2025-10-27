@@ -1276,7 +1276,7 @@ schreiben,Sie schreibt einen Brief.,Писать,Она пишет письmо.`
             const csvContent = await database.exportWords(status);
 
             if (!csvContent) {
-                alert('Нет данных для экспорта');
+                alert('No data to export');
                 return;
             }
 
@@ -1878,7 +1878,7 @@ schreiben,Sie schreibt einen Brief.,Писать,Она пишет письmо.`
             const words = await database.getAllWords();
             
             if (words.length === 0) {
-                statusEl.textContent = 'Нет данных для синхронизации';
+                statusEl.textContent = 'No data to sync';
                 statusEl.className = 'sync-status error';
                 setTimeout(() => {
                     statusEl.style.display = 'none';
@@ -1919,7 +1919,7 @@ schreiben,Sie schreibt einen Brief.,Писать,Она пишет письmо.`
             
             if (response.ok) {
                 const result = await response.json();
-                statusEl.textContent = `Синхронизация завершена! Иmпортировано: ${result.imported || exportData.length} слов`;
+                statusEl.textContent = `Synchronization завершена! Иmпортировано: ${result.imported || exportData.length} слов`;
                 statusEl.className = 'sync-status success';
             } else {
                 throw new Error(`Server error: ${response.status}`);

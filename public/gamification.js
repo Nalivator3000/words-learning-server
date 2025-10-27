@@ -434,7 +434,7 @@ class Gamification {
     // Render leaderboard
     renderLeaderboard(containerElement, leaderboardData, currentUserId, type = 'global') {
         if (!leaderboardData || leaderboardData.length === 0) {
-            containerElement.innerHTML = '<p>Лидерборд пуст</p>';
+            containerElement.innerHTML = '<p>Leaderboard is empty</p>';
             return;
         }
 

@@ -93,9 +93,9 @@ class LanguageManager {
                 
                 // Messages
                 'noWords': 'No words',
-                'syncComplete': 'Синхронизация завершена успешно',
+                'syncComplete': 'Synchronization завершена успешно',
                 'syncError': 'Ошибка синхронизации',
-                'syncing': 'Синхронизация...',
+                'syncing': 'Synchronization...',
 
                 // Additional UI elements
                 'uiLanguage': 'Язык интерфейса',

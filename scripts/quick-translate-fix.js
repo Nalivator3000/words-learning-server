@@ -91,7 +91,35 @@ const translations = {
     'Карточки': 'Flashcards',
     'Аудирование': 'Listening',
     'Отличная работа!': 'Great work!',
-    'Today вы занимались больше обычного!': 'You studied more than usual today!'
+    'Today вы занимались больше обычного!': 'You studied more than usual today!',
+
+    // Settings section
+    'Озвучка (Text-to-Speech)': 'Text-to-Speech',
+    'Русский (ru-RU)': 'Russian (ru-RU)',
+    'Английский (en-US)': 'English (en-US)',
+    'Немецкий (de-DE)': 'German (de-DE)',
+    'Испанский (es-ES)': 'Spanish (es-ES)',
+    'Французский (fr-FR)': 'French (fr-FR)',
+    'Итальянский (it-IT)': 'Italian (it-IT)',
+    'Авто (рекомендуется)': 'Auto (recommended)',
+    'Прослушать пример': 'Play sample',
+    'Автоматический выбор использует умный алгоритм для подбора наилучшего голоса на вашем устройстве.': 'Auto mode uses smart algorithm to select the best voice on your device.',
+    'Параметры озвучки': 'Voice Settings',
+    'Скорость:': 'Speed:',
+    'Медленнее = лучше для запоминания': 'Slower = better for memorization',
+    'Тон:': 'Pitch:',
+    'Высота голоса': 'Voice pitch',
+    'Громкость:': 'Volume:',
+    'Низкий': 'Low',
+    'Нормальный': 'Normal',
+    'Высокий': 'High',
+    'Тест с текущими настройками': 'Test with current settings',
+    'Синхронизация': 'Synchronization',
+    'Синхронизировать с сервером': 'Sync with server',
+
+    // Export
+    'Нет данных для экспорта': 'No data to export',
+    'Нет данных для синхронизации': 'No data to sync'
 };
 
 function replaceInFile(filePath, replacements) {
