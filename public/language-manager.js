@@ -535,6 +535,12 @@ class LanguageManager {
     setUILanguage(languageCode) {
         if (this.supportedLanguages[languageCode]) {
             this.currentUILanguage = languageCode;
+
+            // Delegate to new i18n system if available
+            if (typeof i18n !== 'undefined' && i18n.setLanguage) {
+                i18n.setLanguage(languageCode);
+            }
+
             this.updateUI();
             localStorage.setItem('uiLanguage', languageCode);
         }
@@ -586,7 +592,12 @@ class LanguageManager {
         if (savedLanguage && this.supportedLanguages[savedLanguage]) {
             this.currentUILanguage = savedLanguage;
         }
-        
+
+        // Sync with new i18n system if available
+        if (typeof i18n !== 'undefined' && i18n.setLanguage) {
+            i18n.setLanguage(this.currentUILanguage);
+        }
+
         // Update UI on load
         setTimeout(() => this.updateUI(), 100);
     }
