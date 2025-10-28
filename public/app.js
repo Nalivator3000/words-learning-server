@@ -2078,10 +2078,6 @@ schreiben,Sie schreibt einen Brief.,Писать,Она пишет письmо.`
             const difficultWords = await window.analytics.getDifficultWords(user.id, 20);
             window.analytics.renderDifficultWords('difficultWordsList', difficultWords);
 
-            // Load fluency prediction
-            const fluencyPrediction = await window.analytics.getFluencyPrediction(user.id);
-            window.analytics.renderFluencyPrediction('fluencyPrediction', fluencyPrediction);
-
             // Add period selector event listeners
             document.querySelectorAll('.period-btn').forEach(btn => {
                 btn.addEventListener('click', async (e) => {

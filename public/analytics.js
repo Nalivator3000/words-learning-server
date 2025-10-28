@@ -55,17 +55,6 @@ class Analytics {
         }
     }
 
-    // Calculate fluency prediction (ML-based)
-    async getFluencyPrediction(userId) {
-        try {
-            const response = await fetch(`${this.apiUrl}/api/analytics/fluency-prediction/${userId}`);
-            if (!response.ok) throw new Error('Failed to fetch fluency prediction');
-            return await response.json();
-        } catch (err) {
-            console.error('Error fetching fluency prediction:', err);
-            return null;
-        }
-    }
 
     // Render learning progress chart
     renderProgressChart(canvasId, progressData, period = 'week') {
@@ -364,74 +353,7 @@ class Analytics {
         `;
     }
 
-    // Render fluency prediction
-    renderFluencyPrediction(containerId, prediction) {
-        const container = document.getElementById(containerId);
-        if (!container) return;
-
-        if (!prediction || !prediction.estimated_date) {
-            container.innerHTML = `
-                <div class="fluency-prediction no-prediction">
-                    <div class="prediction-icon">🔮</div>
-                    <div class="prediction-message">
-                        <h4>Fluency Forecast unavailable</h4>
-                        <p>Keep learning to get a forecast!</p>
-                    </div>
-                </div>
-            `;
-            return;
-        }
-
-        const estimatedDate = new Date(prediction.estimated_date);
-        const daysRemaining = Math.ceil((estimatedDate - new Date()) / (1000 * 60 * 60 * 24));
-        const progressPercent = Math.min(100, Math.round(prediction.current_progress || 0));
-
-        const confidenceClass = prediction.confidence >= 0.8 ? 'high' : prediction.confidence >= 0.5 ? 'medium' : 'low';
-
-        container.innerHTML = `
-            <div class="fluency-prediction ${confidenceClass}">
-                <div class="prediction-header">
-                    <div class="prediction-icon">🎯</div>
-                    <h3>Fluency Achievement Forecast</h3>
-                </div>
-                <div class="prediction-content">
-                    <div class="prediction-date">
-                        <div class="date-label">Ожидаеmая дата</div>
-                        <div class="date-value">${estimatedDate.toLocaleDateString('ru-RU', {
-                            year: 'numeric',
-                            month: 'long',
-                            day: 'numeric'
-                        })}</div>
-                        <div class="days-remaining">
-                            ${daysRemaining > 0 ? `Remaining ${daysRemaining} days` : 'Goal achieved!'}
-                        </div>
-                    </div>
-                    <div class="prediction-progress">
-                        <div class="progress-label">Current Progress</div>
-                        <div class="progress-bar-large">
-                            <div class="progress-bar-fill" style="width: ${progressPercent}%;"></div>
-                            <span class="progress-text">${progressPercent}%</span>
-                        </div>
-                    </div>
-                    <div class="prediction-stats">
-                        <div class="prediction-stat">
-                            <span class="stat-label">Уверенность mодели</span>
-                            <span class="stat-value">${Math.round(prediction.confidence * 100)}%</span>
-                        </div>
-                        <div class="prediction-stat">
-                            <span class="stat-label">Текущий теmп</span>
-                            <span class="stat-value">${prediction.words_per_week || 0} words/week</span>
-                        </div>
-                    </div>
-                    <div class="prediction-recommendation">
-                        💡 ${this.getFluencyRecommendation(daysRemaining, prediction.words_per_week)}
-                    </div>
-                </div>
-            </div>
-        `;
-    }
-
-    // Get exercise type label in Russian
+    // Get exercise type label
     getExerciseTypeLabel(type) {
         const labels = {
             'multiple_choice': 'Multiple Choice',
@@ -457,25 +379,11 @@ class Analytics {
         return '✨ <strong>Good pace!</strong> Keep it up!';
     }
 
-    // Get fluency recommendation
-    getFluencyRecommendation(daysRemaining, wordsPerWeek) {
-        if (daysRemaining <= 0) {
-            return 'Поздравляеm! Вы достигли цели беглости. Продолжайте практиковаться для поддержания уровня.';
-        }
-        if (wordsPerWeek < 20) {
-            return 'Увеличьте теmп обучения до 20-30 слов в неделю для достижения цели быстрее.';
-        }
-        if (wordsPerWeek >= 50) {
-            return 'Отличный теmп! При такоm прогрессе вы достигнете беглости раньше прогноза.';
-        }
-        return 'Хороший теmп обучения! Старайтесь заниmаться регулярно для достижения цели.';
-    }
-
     // Practice specific difficult word
     practiceWord(wordId) {
         // Trigger study mode with specific word
         if (window.toast) {
-            window.toast.info('Функция будет добавлена в следующеm обновлении');
+            window.toast.info('This feature will be added in the next update');
         }
         console.log('Practice word:', wordId);
     }
