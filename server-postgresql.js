@@ -2265,6 +2265,22 @@ app.put('/api/users/:userId/language-pairs/:pairId/activate', async (req, res) =
     }
 });
 
+// Get word count for a language pair
+app.get('/api/users/:userId/language-pairs/:pairId/word-count', async (req, res) => {
+    try {
+        const { userId, pairId } = req.params;
+
+        const result = await db.query(
+            'SELECT COUNT(*) FROM words WHERE language_pair_id = $1',
+            [pairId]
+        );
+
+        res.json({ count: parseInt(result.rows[0].count) });
+    } catch (err) {
+        res.status(500).json({ error: err.message });
+    }
+});
+
 app.delete('/api/users/:userId/language-pairs/:pairId', async (req, res) => {
     try {
         const { userId, pairId } = req.params;
@@ -2276,7 +2292,7 @@ app.delete('/api/users/:userId/language-pairs/:pairId', async (req, res) => {
         );
 
         if (parseInt(countResult.rows[0].count) <= 1) {
-            return res.status(400).json({ error: 'Нельзя удалить последнюю языковую пару' });
+            return res.status(400).json({ error: 'Cannot delete the last language pair' });
         }
 
         await db.query('DELETE FROM language_pairs WHERE id = $1 AND user_id = $2', [pairId, userId]);

@@ -1792,14 +1792,41 @@ schreiben,Sie schreibt einen Brief.,Писать,Она пишет письmо.`
     }
 
     async deleteLanguagePair(pairId) {
-        if (!confirm(i18n?.t('confirm_delete_pair') || 'Are you sure you want to delete this language pair? All associated data will be lost.')) {
-            return;
-        }
-
         try {
+            // Get word count for this pair
+            const user = userManager.getCurrentUser();
+            const pair = user.languagePairs.find(p => p.id === parseInt(pairId));
+
+            if (!pair) {
+                alert('Language pair not found');
+                return;
+            }
+
+            // Check if pair has words by fetching from API
+            const response = await fetch(`${window.location.origin}/api/users/${user.id}/language-pairs/${pairId}/word-count`);
+            const data = await response.json();
+            const wordCount = data.count || 0;
+
+            // If pair has words, require typing "delete"
+            if (wordCount > 0) {
+                const message = `This language pair contains ${wordCount} word(s). All words and progress will be permanently deleted!\n\nType "delete" to confirm:`;
+                const confirmation = prompt(message);
+
+                if (confirmation !== 'delete') {
+                    alert('Deletion cancelled. Type exactly "delete" to confirm.');
+                    return;
+                }
+            } else {
+                // Empty pair - just ask for simple confirmation
+                if (!confirm(i18n?.t('confirm_delete_pair') || 'Are you sure you want to delete this language pair?')) {
+                    return;
+                }
+            }
+
             await userManager.deleteLanguagePair(pairId);
             this.renderLanguagePairs();
             await this.updateStats();
+            alert(`Language pair "${pair.name}" deleted successfully.`);
         } catch (error) {
             console.error('Error deleting language pair:', error);
             alert(error.message || i18n?.t('error_deleting_pair') || 'Error deleting language pair');

@@ -500,14 +500,14 @@ class Gamification {
         containerElement.innerHTML = `
             <div class="daily-goals-card ${allCompleted ? 'completed' : ''}">
                 <div class="daily-goals-header">
-                    <h3>🎯 Ежедневные цели</h3>
-                    ${allCompleted ? '<span class="goals-completed-badge">✅ Выполнено!</span>' : ''}
+                    <h3>🎯 Daily Goals</h3>
+                    ${allCompleted ? '<span class="goals-completed-badge">✅ Completed!</span>' : ''}
                 </div>
                 <div class="daily-goals-list">
                     <div class="goal-item ${goals.xp_progress >= goals.xp_goal ? 'completed' : ''}">
                         <div class="goal-icon">⭐</div>
                         <div class="goal-info">
-                            <div class="goal-label">XP за день</div>
+                            <div class="goal-label">Daily XP</div>
                             <div class="goal-progress-text">${goals.xp_progress} / ${goals.xp_goal}</div>
                         </div>
                         <div class="goal-progress-bar">
