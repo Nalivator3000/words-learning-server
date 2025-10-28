@@ -1886,7 +1886,7 @@ textarea {
 .export-section h3 {
     font-size: var(--text-2xl);
     font-weight: 700;
-    color: var(--neutral-900);
+    color: var(--neutral-50);
     margin-bottom: var(--space-6);
 }
 

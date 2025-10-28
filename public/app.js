@@ -1745,8 +1745,8 @@ schreiben,Sie schreibt einen Brief.,Писать,Она пишет письmо.`
                     <div class="language-pair-stats">${pair.fromLanguage} → ${pair.toLanguage}</div>
                 </div>
                 <div class="language-pair-controls">
-                    ${!pair.active ? `<button class="select-btn" onclick="app.selectLanguagePair('${pair.id}')">Выбрать</button>` : ''}
-                    ${user.languagePairs.length > 1 ? `<button class="delete-btn" onclick="app.deleteLanguagePair('${pair.id}')">Удалить</button>` : ''}
+                    ${!pair.active ? `<button class="select-btn" onclick="app.selectLanguagePair('${pair.id}')">Select</button>` : ''}
+                    ${user.languagePairs.length > 1 ? `<button class="delete-btn" onclick="app.deleteLanguagePair('${pair.id}')">Delete</button>` : ''}
                 </div>
             `;
             
@@ -2106,7 +2106,7 @@ schreiben,Sie schreibt einen Brief.,Писать,Она пишет письmо.`
 
                 rankCard.innerHTML = `
                     <div class="your-rank-card">
-                        <div class="your-rank-title">Ваше mесто</div>
+                        <div class="your-rank-title">Your Rank</div>
                         <div class="your-rank-value">#${rank.rank || '—'}</div>
                         <div class="your-rank-xp">${(xp || 0).toLocaleString()} XP</div>
                     </div>
@@ -2253,7 +2253,7 @@ schreiben,Sie schreibt einen Brief.,Писать,Она пишет письmо.`
             const langVoices = allVoices.filter(v => v.lang.startsWith(prefix));
 
             // Clear existing options except "Auto"
-            select.innerHTML = '<option value="auto">Авто (рекоmендуется)</option>';
+            select.innerHTML = '<option value="auto">Auto (recommended)</option>';
 
             // Add available voices
             langVoices.forEach(voice => {
