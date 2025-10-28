@@ -1811,31 +1811,43 @@ schreiben,Sie schreibt einen Brief.,Писать,Она пишет письmо.`
         const supportedLangs = languageManager.getSupportedLanguages();
         const langOptions = Object.entries(supportedLangs).map(([code, name]) => name);
         
+        // Helper function to safely get translation
+        const t = (key, fallback) => {
+            if (typeof i18n !== 'undefined' && i18n.t) {
+                const translation = i18n.t(key);
+                // Check if translation returned a key in brackets (missing translation)
+                if (translation && !translation.startsWith('[')) {
+                    return translation;
+                }
+            }
+            return fallback;
+        };
+
         // Create a better dialog for language selection
         const dialogHtml = `
             <div id="languagePairDialog" class="auth-modal">
                 <div class="auth-content">
-                    <h2 data-i18n="create_language_pair">Create Language Pair</h2>
+                    <h2>${t('create_language_pair', 'Create Language Pair')}</h2>
                     <div class="auth-form active">
                         <label>
-                            <span data-i18n="target_language">Target language:</span>
+                            <span>${t('target_language', 'Target language:')}</span>
                             <select id="fromLanguageSelect" class="language-select">
                                 ${langOptions.map(lang => `<option value="${lang}">${lang}</option>`).join('')}
                             </select>
                         </label>
 
                         <label>
-                            <span data-i18n="native_language">Native language:</span>
+                            <span>${t('native_language', 'Native language:')}</span>
                             <select id="toLanguageSelect" class="language-select">
                                 ${langOptions.map(lang => `<option value="${lang}" ${lang === 'Russian' ? 'selected' : ''}>${lang}</option>`).join('')}
                             </select>
                         </label>
 
-                        <input type="text" id="pairNameInput" placeholder="Pair name (automatic)" class="auth-form input" data-i18n-placeholder="pair_name_placeholder">
+                        <input type="text" id="pairNameInput" placeholder="${t('pair_name_placeholder', 'Pair name (automatic)')}" class="auth-form input">
 
                         <div style="display: flex; gap: 1rem; margin-top: 1rem;">
-                            <button id="createPairBtn" class="auth-btn" data-i18n="create">Create</button>
-                            <button id="cancelPairBtn" class="auth-btn" style="background: #95a5a6;" data-i18n="cancel">Cancel</button>
+                            <button id="createPairBtn" class="auth-btn">${t('create', 'Create')}</button>
+                            <button id="cancelPairBtn" class="auth-btn" style="background: #95a5a6;">${t('cancel', 'Cancel')}</button>
                         </div>
                     </div>
                 </div>
@@ -1843,11 +1855,6 @@ schreiben,Sie schreibt einen Brief.,Писать,Она пишет письmо.`
         `;
 
         document.body.insertAdjacentHTML('beforeend', dialogHtml);
-
-        // Update translations for the newly added dialog
-        if (typeof i18n !== 'undefined' && i18n.updateDOM) {
-            i18n.updateDOM();
-        }
 
         // Set up event listeners
         const updateName = () => {
@@ -1893,11 +1900,15 @@ schreiben,Sie schreibt einen Brief.,Писать,Она пишет письmо.`
 
     async createLanguagePair(fromLang, toLang, name) {
         try {
-            await userManager.createLanguagePair(fromLang, toLang, name);
+            console.log('Creating language pair:', { fromLang, toLang, name });
+            const result = await userManager.createLanguagePair(fromLang, toLang, name);
+            console.log('Language pair created successfully:', result);
             this.renderLanguagePairs();
+            // Also reload full data to be sure
+            await this.loadData();
         } catch (error) {
             console.error('Error creating language pair:', error);
-            alert(i18n?.t('error_creating_pair') || 'Error creating language pair');
+            alert(i18n?.t('error_creating_pair') || 'Error creating language pair: ' + error.message);
         }
     }
 
