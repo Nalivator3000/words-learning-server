@@ -1737,7 +1737,10 @@ schreiben,Sie schreibt einen Brief.,Писать,Она пишет письmо.`
 
         user.languagePairs.forEach(pair => {
             // Skip pairs with invalid data
-            if (!pair.fromLanguage || !pair.toLanguage || !pair.name) return;
+            if (!pair.fromLanguage || !pair.toLanguage || !pair.name) {
+                console.warn('Skipping invalid language pair:', pair);
+                return;
+            }
 
             const item = document.createElement('div');
             item.className = `language-pair-item ${pair.active ? 'active' : ''}`;
@@ -1748,12 +1751,27 @@ schreiben,Sie schreibt einen Brief.,Писать,Она пишет письmо.`
                     <div class="language-pair-stats">${pair.fromLanguage} → ${pair.toLanguage}</div>
                 </div>
                 <div class="language-pair-controls">
-                    ${!pair.active ? `<button class="select-btn" onclick="app.selectLanguagePair('${pair.id}')" data-i18n="select">Select</button>` : ''}
-                    ${user.languagePairs.length > 1 ? `<button class="delete-btn" onclick="app.deleteLanguagePair('${pair.id}')" data-i18n="delete">Delete</button>` : ''}
+                    ${!pair.active ? `<button class="select-btn" data-pair-id="${pair.id}" data-i18n="select">Select</button>` : ''}
+                    ${user.languagePairs.length > 1 ? `<button class="delete-btn" data-pair-id="${pair.id}" data-i18n="delete">Delete</button>` : ''}
                 </div>
             `;
 
             container.appendChild(item);
+        });
+
+        // Add event listeners to buttons (CSP-compliant)
+        container.querySelectorAll('.select-btn').forEach(btn => {
+            btn.addEventListener('click', (e) => {
+                const pairId = e.target.getAttribute('data-pair-id');
+                this.selectLanguagePair(pairId);
+            });
+        });
+
+        container.querySelectorAll('.delete-btn').forEach(btn => {
+            btn.addEventListener('click', (e) => {
+                const pairId = e.target.getAttribute('data-pair-id');
+                this.deleteLanguagePair(pairId);
+            });
         });
 
         // Update translations for the newly added buttons

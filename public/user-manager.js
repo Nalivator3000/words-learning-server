@@ -177,11 +177,18 @@ class UserManager {
             }
 
             const languagePairs = await response.json();
-            this.currentUser.languagePairs = languagePairs;
+
+            // Normalize field names from database (from_lang → fromLanguage)
+            this.currentUser.languagePairs = languagePairs.map(pair => ({
+                ...pair,
+                fromLanguage: pair.from_lang || pair.fromLanguage,
+                toLanguage: pair.to_lang || pair.toLanguage,
+                active: pair.is_active || pair.active
+            }));
 
             // Set active language pair
-            if (languagePairs.length > 0) {
-                this.currentLanguagePair = languagePairs.find(lp => lp.is_active) || languagePairs[0];
+            if (this.currentUser.languagePairs.length > 0) {
+                this.currentLanguagePair = this.currentUser.languagePairs.find(lp => lp.is_active) || this.currentUser.languagePairs[0];
             }
 
             this.showUserInterface();
@@ -211,12 +218,21 @@ class UserManager {
             }
 
             const newPair = await response.json();
-            this.currentUser.languagePairs.push(newPair);
+
+            // Normalize field names from database
+            const normalizedPair = {
+                ...newPair,
+                fromLanguage: newPair.from_lang || newPair.fromLanguage,
+                toLanguage: newPair.to_lang || newPair.toLanguage,
+                active: newPair.is_active || newPair.active
+            };
+
+            this.currentUser.languagePairs.push(normalizedPair);
 
             // Update localStorage
             localStorage.setItem('currentUser', JSON.stringify(this.currentUser));
 
-            return newPair;
+            return normalizedPair;
         } catch (error) {
             console.error('Error creating language pair:', error);
             throw error;
