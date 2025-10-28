@@ -240,7 +240,7 @@ class Gamification {
                         <div class="stat-item">
                             <span class="stat-icon">✅</span>
                             <span class="stat-value">${totalQuizzesCompleted}</span>
-                            <span class="stat-label">Упражнений выполнено</span>
+                            <span class="stat-label">Exercises Completed</span>
                         </div>
                     </div>
                 </section>
@@ -527,7 +527,7 @@ class Gamification {
                     <div class="goal-item ${goals.quizzes_progress >= goals.quizzes_goal ? 'completed' : ''}">
                         <div class="goal-icon">✏️</div>
                         <div class="goal-info">
-                            <div class="goal-label">Упражнений выполнено</div>
+                            <div class="goal-label">Exercises Completed</div>
                             <div class="goal-progress-text">${goals.quizzes_progress} / ${goals.quizzes_goal}</div>
                         </div>
                         <div class="goal-progress-bar">
@@ -535,7 +535,7 @@ class Gamification {
                         </div>
                     </div>
                 </div>
-                ${allCompleted ? '<div class="goals-reward">🎁 +25 XP бонус за выполнение всех целей!</div>' : ''}
+                ${allCompleted ? '<div class="goals-reward">🎁 +25 XP bonus for completing all goals!</div>' : ''}
             </div>
         `;
     }
