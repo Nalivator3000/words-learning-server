@@ -950,3 +950,121 @@
         width: 100%;
     }
 }
+
+/* ============ DARK THEME ============ */
+[data-theme="dark"] .stats-section {
+    background: #2d3748;
+    color: #e2e8f0;
+}
+
+[data-theme="dark"] .stats-section h2 {
+    color: #f7fafc;
+}
+
+[data-theme="dark"] .achievement-category h3 {
+    color: #f7fafc;
+}
+
+[data-theme="dark"] .achievement-card {
+    background: #374151;
+    color: #e2e8f0;
+}
+
+[data-theme="dark"] .achievement-card.unlocked {
+    background: linear-gradient(135deg, #4a5568 0%, #2d3748 100%);
+    border-color: #ffd700;
+}
+
+[data-theme="dark"] .achievement-card.locked {
+    background: #1f2937;
+}
+
+[data-theme="dark"] .achievement-name {
+    color: #f7fafc;
+}
+
+[data-theme="dark"] .achievement-description {
+    color: #cbd5e0;
+}
+
+[data-theme="dark"] .achievement-progress-text {
+    color: #a0aec0;
+}
+
+[data-theme="dark"] .achievement-unlock-title,
+[data-theme="dark"] .achievement-unlock-name {
+    color: #f7fafc;
+}
+
+[data-theme="dark"] .leaderboard-container {
+    background: #2d3748;
+}
+
+[data-theme="dark"] .leaderboard-title {
+    color: #f7fafc;
+}
+
+[data-theme="dark"] .leaderboard-entry {
+    background: #374151;
+}
+
+[data-theme="dark"] .leaderboard-entry:hover {
+    background: #4a5568;
+}
+
+[data-theme="dark"] .leaderboard-entry.current-user {
+    background: linear-gradient(135deg, #4a5568 0%, #2d3748 100%);
+}
+
+[data-theme="dark"] .leaderboard-username {
+    color: #f7fafc;
+}
+
+[data-theme="dark"] .leaderboard-stats {
+    color: #cbd5e0;
+}
+
+[data-theme="dark"] .xp-log-entry {
+    background: #374151;
+}
+
+[data-theme="dark"] .xp-log-action {
+    color: #f7fafc;
+}
+
+[data-theme="dark"] .xp-log-time {
+    color: #a0aec0;
+}
+
+[data-theme="dark"] .heatmap-day.level-0 {
+    background: #374151;
+}
+
+[data-theme="dark"] .daily-goals-card {
+    background: #374151;
+    color: #e2e8f0;
+}
+
+[data-theme="dark"] .daily-goals-header h3 {
+    color: #f7fafc;
+}
+
+[data-theme="dark"] .goal-item {
+    background: #2d3748;
+}
+
+[data-theme="dark"] .goal-item.completed {
+    background: #1e4a3a;
+}
+
+[data-theme="dark"] .goal-name {
+    color: #f7fafc;
+}
+
+[data-theme="dark"] .goal-description {
+    color: #cbd5e0;
+}
+
+[data-theme="dark"] .goal-progress-text {
+    color: #a0aec0;
+}
