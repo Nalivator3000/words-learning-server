@@ -4489,5 +4489,122 @@
     "es": null,
     "fr": null,
     "it": null
+  },
+  "create_language_pair": {
+    "source": "Create Language Pair",
+    "en": "Create Language Pair",
+    "ru": "Создать языковую пару",
+    "de": "Sprachpaar erstellen",
+    "es": "Crear par de idiomas",
+    "fr": "Créer une paire de langues",
+    "it": "Crea coppia di lingue"
+  },
+  "target_language": {
+    "source": "Target language:",
+    "en": "Target language:",
+    "ru": "Изучаемый язык:",
+    "de": "Zielsprache:",
+    "es": "Idioma objetivo:",
+    "fr": "Langue cible:",
+    "it": "Lingua di destinazione:"
+  },
+  "pair_name_placeholder": {
+    "source": "Pair name (automatic)",
+    "en": "Pair name (automatic)",
+    "ru": "Название пары (автоматически)",
+    "de": "Paarname (automatisch)",
+    "es": "Nombre del par (automático)",
+    "fr": "Nom de la paire (automatique)",
+    "it": "Nome coppia (automatico)"
+  },
+  "create": {
+    "source": "Create",
+    "en": "Create",
+    "ru": "Создать",
+    "de": "Erstellen",
+    "es": "Crear",
+    "fr": "Créer",
+    "it": "Crea"
+  },
+  "cancel": {
+    "source": "Cancel",
+    "en": "Cancel",
+    "ru": "Отмена",
+    "de": "Abbrechen",
+    "es": "Cancelar",
+    "fr": "Annuler",
+    "it": "Annulla"
+  },
+  "languages_cannot_be_same": {
+    "source": "Target and native languages cannot be the same",
+    "en": "Target and native languages cannot be the same",
+    "ru": "Изучаемый и родной язык не могут быть одинаковыми",
+    "de": "Ziel- und Muttersprache können nicht identisch sein",
+    "es": "Los idiomas objetivo y nativo no pueden ser iguales",
+    "fr": "Les langues cible et maternelle ne peuvent pas être identiques",
+    "it": "Le lingue di destinazione e native non possono essere uguali"
+  },
+  "select": {
+    "source": "Select",
+    "en": "Select",
+    "ru": "Выбрать",
+    "de": "Auswählen",
+    "es": "Seleccionar",
+    "fr": "Sélectionner",
+    "it": "Seleziona"
+  },
+  "delete": {
+    "source": "Delete",
+    "en": "Delete",
+    "ru": "Удалить",
+    "de": "Löschen",
+    "es": "Eliminar",
+    "fr": "Supprimer",
+    "it": "Elimina"
+  },
+  "language_pair_already_exists": {
+    "source": "This language pair already exists",
+    "en": "This language pair already exists",
+    "ru": "Эта языковая пара уже существует",
+    "de": "Dieses Sprachpaar existiert bereits",
+    "es": "Este par de idiomas ya existe",
+    "fr": "Cette paire de langues existe déjà",
+    "it": "Questa coppia di lingue esiste già"
+  },
+  "error_selecting_pair": {
+    "source": "Error selecting language pair",
+    "en": "Error selecting language pair",
+    "ru": "Ошибка при выборе языковой пары",
+    "de": "Fehler beim Auswählen des Sprachpaars",
+    "es": "Error al seleccionar el par de idiomas",
+    "fr": "Erreur lors de la sélection de la paire de langues",
+    "it": "Errore nella selezione della coppia di lingue"
+  },
+  "confirm_delete_pair": {
+    "source": "Are you sure you want to delete this language pair? All associated data will be lost.",
+    "en": "Are you sure you want to delete this language pair? All associated data will be lost.",
+    "ru": "Вы уверены, что хотите удалить эту языковую пару? Все связанные с ней данные будут потеряны.",
+    "de": "Sind Sie sicher, dass Sie dieses Sprachpaar löschen möchten? Alle zugehörigen Daten gehen verloren.",
+    "es": "¿Está seguro de que desea eliminar este par de idiomas? Se perderán todos los datos asociados.",
+    "fr": "Êtes-vous sûr de vouloir supprimer cette paire de langues ? Toutes les données associées seront perdues.",
+    "it": "Sei sicuro di voler eliminare questa coppia di lingue? Tutti i dati associati andranno persi."
+  },
+  "error_deleting_pair": {
+    "source": "Error deleting language pair",
+    "en": "Error deleting language pair",
+    "ru": "Ошибка при удалении языковой пары",
+    "de": "Fehler beim Löschen des Sprachpaars",
+    "es": "Error al eliminar el par de idiomas",
+    "fr": "Erreur lors de la suppression de la paire de langues",
+    "it": "Errore nell'eliminazione della coppia di lingue"
+  },
+  "error_creating_pair": {
+    "source": "Error creating language pair",
+    "en": "Error creating language pair",
+    "ru": "Ошибка при создании языковой пары",
+    "de": "Fehler beim Erstellen des Sprachpaars",
+    "es": "Error al crear el par de idiomas",
+    "fr": "Erreur lors de la création de la paire de langues",
+    "it": "Errore nella creazione della coppia di lingue"
   }
 }

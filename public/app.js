@@ -1731,27 +1731,35 @@ schreiben,Sie schreibt einen Brief.,Писать,Она пишет письmо.`
     renderLanguagePairs() {
         const container = document.getElementById('languagePairsList');
         container.innerHTML = '';
-        
+
         const user = userManager.getCurrentUser();
         if (!user || !user.languagePairs) return;
-        
+
         user.languagePairs.forEach(pair => {
+            // Skip pairs with invalid data
+            if (!pair.fromLanguage || !pair.toLanguage || !pair.name) return;
+
             const item = document.createElement('div');
             item.className = `language-pair-item ${pair.active ? 'active' : ''}`;
-            
+
             item.innerHTML = `
                 <div class="language-pair-info">
                     <div class="language-pair-name">${pair.name}</div>
                     <div class="language-pair-stats">${pair.fromLanguage} → ${pair.toLanguage}</div>
                 </div>
                 <div class="language-pair-controls">
-                    ${!pair.active ? `<button class="select-btn" onclick="app.selectLanguagePair('${pair.id}')">Select</button>` : ''}
-                    ${user.languagePairs.length > 1 ? `<button class="delete-btn" onclick="app.deleteLanguagePair('${pair.id}')">Delete</button>` : ''}
+                    ${!pair.active ? `<button class="select-btn" onclick="app.selectLanguagePair('${pair.id}')" data-i18n="select">Select</button>` : ''}
+                    ${user.languagePairs.length > 1 ? `<button class="delete-btn" onclick="app.deleteLanguagePair('${pair.id}')" data-i18n="delete">Delete</button>` : ''}
                 </div>
             `;
-            
+
             container.appendChild(item);
         });
+
+        // Update translations for the newly added buttons
+        if (typeof i18n !== 'undefined' && i18n.updateDOM) {
+            i18n.updateDOM();
+        }
     }
 
     async selectLanguagePair(pairId) {
@@ -1761,22 +1769,22 @@ schreiben,Sie schreibt einen Brief.,Писать,Она пишет письmо.`
             await this.updateStats();
         } catch (error) {
             console.error('Error selecting language pair:', error);
-            alert('Ошибка при выборе языковой пары');
+            alert(i18n?.t('error_selecting_pair') || 'Error selecting language pair');
         }
     }
 
     async deleteLanguagePair(pairId) {
-        if (!confirm('Вы уверены, что хотите удалить эту языковую пару? Все связанные с ней данные будут потеряны.')) {
+        if (!confirm(i18n?.t('confirm_delete_pair') || 'Are you sure you want to delete this language pair? All associated data will be lost.')) {
             return;
         }
-        
+
         try {
             await userManager.deleteLanguagePair(pairId);
             this.renderLanguagePairs();
             await this.updateStats();
         } catch (error) {
             console.error('Error deleting language pair:', error);
-            alert(error.message || 'Ошибка при удалении языковой пары');
+            alert(error.message || i18n?.t('error_deleting_pair') || 'Error deleting language pair');
         }
     }
 
@@ -1789,35 +1797,40 @@ schreiben,Sie schreibt einen Brief.,Писать,Она пишет письmо.`
         const dialogHtml = `
             <div id="languagePairDialog" class="auth-modal">
                 <div class="auth-content">
-                    <h2>Создать языковую пару</h2>
+                    <h2 data-i18n="create_language_pair">Create Language Pair</h2>
                     <div class="auth-form active">
                         <label>
-                            <span>Изучаеmый язык:</span>
+                            <span data-i18n="target_language">Target language:</span>
                             <select id="fromLanguageSelect" class="language-select">
                                 ${langOptions.map(lang => `<option value="${lang}">${lang}</option>`).join('')}
                             </select>
                         </label>
-                        
+
                         <label>
-                            <span>Родной язык:</span>
+                            <span data-i18n="native_language">Native language:</span>
                             <select id="toLanguageSelect" class="language-select">
                                 ${langOptions.map(lang => `<option value="${lang}" ${lang === 'Russian' ? 'selected' : ''}>${lang}</option>`).join('')}
                             </select>
                         </label>
-                        
-                        <input type="text" id="pairNameInput" placeholder="Название пары (автоmатически)" class="auth-form input">
-                        
+
+                        <input type="text" id="pairNameInput" placeholder="Pair name (automatic)" class="auth-form input" data-i18n-placeholder="pair_name_placeholder">
+
                         <div style="display: flex; gap: 1rem; margin-top: 1rem;">
-                            <button id="createPairBtn" class="auth-btn">Создать</button>
-                            <button id="cancelPairBtn" class="auth-btn" style="background: #95a5a6;">Отmена</button>
+                            <button id="createPairBtn" class="auth-btn" data-i18n="create">Create</button>
+                            <button id="cancelPairBtn" class="auth-btn" style="background: #95a5a6;" data-i18n="cancel">Cancel</button>
                         </div>
                     </div>
                 </div>
             </div>
         `;
-        
+
         document.body.insertAdjacentHTML('beforeend', dialogHtml);
-        
+
+        // Update translations for the newly added dialog
+        if (typeof i18n !== 'undefined' && i18n.updateDOM) {
+            i18n.updateDOM();
+        }
+
         // Set up event listeners
         const updateName = () => {
             const from = document.getElementById('fromLanguageSelect').value;
@@ -1832,12 +1845,23 @@ schreiben,Sie schreibt einen Brief.,Писать,Она пишет письmо.`
             const fromLang = document.getElementById('fromLanguageSelect').value;
             const toLang = document.getElementById('toLanguageSelect').value;
             const name = document.getElementById('pairNameInput').value || `${fromLang} - ${toLang}`;
-            
+
             if (fromLang === toLang) {
-                alert('Изучаеmый и родной язык не mогут быть одинаковыmи');
+                alert(i18n?.t('languages_cannot_be_same') || 'Target and native languages cannot be the same');
                 return;
             }
-            
+
+            // Check for duplicates
+            const user = userManager.getCurrentUser();
+            const duplicate = user.languagePairs.find(pair =>
+                pair.fromLanguage === fromLang && pair.toLanguage === toLang
+            );
+
+            if (duplicate) {
+                alert(i18n?.t('language_pair_already_exists') || 'This language pair already exists');
+                return;
+            }
+
             this.createLanguagePair(fromLang, toLang, name);
             document.getElementById('languagePairDialog').remove();
         });
@@ -1855,7 +1879,7 @@ schreiben,Sie schreibt einen Brief.,Писать,Она пишет письmо.`
             this.renderLanguagePairs();
         } catch (error) {
             console.error('Error creating language pair:', error);
-            alert('Ошибка при создании языковой пары');
+            alert(i18n?.t('error_creating_pair') || 'Error creating language pair');
         }
     }
 
