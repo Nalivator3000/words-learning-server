@@ -166,13 +166,13 @@ class Gamification {
         containerElement.innerHTML = `
             <div class="gamification-header">
                 <div class="level-display">
-                    <span class="level-badge">Ур. ${level}</span>
+                    <span class="level-badge">Lvl. ${level}</span>
                     <div class="xp-bar-container" title="${currentLevelXP}/${xpForNextLevel} XP">
                         <div class="xp-bar" style="width: ${progress}%;"></div>
                     </div>
                     <span class="xp-text">${totalXP} XP</span>
                 </div>
-                <div class="streak-display" title="Текущий стрик">
+                <div class="streak-display" title="Current Streak">
                     🔥 ${currentStreak} ${this.getStreakDaysText(currentStreak)}
                 </div>
             </div>
@@ -189,11 +189,11 @@ class Gamification {
             <div class="gamification-stats">
                 <!-- Level and XP Section -->
                 <section class="stats-section">
-                    <h2>📊 Уровень и опыт</h2>
+                    <h2>📊 Level and Experience</h2>
                     <div class="level-card">
                         <div class="level-circle">
                             <span class="level-number">${level}</span>
-                            <span class="level-label">УРОВЕНЬ</span>
+                            <span class="level-label">LEVEL</span>
                         </div>
                         <div class="xp-progress">
                             <div class="xp-bar-large">
@@ -207,30 +207,30 @@ class Gamification {
 
                 <!-- Streak Section -->
                 <section class="stats-section">
-                    <h2>🔥 Стрики</h2>
+                    <h2>🔥 Streaks</h2>
                     <div class="streak-cards">
                         <div class="streak-card">
                             <div class="streak-icon">🔥</div>
                             <div class="streak-value">${currentStreak}</div>
-                            <div class="streak-label">Текущий стрик</div>
+                            <div class="streak-label">Current Streak</div>
                         </div>
                         <div class="streak-card">
                             <div class="streak-icon">⭐</div>
                             <div class="streak-value">${longestStreak}</div>
-                            <div class="streak-label">Рекорд</div>
+                            <div class="streak-label">Record</div>
                         </div>
                     </div>
                 </section>
 
                 <!-- Activity Calendar -->
                 <section class="stats-section">
-                    <h2>📅 Активность</h2>
+                    <h2>📅 Activity</h2>
                     <div id="activity-calendar"></div>
                 </section>
 
                 <!-- Achievement Stats -->
                 <section class="stats-section">
-                    <h2>🏆 Статистика</h2>
+                    <h2>🏆 Statistics</h2>
                     <div class="achievement-stats">
                         <div class="stat-item">
                             <span class="stat-icon">📚</span>
@@ -247,13 +247,13 @@ class Gamification {
 
                 <!-- Achievements Section -->
                 <section class="stats-section">
-                    <h2>🏅 Достижения</h2>
+                    <h2>🏅 Achievements</h2>
                     <div id="achievements-container"></div>
                 </section>
 
                 <!-- XP History -->
                 <section class="stats-section">
-                    <h2>📜 История опыта</h2>
+                    <h2>📜 XP History</h2>
                     <div id="xp-log-container"></div>
                 </section>
             </div>
@@ -320,13 +320,13 @@ class Gamification {
         calendarHTML += '</div>';
         calendarHTML += `
             <div class="heatmap-legend">
-                <span>Меньше</span>
+                <span>Less</span>
                 <div class="legend-box level-0"></div>
                 <div class="legend-box level-1"></div>
                 <div class="legend-box level-2"></div>
                 <div class="legend-box level-3"></div>
                 <div class="legend-box level-4"></div>
-                <span>Больше</span>
+                <span>More</span>
             </div>
         `;
 
@@ -336,7 +336,7 @@ class Gamification {
     // Render XP log table
     renderXPLog(containerElement, xpLog) {
         if (!xpLog || xpLog.length === 0) {
-            containerElement.innerHTML = '<p>Нет записей</p>';
+            containerElement.innerHTML = '<p>No records</p>';
             return;
         }
 
@@ -370,17 +370,17 @@ class Gamification {
     // Render achievements grid
     renderAchievements(containerElement, achievementProgress) {
         if (!achievementProgress || achievementProgress.length === 0) {
-            containerElement.innerHTML = '<p>Нет доступных достижений</p>';
+            containerElement.innerHTML = '<p>No achievements available</p>';
             return;
         }
 
         // Group by category
         const categories = {
-            'streak': { name: '🔥 Стрики', achievements: [] },
+            'streak': { name: '🔥 Streaks', achievements: [] },
             'words': { name: '📚 Words', achievements: [] },
-            'level': { name: '⬆️ Уровни', achievements: [] },
-            'quiz': { name: '✏️ Упражнения', achievements: [] },
-            'special': { name: '⭐ Особые', achievements: [] }
+            'level': { name: '⬆️ Levels', achievements: [] },
+            'quiz': { name: '✏️ Exercises', achievements: [] },
+            'special': { name: '⭐ Special', achievements: [] }
         };
 
         achievementProgress.forEach(ach => {
@@ -417,7 +417,7 @@ class Gamification {
                                 </div>
                                 <div class="achievement-progress-text">${ach.currentValue || 0} / ${ach.requirement_value}</div>
                             ` : `
-                                <div class="achievement-unlocked-badge">✅ Получено</div>
+                                <div class="achievement-unlocked-badge">✅ Unlocked</div>
                             `}
                             <div class="achievement-xp">+${ach.xp_reward} XP</div>
                         </div>
@@ -467,8 +467,8 @@ class Gamification {
                             ${isCurrentUser ? '<span class="you-badge">You</span>' : ''}
                         </div>
                         <div class="leaderboard-stats">
-                            Ур. ${user.level} • ${user.current_streak || 0}🔥
-                            ${type === 'weekly' ? `• ${user.weekly_words || 0} слов` : ''}
+                            Lvl. ${user.level} • ${user.current_streak || 0}🔥
+                            ${type === 'weekly' ? `• ${user.weekly_words || 0} words` : ''}
                         </div>
                     </div>
                     <div class="leaderboard-xp">${xp.toLocaleString()} XP</div>
@@ -548,7 +548,7 @@ class Gamification {
         if (leveledUp) {
             notification.innerHTML = `
                 <div class="level-up-animation">
-                    🎉 НОВЫЙ УРОВЕНЬ ${level}! 🎉
+                    🎉 NEW LEVEL ${level}! 🎉
                     <div class="xp-earned">+${xpAmount} XP</div>
                 </div>
             `;
@@ -577,7 +577,7 @@ class Gamification {
         notification.innerHTML = `
             <div class="achievement-unlock-animation">
                 <div class="achievement-unlock-icon">${achievement.icon}</div>
-                <div class="achievement-unlock-title">🏆 Достижение получено!</div>
+                <div class="achievement-unlock-title">🏆 Achievement Unlocked!</div>
                 <div class="achievement-unlock-name">${achievement.name}</div>
                 <div class="achievement-unlock-xp">+${achievement.xp_reward} XP</div>
             </div>
@@ -593,10 +593,8 @@ class Gamification {
 
     // Helper: Get streak days text
     getStreakDaysText(days) {
-        if (days === 0) return 'дней';
-        if (days === 1) return 'день';
-        if (days >= 2 && days <= 4) return 'дня';
-        return 'дней';
+        if (days === 1) return 'day';
+        return 'days';
     }
 
     // Helper: Get icon for XP action type
