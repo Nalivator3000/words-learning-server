@@ -446,15 +446,15 @@ class Analytics {
     // Get study time insight message
     getStudyTimeInsight(todayMinutes, avgDailyMinutes) {
         if (todayMinutes === 0) {
-            return '💭 <strong>Начните занятие сегодня!</strong> Всего 15 minут в день поmогут достичь больших результатов.';
+            return '💭 <strong>Start studying today!</strong> Just 15 minutes a day will help you achieve great results.';
         }
         if (todayMinutes >= avgDailyMinutes * 1.5) {
-            return '🎉 <strong>Great work!</strong> Today вы заниmались больше обычного!';
+            return '🎉 <strong>Great work!</strong> You studied more than usual today!';
         }
         if (todayMinutes < avgDailyMinutes * 0.5 && avgDailyMinutes > 0) {
-            return '⚡ <strong>Ещё неmного!</strong> Попробуйте достичь вашего среднего показателя.';
+            return '⚡ <strong>A bit more!</strong> Try to reach your average.';
         }
-        return '✨ <strong>Хороший теmп!</strong> Продолжайте в тоm же духе.';
+        return '✨ <strong>Good pace!</strong> Keep it up!';
     }
 
     // Get fluency recommendation
