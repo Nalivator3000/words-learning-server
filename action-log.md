@@ -1,5 +1,86 @@
 # Action Log - Words Learning Server
 
+## 2025-10-28
+
+### i18n Translation Manager + Auto-Translation Complete
+**Commits:**
+- cd6c05a: 🌍 i18n: Translation extraction system
+- 547bc5d: 🌐 i18n: Quick translation fixes + auto-translate infrastructure
+- 3a79826: 🔧 FIX: Study mode button subtitles
+- 94fb8a5: 🌐 i18n: Settings section + Leaderboard translations
+- (pending): 🎯 i18n: New translation manager (i18n.js)
+
+**Изменения:**
+
+**1. New Translation Manager (public/i18n.js):**
+- Создан полноценный I18nManager class (234 строки)
+- **Функциональность:**
+  - `loadTranslations()` - загрузка из /translations/source-texts.json
+  - `t(key, params)` - получение перевода с интерполяцией параметров
+  - `setLanguage(lang)` - смена языка с автообновлением DOM
+  - `updateDOM()` - обновление всех элементов с data-i18n атрибутами
+  - `getCoverage(lang)` - процент переведенных текстов
+- **Поддержка атрибутов:**
+  - `data-i18n` - text content
+  - `data-i18n-html` - innerHTML
+  - `data-i18n-title` - title attribute
+  - `data-i18n-placeholder` - placeholder
+- **Fallback стратегия:** current lang → English → [key]
+- **Event system:** dispatches 'languageChanged' event
+- **Auto-initialization:** загрузка при DOMContentLoaded
+
+**2. Auto-Translation Script Results:**
+- Запущен `scripts/auto-translate.js` для 499 текстов
+- MyMemory Translation API (бесплатно, без ключа)
+- Rate limiting: 500ms между запросами
+- **Переведено:** 499 текстов × 6 языков = ~2994 переводов
+- **Результат:** translations/source-texts.json полностью заполнен
+
+**3. Quick Translation Fixes (60+ texts):**
+- **Study modes:** button subtitles (native→target, from letters, 5 sec per answer)
+- **Settings:** TTS section (Speed, Pitch, Volume), language names
+- **Analytics:** chart labels, time stats, fluency forecast
+- **Leaderboard:** empty state message
+- **Export:** error messages
+
+**Файлы:**
+- [public/i18n.js](public/i18n.js) - NEW (234 строки)
+- [scripts/auto-translate.js](scripts/auto-translate.js) - USED (499 texts translated)
+- [scripts/quick-translate-fix.js](scripts/quick-translate-fix.js) - UPDATED (50+ mappings)
+- [translations/source-texts.json](translations/source-texts.json) - UPDATED (499 keys, 6 langs)
+- [public/index.html](public/index.html) - 6+ hardcoded texts replaced
+- [public/gamification.js](public/gamification.js) - leaderboard empty state
+- [public/app.js](public/app.js) - export error messages
+- [public/analytics.js](public/analytics.js) - chart labels
+- [PLAN.md](PLAN.md) - Section 0.0 added (i18n as HIGHEST PRIORITY)
+
+**Преимущества новой системы:**
+
+| Возможность | Старая система | Новая система |
+|---|---|---|
+| Хранение переводов | 10+ файлов | 1 JSON файл |
+| Добавить язык | 2 часа вручную | 2 минуты автоперевод |
+| Найти непереведенное | Невозможно | getCoverage() |
+| Обновить перевод | Искать по всем файлам | Изменить 1 строку в JSON |
+| Поддержка интерполяции | Нет | `{placeholder}` |
+| Event system | Нет | languageChanged event |
+
+**Результат:**
+- ✅ Инфраструктура: 100% готова
+- ✅ Auto-translation: 499 текстов переведены на 6 языков
+- ✅ i18n.js manager: готов к использованию
+- ✅ Quick fixes: 60+ критичных текстов заменены
+- ⏳ Миграция кода: следующий этап (замена всех hardcoded текстов на data-i18n)
+
+**Следующие шаги:**
+1. Добавить `<script src="i18n.js"></script>` в index.html
+2. Заменить все hardcoded тексты на data-i18n атрибуты
+3. Обновить JS код: строки → i18n.t('key')
+4. Тестирование всех 6 языков
+5. Удалить старый language-manager.js
+
+---
+
 ## 2025-10-27
 
 ### Centralized Translation System Infrastructure
