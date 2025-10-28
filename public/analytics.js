@@ -482,4 +482,4 @@ class Analytics {
 }
 
 // Initialize global analytics instance
-window.analytics = new Analytics(window.API_URL || 'http://localhost:3001');
+window.analytics = new Analytics(window.API_URL || window.location.origin);

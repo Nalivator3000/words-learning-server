@@ -613,4 +613,4 @@ class Gamification {
 }
 
 // Initialize global gamification instance
-window.gamification = new Gamification(window.API_URL || 'http://localhost:3000');
+window.gamification = new Gamification(window.API_URL || window.location.origin);
