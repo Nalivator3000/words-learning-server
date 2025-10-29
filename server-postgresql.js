@@ -1543,34 +1543,34 @@ async function initDatabase() {
 async function initializeAchievements() {
     const achievements = [
         // Streak Achievements
-        { key: 'streak_3', name: 'Огонёк 🔥', description: 'Стрик 3 дня подряд', icon: '🔥', category: 'streak', tier: 1, requirement: 3, xp: 50 },
-        { key: 'streak_7', name: 'Неделя силы 💪', description: 'Стрик 7 дней подряд', icon: '💪', category: 'streak', tier: 2, requirement: 7, xp: 100 },
-        { key: 'streak_30', name: 'Месяц победы 🏆', description: 'Стрик 30 дней подряд', icon: '🏆', category: 'streak', tier: 3, requirement: 30, xp: 500 },
-        { key: 'streak_100', name: 'Легенда 👑', description: 'Стрик 100 дней подряд', icon: '👑', category: 'streak', tier: 4, requirement: 100, xp: 2000 },
+        { key: 'streak_3', name: 'Little Flame 🔥', description: '3-day streak', icon: '🔥', category: 'streak', tier: 1, requirement: 3, xp: 50 },
+        { key: 'streak_7', name: 'Week of Power 💪', description: '7-day streak', icon: '💪', category: 'streak', tier: 2, requirement: 7, xp: 100 },
+        { key: 'streak_30', name: 'Month of Victory 🏆', description: '30-day streak', icon: '🏆', category: 'streak', tier: 3, requirement: 30, xp: 500 },
+        { key: 'streak_100', name: 'Legend 👑', description: '100-day streak', icon: '👑', category: 'streak', tier: 4, requirement: 100, xp: 2000 },
 
         // Word Count Achievements
-        { key: 'words_10', name: 'Первые шаги 🌱', description: 'Выучено 10 слов', icon: '🌱', category: 'words', tier: 1, requirement: 10, xp: 25 },
-        { key: 'words_50', name: 'Знаток 📚', description: 'Выучено 50 слов', icon: '📚', category: 'words', tier: 2, requirement: 50, xp: 100 },
-        { key: 'words_100', name: 'Эрудит 🎓', description: 'Выучено 100 слов', icon: '🎓', category: 'words', tier: 3, requirement: 100, xp: 250 },
-        { key: 'words_500', name: 'Мастер слова ⭐', description: 'Выучено 500 слов', icon: '⭐', category: 'words', tier: 4, requirement: 500, xp: 1000 },
-        { key: 'words_1000', name: 'Полиглот 🌍', description: 'Выучено 1000 слов', icon: '🌍', category: 'words', tier: 5, requirement: 1000, xp: 3000 },
+        { key: 'words_10', name: 'First Steps 🌱', description: 'Learned 10 words', icon: '🌱', category: 'words', tier: 1, requirement: 10, xp: 25 },
+        { key: 'words_50', name: 'Connoisseur 📚', description: 'Learned 50 words', icon: '📚', category: 'words', tier: 2, requirement: 50, xp: 100 },
+        { key: 'words_100', name: 'Scholar 🎓', description: 'Learned 100 words', icon: '🎓', category: 'words', tier: 3, requirement: 100, xp: 250 },
+        { key: 'words_500', name: 'Word Master ⭐', description: 'Learned 500 words', icon: '⭐', category: 'words', tier: 4, requirement: 500, xp: 1000 },
+        { key: 'words_1000', name: 'Polyglot 🌍', description: 'Learned 1000 words', icon: '🌍', category: 'words', tier: 5, requirement: 1000, xp: 3000 },
 
         // Level Achievements
-        { key: 'level_5', name: 'Новичок 🥉', description: 'Достигнут 5 уровень', icon: '🥉', category: 'level', tier: 1, requirement: 5, xp: 50 },
-        { key: 'level_10', name: 'Опытный 🥈', description: 'Достигнут 10 уровень', icon: '🥈', category: 'level', tier: 2, requirement: 10, xp: 100 },
-        { key: 'level_25', name: 'Профессионал 🥇', description: 'Достигнут 25 уровень', icon: '🥇', category: 'level', tier: 3, requirement: 25, xp: 500 },
-        { key: 'level_50', name: 'Эксперт 💎', description: 'Достигнут 50 уровень', icon: '💎', category: 'level', tier: 4, requirement: 50, xp: 1500 },
-        { key: 'level_100', name: 'Гроссмейстер 👾', description: 'Достигнут 100 уровень', icon: '👾', category: 'level', tier: 5, requirement: 100, xp: 5000 },
+        { key: 'level_5', name: 'Novice 🥉', description: 'Reached level 5', icon: '🥉', category: 'level', tier: 1, requirement: 5, xp: 50 },
+        { key: 'level_10', name: 'Experienced 🥈', description: 'Reached level 10', icon: '🥈', category: 'level', tier: 2, requirement: 10, xp: 100 },
+        { key: 'level_25', name: 'Professional 🥇', description: 'Reached level 25', icon: '🥇', category: 'level', tier: 3, requirement: 25, xp: 500 },
+        { key: 'level_50', name: 'Expert 💎', description: 'Reached level 50', icon: '💎', category: 'level', tier: 4, requirement: 50, xp: 1500 },
+        { key: 'level_100', name: 'Grandmaster 👾', description: 'Reached level 100', icon: '👾', category: 'level', tier: 5, requirement: 100, xp: 5000 },
 
         // Quiz Achievements
-        { key: 'quiz_100', name: 'Практикант ✏️', description: '100 упражнений выполнено', icon: '✏️', category: 'quiz', tier: 1, requirement: 100, xp: 50 },
-        { key: 'quiz_500', name: 'Трудяга 📝', description: '500 упражнений выполнено', icon: '📝', category: 'quiz', tier: 2, requirement: 500, xp: 250 },
-        { key: 'quiz_1000', name: 'Неутомимый 💪', description: '1000 упражнений выполнено', icon: '💪', category: 'quiz', tier: 3, requirement: 1000, xp: 750 },
+        { key: 'quiz_100', name: 'Trainee ✏️', description: '100 exercises completed', icon: '✏️', category: 'quiz', tier: 1, requirement: 100, xp: 50 },
+        { key: 'quiz_500', name: 'Hard Worker 📝', description: '500 exercises completed', icon: '📝', category: 'quiz', tier: 2, requirement: 500, xp: 250 },
+        { key: 'quiz_1000', name: 'Tireless 💪', description: '1000 exercises completed', icon: '💪', category: 'quiz', tier: 3, requirement: 1000, xp: 750 },
 
         // Special Achievements
-        { key: 'first_word', name: 'Первое слово 🎉', description: 'Выучено первое слово', icon: '🎉', category: 'special', tier: 1, requirement: 1, xp: 10 },
-        { key: 'early_bird', name: 'Ранняя пташка 🌅', description: 'Занятие до 8:00', icon: '🌅', category: 'special', tier: 1, requirement: 1, xp: 25 },
-        { key: 'night_owl', name: 'Ночная сова 🦉', description: 'Занятие после 23:00', icon: '🦉', category: 'special', tier: 1, requirement: 1, xp: 25 },
+        { key: 'first_word', name: 'First Word 🎉', description: 'Learned first word', icon: '🎉', category: 'special', tier: 1, requirement: 1, xp: 10 },
+        { key: 'early_bird', name: 'Early Bird 🌅', description: 'Study before 8:00 AM', icon: '🌅', category: 'special', tier: 1, requirement: 1, xp: 25 },
+        { key: 'night_owl', name: 'Night Owl 🦉', description: 'Study after 11:00 PM', icon: '🦉', category: 'special', tier: 1, requirement: 1, xp: 25 },
     ];
 
     try {
@@ -1578,7 +1578,9 @@ async function initializeAchievements() {
             await db.query(
                 `INSERT INTO achievements (achievement_key, name, description, icon, category, tier, requirement_value, xp_reward)
                  VALUES ($1, $2, $3, $4, $5, $6, $7, $8)
-                 ON CONFLICT (achievement_key) DO NOTHING`,
+                 ON CONFLICT (achievement_key) DO UPDATE SET
+                    name = EXCLUDED.name,
+                    description = EXCLUDED.description`,
                 [ach.key, ach.name, ach.description, ach.icon, ach.category, ach.tier, ach.requirement, ach.xp]
             );
         }
