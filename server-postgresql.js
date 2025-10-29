@@ -7294,6 +7294,17 @@ app.post('/api/admin/achievements/update-all', async (req, res) => {
     }
 });
 
+// Get all achievements (for debugging)
+app.get('/api/admin/achievements/list', async (req, res) => {
+    try {
+        const result = await db.query('SELECT * FROM achievements ORDER BY category, tier');
+        res.json(result.rows);
+    } catch (err) {
+        logger.error('Error fetching achievements:', err);
+        res.status(500).json({ error: err.message });
+    }
+});
+
 // ========================================
 // USER PROFILES SYSTEM ENDPOINTS
 // ========================================
