@@ -7273,6 +7273,27 @@ app.post('/api/admin/achievements', async (req, res) => {
     }
 });
 
+// Update all achievements from code definitions (for translations/updates)
+app.post('/api/admin/achievements/update-all', async (req, res) => {
+    try {
+        // Call the initializeAchievements function to update all achievements
+        await initializeAchievements();
+
+        // Get updated achievements count
+        const result = await db.query('SELECT COUNT(*) FROM achievements');
+        const count = parseInt(result.rows[0].count);
+
+        res.json({
+            success: true,
+            message: `Successfully updated all achievements`,
+            count: count
+        });
+    } catch (err) {
+        logger.error('Error updating achievements:', err);
+        res.status(500).json({ error: err.message });
+    }
+});
+
 // ========================================
 // USER PROFILES SYSTEM ENDPOINTS
 // ========================================
