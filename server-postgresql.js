@@ -7305,6 +7305,48 @@ app.get('/api/admin/achievements/list', async (req, res) => {
     }
 });
 
+// Direct SQL update for achievements (emergency fix)
+app.post('/api/admin/achievements/force-translate', async (req, res) => {
+    try {
+        const updates = [
+            { key: 'streak_3', name: 'Little Flame 🔥', description: '3-day streak' },
+            { key: 'streak_7', name: 'Week of Power 💪', description: '7-day streak' },
+            { key: 'streak_30', name: 'Month of Victory 🏆', description: '30-day streak' },
+            { key: 'streak_100', name: 'Legend 👑', description: '100-day streak' },
+            { key: 'words_10', name: 'First Steps 🌱', description: 'Learned 10 words' },
+            { key: 'words_50', name: 'Connoisseur 📚', description: 'Learned 50 words' },
+            { key: 'words_100', name: 'Scholar 🎓', description: 'Learned 100 words' },
+            { key: 'words_500', name: 'Word Master ⭐', description: 'Learned 500 words' },
+            { key: 'words_1000', name: 'Polyglot 🌍', description: 'Learned 1000 words' },
+            { key: 'level_5', name: 'Novice 🥉', description: 'Reached level 5' },
+            { key: 'level_10', name: 'Experienced 🥈', description: 'Reached level 10' },
+            { key: 'level_25', name: 'Professional 🥇', description: 'Reached level 25' },
+            { key: 'level_50', name: 'Expert 💎', description: 'Reached level 50' },
+            { key: 'level_100', name: 'Grandmaster 👾', description: 'Reached level 100' },
+            { key: 'quiz_100', name: 'Trainee ✏️', description: '100 exercises completed' },
+            { key: 'quiz_500', name: 'Hard Worker 📝', description: '500 exercises completed' },
+            { key: 'quiz_1000', name: 'Tireless 💪', description: '1000 exercises completed' },
+            { key: 'first_word', name: 'First Word 🎉', description: 'Learned first word' },
+            { key: 'early_bird', name: 'Early Bird 🌅', description: 'Study before 8:00 AM' },
+            { key: 'night_owl', name: 'Night Owl 🦉', description: 'Study after 11:00 PM' }
+        ];
+
+        let updated = 0;
+        for (const ach of updates) {
+            await db.query(
+                'UPDATE achievements SET name = $1, description = $2 WHERE achievement_key = $3',
+                [ach.name, ach.description, ach.key]
+            );
+            updated++;
+        }
+
+        res.json({ success: true, message: `Force-updated ${updated} achievements`, count: updated });
+    } catch (err) {
+        logger.error('Error force-updating achievements:', err);
+        res.status(500).json({ error: err.message });
+    }
+});
+
 // ========================================
 // USER PROFILES SYSTEM ENDPOINTS
 // ========================================
