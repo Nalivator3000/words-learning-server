@@ -187,24 +187,6 @@ class Gamification {
 
         containerElement.innerHTML = `
             <div class="gamification-stats">
-                <!-- Level and XP Section -->
-                <section class="stats-section">
-                    <h2>📊 Level and Experience</h2>
-                    <div class="level-card">
-                        <div class="level-circle">
-                            <span class="level-number">${level}</span>
-                            <span class="level-label">LEVEL</span>
-                        </div>
-                        <div class="xp-progress">
-                            <div class="xp-bar-large">
-                                <div class="xp-bar-fill" style="width: ${progress}%;"></div>
-                                <span class="xp-bar-text">${currentLevelXP} / ${xpForNextLevel} XP</span>
-                            </div>
-                            <p class="xp-total">Total XP: <strong>${totalXP} XP</strong></p>
-                        </div>
-                    </div>
-                </section>
-
                 <!-- Streak Section -->
                 <section class="stats-section">
                     <h2>🔥 Streaks</h2>
