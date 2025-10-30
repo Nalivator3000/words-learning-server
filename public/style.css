@@ -4463,6 +4463,47 @@ input:focus, textarea:focus, select:focus {
     background: linear-gradient(90deg, rgba(251, 191, 36, 0.1) 0%, rgba(255, 255, 255, 0.03) 100%);
 }
 
+/* Import Cards Dark Theme */
+[data-theme="dark"] .import-card {
+    background: rgba(45, 55, 72, 0.95);
+    border: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+[data-theme="dark"] .import-card h3 {
+    color: var(--neutral-50);
+}
+
+[data-theme="dark"] .import-card p {
+    color: var(--neutral-300);
+}
+
+[data-theme="dark"] .import-card input[type="text"] {
+    background: var(--neutral-700);
+    border-color: var(--neutral-600);
+    color: var(--neutral-50);
+}
+
+[data-theme="dark"] .import-card input[type="text"]::placeholder {
+    color: var(--neutral-400);
+}
+
+/* Review Cards Dark Theme */
+[data-theme="dark"] .review-stats-container {
+    background: var(--neutral-800);
+}
+
+[data-theme="dark"] .review-stat-card {
+    background: var(--neutral-700);
+}
+
+[data-theme="dark"] .review-stat-label {
+    color: var(--neutral-300);
+}
+
+[data-theme="dark"] .review-stat-value {
+    color: var(--neutral-50);
+}
+
 /* Responsive Analytics */
 @media (max-width: 768px) {
     .chart-canvas-wrapper {
