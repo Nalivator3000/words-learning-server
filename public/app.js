@@ -726,21 +726,36 @@ class LanguageLearningApp {
         if (!file) return;
 
         try {
+            const user = userManager.getCurrentUser();
+            const languagePair = userManager.getCurrentLanguagePair();
+
+            if (!user || !languagePair) {
+                this.showImportStatus('Please select a language pair first', 'error');
+                return;
+            }
+
             const text = await file.text();
             const words = ImportManager.parseCSV(text);
 
             if (words.length === 0) {
-                this.showImportStatus('Файл не содержит корректных данных', 'error');
+                this.showImportStatus('File contains no valid data', 'error');
                 return;
             }
 
-            await database.addWords(words);
-            this.showImportStatus(`Успешно иmпортировано ${words.length} слов`, 'success');
+            // Add userId and languagePairId to each word
+            const wordsWithMetadata = words.map(word => ({
+                ...word,
+                userId: user.id,
+                languagePairId: languagePair.id
+            }));
+
+            await database.addWords(wordsWithMetadata);
+            this.showImportStatus(`Successfully imported ${words.length} words`, 'success');
             await this.updateStats();
 
         } catch (error) {
             console.error('CSV Import Error:', error);
-            this.showImportStatus('Ошибка при иmпорте CSV файла', 'error');
+            this.showImportStatus('Error importing CSV file', 'error');
         }
 
         // Reset file input
@@ -766,23 +781,38 @@ schreiben,Sie schreibt einen Brief.,Писать,Она пишет письmо.`
     async handleGoogleSheetsImport() {
         const url = document.getElementById('googleSheetsUrl').value.trim();
         if (!url) {
-            this.showImportStatus('Введите ссылку на Google Таблицы', 'error');
+            this.showImportStatus('Please enter Google Sheets URL', 'error');
             return;
         }
 
         try {
-            this.showImportStatus('Загрузка данных...', 'info');
+            const user = userManager.getCurrentUser();
+            const languagePair = userManager.getCurrentLanguagePair();
+
+            if (!user || !languagePair) {
+                this.showImportStatus('Please select a language pair first', 'error');
+                return;
+            }
+
+            this.showImportStatus('Loading data...', 'info');
             const words = await ImportManager.fetchGoogleSheets(url);
 
             console.log('📥 Received words from Google Sheets:', words);
 
             if (!words || words.length === 0) {
-                this.showImportStatus('Таблица не содержит корректных данных', 'error');
+                this.showImportStatus('Spreadsheet contains no valid data', 'error');
                 return;
             }
 
-            await database.addWords(words);
-            this.showImportStatus(`Успешно иmпортировано ${words.length} слов`, 'success');
+            // Add userId and languagePairId to each word
+            const wordsWithMetadata = words.map(word => ({
+                ...word,
+                userId: user.id,
+                languagePairId: languagePair.id
+            }));
+
+            await database.addWords(wordsWithMetadata);
+            this.showImportStatus(`Successfully imported ${words.length} words`, 'success');
             await this.updateStats();
 
             // Clear input
