@@ -4504,6 +4504,49 @@ input:focus, textarea:focus, select:focus {
     color: var(--neutral-50);
 }
 
+/* Quiz/Study Cards Dark Theme */
+[data-theme="dark"] .word-building-input {
+    background: var(--neutral-700);
+    border-color: var(--neutral-600);
+    color: var(--neutral-50);
+}
+
+[data-theme="dark"] .word-building-input:focus {
+    border-color: var(--primary-400);
+    box-shadow: 0 0 0 4px rgba(102, 126, 234, 0.2);
+}
+
+[data-theme="dark"] .word-building-input.correct {
+    background: rgba(16, 185, 129, 0.2);
+    border-color: var(--accent-emerald);
+}
+
+[data-theme="dark"] .word-building-input.partial {
+    background: rgba(251, 191, 36, 0.2);
+    border-color: var(--accent-amber);
+}
+
+[data-theme="dark"] .word-building-input.incorrect {
+    background: rgba(244, 63, 94, 0.2);
+    border-color: var(--accent-rose);
+}
+
+[data-theme="dark"] .letter-btn {
+    background: var(--neutral-700);
+    color: var(--neutral-50);
+    border-color: var(--neutral-600);
+}
+
+[data-theme="dark"] .letter-btn:hover:not(:disabled) {
+    background: var(--neutral-600);
+    border-color: var(--primary-400);
+}
+
+[data-theme="dark"] .letter-btn:disabled {
+    background: var(--neutral-800);
+    color: var(--neutral-500);
+}
+
 /* Responsive Analytics */
 @media (max-width: 768px) {
     .chart-canvas-wrapper {
