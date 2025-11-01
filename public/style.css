@@ -456,6 +456,11 @@
     background: rgba(31, 41, 55, 0.9);
 }
 
+[data-theme="dark"] .quiz-area {
+    background: rgba(31, 41, 55, 0.9);
+    border: 1px solid rgba(255, 255, 255, 0.1);
+}
+
 [data-theme="dark"] .quiz-question {
     color: var(--neutral-50);
 }

@@ -200,9 +200,10 @@ class QuizManager {
             const previousLevel = await this.getPreviousLevel(newTotalXP - xpAmount);
             const leveledUp = level > previousLevel;
 
-            if (xpAmount > 0) {
-                window.gamification.showXPNotification(xpAmount, level, leveledUp);
-            }
+            // Notification disabled to avoid interrupting learning flow
+            // if (xpAmount > 0) {
+            //     window.gamification.showXPNotification(xpAmount, level, leveledUp);
+            // }
         }
 
         // Show achievement notifications
