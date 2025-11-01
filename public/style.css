@@ -234,7 +234,11 @@
     color: var(--neutral-50);
 }
 
-/* Dark theme component overrides */
+/* ========================================
+   UNIFIED DARK THEME SYSTEM
+   ======================================== */
+
+/* Main sections */
 [data-theme="dark"] .section {
     background: rgba(31, 41, 55, 0.9);
     border: 1px solid rgba(255, 255, 255, 0.1);
@@ -248,38 +252,84 @@
     background: linear-gradient(90deg, var(--primary-500) 0%, var(--secondary-500) 100%);
 }
 
+/* Unified card system - all cards use same style */
 [data-theme="dark"] .stats-card,
 [data-theme="dark"] .word-card,
-[data-theme="dark"] .language-card {
-    background: rgba(55, 65, 81, 0.6);
+[data-theme="dark"] .language-card,
+[data-theme="dark"] .stat-card,
+[data-theme="dark"] .mode-btn,
+[data-theme="dark"] .achievement-card,
+[data-theme="dark"] .leaderboard-item,
+[data-theme="dark"] .review-stat-card {
+    background: rgba(55, 65, 81, 0.7);
     border: 1px solid rgba(255, 255, 255, 0.1);
+    transition: all 0.3s ease;
 }
 
 [data-theme="dark"] .stats-card:hover,
 [data-theme="dark"] .word-card:hover,
-[data-theme="dark"] .language-card:hover {
-    background: rgba(55, 65, 81, 0.8);
-    box-shadow: 0 8px 20px rgba(0, 0, 0, 0.4);
+[data-theme="dark"] .language-card:hover,
+[data-theme="dark"] .stat-card:hover,
+[data-theme="dark"] .mode-btn:hover,
+[data-theme="dark"] .achievement-card:hover,
+[data-theme="dark"] .leaderboard-item:hover {
+    background: rgba(55, 65, 81, 0.9);
+    border-color: rgba(139, 92, 246, 0.4);
+    box-shadow: 0 8px 20px rgba(0, 0, 0, 0.5);
 }
 
+/* Unified text colors for labels */
 [data-theme="dark"] .stats-label,
 [data-theme="dark"] .word-word,
-[data-theme="dark"] .language-name {
+[data-theme="dark"] .language-name,
+[data-theme="dark"] .review-stat-label,
+[data-theme="dark"] .achievement-title,
+[data-theme="dark"] h3,
+[data-theme="dark"] h4 {
     color: var(--neutral-200);
 }
 
+/* Unified text colors for values */
 [data-theme="dark"] .stats-value,
-[data-theme="dark"] .word-translation {
+[data-theme="dark"] .word-translation,
+[data-theme="dark"] .review-stat-value,
+[data-theme="dark"] .achievement-description {
     color: var(--neutral-50);
 }
 
-[data-theme="dark"] button:not(.theme-toggle):not(.settings-btn) {
+/* Unified buttons - primary action buttons */
+[data-theme="dark"] button:not(.theme-toggle):not(.settings-btn):not(.nav-btn):not(.choice-btn):not(.letter-btn) {
     background: linear-gradient(135deg, var(--primary-600) 0%, var(--primary-700) 100%);
     color: white;
+    border: 1px solid rgba(139, 92, 246, 0.3);
 }
 
-[data-theme="dark"] button:not(.theme-toggle):not(.settings-btn):hover {
+[data-theme="dark"] button:not(.theme-toggle):not(.settings-btn):not(.nav-btn):not(.choice-btn):not(.letter-btn):hover:not(:disabled) {
     background: linear-gradient(135deg, var(--primary-500) 0%, var(--primary-600) 100%);
+    border-color: rgba(139, 92, 246, 0.5);
+    box-shadow: 0 4px 12px rgba(124, 58, 237, 0.3);
+}
+
+/* Unified inputs and textareas */
+[data-theme="dark"] input:not([type="checkbox"]):not([type="radio"]),
+[data-theme="dark"] textarea,
+[data-theme="dark"] select {
+    background: var(--neutral-700);
+    border: 1px solid var(--neutral-600);
+    color: var(--neutral-50);
+}
+
+[data-theme="dark"] input:not([type="checkbox"]):not([type="radio"]):focus,
+[data-theme="dark"] textarea:focus,
+[data-theme="dark"] select:focus {
+    border-color: var(--primary-400);
+    box-shadow: 0 0 0 3px rgba(139, 92, 246, 0.2);
+    background: var(--neutral-700);
+}
+
+[data-theme="dark"] input::placeholder,
+[data-theme="dark"] textarea::placeholder {
+    color: var(--neutral-400);
 }
 
 /* Dark theme navigation buttons */
@@ -298,18 +348,28 @@
     color: white;
 }
 
-/* Dark theme cards and sections */
-[data-theme="dark"] .stat-card,
-[data-theme="dark"] .mode-btn,
-[data-theme="dark"] .word-card {
-    background: rgba(31, 41, 55, 0.8);
-    border: 1px solid rgba(255, 255, 255, 0.1);
+/* Quiz choice buttons */
+[data-theme="dark"] .choice-btn {
+    background: var(--neutral-700);
+    border: 2px solid var(--neutral-600);
+    color: var(--neutral-50);
 }
 
-[data-theme="dark"] .stat-card:hover,
-[data-theme="dark"] .mode-btn:hover {
-    background: rgba(55, 65, 81, 0.9);
-    border-color: rgba(255, 255, 255, 0.2);
+[data-theme="dark"] .choice-btn:hover:not(:disabled) {
+    background: var(--neutral-600);
+    border-color: var(--primary-400);
+}
+
+[data-theme="dark"] .choice-btn.correct {
+    background: rgba(16, 185, 129, 0.2);
+    border-color: var(--status-success);
+    color: var(--neutral-50);
+}
+
+[data-theme="dark"] .choice-btn.incorrect {
+    background: rgba(239, 68, 68, 0.2);
+    border-color: var(--status-error);
+    color: var(--neutral-50);
 }
 
 /* Dark theme header and navigation */
@@ -4497,17 +4557,7 @@ input:focus, textarea:focus, select:focus {
     background: var(--neutral-800);
 }
 
-[data-theme="dark"] .review-stat-card {
-    background: var(--neutral-700);
-}
-
-[data-theme="dark"] .review-stat-label {
-    color: var(--neutral-300);
-}
-
-[data-theme="dark"] .review-stat-value {
-    color: var(--neutral-50);
-}
+/* Removed duplicate review-stat styles - unified above in main dark theme section */
 
 /* Quiz/Study Cards Dark Theme */
 [data-theme="dark"] .word-building-input {
