@@ -418,6 +418,7 @@ class LanguageLearningApp {
         document.getElementById('addLanguagePairBtn').addEventListener('click', () => this.showLanguagePairDialog());
         document.getElementById('lessonSizeInput').addEventListener('change', (e) => this.updateLessonSize(e.target.value));
         document.getElementById('syncBtn').addEventListener('click', () => this.syncWithServer());
+        document.getElementById('saveDailyGoalsBtn').addEventListener('click', () => this.saveDailyGoals());
 
         // Voice settings functionality
         this.setupVoiceSettings();
@@ -1749,13 +1750,16 @@ schreiben,Sie schreibt einen Brief.,Писать,Она пишет письmо.`
 
     async updateSettingsPage() {
         if (!userManager.isLoggedIn()) return;
-        
+
         // Update language pairs list
         this.renderLanguagePairs();
-        
+
         // Update lesson size input
         const lessonSize = userManager.getLessonSize();
         document.getElementById('lessonSizeInput').value = lessonSize;
+
+        // Load daily goals
+        await this.loadDailyGoals();
     }
 
     renderLanguagePairs() {
@@ -1974,6 +1978,68 @@ schreiben,Sie schreibt einen Brief.,Писать,Она пишет письmо.`
             await userManager.setLessonSize(parseInt(size));
         } catch (error) {
             console.error('Error updating lesson size:', error);
+        }
+    }
+
+    async saveDailyGoals() {
+        try {
+            const user = userManager.getCurrentUser();
+            if (!user) {
+                this.showNotification('Please login first', 'error');
+                return;
+            }
+
+            const xpGoal = parseInt(document.getElementById('dailyXPGoalInput').value);
+            const wordsGoal = parseInt(document.getElementById('dailyWordsGoalInput').value);
+            const exercisesGoal = parseInt(document.getElementById('dailyExercisesGoalInput').value);
+
+            const response = await fetch(`${database.apiUrl}/api/daily-goals/${user.id}/targets`, {
+                method: 'PUT',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify({
+                    xpGoal,
+                    wordsGoal,
+                    exercisesGoal
+                })
+            });
+
+            if (!response.ok) {
+                throw new Error('Failed to save daily goals');
+            }
+
+            this.showNotification('Daily goals saved successfully!', 'success');
+
+            // Refresh home page to show updated goals
+            if (this.currentSection === 'homeSection') {
+                await this.loadHome();
+            }
+        } catch (error) {
+            console.error('Error saving daily goals:', error);
+            this.showNotification('Failed to save daily goals', 'error');
+        }
+    }
+
+    async loadDailyGoals() {
+        try {
+            const user = userManager.getCurrentUser();
+            if (!user) return;
+
+            const response = await fetch(`${database.apiUrl}/api/daily-goals/${user.id}`);
+            if (!response.ok) return;
+
+            const goals = await response.json();
+
+            // Set input values if goals exist
+            if (goals && goals.length > 0) {
+                const goal = goals[0]; // Assuming single row with all goals
+                if (goal.xp_goal) document.getElementById('dailyXPGoalInput').value = goal.xp_goal;
+                if (goal.words_goal) document.getElementById('dailyWordsGoalInput').value = goal.words_goal;
+                if (goal.quizzes_goal) document.getElementById('dailyExercisesGoalInput').value = goal.quizzes_goal;
+            }
+        } catch (error) {
+            console.error('Error loading daily goals:', error);
         }
     }
 

@@ -434,6 +434,23 @@
                         </label>
                     </div>
 
+                    <div class="settings-group">
+                        <h3>🎯 Daily Goals</h3>
+                        <label style="display: flex; flex-direction: column; gap: 8px; margin-bottom: 16px;">
+                            <span>Daily XP Goal:</span>
+                            <input type="number" id="dailyXPGoalInput" min="10" max="1000" step="10" value="50" style="padding: 8px; border-radius: 8px;">
+                        </label>
+                        <label style="display: flex; flex-direction: column; gap: 8px; margin-bottom: 16px;">
+                            <span>Words to Learn Daily:</span>
+                            <input type="number" id="dailyWordsGoalInput" min="1" max="50" value="5" style="padding: 8px; border-radius: 8px;">
+                        </label>
+                        <label style="display: flex; flex-direction: column; gap: 8px;">
+                            <span>Exercises to Complete Daily:</span>
+                            <input type="number" id="dailyExercisesGoalInput" min="1" max="100" value="10" style="padding: 8px; border-radius: 8px;">
+                        </label>
+                        <button id="saveDailyGoalsBtn" class="action-btn" style="margin-top: 16px;">Save Goals</button>
+                    </div>
+
                     <!-- TTS Settings hidden - too complex for basic users -->
                     <!--
                     <div class="settings-group">

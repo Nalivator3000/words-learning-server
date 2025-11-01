@@ -14012,6 +14012,42 @@ app.delete('/api/cramming/:sessionId', async (req, res) => {
 });
 
 // Serve main page
+// Update daily goals targets
+app.put('/api/daily-goals/:userId/targets', async (req, res) => {
+    try {
+        const { userId } = req.params;
+        const { xpGoal, wordsGoal, exercisesGoal } = req.body;
+
+        if (!xpGoal || !wordsGoal || !exercisesGoal) {
+            return res.status(400).json({ error: 'All goals (xpGoal, wordsGoal, exercisesGoal) are required' });
+        }
+
+        const today = new Date().toISOString().split('T')[0];
+
+        // Update or create today's goals with new targets
+        await db.query(`
+            INSERT INTO daily_goals (user_id, goal_date, xp_goal, words_goal, quizzes_goal)
+            VALUES ($1, $2, $3, $4, $5)
+            ON CONFLICT (user_id, goal_date)
+            DO UPDATE SET
+                xp_goal = EXCLUDED.xp_goal,
+                words_goal = EXCLUDED.words_goal,
+                quizzes_goal = EXCLUDED.quizzes_goal,
+                updated_at = CURRENT_TIMESTAMP
+        `, [parseInt(userId), today, xpGoal, wordsGoal, exercisesGoal]);
+
+        logger.info(`Updated daily goals for user ${userId}: XP=${xpGoal}, Words=${wordsGoal}, Exercises=${exercisesGoal}`);
+
+        res.json({
+            message: 'Daily goals updated successfully',
+            goals: { xpGoal, wordsGoal, exercisesGoal }
+        });
+    } catch (err) {
+        logger.error('Error updating daily goals:', err);
+        res.status(500).json({ error: err.message });
+    }
+});
+
 app.get('/', (req, res) => {
     res.sendFile(path.join(__dirname, 'public', 'index.html'));
 });
