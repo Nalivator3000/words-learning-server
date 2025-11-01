@@ -260,7 +260,8 @@
 [data-theme="dark"] .mode-btn,
 [data-theme="dark"] .achievement-card,
 [data-theme="dark"] .leaderboard-item,
-[data-theme="dark"] .review-stat-card {
+[data-theme="dark"] .review-stat-card,
+[data-theme="dark"] .word-item {
     background: rgba(55, 65, 81, 0.7);
     border: 1px solid rgba(255, 255, 255, 0.1);
     transition: all 0.3s ease;
@@ -272,7 +273,8 @@
 [data-theme="dark"] .stat-card:hover,
 [data-theme="dark"] .mode-btn:hover,
 [data-theme="dark"] .achievement-card:hover,
-[data-theme="dark"] .leaderboard-item:hover {
+[data-theme="dark"] .leaderboard-item:hover,
+[data-theme="dark"] .word-item:hover {
     background: rgba(55, 65, 81, 0.9);
     border-color: rgba(139, 92, 246, 0.4);
     box-shadow: 0 8px 20px rgba(0, 0, 0, 0.5);
@@ -295,6 +297,11 @@
 [data-theme="dark"] .review-stat-value,
 [data-theme="dark"] .achievement-description {
     color: var(--neutral-50);
+}
+
+/* Word item meta info (dates, etc) */
+[data-theme="dark"] .word-meta {
+    color: var(--neutral-400);
 }
 
 /* Unified buttons - primary action buttons */
