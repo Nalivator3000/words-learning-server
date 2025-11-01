@@ -10689,21 +10689,21 @@ app.put('/api/words/:id/progress', async (req, res) => {
 
         const word = wordResult.rows[0];
 
-        // Point system based on question type
-        // Multiple choice: 2 points, Word building: 5 points, Typing: 10 points
+        // Point system based on question type (3x multiplier for faster progression)
+        // Multiple choice: 6 points, Word building: 15 points, Typing: 30 points
         // Survival mode: 0 points (excluded by client)
         const pointsMap = {
-            'multiple': 2,
-            'multipleChoice': 2,
-            'reverse_multiple': 2,
-            'reverseMultipleChoice': 2,
-            'word_building': 5,
-            'wordBuilding': 5,
-            'typing': 10,
-            'complex': 5  // Weighted average of mixed types
+            'multiple': 6,              // 2 * 3
+            'multipleChoice': 6,        // 2 * 3
+            'reverse_multiple': 6,      // 2 * 3
+            'reverseMultipleChoice': 6, // 2 * 3
+            'word_building': 15,        // 5 * 3
+            'wordBuilding': 15,         // 5 * 3
+            'typing': 30,               // 10 * 3
+            'complex': 15               // 5 * 3 (weighted average)
         };
 
-        const points = pointsMap[questionType] || 2; // Default 2 points
+        const points = pointsMap[questionType] || 6; // Default 6 points (2 * 3)
 
         // Point system: correctCount accumulates earned points (max 100)
         // totalPoints is always 100 (fixed maximum)
@@ -10769,23 +10769,23 @@ app.put('/api/words/:id/progress', async (req, res) => {
         let xpResult = null;
 
         if (correct) {
-            // Award XP based on question difficulty (3x multiplier for faster progression)
+            // Award XP based on question difficulty
             const xpMap = {
-                'multiple': 15,        // 5 * 3
-                'multipleChoice': 15,  // 5 * 3
-                'reverse_multiple': 15,  // 5 * 3
-                'reverseMultipleChoice': 15,  // 5 * 3
-                'word_building': 30,   // 10 * 3
-                'wordBuilding': 30,    // 10 * 3
-                'typing': 45,          // 15 * 3
-                'complex': 30          // 10 * 3
+                'multiple': 5,
+                'multipleChoice': 5,
+                'reverse_multiple': 5,
+                'reverseMultipleChoice': 5,
+                'word_building': 10,
+                'wordBuilding': 10,
+                'typing': 15,
+                'complex': 10
             };
 
-            xpEarned = xpMap[questionType] || 15;
+            xpEarned = xpMap[questionType] || 5;
 
             // Bonus XP for completing a word (reaching learned status)
             if (newStatus === 'learned' && word.status !== 'learned') {
-                xpEarned += 150; // Bonus XP for fully learning a word (50 * 3)
+                xpEarned += 50; // Bonus XP for fully learning a word
                 xpResult = await awardXP(userId, 'word_learned', xpEarned, `Learned: ${word.word}`);
             } else {
                 xpResult = await awardXP(userId, 'quiz_answer', xpEarned, `${questionType}: ${word.word}`);
