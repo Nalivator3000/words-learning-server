@@ -304,6 +304,11 @@
     color: var(--neutral-400);
 }
 
+/* Fix word-item border-bottom in dark theme */
+[data-theme="dark"] .word-item {
+    border-bottom-color: rgba(255, 255, 255, 0.1);
+}
+
 /* Unified buttons - primary action buttons */
 [data-theme="dark"] button:not(.theme-toggle):not(.settings-btn):not(.nav-btn):not(.choice-btn):not(.letter-btn) {
     background: linear-gradient(135deg, var(--primary-600) 0%, var(--primary-700) 100%);
