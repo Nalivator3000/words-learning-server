@@ -10721,33 +10721,51 @@ app.put('/api/words/:id/progress', async (req, res) => {
         // Calculate percentage: (correctCount / 100) * 100 = correctCount
         const percentage = newCorrectCount;
 
-        // Determine new status based on points and review cycle
+        // Improved Spaced Repetition System (SRS)
+        // Intervals: 1, 3, 7, 14, 30, 60, 120+ days (optimized for memory retention)
         let newStatus = word.status;
         let newReviewCycle = word.reviewcycle || 1;
         let nextReviewDate = null;
 
-        if (word.status === 'studying' && newCorrectCount >= 80) {
-            // Completed studying phase (reached 80+ points out of 100) - move to review based on cycle
-            if (newReviewCycle === 1) {
-                newStatus = 'review_7';
-                // Set next review date to 7 days from now
+        // SRS interval schedule (in days)
+        const srsIntervals = [1, 3, 7, 14, 30, 60, 120];
+
+        if (word.status === 'studying' && newCorrectCount >= 50) {
+            // Faster completion: only 50 points needed (was 80)
+            // Move to review with appropriate interval based on cycle
+            if (newReviewCycle <= srsIntervals.length) {
+                const intervalDays = srsIntervals[newReviewCycle - 1];
+                newStatus = `review_${intervalDays}`;
                 nextReviewDate = new Date();
-                nextReviewDate.setDate(nextReviewDate.getDate() + 7);
-                logger.info(`📅 Word ${id} moved to review_7, next review: ${nextReviewDate.toISOString()}`);
-            } else if (newReviewCycle === 2) {
-                newStatus = 'review_30';
-                // Set next review date to 30 days from now
-                nextReviewDate = new Date();
-                nextReviewDate.setDate(nextReviewDate.getDate() + 30);
-                logger.info(`📅 Word ${id} moved to review_30, next review: ${nextReviewDate.toISOString()}`);
-            } else if (newReviewCycle >= 3) {
+                nextReviewDate.setDate(nextReviewDate.getDate() + intervalDays);
+                logger.info(`📅 Word ${id} moved to ${newStatus}, next review in ${intervalDays} days: ${nextReviewDate.toISOString()}`);
+            } else {
+                // After completing all intervals (7+ reviews), mark as learned
                 newStatus = 'learned';
-                logger.info(`🎉 Word ${id} fully learned after 3 cycles!`);
+                logger.info(`🎉 Word ${id} fully learned after ${newReviewCycle} review cycles!`);
             }
-        } else if (!correct && (word.status === 'review_7' || word.status === 'review_30')) {
-            // Failed review - reset to studying but keep cycle
+        } else if (word.status.startsWith('review_') && correct) {
+            // Successful review - move to next interval
+            newReviewCycle = newReviewCycle + 1;
+            newCorrectCount = 0; // Reset points for next cycle
+
+            if (newReviewCycle <= srsIntervals.length) {
+                const intervalDays = srsIntervals[newReviewCycle - 1];
+                newStatus = `review_${intervalDays}`;
+                nextReviewDate = new Date();
+                nextReviewDate.setDate(nextReviewDate.getDate() + intervalDays);
+                logger.info(`✅ Word ${id} passed review! Next review in ${intervalDays} days (cycle ${newReviewCycle})`);
+            } else {
+                // Completed all intervals
+                newStatus = 'learned';
+                logger.info(`🎉 Word ${id} fully learned after ${newReviewCycle - 1} review cycles!`);
+            }
+        } else if (!correct && word.status.startsWith('review_')) {
+            // Failed review - reset to studying but keep cycle for tracking
             newStatus = 'studying';
-            logger.info(`❌ Word ${id} failed review, back to studying (cycle ${newReviewCycle})`);
+            // Reset progress to 20 points (not 0) to make retry faster
+            newCorrectCount = 20;
+            logger.info(`❌ Word ${id} failed review (cycle ${newReviewCycle}), back to studying with 20 points`);
         }
 
         const updateQuery = `UPDATE words
@@ -10767,23 +10785,23 @@ app.put('/api/words/:id/progress', async (req, res) => {
         let xpResult = null;
 
         if (correct) {
-            // Award XP based on question difficulty
+            // Award XP based on question difficulty (3x multiplier for faster progression)
             const xpMap = {
-                'multiple': 5,
-                'multipleChoice': 5,
-                'reverse_multiple': 5,
-                'reverseMultipleChoice': 5,
-                'word_building': 10,
-                'wordBuilding': 10,
-                'typing': 15,
-                'complex': 10
+                'multiple': 15,        // 5 * 3
+                'multipleChoice': 15,  // 5 * 3
+                'reverse_multiple': 15,  // 5 * 3
+                'reverseMultipleChoice': 15,  // 5 * 3
+                'word_building': 30,   // 10 * 3
+                'wordBuilding': 30,    // 10 * 3
+                'typing': 45,          // 15 * 3
+                'complex': 30          // 10 * 3
             };
 
-            xpEarned = xpMap[questionType] || 5;
+            xpEarned = xpMap[questionType] || 15;
 
             // Bonus XP for completing a word (reaching learned status)
             if (newStatus === 'learned' && word.status !== 'learned') {
-                xpEarned += 50; // Bonus XP for fully learning a word
+                xpEarned += 150; // Bonus XP for fully learning a word (50 * 3)
                 xpResult = await awardXP(userId, 'word_learned', xpEarned, `Learned: ${word.word}`);
             } else {
                 xpResult = await awardXP(userId, 'quiz_answer', xpEarned, `${questionType}: ${word.word}`);
@@ -10889,7 +10907,7 @@ app.post('/api/words/check-expired-reviews', async (req, res) => {
             `SELECT id, word, status, reviewCycle, nextReviewDate
              FROM words
              WHERE user_id = $1 AND language_pair_id = $2
-             AND status IN ('review_7', 'review_30')
+             AND status LIKE 'review_%'
              AND nextReviewDate IS NOT NULL
              AND nextReviewDate <= CURRENT_TIMESTAMP`,
             [userId, languagePairId]
