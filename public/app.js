@@ -876,7 +876,7 @@ schreiben,Sie schreibt einen Brief.,Писать,Она пишет письmо.`
     renderQuestion(quizData) {
         const { question, questionNumber, totalQuestions, progress } = quizData;
         
-        document.getElementById('questionCounter').textContent = `Вопрос ${questionNumber} из ${totalQuestions}`;
+        document.getElementById('questionCounter').textContent = `Question ${questionNumber} of ${totalQuestions}`;
         document.getElementById('progressFill').style.width = `${progress}%`;
         
         const questionTextEl = document.getElementById('questionText');
@@ -961,7 +961,7 @@ schreiben,Sie schreibt einen Brief.,Писать,Она пишет письmо.`
     renderReviewQuestion(quizData) {
         const { question, questionNumber, totalQuestions, progress } = quizData;
         
-        document.getElementById('reviewQuestionCounter').textContent = `Вопрос ${questionNumber} из ${totalQuestions}`;
+        document.getElementById('reviewQuestionCounter').textContent = `Question ${questionNumber} of ${totalQuestions}`;
         document.getElementById('reviewProgressFill').style.width = `${progress}%`;
         
         const questionTextEl = document.getElementById('reviewQuestionText');
@@ -1390,7 +1390,7 @@ schreiben,Sie schreibt einen Brief.,Писать,Она пишет письmо.`
         const wordInput = document.createElement('input');
         wordInput.type = 'text';
         wordInput.className = 'word-building-input';
-        wordInput.placeholder = 'Составьте слово...';
+        wordInput.placeholder = 'Build the word...';
         wordInput.dataset.enterPressed = 'false';
         wordInput.onkeypress = (e) => {
             if (e.key === 'Enter') {

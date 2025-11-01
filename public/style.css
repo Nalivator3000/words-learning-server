@@ -529,7 +529,10 @@
 }
 
 [data-theme="dark"] .quiz-question,
-[data-theme="dark"] .word-text {
+[data-theme="dark"] .word-text,
+[data-theme="dark"] .quiz-area strong,
+[data-theme="dark"] #questionText strong,
+[data-theme="dark"] #reviewQuestionText strong {
     color: var(--neutral-50);
 }
 
