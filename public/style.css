@@ -521,7 +521,8 @@
     border: 1px solid rgba(255, 255, 255, 0.1);
 }
 
-[data-theme="dark"] .quiz-question {
+[data-theme="dark"] .quiz-question,
+[data-theme="dark"] .word-text {
     color: var(--neutral-50);
 }
 
