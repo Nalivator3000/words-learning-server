@@ -10722,50 +10722,34 @@ app.put('/api/words/:id/progress', async (req, res) => {
         const percentage = newCorrectCount;
 
         // Improved Spaced Repetition System (SRS)
-        // Intervals: 1, 3, 7, 14, 30, 60, 120+ days (optimized for memory retention)
+        // Cycle: studying (reach 100 pts) → review_N (wait N days) → studying (cycle++) → repeat
+        // Intervals: 1, 3, 7, 14, 30, 60, 120 days (optimized for memory retention)
         let newStatus = word.status;
-        let newReviewCycle = word.reviewcycle || 1;
+        let newReviewCycle = word.reviewcycle || 0;
         let nextReviewDate = null;
 
         // SRS interval schedule (in days)
         const srsIntervals = [1, 3, 7, 14, 30, 60, 120];
 
-        if (word.status === 'studying' && newCorrectCount >= 50) {
-            // Faster completion: only 50 points needed (was 80)
-            // Move to review with appropriate interval based on cycle
-            if (newReviewCycle <= srsIntervals.length) {
-                const intervalDays = srsIntervals[newReviewCycle - 1];
+        if (word.status === 'studying' && newCorrectCount >= 100) {
+            // Reached 100 points - move to review phase
+            if (newReviewCycle < srsIntervals.length) {
+                const intervalDays = srsIntervals[newReviewCycle];
                 newStatus = `review_${intervalDays}`;
                 nextReviewDate = new Date();
                 nextReviewDate.setDate(nextReviewDate.getDate() + intervalDays);
-                logger.info(`📅 Word ${id} moved to ${newStatus}, next review in ${intervalDays} days: ${nextReviewDate.toISOString()}`);
+                logger.info(`📅 Word ${id} completed cycle ${newReviewCycle + 1}! Review in ${intervalDays} days: ${nextReviewDate.toISOString()}`);
             } else {
-                // After completing all intervals (7+ reviews), mark as learned
+                // After completing all intervals (7+ cycles), mark as learned
                 newStatus = 'learned';
-                logger.info(`🎉 Word ${id} fully learned after ${newReviewCycle} review cycles!`);
-            }
-        } else if (word.status.startsWith('review_') && correct) {
-            // Successful review - move to next interval
-            newReviewCycle = newReviewCycle + 1;
-            newCorrectCount = 0; // Reset points for next cycle
-
-            if (newReviewCycle <= srsIntervals.length) {
-                const intervalDays = srsIntervals[newReviewCycle - 1];
-                newStatus = `review_${intervalDays}`;
-                nextReviewDate = new Date();
-                nextReviewDate.setDate(nextReviewDate.getDate() + intervalDays);
-                logger.info(`✅ Word ${id} passed review! Next review in ${intervalDays} days (cycle ${newReviewCycle})`);
-            } else {
-                // Completed all intervals
-                newStatus = 'learned';
-                logger.info(`🎉 Word ${id} fully learned after ${newReviewCycle - 1} review cycles!`);
+                logger.info(`🎉 Word ${id} fully learned after ${newReviewCycle + 1} cycles!`);
             }
         } else if (!correct && word.status.startsWith('review_')) {
-            // Failed review - reset to studying but keep cycle for tracking
+            // Failed review during waiting period - restart cycle with same interval
             newStatus = 'studying';
-            // Reset progress to 20 points (not 0) to make retry faster
-            newCorrectCount = 20;
-            logger.info(`❌ Word ${id} failed review (cycle ${newReviewCycle}), back to studying with 20 points`);
+            newCorrectCount = 0;
+            nextReviewDate = null;
+            logger.info(`❌ Word ${id} failed review (cycle ${newReviewCycle + 1}), restarting cycle from 0 points`);
         }
 
         const updateQuery = `UPDATE words
@@ -10920,21 +10904,21 @@ app.post('/api/words/check-expired-reviews', async (req, res) => {
             });
         }
 
-        // Reset each expired word: status → studying, cycle++, reset points
+        // Reset each expired word: status → studying, cycle++, reset points to 0
         for (const word of expiredWords.rows) {
-            const newCycle = (word.reviewcycle || 1) + 1;
+            const newCycle = (word.reviewcycle || 0) + 1;
             await db.query(
                 `UPDATE words
                  SET status = 'studying',
                      reviewCycle = $1,
                      correctCount = 0,
-                     totalPoints = 0,
+                     totalPoints = 100,
                      nextReviewDate = NULL,
                      updatedAt = CURRENT_TIMESTAMP
                  WHERE id = $2`,
                 [newCycle, word.id]
             );
-            logger.info(`⏰ Word "${word.word}" (${word.status}) expired - reset to studying cycle ${newCycle}`);
+            logger.info(`⏰ Word "${word.word}" (${word.status}) expired - moved to studying cycle ${newCycle} (0/100 pts)`);
         }
 
         res.json({
