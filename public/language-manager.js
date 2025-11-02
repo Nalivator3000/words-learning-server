@@ -604,36 +604,52 @@ class LanguageManager {
     
     // Audio language detection for TTS
     getAudioLanguageCode(text, languagePair) {
-        if (!languagePair) return 'de-DE'; // Default fallback
-        
+        if (!languagePair) {
+            console.log('⚠️ No language pair, using default de-DE');
+            return 'de-DE'; // Default fallback
+        }
+
         const studyingLang = languagePair.fromLanguage;
         const nativeLang = languagePair.toLanguage;
-        
-        // Enhanced language detection
+
+        console.log(`🔍 Language detection for "${text}"`);
+        console.log(`   Studying: ${studyingLang}, Native: ${nativeLang}`);
+
+        // Improved language detection using specific character patterns
         const isNativeLanguage = this.detectNativeLanguage(text, nativeLang);
-        
+
+        console.log(`   Is native language (${nativeLang})? ${isNativeLanguage}`);
+
+        let audioCode;
         if (isNativeLanguage) {
-            return this.getAudioCode(nativeLang);
+            audioCode = this.getAudioCode(nativeLang);
+            console.log(`   ✅ Using NATIVE voice: ${audioCode}`);
         } else {
-            return this.getAudioCode(studyingLang);
+            audioCode = this.getAudioCode(studyingLang);
+            console.log(`   ✅ Using STUDYING voice: ${audioCode}`);
         }
+
+        return audioCode;
     }
-    
+
     detectNativeLanguage(text, nativeLanguage) {
         if (!text || !nativeLanguage) return false;
-        
+
         // Language-specific character patterns
         const patterns = {
-            'Russian': /[а-яё]/i,
-            'English': /^[a-zA-Z\s\-'.,"!?]+$/,
-            'German': /[äöüßÄÖÜ]|^[a-zA-Z\s\-'.,"!?]+$/,
-            'Spanish': /[ñáéíóúüÑÁÉÍÓÚÜ]|^[a-zA-Z\s\-'.,"!?]+$/,
-            'French': /[àâäéèêëïîôöùûüÿçÀÂÄÉÈÊËÏÎÔÖÙÛÜŸÇ]|^[a-zA-Z\s\-'.,"!?]+$/,
-            'Italian': /[àèéìíîòóùúÀÈÉÌÍÎÒÓÙÚ]|^[a-zA-Z\s\-'.,"!?]+$/
+            'Russian': /[а-яёА-ЯЁ]/,
+            'English': /^[a-zA-Z\s\-'.,"!?0-9]+$/, // Pure Latin without accents
+            'German': /[äöüßÄÖÜ]/,
+            'Spanish': /[ñáéíóúüÑÁÉÍÓÚÜ¿¡]/,
+            'French': /[àâäéèêëïîôöùûüÿçÀÂÄÉÈÊËÏÎÔÖÙÛÜŸÇ]/,
+            'Italian': /[àèéìíîòóùúÀÈÉÌÍÎÒÓÙÚ]/
         };
-        
+
         const pattern = patterns[nativeLanguage];
-        return pattern ? pattern.test(text) : false;
+        if (!pattern) return false;
+
+        // Check if text contains characters specific to the native language
+        return pattern.test(text);
     }
     
     getAudioCode(language) {
