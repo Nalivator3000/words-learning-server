@@ -350,7 +350,7 @@ class LanguageLearningApp {
             }
         } catch (error) {
             console.error('Failed to initialize app:', error);
-            this.showError('Ошибка инициализации приложения');
+            this.showError(i18n.t('app_init_error'));
         }
     }
 
@@ -459,7 +459,7 @@ class LanguageLearningApp {
         const password = document.getElementById('loginPassword').value;
         
         if (!email || !password) {
-            this.showAuthError('Пожалуйста, заполните все поля');
+            this.showAuthError(i18n.t('fill_all_fields'));
             return;
         }
         
@@ -480,17 +480,17 @@ class LanguageLearningApp {
         const confirmPassword = document.getElementById('registerPasswordConfirm').value;
         
         if (!name || !email || !password || !confirmPassword) {
-            this.showAuthError('Пожалуйста, заполните все поля');
+            this.showAuthError(i18n.t('fill_all_fields'));
             return;
         }
         
         if (password !== confirmPassword) {
-            this.showAuthError('Пароли не совпадают');
+            this.showAuthError(i18n.t('passwords_not_match'));
             return;
         }
         
         if (password.length < 6) {
-            this.showAuthError('Пароль должен быть не mенее 6 сиmволов');
+            this.showAuthError(i18n.t('password_min_length'));
             return;
         }
         
@@ -678,7 +678,7 @@ class LanguageLearningApp {
             const lastReviewed = word.lastreviewdate || word.lastReviewDate;
 
             const dateAdded = createdAt ? new Date(createdAt).toLocaleDateString('ru-RU') : 'N/A';
-            const dateStudied = lastReviewed ? new Date(lastReviewed).toLocaleDateString('ru-RU') : 'Не изучалось';
+            const dateStudied = lastReviewed ? new Date(lastReviewed).toLocaleDateString('ru-RU') : i18n.t('not_studied');
 
             metaDiv.innerHTML = `📅 Added: ${dateAdded} | 📚 Studied: ${dateStudied}`;
 
@@ -776,7 +776,7 @@ schreiben,Sie schreibt einen Brief.,Писать,Она пишет письmо.`
         link.click();
         URL.revokeObjectURL(link.href);
 
-        this.showImportStatus('Шаблон CSV скачан', 'success');
+        this.showImportStatus(i18n.t('csv_template_downloaded'), 'success');
     }
 
     async handleGoogleSheetsImport() {
@@ -1166,7 +1166,7 @@ schreiben,Sie schreibt einen Brief.,Писать,Она пишет письmо.`
         }
         
         // Special case: extract foreign word from "Правильный ответ: [foreign word]" pattern
-        if (!textToSpeak && result.feedback && result.feedback.includes('Правильный ответ:')) {
+        if (!textToSpeak && result.feedback && result.feedback.includes(i18n.t('correct_answer'))) {
             const match = result.feedback.match(/Правильный ответ:\s*(.+?)$/);
             if (match) {
                 const extractedText = match[1].trim();
@@ -1653,7 +1653,7 @@ schreiben,Sie schreibt einen Brief.,Писать,Она пишет письmо.`
         const button = document.createElement('button');
         button.className = className;
         button.innerHTML = '🔊';
-        button.title = 'Озвучить';
+        button.title = i18n.t('play_audio');
         button.onclick = (e) => {
             e.preventDefault();
             e.stopPropagation();
@@ -1669,7 +1669,7 @@ schreiben,Sie schreibt einen Brief.,Писать,Она пишет письmо.`
         const audioBtn = document.createElement('span');
         audioBtn.className = 'audio-btn-inline';
         audioBtn.innerHTML = ' 🔊';
-        audioBtn.title = 'Озвучить';
+        audioBtn.title = i18n.t('play_audio');
         audioBtn.style.cursor = 'pointer';
         audioBtn.style.marginLeft = '8px';
         audioBtn.onclick = (e) => {
@@ -2384,7 +2384,7 @@ schreiben,Sie schreibt einen Brief.,Писать,Она пишет письmо.`
                         'Spanish': { text: 'Hola! Esta es una prueba de la configuración actual.', lang: 'es-ES' },
                         'French': { text: 'Bonjour! Ceci est un test des paramètres actuels.', lang: 'fr-FR' },
                         'Italian': { text: 'Ciao! Questo è un test delle impostazioni attuali.', lang: 'it-IT' },
-                        'Russian': { text: 'Привет! Это тест текущих настроек.', lang: 'ru-RU' }
+                        'Russian': { text: i18n.t('voice_test_sample'), lang: 'ru-RU' }
                     };
                     const testData = testTexts[currentPair.fromLanguage];
                     if (testData) {
@@ -2411,7 +2411,7 @@ schreiben,Sie schreibt einen Brief.,Писать,Она пишет письmо.`
 
     populateVoiceSelectors(allVoices) {
         const languages = [
-            { code: 'ru-RU', prefix: 'ru', sample: 'Привет, это тестовое сообщение' },
+            { code: 'ru-RU', prefix: 'ru', sample: i18n.t('test_message') },
             { code: 'en-US', prefix: 'en', sample: 'Hello, this is a test message' },
             { code: 'de-DE', prefix: 'de', sample: 'Hallo, dies ist eine Testnachricht' },
             { code: 'es-ES', prefix: 'es', sample: 'Hola, este es un mensaje de prueba' },
@@ -2449,7 +2449,7 @@ schreiben,Sie schreibt einen Brief.,Писать,Она пишет письmо.`
 
     previewVoice(langCode) {
         const sampleText = {
-            'ru-RU': 'Привет! Это приmер русского голоса для изучения иностранных слов.',
+            'ru-RU': i18n.t('russian_voice_sample'),
             'en-US': 'Hello! This is a sample of the English voice for learning foreign words.',
             'de-DE': 'Hallo! Dies ist ein Beispiel der deutschen Stimme zum Lernen von Fremdwörtern.',
             'es-ES': 'Hola! Este es un ejemplo de voz en español para aprender palabras extranjeras.',

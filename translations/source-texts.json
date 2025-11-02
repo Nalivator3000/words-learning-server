@@ -4642,5 +4642,95 @@
     "es": "Modo Complejo",
     "fr": "Mode Complexe",
     "it": "Modalità Complessa"
+  },
+  "app_init_error": {
+    "source": "Ошибка инициализации приложения",
+    "en": "Application initialization error",
+    "ru": "Ошибка инициализации приложения",
+    "de": "Fehler bei der Anwendungsinitialisierung",
+    "es": "Error de inicialización de la aplicación",
+    "fr": "Erreur d'initialisation de l'application",
+    "it": "Errore di inizializzazione dell'applicazione"
+  },
+  "fill_all_fields": {
+    "source": "Пожалуйста, заполните все поля",
+    "en": "Please fill in all fields",
+    "ru": "Пожалуйста, заполните все поля",
+    "de": "Bitte füllen Sie alle Felder aus",
+    "es": "Por favor complete todos los campos",
+    "fr": "Veuillez remplir tous les champs",
+    "it": "Si prega di compilare tutti i campi"
+  },
+  "passwords_not_match": {
+    "source": "Пароли не совпадают",
+    "en": "Passwords do not match",
+    "ru": "Пароли не совпадают",
+    "de": "Passwörter stimmen nicht überein",
+    "es": "Las contraseñas no coinciden",
+    "fr": "Les mots de passe ne correspondent pas",
+    "it": "Le password non corrispondono"
+  },
+  "password_min_length": {
+    "source": "Пароль должен быть не менее 6 символов",
+    "en": "Password must be at least 6 characters",
+    "ru": "Пароль должен быть не менее 6 символов",
+    "de": "Passwort muss mindestens 6 Zeichen lang sein",
+    "es": "La contraseña debe tener al menos 6 caracteres",
+    "fr": "Le mot de passe doit contenir au moins 6 caractères",
+    "it": "La password deve contenere almeno 6 caratteri"
+  },
+  "not_studied": {
+    "source": "Не изучалось",
+    "en": "Not studied",
+    "ru": "Не изучалось",
+    "de": "Nicht gelernt",
+    "es": "No estudiado",
+    "fr": "Pas étudié",
+    "it": "Non studiato"
+  },
+  "csv_template_downloaded": {
+    "source": "Шаблон CSV скачан",
+    "en": "CSV template downloaded",
+    "ru": "Шаблон CSV скачан",
+    "de": "CSV-Vorlage heruntergeladen",
+    "es": "Plantilla CSV descargada",
+    "fr": "Modèle CSV téléchargé",
+    "it": "Modello CSV scaricato"
+  },
+  "play_audio": {
+    "source": "Озвучить",
+    "en": "Play audio",
+    "ru": "Озвучить",
+    "de": "Audio abspielen",
+    "es": "Reproducir audio",
+    "fr": "Lire l'audio",
+    "it": "Riproduci audio"
+  },
+  "voice_test_sample": {
+    "source": "Привет! Это тест текущих настроек.",
+    "en": "Hello! This is a test of current settings.",
+    "ru": "Привет! Это тест текущих настроек.",
+    "de": "Hallo! Dies ist ein Test der aktuellen Einstellungen.",
+    "es": "¡Hola! Esta es una prueba de la configuración actual.",
+    "fr": "Bonjour! Ceci est un test des paramètres actuels.",
+    "it": "Ciao! Questo è un test delle impostazioni correnti."
+  },
+  "test_message": {
+    "source": "Привет, это тестовое сообщение",
+    "en": "Hello, this is a test message",
+    "ru": "Привет, это тестовое сообщение",
+    "de": "Hallo, dies ist eine Testnachricht",
+    "es": "Hola, este es un mensaje de prueba",
+    "fr": "Bonjour, ceci est un message de test",
+    "it": "Ciao, questo è un messaggio di prova"
+  },
+  "russian_voice_sample": {
+    "source": "Привет! Это пример русского голоса для изучения иностранных слов.",
+    "en": "Hello! This is a sample of Russian voice for learning foreign words.",
+    "ru": "Привет! Это пример русского голоса для изучения иностранных слов.",
+    "de": "Hallo! Dies ist ein Beispiel für russische Stimme zum Lernen von Fremdwörtern.",
+    "es": "¡Hola! Este es un ejemplo de voz rusa para aprender palabras extranjeras.",
+    "fr": "Bonjour! Ceci est un exemple de voix russe pour apprendre des mots étrangers.",
+    "it": "Ciao! Questo è un esempio di voce russa per imparare parole straniere."
   }
 }
