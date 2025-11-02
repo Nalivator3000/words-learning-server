@@ -920,7 +920,7 @@ schreiben,Sie schreibt einen Brief.,Писать,Она пишет письmо.`
             const input = document.createElement('input');
             input.type = 'text';
             input.className = 'text-input';
-            input.placeholder = languageManager.t('enterAnswer');
+            input.placeholder = i18n.t('enterAnswer');
             input.dataset.enterPressed = 'false';
             input.onkeypress = (e) => {
                 if (e.key === 'Enter') {
@@ -939,13 +939,13 @@ schreiben,Sie schreibt einen Brief.,Писать,Она пишет письmо.`
 
             const submitBtn = document.createElement('button');
             submitBtn.className = 'action-btn';
-            submitBtn.textContent = languageManager.t('submit');
+            submitBtn.textContent = i18n.t('submit');
             submitBtn.onclick = () => this.handleTypingAnswer(input.value, input);
             buttonContainer.appendChild(submitBtn);
 
             const showAnswerBtn = document.createElement('button');
             showAnswerBtn.className = 'action-btn show-answer-btn';
-            showAnswerBtn.textContent = languageManager.t('showAnswer');
+            showAnswerBtn.textContent = i18n.t('showAnswer');
             showAnswerBtn.onclick = () => this.showAnswer(input);
             buttonContainer.appendChild(showAnswerBtn);
 
@@ -1005,7 +1005,7 @@ schreiben,Sie schreibt einen Brief.,Писать,Она пишет письmо.`
             const input = document.createElement('input');
             input.type = 'text';
             input.className = 'text-input';
-            input.placeholder = languageManager.t('enterAnswer');
+            input.placeholder = i18n.t('enterAnswer');
             input.dataset.enterPressed = 'false';
             input.onkeypress = (e) => {
                 if (e.key === 'Enter') {
@@ -1024,13 +1024,13 @@ schreiben,Sie schreibt einen Brief.,Писать,Она пишет письmо.`
 
             const submitBtn = document.createElement('button');
             submitBtn.className = 'action-btn';
-            submitBtn.textContent = languageManager.t('submit');
+            submitBtn.textContent = i18n.t('submit');
             submitBtn.onclick = () => this.handleReviewTypingAnswer(input.value, input);
             buttonContainer.appendChild(submitBtn);
 
             const showAnswerBtn = document.createElement('button');
             showAnswerBtn.className = 'action-btn show-answer-btn';
-            showAnswerBtn.textContent = languageManager.t('showAnswer');
+            showAnswerBtn.textContent = i18n.t('showAnswer');
             showAnswerBtn.onclick = () => this.showReviewAnswer(input);
             buttonContainer.appendChild(showAnswerBtn);
 
@@ -1247,7 +1247,7 @@ schreiben,Sie schreibt einen Brief.,Писать,Она пишет письmо.`
 
     finishQuiz() {
         const results = quizManager.getQuizResults();
-        const message = `${languageManager.t('quizCompleted')}\n${languageManager.t('result')}: ${results.score}/${results.totalQuestions} (${results.percentage}%)`;
+        const message = `${i18n.t('quizCompleted')}\n${i18n.t('result')}: ${results.score}/${results.totalQuestions} (${results.percentage}%)`;
         alert(message);
 
         this.resetQuizInterface();
@@ -1257,7 +1257,7 @@ schreiben,Sie schreibt einen Brief.,Писать,Она пишет письmо.`
 
     finishReview() {
         const results = quizManager.getQuizResults();
-        const message = `${languageManager.t('reviewCompleted')}\n${languageManager.t('result')}: ${results.score}/${results.totalQuestions} (${results.percentage}%)`;
+        const message = `${i18n.t('reviewCompleted')}\n${i18n.t('result')}: ${results.score}/${results.totalQuestions} (${results.percentage}%)`;
         alert(message);
 
         this.resetReviewInterface();
@@ -1288,19 +1288,19 @@ schreiben,Sie schreibt einen Brief.,Писать,Она пишет письmо.`
 
     async deleteWord(wordId) {
         // Feature temporarily disabled - requires server endpoint
-        alert(languageManager.t('deleteFeatureDisabled'));
+        alert(i18n.t('deleteFeatureDisabled'));
         console.warn('deleteWord: Not implemented on server');
     }
 
     async moveWordToStatus(wordId, newStatus) {
         // Feature temporarily disabled - requires server endpoint
-        alert(languageManager.t('moveFeatureDisabled'));
+        alert(i18n.t('moveFeatureDisabled'));
         console.warn('moveWordToStatus: Not implemented on server');
     }
 
     async resetAllWordsToStudying() {
         // Feature temporarily disabled - requires server endpoint
-        alert(languageManager.t('resetFeatureDisabled'));
+        alert(i18n.t('resetFeatureDisabled'));
         console.warn('resetAllWordsToStudying: Not implemented on server');
     }
 
@@ -1309,7 +1309,7 @@ schreiben,Sie schreibt einen Brief.,Писать,Она пишет письmо.`
             const csvContent = await database.exportWords(status);
 
             if (!csvContent) {
-                alert(languageManager.t('noDataToExport'));
+                alert(i18n.t('noDataToExport'));
                 return;
             }
 
@@ -1332,7 +1332,7 @@ schreiben,Sie schreibt einen Brief.,Писать,Она пишет письmо.`
 
         } catch (error) {
             console.error('Export error:', error);
-            alert(languageManager.t('exportError'));
+            alert(i18n.t('exportError'));
         }
     }
 
@@ -1393,7 +1393,7 @@ schreiben,Sie schreibt einen Brief.,Писать,Она пишет письmо.`
         const wordInput = document.createElement('input');
         wordInput.type = 'text';
         wordInput.className = 'word-building-input';
-        wordInput.placeholder = languageManager.t('buildTheWord');
+        wordInput.placeholder = i18n.t('buildTheWord');
         wordInput.dataset.enterPressed = 'false';
         wordInput.onkeypress = (e) => {
             if (e.key === 'Enter') {
@@ -1430,19 +1430,19 @@ schreiben,Sie schreibt einen Brief.,Писать,Она пишет письmо.`
         
         const clearBtn = document.createElement('button');
         clearBtn.className = 'clear-word-btn';
-        clearBtn.textContent = languageManager.t('clear');
+        clearBtn.textContent = i18n.t('clear');
         clearBtn.onclick = () => this.clearBuiltWord(wordInput, letterTiles);
         controls.appendChild(clearBtn);
 
         const submitBtn = document.createElement('button');
         submitBtn.className = 'action-btn';
-        submitBtn.textContent = languageManager.t('submit');
+        submitBtn.textContent = i18n.t('submit');
         submitBtn.onclick = () => this.handleWordBuildingSubmit(wordInput, question);
         controls.appendChild(submitBtn);
 
         const showAnswerBtn = document.createElement('button');
         showAnswerBtn.className = 'action-btn show-answer-btn';
-        showAnswerBtn.textContent = languageManager.t('showAnswer');
+        showAnswerBtn.textContent = i18n.t('showAnswer');
         showAnswerBtn.onclick = () => this.showWordBuildingAnswer(wordInput, question);
         controls.appendChild(showAnswerBtn);
         
@@ -2047,7 +2047,7 @@ schreiben,Sie schreibt einen Brief.,Писать,Она пишет письmо.`
 
     async syncWithServer() {
         const statusEl = document.getElementById('syncStatus');
-        statusEl.textContent = languageManager.t('exportingData');
+        statusEl.textContent = i18n.t('exportingData');
         statusEl.className = 'sync-status info';
         statusEl.style.display = 'block';
         
@@ -2056,7 +2056,7 @@ schreiben,Sie schreibt einen Brief.,Писать,Она пишет письmо.`
             const words = await database.getAllWords();
             
             if (words.length === 0) {
-                statusEl.textContent = languageManager.t('noDataToSync');
+                statusEl.textContent = i18n.t('noDataToSync');
                 statusEl.className = 'sync-status error';
                 setTimeout(() => {
                     statusEl.style.display = 'none';
@@ -2140,11 +2140,11 @@ schreiben,Sie schreibt einen Brief.,Писать,Она пишет письmо.`
                 document.body.removeChild(link);
                 URL.revokeObjectURL(url);
                 
-                statusEl.textContent = languageManager.t('serverConnectionError');
+                statusEl.textContent = i18n.t('serverConnectionError');
                 statusEl.className = 'sync-status error';
                 
             } catch (fallbackError) {
-                statusEl.textContent = languageManager.t('syncAndExportError');
+                statusEl.textContent = i18n.t('syncAndExportError');
                 statusEl.className = 'sync-status error';
             }
             
@@ -2397,11 +2397,11 @@ schreiben,Sie schreibt einen Brief.,Писать,Она пишет письmо.`
 
                 // Disable button during playback
                 testBtn.disabled = true;
-                testBtn.textContent = languageManager.t('voicePlaying');
+                testBtn.textContent = i18n.t('voicePlaying');
 
                 setTimeout(() => {
                     testBtn.disabled = false;
-                    testBtn.textContent = languageManager.t('voiceTestButton');
+                    testBtn.textContent = i18n.t('voiceTestButton');
                 }, 4000);
 
                 this.audioManager.speak(testText, langCode);

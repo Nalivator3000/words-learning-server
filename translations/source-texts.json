@@ -4867,5 +4867,176 @@
     "es": "¡Correcto! +1 punto",
     "fr": "Correct! +1 point",
     "it": "Corretto! +1 punto"
+  },
+  "enterAnswer": {
+    "source": "Enter answer",
+    "en": "Enter answer",
+    "ru": "Введите ответ",
+    "de": "Antwort eingeben",
+    "es": "Ingrese respuesta",
+    "fr": "Entrez la réponse",
+    "it": "Inserisci risposta"
+  },
+  "submit": {
+    "source": "Submit",
+    "en": "Submit",
+    "ru": "Отправить",
+    "de": "Absenden",
+    "es": "Enviar",
+    "fr": "Soumettre",
+    "it": "Invia"
+  },
+  "showAnswer": {
+    "source": "Show Answer",
+    "en": "Show Answer",
+    "ru": "Показать ответ",
+    "de": "Antwort zeigen",
+    "es": "Mostrar respuesta",
+    "fr": "Afficher la réponse",
+    "it": "Mostra risposta"
+  },
+  "quizCompleted": {
+    "source": "Quiz Completed!",
+    "en": "Quiz Completed!",
+    "ru": "Тест завершен!",
+    "de": "Quiz abgeschlossen!",
+    "es": "¡Cuestionario completado!",
+    "fr": "Quiz terminé!",
+    "it": "Quiz completato!"
+  },
+  "result": {
+    "source": "Result",
+    "en": "Result",
+    "ru": "Результат",
+    "de": "Ergebnis",
+    "es": "Resultado",
+    "fr": "Résultat",
+    "it": "Risultato"
+  },
+  "reviewCompleted": {
+    "source": "Review Completed!",
+    "en": "Review Completed!",
+    "ru": "Повторение завершено!",
+    "de": "Wiederholung abgeschlossen!",
+    "es": "¡Revisión completada!",
+    "fr": "Révision terminée!",
+    "it": "Revisione completata!"
+  },
+  "deleteFeatureDisabled": {
+    "source": "Delete feature is currently disabled",
+    "en": "Delete feature is currently disabled",
+    "ru": "Функция удаления временно отключена",
+    "de": "Löschfunktion ist derzeit deaktiviert",
+    "es": "La función de eliminar está actualmente deshabilitada",
+    "fr": "La fonction de suppression est actuellement désactivée",
+    "it": "La funzione di eliminazione è attualmente disabilitata"
+  },
+  "moveFeatureDisabled": {
+    "source": "Move feature is currently disabled",
+    "en": "Move feature is currently disabled",
+    "ru": "Функция перемещения временно отключена",
+    "de": "Verschiebungsfunktion ist derzeit deaktiviert",
+    "es": "La función de mover está actualmente deshabilitada",
+    "fr": "La fonction de déplacement est actuellement désactivée",
+    "it": "La funzione di spostamento è attualmente disabilitata"
+  },
+  "resetFeatureDisabled": {
+    "source": "Reset feature is currently disabled",
+    "en": "Reset feature is currently disabled",
+    "ru": "Функция сброса временно отключена",
+    "de": "Zurücksetzungsfunktion ist derzeit deaktiviert",
+    "es": "La función de restablecer está actualmente deshabilitada",
+    "fr": "La fonction de réinitialisation est actuellement désactivée",
+    "it": "La funzione di reset è attualmente disabilitata"
+  },
+  "noDataToExport": {
+    "source": "No data to export",
+    "en": "No data to export",
+    "ru": "Нет данных для экспорта",
+    "de": "Keine Daten zum Exportieren",
+    "es": "No hay datos para exportar",
+    "fr": "Aucune donnée à exporter",
+    "it": "Nessun dato da esportare"
+  },
+  "exportError": {
+    "source": "Export error",
+    "en": "Export error",
+    "ru": "Ошибка экспорта",
+    "de": "Exportfehler",
+    "es": "Error de exportación",
+    "fr": "Erreur d'exportation",
+    "it": "Errore di esportazione"
+  },
+  "buildTheWord": {
+    "source": "Build the word",
+    "en": "Build the word",
+    "ru": "Составьте слово",
+    "de": "Bauen Sie das Wort",
+    "es": "Construya la palabra",
+    "fr": "Construisez le mot",
+    "it": "Costruisci la parola"
+  },
+  "clear": {
+    "source": "Clear",
+    "en": "Clear",
+    "ru": "Очистить",
+    "de": "Löschen",
+    "es": "Limpiar",
+    "fr": "Effacer",
+    "it": "Cancella"
+  },
+  "exportingData": {
+    "source": "Exporting data...",
+    "en": "Exporting data...",
+    "ru": "Экспорт данных...",
+    "de": "Daten werden exportiert...",
+    "es": "Exportando datos...",
+    "fr": "Exportation des données...",
+    "it": "Esportazione dati..."
+  },
+  "noDataToSync": {
+    "source": "No data to sync",
+    "en": "No data to sync",
+    "ru": "Нет данных для синхронизации",
+    "de": "Keine Daten zum Synchronisieren",
+    "es": "No hay datos para sincronizar",
+    "fr": "Aucune donnée à synchroniser",
+    "it": "Nessun dato da sincronizzare"
+  },
+  "serverConnectionError": {
+    "source": "Server connection error",
+    "en": "Server connection error",
+    "ru": "Ошибка подключения к серверу",
+    "de": "Serververbindungsfehler",
+    "es": "Error de conexión al servidor",
+    "fr": "Erreur de connexion au serveur",
+    "it": "Errore di connessione al server"
+  },
+  "syncAndExportError": {
+    "source": "Sync and export error",
+    "en": "Sync and export error",
+    "ru": "Ошибка синхронизации и экспорта",
+    "de": "Synchronisierungs- und Exportfehler",
+    "es": "Error de sincronización y exportación",
+    "fr": "Erreur de synchronisation et d'exportation",
+    "it": "Errore di sincronizzazione ed esportazione"
+  },
+  "voicePlaying": {
+    "source": "Playing...",
+    "en": "Playing...",
+    "ru": "Воспроизведение...",
+    "de": "Wird abgespielt...",
+    "es": "Reproduciendo...",
+    "fr": "En cours de lecture...",
+    "it": "Riproduzione..."
+  },
+  "voiceTestButton": {
+    "source": "Test Voice",
+    "en": "Test Voice",
+    "ru": "Тест голоса",
+    "de": "Stimme testen",
+    "es": "Probar voz",
+    "fr": "Tester la voix",
+    "it": "Testa voce"
   }
 }
