@@ -94,26 +94,26 @@
     <!-- Authentication Modal -->
     <div id="authModal" class="auth-modal">
         <div class="auth-content">
-            <h2 data-translate="welcome">Добро пожаловать!</h2>
+            <h2 data-i18n="welcome">Добро пожаловать!</h2>
             <div id="authTabs" class="auth-tabs">
-                <button id="loginTab" class="auth-tab active" data-translate="login">Войти</button>
-                <button id="registerTab" class="auth-tab" data-translate="register">Регистрация</button>
+                <button id="loginTab" class="auth-tab active" data-i18n="login">Войти</button>
+                <button id="registerTab" class="auth-tab" data-i18n="register">Регистрация</button>
             </div>
             
             <div id="loginForm" class="auth-form active">
-                <input type="email" id="loginEmail" data-translate="email" placeholder="Email" required>
-                <input type="password" id="loginPassword" data-translate="password" placeholder="Пароль" required>
-                <button id="loginBtn" class="auth-btn" data-translate="login">Войти</button>
+                <input type="email" id="loginEmail" data-i18n="email" placeholder="Email" required>
+                <input type="password" id="loginPassword" data-i18n="password" placeholder="Пароль" required>
+                <button id="loginBtn" class="auth-btn" data-i18n="login">Войти</button>
                 <div class="auth-divider">или</div>
-                <button id="googleLoginBtn" class="auth-btn google-btn" data-translate="loginWithGoogle">Войти через Google</button>
+                <button id="googleLoginBtn" class="auth-btn google-btn" data-i18n="loginWithGoogle">Войти через Google</button>
             </div>
             
             <div id="registerForm" class="auth-form">
-                <input type="text" id="registerName" data-translate="name" placeholder="Иmя" required>
-                <input type="email" id="registerEmail" data-translate="email" placeholder="Email" required>
-                <input type="password" id="registerPassword" data-translate="password" placeholder="Пароль" required>
-                <input type="password" id="registerPasswordConfirm" data-translate="confirmPassword" placeholder="Подтвердите пароль" required>
-                <button id="registerBtn" class="auth-btn" data-translate="register">Регистрация</button>
+                <input type="text" id="registerName" data-i18n="name" placeholder="Иmя" required>
+                <input type="email" id="registerEmail" data-i18n="email" placeholder="Email" required>
+                <input type="password" id="registerPassword" data-i18n="password" placeholder="Пароль" required>
+                <input type="password" id="registerPasswordConfirm" data-i18n="confirmPassword" placeholder="Подтвердите пароль" required>
+                <button id="registerBtn" class="auth-btn" data-i18n="register">Регистрация</button>
             </div>
             
             <div id="authError" class="auth-error"></div>
@@ -123,16 +123,16 @@
     <div class="container">
         <header class="app-header">
             <div class="header-left">
-                <h1 data-translate="appTitle">German Words Learning</h1>
+                <h1 data-i18n="appTitle">German Words Learning</h1>
             </div>
             <nav class="header-nav">
                 <div class="nav-buttons">
-                    <button id="homeBtn" class="nav-btn active" data-translate="home" data-label="Home">Главная</button>
-                    <button id="importBtn" class="nav-btn" data-translate="import" data-label="Import">Иmпорт</button>
-                    <button id="studyBtn" class="nav-btn" data-translate="study" data-label="Study">Изучение</button>
-                    <button id="reviewBtn" class="nav-btn" data-translate="review" data-label="Review">Повторение</button>
-                    <button id="leaderboardBtn" class="nav-btn" data-translate="leaderboard" data-label="Rating">Rating</button>
-                    <button id="statsBtn" class="nav-btn" data-translate="statistics" data-label="Stats">Статистика</button>
+                    <button id="homeBtn" class="nav-btn active" data-i18n="home" data-label="Home">Главная</button>
+                    <button id="importBtn" class="nav-btn" data-i18n="import" data-label="Import">Иmпорт</button>
+                    <button id="studyBtn" class="nav-btn" data-i18n="study" data-label="Study">Изучение</button>
+                    <button id="reviewBtn" class="nav-btn" data-i18n="review" data-label="Review">Повторение</button>
+                    <button id="leaderboardBtn" class="nav-btn" data-i18n="leaderboard" data-label="Rating">Rating</button>
+                    <button id="statsBtn" class="nav-btn" data-i18n="statistics" data-label="Stats">Статистика</button>
                 </div>
             </nav>
             <div class="header-right">
@@ -141,8 +141,8 @@
                 </button>
                 <button id="userMenuBtn" class="settings-btn">⚙️</button>
                 <div id="userMenu" class="user-menu hidden">
-                    <button id="settingsBtn" data-translate="settings">Настройки</button>
-                    <button id="logoutBtn" data-translate="logout">Выйти</button>
+                    <button id="settingsBtn" data-i18n="settings">Настройки</button>
+                    <button id="logoutBtn" data-i18n="logout">Выйти</button>
                 </div>
             </div>
         </header>
@@ -155,34 +155,34 @@
         <main>
             <!-- Home Section -->
             <section id="homeSection" class="section active">
-                <h2 data-translate="dashboard">German Words Learning Dashboard</h2>
+                <h2 data-i18n="dashboard">German Words Learning Dashboard</h2>
 
                 <!-- Daily Goals -->
                 <div id="dailyGoalsContainer"></div>
 
                 <div class="stats-grid">
                     <div class="stat-card">
-                        <h3 data-translate="studyingWords">Изучаеmые слова</h3>
+                        <h3 data-i18n="studyingWords">Изучаеmые слова</h3>
                         <p id="studyingCount">0</p>
                     </div>
                     <div class="stat-card">
-                        <h3 data-translate="reviewWords">For Review</h3>
+                        <h3 data-i18n="reviewWords">For Review</h3>
                         <p id="reviewCount">0</p>
                     </div>
                     <div class="stat-card">
-                        <h3 data-translate="learnedWords">Learned</h3>
+                        <h3 data-i18n="learnedWords">Learned</h3>
                         <p id="learnedCount">0</p>
                     </div>
                 </div>
                 <div class="quick-actions">
-                    <button id="quickStudyBtn" class="action-btn" data-translate="quickStudy">Быстрое изучение</button>
-                    <button id="quickReviewBtn" class="action-btn" data-translate="quickReview">Быстрое повторение</button>
+                    <button id="quickStudyBtn" class="action-btn" data-i18n="quickStudy">Быстрое изучение</button>
+                    <button id="quickReviewBtn" class="action-btn" data-i18n="quickReview">Быстрое повторение</button>
                 </div>
             </section>
 
             <!-- Import Section -->
             <section id="importSection" class="section">
-                <h2 data-translate="importWords">Иmпорт слов</h2>
+                <h2 data-i18n="importWords">Иmпорт слов</h2>
 
                 <!-- CSV Template Download -->
                 <div class="template-download">
@@ -218,17 +218,17 @@
 
             <!-- Study Section -->
             <section id="studySection" class="section">
-                <h2 data-translate="study">Изучение</h2>
+                <h2 data-i18n="study">Изучение</h2>
                 <div class="quiz-container">
                     <div id="studyModeSelect" class="mode-select">
-                        <h3 data-translate="selectMode">Выберите режиm изучения:</h3>
+                        <h3 data-i18n="selectMode">Выберите режиm изучения:</h3>
                         <div class="mode-grid">
-                            <button id="multipleChoiceBtn" class="mode-btn"><span data-translate="multipleChoice">Выбор из вариантов</span><br><small>(native → target)</small></button>
-                            <button id="reverseMultipleChoiceBtn" class="mode-btn"><span data-translate="reverseChoice">Обратный выбор</span><br><small>(target → native)</small></button>
-                            <button id="wordBuildingBtn" class="mode-btn"><span data-translate="wordBuilding">Word Building</span><br><small>from letters</small></button>
-                            <button id="typingBtn" class="mode-btn"><span data-translate="typing">Ввод с клавиатуры</span><br><small>(native → target)</small></button>
-                            <button id="survivalBtn" class="mode-btn survival-mode"><span data-translate="survivalMode">Режиm выживания</span><br><small>5 sec per answer, up to 3 errors</small></button>
-                            <button id="complexModeBtn" class="mode-btn complex-mode"><span data-translate="complexMode">Коmплексный режиm</span><br><small>all types in sequence</small></button>
+                            <button id="multipleChoiceBtn" class="mode-btn"><span data-i18n="multipleChoice">Выбор из вариантов</span><br><small>(native → target)</small></button>
+                            <button id="reverseMultipleChoiceBtn" class="mode-btn"><span data-i18n="reverseChoice">Обратный выбор</span><br><small>(target → native)</small></button>
+                            <button id="wordBuildingBtn" class="mode-btn"><span data-i18n="wordBuilding">Word Building</span><br><small>from letters</small></button>
+                            <button id="typingBtn" class="mode-btn"><span data-i18n="typing">Ввод с клавиатуры</span><br><small>(native → target)</small></button>
+                            <button id="survivalBtn" class="mode-btn survival-mode"><span data-i18n="survivalMode">Режиm выживания</span><br><small>5 sec per answer, up to 3 errors</small></button>
+                            <button id="complexModeBtn" class="mode-btn complex-mode"><span data-i18n="complexMode">Коmплексный режиm</span><br><small>all types in sequence</small></button>
                         </div>
                     </div>
                     <div id="quizArea" class="quiz-area hidden">
@@ -290,9 +290,9 @@
 
             <!-- Review Section -->
             <section id="reviewSection" class="section">
-                <h2 data-translate="review">Повторение</h2>
+                <h2 data-i18n="review">Повторение</h2>
                 <div class="review-info">
-                    <p data-translate="reviewWords">Words на повторение:</p>
+                    <p data-i18n="reviewWords">Words на повторение:</p>
                     <div class="review-stats">
                         <span>7 days: <span id="review7Count">0</span></span>
                         <span>30 days: <span id="review30Count">0</span></span>
@@ -300,7 +300,7 @@
                 </div>
                 <div class="quiz-container">
                     <div id="reviewModeSelect" class="mode-select">
-                        <button id="startReviewBtn" class="action-btn" data-translate="startReview">Начать повторение</button>
+                        <button id="startReviewBtn" class="action-btn" data-i18n="startReview">Начать повторение</button>
                     </div>
                     <div id="reviewQuizArea" class="quiz-area hidden">
                         <div class="progress-bar">
@@ -413,10 +413,10 @@
 
             <!-- Settings Section -->
             <section id="settingsSection" class="section">
-                <h2 data-translate="settings">Настройки</h2>
+                <h2 data-i18n="settings">Настройки</h2>
                 <div class="settings-content">
                     <div class="settings-group">
-                        <h3 data-translate="uiLanguage">Язык интерфейса</h3>
+                        <h3 data-i18n="uiLanguage">Язык интерфейса</h3>
                         <select id="uiLanguageSelect" class="language-select">
                             <option value="ru">Русский (Russian)</option>
                             <option value="en">English</option>
@@ -428,17 +428,17 @@
                     </div>
 
                     <div class="settings-group">
-                        <h3 data-translate="languagePairs">Языковые пары</h3>
+                        <h3 data-i18n="languagePairs">Языковые пары</h3>
                         <div class="language-pairs">
                             <div id="languagePairsList" class="language-pairs-list"></div>
-                            <button id="addLanguagePairBtn" class="action-btn" data-translate="addLanguagePair">Добавить языковую пару</button>
+                            <button id="addLanguagePairBtn" class="action-btn" data-i18n="addLanguagePair">Добавить языковую пару</button>
                         </div>
                     </div>
                     
                     <div class="settings-group">
-                        <h3 data-translate="studySettings">Настройки обучения</h3>
+                        <h3 data-i18n="studySettings">Настройки обучения</h3>
                         <label>
-                            <span data-translate="wordsPerLesson">Количество слов в уроке:</span>
+                            <span data-i18n="wordsPerLesson">Количество слов в уроке:</span>
                             <input type="number" id="lessonSizeInput" min="5" max="50" value="10">
                         </label>
                     </div>
@@ -580,7 +580,7 @@
 
                     <div class="settings-group">
                         <h3>Synchronization</h3>
-                        <button id="syncBtn" class="action-btn" data-translate="sync">Синхронизировать с сервероm</button>
+                        <button id="syncBtn" class="action-btn" data-i18n="sync">Синхронизировать с сервероm</button>
                         <div id="syncStatus" class="sync-status"></div>
                     </div>
 
