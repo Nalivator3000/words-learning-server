@@ -164,32 +164,32 @@ class QuizManager {
 
         if (question.type === 'multipleChoice' || question.type === 'reverseMultipleChoice') {
             isCorrect = userAnswer === question.correctAnswer;
-            feedback = isCorrect ? 
-                'Правильно!' : 
-                `Неправильно. Правильный ответ: ${question.correctAnswer}`;
+            feedback = isCorrect ?
+                'Correct!' :
+                `Incorrect. Correct answer: ${question.correctAnswer}`;
         } else if (question.type === 'wordBuilding') {
             const result = this.checkTypingAnswerDetailed(userAnswer, question.correctAnswer);
             isCorrect = result.correct;
             isPartiallyCorrect = result.partiallyCorrect;
-            
+
             if (isCorrect) {
-                feedback = 'Правильно!';
+                feedback = 'Correct!';
             } else if (isPartiallyCorrect) {
-                feedback = `Почти правильно! Правильный ответ: ${question.correctAnswer}`;
+                feedback = `Almost! Correct answer: ${question.correctAnswer}`;
             } else {
-                feedback = `Неправильно. Правильный ответ: ${question.correctAnswer}`;
+                feedback = `Incorrect. Correct answer: ${question.correctAnswer}`;
             }
         } else if (question.type === 'typing') {
             const result = this.checkTypingAnswerDetailed(userAnswer, question.correctAnswer);
             isCorrect = result.correct;
             isPartiallyCorrect = result.partiallyCorrect;
-            
+
             if (isCorrect) {
-                feedback = 'Правильно!';
+                feedback = 'Correct!';
             } else if (isPartiallyCorrect) {
-                feedback = `Почти правильно! Правильный ответ: ${question.correctAnswer}`;
+                feedback = `Almost! Correct answer: ${question.correctAnswer}`;
             } else {
-                feedback = `Неправильно. Правильный ответ: ${question.correctAnswer}`;
+                feedback = `Incorrect. Correct answer: ${question.correctAnswer}`;
             }
         }
 

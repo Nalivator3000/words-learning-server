@@ -939,13 +939,13 @@ schreiben,Sie schreibt einen Brief.,Писать,Она пишет письmо.`
 
             const submitBtn = document.createElement('button');
             submitBtn.className = 'action-btn';
-            submitBtn.textContent = 'Ответить';
+            submitBtn.textContent = 'Submit';
             submitBtn.onclick = () => this.handleTypingAnswer(input.value, input);
             buttonContainer.appendChild(submitBtn);
 
             const showAnswerBtn = document.createElement('button');
             showAnswerBtn.className = 'action-btn show-answer-btn';
-            showAnswerBtn.textContent = 'Показать ответ';
+            showAnswerBtn.textContent = 'Show Answer';
             showAnswerBtn.onclick = () => this.showAnswer(input);
             buttonContainer.appendChild(showAnswerBtn);
 
@@ -1024,13 +1024,13 @@ schreiben,Sie schreibt einen Brief.,Писать,Она пишет письmо.`
 
             const submitBtn = document.createElement('button');
             submitBtn.className = 'action-btn';
-            submitBtn.textContent = 'Ответить';
+            submitBtn.textContent = 'Submit';
             submitBtn.onclick = () => this.handleReviewTypingAnswer(input.value, input);
             buttonContainer.appendChild(submitBtn);
 
             const showAnswerBtn = document.createElement('button');
             showAnswerBtn.className = 'action-btn show-answer-btn';
-            showAnswerBtn.textContent = 'Показать ответ';
+            showAnswerBtn.textContent = 'Show Answer';
             showAnswerBtn.onclick = () => this.showReviewAnswer(input);
             buttonContainer.appendChild(showAnswerBtn);
 
@@ -1428,19 +1428,19 @@ schreiben,Sie schreibt einen Brief.,Писать,Она пишет письmо.`
         
         const clearBtn = document.createElement('button');
         clearBtn.className = 'clear-word-btn';
-        clearBtn.textContent = 'Очистить';
+        clearBtn.textContent = 'Clear';
         clearBtn.onclick = () => this.clearBuiltWord(wordInput, letterTiles);
         controls.appendChild(clearBtn);
-        
+
         const submitBtn = document.createElement('button');
         submitBtn.className = 'action-btn';
-        submitBtn.textContent = 'Ответить';
+        submitBtn.textContent = 'Submit';
         submitBtn.onclick = () => this.handleWordBuildingSubmit(wordInput, question);
         controls.appendChild(submitBtn);
-        
+
         const showAnswerBtn = document.createElement('button');
         showAnswerBtn.className = 'action-btn show-answer-btn';
-        showAnswerBtn.textContent = 'Показать ответ';
+        showAnswerBtn.textContent = 'Show Answer';
         showAnswerBtn.onclick = () => this.showWordBuildingAnswer(wordInput, question);
         controls.appendChild(showAnswerBtn);
         
