@@ -1,10 +1,27 @@
-[{
-  "relation": ["delegate_permission/common.handle_all_urls"],
-  "target": {
-    "namespace": "android_app",
-    "package_name": "com.fluentflow.app",
-    "sha256_cert_fingerprints": [
-      "REPLACE_WITH_YOUR_SHA256_FINGERPRINT_AFTER_GENERATING_KEYSTORE"
-    ]
+[
+  {
+    "relation": [
+      "delegate_permission/common.handle_all_urls"
+    ],
+    "target": {
+      "namespace": "android_app",
+      "package_name": "com.fluentflow.app",
+      "sha256_cert_fingerprints": [
+        "REPLACE_WITH_YOUR_SHA256_FINGERPRINT_AFTER_GENERATING_KEYSTORE"
+      ]
+    }
+  },
+  {
+    "relation": [
+      "delegate_permission/common.handle_all_urls",
+      "delegate_permission/common.get_login_creds"
+    ],
+    "target": {
+      "namespace": "android_app",
+      "package_name": "com.lexibooster.app",
+      "sha256_cert_fingerprints": [
+        "1A:66:E0:A7:E4:B1:92:0A:DA:5C:B6:E2:CC:9F:CF:A6:D0:EB:05:E5:42:E3:C4:3B:98:C4:47:B2:2D:54:9A:48"
+      ]
+    }
   }
-}]
+]
