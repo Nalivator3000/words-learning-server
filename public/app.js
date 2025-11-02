@@ -1247,8 +1247,8 @@ schreiben,Sie schreibt einen Brief.,Писать,Она пишет письmо.`
 
     finishQuiz() {
         const results = quizManager.getQuizResults();
-        alert(`Квиз завершен!\nРезультат: ${results.score}/${results.totalQuestions} (${results.percentage}%)`);
-        
+        alert(`Quiz completed!\nResult: ${results.score}/${results.totalQuestions} (${results.percentage}%)`);
+
         this.resetQuizInterface();
         quizManager.reset();
         this.updateStats();
@@ -1256,8 +1256,8 @@ schreiben,Sie schreibt einen Brief.,Писать,Она пишет письmо.`
 
     finishReview() {
         const results = quizManager.getQuizResults();
-        alert(`Повторение завершено!\nРезультат: ${results.score}/${results.totalQuestions} (${results.percentage}%)`);
-        
+        alert(`Review completed!\nResult: ${results.score}/${results.totalQuestions} (${results.percentage}%)`);
+
         this.resetReviewInterface();
         quizManager.reset();
         this.updateStats();

@@ -6,6 +6,7 @@ class QuizManager {
         this.questions = [];
         this.mode = null; // 'study' or 'review'
         this.quizType = null; // 'multiple' or 'typing'
+        this.wordCount = 0; // Number of unique words (for complex mode)
     }
 
     async startQuiz(mode, quizType, questionCount = 10) {
@@ -14,6 +15,7 @@ class QuizManager {
         this.currentQuestionIndex = 0;
         this.score = 0;
         this.questions = [];
+        this.wordCount = 0;
 
         // Get words based on mode
         let words;
@@ -26,6 +28,9 @@ class QuizManager {
         if (words.length === 0) {
             throw new Error('No words для изучения');
         }
+
+        // Store word count for proper scoring in complex mode
+        this.wordCount = words.length;
 
         // Prepare questions
         for (const word of words) {
@@ -44,7 +49,7 @@ class QuizManager {
                 const reverseQ = await this.createReverseMultipleChoiceQuestion(word, words);
                 const buildingQ = this.createWordBuildingQuestion(word);
                 const typingQ = this.createTypingQuestion(word);
-                
+
                 this.questions.push(multipleQ, reverseQ, buildingQ, typingQ);
                 continue; // Skip the normal push below
             }
@@ -55,6 +60,7 @@ class QuizManager {
             mode,
             quizType,
             totalQuestions: this.questions.length,
+            wordCount: this.wordCount,
             startTime: new Date()
         };
 
@@ -392,10 +398,15 @@ class QuizManager {
     }
 
     getQuizResults() {
+        // For complex mode, calculate based on total questions (all sub-questions)
+        // For other modes, use question count which equals word count
+        const totalQuestions = this.questions.length;
+        const percentage = Math.round((this.score / totalQuestions) * 100);
+
         return {
             score: this.score,
-            totalQuestions: this.questions.length,
-            percentage: Math.round((this.score / this.questions.length) * 100),
+            totalQuestions: totalQuestions,
+            percentage: percentage,
             duration: new Date() - this.currentQuiz.startTime,
             mode: this.mode,
             quizType: this.quizType
@@ -409,6 +420,7 @@ class QuizManager {
         this.questions = [];
         this.mode = null;
         this.quizType = null;
+        this.wordCount = 0;
     }
 
     // Helper: Calculate level from XP (client-side copy of server logic)
