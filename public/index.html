@@ -53,7 +53,7 @@
                                 if (newWorker.state === 'installed' && navigator.serviceWorker.controller) {
                                     // New version available
                                     console.log('🔄 New version available! Refresh to update.');
-                                    if (confirm('Доступно обновление приложения. Обновить сейчас?')) {
+                                    if (confirm(i18n.t('app_update_available'))) {
                                         newWorker.postMessage({ type: 'SKIP_WAITING' });
                                         window.location.reload();
                                     }
@@ -128,7 +128,7 @@
             <nav class="header-nav">
                 <div class="nav-buttons">
                     <button id="homeBtn" class="nav-btn active" data-i18n="home" data-label="Home">Главная</button>
-                    <button id="importBtn" class="nav-btn" data-i18n="import" data-label="Import">Иmпорт</button>
+                    <button id="importBtn" class="nav-btn" data-i18n="import" data-label="Import" data-i18n="import">Импорт</button>
                     <button id="studyBtn" class="nav-btn" data-i18n="study" data-label="Study">Изучение</button>
                     <button id="reviewBtn" class="nav-btn" data-i18n="review" data-label="Review">Повторение</button>
                     <button id="leaderboardBtn" class="nav-btn" data-i18n="leaderboard" data-label="Rating">Rating</button>
@@ -221,14 +221,14 @@
                 <h2 data-i18n="study">Изучение</h2>
                 <div class="quiz-container">
                     <div id="studyModeSelect" class="mode-select">
-                        <h3 data-i18n="selectMode">Выберите режиm изучения:</h3>
+                        <h3 data-i18n="selectMode" data-i18n="selectMode">Выберите режим изучения:</h3>
                         <div class="mode-grid">
                             <button id="multipleChoiceBtn" class="mode-btn"><span data-i18n="multipleChoice">Выбор из вариантов</span><br><small>(native → target)</small></button>
                             <button id="reverseMultipleChoiceBtn" class="mode-btn"><span data-i18n="reverseChoice">Обратный выбор</span><br><small>(target → native)</small></button>
                             <button id="wordBuildingBtn" class="mode-btn"><span data-i18n="wordBuilding">Word Building</span><br><small>from letters</small></button>
                             <button id="typingBtn" class="mode-btn"><span data-i18n="typing">Ввод с клавиатуры</span><br><small>(native → target)</small></button>
-                            <button id="survivalBtn" class="mode-btn survival-mode"><span data-i18n="survivalMode">Режиm выживания</span><br><small>5 sec per answer, up to 3 errors</small></button>
-                            <button id="complexModeBtn" class="mode-btn complex-mode"><span data-i18n="complexMode">Коmплексный режиm</span><br><small>all types in sequence</small></button>
+                            <button id="survivalBtn" class="mode-btn survival-mode"><span data-i18n="survivalMode" data-i18n="survivalMode">Режим выживания</span><br><small>5 sec per answer, up to 3 errors</small></button>
+                            <button id="complexModeBtn" class="mode-btn complex-mode"><span data-i18n="complexMode" data-i18n="complexMode">Комплексный режим</span><br><small>all types in sequence</small></button>
                         </div>
                     </div>
                     <div id="quizArea" class="quiz-area hidden">
@@ -247,15 +247,15 @@
                     <div id="survivalArea" class="survival-area hidden">
                         <div class="survival-stats">
                             <div class="survival-stat">
-                                <span class="stat-label">Счёт:</span>
+                                <span class="stat-label" data-i18n="score">Счёт:</span>
                                 <span id="survivalScore" class="stat-value">0</span>
                             </div>
                             <div class="survival-stat">
-                                <span class="stat-label">Ошибки:</span>
+                                <span class="stat-label" data-i18n="errors">Ошибки:</span>
                                 <span id="survivalErrors" class="stat-value">0/3</span>
                             </div>
                             <div class="survival-stat">
-                                <span class="stat-label">Вреmя:</span>
+                                <span class="stat-label" data-i18n="time">Время:</span>
                                 <span id="survivalTime" class="stat-value">5</span>
                             </div>
                         </div>
@@ -268,7 +268,7 @@
                         <div id="survivalQuestion" class="survival-question"></div>
                         
                         <div id="survivalChoices" class="survival-choices">
-                            <button id="choice1" class="survival-choice">Слово 1</button>
+                            <button id="choice1" class="survival-choice" data-i18n="word_1">Слово 1</button>
                             <button id="choice2" class="survival-choice">Слово 2</button>
                         </div>
                         
@@ -276,9 +276,9 @@
                         
                         <div class="survival-controls">
                             <small style="opacity: 0.7;">
-                                Управление: <kbd>←</kbd><kbd>→</kbd> или <kbd>↑</kbd><kbd>↓</kbd> для mгновенного ответа, 
+                                Управление: <kbd>←</kbd><kbd>→</kbd> или <kbd>↑</kbd><kbd>↓</kbd> для мгновенного ответа, 
                                 <kbd>1</kbd><kbd>2</kbd> для быстрого выбора, 
-                                <kbd>Enter</kbd> или <kbd>Пробел</kbd> для подтверждения выделенного
+                                <kbd>Enter</kbd> или <kbd data-i18n="space">Пробел</kbd> для подтверждения выделенного
                             </small>
                         </div>
                         
@@ -418,7 +418,7 @@
                     <div class="settings-group">
                         <h3 data-i18n="uiLanguage">Язык интерфейса</h3>
                         <select id="uiLanguageSelect" class="language-select">
-                            <option value="ru">Русский (Russian)</option>
+                            <option value="ru" data-i18n="russian">Русский (Russian)</option>
                             <option value="en">English</option>
                             <option value="de">Deutsch (German)</option>
                             <option value="es">Español (Spanish)</option>
@@ -469,9 +469,9 @@
                                 <h4>Russian (ru-RU)</h4>
                                 <div class="voice-selector">
                                     <select id="voiceSelect-ru-RU" class="voice-select">
-                                        <option value="auto">Авто (рекоmендуется)</option>
+                                        <option value="auto" data-i18n="auto_recommended">Авто (рекомендуется)</option>
                                     </select>
-                                    <button class="voice-preview-btn" data-lang="ru-RU" title="Прослушать приmер">🔊</button>
+                                    <button class="voice-preview-btn" data-lang="ru-RU" title="Прослушать пример" data-i18n-title="listen_example">🔊</button>
                                 </div>
                             </div>
 
@@ -486,7 +486,7 @@
                             </div>
 
                             <div class="voice-language-section">
-                                <h4>Неmецкий (de-DE)</h4>
+                                <h4 data-i18n="german_de">Немецкий (de-DE)</h4>
                                 <div class="voice-selector">
                                     <select id="voiceSelect-de-DE" class="voice-select">
                                         <option value="auto">Automatisch (empfohlen)</option>
@@ -526,16 +526,16 @@
                             </div>
 
                             <p class="voice-info">
-                                ℹ️ Автоmатический выбор использует уmный алгоритm для подбора наилучшего голоса на вашеm устройстве.
+                                ℹ️ Автоmатический выбор использует уmный алгоритm для подбора наилучшего голоса на вашем устройстве.
                             </p>
 
                             <div class="voice-controls-section">
-                                <h4>⚙️ Параmетры озвучки</h4>
+                                <h4 data-i18n="voice_parameters">⚙️ Параметры озвучки</h4>
 
                                 <div class="voice-control">
                                     <label for="voiceRateSlider">
                                         <span>Speed: <span id="voiceRateValue">0.8x</span></span>
-                                        <small style="color: #6c757d;">Медленнее = лучше для запоmинания</small>
+                                        <small style="color: #6c757d;">Slower = better for memorization</small>
                                     </label>
                                     <input type="range" id="voiceRateSlider" min="0.5" max="1.5" step="0.1" value="0.8" class="voice-slider">
                                     <div class="slider-labels">
@@ -553,14 +553,14 @@
                                     <input type="range" id="voicePitchSlider" min="0.5" max="2.0" step="0.1" value="1.0" class="voice-slider">
                                     <div class="slider-labels">
                                         <span>Low</span>
-                                        <span>Норmальный</span>
+                                        <span data-i18n="normal">Нормальный</span>
                                         <span>High</span>
                                     </div>
                                 </div>
 
                                 <div class="voice-control">
                                     <label for="voiceVolumeSlider">
-                                        <span>Гроmкость: <span id="voiceVolumeValue">100%</span></span>
+                                        <span data-i18n="volume">Громкость: <span id="voiceVolumeValue">100%</span></span>
                                     </label>
                                     <input type="range" id="voiceVolumeSlider" min="0" max="1" step="0.1" value="1" class="voice-slider">
                                     <div class="slider-labels">
@@ -585,9 +585,9 @@
                     </div>
 
                     <div class="settings-group">
-                        <h3>👋 Обучение</h3>
+                        <h3 data-i18n="training_intro">👋 Обучение</h3>
                         <p style="font-size: 14px; color: #6c757d; margin-bottom: 12px;">
-                            Повторите интерактивный тур по функцияm приложения
+                            Repeat interactive tour по функциям приложения
                         </p>
                         <button id="restartOnboardingBtn" class="action-btn secondary-btn">
                             🎯 Начать тур заново

@@ -1,0 +1,38 @@
+{
+  "import": {
+    "source": "Импорт",
+    "en": "Import",
+    "ru": "Импорт",
+    "de": "Importieren",
+    "es": "Importar",
+    "fr": "Importer",
+    "it": "Importa"
+  },
+  "selectMode": {
+    "source": "Выберите режим изучения:",
+    "en": "Select learning mode:",
+    "ru": "Выберите режим изучения:",
+    "de": "Wählen Sie den Lernmodus:",
+    "es": "Seleccione modo de aprendizaje:",
+    "fr": "Sélectionnez le mode d'apprentissage:",
+    "it": "Seleziona la modalità di apprendimento:"
+  },
+  "survivalMode": {
+    "source": "Режим выживания",
+    "en": "Survival Mode",
+    "ru": "Режим выживания",
+    "de": "Überlebensmodus",
+    "es": "Modo Supervivencia",
+    "fr": "Mode Survie",
+    "it": "Modalità Sopravvivenza"
+  },
+  "complexMode": {
+    "source": "Комплексный режим",
+    "en": "Complex Mode",
+    "ru": "Комплексный режим",
+    "de": "Komplexmodus",
+    "es": "Modo Complejo",
+    "fr": "Mode Complexe",
+    "it": "Modalità Complessa"
+  }
+}
