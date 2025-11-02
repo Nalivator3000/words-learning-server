@@ -4732,5 +4732,140 @@
     "es": "¡Hola! Este es un ejemplo de voz rusa para aprender palabras extranjeras.",
     "fr": "Bonjour! Ceci est un exemple de voix russe pour apprendre des mots étrangers.",
     "it": "Ciao! Questo è un esempio di voce russa per imparare parole straniere."
+  },
+  "onboarding_step1": {
+    "source": "Давайте познакомимся с приложением. Сначала войдите или зарегистрируйтесь, чтобы сохранять ваш прогресс.",
+    "en": "Let's get familiar with the app. First, log in or register to save your progress.",
+    "ru": "Давайте познакомимся с приложением. Сначала войдите или зарегистрируйтесь, чтобы сохранять ваш прогресс.",
+    "de": "Lernen wir die App kennen. Melden Sie sich zuerst an oder registrieren Sie sich, um Ihren Fortschritt zu speichern.",
+    "es": "Familiaricémonos con la aplicación. Primero, inicie sesión o regístrese para guardar su progreso.",
+    "fr": "Faisons connaissance avec l'application. Connectez-vous ou inscrivez-vous d'abord pour sauvegarder votre progression.",
+    "it": "Familiarizziamo con l'app. Prima accedi o registrati per salvare i tuoi progressi."
+  },
+  "onboarding_step2": {
+    "source": "Здесь вы можете импортировать слова из CSV файла или Google Таблиц. Начните с добавления нескольких слов для изучения!",
+    "en": "Here you can import words from CSV file or Google Sheets. Start by adding a few words to study!",
+    "ru": "Здесь вы можете импортировать слова из CSV файла или Google Таблиц. Начните с добавления нескольких слов для изучения!",
+    "de": "Hier können Sie Wörter aus einer CSV-Datei oder Google Sheets importieren. Beginnen Sie mit dem Hinzufügen einiger Wörter zum Lernen!",
+    "es": "Aquí puede importar palabras desde archivo CSV o Google Sheets. ¡Comience agregando algunas palabras para estudiar!",
+    "fr": "Ici, vous pouvez importer des mots depuis un fichier CSV ou Google Sheets. Commencez par ajouter quelques mots à étudier!",
+    "it": "Qui puoi importare parole da file CSV o Google Sheets. Inizia aggiungendo alcune parole da studiare!"
+  },
+  "onboarding_step3": {
+    "source": "В этом разделе вы изучаете новые слова. Приложение показывает слово, перевод и примеры использования.",
+    "en": "In this section you learn new words. The app shows word, translation and usage examples.",
+    "ru": "В этом разделе вы изучаете новые слова. Приложение показывает слово, перевод и примеры использования.",
+    "de": "In diesem Abschnitt lernen Sie neue Wörter. Die App zeigt Wort, Übersetzung und Verwendungsbeispiele.",
+    "es": "En esta sección aprende nuevas palabras. La aplicación muestra palabra, traducción y ejemplos de uso.",
+    "fr": "Dans cette section, vous apprenez de nouveaux mots. L'application affiche le mot, la traduction et les exemples d'utilisation.",
+    "it": "In questa sezione impari nuove parole. L'app mostra parola, traduzione ed esempi d'uso."
+  },
+  "onboarding_step4": {
+    "source": "Здесь вы закрепляете изученные слова с помощью различных упражнений: карточки, ввод текста и множественный выбор.",
+    "en": "Here you reinforce learned words with various exercises: flashcards, text input and multiple choice.",
+    "ru": "Здесь вы закрепляете изученные слова с помощью различных упражнений: карточки, ввод текста и множественный выбор.",
+    "de": "Hier festigen Sie gelernte Wörter mit verschiedenen Übungen: Karteikarten, Texteingabe und Multiple Choice.",
+    "es": "Aquí refuerza las palabras aprendidas con varios ejercicios: tarjetas, entrada de texto y opción múltiple.",
+    "fr": "Ici, vous renforcez les mots appris avec divers exercices: cartes mémoire, saisie de texte et choix multiples.",
+    "it": "Qui rafforzi le parole apprese con vari esercizi: flashcard, input di testo e scelta multipla."
+  },
+  "onboarding_step5": {
+    "source": "Отслеживайте свой прогресс, зарабатывайте XP, повышайте уровень и получайте достижения! Соревнуйтесь в глобальных лидербордах.",
+    "en": "Track your progress, earn XP, level up and unlock achievements! Compete on global leaderboards.",
+    "ru": "Отслеживайте свой прогресс, зарабатывайте XP, повышайте уровень и получайте достижения! Соревнуйтесь в глобальных лидербордах.",
+    "de": "Verfolgen Sie Ihren Fortschritt, verdienen Sie XP, steigen Sie auf und schalten Sie Erfolge frei! Konkurrieren Sie auf globalen Bestenlisten.",
+    "es": "Siga su progreso, gane XP, suba de nivel y desbloquee logros! Compita en tablas de clasificación globales.",
+    "fr": "Suivez votre progression, gagnez de l'XP, montez de niveau et débloquez des succès! Compétez sur les classements mondiaux.",
+    "it": "Traccia i tuoi progressi, guadagna XP, sali di livello e sblocca risultati! Compete nelle classifiche globali."
+  },
+  "onboarding_step6": {
+    "source": "Настройте озвучку слов, выберите голос, измените скорость и тон. Также здесь вы можете синхронизировать данные с сервером.",
+    "en": "Configure word pronunciation, select voice, adjust speed and pitch. Here you can also sync data with server.",
+    "ru": "Настройте озвучку слов, выберите голос, измените скорость и тон. Также здесь вы можете синхронизировать данные с сервером.",
+    "de": "Konfigurieren Sie die Wortaussprache, wählen Sie Stimme, passen Sie Geschwindigkeit und Tonhöhe an. Hier können Sie auch Daten mit dem Server synchronisieren.",
+    "es": "Configure la pronunciación de palabras, seleccione voz, ajuste velocidad y tono. Aquí también puede sincronizar datos con el servidor.",
+    "fr": "Configurez la prononciation des mots, sélectionnez la voix, ajustez la vitesse et la hauteur. Ici, vous pouvez également synchroniser les données avec le serveur.",
+    "it": "Configura la pronuncia delle parole, seleziona voce, regola velocità e tono. Qui puoi anche sincronizzare i dati con il server."
+  },
+  "onboarding_step7": {
+    "source": "Переключайтесь между светлой и темной темой для комфортного обучения в любое время суток.",
+    "en": "Switch between light and dark theme for comfortable learning at any time of day.",
+    "ru": "Переключайтесь между светлой и темной темой для комфортного обучения в любое время суток.",
+    "de": "Wechseln Sie zwischen hellem und dunklem Design für komfortables Lernen zu jeder Tageszeit.",
+    "es": "Cambie entre tema claro y oscuro para un aprendizaje cómodo en cualquier momento del día.",
+    "fr": "Basculez entre le thème clair et sombre pour un apprentissage confortable à tout moment de la journée.",
+    "it": "Passa tra tema chiaro e scuro per un apprendimento confortevole in qualsiasi momento della giornata."
+  },
+  "onboarding_step8": {
+    "source": "Теперь вы готовы начать изучение! Импортируйте слова и начните свой путь к свободному владению языком. Удачи!",
+    "en": "Now you're ready to start learning! Import words and begin your journey to language fluency. Good luck!",
+    "ru": "Теперь вы готовы начать изучение! Импортируйте слова и начните свой путь к свободному владению языком. Удачи!",
+    "de": "Jetzt sind Sie bereit, mit dem Lernen zu beginnen! Importieren Sie Wörter und beginnen Sie Ihre Reise zur Sprachkompetenz. Viel Glück!",
+    "es": "¡Ahora está listo para comenzar a aprender! Importe palabras y comience su viaje hacia la fluidez del idioma. ¡Buena suerte!",
+    "fr": "Vous êtes maintenant prêt à commencer l'apprentissage! Importez des mots et commencez votre voyage vers la maîtrise de la langue. Bonne chance!",
+    "it": "Ora sei pronto per iniziare a imparare! Importa parole e inizia il tuo viaggio verso la padronanza della lingua. Buona fortuna!"
+  },
+  "finish": {
+    "source": "Завершить ✓",
+    "en": "Finish ✓",
+    "ru": "Завершить ✓",
+    "de": "Beenden ✓",
+    "es": "Terminar ✓",
+    "fr": "Terminer ✓",
+    "it": "Finisci ✓"
+  },
+  "next": {
+    "source": "Далее →",
+    "en": "Next →",
+    "ru": "Далее →",
+    "de": "Weiter →",
+    "es": "Siguiente →",
+    "fr": "Suivant →",
+    "it": "Avanti →"
+  },
+  "skip_tutorial_confirm": {
+    "source": "Вы уверены, что хотите пропустить обучение? Вы всегда сможете вернуться к нему позже.",
+    "en": "Are you sure you want to skip the tutorial? You can always return to it later.",
+    "ru": "Вы уверены, что хотите пропустить обучение? Вы всегда сможете вернуться к нему позже.",
+    "de": "Sind Sie sicher, dass Sie das Tutorial überspringen möchten? Sie können jederzeit später zurückkehren.",
+    "es": "¿Está seguro de que desea omitir el tutorial? Siempre puede volver a él más tarde.",
+    "fr": "Êtes-vous sûr de vouloir sauter le tutoriel? Vous pouvez toujours y revenir plus tard.",
+    "it": "Sei sicuro di voler saltare il tutorial? Puoi sempre tornarci più tardi."
+  },
+  "survival_min_words": {
+    "source": "Нужно минимум 4 слова для режима выживания",
+    "en": "Need at least 4 words for survival mode",
+    "ru": "Нужно минимум 4 слова для режима выживания",
+    "de": "Mindestens 4 Wörter für den Überlebensmodus erforderlich",
+    "es": "Se necesitan al menos 4 palabras para el modo supervivencia",
+    "fr": "Au moins 4 mots nécessaires pour le mode survie",
+    "it": "Servono almeno 4 parole per la modalità sopravvivenza"
+  },
+  "time_up": {
+    "source": "Время вышло!",
+    "en": "Time's up!",
+    "ru": "Время вышло!",
+    "de": "Zeit abgelaufen!",
+    "es": "¡Se acabó el tiempo!",
+    "fr": "Le temps est écoulé!",
+    "it": "Tempo scaduto!"
+  },
+  "incorrect": {
+    "source": "Неправильно!",
+    "en": "Incorrect!",
+    "ru": "Неправильно!",
+    "de": "Falsch!",
+    "es": "¡Incorrecto!",
+    "fr": "Incorrect!",
+    "it": "Scorretto!"
+  },
+  "correct_plus_point": {
+    "source": "Правильно! +1 очко",
+    "en": "Correct! +1 point",
+    "ru": "Правильно! +1 очко",
+    "de": "Richtig! +1 Punkt",
+    "es": "¡Correcto! +1 punto",
+    "fr": "Correct! +1 point",
+    "it": "Corretto! +1 punto"
   }
 }

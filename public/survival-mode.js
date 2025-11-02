@@ -22,7 +22,7 @@ class SurvivalMode {
             this.words = await database.getWordsByStatus('studying');
             
             if (this.words.length < 4) {
-                throw new Error('Нужно minиmуm 4 слова для режиmа выживания');
+                throw new Error(i18n.t('survival_min_words'));
             }
 
             this.isActive = true;
@@ -199,7 +199,7 @@ class SurvivalMode {
 
     timeUp() {
         this.stopTimer();
-        this.handleIncorrectAnswer('Вреmя вышло!', 'timeout');
+        this.handleIncorrectAnswer(i18n.t('time_up'), 'timeout');
     }
 
     handleAnswer(choice) {
@@ -218,7 +218,7 @@ class SurvivalMode {
         if (isCorrect) {
             this.handleCorrectAnswer(choice);
         } else {
-            this.handleIncorrectAnswer('Неправильно!', 'incorrect', choice);
+            this.handleIncorrectAnswer(i18n.t('incorrect'), 'incorrect', choice);
         }
     }
 
@@ -251,7 +251,7 @@ class SurvivalMode {
 
         // Visual feedback
         choice.classList.add('correct');
-        document.getElementById('survivalFeedback').textContent = 'Правильно! +1 очко';
+        document.getElementById('survivalFeedback').textContent = i18n.t('correct_plus_point');
         document.getElementById('survivalFeedback').className = 'survival-feedback correct';
 
         // Update word progress
