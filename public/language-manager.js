@@ -102,7 +102,12 @@ class LanguageManager {
                 'leaderboard': 'Рейтинг',
                 'dashboard': 'Панель управления',
                 'survivalMode': 'Режиm выживания',
-                'startReview': 'Начать повторение'
+                'startReview': 'Начать повторение',
+
+                // Completion messages
+                'quizCompleted': 'Квиз завершен!',
+                'reviewCompleted': 'Повторение завершено!',
+                'result': 'Результат'
             },
             
             'en': {
@@ -187,7 +192,12 @@ class LanguageManager {
                 'leaderboard': 'Leaderboard',
                 'dashboard': 'Dashboard',
                 'survivalMode': 'Survival Mode',
-                'startReview': 'Start Review'
+                'startReview': 'Start Review',
+
+                // Completion messages
+                'quizCompleted': 'Quiz completed!',
+                'reviewCompleted': 'Review completed!',
+                'result': 'Result'
             },
             
             'de': {
