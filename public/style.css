@@ -309,6 +309,19 @@
     border-bottom-color: rgba(255, 255, 255, 0.1);
 }
 
+/* List sections and word lists dark theme */
+[data-theme="dark"] .list-section {
+    background: rgba(31, 41, 55, 0.7);
+    backdrop-filter: blur(20px);
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    box-shadow: 0 8px 20px rgba(0, 0, 0, 0.5);
+}
+
+[data-theme="dark"] .word-list {
+    background: rgba(17, 24, 39, 0.5);
+    border: 1px solid rgba(255, 255, 255, 0.1);
+}
+
 /* Unified buttons - primary action buttons */
 [data-theme="dark"] button:not(.theme-toggle):not(.settings-btn):not(.nav-btn):not(.choice-btn):not(.letter-btn) {
     background: linear-gradient(135deg, var(--primary-600) 0%, var(--primary-700) 100%);
