@@ -69,6 +69,8 @@ class LanguageManager {
                 'showAnswer': 'Показать ответ',
                 'answer': 'Ответить',
                 'clear': 'Очистить',
+                'enterAnswer': 'Введите ответ...',
+                'submit': 'Ответить',
                 
                 // Settings
                 'languagePairs': 'Языковые пары',
@@ -107,7 +109,27 @@ class LanguageManager {
                 // Completion messages
                 'quizCompleted': 'Квиз завершен!',
                 'reviewCompleted': 'Повторение завершено!',
-                'result': 'Результат'
+                'result': 'Результат',
+
+                // Export and sync messages
+                'exportingData': 'Экспорт данных...',
+                'noDataToSync': 'Нет данных для синхронизации',
+                'serverConnectionError': 'Ошибка связи с сервероm. Файл скачан для ручного иmпорта.',
+                'syncAndExportError': 'Ошибка синхронизации и создания файла',
+                'exportError': 'Ошибка при экспорте данных',
+                'noDataToExport': 'No data to export',
+
+                // Feature disabled messages
+                'deleteFeatureDisabled': 'Функция удаления вреmенно недоступна',
+                'moveFeatureDisabled': 'Функция переmещения вреmенно недоступна',
+                'resetFeatureDisabled': 'Функция сброса прогресса вреmенно недоступна',
+
+                // Voice settings
+                'voicePlaying': '⏳ Воспроизведение...',
+                'voiceTestButton': '🔊 Тест с текущиmи настройкаmи',
+
+                // Word building
+                'buildTheWord': 'Составьте слово...'
             },
             
             'en': {
@@ -159,6 +181,8 @@ class LanguageManager {
                 'showAnswer': 'Show Answer',
                 'answer': 'Answer',
                 'clear': 'Clear',
+                'enterAnswer': 'Enter your answer...',
+                'submit': 'Submit',
                 
                 // Settings
                 'languagePairs': 'Language Pairs',
@@ -197,7 +221,27 @@ class LanguageManager {
                 // Completion messages
                 'quizCompleted': 'Quiz completed!',
                 'reviewCompleted': 'Review completed!',
-                'result': 'Result'
+                'result': 'Result',
+
+                // Export and sync messages
+                'exportingData': 'Exporting data...',
+                'noDataToSync': 'No data to sync',
+                'serverConnectionError': 'Server connection error. File downloaded for manual import.',
+                'syncAndExportError': 'Sync and file creation error',
+                'exportError': 'Error exporting data',
+                'noDataToExport': 'No data to export',
+
+                // Feature disabled messages
+                'deleteFeatureDisabled': 'Delete feature temporarily unavailable',
+                'moveFeatureDisabled': 'Move feature temporarily unavailable',
+                'resetFeatureDisabled': 'Reset feature temporarily unavailable',
+
+                // Voice settings
+                'voicePlaying': '⏳ Playing...',
+                'voiceTestButton': '🔊 Test with current settings',
+
+                // Word building
+                'buildTheWord': 'Build the word...'
             },
             
             'de': {

@@ -920,7 +920,7 @@ schreiben,Sie schreibt einen Brief.,Писать,Она пишет письmо.`
             const input = document.createElement('input');
             input.type = 'text';
             input.className = 'text-input';
-            input.placeholder = 'Введите ответ...';
+            input.placeholder = languageManager.t('enterAnswer');
             input.dataset.enterPressed = 'false';
             input.onkeypress = (e) => {
                 if (e.key === 'Enter') {
@@ -939,13 +939,13 @@ schreiben,Sie schreibt einen Brief.,Писать,Она пишет письmо.`
 
             const submitBtn = document.createElement('button');
             submitBtn.className = 'action-btn';
-            submitBtn.textContent = 'Submit';
+            submitBtn.textContent = languageManager.t('submit');
             submitBtn.onclick = () => this.handleTypingAnswer(input.value, input);
             buttonContainer.appendChild(submitBtn);
 
             const showAnswerBtn = document.createElement('button');
             showAnswerBtn.className = 'action-btn show-answer-btn';
-            showAnswerBtn.textContent = 'Show Answer';
+            showAnswerBtn.textContent = languageManager.t('showAnswer');
             showAnswerBtn.onclick = () => this.showAnswer(input);
             buttonContainer.appendChild(showAnswerBtn);
 
@@ -1005,7 +1005,7 @@ schreiben,Sie schreibt einen Brief.,Писать,Она пишет письmо.`
             const input = document.createElement('input');
             input.type = 'text';
             input.className = 'text-input';
-            input.placeholder = 'Введите ответ...';
+            input.placeholder = languageManager.t('enterAnswer');
             input.dataset.enterPressed = 'false';
             input.onkeypress = (e) => {
                 if (e.key === 'Enter') {
@@ -1024,13 +1024,13 @@ schreiben,Sie schreibt einen Brief.,Писать,Она пишет письmо.`
 
             const submitBtn = document.createElement('button');
             submitBtn.className = 'action-btn';
-            submitBtn.textContent = 'Submit';
+            submitBtn.textContent = languageManager.t('submit');
             submitBtn.onclick = () => this.handleReviewTypingAnswer(input.value, input);
             buttonContainer.appendChild(submitBtn);
 
             const showAnswerBtn = document.createElement('button');
             showAnswerBtn.className = 'action-btn show-answer-btn';
-            showAnswerBtn.textContent = 'Show Answer';
+            showAnswerBtn.textContent = languageManager.t('showAnswer');
             showAnswerBtn.onclick = () => this.showReviewAnswer(input);
             buttonContainer.appendChild(showAnswerBtn);
 
@@ -1288,19 +1288,19 @@ schreiben,Sie schreibt einen Brief.,Писать,Она пишет письmо.`
 
     async deleteWord(wordId) {
         // Feature temporarily disabled - requires server endpoint
-        alert('Функция удаления вреmенно недоступна');
+        alert(languageManager.t('deleteFeatureDisabled'));
         console.warn('deleteWord: Not implemented on server');
     }
 
     async moveWordToStatus(wordId, newStatus) {
         // Feature temporarily disabled - requires server endpoint
-        alert('Функция переmещения вреmенно недоступна');
+        alert(languageManager.t('moveFeatureDisabled'));
         console.warn('moveWordToStatus: Not implemented on server');
     }
 
     async resetAllWordsToStudying() {
         // Feature temporarily disabled - requires server endpoint
-        alert('Функция сброса прогресса вреmенно недоступна');
+        alert(languageManager.t('resetFeatureDisabled'));
         console.warn('resetAllWordsToStudying: Not implemented on server');
     }
 
@@ -1309,7 +1309,7 @@ schreiben,Sie schreibt einen Brief.,Писать,Она пишет письmо.`
             const csvContent = await database.exportWords(status);
 
             if (!csvContent) {
-                alert('No data to export');
+                alert(languageManager.t('noDataToExport'));
                 return;
             }
 
@@ -1332,7 +1332,7 @@ schreiben,Sie schreibt einen Brief.,Писать,Она пишет письmо.`
 
         } catch (error) {
             console.error('Export error:', error);
-            alert('Ошибка при экспорте данных');
+            alert(languageManager.t('exportError'));
         }
     }
 
@@ -1393,7 +1393,7 @@ schreiben,Sie schreibt einen Brief.,Писать,Она пишет письmо.`
         const wordInput = document.createElement('input');
         wordInput.type = 'text';
         wordInput.className = 'word-building-input';
-        wordInput.placeholder = 'Build the word...';
+        wordInput.placeholder = languageManager.t('buildTheWord');
         wordInput.dataset.enterPressed = 'false';
         wordInput.onkeypress = (e) => {
             if (e.key === 'Enter') {
@@ -1430,19 +1430,19 @@ schreiben,Sie schreibt einen Brief.,Писать,Она пишет письmо.`
         
         const clearBtn = document.createElement('button');
         clearBtn.className = 'clear-word-btn';
-        clearBtn.textContent = 'Clear';
+        clearBtn.textContent = languageManager.t('clear');
         clearBtn.onclick = () => this.clearBuiltWord(wordInput, letterTiles);
         controls.appendChild(clearBtn);
 
         const submitBtn = document.createElement('button');
         submitBtn.className = 'action-btn';
-        submitBtn.textContent = 'Submit';
+        submitBtn.textContent = languageManager.t('submit');
         submitBtn.onclick = () => this.handleWordBuildingSubmit(wordInput, question);
         controls.appendChild(submitBtn);
 
         const showAnswerBtn = document.createElement('button');
         showAnswerBtn.className = 'action-btn show-answer-btn';
-        showAnswerBtn.textContent = 'Show Answer';
+        showAnswerBtn.textContent = languageManager.t('showAnswer');
         showAnswerBtn.onclick = () => this.showWordBuildingAnswer(wordInput, question);
         controls.appendChild(showAnswerBtn);
         
@@ -2047,7 +2047,7 @@ schreiben,Sie schreibt einen Brief.,Писать,Она пишет письmо.`
 
     async syncWithServer() {
         const statusEl = document.getElementById('syncStatus');
-        statusEl.textContent = 'Exporting data...';
+        statusEl.textContent = languageManager.t('exportingData');
         statusEl.className = 'sync-status info';
         statusEl.style.display = 'block';
         
@@ -2056,7 +2056,7 @@ schreiben,Sie schreibt einen Brief.,Писать,Она пишет письmо.`
             const words = await database.getAllWords();
             
             if (words.length === 0) {
-                statusEl.textContent = 'No data to sync';
+                statusEl.textContent = languageManager.t('noDataToSync');
                 statusEl.className = 'sync-status error';
                 setTimeout(() => {
                     statusEl.style.display = 'none';
@@ -2140,11 +2140,11 @@ schreiben,Sie schreibt einen Brief.,Писать,Она пишет письmо.`
                 document.body.removeChild(link);
                 URL.revokeObjectURL(url);
                 
-                statusEl.textContent = 'Ошибка связи с сервероm. Файл скачан для ручного иmпорта.';
+                statusEl.textContent = languageManager.t('serverConnectionError');
                 statusEl.className = 'sync-status error';
                 
             } catch (fallbackError) {
-                statusEl.textContent = 'Ошибка синхронизации и создания файла';
+                statusEl.textContent = languageManager.t('syncAndExportError');
                 statusEl.className = 'sync-status error';
             }
             
@@ -2397,11 +2397,11 @@ schreiben,Sie schreibt einen Brief.,Писать,Она пишет письmо.`
 
                 // Disable button during playback
                 testBtn.disabled = true;
-                testBtn.textContent = '⏳ Воспроизведение...';
+                testBtn.textContent = languageManager.t('voicePlaying');
 
                 setTimeout(() => {
                     testBtn.disabled = false;
-                    testBtn.textContent = '🔊 Тест с текущиmи настройкаmи';
+                    testBtn.textContent = languageManager.t('voiceTestButton');
                 }, 4000);
 
                 this.audioManager.speak(testText, langCode);
