@@ -523,7 +523,12 @@ class Gamification {
     }
 
     // Show XP earned notification
+    // DISABLED: XP notifications disabled to avoid interrupting learning flow
     showXPNotification(xpAmount, level, leveledUp = false) {
+        // Notification disabled - XP is still earned but not shown as popup
+        return;
+
+        /* DISABLED CODE:
         const notification = document.createElement('div');
         notification.className = 'xp-notification';
 
@@ -549,6 +554,7 @@ class Gamification {
         setTimeout(() => {
             notification.remove();
         }, 3000);
+        */
     }
 
     // Show achievement unlocked notification
