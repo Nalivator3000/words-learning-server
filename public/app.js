@@ -369,6 +369,7 @@ class LanguageLearningApp {
         document.getElementById('importBtn').addEventListener('click', () => this.showSection('import'));
         document.getElementById('studyBtn').addEventListener('click', () => this.showSection('study'));
         document.getElementById('reviewBtn').addEventListener('click', () => this.showSection('review'));
+        document.getElementById('challengesBtn').addEventListener('click', () => this.showSection('challenges'));
         document.getElementById('leaderboardBtn').addEventListener('click', () => this.showSection('leaderboard'));
         document.getElementById('statsBtn').addEventListener('click', () => this.showSection('stats'));
 
@@ -546,6 +547,12 @@ class LanguageLearningApp {
             await this.updateStats();
         } else if (sectionName === 'review') {
             await this.updateReviewStats();
+        } else if (sectionName === 'challenges') {
+            await window.featuresUI.loadDailyChallenges();
+        } else if (sectionName === 'streakFreeze') {
+            await window.featuresUI.loadStreakFreezes();
+        } else if (sectionName === 'bugReports') {
+            await window.featuresUI.loadRecentBugReports();
         } else if (sectionName === 'leaderboard') {
             await this.loadLeaderboard('global');
         } else if (sectionName === 'stats') {

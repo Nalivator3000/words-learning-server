@@ -15,6 +15,12 @@ class UserManager {
                 await this.loadUserLanguagePairs();
                 this.hideAuthModal();
                 this.showUserInterface();
+
+                // Initialize features UI with user info
+                if (window.featuresUI) {
+                    window.featuresUI.setUser(this.currentUser.id, this.currentLanguagePair?.id);
+                }
+
                 this.initialized = true;
                 return true;
             }
@@ -79,6 +85,11 @@ class UserManager {
             this.hideAuthModal();
             this.showUserInterface();
 
+            // Initialize features UI with user info
+            if (window.featuresUI) {
+                window.featuresUI.setUser(this.currentUser.id, this.currentLanguagePair?.id);
+            }
+
             return true;
         } catch (error) {
             console.error('Login error:', error);
@@ -111,6 +122,11 @@ class UserManager {
 
             this.hideAuthModal();
             this.showUserInterface();
+
+            // Initialize features UI with user info
+            if (window.featuresUI) {
+                window.featuresUI.setUser(this.currentUser.id, this.currentLanguagePair?.id);
+            }
 
             return true;
         } catch (error) {

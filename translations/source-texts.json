@@ -5632,5 +5632,491 @@
     "es": "Sincronizar",
     "fr": "Synchroniser",
     "it": "Sincronizza"
+  },
+  "daily_challenges": {
+    "source": "Ежедневные задания",
+    "en": "Daily Challenges",
+    "ru": "Ежедневные задания",
+    "de": "Daily Challenges",
+    "es": "Daily Challenges",
+    "fr": "Daily Challenges",
+    "it": "Daily Challenges"
+  },
+  "challenges_description": {
+    "source": "Выполняй ежедневные задания и получай дополнительные награды! Каждый день новые челленджи.",
+    "en": "Complete daily challenges and earn extra rewards! New challenges every day.",
+    "ru": "Выполняй ежедневные задания и получай дополнительные награды! Каждый день новые челленджи.",
+    "de": "Complete daily challenges and earn extra rewards! New challenges every day.",
+    "es": "Complete daily challenges and earn extra rewards! New challenges every day.",
+    "fr": "Complete daily challenges and earn extra rewards! New challenges every day.",
+    "it": "Complete daily challenges and earn extra rewards! New challenges every day."
+  },
+  "challenges_completed_today": {
+    "source": "Выполнено сегодня",
+    "en": "Completed Today",
+    "ru": "Выполнено сегодня",
+    "de": "Completed Today",
+    "es": "Completed Today",
+    "fr": "Completed Today",
+    "it": "Completed Today"
+  },
+  "challenges_streak": {
+    "source": "Серия дней",
+    "en": "Streak Days",
+    "ru": "Серия дней",
+    "de": "Streak Days",
+    "es": "Streak Days",
+    "fr": "Streak Days",
+    "it": "Streak Days"
+  },
+  "challenges_total": {
+    "source": "Всего выполнено",
+    "en": "Total Completed",
+    "ru": "Всего выполнено",
+    "de": "Total Completed",
+    "es": "Total Completed",
+    "fr": "Total Completed",
+    "it": "Total Completed"
+  },
+  "days_short": {
+    "source": "дн.",
+    "en": "d.",
+    "ru": "дн.",
+    "de": "d.",
+    "es": "d.",
+    "fr": "d.",
+    "it": "d."
+  },
+  "challenge_easy": {
+    "source": "Легко",
+    "en": "Easy",
+    "ru": "Легко",
+    "de": "Easy",
+    "es": "Easy",
+    "fr": "Easy",
+    "it": "Easy"
+  },
+  "challenge_medium": {
+    "source": "Средне",
+    "en": "Medium",
+    "ru": "Средне",
+    "de": "Medium",
+    "es": "Medium",
+    "fr": "Medium",
+    "it": "Medium"
+  },
+  "challenge_hard": {
+    "source": "Сложно",
+    "en": "Hard",
+    "ru": "Сложно",
+    "de": "Hard",
+    "es": "Hard",
+    "fr": "Hard",
+    "it": "Hard"
+  },
+  "challenge_progress": {
+    "source": "Прогресс",
+    "en": "Progress",
+    "ru": "Прогресс",
+    "de": "Progress",
+    "es": "Progress",
+    "fr": "Progress",
+    "it": "Progress"
+  },
+  "challenge_reward": {
+    "source": "Награда",
+    "en": "Reward",
+    "ru": "Награда",
+    "de": "Reward",
+    "es": "Reward",
+    "fr": "Reward",
+    "it": "Reward"
+  },
+  "challenge_claim_reward": {
+    "source": "Получить награду",
+    "en": "Claim Reward",
+    "ru": "Получить награду",
+    "de": "Claim Reward",
+    "es": "Claim Reward",
+    "fr": "Claim Reward",
+    "it": "Claim Reward"
+  },
+  "challenge_completed": {
+    "source": "Выполнено!",
+    "en": "Completed!",
+    "ru": "Выполнено!",
+    "de": "Completed!",
+    "es": "Completed!",
+    "fr": "Completed!",
+    "it": "Completed!"
+  },
+  "challenge_locked": {
+    "source": "Заблокировано",
+    "en": "Locked",
+    "ru": "Заблокировано",
+    "de": "Locked",
+    "es": "Locked",
+    "fr": "Locked",
+    "it": "Locked"
+  },
+  "streak_freeze_title": {
+    "source": "Заморозка стрика",
+    "en": "Streak Freeze",
+    "ru": "Заморозка стрика",
+    "de": "Streak Freeze",
+    "es": "Streak Freeze",
+    "fr": "Streak Freeze",
+    "it": "Streak Freeze"
+  },
+  "streak_freeze_description": {
+    "source": "Защити свой стрик от потери! Используй заморозку, если не можешь заниматься.",
+    "en": "Protect your streak from loss! Use freeze if you can't study.",
+    "ru": "Защити свой стрик от потери! Используй заморозку, если не можешь заниматься.",
+    "de": "Protect your streak from loss! Use freeze if you can't study.",
+    "es": "Protect your streak from loss! Use freeze if you can't study.",
+    "fr": "Protect your streak from loss! Use freeze if you can't study.",
+    "it": "Protect your streak from loss! Use freeze if you can't study."
+  },
+  "active_freezes": {
+    "source": "Активные заморозки",
+    "en": "Active Freezes",
+    "ru": "Активные заморозки",
+    "de": "Active Freezes",
+    "es": "Active Freezes",
+    "fr": "Active Freezes",
+    "it": "Active Freezes"
+  },
+  "use_freeze": {
+    "source": "Использовать заморозку",
+    "en": "Use Freeze",
+    "ru": "Использовать заморозку",
+    "de": "Use Freeze",
+    "es": "Use Freeze",
+    "fr": "Use Freeze",
+    "it": "Use Freeze"
+  },
+  "use_freeze_description": {
+    "source": "Активируй заморозку прямо сейчас, чтобы защитить стрик на сегодня",
+    "en": "Activate freeze right now to protect today's streak",
+    "ru": "Активируй заморозку прямо сейчас, чтобы защитить стрик на сегодня",
+    "de": "Activate freeze right now to protect today's streak",
+    "es": "Activate freeze right now to protect today's streak",
+    "fr": "Activate freeze right now to protect today's streak",
+    "it": "Activate freeze right now to protect today's streak"
+  },
+  "use_freeze_button": {
+    "source": "Использовать заморозку",
+    "en": "Use Freeze",
+    "ru": "Использовать заморозку",
+    "de": "Use Freeze",
+    "es": "Use Freeze",
+    "fr": "Use Freeze",
+    "it": "Use Freeze"
+  },
+  "free_freeze": {
+    "source": "Бесплатная заморозка",
+    "en": "Free Freeze",
+    "ru": "Бесплатная заморозка",
+    "de": "Free Freeze",
+    "es": "Free Freeze",
+    "fr": "Free Freeze",
+    "it": "Free Freeze"
+  },
+  "free_freeze_description": {
+    "source": "Получай 1 бесплатную заморозку каждую неделю!",
+    "en": "Get 1 free freeze every week!",
+    "ru": "Получай 1 бесплатную заморозку каждую неделю!",
+    "de": "Get 1 free freeze every week!",
+    "es": "Get 1 free freeze every week!",
+    "fr": "Get 1 free freeze every week!",
+    "it": "Get 1 free freeze every week!"
+  },
+  "claim_free_freeze": {
+    "source": "Получить бесплатную заморозку",
+    "en": "Claim Free Freeze",
+    "ru": "Получить бесплатную заморозку",
+    "de": "Claim Free Freeze",
+    "es": "Claim Free Freeze",
+    "fr": "Claim Free Freeze",
+    "it": "Claim Free Freeze"
+  },
+  "freeze_history": {
+    "source": "История использования",
+    "en": "Usage History",
+    "ru": "История использования",
+    "de": "Usage History",
+    "es": "Usage History",
+    "fr": "Usage History",
+    "it": "Usage History"
+  },
+  "freeze_active": {
+    "source": "Активна",
+    "en": "Active",
+    "ru": "Активна",
+    "de": "Active",
+    "es": "Active",
+    "fr": "Active",
+    "it": "Active"
+  },
+  "freeze_days_left": {
+    "source": "дней осталось",
+    "en": "days left",
+    "ru": "дней осталось",
+    "de": "days left",
+    "es": "days left",
+    "fr": "days left",
+    "it": "days left"
+  },
+  "freeze_expires": {
+    "source": "Истекает",
+    "en": "Expires",
+    "ru": "Истекает",
+    "de": "Expires",
+    "es": "Expires",
+    "fr": "Expires",
+    "it": "Expires"
+  },
+  "no_active_freezes": {
+    "source": "Нет активных заморозок",
+    "en": "No active freezes",
+    "ru": "Нет активных заморозок",
+    "de": "No active freezes",
+    "es": "No active freezes",
+    "fr": "No active freezes",
+    "it": "No active freezes"
+  },
+  "freeze_used_successfully": {
+    "source": "Заморозка успешно использована!",
+    "en": "Freeze used successfully!",
+    "ru": "Заморозка успешно использована!",
+    "de": "Freeze used successfully!",
+    "es": "Freeze used successfully!",
+    "fr": "Freeze used successfully!",
+    "it": "Freeze used successfully!"
+  },
+  "free_freeze_claimed": {
+    "source": "Бесплатная заморозка получена!",
+    "en": "Free freeze claimed!",
+    "ru": "Бесплатная заморозка получена!",
+    "de": "Free freeze claimed!",
+    "es": "Free freeze claimed!",
+    "fr": "Free freeze claimed!",
+    "it": "Free freeze claimed!"
+  },
+  "freeze_not_available": {
+    "source": "Нет доступных заморозок",
+    "en": "No freezes available",
+    "ru": "Нет доступных заморозок",
+    "de": "No freezes available",
+    "es": "No freezes available",
+    "fr": "No freezes available",
+    "it": "No freezes available"
+  },
+  "bug_reports": {
+    "source": "Сообщить об ошибке",
+    "en": "Report a Bug",
+    "ru": "Сообщить об ошибке",
+    "de": "Report a Bug",
+    "es": "Report a Bug",
+    "fr": "Report a Bug",
+    "it": "Report a Bug"
+  },
+  "bug_reports_description": {
+    "source": "Нашли ошибку или баг? Опишите проблему, и мы её исправим!",
+    "en": "Found a bug? Describe the problem and we'll fix it!",
+    "ru": "Нашли ошибку или баг? Опишите проблему, и мы её исправим!",
+    "de": "Found a bug? Describe the problem and we'll fix it!",
+    "es": "Found a bug? Describe the problem and we'll fix it!",
+    "fr": "Found a bug? Describe the problem and we'll fix it!",
+    "it": "Found a bug? Describe the problem and we'll fix it!"
+  },
+  "bug_title": {
+    "source": "Название проблемы",
+    "en": "Problem Title",
+    "ru": "Название проблемы",
+    "de": "Problem Title",
+    "es": "Problem Title",
+    "fr": "Problem Title",
+    "it": "Problem Title"
+  },
+  "bug_title_placeholder": {
+    "source": "Краткое описание проблемы",
+    "en": "Brief description of the problem",
+    "ru": "Краткое описание проблемы",
+    "de": "Brief description of the problem",
+    "es": "Brief description of the problem",
+    "fr": "Brief description of the problem",
+    "it": "Brief description of the problem"
+  },
+  "bug_description": {
+    "source": "Подробное описание",
+    "en": "Detailed Description",
+    "ru": "Подробное описание",
+    "de": "Detailed Description",
+    "es": "Detailed Description",
+    "fr": "Detailed Description",
+    "it": "Detailed Description"
+  },
+  "bug_description_placeholder": {
+    "source": "Опишите, что произошло, как воспроизвести ошибку, какое поведение ожидали",
+    "en": "Describe what happened, how to reproduce the bug, what behavior you expected",
+    "ru": "Опишите, что произошло, как воспроизвести ошибку, какое поведение ожидали",
+    "de": "Describe what happened, how to reproduce the bug, what behavior you expected",
+    "es": "Describe what happened, how to reproduce the bug, what behavior you expected",
+    "fr": "Describe what happened, how to reproduce the bug, what behavior you expected",
+    "it": "Describe what happened, how to reproduce the bug, what behavior you expected"
+  },
+  "bug_severity": {
+    "source": "Критичность",
+    "en": "Severity",
+    "ru": "Критичность",
+    "de": "Severity",
+    "es": "Severity",
+    "fr": "Severity",
+    "it": "Severity"
+  },
+  "severity_low": {
+    "source": "Низкая (косметическая)",
+    "en": "Low (cosmetic)",
+    "ru": "Низкая (косметическая)",
+    "de": "Low (cosmetic)",
+    "es": "Low (cosmetic)",
+    "fr": "Low (cosmetic)",
+    "it": "Low (cosmetic)"
+  },
+  "severity_medium": {
+    "source": "Средняя (влияет на работу)",
+    "en": "Medium (affects functionality)",
+    "ru": "Средняя (влияет на работу)",
+    "de": "Medium (affects functionality)",
+    "es": "Medium (affects functionality)",
+    "fr": "Medium (affects functionality)",
+    "it": "Medium (affects functionality)"
+  },
+  "severity_high": {
+    "source": "Высокая (блокирует функцию)",
+    "en": "High (blocks feature)",
+    "ru": "Высокая (блокирует функцию)",
+    "de": "High (blocks feature)",
+    "es": "High (blocks feature)",
+    "fr": "High (blocks feature)",
+    "it": "High (blocks feature)"
+  },
+  "severity_critical": {
+    "source": "Критическая (краш приложения)",
+    "en": "Critical (app crash)",
+    "ru": "Критическая (краш приложения)",
+    "de": "Critical (app crash)",
+    "es": "Critical (app crash)",
+    "fr": "Critical (app crash)",
+    "it": "Critical (app crash)"
+  },
+  "bug_steps": {
+    "source": "Шаги для воспроизведения",
+    "en": "Steps to Reproduce",
+    "ru": "Шаги для воспроизведения",
+    "de": "Steps to Reproduce",
+    "es": "Steps to Reproduce",
+    "fr": "Steps to Reproduce",
+    "it": "Steps to Reproduce"
+  },
+  "bug_steps_placeholder": {
+    "source": "1. Открыть раздел... 2. Нажать на... 3. Увидеть ошибку...",
+    "en": "1. Open section... 2. Click on... 3. See error...",
+    "ru": "1. Открыть раздел... 2. Нажать на... 3. Увидеть ошибку...",
+    "de": "1. Open section... 2. Click on... 3. See error...",
+    "es": "1. Open section... 2. Click on... 3. See error...",
+    "fr": "1. Open section... 2. Click on... 3. See error...",
+    "it": "1. Open section... 2. Click on... 3. See error..."
+  },
+  "characters_left": {
+    "source": "Осталось символов",
+    "en": "Characters left",
+    "ru": "Осталось символов",
+    "de": "Characters left",
+    "es": "Characters left",
+    "fr": "Characters left",
+    "it": "Characters left"
+  },
+  "send_bug_report": {
+    "source": "Отправить отчёт",
+    "en": "Send Report",
+    "ru": "Отправить отчёт",
+    "de": "Send Report",
+    "es": "Send Report",
+    "fr": "Send Report",
+    "it": "Send Report"
+  },
+  "reset_form": {
+    "source": "Очистить форму",
+    "en": "Clear Form",
+    "ru": "Очистить форму",
+    "de": "Clear Form",
+    "es": "Clear Form",
+    "fr": "Clear Form",
+    "it": "Clear Form"
+  },
+  "my_bug_reports": {
+    "source": "Мои отчёты",
+    "en": "My Reports",
+    "ru": "Мои отчёты",
+    "de": "My Reports",
+    "es": "My Reports",
+    "fr": "My Reports",
+    "it": "My Reports"
+  },
+  "bug_report_sent": {
+    "source": "Отчёт об ошибке успешно отправлен!",
+    "en": "Bug report sent successfully!",
+    "ru": "Отчёт об ошибке успешно отправлен!",
+    "de": "Bug report sent successfully!",
+    "es": "Bug report sent successfully!",
+    "fr": "Bug report sent successfully!",
+    "it": "Bug report sent successfully!"
+  },
+  "no_bug_reports": {
+    "source": "Отчётов пока нет",
+    "en": "No reports yet",
+    "ru": "Отчётов пока нет",
+    "de": "No reports yet",
+    "es": "No reports yet",
+    "fr": "No reports yet",
+    "it": "No reports yet"
+  },
+  "bug_status_new": {
+    "source": "Новая",
+    "en": "New",
+    "ru": "Новая",
+    "de": "New",
+    "es": "New",
+    "fr": "New",
+    "it": "New"
+  },
+  "bug_status_in_progress": {
+    "source": "В работе",
+    "en": "In Progress",
+    "ru": "В работе",
+    "de": "In Progress",
+    "es": "In Progress",
+    "fr": "In Progress",
+    "it": "In Progress"
+  },
+  "bug_status_resolved": {
+    "source": "Решена",
+    "en": "Resolved",
+    "ru": "Решена",
+    "de": "Resolved",
+    "es": "Resolved",
+    "fr": "Resolved",
+    "it": "Resolved"
+  },
+  "bug_status_closed": {
+    "source": "Закрыта",
+    "en": "Closed",
+    "ru": "Закрыта",
+    "de": "Closed",
+    "es": "Closed",
+    "fr": "Closed",
+    "it": "Closed"
   }
 }

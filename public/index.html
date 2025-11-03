@@ -87,6 +87,12 @@
             gamificationLink.rel = 'stylesheet';
             gamificationLink.href = 'gamification.css?v=' + Date.now();
             document.head.appendChild(gamificationLink);
+
+            // Load features UI CSS
+            const featuresLink = document.createElement('link');
+            featuresLink.rel = 'stylesheet';
+            featuresLink.href = 'features-ui.css?v=' + Date.now();
+            document.head.appendChild(featuresLink);
         })();
     </script>
 </head>
@@ -131,6 +137,7 @@
                     <button id="importBtn" class="nav-btn" data-i18n="import" data-label="Import" data-i18n="import">Импорт</button>
                     <button id="studyBtn" class="nav-btn" data-i18n="study" data-label="Study">Изучение</button>
                     <button id="reviewBtn" class="nav-btn" data-i18n="review" data-label="Review">Повторение</button>
+                    <button id="challengesBtn" class="nav-btn" data-i18n="daily_challenges" data-label="Challenges">Челленджи</button>
                     <button id="leaderboardBtn" class="nav-btn" data-i18n="leaderboard" data-label="Rating">Rating</button>
                     <button id="statsBtn" class="nav-btn" data-i18n="statistics" data-label="Stats">Статистика</button>
                 </div>
@@ -595,6 +602,172 @@
                     </div>
                 </div>
             </section>
+
+            <!-- Daily Challenges Section -->
+            <section id="challengesSection" class="section">
+                <h2 data-i18n="daily_challenges">🎯 Ежедневные задания</h2>
+                <p class="section-description" data-i18n="challenges_description">
+                    Выполняй ежедневные задания и получай дополнительные награды! Каждый день новые челленджи.
+                </p>
+
+                <div id="challengesContainer" class="challenges-container">
+                    <!-- Challenges will be rendered here by JavaScript -->
+                    <div class="loading-spinner">
+                        <div class="spinner"></div>
+                        <p data-i18n="loading">Загрузка...</p>
+                    </div>
+                </div>
+
+                <!-- Challenges Stats -->
+                <div class="challenges-stats">
+                    <div class="stat-card">
+                        <h3 data-i18n="challenges_completed_today">Выполнено сегодня</h3>
+                        <p id="challengesCompletedToday">0/3</p>
+                    </div>
+                    <div class="stat-card">
+                        <h3 data-i18n="challenges_streak">Серия дней</h3>
+                        <p id="challengesStreak">0 <span data-i18n="days_short">дн.</span></p>
+                    </div>
+                    <div class="stat-card">
+                        <h3 data-i18n="challenges_total">Всего выполнено</h3>
+                        <p id="challengesTotal">0</p>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Streak Freeze Section -->
+            <section id="streakFreezeSection" class="section">
+                <h2>❄️ <span data-i18n="streak_freeze_title">Заморозка стрика</span></h2>
+                <p class="section-description" data-i18n="streak_freeze_description">
+                    Защити свой стрик от потери! Используй заморозку, если не можешь заниматься.
+                </p>
+
+                <!-- Active Freezes -->
+                <div class="freeze-status-card">
+                    <h3 data-i18n="active_freezes">Активные заморозки</h3>
+                    <div id="activeFreezes" class="active-freezes-list">
+                        <div class="loading-spinner">
+                            <div class="spinner"></div>
+                            <p data-i18n="loading">Загрузка...</p>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Use Freeze -->
+                <div class="use-freeze-card">
+                    <h3 data-i18n="use_freeze">Использовать заморозку</h3>
+                    <p data-i18n="use_freeze_description" style="font-size: 14px; color: #6c757d; margin-bottom: 16px;">
+                        Активируй заморозку прямо сейчас, чтобы защитить стрик на сегодня
+                    </p>
+                    <button id="useFreezeBtn" class="action-btn" disabled>
+                        ❄️ <span data-i18n="use_freeze_button">Использовать заморозку</span>
+                    </button>
+                    <p id="freezeStatus" style="margin-top: 12px; font-size: 14px;"></p>
+                </div>
+
+                <!-- Get Free Freeze -->
+                <div class="free-freeze-card">
+                    <h3 data-i18n="free_freeze">Бесплатная заморозка</h3>
+                    <p data-i18n="free_freeze_description" style="font-size: 14px; color: #6c757d; margin-bottom: 16px;">
+                        Получай 1 бесплатную заморозку каждую неделю!
+                    </p>
+                    <button id="claimFreeFreezeBtn" class="action-btn secondary-btn">
+                        🎁 <span data-i18n="claim_free_freeze">Получить бесплатную заморозку</span>
+                    </button>
+                </div>
+
+                <!-- Freeze History -->
+                <div class="freeze-history-card">
+                    <h3 data-i18n="freeze_history">История использования</h3>
+                    <div id="freezeHistory" class="freeze-history-list">
+                        <!-- History will be rendered here -->
+                    </div>
+                </div>
+            </section>
+
+            <!-- Bug Reports Section -->
+            <section id="bugReportsSection" class="section">
+                <h2>🐛 <span data-i18n="bug_reports">Сообщить об ошибке</span></h2>
+                <p class="section-description" data-i18n="bug_reports_description">
+                    Нашли ошибку или баг? Опишите проблему, и мы её исправим!
+                </p>
+
+                <form id="bugReportForm" class="bug-report-form">
+                    <div class="form-group">
+                        <label for="bugTitle">
+                            <span data-i18n="bug_title">Название проблемы</span> *
+                        </label>
+                        <input
+                            type="text"
+                            id="bugTitle"
+                            required
+                            maxlength="200"
+                            data-i18n-placeholder="bug_title_placeholder"
+                            placeholder="Краткое описание проблемы"
+                        >
+                    </div>
+
+                    <div class="form-group">
+                        <label for="bugDescription">
+                            <span data-i18n="bug_description">Подробное описание</span> *
+                        </label>
+                        <textarea
+                            id="bugDescription"
+                            required
+                            rows="6"
+                            maxlength="2000"
+                            data-i18n-placeholder="bug_description_placeholder"
+                            placeholder="Опишите, что произошло, как воспроизвести ошибку, какое поведение ожидали"
+                        ></textarea>
+                        <small data-i18n="characters_left">Осталось символов: <span id="charCount">2000</span></small>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="bugSeverity">
+                            <span data-i18n="bug_severity">Критичность</span> *
+                        </label>
+                        <select id="bugSeverity" required>
+                            <option value="low" data-i18n="severity_low">Низкая (косметическая)</option>
+                            <option value="medium" data-i18n="severity_medium" selected>Средняя (влияет на работу)</option>
+                            <option value="high" data-i18n="severity_high">Высокая (блокирует функцию)</option>
+                            <option value="critical" data-i18n="severity_critical">Критическая (краш приложения)</option>
+                        </select>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="bugSteps">
+                            <span data-i18n="bug_steps">Шаги для воспроизведения</span>
+                        </label>
+                        <textarea
+                            id="bugSteps"
+                            rows="4"
+                            maxlength="1000"
+                            data-i18n-placeholder="bug_steps_placeholder"
+                            placeholder="1. Открыть раздел... 2. Нажать на... 3. Увидеть ошибку..."
+                        ></textarea>
+                    </div>
+
+                    <div class="form-buttons">
+                        <button type="submit" class="action-btn">
+                            📤 <span data-i18n="send_bug_report">Отправить отчёт</span>
+                        </button>
+                        <button type="reset" class="action-btn secondary-btn">
+                            🔄 <span data-i18n="reset_form">Очистить форму</span>
+                        </button>
+                    </div>
+                </form>
+
+                <!-- Recent Reports -->
+                <div class="recent-reports-card">
+                    <h3 data-i18n="my_bug_reports">Мои отчёты</h3>
+                    <div id="recentBugReports" class="bug-reports-list">
+                        <div class="loading-spinner">
+                            <div class="spinner"></div>
+                            <p data-i18n="loading">Загрузка...</p>
+                        </div>
+                    </div>
+                </div>
+            </section>
         </main>
 
         <!-- Version Info -->
@@ -642,6 +815,7 @@
     <script src="gamification.js"></script>
     <script src="analytics.js"></script>
     <script src="onboarding.js"></script>
+    <script src="features-ui.js"></script>
     <script src="app.js"></script>
 </body>
 </html>
