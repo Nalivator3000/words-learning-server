@@ -1,0 +1,65 @@
+{
+  "controls": {
+    "source": "Управление:",
+    "en": "Controls:",
+    "ru": "Управление:",
+    "de": "Steuerung:",
+    "es": "Controles:",
+    "fr": "Contrôles:",
+    "it": "Controlli:"
+  },
+  "instant_answer": {
+    "source": "для мгновенного ответа,",
+    "en": "for instant answer,",
+    "ru": "для мгновенного ответа,",
+    "de": "für sofortige Antwort,",
+    "es": "para respuesta instantánea,",
+    "fr": "pour réponse instantanée,",
+    "it": "per risposta istantanea,"
+  },
+  "quick_choice": {
+    "source": "для быстрого выбора,",
+    "en": "for quick choice,",
+    "ru": "для быстрого выбора,",
+    "de": "für schnelle Auswahl,",
+    "es": "para elección rápida,",
+    "fr": "pour choix rapide,",
+    "it": "per scelta rapida,"
+  },
+  "auto_voice_info": {
+    "source": "Автоматический выбор использует умный алгоритм для подбора наилучшего голоса на вашем устройстве.",
+    "en": "Automatic selection uses smart algorithm to choose the best voice on your device.",
+    "ru": "Автоматический выбор использует умный алгоритм для подбора наилучшего голоса на вашем устройстве.",
+    "de": "Die automatische Auswahl verwendet einen intelligenten Algorithmus zur Auswahl der besten Stimme auf Ihrem Gerät.",
+    "es": "La selección automática utiliza un algoritmo inteligente para elegir la mejor voz en su dispositivo.",
+    "fr": "La sélection automatique utilise un algorithme intelligent pour choisir la meilleure voix sur votre appareil.",
+    "it": "La selezione automatica utilizza un algoritmo intelligente per scegliere la voce migliore sul tuo dispositivo."
+  },
+  "test_with_current_settings": {
+    "source": "Тест с текущими настройками",
+    "en": "Test with current settings",
+    "ru": "Тест с текущими настройками",
+    "de": "Test mit aktuellen Einstellungen",
+    "es": "Prueba con configuración actual",
+    "fr": "Test avec les paramètres actuels",
+    "it": "Test con impostazioni correnti"
+  },
+  "app_features_tour": {
+    "source": "по функциям приложения",
+    "en": "of app features",
+    "ru": "по функциям приложения",
+    "de": "der App-Funktionen",
+    "es": "de las funciones de la aplicación",
+    "fr": "des fonctionnalités de l'application",
+    "it": "delle funzionalità dell'app"
+  },
+  "start_tour_again": {
+    "source": "Начать тур заново",
+    "en": "Start tour again",
+    "ru": "Начать тур заново",
+    "de": "Tour erneut starten",
+    "es": "Iniciar tour nuevamente",
+    "fr": "Recommencer le tour",
+    "it": "Ricomincia il tour"
+  }
+}

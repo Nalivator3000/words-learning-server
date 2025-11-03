@@ -210,7 +210,7 @@
                         <h3>From Google Sheets</h3>
                         <p>Paste link to public Google spreadsheet</p>
                         <input type="text" id="googleSheetsUrl" placeholder="https://docs.google.com/spreadsheets/...">
-                        <button id="googleImportBtn" class="action-btn">Иmпорт</button>
+                        <button id="googleImportBtn" class="action-btn" data-i18n="import">Импорт</button>
                     </div>
                 </div>
                 <div id="importStatus" class="status-message"></div>
@@ -276,8 +276,8 @@
                         
                         <div class="survival-controls">
                             <small style="opacity: 0.7;">
-                                Управление: <kbd>←</kbd><kbd>→</kbd> или <kbd>↑</kbd><kbd>↓</kbd> для мгновенного ответа, 
-                                <kbd>1</kbd><kbd>2</kbd> для быстрого выбора, 
+                                <span data-i18n="controls">Управление:</span> <kbd>←</kbd><kbd>→</kbd> <span data-i18n="or">или</span> <kbd>↑</kbd><kbd>↓</kbd> <span data-i18n="instant_answer">для мгновенного ответа,</span> 
+                                <kbd>1</kbd><kbd>2</kbd> <span data-i18n="quick_choice">для быстрого выбора,</span> 
                                 <kbd>Enter</kbd> или <kbd data-i18n="space">Пробел</kbd> для подтверждения выделенного
                             </small>
                         </div>
@@ -526,7 +526,7 @@
                             </div>
 
                             <p class="voice-info">
-                                ℹ️ Автоmатический выбор использует уmный алгоритm для подбора наилучшего голоса на вашем устройстве.
+                                ℹ️ <span data-i18n="auto_voice_info">Автоматический выбор использует умный алгоритм для подбора наилучшего голоса на вашем устройстве.</span>
                             </p>
 
                             <div class="voice-controls-section">
@@ -571,7 +571,7 @@
                                 </div>
 
                                 <button id="testVoiceSettingsBtn" class="action-btn" style="margin-top: 10px;">
-                                    🔊 Тест с текущиmи настройкаmи
+                                    🔊 <span data-i18n="test_with_current_settings">Тест с текущими настройками</span>
                                 </button>
                             </div>
                         </div>
@@ -587,10 +587,10 @@
                     <div class="settings-group">
                         <h3 data-i18n="training_intro">👋 Обучение</h3>
                         <p style="font-size: 14px; color: #6c757d; margin-bottom: 12px;">
-                            Repeat interactive tour по функциям приложения
+                            Repeat interactive tour <span data-i18n="app_features_tour">по функциям приложения</span>
                         </p>
                         <button id="restartOnboardingBtn" class="action-btn secondary-btn">
-                            🎯 Начать тур заново
+                            🎯 <span data-i18n="start_tour_again">Начать тур заново</span>
                         </button>
                     </div>
                 </div>

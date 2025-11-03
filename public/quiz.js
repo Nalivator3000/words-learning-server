@@ -26,7 +26,7 @@ class QuizManager {
         }
 
         if (words.length === 0) {
-            throw new Error('No words для изучения');
+            throw new Error(i18n.t('no_words_to_study'));
         }
 
         // Store word count for proper scoring in complex mode
@@ -544,7 +544,7 @@ class ImportManager {
             const csvText = await response.text();
             return this.parseCSV(csvText);
         } catch (error) {
-            throw new Error(`Ошибка при загрузке Google Таблиц: ${error.message}`);
+            throw new Error(`${i18n.t('google_sheets_error')}: ${error.message}`);
         }
     }
 }

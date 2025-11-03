@@ -1,0 +1,38 @@
+{
+  "no_words_to_study": {
+    "source": "No words для изучения",
+    "en": "No words to study",
+    "ru": "Нет слов для изучения",
+    "de": "Keine Wörter zum Lernen",
+    "es": "No hay palabras para estudiar",
+    "fr": "Aucun mot à étudier",
+    "it": "Nessuna parola da studiare"
+  },
+  "google_sheets_error": {
+    "source": "Ошибка при загрузке Google Таблиц",
+    "en": "Error loading Google Sheets",
+    "ru": "Ошибка при загрузке Google Таблиц",
+    "de": "Fehler beim Laden von Google Sheets",
+    "es": "Error al cargar Google Sheets",
+    "fr": "Erreur lors du chargement de Google Sheets",
+    "it": "Errore nel caricamento di Google Sheets"
+  },
+  "google_login_not_implemented": {
+    "source": "Google login не реализован. Используйте обычный вход или регистрацию.",
+    "en": "Google login is not implemented. Use regular login or registration.",
+    "ru": "Google login не реализован. Используйте обычный вход или регистрацию.",
+    "de": "Google-Login ist nicht implementiert. Verwenden Sie reguläre Anmeldung oder Registrierung.",
+    "es": "El inicio de sesión de Google no está implementado. Use inicio de sesión o registro regular.",
+    "fr": "La connexion Google n'est pas implémentée. Utilisez la connexion ou l'inscription normale.",
+    "it": "L'accesso Google non è implementato. Usa l'accesso o la registrazione normale."
+  },
+  "install_app": {
+    "source": "Установить приложение",
+    "en": "Install app",
+    "ru": "Установить приложение",
+    "de": "App installieren",
+    "es": "Instalar aplicación",
+    "fr": "Installer l'application",
+    "it": "Installa app"
+  }
+}

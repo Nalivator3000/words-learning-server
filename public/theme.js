@@ -121,7 +121,7 @@ class PWAInstallManager {
             this.installButton.className = 'pwa-install-button';
             this.installButton.innerHTML = `
                 <span class="install-icon">📱</span>
-                <span class="install-text">Установить приложение</span>
+                <span class="install-text">${i18n.t('install_app')}</span>
             `;
             this.installButton.addEventListener('click', () => this.installApp());
 

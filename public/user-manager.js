@@ -140,7 +140,7 @@ class UserManager {
     async loginWithGoogleDemo() {
         try {
             // Demo version for local testing
-            alert('Google login не реализован. Используйте обычный вход или регистрацию.');
+            alert(i18n.t('google_login_not_implemented'));
             return false;
         } catch (error) {
             console.error('Google login demo error:', error);
