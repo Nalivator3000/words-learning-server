@@ -115,6 +115,9 @@ app.use(cors());
 app.use(express.json());
 app.use(express.static(path.join(__dirname, 'public')));
 
+// Serve translations folder
+app.use('/translations', express.static(path.join(__dirname, 'translations')));
+
 // File upload setup
 const upload = multer({ dest: 'uploads/' });
 
