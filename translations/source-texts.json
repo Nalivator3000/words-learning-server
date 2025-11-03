@@ -1955,11 +1955,11 @@
   "leaderboard": {
     "source": "🏆 Leaderboard",
     "en": "🏆 Leaderboard",
-    "ru": null,
-    "de": null,
-    "es": null,
-    "fr": null,
-    "it": null
+    "ru": "🏆 Таблица лидеров",
+    "de": "🏆 Bestenliste",
+    "es": "🏆 Tabla de clasificación",
+    "fr": "🏆 Classement",
+    "it": "🏆 Classifica"
   },
   "week": {
     "source": "📅 Week",
@@ -2450,11 +2450,11 @@
   "correct_answer": {
     "source": "Correct answer:",
     "en": "Correct answer:",
-    "ru": null,
-    "de": null,
-    "es": null,
-    "fr": null,
-    "it": null
+    "ru": "Правильный ответ:",
+    "de": "Richtige Antwort:",
+    "es": "Respuesta correcta:",
+    "fr": "Bonne réponse:",
+    "it": "Risposta corretta:"
   },
   "show_answer": {
     "source": "Show Answer",
@@ -5137,5 +5137,500 @@
     "es": "Iniciar tour nuevamente",
     "fr": "Recommencer le tour",
     "it": "Ricomincia il tour"
+  },
+  "app_update_available": {
+    "source": "Доступно обновление приложения. Обновить сейчас?",
+    "en": "App update available. Update now?",
+    "ru": "Доступно обновление приложения. Обновить сейчас?",
+    "de": "App-Update verfügbar. Jetzt aktualisieren?",
+    "es": "Actualización disponible. ¿Actualizar ahora?",
+    "fr": "Mise à jour disponible. Mettre à jour maintenant?",
+    "it": "Aggiornamento disponibile. Aggiornare ora?"
+  },
+  "score": {
+    "source": "Счёт:",
+    "en": "Score:",
+    "ru": "Счёт:",
+    "de": "Punktzahl:",
+    "es": "Puntuación:",
+    "fr": "Score:",
+    "it": "Punteggio:"
+  },
+  "errors": {
+    "source": "Ошибки:",
+    "en": "Errors:",
+    "ru": "Ошибки:",
+    "de": "Fehler:",
+    "es": "Errores:",
+    "fr": "Erreurs:",
+    "it": "Errori:"
+  },
+  "time": {
+    "source": "Время:",
+    "en": "Time:",
+    "ru": "Время:",
+    "de": "Zeit:",
+    "es": "Tiempo:",
+    "fr": "Temps:",
+    "it": "Tempo:"
+  },
+  "word_1": {
+    "source": "Слово 1",
+    "en": "Word 1",
+    "ru": "Слово 1",
+    "de": "Wort 1",
+    "es": "Palabra 1",
+    "fr": "Mot 1",
+    "it": "Parola 1"
+  },
+  "for_instant_answer": {
+    "source": "для мгновенного ответа",
+    "en": "for instant answer",
+    "ru": "для мгновенного ответа",
+    "de": "für sofortige Antwort",
+    "es": "para respuesta instantánea",
+    "fr": "pour réponse instantanée",
+    "it": "per risposta istantanea"
+  },
+  "for_quick_selection": {
+    "source": "для быстрого выбора",
+    "en": "for quick selection",
+    "ru": "для быстрого выбора",
+    "de": "für schnelle Auswahl",
+    "es": "para selección rápida",
+    "fr": "pour sélection rapide",
+    "it": "per selezione rapida"
+  },
+  "space": {
+    "source": "Пробел",
+    "en": "Space",
+    "ru": "Пробел",
+    "de": "Leertaste",
+    "es": "Espacio",
+    "fr": "Espace",
+    "it": "Spazio"
+  },
+  "to_confirm_selected": {
+    "source": "для подтверждения выделенного",
+    "en": "to confirm selected",
+    "ru": "для подтверждения выделенного",
+    "de": "zur Bestätigung der Auswahl",
+    "es": "para confirmar selección",
+    "fr": "pour confirmer la sélection",
+    "it": "per confermare la selezione"
+  },
+  "russian": {
+    "source": "Русский (Russian)",
+    "en": "Russian (Russian)",
+    "ru": "Русский (Russian)",
+    "de": "Russisch (Russian)",
+    "es": "Ruso (Russian)",
+    "fr": "Russe (Russian)",
+    "it": "Russo (Russian)"
+  },
+  "auto_recommended": {
+    "source": "Авто (рекомендуется)",
+    "en": "Auto (recommended)",
+    "ru": "Авто (рекомендуется)",
+    "de": "Auto (empfohlen)",
+    "es": "Auto (recomendado)",
+    "fr": "Auto (recommandé)",
+    "it": "Auto (consigliato)"
+  },
+  "listen_example": {
+    "source": "Прослушать пример",
+    "en": "Listen example",
+    "ru": "Прослушать пример",
+    "de": "Beispiel anhören",
+    "es": "Escuchar ejemplo",
+    "fr": "Écouter l'exemple",
+    "it": "Ascolta esempio"
+  },
+  "german_de": {
+    "source": "Немецкий (de-DE)",
+    "en": "German (de-DE)",
+    "ru": "Немецкий (de-DE)",
+    "de": "Deutsch (de-DE)",
+    "es": "Alemán (de-DE)",
+    "fr": "Allemand (de-DE)",
+    "it": "Tedesco (de-DE)"
+  },
+  "auto_selection_info": {
+    "source": "ℹ️ Автоматический выбор использует умный алгоритм для подбора наилучшего голоса на вашем устройстве.",
+    "en": "ℹ️ Auto selection uses smart algorithm to find the best voice on your device.",
+    "ru": "ℹ️ Автоматический выбор использует умный алгоритм для подбора наилучшего голоса на вашем устройстве.",
+    "de": "ℹ️ Die automatische Auswahl verwendet einen intelligenten Algorithmus, um die beste Stimme auf Ihrem Gerät zu finden.",
+    "es": "ℹ️ La selección automática utiliza un algoritmo inteligente para encontrar la mejor voz en su dispositivo.",
+    "fr": "ℹ️ La sélection automatique utilise un algorithme intelligent pour trouver la meilleure voix sur votre appareil.",
+    "it": "ℹ️ La selezione automatica utilizza un algoritmo intelligente per trovare la voce migliore sul tuo dispositivo."
+  },
+  "voice_parameters": {
+    "source": "⚙️ Параметры озвучки",
+    "en": "⚙️ Voice Parameters",
+    "ru": "⚙️ Параметры озвучки",
+    "de": "⚙️ Sprachparameter",
+    "es": "⚙️ Parámetros de voz",
+    "fr": "⚙️ Paramètres de voix",
+    "it": "⚙️ Parametri vocali"
+  },
+  "slower_better_memory": {
+    "source": "Медленнее = лучше для запоминания",
+    "en": "Slower = better for memorization",
+    "ru": "Медленнее = лучше для запоминания",
+    "de": "Langsamer = besser fürs Lernen",
+    "es": "Más lento = mejor para memorizar",
+    "fr": "Plus lent = meilleur pour mémoriser",
+    "it": "Più lento = migliore per memorizzare"
+  },
+  "normal": {
+    "source": "Нормальный",
+    "en": "Normal",
+    "ru": "Нормальный",
+    "de": "Normal",
+    "es": "Normal",
+    "fr": "Normal",
+    "it": "Normale"
+  },
+  "volume": {
+    "source": "Громкость:",
+    "en": "Volume:",
+    "ru": "Громкость:",
+    "de": "Lautstärke:",
+    "es": "Volumen:",
+    "fr": "Volume:",
+    "it": "Volume:"
+  },
+  "test_current_settings": {
+    "source": "🔊 Тест с текущими настройками",
+    "en": "🔊 Test with current settings",
+    "ru": "🔊 Тест с текущими настройками",
+    "de": "🔊 Test mit aktuellen Einstellungen",
+    "es": "🔊 Prueba con configuración actual",
+    "fr": "🔊 Test avec paramètres actuels",
+    "it": "🔊 Test con impostazioni correnti"
+  },
+  "training_intro": {
+    "source": "👋 Обучение",
+    "en": "👋 Training",
+    "ru": "👋 Обучение",
+    "de": "👋 Training",
+    "es": "👋 Entrenamiento",
+    "fr": "👋 Formation",
+    "it": "👋 Formazione"
+  },
+  "repeat_interactive_tour": {
+    "source": "Повторите интерактивный тур по функциям приложения",
+    "en": "Repeat interactive tour of app features",
+    "ru": "Повторите интерактивный тур по функциям приложения",
+    "de": "Interaktive Tour der App-Funktionen wiederholen",
+    "es": "Repita el tour interactivo de funciones",
+    "fr": "Répétez le tour interactif des fonctionnalités",
+    "it": "Ripeti il tour interattivo delle funzionalità"
+  },
+  "welcome": {
+    "source": "Welcome to German Words Learning",
+    "en": "Welcome to German Words Learning",
+    "ru": "Добро пожаловать в German Words Learning",
+    "de": "Willkommen bei German Words Learning",
+    "es": "Bienvenido a German Words Learning",
+    "fr": "Bienvenue à German Words Learning",
+    "it": "Benvenuto su German Words Learning"
+  },
+  "login": {
+    "source": "Login",
+    "en": "Login",
+    "ru": "Войти",
+    "de": "Anmelden",
+    "es": "Iniciar sesión",
+    "fr": "Connexion",
+    "it": "Accedi"
+  },
+  "register": {
+    "source": "Register",
+    "en": "Register",
+    "ru": "Регистрация",
+    "de": "Registrieren",
+    "es": "Registrarse",
+    "fr": "S'inscrire",
+    "it": "Registrati"
+  },
+  "email": {
+    "source": "Email",
+    "en": "Email",
+    "ru": "Email",
+    "de": "E-Mail",
+    "es": "Correo electrónico",
+    "fr": "E-mail",
+    "it": "Email"
+  },
+  "password": {
+    "source": "Password",
+    "en": "Password",
+    "ru": "Пароль",
+    "de": "Passwort",
+    "es": "Contraseña",
+    "fr": "Mot de passe",
+    "it": "Password"
+  },
+  "loginWithGoogle": {
+    "source": "Login with Google",
+    "en": "Login with Google",
+    "ru": "Войти через Google",
+    "de": "Mit Google anmelden",
+    "es": "Iniciar sesión con Google",
+    "fr": "Se connecter avec Google",
+    "it": "Accedi con Google"
+  },
+  "name": {
+    "source": "Name",
+    "en": "Name",
+    "ru": "Имя",
+    "de": "Name",
+    "es": "Nombre",
+    "fr": "Nom",
+    "it": "Nome"
+  },
+  "confirmPassword": {
+    "source": "Confirm Password",
+    "en": "Confirm Password",
+    "ru": "Подтвердите пароль",
+    "de": "Passwort bestätigen",
+    "es": "Confirmar contraseña",
+    "fr": "Confirmer le mot de passe",
+    "it": "Conferma password"
+  },
+  "appTitle": {
+    "source": "German Words Learning",
+    "en": "German Words Learning",
+    "ru": "Изучение немецких слов",
+    "de": "Deutsche Wörter lernen",
+    "es": "Aprendizaje de palabras alemanas",
+    "fr": "Apprentissage des mots allemands",
+    "it": "Apprendimento parole tedesche"
+  },
+  "home": {
+    "source": "Home",
+    "en": "Home",
+    "ru": "Главная",
+    "de": "Startseite",
+    "es": "Inicio",
+    "fr": "Accueil",
+    "it": "Home"
+  },
+  "study": {
+    "source": "Study",
+    "en": "Study",
+    "ru": "Изучение",
+    "de": "Lernen",
+    "es": "Estudiar",
+    "fr": "Étudier",
+    "it": "Studia"
+  },
+  "review": {
+    "source": "Review",
+    "en": "Review",
+    "ru": "Повторение",
+    "de": "Wiederholung",
+    "es": "Repaso",
+    "fr": "Révision",
+    "it": "Ripasso"
+  },
+  "statistics": {
+    "source": "Statistics",
+    "en": "Statistics",
+    "ru": "Статистика",
+    "de": "Statistik",
+    "es": "Estadísticas",
+    "fr": "Statistiques",
+    "it": "Statistiche"
+  },
+  "settings": {
+    "source": "Settings",
+    "en": "Settings",
+    "ru": "Настройки",
+    "de": "Einstellungen",
+    "es": "Configuración",
+    "fr": "Paramètres",
+    "it": "Impostazioni"
+  },
+  "logout": {
+    "source": "Logout",
+    "en": "Logout",
+    "ru": "Выйти",
+    "de": "Abmelden",
+    "es": "Cerrar sesión",
+    "fr": "Déconnexion",
+    "it": "Esci"
+  },
+  "dashboard": {
+    "source": "Dashboard",
+    "en": "Dashboard",
+    "ru": "Панель управления",
+    "de": "Dashboard",
+    "es": "Panel",
+    "fr": "Tableau de bord",
+    "it": "Pannello"
+  },
+  "studyingWords": {
+    "source": "Studying",
+    "en": "Studying",
+    "ru": "Изучается",
+    "de": "In Bearbeitung",
+    "es": "Estudiando",
+    "fr": "En cours d'étude",
+    "it": "In studio"
+  },
+  "reviewWords": {
+    "source": "Review",
+    "en": "Review",
+    "ru": "Повторение",
+    "de": "Wiederholung",
+    "es": "Repasar",
+    "fr": "À réviser",
+    "it": "Da ripassare"
+  },
+  "learnedWords": {
+    "source": "Learned",
+    "en": "Learned",
+    "ru": "Выучено",
+    "de": "Gelernt",
+    "es": "Aprendido",
+    "fr": "Appris",
+    "it": "Imparato"
+  },
+  "quickStudy": {
+    "source": "Quick Study",
+    "en": "Quick Study",
+    "ru": "Быстрое изучение",
+    "de": "Schnelles Lernen",
+    "es": "Estudio rápido",
+    "fr": "Étude rapide",
+    "it": "Studio rapido"
+  },
+  "quickReview": {
+    "source": "Quick Review",
+    "en": "Quick Review",
+    "ru": "Быстрое повторение",
+    "de": "Schnelle Wiederholung",
+    "es": "Repaso rápido",
+    "fr": "Révision rapide",
+    "it": "Ripasso rapido"
+  },
+  "importWords": {
+    "source": "Import Words",
+    "en": "Import Words",
+    "ru": "Импорт слов",
+    "de": "Wörter importieren",
+    "es": "Importar palabras",
+    "fr": "Importer des mots",
+    "it": "Importa parole"
+  },
+  "multipleChoice": {
+    "source": "Multiple Choice",
+    "en": "Multiple Choice",
+    "ru": "Множественный выбор",
+    "de": "Multiple Choice",
+    "es": "Opción múltiple",
+    "fr": "Choix multiples",
+    "it": "Scelta multipla"
+  },
+  "reverseChoice": {
+    "source": "Reverse Choice",
+    "en": "Reverse Choice",
+    "ru": "Обратный выбор",
+    "de": "Umgekehrte Auswahl",
+    "es": "Elección inversa",
+    "fr": "Choix inversé",
+    "it": "Scelta inversa"
+  },
+  "wordBuilding": {
+    "source": "Word Building",
+    "en": "Word Building",
+    "ru": "Составление слов",
+    "de": "Wortbildung",
+    "es": "Construcción de palabras",
+    "fr": "Construction de mots",
+    "it": "Costruzione parole"
+  },
+  "typing": {
+    "source": "Typing",
+    "en": "Typing",
+    "ru": "Ввод текста",
+    "de": "Tippen",
+    "es": "Escritura",
+    "fr": "Saisie",
+    "it": "Digitazione"
+  },
+  "or": {
+    "source": "or",
+    "en": "or",
+    "ru": "или",
+    "de": "oder",
+    "es": "o",
+    "fr": "ou",
+    "it": "o"
+  },
+  "startReview": {
+    "source": "Start Review",
+    "en": "Start Review",
+    "ru": "Начать повторение",
+    "de": "Wiederholung starten",
+    "es": "Iniciar repaso",
+    "fr": "Commencer la révision",
+    "it": "Inizia ripasso"
+  },
+  "uiLanguage": {
+    "source": "Interface Language",
+    "en": "Interface Language",
+    "ru": "Язык интерфейса",
+    "de": "Schnittstellensprache",
+    "es": "Idioma de la interfaz",
+    "fr": "Langue de l'interface",
+    "it": "Lingua dell'interfaccia"
+  },
+  "languagePairs": {
+    "source": "Language Pairs",
+    "en": "Language Pairs",
+    "ru": "Языковые пары",
+    "de": "Sprachpaare",
+    "es": "Pares de idiomas",
+    "fr": "Paires de langues",
+    "it": "Coppie linguistiche"
+  },
+  "addLanguagePair": {
+    "source": "Add Language Pair",
+    "en": "Add Language Pair",
+    "ru": "Добавить языковую пару",
+    "de": "Sprachpaar hinzufügen",
+    "es": "Agregar par de idiomas",
+    "fr": "Ajouter une paire de langues",
+    "it": "Aggiungi coppia linguistica"
+  },
+  "studySettings": {
+    "source": "Study Settings",
+    "en": "Study Settings",
+    "ru": "Настройки обучения",
+    "de": "Lerneinstellungen",
+    "es": "Configuración de estudio",
+    "fr": "Paramètres d'étude",
+    "it": "Impostazioni di studio"
+  },
+  "wordsPerLesson": {
+    "source": "Words per Lesson",
+    "en": "Words per Lesson",
+    "ru": "Слов за урок",
+    "de": "Wörter pro Lektion",
+    "es": "Palabras por lección",
+    "fr": "Mots par leçon",
+    "it": "Parole per lezione"
+  },
+  "sync": {
+    "source": "Sync",
+    "en": "Sync",
+    "ru": "Синхронизация",
+    "de": "Synchronisieren",
+    "es": "Sincronizar",
+    "fr": "Synchroniser",
+    "it": "Sincronizza"
   }
 }
