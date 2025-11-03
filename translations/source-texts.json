@@ -1,1956 +1,1956 @@
 {
   "1": {
     "source": "Вопрос 1 из 10",
-    "en": null,
+    "en": "Вопрос 1 из 10",
     "ru": "Вопрос 1 из 10",
-    "de": null,
-    "es": null,
-    "fr": null,
-    "it": null
+    "de": "Вопрос 1 из 10",
+    "es": "Вопрос 1 из 10",
+    "fr": "Вопрос 1 из 10",
+    "it": "Вопрос 1 из 10"
   },
   "2": {
     "source": "Слово 2",
-    "en": null,
+    "en": "Слово 2",
     "ru": "Слово 2",
-    "de": null,
-    "es": null,
-    "fr": null,
-    "it": null
+    "de": "Слово 2",
+    "es": "Слово 2",
+    "fr": "Слово 2",
+    "it": "Слово 2"
   },
   "30": {
     "source": "30 дней:",
-    "en": null,
+    "en": "30 дней:",
     "ru": "30 дней:",
-    "de": null,
-    "es": null,
-    "fr": null,
-    "it": null
+    "de": "30 дней:",
+    "es": "30 дней:",
+    "fr": "30 дней:",
+    "it": "30 дней:"
   },
   "failed_to_fetch": {
     "source": "Failed to fetch learning progress",
     "en": "Failed to fetch learning progress",
-    "ru": null,
-    "de": null,
-    "es": null,
-    "fr": null,
-    "it": null
+    "ru": "Failed to fetch learning progress",
+    "de": "Failed to fetch learning progress",
+    "es": "Failed to fetch learning progress",
+    "fr": "Failed to fetch learning progress",
+    "it": "Failed to fetch learning progress"
   },
   "error_fetching_learning": {
     "source": "Error fetching learning progress:",
     "en": "Error fetching learning progress:",
-    "ru": null,
-    "de": null,
-    "es": null,
-    "fr": null,
-    "it": null
+    "ru": "Error fetching learning progress:",
+    "de": "Error fetching learning progress:",
+    "es": "Error fetching learning progress:",
+    "fr": "Error fetching learning progress:",
+    "it": "Error fetching learning progress:"
   },
   "failed_to_fetch_1": {
     "source": "Failed to fetch exercise stats",
     "en": "Failed to fetch exercise stats",
-    "ru": null,
-    "de": null,
-    "es": null,
-    "fr": null,
-    "it": null
+    "ru": "Failed to fetch exercise stats",
+    "de": "Failed to fetch exercise stats",
+    "es": "Failed to fetch exercise stats",
+    "fr": "Failed to fetch exercise stats",
+    "it": "Failed to fetch exercise stats"
   },
   "error_fetching_exercise": {
     "source": "Error fetching exercise stats:",
     "en": "Error fetching exercise stats:",
-    "ru": null,
-    "de": null,
-    "es": null,
-    "fr": null,
-    "it": null
+    "ru": "Error fetching exercise stats:",
+    "de": "Error fetching exercise stats:",
+    "es": "Error fetching exercise stats:",
+    "fr": "Error fetching exercise stats:",
+    "it": "Error fetching exercise stats:"
   },
   "failed_to_fetch_2": {
     "source": "Failed to fetch difficult words",
     "en": "Failed to fetch difficult words",
-    "ru": null,
-    "de": null,
-    "es": null,
-    "fr": null,
-    "it": null
+    "ru": "Failed to fetch difficult words",
+    "de": "Failed to fetch difficult words",
+    "es": "Failed to fetch difficult words",
+    "fr": "Failed to fetch difficult words",
+    "it": "Failed to fetch difficult words"
   },
   "error_fetching_difficult": {
     "source": "Error fetching difficult words:",
     "en": "Error fetching difficult words:",
-    "ru": null,
-    "de": null,
-    "es": null,
-    "fr": null,
-    "it": null
+    "ru": "Error fetching difficult words:",
+    "de": "Error fetching difficult words:",
+    "es": "Error fetching difficult words:",
+    "fr": "Error fetching difficult words:",
+    "it": "Error fetching difficult words:"
   },
   "failed_to_fetch_3": {
     "source": "Failed to fetch study time",
     "en": "Failed to fetch study time",
-    "ru": null,
-    "de": null,
-    "es": null,
-    "fr": null,
-    "it": null
+    "ru": "Failed to fetch study time",
+    "de": "Failed to fetch study time",
+    "es": "Failed to fetch study time",
+    "fr": "Failed to fetch study time",
+    "it": "Failed to fetch study time"
   },
   "error_fetching_study": {
     "source": "Error fetching study time:",
     "en": "Error fetching study time:",
-    "ru": null,
-    "de": null,
-    "es": null,
-    "fr": null,
-    "it": null
+    "ru": "Error fetching study time:",
+    "de": "Error fetching study time:",
+    "es": "Error fetching study time:",
+    "fr": "Error fetching study time:",
+    "it": "Error fetching study time:"
   },
   "failed_to_fetch_4": {
     "source": "Failed to fetch fluency prediction",
     "en": "Failed to fetch fluency prediction",
-    "ru": null,
-    "de": null,
-    "es": null,
-    "fr": null,
-    "it": null
+    "ru": "Failed to fetch fluency prediction",
+    "de": "Failed to fetch fluency prediction",
+    "es": "Failed to fetch fluency prediction",
+    "fr": "Failed to fetch fluency prediction",
+    "it": "Failed to fetch fluency prediction"
   },
   "error_fetching_fluency": {
     "source": "Error fetching fluency prediction:",
     "en": "Error fetching fluency prediction:",
-    "ru": null,
-    "de": null,
-    "es": null,
-    "fr": null,
-    "it": null
+    "ru": "Error fetching fluency prediction:",
+    "de": "Error fetching fluency prediction:",
+    "es": "Error fetching fluency prediction:",
+    "fr": "Error fetching fluency prediction:",
+    "it": "Error fetching fluency prediction:"
   },
   "xp": {
     "source": "XP заработано",
-    "en": null,
+    "en": "XP заработано",
     "ru": "XP заработано",
-    "de": null,
-    "es": null,
-    "fr": null,
-    "it": null
+    "de": "XP заработано",
+    "es": "XP заработано",
+    "fr": "XP заработано",
+    "it": "XP заработано"
   },
   "backgroundcolor": {
     "source": ",\r\n                        backgroundColor:",
     "en": ",\r\n                        backgroundColor:",
-    "ru": null,
-    "de": null,
-    "es": null,
-    "fr": null,
-    "it": null
+    "ru": ",\r\n                        backgroundColor:",
+    "de": ",\r\n                        backgroundColor:",
+    "es": ",\r\n                        backgroundColor:",
+    "fr": ",\r\n                        backgroundColor:",
+    "it": ",\r\n                        backgroundColor:"
   },
   "": {
     "source": "Слов выучено",
-    "en": null,
+    "en": "Слов выучено",
     "ru": "Слов выучено",
-    "de": null,
-    "es": null,
-    "fr": null,
-    "it": null
+    "de": "Слов выучено",
+    "es": "Слов выучено",
+    "fr": "Слов выучено",
+    "it": "Слов выучено"
   },
   "_1": {
     "source": "Слова",
-    "en": null,
+    "en": "Слова",
     "ru": "Слова",
-    "de": null,
-    "es": null,
-    "fr": null,
-    "it": null
+    "de": "Слова",
+    "es": "Слова",
+    "fr": "Слова",
+    "it": "Слова"
   },
   "_2": {
     "source": "Процент успешности",
-    "en": null,
+    "en": "Процент успешности",
     "ru": "Процент успешности",
-    "de": null,
-    "es": null,
-    "fr": null,
-    "it": null
+    "de": "Процент успешности",
+    "es": "Процент успешности",
+    "fr": "Процент успешности",
+    "it": "Процент успешности"
   },
   "word_stat_error_rate": {
     "source": "word-stat error-rate",
     "en": "word-stat error-rate",
-    "ru": null,
-    "de": null,
-    "es": null,
-    "fr": null,
-    "it": null
+    "ru": "word-stat error-rate",
+    "de": "word-stat error-rate",
+    "es": "word-stat error-rate",
+    "fr": "word-stat error-rate",
+    "it": "word-stat error-rate"
   },
   "_3": {
     "source": "Отработать это слово",
-    "en": null,
+    "en": "Отработать это слово",
     "ru": "Отработать это слово",
-    "de": null,
-    "es": null,
-    "fr": null,
-    "it": null
+    "de": "Отработать это слово",
+    "es": "Отработать это слово",
+    "fr": "Отработать это слово",
+    "it": "Отработать это слово"
   },
   "time_card_highlight": {
     "source": "time-card highlight",
     "en": "time-card highlight",
-    "ru": null,
-    "de": null,
-    "es": null,
-    "fr": null,
-    "it": null
+    "ru": "time-card highlight",
+    "de": "time-card highlight",
+    "es": "time-card highlight",
+    "fr": "time-card highlight",
+    "it": "time-card highlight"
   },
   "fluency_prediction_no_prediction": {
     "source": "fluency-prediction no-prediction",
     "en": "fluency-prediction no-prediction",
-    "ru": null,
-    "de": null,
-    "es": null,
-    "fr": null,
-    "it": null
+    "ru": "fluency-prediction no-prediction",
+    "de": "fluency-prediction no-prediction",
+    "es": "fluency-prediction no-prediction",
+    "fr": "fluency-prediction no-prediction",
+    "it": "fluency-prediction no-prediction"
   },
   "_4": {
     "source": "Поздравляем! Вы достигли цели беглости. Продолжайте практиковаться для поддержания уровня.",
-    "en": null,
+    "en": "Поздравляем! Вы достигли цели беглости. Продолжайте практиковаться для поддержания уровня.",
     "ru": "Поздравляем! Вы достигли цели беглости. Продолжайте практиковаться для поддержания уровня.",
-    "de": null,
-    "es": null,
-    "fr": null,
-    "it": null
+    "de": "Поздравляем! Вы достигли цели беглости. Продолжайте практиковаться для поддержания уровня.",
+    "es": "Поздравляем! Вы достигли цели беглости. Продолжайте практиковаться для поддержания уровня.",
+    "fr": "Поздравляем! Вы достигли цели беглости. Продолжайте практиковаться для поддержания уровня.",
+    "it": "Поздравляем! Вы достигли цели беглости. Продолжайте практиковаться для поддержания уровня."
   },
   "_5": {
     "source": "Отличный темп! При таком прогрессе вы достигнете беглости раньше прогноза.",
-    "en": null,
+    "en": "Отличный темп! При таком прогрессе вы достигнете беглости раньше прогноза.",
     "ru": "Отличный темп! При таком прогрессе вы достигнете беглости раньше прогноза.",
-    "de": null,
-    "es": null,
-    "fr": null,
-    "it": null
+    "de": "Отличный темп! При таком прогрессе вы достигнете беглости раньше прогноза.",
+    "es": "Отличный темп! При таком прогрессе вы достигнете беглости раньше прогноза.",
+    "fr": "Отличный темп! При таком прогрессе вы достигнете беглости раньше прогноза.",
+    "it": "Отличный темп! При таком прогрессе вы достигнете беглости раньше прогноза."
   },
   "_6": {
     "source": "Хороший темп обучения! Старайтесь заниматься регулярно для достижения цели.",
-    "en": null,
+    "en": "Хороший темп обучения! Старайтесь заниматься регулярно для достижения цели.",
     "ru": "Хороший темп обучения! Старайтесь заниматься регулярно для достижения цели.",
-    "de": null,
-    "es": null,
-    "fr": null,
-    "it": null
+    "de": "Хороший темп обучения! Старайтесь заниматься регулярно для достижения цели.",
+    "es": "Хороший темп обучения! Старайтесь заниматься регулярно для достижения цели.",
+    "fr": "Хороший темп обучения! Старайтесь заниматься регулярно для достижения цели.",
+    "it": "Хороший темп обучения! Старайтесь заниматься регулярно для достижения цели."
   },
   "_7": {
     "source": "Функция будет добавлена в следующем обновлении",
-    "en": null,
+    "en": "Функция будет добавлена в следующем обновлении",
     "ru": "Функция будет добавлена в следующем обновлении",
-    "de": null,
-    "es": null,
-    "fr": null,
-    "it": null
+    "de": "Функция будет добавлена в следующем обновлении",
+    "es": "Функция будет добавлена в следующем обновлении",
+    "fr": "Функция будет добавлена в следующем обновлении",
+    "it": "Функция будет добавлена в следующем обновлении"
   },
   "practice_word": {
     "source": "Practice word:",
     "en": "Practice word:",
-    "ru": null,
-    "de": null,
-    "es": null,
-    "fr": null,
-    "it": null
+    "ru": "Practice word:",
+    "de": "Practice word:",
+    "es": "Practice word:",
+    "fr": "Practice word:",
+    "it": "Practice word:"
   },
   "words_array_is": {
     "source": "Words array is required",
     "en": "Words array is required",
-    "ru": null,
-    "de": null,
-    "es": null,
-    "fr": null,
-    "it": null
+    "ru": "Words array is required",
+    "de": "Words array is required",
+    "es": "Words array is required",
+    "fr": "Words array is required",
+    "it": "Words array is required"
   },
   "user_context_not": {
     "source": "User context not available",
     "en": "User context not available",
-    "ru": null,
-    "de": null,
-    "es": null,
-    "fr": null,
-    "it": null
+    "ru": "User context not available",
+    "de": "User context not available",
+    "es": "User context not available",
+    "fr": "User context not available",
+    "it": "User context not available"
   },
   "cannot_check_expired": {
     "source": "Cannot check expired reviews: user context not available",
     "en": "Cannot check expired reviews: user context not available",
-    "ru": null,
-    "de": null,
-    "es": null,
-    "fr": null,
-    "it": null
+    "ru": "Cannot check expired reviews: user context not available",
+    "de": "Cannot check expired reviews: user context not available",
+    "es": "Cannot check expired reviews: user context not available",
+    "fr": "Cannot check expired reviews: user context not available",
+    "it": "Cannot check expired reviews: user context not available"
   },
   "_8": {
     "source": "Слово",
-    "en": null,
+    "en": "Слово",
     "ru": "Слово",
-    "de": null,
-    "es": null,
-    "fr": null,
-    "it": null
+    "de": "Слово",
+    "es": "Слово",
+    "fr": "Слово",
+    "it": "Слово"
   },
   "_9": {
     "source": "Пример",
-    "en": null,
+    "en": "Пример",
     "ru": "Пример",
-    "de": null,
-    "es": null,
-    "fr": null,
-    "it": null
+    "de": "Пример",
+    "es": "Пример",
+    "fr": "Пример",
+    "it": "Пример"
   },
   "_10": {
     "source": "Перевод",
-    "en": null,
+    "en": "Перевод",
     "ru": "Перевод",
-    "de": null,
-    "es": null,
-    "fr": null,
-    "it": null
+    "de": "Перевод",
+    "es": "Перевод",
+    "fr": "Перевод",
+    "it": "Перевод"
   },
   "_11": {
     "source": "Перевод примера",
-    "en": null,
+    "en": "Перевод примера",
     "ru": "Перевод примера",
-    "de": null,
-    "es": null,
-    "fr": null,
-    "it": null
+    "de": "Перевод примера",
+    "es": "Перевод примера",
+    "fr": "Перевод примера",
+    "it": "Перевод примера"
   },
   "_12": {
     "source": "Статус",
-    "en": null,
+    "en": "Статус",
     "ru": "Статус",
-    "de": null,
-    "es": null,
-    "fr": null,
-    "it": null
+    "de": "Статус",
+    "es": "Статус",
+    "fr": "Статус",
+    "it": "Статус"
   },
   "_13": {
     "source": "Правильных ответов",
-    "en": null,
+    "en": "Правильных ответов",
     "ru": "Правильных ответов",
-    "de": null,
-    "es": null,
-    "fr": null,
-    "it": null
+    "de": "Правильных ответов",
+    "es": "Правильных ответов",
+    "fr": "Правильных ответов",
+    "it": "Правильных ответов"
   },
   "_14": {
     "source": "Неправильных ответов",
-    "en": null,
+    "en": "Неправильных ответов",
     "ru": "Неправильных ответов",
-    "de": null,
-    "es": null,
-    "fr": null,
-    "it": null
+    "de": "Неправильных ответов",
+    "es": "Неправильных ответов",
+    "fr": "Неправильных ответов",
+    "it": "Неправильных ответов"
   },
   "_15": {
     "source": "Дата добавления",
-    "en": null,
+    "en": "Дата добавления",
     "ru": "Дата добавления",
-    "de": null,
-    "es": null,
-    "fr": null,
-    "it": null
+    "de": "Дата добавления",
+    "es": "Дата добавления",
+    "fr": "Дата добавления",
+    "it": "Дата добавления"
   },
   "_16": {
     "source": "Последнее изучение",
-    "en": null,
+    "en": "Последнее изучение",
     "ru": "Последнее изучение",
-    "de": null,
-    "es": null,
-    "fr": null,
-    "it": null
+    "de": "Последнее изучение",
+    "es": "Последнее изучение",
+    "fr": "Последнее изучение",
+    "it": "Последнее изучение"
   },
   "_17": {
     "source": "Изучается",
-    "en": null,
+    "en": "Изучается",
     "ru": "Изучается",
-    "de": null,
-    "es": null,
-    "fr": null,
-    "it": null
+    "de": "Изучается",
+    "es": "Изучается",
+    "fr": "Изучается",
+    "it": "Изучается"
   },
   "failed_to_load": {
     "source": "Failed to load custom voice settings:",
     "en": "Failed to load custom voice settings:",
-    "ru": null,
-    "de": null,
-    "es": null,
-    "fr": null,
-    "it": null
+    "ru": "Failed to load custom voice settings:",
+    "de": "Failed to load custom voice settings:",
+    "es": "Failed to load custom voice settings:",
+    "fr": "Failed to load custom voice settings:",
+    "it": "Failed to load custom voice settings:"
   },
   "failed_to_load_1": {
     "source": "Failed to load voice settings:",
     "en": "Failed to load voice settings:",
-    "ru": null,
-    "de": null,
-    "es": null,
-    "fr": null,
-    "it": null
+    "ru": "Failed to load voice settings:",
+    "de": "Failed to load voice settings:",
+    "es": "Failed to load voice settings:",
+    "fr": "Failed to load voice settings:",
+    "it": "Failed to load voice settings:"
   },
   "failed_to_save": {
     "source": "Failed to save voice settings:",
     "en": "Failed to save voice settings:",
-    "ru": null,
-    "de": null,
-    "es": null,
-    "fr": null,
-    "it": null
+    "ru": "Failed to save voice settings:",
+    "de": "Failed to save voice settings:",
+    "es": "Failed to save voice settings:",
+    "fr": "Failed to save voice settings:",
+    "it": "Failed to save voice settings:"
   },
   "failed_to_save_1": {
     "source": "Failed to save custom voice settings:",
     "en": "Failed to save custom voice settings:",
-    "ru": null,
-    "de": null,
-    "es": null,
-    "fr": null,
-    "it": null
+    "ru": "Failed to save custom voice settings:",
+    "de": "Failed to save custom voice settings:",
+    "es": "Failed to save custom voice settings:",
+    "fr": "Failed to save custom voice settings:",
+    "it": "Failed to save custom voice settings:"
   },
   "audiomanager_empty_text": {
     "source": "AudioManager: Empty text, skipping TTS",
     "en": "AudioManager: Empty text, skipping TTS",
-    "ru": null,
-    "de": null,
-    "es": null,
-    "fr": null,
-    "it": null
+    "ru": "AudioManager: Empty text, skipping TTS",
+    "de": "AudioManager: Empty text, skipping TTS",
+    "es": "AudioManager: Empty text, skipping TTS",
+    "fr": "AudioManager: Empty text, skipping TTS",
+    "it": "AudioManager: Empty text, skipping TTS"
   },
   "audiomanager_speaking": {
     "source": "AudioManager: Speaking",
     "en": "AudioManager: Speaking",
-    "ru": null,
-    "de": null,
-    "es": null,
-    "fr": null,
-    "it": null
+    "ru": "AudioManager: Speaking",
+    "de": "AudioManager: Speaking",
+    "es": "AudioManager: Speaking",
+    "fr": "AudioManager: Speaking",
+    "it": "AudioManager: Speaking"
   },
   "audiomanager_using_voice": {
     "source": "AudioManager: Using voice",
     "en": "AudioManager: Using voice",
-    "ru": null,
-    "de": null,
-    "es": null,
-    "fr": null,
-    "it": null
+    "ru": "AudioManager: Using voice",
+    "de": "AudioManager: Using voice",
+    "es": "AudioManager: Using voice",
+    "fr": "AudioManager: Using voice",
+    "it": "AudioManager: Using voice"
   },
   "speech_synthesis_error": {
     "source": "Speech synthesis error:",
     "en": "Speech synthesis error:",
-    "ru": null,
-    "de": null,
-    "es": null,
-    "fr": null,
-    "it": null
+    "ru": "Speech synthesis error:",
+    "de": "Speech synthesis error:",
+    "es": "Speech synthesis error:",
+    "fr": "Speech synthesis error:",
+    "it": "Speech synthesis error:"
   },
   "audiomanager_speech_finished": {
     "source": "AudioManager: Speech finished",
     "en": "AudioManager: Speech finished",
-    "ru": null,
-    "de": null,
-    "es": null,
-    "fr": null,
-    "it": null
+    "ru": "AudioManager: Speech finished",
+    "de": "AudioManager: Speech finished",
+    "es": "AudioManager: Speech finished",
+    "fr": "AudioManager: Speech finished",
+    "it": "AudioManager: Speech finished"
   },
   "failed_to_initialize": {
     "source": "Failed to initialize app:",
     "en": "Failed to initialize app:",
-    "ru": null,
-    "de": null,
-    "es": null,
-    "fr": null,
-    "it": null
+    "ru": "Failed to initialize app:",
+    "de": "Failed to initialize app:",
+    "es": "Failed to initialize app:",
+    "fr": "Failed to initialize app:",
+    "it": "Failed to initialize app:"
   },
   "_18": {
     "source": "Ошибка инициализации приложения",
-    "en": null,
+    "en": "Ошибка инициализации приложения",
     "ru": "Ошибка инициализации приложения",
-    "de": null,
-    "es": null,
-    "fr": null,
-    "it": null
+    "de": "Ошибка инициализации приложения",
+    "es": "Ошибка инициализации приложения",
+    "fr": "Ошибка инициализации приложения",
+    "it": "Ошибка инициализации приложения"
   },
   "_19": {
     "source": "Пожалуйста, заполните все поля",
-    "en": null,
+    "en": "Пожалуйста, заполните все поля",
     "ru": "Пожалуйста, заполните все поля",
-    "de": null,
-    "es": null,
-    "fr": null,
-    "it": null
+    "de": "Пожалуйста, заполните все поля",
+    "es": "Пожалуйста, заполните все поля",
+    "fr": "Пожалуйста, заполните все поля",
+    "it": "Пожалуйста, заполните все поля"
   },
   "_20": {
     "source": "Пароли не совпадают",
-    "en": null,
+    "en": "Пароли не совпадают",
     "ru": "Пароли не совпадают",
-    "de": null,
-    "es": null,
-    "fr": null,
-    "it": null
+    "de": "Пароли не совпадают",
+    "es": "Пароли не совпадают",
+    "fr": "Пароли не совпадают",
+    "it": "Пароли не совпадают"
   },
   "error_updating_stats": {
     "source": "Error updating stats:",
     "en": "Error updating stats:",
-    "ru": null,
-    "de": null,
-    "es": null,
-    "fr": null,
-    "it": null
+    "ru": "Error updating stats:",
+    "de": "Error updating stats:",
+    "es": "Error updating stats:",
+    "fr": "Error updating stats:",
+    "it": "Error updating stats:"
   },
   "error_updating_review": {
     "source": "Error updating review stats:",
     "en": "Error updating review stats:",
-    "ru": null,
-    "de": null,
-    "es": null,
-    "fr": null,
-    "it": null
+    "ru": "Error updating review stats:",
+    "de": "Error updating review stats:",
+    "es": "Error updating review stats:",
+    "fr": "Error updating review stats:",
+    "it": "Error updating review stats:"
   },
   "error_updating_stats_1": {
     "source": "Error updating stats page:",
     "en": "Error updating stats page:",
-    "ru": null,
-    "de": null,
-    "es": null,
-    "fr": null,
-    "it": null
+    "ru": "Error updating stats page:",
+    "de": "Error updating stats page:",
+    "es": "Error updating stats page:",
+    "fr": "Error updating stats page:",
+    "it": "Error updating stats page:"
   },
   "error_updating_word": {
     "source": "Error updating word lists:",
     "en": "Error updating word lists:",
-    "ru": null,
-    "de": null,
-    "es": null,
-    "fr": null,
-    "it": null
+    "ru": "Error updating word lists:",
+    "de": "Error updating word lists:",
+    "es": "Error updating word lists:",
+    "fr": "Error updating word lists:",
+    "it": "Error updating word lists:"
   },
   "_21": {
     "source": "Не изучалось",
-    "en": null,
+    "en": "Не изучалось",
     "ru": "Не изучалось",
-    "de": null,
-    "es": null,
-    "fr": null,
-    "it": null
+    "de": "Не изучалось",
+    "es": "Не изучалось",
+    "fr": "Не изучалось",
+    "it": "Не изучалось"
   },
   "_22": {
     "source": "Файл не содержит корректных данных",
-    "en": null,
+    "en": "Файл не содержит корректных данных",
     "ru": "Файл не содержит корректных данных",
-    "de": null,
-    "es": null,
-    "fr": null,
-    "it": null
+    "de": "Файл не содержит корректных данных",
+    "es": "Файл не содержит корректных данных",
+    "fr": "Файл не содержит корректных данных",
+    "it": "Файл не содержит корректных данных"
   },
   "csv_import_error": {
     "source": "CSV Import Error:",
     "en": "CSV Import Error:",
-    "ru": null,
-    "de": null,
-    "es": null,
-    "fr": null,
-    "it": null
+    "ru": "CSV Import Error:",
+    "de": "CSV Import Error:",
+    "es": "CSV Import Error:",
+    "fr": "CSV Import Error:",
+    "it": "CSV Import Error:"
   },
   "_23": {
     "source": "Ошибка при импорте CSV файла",
-    "en": null,
+    "en": "Ошибка при импорте CSV файла",
     "ru": "Ошибка при импорте CSV файла",
-    "de": null,
-    "es": null,
-    "fr": null,
-    "it": null
+    "de": "Ошибка при импорте CSV файла",
+    "es": "Ошибка при импорте CSV файла",
+    "fr": "Ошибка при импорте CSV файла",
+    "it": "Ошибка при импорте CSV файла"
   },
   "csv": {
     "source": "Шаблон CSV скачан",
-    "en": null,
+    "en": "Шаблон CSV скачан",
     "ru": "Шаблон CSV скачан",
-    "de": null,
-    "es": null,
-    "fr": null,
-    "it": null
+    "de": "Шаблон CSV скачан",
+    "es": "Шаблон CSV скачан",
+    "fr": "Шаблон CSV скачан",
+    "it": "Шаблон CSV скачан"
   },
   "_24": {
     "source": "Введите ссылку на Google Таблицы",
-    "en": null,
+    "en": "Введите ссылку на Google Таблицы",
     "ru": "Введите ссылку на Google Таблицы",
-    "de": null,
-    "es": null,
-    "fr": null,
-    "it": null
+    "de": "Введите ссылку на Google Таблицы",
+    "es": "Введите ссылку на Google Таблицы",
+    "fr": "Введите ссылку на Google Таблицы",
+    "it": "Введите ссылку на Google Таблицы"
   },
   "_25": {
     "source": "Загрузка данных...",
-    "en": null,
+    "en": "Загрузка данных...",
     "ru": "Загрузка данных...",
-    "de": null,
-    "es": null,
-    "fr": null,
-    "it": null
+    "de": "Загрузка данных...",
+    "es": "Загрузка данных...",
+    "fr": "Загрузка данных...",
+    "it": "Загрузка данных..."
   },
   "_26": {
     "source": "Таблица не содержит корректных данных",
-    "en": null,
+    "en": "Таблица не содержит корректных данных",
     "ru": "Таблица не содержит корректных данных",
-    "de": null,
-    "es": null,
-    "fr": null,
-    "it": null
+    "de": "Таблица не содержит корректных данных",
+    "es": "Таблица не содержит корректных данных",
+    "fr": "Таблица не содержит корректных данных",
+    "it": "Таблица не содержит корректных данных"
   },
   "google_sheets_import": {
     "source": "Google Sheets Import Error:",
     "en": "Google Sheets Import Error:",
-    "ru": null,
-    "de": null,
-    "es": null,
-    "fr": null,
-    "it": null
+    "ru": "Google Sheets Import Error:",
+    "de": "Google Sheets Import Error:",
+    "es": "Google Sheets Import Error:",
+    "fr": "Google Sheets Import Error:",
+    "it": "Google Sheets Import Error:"
   },
   "error_starting_study": {
     "source": "Error starting study quiz:",
     "en": "Error starting study quiz:",
-    "ru": null,
-    "de": null,
-    "es": null,
-    "fr": null,
-    "it": null
+    "ru": "Error starting study quiz:",
+    "de": "Error starting study quiz:",
+    "es": "Error starting study quiz:",
+    "fr": "Error starting study quiz:",
+    "it": "Error starting study quiz:"
   },
   "error_starting_review": {
     "source": "Error starting review quiz:",
     "en": "Error starting review quiz:",
-    "ru": null,
-    "de": null,
-    "es": null,
-    "fr": null,
-    "it": null
+    "ru": "Error starting review quiz:",
+    "de": "Error starting review quiz:",
+    "es": "Error starting review quiz:",
+    "fr": "Error starting review quiz:",
+    "it": "Error starting review quiz:"
   },
   "_27": {
     "source": "Введите ответ...",
-    "en": null,
+    "en": "Введите ответ...",
     "ru": "Введите ответ...",
-    "de": null,
-    "es": null,
-    "fr": null,
-    "it": null
+    "de": "Введите ответ...",
+    "es": "Введите ответ...",
+    "fr": "Введите ответ...",
+    "it": "Введите ответ..."
   },
   "_28": {
     "source": "Ответить",
-    "en": null,
+    "en": "Ответить",
     "ru": "Ответить",
-    "de": null,
-    "es": null,
-    "fr": null,
-    "it": null
+    "de": "Ответить",
+    "es": "Ответить",
+    "fr": "Ответить",
+    "it": "Ответить"
   },
   "action_btn_show_answer_btn": {
     "source": "action-btn show-answer-btn",
     "en": "action-btn show-answer-btn",
-    "ru": null,
-    "de": null,
-    "es": null,
-    "fr": null,
-    "it": null
+    "ru": "action-btn show-answer-btn",
+    "de": "action-btn show-answer-btn",
+    "es": "action-btn show-answer-btn",
+    "fr": "action-btn show-answer-btn",
+    "it": "action-btn show-answer-btn"
   },
   "_29": {
     "source": "Показать ответ",
-    "en": null,
+    "en": "Показать ответ",
     "ru": "Показать ответ",
-    "de": null,
-    "es": null,
-    "fr": null,
-    "it": null
+    "de": "Показать ответ",
+    "es": "Показать ответ",
+    "fr": "Показать ответ",
+    "it": "Показать ответ"
   },
   "_30": {
     "source": "Правильный ответ:",
-    "en": null,
+    "en": "Правильный ответ:",
     "ru": "Правильный ответ:",
-    "de": null,
-    "es": null,
-    "fr": null,
-    "it": null
+    "de": "Правильный ответ:",
+    "es": "Правильный ответ:",
+    "fr": "Правильный ответ:",
+    "it": "Правильный ответ:"
   },
   "extracted_text_from": {
     "source": "Extracted text from feedback:",
     "en": "Extracted text from feedback:",
-    "ru": null,
-    "de": null,
-    "es": null,
-    "fr": null,
-    "it": null
+    "ru": "Extracted text from feedback:",
+    "de": "Extracted text from feedback:",
+    "es": "Extracted text from feedback:",
+    "fr": "Extracted text from feedback:",
+    "it": "Extracted text from feedback:"
   },
   "using_extracted_foreign": {
     "source": "Using extracted foreign text:",
     "en": "Using extracted foreign text:",
-    "ru": null,
-    "de": null,
-    "es": null,
-    "fr": null,
-    "it": null
+    "ru": "Using extracted foreign text:",
+    "de": "Using extracted foreign text:",
+    "es": "Using extracted foreign text:",
+    "fr": "Using extracted foreign text:",
+    "it": "Using extracted foreign text:"
   },
   "error_starting_survival": {
     "source": "Error starting survival mode:",
     "en": "Error starting survival mode:",
-    "ru": null,
-    "de": null,
-    "es": null,
-    "fr": null,
-    "it": null
+    "ru": "Error starting survival mode:",
+    "de": "Error starting survival mode:",
+    "es": "Error starting survival mode:",
+    "fr": "Error starting survival mode:",
+    "it": "Error starting survival mode:"
   },
   "_31": {
     "source": "Функция удаления временно недоступна",
-    "en": null,
+    "en": "Функция удаления временно недоступна",
     "ru": "Функция удаления временно недоступна",
-    "de": null,
-    "es": null,
-    "fr": null,
-    "it": null
+    "de": "Функция удаления временно недоступна",
+    "es": "Функция удаления временно недоступна",
+    "fr": "Функция удаления временно недоступна",
+    "it": "Функция удаления временно недоступна"
   },
   "_32": {
     "source": "Функция перемещения временно недоступна",
-    "en": null,
+    "en": "Функция перемещения временно недоступна",
     "ru": "Функция перемещения временно недоступна",
-    "de": null,
-    "es": null,
-    "fr": null,
-    "it": null
+    "de": "Функция перемещения временно недоступна",
+    "es": "Функция перемещения временно недоступна",
+    "fr": "Функция перемещения временно недоступна",
+    "it": "Функция перемещения временно недоступна"
   },
   "_33": {
     "source": "Функция сброса прогресса временно недоступна",
-    "en": null,
+    "en": "Функция сброса прогресса временно недоступна",
     "ru": "Функция сброса прогресса временно недоступна",
-    "de": null,
-    "es": null,
-    "fr": null,
-    "it": null
+    "de": "Функция сброса прогресса временно недоступна",
+    "es": "Функция сброса прогресса временно недоступна",
+    "fr": "Функция сброса прогресса временно недоступна",
+    "it": "Функция сброса прогресса временно недоступна"
   },
   "_34": {
     "source": "Нет данных для экспорта",
-    "en": null,
+    "en": "Нет данных для экспорта",
     "ru": "Нет данных для экспорта",
-    "de": null,
-    "es": null,
-    "fr": null,
-    "it": null
+    "de": "Нет данных для экспорта",
+    "es": "Нет данных для экспорта",
+    "fr": "Нет данных для экспорта",
+    "it": "Нет данных для экспорта"
   },
   "export_error": {
     "source": "Export error:",
     "en": "Export error:",
-    "ru": null,
-    "de": null,
-    "es": null,
-    "fr": null,
-    "it": null
+    "ru": "Export error:",
+    "de": "Export error:",
+    "es": "Export error:",
+    "fr": "Export error:",
+    "it": "Export error:"
   },
   "_35": {
     "source": "Ошибка при экспорте данных",
-    "en": null,
+    "en": "Ошибка при экспорте данных",
     "ru": "Ошибка при экспорте данных",
-    "de": null,
-    "es": null,
-    "fr": null,
-    "it": null
+    "de": "Ошибка при экспорте данных",
+    "es": "Ошибка при экспорте данных",
+    "fr": "Ошибка при экспорте данных",
+    "it": "Ошибка при экспорте данных"
   },
   "_36": {
     "source": "Составьте слово...",
-    "en": null,
+    "en": "Составьте слово...",
     "ru": "Составьте слово...",
-    "de": null,
-    "es": null,
-    "fr": null,
-    "it": null
+    "de": "Составьте слово...",
+    "es": "Составьте слово...",
+    "fr": "Составьте слово...",
+    "it": "Составьте слово..."
   },
   "_37": {
     "source": "Очистить",
-    "en": null,
+    "en": "Очистить",
     "ru": "Очистить",
-    "de": null,
-    "es": null,
-    "fr": null,
-    "it": null
+    "de": "Очистить",
+    "es": "Очистить",
+    "fr": "Очистить",
+    "it": "Очистить"
   },
   "_38": {
     "source": "Озвучить",
-    "en": null,
+    "en": "Озвучить",
     "ru": "Озвучить",
-    "de": null,
-    "es": null,
-    "fr": null,
-    "it": null
+    "de": "Озвучить",
+    "es": "Озвучить",
+    "fr": "Озвучить",
+    "it": "Озвучить"
   },
   "error_selecting_language": {
     "source": "Error selecting language pair:",
     "en": "Error selecting language pair:",
-    "ru": null,
-    "de": null,
-    "es": null,
-    "fr": null,
-    "it": null
+    "ru": "Error selecting language pair:",
+    "de": "Error selecting language pair:",
+    "es": "Error selecting language pair:",
+    "fr": "Error selecting language pair:",
+    "it": "Error selecting language pair:"
   },
   "_39": {
     "source": "Ошибка при выборе языковой пары",
-    "en": null,
+    "en": "Ошибка при выборе языковой пары",
     "ru": "Ошибка при выборе языковой пары",
-    "de": null,
-    "es": null,
-    "fr": null,
-    "it": null
+    "de": "Ошибка при выборе языковой пары",
+    "es": "Ошибка при выборе языковой пары",
+    "fr": "Ошибка при выборе языковой пары",
+    "it": "Ошибка при выборе языковой пары"
   },
   "_40": {
     "source": "Вы уверены, что хотите удалить эту языковую пару? Все связанные с ней данные будут потеряны.",
-    "en": null,
+    "en": "Вы уверены, что хотите удалить эту языковую пару? Все связанные с ней данные будут потеряны.",
     "ru": "Вы уверены, что хотите удалить эту языковую пару? Все связанные с ней данные будут потеряны.",
-    "de": null,
-    "es": null,
-    "fr": null,
-    "it": null
+    "de": "Вы уверены, что хотите удалить эту языковую пару? Все связанные с ней данные будут потеряны.",
+    "es": "Вы уверены, что хотите удалить эту языковую пару? Все связанные с ней данные будут потеряны.",
+    "fr": "Вы уверены, что хотите удалить эту языковую пару? Все связанные с ней данные будут потеряны.",
+    "it": "Вы уверены, что хотите удалить эту языковую пару? Все связанные с ней данные будут потеряны."
   },
   "error_deleting_language": {
     "source": "Error deleting language pair:",
     "en": "Error deleting language pair:",
-    "ru": null,
-    "de": null,
-    "es": null,
-    "fr": null,
-    "it": null
+    "ru": "Error deleting language pair:",
+    "de": "Error deleting language pair:",
+    "es": "Error deleting language pair:",
+    "fr": "Error deleting language pair:",
+    "it": "Error deleting language pair:"
   },
   "_41": {
     "source": "Ошибка при удалении языковой пары",
-    "en": null,
+    "en": "Ошибка при удалении языковой пары",
     "ru": "Ошибка при удалении языковой пары",
-    "de": null,
-    "es": null,
-    "fr": null,
-    "it": null
+    "de": "Ошибка при удалении языковой пары",
+    "es": "Ошибка при удалении языковой пары",
+    "fr": "Ошибка при удалении языковой пары",
+    "it": "Ошибка при удалении языковой пары"
   },
   "auth_form_active": {
     "source": "auth-form active",
     "en": "auth-form active",
-    "ru": null,
-    "de": null,
-    "es": null,
-    "fr": null,
-    "it": null
+    "ru": "auth-form active",
+    "de": "auth-form active",
+    "es": "auth-form active",
+    "fr": "auth-form active",
+    "it": "auth-form active"
   },
   "auth_form_input": {
     "source": "auth-form input",
     "en": "auth-form input",
-    "ru": null,
-    "de": null,
-    "es": null,
-    "fr": null,
-    "it": null
+    "ru": "auth-form input",
+    "de": "auth-form input",
+    "es": "auth-form input",
+    "fr": "auth-form input",
+    "it": "auth-form input"
   },
   "_42": {
     "source": "Изучаемый и родной язык не могут быть одинаковыми",
-    "en": null,
+    "en": "Изучаемый и родной язык не могут быть одинаковыми",
     "ru": "Изучаемый и родной язык не могут быть одинаковыми",
-    "de": null,
-    "es": null,
-    "fr": null,
-    "it": null
+    "de": "Изучаемый и родной язык не могут быть одинаковыми",
+    "es": "Изучаемый и родной язык не могут быть одинаковыми",
+    "fr": "Изучаемый и родной язык не могут быть одинаковыми",
+    "it": "Изучаемый и родной язык не могут быть одинаковыми"
   },
   "error_creating_language": {
     "source": "Error creating language pair:",
     "en": "Error creating language pair:",
-    "ru": null,
-    "de": null,
-    "es": null,
-    "fr": null,
-    "it": null
+    "ru": "Error creating language pair:",
+    "de": "Error creating language pair:",
+    "es": "Error creating language pair:",
+    "fr": "Error creating language pair:",
+    "it": "Error creating language pair:"
   },
   "_43": {
     "source": "Ошибка при создании языковой пары",
-    "en": null,
+    "en": "Ошибка при создании языковой пары",
     "ru": "Ошибка при создании языковой пары",
-    "de": null,
-    "es": null,
-    "fr": null,
-    "it": null
+    "de": "Ошибка при создании языковой пары",
+    "es": "Ошибка при создании языковой пары",
+    "fr": "Ошибка при создании языковой пары",
+    "it": "Ошибка при создании языковой пары"
   },
   "error_updating_lesson": {
     "source": "Error updating lesson size:",
     "en": "Error updating lesson size:",
-    "ru": null,
-    "de": null,
-    "es": null,
-    "fr": null,
-    "it": null
+    "ru": "Error updating lesson size:",
+    "de": "Error updating lesson size:",
+    "es": "Error updating lesson size:",
+    "fr": "Error updating lesson size:",
+    "it": "Error updating lesson size:"
   },
   "exporting_data": {
     "source": "Exporting data...",
     "en": "Exporting data...",
-    "ru": null,
-    "de": null,
-    "es": null,
-    "fr": null,
-    "it": null
+    "ru": "Exporting data...",
+    "de": "Exporting data...",
+    "es": "Exporting data...",
+    "fr": "Exporting data...",
+    "it": "Exporting data..."
   },
   "sync_status_info": {
     "source": "sync-status info",
     "en": "sync-status info",
-    "ru": null,
-    "de": null,
-    "es": null,
-    "fr": null,
-    "it": null
+    "ru": "sync-status info",
+    "de": "sync-status info",
+    "es": "sync-status info",
+    "fr": "sync-status info",
+    "it": "sync-status info"
   },
   "_44": {
     "source": "Нет данных для синхронизации",
-    "en": null,
+    "en": "Нет данных для синхронизации",
     "ru": "Нет данных для синхронизации",
-    "de": null,
-    "es": null,
-    "fr": null,
-    "it": null
+    "de": "Нет данных для синхронизации",
+    "es": "Нет данных для синхронизации",
+    "fr": "Нет данных для синхронизации",
+    "it": "Нет данных для синхронизации"
   },
   "sync_status_error": {
     "source": "sync-status error",
     "en": "sync-status error",
-    "ru": null,
-    "de": null,
-    "es": null,
-    "fr": null,
-    "it": null
+    "ru": "sync-status error",
+    "de": "sync-status error",
+    "es": "sync-status error",
+    "fr": "sync-status error",
+    "it": "sync-status error"
   },
   "sync_status_success": {
     "source": "sync-status success",
     "en": "sync-status success",
-    "ru": null,
-    "de": null,
-    "es": null,
-    "fr": null,
-    "it": null
+    "ru": "sync-status success",
+    "de": "sync-status success",
+    "es": "sync-status success",
+    "fr": "sync-status success",
+    "it": "sync-status success"
   },
   "sync_error": {
     "source": "Sync error:",
     "en": "Sync error:",
-    "ru": null,
-    "de": null,
-    "es": null,
-    "fr": null,
-    "it": null
+    "ru": "Sync error:",
+    "de": "Sync error:",
+    "es": "Sync error:",
+    "fr": "Sync error:",
+    "it": "Sync error:"
   },
   "_45": {
     "source": "Ошибка связи с сервером. Файл скачан для ручного импорта.",
-    "en": null,
+    "en": "Ошибка связи с сервером. Файл скачан для ручного импорта.",
     "ru": "Ошибка связи с сервером. Файл скачан для ручного импорта.",
-    "de": null,
-    "es": null,
-    "fr": null,
-    "it": null
+    "de": "Ошибка связи с сервером. Файл скачан для ручного импорта.",
+    "es": "Ошибка связи с сервером. Файл скачан для ручного импорта.",
+    "fr": "Ошибка связи с сервером. Файл скачан для ручного импорта.",
+    "it": "Ошибка связи с сервером. Файл скачан для ручного импорта."
   },
   "_46": {
     "source": "Ошибка синхронизации и создания файла",
-    "en": null,
+    "en": "Ошибка синхронизации и создания файла",
     "ru": "Ошибка синхронизации и создания файла",
-    "de": null,
-    "es": null,
-    "fr": null,
-    "it": null
+    "de": "Ошибка синхронизации и создания файла",
+    "es": "Ошибка синхронизации и создания файла",
+    "fr": "Ошибка синхронизации и создания файла",
+    "it": "Ошибка синхронизации и создания файла"
   },
   "error_loading_analytics": {
     "source": "Error loading analytics:",
     "en": "Error loading analytics:",
-    "ru": null,
-    "de": null,
-    "es": null,
-    "fr": null,
-    "it": null
+    "ru": "Error loading analytics:",
+    "de": "Error loading analytics:",
+    "es": "Error loading analytics:",
+    "fr": "Error loading analytics:",
+    "it": "Error loading analytics:"
   },
   "error_loading_progress": {
     "source": "Error loading progress chart:",
     "en": "Error loading progress chart:",
-    "ru": null,
-    "de": null,
-    "es": null,
-    "fr": null,
-    "it": null
+    "ru": "Error loading progress chart:",
+    "de": "Error loading progress chart:",
+    "es": "Error loading progress chart:",
+    "fr": "Error loading progress chart:",
+    "it": "Error loading progress chart:"
   },
   "error_loading_gamification": {
     "source": "Error loading gamification header:",
     "en": "Error loading gamification header:",
-    "ru": null,
-    "de": null,
-    "es": null,
-    "fr": null,
-    "it": null
+    "ru": "Error loading gamification header:",
+    "de": "Error loading gamification header:",
+    "es": "Error loading gamification header:",
+    "fr": "Error loading gamification header:",
+    "it": "Error loading gamification header:"
   },
   "error_loading_gamification_1": {
     "source": "Error loading gamification stats:",
     "en": "Error loading gamification stats:",
-    "ru": null,
-    "de": null,
-    "es": null,
-    "fr": null,
-    "it": null
+    "ru": "Error loading gamification stats:",
+    "de": "Error loading gamification stats:",
+    "es": "Error loading gamification stats:",
+    "fr": "Error loading gamification stats:",
+    "it": "Error loading gamification stats:"
   },
   "error_loading_leaderboard": {
     "source": "Error loading leaderboard:",
     "en": "Error loading leaderboard:",
-    "ru": null,
-    "de": null,
-    "es": null,
-    "fr": null,
-    "it": null
+    "ru": "Error loading leaderboard:",
+    "de": "Error loading leaderboard:",
+    "es": "Error loading leaderboard:",
+    "fr": "Error loading leaderboard:",
+    "it": "Error loading leaderboard:"
   },
   "error_loading_daily": {
     "source": "Error loading daily goals:",
     "en": "Error loading daily goals:",
-    "ru": null,
-    "de": null,
-    "es": null,
-    "fr": null,
-    "it": null
+    "ru": "Error loading daily goals:",
+    "de": "Error loading daily goals:",
+    "es": "Error loading daily goals:",
+    "fr": "Error loading daily goals:",
+    "it": "Error loading daily goals:"
   },
   "hallo_dies_ist": {
     "source": "Hallo! Dies ist ein Test der aktuellen Einstellungen.",
     "en": "Hallo! Dies ist ein Test der aktuellen Einstellungen.",
-    "ru": null,
-    "de": null,
-    "es": null,
-    "fr": null,
-    "it": null
+    "ru": "Hallo! Dies ist ein Test der aktuellen Einstellungen.",
+    "de": "Hallo! Dies ist ein Test der aktuellen Einstellungen.",
+    "es": "Hallo! Dies ist ein Test der aktuellen Einstellungen.",
+    "fr": "Hallo! Dies ist ein Test der aktuellen Einstellungen.",
+    "it": "Hallo! Dies ist ein Test der aktuellen Einstellungen."
   },
   "hello_this_is": {
     "source": "Hello! This is a test of the current settings.",
     "en": "Hello! This is a test of the current settings.",
-    "ru": null,
-    "de": null,
-    "es": null,
-    "fr": null,
-    "it": null
+    "ru": "Hello! This is a test of the current settings.",
+    "de": "Hello! This is a test of the current settings.",
+    "es": "Hello! This is a test of the current settings.",
+    "fr": "Hello! This is a test of the current settings.",
+    "it": "Hello! This is a test of the current settings."
   },
   "lang": {
     "source": ", lang:",
     "en": ", lang:",
-    "ru": null,
-    "de": null,
-    "es": null,
-    "fr": null,
-    "it": null
+    "ru": ", lang:",
+    "de": ", lang:",
+    "es": ", lang:",
+    "fr": ", lang:",
+    "it": ", lang:"
   },
   "_47": {
     "source": "Привет! Это тест текущих настроек.",
-    "en": null,
+    "en": "Привет! Это тест текущих настроек.",
     "ru": "Привет! Это тест текущих настроек.",
-    "de": null,
-    "es": null,
-    "fr": null,
-    "it": null
+    "de": "Привет! Это тест текущих настроек.",
+    "es": "Привет! Это тест текущих настроек.",
+    "fr": "Привет! Это тест текущих настроек.",
+    "it": "Привет! Это тест текущих настроек."
   },
   "_48": {
     "source": "Привет, это тестовое сообщение",
-    "en": null,
+    "en": "Привет, это тестовое сообщение",
     "ru": "Привет, это тестовое сообщение",
-    "de": null,
-    "es": null,
-    "fr": null,
-    "it": null
+    "de": "Привет, это тестовое сообщение",
+    "es": "Привет, это тестовое сообщение",
+    "fr": "Привет, это тестовое сообщение",
+    "it": "Привет, это тестовое сообщение"
   },
   "hello_this_is_1": {
     "source": "Hello, this is a test message",
     "en": "Hello, this is a test message",
-    "ru": null,
-    "de": null,
-    "es": null,
-    "fr": null,
-    "it": null
+    "ru": "Hello, this is a test message",
+    "de": "Hello, this is a test message",
+    "es": "Hello, this is a test message",
+    "fr": "Hello, this is a test message",
+    "it": "Hello, this is a test message"
   },
   "hallo_dies_ist_1": {
     "source": "Hallo, dies ist eine Testnachricht",
     "en": "Hallo, dies ist eine Testnachricht",
-    "ru": null,
-    "de": null,
-    "es": null,
-    "fr": null,
-    "it": null
+    "ru": "Hallo, dies ist eine Testnachricht",
+    "de": "Hallo, dies ist eine Testnachricht",
+    "es": "Hallo, dies ist eine Testnachricht",
+    "fr": "Hallo, dies ist eine Testnachricht",
+    "it": "Hallo, dies ist eine Testnachricht"
   },
   "hola_este_es": {
     "source": "Hola, este es un mensaje de prueba",
     "en": "Hola, este es un mensaje de prueba",
-    "ru": null,
-    "de": null,
-    "es": null,
-    "fr": null,
-    "it": null
+    "ru": "Hola, este es un mensaje de prueba",
+    "de": "Hola, este es un mensaje de prueba",
+    "es": "Hola, este es un mensaje de prueba",
+    "fr": "Hola, este es un mensaje de prueba",
+    "it": "Hola, este es un mensaje de prueba"
   },
   "bonjour_ceci_est": {
     "source": "Bonjour, ceci est un message de test",
     "en": "Bonjour, ceci est un message de test",
-    "ru": null,
-    "de": null,
-    "es": null,
-    "fr": null,
-    "it": null
+    "ru": "Bonjour, ceci est un message de test",
+    "de": "Bonjour, ceci est un message de test",
+    "es": "Bonjour, ceci est un message de test",
+    "fr": "Bonjour, ceci est un message de test",
+    "it": "Bonjour, ceci est un message de test"
   },
   "_49": {
     "source": "Привет! Это пример русского голоса для изучения иностранных слов.",
-    "en": null,
+    "en": "Привет! Это пример русского голоса для изучения иностранных слов.",
     "ru": "Привет! Это пример русского голоса для изучения иностранных слов.",
-    "de": null,
-    "es": null,
-    "fr": null,
-    "it": null
+    "de": "Привет! Это пример русского голоса для изучения иностранных слов.",
+    "es": "Привет! Это пример русского голоса для изучения иностранных слов.",
+    "fr": "Привет! Это пример русского голоса для изучения иностранных слов.",
+    "it": "Привет! Это пример русского голоса для изучения иностранных слов."
   },
   "hello_this_is_2": {
     "source": "Hello! This is a sample of the English voice for learning foreign words.",
     "en": "Hello! This is a sample of the English voice for learning foreign words.",
-    "ru": null,
-    "de": null,
-    "es": null,
-    "fr": null,
-    "it": null
+    "ru": "Hello! This is a sample of the English voice for learning foreign words.",
+    "de": "Hello! This is a sample of the English voice for learning foreign words.",
+    "es": "Hello! This is a sample of the English voice for learning foreign words.",
+    "fr": "Hello! This is a sample of the English voice for learning foreign words.",
+    "it": "Hello! This is a sample of the English voice for learning foreign words."
   },
   "test_voice": {
     "source": "Test voice",
     "en": "Test voice",
-    "ru": null,
-    "de": null,
-    "es": null,
-    "fr": null,
-    "it": null
+    "ru": "Test voice",
+    "de": "Test voice",
+    "es": "Test voice",
+    "fr": "Test voice",
+    "it": "Test voice"
   },
   "meta_ads_expense": {
     "source": "Meta Ads Expense Tracker installed",
     "en": "Meta Ads Expense Tracker installed",
-    "ru": null,
-    "de": null,
-    "es": null,
-    "fr": null,
-    "it": null
+    "ru": "Meta Ads Expense Tracker installed",
+    "de": "Meta Ads Expense Tracker installed",
+    "es": "Meta Ads Expense Tracker installed",
+    "fr": "Meta Ads Expense Tracker installed",
+    "it": "Meta Ads Expense Tracker installed"
   },
   "database_using_server_based": {
     "source": "Database: Using server-based storage at",
     "en": "Database: Using server-based storage at",
-    "ru": null,
-    "de": null,
-    "es": null,
-    "fr": null,
-    "it": null
+    "ru": "Database: Using server-based storage at",
+    "de": "Database: Using server-based storage at",
+    "es": "Database: Using server-based storage at",
+    "fr": "Database: Using server-based storage at",
+    "it": "Database: Using server-based storage at"
   },
   "words_added": {
     "source": "Words added:",
     "en": "Words added:",
-    "ru": null,
-    "de": null,
-    "es": null,
-    "fr": null,
-    "it": null
+    "ru": "Words added:",
+    "de": "Words added:",
+    "es": "Words added:",
+    "fr": "Words added:",
+    "it": "Words added:"
   },
   "error_adding_words": {
     "source": "Error adding words:",
     "en": "Error adding words:",
-    "ru": null,
-    "de": null,
-    "es": null,
-    "fr": null,
-    "it": null
+    "ru": "Error adding words:",
+    "de": "Error adding words:",
+    "es": "Error adding words:",
+    "fr": "Error adding words:",
+    "it": "Error adding words:"
   },
   "error_getting_words": {
     "source": "Error getting words by status:",
     "en": "Error getting words by status:",
-    "ru": null,
-    "de": null,
-    "es": null,
-    "fr": null,
-    "it": null
+    "ru": "Error getting words by status:",
+    "de": "Error getting words by status:",
+    "es": "Error getting words by status:",
+    "fr": "Error getting words by status:",
+    "it": "Error getting words by status:"
   },
   "progress_updated": {
     "source": "Progress updated:",
     "en": "Progress updated:",
-    "ru": null,
-    "de": null,
-    "es": null,
-    "fr": null,
-    "it": null
+    "ru": "Progress updated:",
+    "de": "Progress updated:",
+    "es": "Progress updated:",
+    "fr": "Progress updated:",
+    "it": "Progress updated:"
   },
   "error_updating_word_1": {
     "source": "Error updating word progress:",
     "en": "Error updating word progress:",
-    "ru": null,
-    "de": null,
-    "es": null,
-    "fr": null,
-    "it": null
+    "ru": "Error updating word progress:",
+    "de": "Error updating word progress:",
+    "es": "Error updating word progress:",
+    "fr": "Error updating word progress:",
+    "it": "Error updating word progress:"
   },
   "error_getting_word": {
     "source": "Error getting word counts:",
     "en": "Error getting word counts:",
-    "ru": null,
-    "de": null,
-    "es": null,
-    "fr": null,
-    "it": null
+    "ru": "Error getting word counts:",
+    "de": "Error getting word counts:",
+    "es": "Error getting word counts:",
+    "fr": "Error getting word counts:",
+    "it": "Error getting word counts:"
   },
   "error_getting_all": {
     "source": "Error getting all words:",
     "en": "Error getting all words:",
-    "ru": null,
-    "de": null,
-    "es": null,
-    "fr": null,
-    "it": null
+    "ru": "Error getting all words:",
+    "de": "Error getting all words:",
+    "es": "Error getting all words:",
+    "fr": "Error getting all words:",
+    "it": "Error getting all words:"
   },
   "error_getting_random": {
     "source": "Error getting random words:",
     "en": "Error getting random words:",
-    "ru": null,
-    "de": null,
-    "es": null,
-    "fr": null,
-    "it": null
+    "ru": "Error getting random words:",
+    "de": "Error getting random words:",
+    "es": "Error getting random words:",
+    "fr": "Error getting random words:",
+    "it": "Error getting random words:"
   },
   "error_getting_review": {
     "source": "Error getting review words:",
     "en": "Error getting review words:",
-    "ru": null,
-    "de": null,
-    "es": null,
-    "fr": null,
-    "it": null
+    "ru": "Error getting review words:",
+    "de": "Error getting review words:",
+    "es": "Error getting review words:",
+    "fr": "Error getting review words:",
+    "it": "Error getting review words:"
   },
   "error_exporting_words": {
     "source": "Error exporting words:",
     "en": "Error exporting words:",
-    "ru": null,
-    "de": null,
-    "es": null,
-    "fr": null,
-    "it": null
+    "ru": "Error exporting words:",
+    "de": "Error exporting words:",
+    "es": "Error exporting words:",
+    "fr": "Error exporting words:",
+    "it": "Error exporting words:"
   },
   "clearalldata_not_supported": {
     "source": "clearAllData: Not supported with server storage",
     "en": "clearAllData: Not supported with server storage",
-    "ru": null,
-    "de": null,
-    "es": null,
-    "fr": null,
-    "it": null
+    "ru": "clearAllData: Not supported with server storage",
+    "de": "clearAllData: Not supported with server storage",
+    "es": "clearAllData: Not supported with server storage",
+    "fr": "clearAllData: Not supported with server storage",
+    "it": "clearAllData: Not supported with server storage"
   },
   "meta_ads_expense_1": {
     "source": "Meta Ads Expense Tracker - Debug Test",
     "en": "Meta Ads Expense Tracker - Debug Test",
-    "ru": null,
-    "de": null,
-    "es": null,
-    "fr": null,
-    "it": null
+    "ru": "Meta Ads Expense Tracker - Debug Test",
+    "de": "Meta Ads Expense Tracker - Debug Test",
+    "es": "Meta Ads Expense Tracker - Debug Test",
+    "fr": "Meta Ads Expense Tracker - Debug Test",
+    "it": "Meta Ads Expense Tracker - Debug Test"
   },
   "check_extension": {
     "source": "Check Extension",
     "en": "Check Extension",
-    "ru": null,
-    "de": null,
-    "es": null,
-    "fr": null,
-    "it": null
+    "ru": "Check Extension",
+    "de": "Check Extension",
+    "es": "Check Extension",
+    "fr": "Check Extension",
+    "it": "Check Extension"
   },
   "check_permissions": {
     "source": "Check Permissions",
     "en": "Check Permissions",
-    "ru": null,
-    "de": null,
-    "es": null,
-    "fr": null,
-    "it": null
+    "ru": "Check Permissions",
+    "de": "Check Permissions",
+    "es": "Check Permissions",
+    "fr": "Check Permissions",
+    "it": "Check Permissions"
   },
   "check_current_url": {
     "source": "Check Current URL",
     "en": "Check Current URL",
-    "ru": null,
-    "de": null,
-    "es": null,
-    "fr": null,
-    "it": null
+    "ru": "Check Current URL",
+    "de": "Check Current URL",
+    "es": "Check Current URL",
+    "fr": "Check Current URL",
+    "it": "Check Current URL"
   },
   "open_chrome_devtools": {
     "source": "Open Chrome DevTools (F12) and check the Console tab for detailed logs when you click \"Get Expenses\" in the extension popup.",
     "en": "Open Chrome DevTools (F12) and check the Console tab for detailed logs when you click \"Get Expenses\" in the extension popup.",
-    "ru": null,
-    "de": null,
-    "es": null,
-    "fr": null,
-    "it": null
+    "ru": "Open Chrome DevTools (F12) and check the Console tab for detailed logs when you click \"Get Expenses\" in the extension popup.",
+    "de": "Open Chrome DevTools (F12) and check the Console tab for detailed logs when you click \"Get Expenses\" in the extension popup.",
+    "es": "Open Chrome DevTools (F12) and check the Console tab for detailed logs when you click \"Get Expenses\" in the extension popup.",
+    "fr": "Open Chrome DevTools (F12) and check the Console tab for detailed logs when you click \"Get Expenses\" in the extension popup.",
+    "it": "Open Chrome DevTools (F12) and check the Console tab for detailed logs when you click \"Get Expenses\" in the extension popup."
   },
   "look_for_logs": {
     "source": "Look for logs with these prefixes:\r\n🔵 - Popup script logs\r\n🟡 - Content script logs\r\n❌ - Error logs\r\n✅ - Success logs",
     "en": "Look for logs with these prefixes:\r\n🔵 - Popup script logs\r\n🟡 - Content script logs\r\n❌ - Error logs\r\n✅ - Success logs",
-    "ru": null,
-    "de": null,
-    "es": null,
-    "fr": null,
-    "it": null
+    "ru": "Look for logs with these prefixes:\r\n🔵 - Popup script logs\r\n🟡 - Content script logs\r\n❌ - Error logs\r\n✅ - Success logs",
+    "de": "Look for logs with these prefixes:\r\n🔵 - Popup script logs\r\n🟡 - Content script logs\r\n❌ - Error logs\r\n✅ - Success logs",
+    "es": "Look for logs with these prefixes:\r\n🔵 - Popup script logs\r\n🟡 - Content script logs\r\n❌ - Error logs\r\n✅ - Success logs",
+    "fr": "Look for logs with these prefixes:\r\n🔵 - Popup script logs\r\n🟡 - Content script logs\r\n❌ - Error logs\r\n✅ - Success logs",
+    "it": "Look for logs with these prefixes:\r\n🔵 - Popup script logs\r\n🟡 - Content script logs\r\n❌ - Error logs\r\n✅ - Success logs"
   },
   "test_data_extraction": {
     "source": "Test Data Extraction on This Page",
     "en": "Test Data Extraction on This Page",
-    "ru": null,
-    "de": null,
-    "es": null,
-    "fr": null,
-    "it": null
+    "ru": "Test Data Extraction on This Page",
+    "de": "Test Data Extraction on This Page",
+    "es": "Test Data Extraction on This Page",
+    "fr": "Test Data Extraction on This Page",
+    "it": "Test Data Extraction on This Page"
   },
   "amount_spent": {
     "source": "Amount Spent",
     "en": "Amount Spent",
-    "ru": null,
-    "de": null,
-    "es": null,
-    "fr": null,
-    "it": null
+    "ru": "Amount Spent",
+    "de": "Amount Spent",
+    "es": "Amount Spent",
+    "fr": "Amount Spent",
+    "it": "Amount Spent"
   },
   "aug_26_2025": {
     "source": "Aug 26, 2025",
     "en": "Aug 26, 2025",
-    "ru": null,
-    "de": null,
-    "es": null,
-    "fr": null,
-    "it": null
+    "ru": "Aug 26, 2025",
+    "de": "Aug 26, 2025",
+    "es": "Aug 26, 2025",
+    "fr": "Aug 26, 2025",
+    "it": "Aug 26, 2025"
   },
   "test_campaign": {
     "source": "Test Campaign",
     "en": "Test Campaign",
-    "ru": null,
-    "de": null,
-    "es": null,
-    "fr": null,
-    "it": null
+    "ru": "Test Campaign",
+    "de": "Test Campaign",
+    "es": "Test Campaign",
+    "fr": "Test Campaign",
+    "it": "Test Campaign"
   },
   "45_67": {
     "source": "$45.67",
     "en": "$45.67",
-    "ru": null,
-    "de": null,
-    "es": null,
-    "fr": null,
-    "it": null
+    "ru": "$45.67",
+    "de": "$45.67",
+    "es": "$45.67",
+    "fr": "$45.67",
+    "it": "$45.67"
   },
   "failed_to_fetch_5": {
     "source": "Failed to fetch stats",
     "en": "Failed to fetch stats",
-    "ru": null,
-    "de": null,
-    "es": null,
-    "fr": null,
-    "it": null
+    "ru": "Failed to fetch stats",
+    "de": "Failed to fetch stats",
+    "es": "Failed to fetch stats",
+    "fr": "Failed to fetch stats",
+    "it": "Failed to fetch stats"
   },
   "error_fetching_user": {
     "source": "Error fetching user stats:",
     "en": "Error fetching user stats:",
-    "ru": null,
-    "de": null,
-    "es": null,
-    "fr": null,
-    "it": null
+    "ru": "Error fetching user stats:",
+    "de": "Error fetching user stats:",
+    "es": "Error fetching user stats:",
+    "fr": "Error fetching user stats:",
+    "it": "Error fetching user stats:"
   },
   "failed_to_fetch_6": {
     "source": "Failed to fetch XP log",
     "en": "Failed to fetch XP log",
-    "ru": null,
-    "de": null,
-    "es": null,
-    "fr": null,
-    "it": null
+    "ru": "Failed to fetch XP log",
+    "de": "Failed to fetch XP log",
+    "es": "Failed to fetch XP log",
+    "fr": "Failed to fetch XP log",
+    "it": "Failed to fetch XP log"
   },
   "error_fetching_xp": {
     "source": "Error fetching XP log:",
     "en": "Error fetching XP log:",
-    "ru": null,
-    "de": null,
-    "es": null,
-    "fr": null,
-    "it": null
+    "ru": "Error fetching XP log:",
+    "de": "Error fetching XP log:",
+    "es": "Error fetching XP log:",
+    "fr": "Error fetching XP log:",
+    "it": "Error fetching XP log:"
   },
   "failed_to_fetch_7": {
     "source": "Failed to fetch activity",
     "en": "Failed to fetch activity",
-    "ru": null,
-    "de": null,
-    "es": null,
-    "fr": null,
-    "it": null
+    "ru": "Failed to fetch activity",
+    "de": "Failed to fetch activity",
+    "es": "Failed to fetch activity",
+    "fr": "Failed to fetch activity",
+    "it": "Failed to fetch activity"
   },
   "error_fetching_activity": {
     "source": "Error fetching activity:",
     "en": "Error fetching activity:",
-    "ru": null,
-    "de": null,
-    "es": null,
-    "fr": null,
-    "it": null
+    "ru": "Error fetching activity:",
+    "de": "Error fetching activity:",
+    "es": "Error fetching activity:",
+    "fr": "Error fetching activity:",
+    "it": "Error fetching activity:"
   },
   "failed_to_fetch_8": {
     "source": "Failed to fetch global leaderboard",
     "en": "Failed to fetch global leaderboard",
-    "ru": null,
-    "de": null,
-    "es": null,
-    "fr": null,
-    "it": null
+    "ru": "Failed to fetch global leaderboard",
+    "de": "Failed to fetch global leaderboard",
+    "es": "Failed to fetch global leaderboard",
+    "fr": "Failed to fetch global leaderboard",
+    "it": "Failed to fetch global leaderboard"
   },
   "error_fetching_global": {
     "source": "Error fetching global leaderboard:",
     "en": "Error fetching global leaderboard:",
-    "ru": null,
-    "de": null,
-    "es": null,
-    "fr": null,
-    "it": null
+    "ru": "Error fetching global leaderboard:",
+    "de": "Error fetching global leaderboard:",
+    "es": "Error fetching global leaderboard:",
+    "fr": "Error fetching global leaderboard:",
+    "it": "Error fetching global leaderboard:"
   },
   "failed_to_fetch_9": {
     "source": "Failed to fetch weekly leaderboard",
     "en": "Failed to fetch weekly leaderboard",
-    "ru": null,
-    "de": null,
-    "es": null,
-    "fr": null,
-    "it": null
+    "ru": "Failed to fetch weekly leaderboard",
+    "de": "Failed to fetch weekly leaderboard",
+    "es": "Failed to fetch weekly leaderboard",
+    "fr": "Failed to fetch weekly leaderboard",
+    "it": "Failed to fetch weekly leaderboard"
   },
   "error_fetching_weekly": {
     "source": "Error fetching weekly leaderboard:",
     "en": "Error fetching weekly leaderboard:",
-    "ru": null,
-    "de": null,
-    "es": null,
-    "fr": null,
-    "it": null
+    "ru": "Error fetching weekly leaderboard:",
+    "de": "Error fetching weekly leaderboard:",
+    "es": "Error fetching weekly leaderboard:",
+    "fr": "Error fetching weekly leaderboard:",
+    "it": "Error fetching weekly leaderboard:"
   },
   "failed_to_fetch_10": {
     "source": "Failed to fetch user rank",
     "en": "Failed to fetch user rank",
-    "ru": null,
-    "de": null,
-    "es": null,
-    "fr": null,
-    "it": null
+    "ru": "Failed to fetch user rank",
+    "de": "Failed to fetch user rank",
+    "es": "Failed to fetch user rank",
+    "fr": "Failed to fetch user rank",
+    "it": "Failed to fetch user rank"
   },
   "error_fetching_user_1": {
     "source": "Error fetching user rank:",
     "en": "Error fetching user rank:",
-    "ru": null,
-    "de": null,
-    "es": null,
-    "fr": null,
-    "it": null
+    "ru": "Error fetching user rank:",
+    "de": "Error fetching user rank:",
+    "es": "Error fetching user rank:",
+    "fr": "Error fetching user rank:",
+    "it": "Error fetching user rank:"
   },
   "failed_to_fetch_11": {
     "source": "Failed to fetch daily goals",
     "en": "Failed to fetch daily goals",
-    "ru": null,
-    "de": null,
-    "es": null,
-    "fr": null,
-    "it": null
+    "ru": "Failed to fetch daily goals",
+    "de": "Failed to fetch daily goals",
+    "es": "Failed to fetch daily goals",
+    "fr": "Failed to fetch daily goals",
+    "it": "Failed to fetch daily goals"
   },
   "error_fetching_daily": {
     "source": "Error fetching daily goals:",
     "en": "Error fetching daily goals:",
-    "ru": null,
-    "de": null,
-    "es": null,
-    "fr": null,
-    "it": null
+    "ru": "Error fetching daily goals:",
+    "de": "Error fetching daily goals:",
+    "es": "Error fetching daily goals:",
+    "fr": "Error fetching daily goals:",
+    "it": "Error fetching daily goals:"
   },
   "failed_to_update": {
     "source": "Failed to update daily goals",
     "en": "Failed to update daily goals",
-    "ru": null,
-    "de": null,
-    "es": null,
-    "fr": null,
-    "it": null
+    "ru": "Failed to update daily goals",
+    "de": "Failed to update daily goals",
+    "es": "Failed to update daily goals",
+    "fr": "Failed to update daily goals",
+    "it": "Failed to update daily goals"
   },
   "error_updating_daily": {
     "source": "Error updating daily goals:",
     "en": "Error updating daily goals:",
-    "ru": null,
-    "de": null,
-    "es": null,
-    "fr": null,
-    "it": null
+    "ru": "Error updating daily goals:",
+    "de": "Error updating daily goals:",
+    "es": "Error updating daily goals:",
+    "fr": "Error updating daily goals:",
+    "it": "Error updating daily goals:"
   },
   "_50": {
     "source": "Текущий стрик",
-    "en": null,
+    "en": "Текущий стрик",
     "ru": "Текущий стрик",
-    "de": null,
-    "es": null,
-    "fr": null,
-    "it": null
+    "de": "Текущий стрик",
+    "es": "Текущий стрик",
+    "fr": "Текущий стрик",
+    "it": "Текущий стрик"
   },
   "minute": {
     "source": ",\n                minute:",
     "en": ",\n                minute:",
-    "ru": null,
-    "de": null,
-    "es": null,
-    "fr": null,
-    "it": null
+    "ru": ",\n                minute:",
+    "de": ",\n                minute:",
+    "es": ",\n                minute:",
+    "fr": ",\n                minute:",
+    "it": ",\n                minute:"
   },
   "_51": {
     "source": "дней",
-    "en": null,
+    "en": "дней",
     "ru": "дней",
-    "de": null,
-    "es": null,
-    "fr": null,
-    "it": null
+    "de": "дней",
+    "es": "дней",
+    "fr": "дней",
+    "it": "дней"
   },
   "_52": {
     "source": "день",
-    "en": null,
+    "en": "день",
     "ru": "день",
-    "de": null,
-    "es": null,
-    "fr": null,
-    "it": null
+    "de": "день",
+    "es": "день",
+    "fr": "день",
+    "it": "день"
   },
   "_53": {
     "source": "дня",
-    "en": null,
+    "en": "дня",
     "ru": "дня",
-    "de": null,
-    "es": null,
-    "fr": null,
-    "it": null
+    "de": "дня",
+    "es": "дня",
+    "fr": "дня",
+    "it": "дня"
   },
   "_54": {
     "source": "Генератор иконок для Progressive Web App",
-    "en": null,
+    "en": "Генератор иконок для Progressive Web App",
     "ru": "Генератор иконок для Progressive Web App",
-    "de": null,
-    "es": null,
-    "fr": null,
-    "it": null
+    "de": "Генератор иконок для Progressive Web App",
+    "es": "Генератор иконок для Progressive Web App",
+    "fr": "Генератор иконок для Progressive Web App",
+    "it": "Генератор иконок для Progressive Web App"
   },
   "_55": {
     "source": "🎨 Сгенерировать иконки",
-    "en": null,
+    "en": "🎨 Сгенерировать иконки",
     "ru": "🎨 Сгенерировать иконки",
-    "de": null,
-    "es": null,
-    "fr": null,
-    "it": null
+    "de": "🎨 Сгенерировать иконки",
+    "es": "🎨 Сгенерировать иконки",
+    "fr": "🎨 Сгенерировать иконки",
+    "it": "🎨 Сгенерировать иконки"
   },
   "_56": {
     "source": "Добро пожаловать!",
-    "en": null,
+    "en": "Добро пожаловать!",
     "ru": "Добро пожаловать!",
-    "de": null,
-    "es": null,
-    "fr": null,
-    "it": null
+    "de": "Добро пожаловать!",
+    "es": "Добро пожаловать!",
+    "fr": "Добро пожаловать!",
+    "it": "Добро пожаловать!"
   },
   "_57": {
     "source": "Регистрация",
-    "en": null,
+    "en": "Регистрация",
     "ru": "Регистрация",
-    "de": null,
-    "es": null,
-    "fr": null,
-    "it": null
+    "de": "Регистрация",
+    "es": "Регистрация",
+    "fr": "Регистрация",
+    "it": "Регистрация"
   },
   "_58": {
     "source": "Войти",
-    "en": null,
+    "en": "Войти",
     "ru": "Войти",
-    "de": null,
-    "es": null,
-    "fr": null,
-    "it": null
+    "de": "Войти",
+    "es": "Войти",
+    "fr": "Войти",
+    "it": "Войти"
   },
   "_59": {
     "source": "или",
-    "en": null,
+    "en": "или",
     "ru": "или",
-    "de": null,
-    "es": null,
-    "fr": null,
-    "it": null
+    "de": "или",
+    "es": "или",
+    "fr": "или",
+    "it": "или"
   },
   "google": {
     "source": "Войти через Google",
-    "en": null,
+    "en": "Войти через Google",
     "ru": "Войти через Google",
-    "de": null,
-    "es": null,
-    "fr": null,
-    "it": null
+    "de": "Войти через Google",
+    "es": "Войти через Google",
+    "fr": "Войти через Google",
+    "it": "Войти через Google"
   },
   "_60": {
     "source": "Импорт",
-    "en": null,
+    "en": "Импорт",
     "ru": "Импорт",
-    "de": null,
-    "es": null,
-    "fr": null,
-    "it": null
+    "de": "Импорт",
+    "es": "Импорт",
+    "fr": "Импорт",
+    "it": "Импорт"
   },
   "_61": {
     "source": "Изучение",
-    "en": null,
+    "en": "Изучение",
     "ru": "Изучение",
-    "de": null,
-    "es": null,
-    "fr": null,
-    "it": null
+    "de": "Изучение",
+    "es": "Изучение",
+    "fr": "Изучение",
+    "it": "Изучение"
   },
   "_62": {
     "source": "Повторение",
-    "en": null,
+    "en": "Повторение",
     "ru": "Повторение",
-    "de": null,
-    "es": null,
-    "fr": null,
-    "it": null
+    "de": "Повторение",
+    "es": "Повторение",
+    "fr": "Повторение",
+    "it": "Повторение"
   },
   "_63": {
     "source": "Статистика",
-    "en": null,
+    "en": "Статистика",
     "ru": "Статистика",
-    "de": null,
-    "es": null,
-    "fr": null,
-    "it": null
+    "de": "Статистика",
+    "es": "Статистика",
+    "fr": "Статистика",
+    "it": "Статистика"
   },
   "_64": {
     "source": "🌙",
     "en": "🌙",
-    "ru": null,
-    "de": null,
-    "es": null,
-    "fr": null,
-    "it": null
+    "ru": "🌙",
+    "de": "🌙",
+    "es": "🌙",
+    "fr": "🌙",
+    "it": "🌙"
   },
   "_65": {
     "source": "⚙️",
     "en": "⚙️",
-    "ru": null,
-    "de": null,
-    "es": null,
-    "fr": null,
-    "it": null
+    "ru": "⚙️",
+    "de": "⚙️",
+    "es": "⚙️",
+    "fr": "⚙️",
+    "it": "⚙️"
   },
   "_66": {
     "source": "Выйти",
-    "en": null,
+    "en": "Выйти",
     "ru": "Выйти",
-    "de": null,
-    "es": null,
-    "fr": null,
-    "it": null
+    "de": "Выйти",
+    "es": "Выйти",
+    "fr": "Выйти",
+    "it": "Выйти"
   },
   "german_words_learning": {
     "source": "German Words Learning Dashboard",
     "en": "German Words Learning Dashboard",
-    "ru": null,
-    "de": null,
-    "es": null,
-    "fr": null,
-    "it": null
+    "ru": "German Words Learning Dashboard",
+    "de": "German Words Learning Dashboard",
+    "es": "German Words Learning Dashboard",
+    "fr": "German Words Learning Dashboard",
+    "it": "German Words Learning Dashboard"
   },
   "_67": {
     "source": "Изучаемые слова",
-    "en": null,
+    "en": "Изучаемые слова",
     "ru": "Изучаемые слова",
-    "de": null,
-    "es": null,
-    "fr": null,
-    "it": null
+    "de": "Изучаемые слова",
+    "es": "Изучаемые слова",
+    "fr": "Изучаемые слова",
+    "it": "Изучаемые слова"
   },
   "_68": {
     "source": "Быстрое повторение",
-    "en": null,
+    "en": "Быстрое повторение",
     "ru": "Быстрое повторение",
-    "de": null,
-    "es": null,
-    "fr": null,
-    "it": null
+    "de": "Быстрое повторение",
+    "es": "Быстрое повторение",
+    "fr": "Быстрое повторение",
+    "it": "Быстрое повторение"
   },
   "_69": {
     "source": "Импорт слов",
-    "en": null,
+    "en": "Импорт слов",
     "ru": "Импорт слов",
-    "de": null,
-    "es": null,
-    "fr": null,
-    "it": null
+    "de": "Импорт слов",
+    "es": "Импорт слов",
+    "fr": "Импорт слов",
+    "it": "Импорт слов"
   },
   "_70": {
     "source": "📄 Скачать шаблон CSV",
-    "en": null,
+    "en": "📄 Скачать шаблон CSV",
     "ru": "📄 Скачать шаблон CSV",
-    "de": null,
-    "es": null,
-    "fr": null,
-    "it": null
+    "de": "📄 Скачать шаблон CSV",
+    "es": "📄 Скачать шаблон CSV",
+    "fr": "📄 Скачать шаблон CSV",
+    "it": "📄 Скачать шаблон CSV"
   },
   "_71": {
     "source": "Шаблон содержит правильные заголовки колонок и примеры для заполнения",
-    "en": null,
+    "en": "Шаблон содержит правильные заголовки колонок и примеры для заполнения",
     "ru": "Шаблон содержит правильные заголовки колонок и примеры для заполнения",
-    "de": null,
-    "es": null,
-    "fr": null,
-    "it": null
+    "de": "Шаблон содержит правильные заголовки колонок и примеры для заполнения",
+    "es": "Шаблон содержит правильные заголовки колонок и примеры для заполнения",
+    "fr": "Шаблон содержит правильные заголовки колонок и примеры для заполнения",
+    "it": "Шаблон содержит правильные заголовки колонок и примеры для заполнения"
   },
   "csv_1": {
     "source": "Из CSV файла",
-    "en": null,
+    "en": "Из CSV файла",
     "ru": "Из CSV файла",
-    "de": null,
-    "es": null,
-    "fr": null,
-    "it": null
+    "de": "Из CSV файла",
+    "es": "Из CSV файла",
+    "fr": "Из CSV файла",
+    "it": "Из CSV файла"
   },
   "csv_2": {
     "source": "Загрузите CSV файл с колонками: Слово, Пример, Перевод, Перевод примера",
-    "en": null,
+    "en": "Загрузите CSV файл с колонками: Слово, Пример, Перевод, Перевод примера",
     "ru": "Загрузите CSV файл с колонками: Слово, Пример, Перевод, Перевод примера",
-    "de": null,
-    "es": null,
-    "fr": null,
-    "it": null
+    "de": "Загрузите CSV файл с колонками: Слово, Пример, Перевод, Перевод примера",
+    "es": "Загрузите CSV файл с колонками: Слово, Пример, Перевод, Перевод примера",
+    "fr": "Загрузите CSV файл с колонками: Слово, Пример, Перевод, Перевод примера",
+    "it": "Загрузите CSV файл с колонками: Слово, Пример, Перевод, Перевод примера"
   },
   "_72": {
     "source": "Выбрать файл",
-    "en": null,
+    "en": "Выбрать файл",
     "ru": "Выбрать файл",
-    "de": null,
-    "es": null,
-    "fr": null,
-    "it": null
+    "de": "Выбрать файл",
+    "es": "Выбрать файл",
+    "fr": "Выбрать файл",
+    "it": "Выбрать файл"
   },
   "_73": {
     "source": "Вставьте ссылку на публичную Google таблицу",
-    "en": null,
+    "en": "Вставьте ссылку на публичную Google таблицу",
     "ru": "Вставьте ссылку на публичную Google таблицу",
-    "de": null,
-    "es": null,
-    "fr": null,
-    "it": null
+    "de": "Вставьте ссылку на публичную Google таблицу",
+    "es": "Вставьте ссылку на публичную Google таблицу",
+    "fr": "Вставьте ссылку на публичную Google таблицу",
+    "it": "Вставьте ссылку на публичную Google таблицу"
   },
   "_74": {
     "source": "Выберите режим изучения:",
-    "en": null,
+    "en": "Выберите режим изучения:",
     "ru": "Выберите режим изучения:",
-    "de": null,
-    "es": null,
-    "fr": null,
-    "it": null
+    "de": "Выберите режим изучения:",
+    "es": "Выберите режим изучения:",
+    "fr": "Выберите режим изучения:",
+    "it": "Выберите режим изучения:"
   },
   "_75": {
     "source": "Выбор из вариантов",
-    "en": null,
+    "en": "Выбор из вариантов",
     "ru": "Выбор из вариантов",
-    "de": null,
-    "es": null,
-    "fr": null,
-    "it": null
+    "de": "Выбор из вариантов",
+    "es": "Выбор из вариантов",
+    "fr": "Выбор из вариантов",
+    "it": "Выбор из вариантов"
   },
   "_76": {
     "source": "Обратный выбор",
-    "en": null,
+    "en": "Обратный выбор",
     "ru": "Обратный выбор",
-    "de": null,
-    "es": null,
-    "fr": null,
-    "it": null
+    "de": "Обратный выбор",
+    "es": "Обратный выбор",
+    "fr": "Обратный выбор",
+    "it": "Обратный выбор"
   },
   "_77": {
     "source": "Составление слова",
-    "en": null,
+    "en": "Составление слова",
     "ru": "Составление слова",
-    "de": null,
-    "es": null,
-    "fr": null,
-    "it": null
+    "de": "Составление слова",
+    "es": "Составление слова",
+    "fr": "Составление слова",
+    "it": "Составление слова"
   },
   "_78": {
     "source": "Ввод с клавиатуры",
-    "en": null,
+    "en": "Ввод с клавиатуры",
     "ru": "Ввод с клавиатуры",
-    "de": null,
-    "es": null,
-    "fr": null,
-    "it": null
+    "de": "Ввод с клавиатуры",
+    "es": "Ввод с клавиатуры",
+    "fr": "Ввод с клавиатуры",
+    "it": "Ввод с клавиатуры"
   },
   "_79": {
     "source": "Режим выживания",
-    "en": null,
+    "en": "Режим выживания",
     "ru": "Режим выживания",
-    "de": null,
-    "es": null,
-    "fr": null,
-    "it": null
+    "de": "Режим выживания",
+    "es": "Режим выживания",
+    "fr": "Режим выживания",
+    "it": "Режим выживания"
   },
   "_80": {
     "source": "Комплексный режим",
-    "en": null,
+    "en": "Комплексный режим",
     "ru": "Комплексный режим",
-    "de": null,
-    "es": null,
-    "fr": null,
-    "it": null
+    "de": "Комплексный режим",
+    "es": "Комплексный режим",
+    "fr": "Комплексный режим",
+    "it": "Комплексный режим"
   },
   "_81": {
     "source": "Далее",
-    "en": null,
+    "en": "Далее",
     "ru": "Далее",
-    "de": null,
-    "es": null,
-    "fr": null,
-    "it": null
+    "de": "Далее",
+    "es": "Далее",
+    "fr": "Далее",
+    "it": "Далее"
   },
   "_82": {
     "source": "Завершить",
-    "en": null,
+    "en": "Завершить",
     "ru": "Завершить",
-    "de": null,
-    "es": null,
-    "fr": null,
-    "it": null
+    "de": "Завершить",
+    "es": "Завершить",
+    "fr": "Завершить",
+    "it": "Завершить"
   },
   "0_3": {
     "source": "0/3",
     "en": "0/3",
-    "ru": null,
-    "de": null,
-    "es": null,
-    "fr": null,
-    "it": null
+    "ru": "0/3",
+    "de": "0/3",
+    "es": "0/3",
+    "fr": "0/3",
+    "it": "0/3"
   },
   "_83": {
     "source": "Начать заново",
-    "en": null,
+    "en": "Начать заново",
     "ru": "Начать заново",
-    "de": null,
-    "es": null,
-    "fr": null,
-    "it": null
+    "de": "Начать заново",
+    "es": "Начать заново",
+    "fr": "Начать заново",
+    "it": "Начать заново"
   },
   "_84": {
     "source": "Начать повторение",
-    "en": null,
+    "en": "Начать повторение",
     "ru": "Начать повторение",
-    "de": null,
-    "es": null,
-    "fr": null,
-    "it": null
+    "de": "Начать повторение",
+    "es": "Начать повторение",
+    "fr": "Начать повторение",
+    "it": "Начать повторение"
   },
   "export_data": {
     "source": "Export Data",
     "en": "Export Data",
-    "ru": null,
-    "de": null,
-    "es": null,
-    "fr": null,
-    "it": null
+    "ru": "Export Data",
+    "de": "Export Data",
+    "es": "Export Data",
+    "fr": "Export Data",
+    "it": "Export Data"
   },
   "export_learning_words": {
     "source": "Export Learning Words",
     "en": "Export Learning Words",
-    "ru": null,
-    "de": null,
-    "es": null,
-    "fr": null,
-    "it": null
+    "ru": "Export Learning Words",
+    "de": "Export Learning Words",
+    "es": "Export Learning Words",
+    "fr": "Export Learning Words",
+    "it": "Export Learning Words"
   },
   "export_review_words": {
     "source": "Export Review Words",
     "en": "Export Review Words",
-    "ru": null,
-    "de": null,
-    "es": null,
-    "fr": null,
-    "it": null
+    "ru": "Export Review Words",
+    "de": "Export Review Words",
+    "es": "Export Review Words",
+    "fr": "Export Review Words",
+    "it": "Export Review Words"
   },
   "export_learned_words": {
     "source": "Export Learned Words",
     "en": "Export Learned Words",
-    "ru": null,
-    "de": null,
-    "es": null,
-    "fr": null,
-    "it": null
+    "ru": "Export Learned Words",
+    "de": "Export Learned Words",
+    "es": "Export Learned Words",
+    "fr": "Export Learned Words",
+    "it": "Export Learned Words"
   },
   "export_all_words": {
     "source": "Export All Words",
     "en": "Export All Words",
-    "ru": null,
-    "de": null,
-    "es": null,
-    "fr": null,
-    "it": null
+    "ru": "Export All Words",
+    "de": "Export All Words",
+    "es": "Export All Words",
+    "fr": "Export All Words",
+    "it": "Export All Words"
   },
   "learning_words": {
     "source": "Learning Words (",
     "en": "Learning Words (",
-    "ru": null,
-    "de": null,
-    "es": null,
-    "fr": null,
-    "it": null
+    "ru": "Learning Words (",
+    "de": "Learning Words (",
+    "es": "Learning Words (",
+    "fr": "Learning Words (",
+    "it": "Learning Words ("
   },
   "_85": {
     "source": "График прогресса обучения",
-    "en": null,
+    "en": "График прогресса обучения",
     "ru": "График прогресса обучения",
-    "de": null,
-    "es": null,
-    "fr": null,
-    "it": null
+    "de": "График прогресса обучения",
+    "es": "График прогресса обучения",
+    "fr": "График прогресса обучения",
+    "it": "График прогресса обучения"
   },
   "_86": {
     "source": "Месяц",
-    "en": null,
+    "en": "Месяц",
     "ru": "Месяц",
-    "de": null,
-    "es": null,
-    "fr": null,
-    "it": null
+    "de": "Месяц",
+    "es": "Месяц",
+    "fr": "Месяц",
+    "it": "Месяц"
   },
   "_87": {
     "source": "Год",
-    "en": null,
+    "en": "Год",
     "ru": "Год",
-    "de": null,
-    "es": null,
-    "fr": null,
-    "it": null
+    "de": "Год",
+    "es": "Год",
+    "fr": "Год",
+    "it": "Год"
   },
   "_88": {
     "source": "✅ Успешность по типам упражнений",
-    "en": null,
+    "en": "✅ Успешность по типам упражнений",
     "ru": "✅ Успешность по типам упражнений",
-    "de": null,
-    "es": null,
-    "fr": null,
-    "it": null
+    "de": "✅ Успешность по типам упражнений",
+    "es": "✅ Успешность по типам упражнений",
+    "fr": "✅ Успешность по типам упражнений",
+    "it": "✅ Успешность по типам упражнений"
   },
   "_89": {
     "source": "Процент правильных ответов в разных режимах",
-    "en": null,
+    "en": "Процент правильных ответов в разных режимах",
     "ru": "Процент правильных ответов в разных режимах",
-    "de": null,
-    "es": null,
-    "fr": null,
-    "it": null
+    "de": "Процент правильных ответов в разных режимах",
+    "es": "Процент правильных ответов в разных режимах",
+    "fr": "Процент правильных ответов в разных режимах",
+    "it": "Процент правильных ответов в разных режимах"
   },
   "_90": {
     "source": "Слова, в которых вы чаще всего ошибаетесь",
-    "en": null,
+    "en": "Слова, в которых вы чаще всего ошибаетесь",
     "ru": "Слова, в которых вы чаще всего ошибаетесь",
-    "de": null,
-    "es": null,
-    "fr": null,
-    "it": null
+    "de": "Слова, в которых вы чаще всего ошибаетесь",
+    "es": "Слова, в которых вы чаще всего ошибаетесь",
+    "fr": "Слова, в которых вы чаще всего ошибаетесь",
+    "it": "Слова, в которых вы чаще всего ошибаетесь"
   },
   "_91": {
     "source": "🔄 Сбросить весь прогресс",
-    "en": null,
+    "en": "🔄 Сбросить весь прогресс",
     "ru": "🔄 Сбросить весь прогресс",
-    "de": null,
-    "es": null,
-    "fr": null,
-    "it": null
+    "de": "🔄 Сбросить весь прогресс",
+    "es": "🔄 Сбросить весь прогресс",
+    "fr": "🔄 Сбросить весь прогресс",
+    "it": "🔄 Сбросить весь прогресс"
   },
   "_92": {
     "source": "⚠️ ВНИМАНИЕ: Это действие переместит все слова на \"изучение\" и обнулит все баллы! Необратимо!",
-    "en": null,
+    "en": "⚠️ ВНИМАНИЕ: Это действие переместит все слова на \"изучение\" и обнулит все баллы! Необратимо!",
     "ru": "⚠️ ВНИМАНИЕ: Это действие переместит все слова на \"изучение\" и обнулит все баллы! Необратимо!",
-    "de": null,
-    "es": null,
-    "fr": null,
-    "it": null
+    "de": "⚠️ ВНИМАНИЕ: Это действие переместит все слова на \"изучение\" и обнулит все баллы! Необратимо!",
+    "es": "⚠️ ВНИМАНИЕ: Это действие переместит все слова на \"изучение\" и обнулит все баллы! Необратимо!",
+    "fr": "⚠️ ВНИМАНИЕ: Это действие переместит все слова на \"изучение\" и обнулит все баллы! Необратимо!",
+    "it": "⚠️ ВНИМАНИЕ: Это действие переместит все слова на \"изучение\" и обнулит все баллы! Необратимо!"
   },
   "leaderboard": {
     "source": "🏆 Leaderboard",
@@ -1964,488 +1964,488 @@
   "week": {
     "source": "📅 Week",
     "en": "📅 Week",
-    "ru": null,
-    "de": null,
-    "es": null,
-    "fr": null,
-    "it": null
+    "ru": "📅 Week",
+    "de": "📅 Week",
+    "es": "📅 Week",
+    "fr": "📅 Week",
+    "it": "📅 Week"
   },
   "_93": {
     "source": "Настройки",
-    "en": null,
+    "en": "Настройки",
     "ru": "Настройки",
-    "de": null,
-    "es": null,
-    "fr": null,
-    "it": null
+    "de": "Настройки",
+    "es": "Настройки",
+    "fr": "Настройки",
+    "it": "Настройки"
   },
   "_94": {
     "source": "Язык интерфейса",
-    "en": null,
+    "en": "Язык интерфейса",
     "ru": "Язык интерфейса",
-    "de": null,
-    "es": null,
-    "fr": null,
-    "it": null
+    "de": "Язык интерфейса",
+    "es": "Язык интерфейса",
+    "fr": "Язык интерфейса",
+    "it": "Язык интерфейса"
   },
   "_95": {
     "source": "Добавить языковую пару",
-    "en": null,
+    "en": "Добавить языковую пару",
     "ru": "Добавить языковую пару",
-    "de": null,
-    "es": null,
-    "fr": null,
-    "it": null
+    "de": "Добавить языковую пару",
+    "es": "Добавить языковую пару",
+    "fr": "Добавить языковую пару",
+    "it": "Добавить языковую пару"
   },
   "ru_ru": {
     "source": "Русский (ru-RU)",
-    "en": null,
+    "en": "Русский (ru-RU)",
     "ru": "Русский (ru-RU)",
-    "de": null,
-    "es": null,
-    "fr": null,
-    "it": null
+    "de": "Русский (ru-RU)",
+    "es": "Русский (ru-RU)",
+    "fr": "Русский (ru-RU)",
+    "it": "Русский (ru-RU)"
   },
   "_96": {
     "source": "🔊",
     "en": "🔊",
-    "ru": null,
-    "de": null,
-    "es": null,
-    "fr": null,
-    "it": null
+    "ru": "🔊",
+    "de": "🔊",
+    "es": "🔊",
+    "fr": "🔊",
+    "it": "🔊"
   },
   "_97": {
     "source": "ℹ️ Автоматический выбор использует умный алгоритм для подбора наилучшего голоса на вашем устройстве.",
-    "en": null,
+    "en": "ℹ️ Автоматический выбор использует умный алгоритм для подбора наилучшего голоса на вашем устройстве.",
     "ru": "ℹ️ Автоматический выбор использует умный алгоритм для подбора наилучшего голоса на вашем устройстве.",
-    "de": null,
-    "es": null,
-    "fr": null,
-    "it": null
+    "de": "ℹ️ Автоматический выбор использует умный алгоритм для подбора наилучшего голоса на вашем устройстве.",
+    "es": "ℹ️ Автоматический выбор использует умный алгоритм для подбора наилучшего голоса на вашем устройстве.",
+    "fr": "ℹ️ Автоматический выбор использует умный алгоритм для подбора наилучшего голоса на вашем устройстве.",
+    "it": "ℹ️ Автоматический выбор использует умный алгоритм для подбора наилучшего голоса на вашем устройстве."
   },
   "_98": {
     "source": "Скорость:",
-    "en": null,
+    "en": "Скорость:",
     "ru": "Скорость:",
-    "de": null,
-    "es": null,
-    "fr": null,
-    "it": null
+    "de": "Скорость:",
+    "es": "Скорость:",
+    "fr": "Скорость:",
+    "it": "Скорость:"
   },
   "_99": {
     "source": "Тон:",
-    "en": null,
+    "en": "Тон:",
     "ru": "Тон:",
-    "de": null,
-    "es": null,
-    "fr": null,
-    "it": null
+    "de": "Тон:",
+    "es": "Тон:",
+    "fr": "Тон:",
+    "it": "Тон:"
   },
   "_100": {
     "source": "Нормальный",
-    "en": null,
+    "en": "Нормальный",
     "ru": "Нормальный",
-    "de": null,
-    "es": null,
-    "fr": null,
-    "it": null
+    "de": "Нормальный",
+    "es": "Нормальный",
+    "fr": "Нормальный",
+    "it": "Нормальный"
   },
   "_101": {
     "source": "Высокий",
-    "en": null,
+    "en": "Высокий",
     "ru": "Высокий",
-    "de": null,
-    "es": null,
-    "fr": null,
-    "it": null
+    "de": "Высокий",
+    "es": "Высокий",
+    "fr": "Высокий",
+    "it": "Высокий"
   },
   "_102": {
     "source": "Громкость:",
-    "en": null,
+    "en": "Громкость:",
     "ru": "Громкость:",
-    "de": null,
-    "es": null,
-    "fr": null,
-    "it": null
+    "de": "Громкость:",
+    "es": "Громкость:",
+    "fr": "Громкость:",
+    "it": "Громкость:"
   },
   "_103": {
     "source": "🔊 Тест с текущими настройками",
-    "en": null,
+    "en": "🔊 Тест с текущими настройками",
     "ru": "🔊 Тест с текущими настройками",
-    "de": null,
-    "es": null,
-    "fr": null,
-    "it": null
+    "de": "🔊 Тест с текущими настройками",
+    "es": "🔊 Тест с текущими настройками",
+    "fr": "🔊 Тест с текущими настройками",
+    "it": "🔊 Тест с текущими настройками"
   },
   "_104": {
     "source": "Синхронизировать с сервером",
-    "en": null,
+    "en": "Синхронизировать с сервером",
     "ru": "Синхронизировать с сервером",
-    "de": null,
-    "es": null,
-    "fr": null,
-    "it": null
+    "de": "Синхронизировать с сервером",
+    "es": "Синхронизировать с сервером",
+    "fr": "Синхронизировать с сервером",
+    "it": "Синхронизировать с сервером"
   },
   "_105": {
     "source": "Повторите интерактивный тур по функциям приложения",
-    "en": null,
+    "en": "Повторите интерактивный тур по функциям приложения",
     "ru": "Повторите интерактивный тур по функциям приложения",
-    "de": null,
-    "es": null,
-    "fr": null,
-    "it": null
+    "de": "Повторите интерактивный тур по функциям приложения",
+    "es": "Повторите интерактивный тур по функциям приложения",
+    "fr": "Повторите интерактивный тур по функциям приложения",
+    "it": "Повторите интерактивный тур по функциям приложения"
   },
   "_106": {
     "source": "🎯 Начать тур заново",
-    "en": null,
+    "en": "🎯 Начать тур заново",
     "ru": "🎯 Начать тур заново",
-    "de": null,
-    "es": null,
-    "fr": null,
-    "it": null
+    "de": "🎯 Начать тур заново",
+    "es": "🎯 Начать тур заново",
+    "fr": "🎯 Начать тур заново",
+    "it": "🎯 Начать тур заново"
   },
   "new_version": {
     "source": "✨ NEW VERSION LOADED! ✨",
     "en": "✨ NEW VERSION LOADED! ✨",
-    "ru": null,
-    "de": null,
-    "es": null,
-    "fr": null,
-    "it": null
+    "ru": "✨ NEW VERSION LOADED! ✨",
+    "de": "✨ NEW VERSION LOADED! ✨",
+    "es": "✨ NEW VERSION LOADED! ✨",
+    "fr": "✨ NEW VERSION LOADED! ✨",
+    "it": "✨ NEW VERSION LOADED! ✨"
   },
   "_107": {
     "source": "Пароль",
-    "en": null,
+    "en": "Пароль",
     "ru": "Пароль",
-    "de": null,
-    "es": null,
-    "fr": null,
-    "it": null
+    "de": "Пароль",
+    "es": "Пароль",
+    "fr": "Пароль",
+    "it": "Пароль"
   },
   "_108": {
     "source": "Имя",
-    "en": null,
+    "en": "Имя",
     "ru": "Имя",
-    "de": null,
-    "es": null,
-    "fr": null,
-    "it": null
+    "de": "Имя",
+    "es": "Имя",
+    "fr": "Имя",
+    "it": "Имя"
   },
   "_109": {
     "source": "Подтвердите пароль",
-    "en": null,
+    "en": "Подтвердите пароль",
     "ru": "Подтвердите пароль",
-    "de": null,
-    "es": null,
-    "fr": null,
-    "it": null
+    "de": "Подтвердите пароль",
+    "es": "Подтвердите пароль",
+    "fr": "Подтвердите пароль",
+    "it": "Подтвердите пароль"
   },
   "_110": {
     "source": "Главная",
-    "en": null,
+    "en": "Главная",
     "ru": "Главная",
-    "de": null,
-    "es": null,
-    "fr": null,
-    "it": null
+    "de": "Главная",
+    "es": "Главная",
+    "fr": "Главная",
+    "it": "Главная"
   },
   "_111": {
     "source": "На повторении",
-    "en": null,
+    "en": "На повторении",
     "ru": "На повторении",
-    "de": null,
-    "es": null,
-    "fr": null,
-    "it": null
+    "de": "На повторении",
+    "es": "На повторении",
+    "fr": "На повторении",
+    "it": "На повторении"
   },
   "_112": {
     "source": "Изучено",
-    "en": null,
+    "en": "Изучено",
     "ru": "Изучено",
-    "de": null,
-    "es": null,
-    "fr": null,
-    "it": null
+    "de": "Изучено",
+    "es": "Изучено",
+    "fr": "Изучено",
+    "it": "Изучено"
   },
   "_113": {
     "source": "Быстрое изучение",
-    "en": null,
+    "en": "Быстрое изучение",
     "ru": "Быстрое изучение",
-    "de": null,
-    "es": null,
-    "fr": null,
-    "it": null
+    "de": "Быстрое изучение",
+    "es": "Быстрое изучение",
+    "fr": "Быстрое изучение",
+    "it": "Быстрое изучение"
   },
   "_114": {
     "source": "Вопрос",
-    "en": null,
+    "en": "Вопрос",
     "ru": "Вопрос",
-    "de": null,
-    "es": null,
-    "fr": null,
-    "it": null
+    "de": "Вопрос",
+    "es": "Вопрос",
+    "fr": "Вопрос",
+    "it": "Вопрос"
   },
   "_115": {
     "source": "из",
-    "en": null,
+    "en": "из",
     "ru": "из",
-    "de": null,
-    "es": null,
-    "fr": null,
-    "it": null
+    "de": "из",
+    "es": "из",
+    "fr": "из",
+    "it": "из"
   },
   "_116": {
     "source": "Правильно!",
-    "en": null,
+    "en": "Правильно!",
     "ru": "Правильно!",
-    "de": null,
-    "es": null,
-    "fr": null,
-    "it": null
+    "de": "Правильно!",
+    "es": "Правильно!",
+    "fr": "Правильно!",
+    "it": "Правильно!"
   },
   "_117": {
     "source": "Неправильно.",
-    "en": null,
+    "en": "Неправильно.",
     "ru": "Неправильно.",
-    "de": null,
-    "es": null,
-    "fr": null,
-    "it": null
+    "de": "Неправильно.",
+    "es": "Неправильно.",
+    "fr": "Неправильно.",
+    "it": "Неправильно."
   },
   "_118": {
     "source": "Языковые пары",
-    "en": null,
+    "en": "Языковые пары",
     "ru": "Языковые пары",
-    "de": null,
-    "es": null,
-    "fr": null,
-    "it": null
+    "de": "Языковые пары",
+    "es": "Языковые пары",
+    "fr": "Языковые пары",
+    "it": "Языковые пары"
   },
   "_119": {
     "source": "Настройки обучения",
-    "en": null,
+    "en": "Настройки обучения",
     "ru": "Настройки обучения",
-    "de": null,
-    "es": null,
-    "fr": null,
-    "it": null
+    "de": "Настройки обучения",
+    "es": "Настройки обучения",
+    "fr": "Настройки обучения",
+    "it": "Настройки обучения"
   },
   "_120": {
     "source": "Количество слов в уроке:",
-    "en": null,
+    "en": "Количество слов в уроке:",
     "ru": "Количество слов в уроке:",
-    "de": null,
-    "es": null,
-    "fr": null,
-    "it": null
+    "de": "Количество слов в уроке:",
+    "es": "Количество слов в уроке:",
+    "fr": "Количество слов в уроке:",
+    "it": "Количество слов в уроке:"
   },
   "_121": {
     "source": "Выбрать",
-    "en": null,
+    "en": "Выбрать",
     "ru": "Выбрать",
-    "de": null,
-    "es": null,
-    "fr": null,
-    "it": null
+    "de": "Выбрать",
+    "es": "Выбрать",
+    "fr": "Выбрать",
+    "it": "Выбрать"
   },
   "_122": {
     "source": "Удалить",
-    "en": null,
+    "en": "Удалить",
     "ru": "Удалить",
-    "de": null,
-    "es": null,
-    "fr": null,
-    "it": null
+    "de": "Удалить",
+    "es": "Удалить",
+    "fr": "Удалить",
+    "it": "Удалить"
   },
   "google_1": {
     "source": "Из Google Таблиц",
-    "en": null,
+    "en": "Из Google Таблиц",
     "ru": "Из Google Таблиц",
-    "de": null,
-    "es": null,
-    "fr": null,
-    "it": null
+    "de": "Из Google Таблиц",
+    "es": "Из Google Таблиц",
+    "fr": "Из Google Таблиц",
+    "it": "Из Google Таблиц"
   },
   "_123": {
     "source": "Изучаемый язык:",
-    "en": null,
+    "en": "Изучаемый язык:",
     "ru": "Изучаемый язык:",
-    "de": null,
-    "es": null,
-    "fr": null,
-    "it": null
+    "de": "Изучаемый язык:",
+    "es": "Изучаемый язык:",
+    "fr": "Изучаемый язык:",
+    "it": "Изучаемый язык:"
   },
   "_124": {
     "source": "Родной язык:",
-    "en": null,
+    "en": "Родной язык:",
     "ru": "Родной язык:",
-    "de": null,
-    "es": null,
-    "fr": null,
-    "it": null
+    "de": "Родной язык:",
+    "es": "Родной язык:",
+    "fr": "Родной язык:",
+    "it": "Родной язык:"
   },
   "_125": {
     "source": "Название пары:",
-    "en": null,
+    "en": "Название пары:",
     "ru": "Название пары:",
-    "de": null,
-    "es": null,
-    "fr": null,
-    "it": null
+    "de": "Название пары:",
+    "es": "Название пары:",
+    "fr": "Название пары:",
+    "it": "Название пары:"
   },
   "_126": {
     "source": "Нет слов",
-    "en": null,
+    "en": "Нет слов",
     "ru": "Нет слов",
-    "de": null,
-    "es": null,
-    "fr": null,
-    "it": null
+    "de": "Нет слов",
+    "es": "Нет слов",
+    "fr": "Нет слов",
+    "it": "Нет слов"
   },
   "_127": {
     "source": "Синхронизация завершена успешно",
-    "en": null,
+    "en": "Синхронизация завершена успешно",
     "ru": "Синхронизация завершена успешно",
-    "de": null,
-    "es": null,
-    "fr": null,
-    "it": null
+    "de": "Синхронизация завершена успешно",
+    "es": "Синхронизация завершена успешно",
+    "fr": "Синхронизация завершена успешно",
+    "it": "Синхронизация завершена успешно"
   },
   "_128": {
     "source": "Ошибка синхронизации",
-    "en": null,
+    "en": "Ошибка синхронизации",
     "ru": "Ошибка синхронизации",
-    "de": null,
-    "es": null,
-    "fr": null,
-    "it": null
+    "de": "Ошибка синхронизации",
+    "es": "Ошибка синхронизации",
+    "fr": "Ошибка синхронизации",
+    "it": "Ошибка синхронизации"
   },
   "_129": {
     "source": "Синхронизация...",
-    "en": null,
+    "en": "Синхронизация...",
     "ru": "Синхронизация...",
-    "de": null,
-    "es": null,
-    "fr": null,
-    "it": null
+    "de": "Синхронизация...",
+    "es": "Синхронизация...",
+    "fr": "Синхронизация...",
+    "it": "Синхронизация..."
   },
   "_130": {
     "source": "Рейтинг",
-    "en": null,
+    "en": "Рейтинг",
     "ru": "Рейтинг",
-    "de": null,
-    "es": null,
-    "fr": null,
-    "it": null
+    "de": "Рейтинг",
+    "es": "Рейтинг",
+    "fr": "Рейтинг",
+    "it": "Рейтинг"
   },
   "_131": {
     "source": "Панель управления",
-    "en": null,
+    "en": "Панель управления",
     "ru": "Панель управления",
-    "de": null,
-    "es": null,
-    "fr": null,
-    "it": null
+    "de": "Панель управления",
+    "es": "Панель управления",
+    "fr": "Панель управления",
+    "it": "Панель управления"
   },
   "confirm_password": {
     "source": "Confirm Password",
     "en": "Confirm Password",
-    "ru": null,
-    "de": null,
-    "es": null,
-    "fr": null,
-    "it": null
+    "ru": "Confirm Password",
+    "de": "Confirm Password",
+    "es": "Confirm Password",
+    "fr": "Confirm Password",
+    "it": "Confirm Password"
   },
   "login_with_google": {
     "source": "Login with Google",
     "en": "Login with Google",
-    "ru": null,
-    "de": null,
-    "es": null,
-    "fr": null,
-    "it": null
+    "ru": "Login with Google",
+    "de": "Login with Google",
+    "es": "Login with Google",
+    "fr": "Login with Google",
+    "it": "Login with Google"
   },
   "studying_words": {
     "source": "Studying Words",
     "en": "Studying Words",
-    "ru": null,
-    "de": null,
-    "es": null,
-    "fr": null,
-    "it": null
+    "ru": "Studying Words",
+    "de": "Studying Words",
+    "es": "Studying Words",
+    "fr": "Studying Words",
+    "it": "Studying Words"
   },
   "review_words": {
     "source": "Review Words",
     "en": "Review Words",
-    "ru": null,
-    "de": null,
-    "es": null,
-    "fr": null,
-    "it": null
+    "ru": "Review Words",
+    "de": "Review Words",
+    "es": "Review Words",
+    "fr": "Review Words",
+    "it": "Review Words"
   },
   "quick_study": {
     "source": "Quick Study",
     "en": "Quick Study",
-    "ru": null,
-    "de": null,
-    "es": null,
-    "fr": null,
-    "it": null
+    "ru": "Quick Study",
+    "de": "Quick Study",
+    "es": "Quick Study",
+    "fr": "Quick Study",
+    "it": "Quick Study"
   },
   "quick_review": {
     "source": "Quick Review",
     "en": "Quick Review",
-    "ru": null,
-    "de": null,
-    "es": null,
-    "fr": null,
-    "it": null
+    "ru": "Quick Review",
+    "de": "Quick Review",
+    "es": "Quick Review",
+    "fr": "Quick Review",
+    "it": "Quick Review"
   },
   "select_study_mode": {
     "source": "Select study mode:",
     "en": "Select study mode:",
-    "ru": null,
-    "de": null,
-    "es": null,
-    "fr": null,
-    "it": null
+    "ru": "Select study mode:",
+    "de": "Select study mode:",
+    "es": "Select study mode:",
+    "fr": "Select study mode:",
+    "it": "Select study mode:"
   },
   "multiple_choice": {
     "source": "Multiple Choice",
     "en": "Multiple Choice",
-    "ru": null,
-    "de": null,
-    "es": null,
-    "fr": null,
-    "it": null
+    "ru": "Multiple Choice",
+    "de": "Multiple Choice",
+    "es": "Multiple Choice",
+    "fr": "Multiple Choice",
+    "it": "Multiple Choice"
   },
   "reverse_choice": {
     "source": "Reverse Choice",
     "en": "Reverse Choice",
-    "ru": null,
-    "de": null,
-    "es": null,
-    "fr": null,
-    "it": null
+    "ru": "Reverse Choice",
+    "de": "Reverse Choice",
+    "es": "Reverse Choice",
+    "fr": "Reverse Choice",
+    "it": "Reverse Choice"
   },
   "word_building": {
     "source": "Word Building",
     "en": "Word Building",
-    "ru": null,
-    "de": null,
-    "es": null,
-    "fr": null,
-    "it": null
+    "ru": "Word Building",
+    "de": "Word Building",
+    "es": "Word Building",
+    "fr": "Word Building",
+    "it": "Word Building"
   },
   "complex_mode": {
     "source": "Complex Mode",
     "en": "Complex Mode",
-    "ru": null,
-    "de": null,
-    "es": null,
-    "fr": null,
-    "it": null
+    "ru": "Complex Mode",
+    "de": "Complex Mode",
+    "es": "Complex Mode",
+    "fr": "Complex Mode",
+    "it": "Complex Mode"
   },
   "correct_answer": {
     "source": "Correct answer:",
@@ -2459,2036 +2459,2036 @@
   "show_answer": {
     "source": "Show Answer",
     "en": "Show Answer",
-    "ru": null,
-    "de": null,
-    "es": null,
-    "fr": null,
-    "it": null
+    "ru": "Show Answer",
+    "de": "Show Answer",
+    "es": "Show Answer",
+    "fr": "Show Answer",
+    "it": "Show Answer"
   },
   "language_pairs": {
     "source": "Language Pairs",
     "en": "Language Pairs",
-    "ru": null,
-    "de": null,
-    "es": null,
-    "fr": null,
-    "it": null
+    "ru": "Language Pairs",
+    "de": "Language Pairs",
+    "es": "Language Pairs",
+    "fr": "Language Pairs",
+    "it": "Language Pairs"
   },
   "study_settings": {
     "source": "Study Settings",
     "en": "Study Settings",
-    "ru": null,
-    "de": null,
-    "es": null,
-    "fr": null,
-    "it": null
+    "ru": "Study Settings",
+    "de": "Study Settings",
+    "es": "Study Settings",
+    "fr": "Study Settings",
+    "it": "Study Settings"
   },
   "words_per_lesson": {
     "source": "Words per lesson:",
     "en": "Words per lesson:",
-    "ru": null,
-    "de": null,
-    "es": null,
-    "fr": null,
-    "it": null
+    "ru": "Words per lesson:",
+    "de": "Words per lesson:",
+    "es": "Words per lesson:",
+    "fr": "Words per lesson:",
+    "it": "Words per lesson:"
   },
   "add_language_pair": {
     "source": "Add Language Pair",
     "en": "Add Language Pair",
-    "ru": null,
-    "de": null,
-    "es": null,
-    "fr": null,
-    "it": null
+    "ru": "Add Language Pair",
+    "de": "Add Language Pair",
+    "es": "Add Language Pair",
+    "fr": "Add Language Pair",
+    "it": "Add Language Pair"
   },
   "sync_with_server": {
     "source": "Sync with Server",
     "en": "Sync with Server",
-    "ru": null,
-    "de": null,
-    "es": null,
-    "fr": null,
-    "it": null
+    "ru": "Sync with Server",
+    "de": "Sync with Server",
+    "es": "Sync with Server",
+    "fr": "Sync with Server",
+    "it": "Sync with Server"
   },
   "import_words": {
     "source": "Import Words",
     "en": "Import Words",
-    "ru": null,
-    "de": null,
-    "es": null,
-    "fr": null,
-    "it": null
+    "ru": "Import Words",
+    "de": "Import Words",
+    "es": "Import Words",
+    "fr": "Import Words",
+    "it": "Import Words"
   },
   "from_csv_file": {
     "source": "From CSV File",
     "en": "From CSV File",
-    "ru": null,
-    "de": null,
-    "es": null,
-    "fr": null,
-    "it": null
+    "ru": "From CSV File",
+    "de": "From CSV File",
+    "es": "From CSV File",
+    "fr": "From CSV File",
+    "it": "From CSV File"
   },
   "from_google_sheets": {
     "source": "From Google Sheets",
     "en": "From Google Sheets",
-    "ru": null,
-    "de": null,
-    "es": null,
-    "fr": null,
-    "it": null
+    "ru": "From Google Sheets",
+    "de": "From Google Sheets",
+    "es": "From Google Sheets",
+    "fr": "From Google Sheets",
+    "it": "From Google Sheets"
   },
   "select_file": {
     "source": "Select File",
     "en": "Select File",
-    "ru": null,
-    "de": null,
-    "es": null,
-    "fr": null,
-    "it": null
+    "ru": "Select File",
+    "de": "Select File",
+    "es": "Select File",
+    "fr": "Select File",
+    "it": "Select File"
   },
   "studying_language": {
     "source": "Studying Language:",
     "en": "Studying Language:",
-    "ru": null,
-    "de": null,
-    "es": null,
-    "fr": null,
-    "it": null
+    "ru": "Studying Language:",
+    "de": "Studying Language:",
+    "es": "Studying Language:",
+    "fr": "Studying Language:",
+    "it": "Studying Language:"
   },
   "native_language": {
     "source": "Native Language:",
     "en": "Native Language:",
-    "ru": null,
-    "de": null,
-    "es": null,
-    "fr": null,
-    "it": null
+    "ru": "Native Language:",
+    "de": "Native Language:",
+    "es": "Native Language:",
+    "fr": "Native Language:",
+    "it": "Native Language:"
   },
   "pair_name": {
     "source": "Pair Name:",
     "en": "Pair Name:",
-    "ru": null,
-    "de": null,
-    "es": null,
-    "fr": null,
-    "it": null
+    "ru": "Pair Name:",
+    "de": "Pair Name:",
+    "es": "Pair Name:",
+    "fr": "Pair Name:",
+    "it": "Pair Name:"
   },
   "no_words": {
     "source": "No words",
     "en": "No words",
-    "ru": null,
-    "de": null,
-    "es": null,
-    "fr": null,
-    "it": null
+    "ru": "No words",
+    "de": "No words",
+    "es": "No words",
+    "fr": "No words",
+    "it": "No words"
   },
   "sync_completed_successfully": {
     "source": "Sync completed successfully",
     "en": "Sync completed successfully",
-    "ru": null,
-    "de": null,
-    "es": null,
-    "fr": null,
-    "it": null
+    "ru": "Sync completed successfully",
+    "de": "Sync completed successfully",
+    "es": "Sync completed successfully",
+    "fr": "Sync completed successfully",
+    "it": "Sync completed successfully"
   },
   "sync_error_1": {
     "source": "Sync error",
     "en": "Sync error",
-    "ru": null,
-    "de": null,
-    "es": null,
-    "fr": null,
-    "it": null
+    "ru": "Sync error",
+    "de": "Sync error",
+    "es": "Sync error",
+    "fr": "Sync error",
+    "it": "Sync error"
   },
   "ui_language": {
     "source": "UI Language",
     "en": "UI Language",
-    "ru": null,
-    "de": null,
-    "es": null,
-    "fr": null,
-    "it": null
+    "ru": "UI Language",
+    "de": "UI Language",
+    "es": "UI Language",
+    "fr": "UI Language",
+    "it": "UI Language"
   },
   "survival_mode": {
     "source": "Survival Mode",
     "en": "Survival Mode",
-    "ru": null,
-    "de": null,
-    "es": null,
-    "fr": null,
-    "it": null
+    "ru": "Survival Mode",
+    "de": "Survival Mode",
+    "es": "Survival Mode",
+    "fr": "Survival Mode",
+    "it": "Survival Mode"
   },
   "start_review": {
     "source": "Start Review",
     "en": "Start Review",
-    "ru": null,
-    "de": null,
-    "es": null,
-    "fr": null,
-    "it": null
+    "ru": "Start Review",
+    "de": "Start Review",
+    "es": "Start Review",
+    "fr": "Start Review",
+    "it": "Start Review"
   },
   "richtige_antwort": {
     "source": "Richtige Antwort:",
     "en": "Richtige Antwort:",
-    "ru": null,
-    "de": null,
-    "es": null,
-    "fr": null,
-    "it": null
+    "ru": "Richtige Antwort:",
+    "de": "Richtige Antwort:",
+    "es": "Richtige Antwort:",
+    "fr": "Richtige Antwort:",
+    "it": "Richtige Antwort:"
   },
   "antwort_zeigen": {
     "source": "Antwort zeigen",
     "en": "Antwort zeigen",
-    "ru": null,
-    "de": null,
-    "es": null,
-    "fr": null,
-    "it": null
+    "ru": "Antwort zeigen",
+    "de": "Antwort zeigen",
+    "es": "Antwort zeigen",
+    "fr": "Antwort zeigen",
+    "it": "Antwort zeigen"
   },
   "palabras_en_estudio": {
     "source": "Palabras en estudio",
     "en": "Palabras en estudio",
-    "ru": null,
-    "de": null,
-    "es": null,
-    "fr": null,
-    "it": null
+    "ru": "Palabras en estudio",
+    "de": "Palabras en estudio",
+    "es": "Palabras en estudio",
+    "fr": "Palabras en estudio",
+    "it": "Palabras en estudio"
   },
   "palabras_para_repasar": {
     "source": "Palabras para repasar",
     "en": "Palabras para repasar",
-    "ru": null,
-    "de": null,
-    "es": null,
-    "fr": null,
-    "it": null
+    "ru": "Palabras para repasar",
+    "de": "Palabras para repasar",
+    "es": "Palabras para repasar",
+    "fr": "Palabras para repasar",
+    "it": "Palabras para repasar"
   },
   "seleccionar_modo_de": {
     "source": "Seleccionar modo de estudio:",
     "en": "Seleccionar modo de estudio:",
-    "ru": null,
-    "de": null,
-    "es": null,
-    "fr": null,
-    "it": null
+    "ru": "Seleccionar modo de estudio:",
+    "de": "Seleccionar modo de estudio:",
+    "es": "Seleccionar modo de estudio:",
+    "fr": "Seleccionar modo de estudio:",
+    "it": "Seleccionar modo de estudio:"
   },
   "pares_de_idiomas": {
     "source": "Pares de idiomas",
     "en": "Pares de idiomas",
-    "ru": null,
-    "de": null,
-    "es": null,
-    "fr": null,
-    "it": null
+    "ru": "Pares de idiomas",
+    "de": "Pares de idiomas",
+    "es": "Pares de idiomas",
+    "fr": "Pares de idiomas",
+    "it": "Pares de idiomas"
   },
   "importar_palabras": {
     "source": "Importar palabras",
     "en": "Importar palabras",
-    "ru": null,
-    "de": null,
-    "es": null,
-    "fr": null,
-    "it": null
+    "ru": "Importar palabras",
+    "de": "Importar palabras",
+    "es": "Importar palabras",
+    "fr": "Importar palabras",
+    "it": "Importar palabras"
   },
   "desde_archivo_csv": {
     "source": "Desde archivo CSV",
     "en": "Desde archivo CSV",
-    "ru": null,
-    "de": null,
-    "es": null,
-    "fr": null,
-    "it": null
+    "ru": "Desde archivo CSV",
+    "de": "Desde archivo CSV",
+    "es": "Desde archivo CSV",
+    "fr": "Desde archivo CSV",
+    "it": "Desde archivo CSV"
   },
   "desde_google_sheets": {
     "source": "Desde Google Sheets",
     "en": "Desde Google Sheets",
-    "ru": null,
-    "de": null,
-    "es": null,
-    "fr": null,
-    "it": null
+    "ru": "Desde Google Sheets",
+    "de": "Desde Google Sheets",
+    "es": "Desde Google Sheets",
+    "fr": "Desde Google Sheets",
+    "it": "Desde Google Sheets"
   },
   "seleccionar_archivo": {
     "source": "Seleccionar archivo",
     "en": "Seleccionar archivo",
-    "ru": null,
-    "de": null,
-    "es": null,
-    "fr": null,
-    "it": null
+    "ru": "Seleccionar archivo",
+    "de": "Seleccionar archivo",
+    "es": "Seleccionar archivo",
+    "fr": "Seleccionar archivo",
+    "it": "Seleccionar archivo"
   },
   "idioma_a_estudiar": {
     "source": "Idioma a estudiar:",
     "en": "Idioma a estudiar:",
-    "ru": null,
-    "de": null,
-    "es": null,
-    "fr": null,
-    "it": null
+    "ru": "Idioma a estudiar:",
+    "de": "Idioma a estudiar:",
+    "es": "Idioma a estudiar:",
+    "fr": "Idioma a estudiar:",
+    "it": "Idioma a estudiar:"
   },
   "idioma_nativo": {
     "source": "Idioma nativo:",
     "en": "Idioma nativo:",
-    "ru": null,
-    "de": null,
-    "es": null,
-    "fr": null,
-    "it": null
+    "ru": "Idioma nativo:",
+    "de": "Idioma nativo:",
+    "es": "Idioma nativo:",
+    "fr": "Idioma nativo:",
+    "it": "Idioma nativo:"
   },
   "nombre_del_par": {
     "source": "Nombre del par:",
     "en": "Nombre del par:",
-    "ru": null,
-    "de": null,
-    "es": null,
-    "fr": null,
-    "it": null
+    "ru": "Nombre del par:",
+    "de": "Nombre del par:",
+    "es": "Nombre del par:",
+    "fr": "Nombre del par:",
+    "it": "Nombre del par:"
   },
   "sin_palabras": {
     "source": "Sin palabras",
     "en": "Sin palabras",
-    "ru": null,
-    "de": null,
-    "es": null,
-    "fr": null,
-    "it": null
+    "ru": "Sin palabras",
+    "de": "Sin palabras",
+    "es": "Sin palabras",
+    "fr": "Sin palabras",
+    "it": "Sin palabras"
   },
   "idioma_de_interfaz": {
     "source": "Idioma de interfaz",
     "en": "Idioma de interfaz",
-    "ru": null,
-    "de": null,
-    "es": null,
-    "fr": null,
-    "it": null
+    "ru": "Idioma de interfaz",
+    "de": "Idioma de interfaz",
+    "es": "Idioma de interfaz",
+    "fr": "Idioma de interfaz",
+    "it": "Idioma de interfaz"
   },
   "bienvenue": {
     "source": "Bienvenue !",
     "en": "Bienvenue !",
-    "ru": null,
-    "de": null,
-    "es": null,
-    "fr": null,
-    "it": null
+    "ru": "Bienvenue !",
+    "de": "Bienvenue !",
+    "es": "Bienvenue !",
+    "fr": "Bienvenue !",
+    "it": "Bienvenue !"
   },
   "se_connecter": {
     "source": "Se connecter",
     "en": "Se connecter",
-    "ru": null,
-    "de": null,
-    "es": null,
-    "fr": null,
-    "it": null
+    "ru": "Se connecter",
+    "de": "Se connecter",
+    "es": "Se connecter",
+    "fr": "Se connecter",
+    "it": "Se connecter"
   },
   "mot_de_passe": {
     "source": "Mot de passe",
     "en": "Mot de passe",
-    "ru": null,
-    "de": null,
-    "es": null,
-    "fr": null,
-    "it": null
+    "ru": "Mot de passe",
+    "de": "Mot de passe",
+    "es": "Mot de passe",
+    "fr": "Mot de passe",
+    "it": "Mot de passe"
   },
   "confirmer_le_mot": {
     "source": "Confirmer le mot de passe",
     "en": "Confirmer le mot de passe",
-    "ru": null,
-    "de": null,
-    "es": null,
-    "fr": null,
-    "it": null
+    "ru": "Confirmer le mot de passe",
+    "de": "Confirmer le mot de passe",
+    "es": "Confirmer le mot de passe",
+    "fr": "Confirmer le mot de passe",
+    "it": "Confirmer le mot de passe"
   },
   "se_connecter_avec": {
     "source": "Se connecter avec Google",
     "en": "Se connecter avec Google",
-    "ru": null,
-    "de": null,
-    "es": null,
-    "fr": null,
-    "it": null
+    "ru": "Se connecter avec Google",
+    "de": "Se connecter avec Google",
+    "es": "Se connecter avec Google",
+    "fr": "Se connecter avec Google",
+    "it": "Se connecter avec Google"
   },
   "correct": {
     "source": "Correct !",
     "en": "Correct !",
-    "ru": null,
-    "de": null,
-    "es": null,
-    "fr": null,
-    "it": null
+    "ru": "Correct !",
+    "de": "Correct !",
+    "es": "Correct !",
+    "fr": "Correct !",
+    "it": "Correct !"
   },
   "paires_de_langues": {
     "source": "Paires de langues",
     "en": "Paires de langues",
-    "ru": null,
-    "de": null,
-    "es": null,
-    "fr": null,
-    "it": null
+    "ru": "Paires de langues",
+    "de": "Paires de langues",
+    "es": "Paires de langues",
+    "fr": "Paires de langues",
+    "it": "Paires de langues"
   },
   "importer_des_mots": {
     "source": "Importer des mots",
     "en": "Importer des mots",
-    "ru": null,
-    "de": null,
-    "es": null,
-    "fr": null,
-    "it": null
+    "ru": "Importer des mots",
+    "de": "Importer des mots",
+    "es": "Importer des mots",
+    "fr": "Importer des mots",
+    "it": "Importer des mots"
   },
   "depuis_un_fichier": {
     "source": "Depuis un fichier CSV",
     "en": "Depuis un fichier CSV",
-    "ru": null,
-    "de": null,
-    "es": null,
-    "fr": null,
-    "it": null
+    "ru": "Depuis un fichier CSV",
+    "de": "Depuis un fichier CSV",
+    "es": "Depuis un fichier CSV",
+    "fr": "Depuis un fichier CSV",
+    "it": "Depuis un fichier CSV"
   },
   "depuis_google_sheets": {
     "source": "Depuis Google Sheets",
     "en": "Depuis Google Sheets",
-    "ru": null,
-    "de": null,
-    "es": null,
-    "fr": null,
-    "it": null
+    "ru": "Depuis Google Sheets",
+    "de": "Depuis Google Sheets",
+    "es": "Depuis Google Sheets",
+    "fr": "Depuis Google Sheets",
+    "it": "Depuis Google Sheets"
   },
   "aucun_mot": {
     "source": "Aucun mot",
     "en": "Aucun mot",
-    "ru": null,
-    "de": null,
-    "es": null,
-    "fr": null,
-    "it": null
+    "ru": "Aucun mot",
+    "de": "Aucun mot",
+    "es": "Aucun mot",
+    "fr": "Aucun mot",
+    "it": "Aucun mot"
   },
   "tableau_de_bord": {
     "source": "Tableau de bord",
     "en": "Tableau de bord",
-    "ru": null,
-    "de": null,
-    "es": null,
-    "fr": null,
-    "it": null
+    "ru": "Tableau de bord",
+    "de": "Tableau de bord",
+    "es": "Tableau de bord",
+    "fr": "Tableau de bord",
+    "it": "Tableau de bord"
   },
   "mode_survie": {
     "source": "Mode survie",
     "en": "Mode survie",
-    "ru": null,
-    "de": null,
-    "es": null,
-    "fr": null,
-    "it": null
+    "ru": "Mode survie",
+    "de": "Mode survie",
+    "es": "Mode survie",
+    "fr": "Mode survie",
+    "it": "Mode survie"
   },
   "conferma_password": {
     "source": "Conferma password",
     "en": "Conferma password",
-    "ru": null,
-    "de": null,
-    "es": null,
-    "fr": null,
-    "it": null
+    "ru": "Conferma password",
+    "de": "Conferma password",
+    "es": "Conferma password",
+    "fr": "Conferma password",
+    "it": "Conferma password"
   },
   "accedi_con_google": {
     "source": "Accedi con Google",
     "en": "Accedi con Google",
-    "ru": null,
-    "de": null,
-    "es": null,
-    "fr": null,
-    "it": null
+    "ru": "Accedi con Google",
+    "de": "Accedi con Google",
+    "es": "Accedi con Google",
+    "fr": "Accedi con Google",
+    "it": "Accedi con Google"
   },
   "parole_da_studiare": {
     "source": "Parole da studiare",
     "en": "Parole da studiare",
-    "ru": null,
-    "de": null,
-    "es": null,
-    "fr": null,
-    "it": null
+    "ru": "Parole da studiare",
+    "de": "Parole da studiare",
+    "es": "Parole da studiare",
+    "fr": "Parole da studiare",
+    "it": "Parole da studiare"
   },
   "parole_da_ripassare": {
     "source": "Parole da ripassare",
     "en": "Parole da ripassare",
-    "ru": null,
-    "de": null,
-    "es": null,
-    "fr": null,
-    "it": null
+    "ru": "Parole da ripassare",
+    "de": "Parole da ripassare",
+    "es": "Parole da ripassare",
+    "fr": "Parole da ripassare",
+    "it": "Parole da ripassare"
   },
   "studio_rapido": {
     "source": "Studio rapido",
     "en": "Studio rapido",
-    "ru": null,
-    "de": null,
-    "es": null,
-    "fr": null,
-    "it": null
+    "ru": "Studio rapido",
+    "de": "Studio rapido",
+    "es": "Studio rapido",
+    "fr": "Studio rapido",
+    "it": "Studio rapido"
   },
   "ripasso_rapido": {
     "source": "Ripasso rapido",
     "en": "Ripasso rapido",
-    "ru": null,
-    "de": null,
-    "es": null,
-    "fr": null,
-    "it": null
+    "ru": "Ripasso rapido",
+    "de": "Ripasso rapido",
+    "es": "Ripasso rapido",
+    "fr": "Ripasso rapido",
+    "it": "Ripasso rapido"
   },
   "risposta_corretta": {
     "source": "Risposta corretta:",
     "en": "Risposta corretta:",
-    "ru": null,
-    "de": null,
-    "es": null,
-    "fr": null,
-    "it": null
+    "ru": "Risposta corretta:",
+    "de": "Risposta corretta:",
+    "es": "Risposta corretta:",
+    "fr": "Risposta corretta:",
+    "it": "Risposta corretta:"
   },
   "mostra_risposta": {
     "source": "Mostra risposta",
     "en": "Mostra risposta",
-    "ru": null,
-    "de": null,
-    "es": null,
-    "fr": null,
-    "it": null
+    "ru": "Mostra risposta",
+    "de": "Mostra risposta",
+    "es": "Mostra risposta",
+    "fr": "Mostra risposta",
+    "it": "Mostra risposta"
   },
   "coppie_di_lingue": {
     "source": "Coppie di lingue",
     "en": "Coppie di lingue",
-    "ru": null,
-    "de": null,
-    "es": null,
-    "fr": null,
-    "it": null
+    "ru": "Coppie di lingue",
+    "de": "Coppie di lingue",
+    "es": "Coppie di lingue",
+    "fr": "Coppie di lingue",
+    "it": "Coppie di lingue"
   },
   "impostazioni_di_studio": {
     "source": "Impostazioni di studio",
     "en": "Impostazioni di studio",
-    "ru": null,
-    "de": null,
-    "es": null,
-    "fr": null,
-    "it": null
+    "ru": "Impostazioni di studio",
+    "de": "Impostazioni di studio",
+    "es": "Impostazioni di studio",
+    "fr": "Impostazioni di studio",
+    "it": "Impostazioni di studio"
   },
   "parole_per_lezione": {
     "source": "Parole per lezione:",
     "en": "Parole per lezione:",
-    "ru": null,
-    "de": null,
-    "es": null,
-    "fr": null,
-    "it": null
+    "ru": "Parole per lezione:",
+    "de": "Parole per lezione:",
+    "es": "Parole per lezione:",
+    "fr": "Parole per lezione:",
+    "it": "Parole per lezione:"
   },
   "aggiungi_coppia_di": {
     "source": "Aggiungi coppia di lingue",
     "en": "Aggiungi coppia di lingue",
-    "ru": null,
-    "de": null,
-    "es": null,
-    "fr": null,
-    "it": null
+    "ru": "Aggiungi coppia di lingue",
+    "de": "Aggiungi coppia di lingue",
+    "es": "Aggiungi coppia di lingue",
+    "fr": "Aggiungi coppia di lingue",
+    "it": "Aggiungi coppia di lingue"
   },
   "sincronizza_con_il": {
     "source": "Sincronizza con il server",
     "en": "Sincronizza con il server",
-    "ru": null,
-    "de": null,
-    "es": null,
-    "fr": null,
-    "it": null
+    "ru": "Sincronizza con il server",
+    "de": "Sincronizza con il server",
+    "es": "Sincronizza con il server",
+    "fr": "Sincronizza con il server",
+    "it": "Sincronizza con il server"
   },
   "importa_parole": {
     "source": "Importa parole",
     "en": "Importa parole",
-    "ru": null,
-    "de": null,
-    "es": null,
-    "fr": null,
-    "it": null
+    "ru": "Importa parole",
+    "de": "Importa parole",
+    "es": "Importa parole",
+    "fr": "Importa parole",
+    "it": "Importa parole"
   },
   "da_file_csv": {
     "source": "Da file CSV",
     "en": "Da file CSV",
-    "ru": null,
-    "de": null,
-    "es": null,
-    "fr": null,
-    "it": null
+    "ru": "Da file CSV",
+    "de": "Da file CSV",
+    "es": "Da file CSV",
+    "fr": "Da file CSV",
+    "it": "Da file CSV"
   },
   "da_google_sheets": {
     "source": "Da Google Sheets",
     "en": "Da Google Sheets",
-    "ru": null,
-    "de": null,
-    "es": null,
-    "fr": null,
-    "it": null
+    "ru": "Da Google Sheets",
+    "de": "Da Google Sheets",
+    "es": "Da Google Sheets",
+    "fr": "Da Google Sheets",
+    "it": "Da Google Sheets"
   },
   "seleziona_file": {
     "source": "Seleziona file",
     "en": "Seleziona file",
-    "ru": null,
-    "de": null,
-    "es": null,
-    "fr": null,
-    "it": null
+    "ru": "Seleziona file",
+    "de": "Seleziona file",
+    "es": "Seleziona file",
+    "fr": "Seleziona file",
+    "it": "Seleziona file"
   },
   "lingua_da_studiare": {
     "source": "Lingua da studiare:",
     "en": "Lingua da studiare:",
-    "ru": null,
-    "de": null,
-    "es": null,
-    "fr": null,
-    "it": null
+    "ru": "Lingua da studiare:",
+    "de": "Lingua da studiare:",
+    "es": "Lingua da studiare:",
+    "fr": "Lingua da studiare:",
+    "it": "Lingua da studiare:"
   },
   "lingua_madre": {
     "source": "Lingua madre:",
     "en": "Lingua madre:",
-    "ru": null,
-    "de": null,
-    "es": null,
-    "fr": null,
-    "it": null
+    "ru": "Lingua madre:",
+    "de": "Lingua madre:",
+    "es": "Lingua madre:",
+    "fr": "Lingua madre:",
+    "it": "Lingua madre:"
   },
   "nome_della_coppia": {
     "source": "Nome della coppia:",
     "en": "Nome della coppia:",
-    "ru": null,
-    "de": null,
-    "es": null,
-    "fr": null,
-    "it": null
+    "ru": "Nome della coppia:",
+    "de": "Nome della coppia:",
+    "es": "Nome della coppia:",
+    "fr": "Nome della coppia:",
+    "it": "Nome della coppia:"
   },
   "nessuna_parola": {
     "source": "Nessuna parola",
     "en": "Nessuna parola",
-    "ru": null,
-    "de": null,
-    "es": null,
-    "fr": null,
-    "it": null
+    "ru": "Nessuna parola",
+    "de": "Nessuna parola",
+    "es": "Nessuna parola",
+    "fr": "Nessuna parola",
+    "it": "Nessuna parola"
   },
   "sincronizzazione_completata_con": {
     "source": "Sincronizzazione completata con successo",
     "en": "Sincronizzazione completata con successo",
-    "ru": null,
-    "de": null,
-    "es": null,
-    "fr": null,
-    "it": null
+    "ru": "Sincronizzazione completata con successo",
+    "de": "Sincronizzazione completata con successo",
+    "es": "Sincronizzazione completata con successo",
+    "fr": "Sincronizzazione completata con successo",
+    "it": "Sincronizzazione completata con successo"
   },
   "errore_di_sincronizzazione": {
     "source": "Errore di sincronizzazione",
     "en": "Errore di sincronizzazione",
-    "ru": null,
-    "de": null,
-    "es": null,
-    "fr": null,
-    "it": null
+    "ru": "Errore di sincronizzazione",
+    "de": "Errore di sincronizzazione",
+    "es": "Errore di sincronizzazione",
+    "fr": "Errore di sincronizzazione",
+    "it": "Errore di sincronizzazione"
   },
   "sincronizzazione_in_corso": {
     "source": "Sincronizzazione in corso...",
     "en": "Sincronizzazione in corso...",
-    "ru": null,
-    "de": null,
-    "es": null,
-    "fr": null,
-    "it": null
+    "ru": "Sincronizzazione in corso...",
+    "de": "Sincronizzazione in corso...",
+    "es": "Sincronizzazione in corso...",
+    "fr": "Sincronizzazione in corso...",
+    "it": "Sincronizzazione in corso..."
   },
   "pannello_di_controllo": {
     "source": "Pannello di controllo",
     "en": "Pannello di controllo",
-    "ru": null,
-    "de": null,
-    "es": null,
-    "fr": null,
-    "it": null
+    "ru": "Pannello di controllo",
+    "de": "Pannello di controllo",
+    "es": "Pannello di controllo",
+    "fr": "Pannello di controllo",
+    "it": "Pannello di controllo"
   },
   "language_learning_app": {
     "source": "Language Learning App",
     "en": "Language Learning App",
-    "ru": null,
-    "de": null,
-    "es": null,
-    "fr": null,
-    "it": null
+    "ru": "Language Learning App",
+    "de": "Language Learning App",
+    "es": "Language Learning App",
+    "fr": "Language Learning App",
+    "it": "Language Learning App"
   },
   "_132": {
     "source": "Перенос данных пользователя из localStorage в PostgreSQL",
-    "en": null,
+    "en": "Перенос данных пользователя из localStorage в PostgreSQL",
     "ru": "Перенос данных пользователя из localStorage в PostgreSQL",
-    "de": null,
-    "es": null,
-    "fr": null,
-    "it": null
+    "de": "Перенос данных пользователя из localStorage в PostgreSQL",
+    "es": "Перенос данных пользователя из localStorage в PostgreSQL",
+    "fr": "Перенос данных пользователя из localStorage в PostgreSQL",
+    "it": "Перенос данных пользователя из localStorage в PostgreSQL"
   },
   "_133": {
     "source": "• Ваш аккаунт будет перенесен в облачную базу данных",
-    "en": null,
+    "en": "• Ваш аккаунт будет перенесен в облачную базу данных",
     "ru": "• Ваш аккаунт будет перенесен в облачную базу данных",
-    "de": null,
-    "es": null,
-    "fr": null,
-    "it": null
+    "de": "• Ваш аккаунт будет перенесен в облачную базу данных",
+    "es": "• Ваш аккаунт будет перенесен в облачную базу данных",
+    "fr": "• Ваш аккаунт будет перенесен в облачную базу данных",
+    "it": "• Ваш аккаунт будет перенесен в облачную базу данных"
   },
   "_134": {
     "source": "• Вы сможете входить с любого устройства",
-    "en": null,
+    "en": "• Вы сможете входить с любого устройства",
     "ru": "• Вы сможете входить с любого устройства",
-    "de": null,
-    "es": null,
-    "fr": null,
-    "it": null
+    "de": "• Вы сможете входить с любого устройства",
+    "es": "• Вы сможете входить с любого устройства",
+    "fr": "• Вы сможете входить с любого устройства",
+    "it": "• Вы сможете входить с любого устройства"
   },
   "_135": {
     "source": "• Данные будут синхронизироваться между устройствами",
-    "en": null,
+    "en": "• Данные будут синхронизироваться между устройствами",
     "ru": "• Данные будут синхронизироваться между устройствами",
-    "de": null,
-    "es": null,
-    "fr": null,
-    "it": null
+    "de": "• Данные будут синхронизироваться между устройствами",
+    "es": "• Данные будут синхронизироваться между устройствами",
+    "fr": "• Данные будут синхронизироваться между устройствами",
+    "it": "• Данные будут синхронизироваться между устройствами"
   },
   "_136": {
     "source": "• Локальные данные останутся без изменений",
-    "en": null,
+    "en": "• Локальные данные останутся без изменений",
     "ru": "• Локальные данные останутся без изменений",
-    "de": null,
-    "es": null,
-    "fr": null,
-    "it": null
+    "de": "• Локальные данные останутся без изменений",
+    "es": "• Локальные данные останутся без изменений",
+    "fr": "• Локальные данные останутся без изменений",
+    "it": "• Локальные данные останутся без изменений"
   },
   "_137": {
     "source": "Пользователь не найден в localStorage. Перейдите на главную страницу и зарегистрируйтесь.",
-    "en": null,
+    "en": "Пользователь не найден в localStorage. Перейдите на главную страницу и зарегистрируйтесь.",
     "ru": "Пользователь не найден в localStorage. Перейдите на главную страницу и зарегистрируйтесь.",
-    "de": null,
-    "es": null,
-    "fr": null,
-    "it": null
+    "de": "Пользователь не найден в localStorage. Перейдите на главную страницу и зарегистрируйтесь.",
+    "es": "Пользователь не найден в localStorage. Перейдите на главную страницу и зарегистрируйтесь.",
+    "fr": "Пользователь не найден в localStorage. Перейдите на главную страницу и зарегистрируйтесь.",
+    "it": "Пользователь не найден в localStorage. Перейдите на главную страницу и зарегистрируйтесь."
   },
   "_138": {
     "source": "Перенести в базу данных",
-    "en": null,
+    "en": "Перенести в базу данных",
     "ru": "Перенести в базу данных",
-    "de": null,
-    "es": null,
-    "fr": null,
-    "it": null
+    "de": "Перенести в базу данных",
+    "es": "Перенести в базу данных",
+    "fr": "Перенести в базу данных",
+    "it": "Перенести в базу данных"
   },
   "_139": {
     "source": "Вернуться на главную",
-    "en": null,
+    "en": "Вернуться на главную",
     "ru": "Вернуться на главную",
-    "de": null,
-    "es": null,
-    "fr": null,
-    "it": null
+    "de": "Вернуться на главную",
+    "es": "Вернуться на главную",
+    "fr": "Вернуться на главную",
+    "it": "Вернуться на главную"
   },
   "_140": {
     "source": "Найден пользователь:",
-    "en": null,
+    "en": "Найден пользователь:",
     "ru": "Найден пользователь:",
-    "de": null,
-    "es": null,
-    "fr": null,
-    "it": null
+    "de": "Найден пользователь:",
+    "es": "Найден пользователь:",
+    "fr": "Найден пользователь:",
+    "it": "Найден пользователь:"
   },
   "user_name": {
     "source": "${user.name}",
     "en": "${user.name}",
-    "ru": null,
-    "de": null,
-    "es": null,
-    "fr": null,
-    "it": null
+    "ru": "${user.name}",
+    "de": "${user.name}",
+    "es": "${user.name}",
+    "fr": "${user.name}",
+    "it": "${user.name}"
   },
   "user_languagepairs_user_languagepairs_length": {
     "source": "${user.languagePairs ? user.languagePairs.length : 0}",
     "en": "${user.languagePairs ? user.languagePairs.length : 0}",
-    "ru": null,
-    "de": null,
-    "es": null,
-    "fr": null,
-    "it": null
+    "ru": "${user.languagePairs ? user.languagePairs.length : 0}",
+    "de": "${user.languagePairs ? user.languagePairs.length : 0}",
+    "es": "${user.languagePairs ? user.languagePairs.length : 0}",
+    "fr": "${user.languagePairs ? user.languagePairs.length : 0}",
+    "it": "${user.languagePairs ? user.languagePairs.length : 0}"
   },
   "failed_to_load_2": {
     "source": "Failed to load onboarding state:",
     "en": "Failed to load onboarding state:",
-    "ru": null,
-    "de": null,
-    "es": null,
-    "fr": null,
-    "it": null
+    "ru": "Failed to load onboarding state:",
+    "de": "Failed to load onboarding state:",
+    "es": "Failed to load onboarding state:",
+    "fr": "Failed to load onboarding state:",
+    "it": "Failed to load onboarding state:"
   },
   "failed_to_save_2": {
     "source": "Failed to save onboarding state:",
     "en": "Failed to save onboarding state:",
-    "ru": null,
-    "de": null,
-    "es": null,
-    "fr": null,
-    "it": null
+    "ru": "Failed to save onboarding state:",
+    "de": "Failed to save onboarding state:",
+    "es": "Failed to save onboarding state:",
+    "fr": "Failed to save onboarding state:",
+    "it": "Failed to save onboarding state:"
   },
   "title": {
     "source": ",\r\n                title:",
     "en": ",\r\n                title:",
-    "ru": null,
-    "de": null,
-    "es": null,
-    "fr": null,
-    "it": null
+    "ru": ",\r\n                title:",
+    "de": ",\r\n                title:",
+    "es": ",\r\n                title:",
+    "fr": ",\r\n                title:",
+    "it": ",\r\n                title:"
   },
   "description": {
     "source": ",\r\n                description:",
     "en": ",\r\n                description:",
-    "ru": null,
-    "de": null,
-    "es": null,
-    "fr": null,
-    "it": null
+    "ru": ",\r\n                description:",
+    "de": ",\r\n                description:",
+    "es": ",\r\n                description:",
+    "fr": ",\r\n                description:",
+    "it": ",\r\n                description:"
   },
   "position": {
     "source": ",\r\n                position:",
     "en": ",\r\n                position:",
-    "ru": null,
-    "de": null,
-    "es": null,
-    "fr": null,
-    "it": null
+    "ru": ",\r\n                position:",
+    "de": ",\r\n                position:",
+    "es": ",\r\n                position:",
+    "fr": ",\r\n                position:",
+    "it": ",\r\n                position:"
   },
   "action": {
     "source": ",\r\n                action:",
     "en": ",\r\n                action:",
-    "ru": null,
-    "de": null,
-    "es": null,
-    "fr": null,
-    "it": null
+    "ru": ",\r\n                action:",
+    "de": ",\r\n                action:",
+    "es": ",\r\n                action:",
+    "fr": ",\r\n                action:",
+    "it": ",\r\n                action:"
   },
   "_141": {
     "source": "Вы уверены, что хотите пропустить обучение? Вы всегда сможете вернуться к нему позже.",
-    "en": null,
+    "en": "Вы уверены, что хотите пропустить обучение? Вы всегда сможете вернуться к нему позже.",
     "ru": "Вы уверены, что хотите пропустить обучение? Вы всегда сможете вернуться к нему позже.",
-    "de": null,
-    "es": null,
-    "fr": null,
-    "it": null
+    "de": "Вы уверены, что хотите пропустить обучение? Вы всегда сможете вернуться к нему позже.",
+    "es": "Вы уверены, что хотите пропустить обучение? Вы всегда сможете вернуться к нему позже.",
+    "fr": "Вы уверены, что хотите пропустить обучение? Вы всегда сможете вернуться к нему позже.",
+    "it": "Вы уверены, что хотите пропустить обучение? Вы всегда сможете вернуться к нему позже."
   },
   "_142": {
     "source": "Первые шаги",
-    "en": null,
+    "en": "Первые шаги",
     "ru": "Первые шаги",
-    "de": null,
-    "es": null,
-    "fr": null,
-    "it": null
+    "de": "Первые шаги",
+    "es": "Первые шаги",
+    "fr": "Первые шаги",
+    "it": "Первые шаги"
   },
   "click_get_expenses": {
     "source": "Click \"Get Expenses\" to start",
     "en": "Click \"Get Expenses\" to start",
-    "ru": null,
-    "de": null,
-    "es": null,
-    "fr": null,
-    "it": null
+    "ru": "Click \"Get Expenses\" to start",
+    "de": "Click \"Get Expenses\" to start",
+    "es": "Click \"Get Expenses\" to start",
+    "fr": "Click \"Get Expenses\" to start",
+    "it": "Click \"Get Expenses\" to start"
   },
   "get_expenses": {
     "source": "Get Expenses",
     "en": "Get Expenses",
-    "ru": null,
-    "de": null,
-    "es": null,
-    "fr": null,
-    "it": null
+    "ru": "Get Expenses",
+    "de": "Get Expenses",
+    "es": "Get Expenses",
+    "fr": "Get Expenses",
+    "it": "Get Expenses"
   },
   "copy_to_clipboard": {
     "source": "Copy to Clipboard",
     "en": "Copy to Clipboard",
-    "ru": null,
-    "de": null,
-    "es": null,
-    "fr": null,
-    "it": null
+    "ru": "Copy to Clipboard",
+    "de": "Copy to Clipboard",
+    "es": "Copy to Clipboard",
+    "fr": "Copy to Clipboard",
+    "it": "Copy to Clipboard"
   },
   "extracting_data": {
     "source": "Extracting data...",
     "en": "Extracting data...",
-    "ru": null,
-    "de": null,
-    "es": null,
-    "fr": null,
-    "it": null
+    "ru": "Extracting data...",
+    "de": "Extracting data...",
+    "es": "Extracting data...",
+    "fr": "Extracting data...",
+    "it": "Extracting data..."
   },
   "expense_display_loading": {
     "source": "expense-display loading",
     "en": "expense-display loading",
-    "ru": null,
-    "de": null,
-    "es": null,
-    "fr": null,
-    "it": null
+    "ru": "expense-display loading",
+    "de": "expense-display loading",
+    "es": "expense-display loading",
+    "fr": "expense-display loading",
+    "it": "expense-display loading"
   },
   "please_navigate_to": {
     "source": "Please navigate to Facebook Ads Manager first",
     "en": "Please navigate to Facebook Ads Manager first",
-    "ru": null,
-    "de": null,
-    "es": null,
-    "fr": null,
-    "it": null
+    "ru": "Please navigate to Facebook Ads Manager first",
+    "de": "Please navigate to Facebook Ads Manager first",
+    "es": "Please navigate to Facebook Ads Manager first",
+    "fr": "Please navigate to Facebook Ads Manager first",
+    "it": "Please navigate to Facebook Ads Manager first"
   },
   "expense_display_success": {
     "source": "expense-display success",
     "en": "expense-display success",
-    "ru": null,
-    "de": null,
-    "es": null,
-    "fr": null,
-    "it": null
+    "ru": "expense-display success",
+    "de": "expense-display success",
+    "es": "expense-display success",
+    "fr": "expense-display success",
+    "it": "expense-display success"
   },
   "ready_to_copy": {
     "source": "Ready to copy!",
     "en": "Ready to copy!",
-    "ru": null,
-    "de": null,
-    "es": null,
-    "fr": null,
-    "it": null
+    "ru": "Ready to copy!",
+    "de": "Ready to copy!",
+    "es": "Ready to copy!",
+    "fr": "Ready to copy!",
+    "it": "Ready to copy!"
   },
   "status_success": {
     "source": "status success",
     "en": "status success",
-    "ru": null,
-    "de": null,
-    "es": null,
-    "fr": null,
-    "it": null
+    "ru": "status success",
+    "de": "status success",
+    "es": "status success",
+    "fr": "status success",
+    "it": "status success"
   },
   "no_results_from": {
     "source": "No results from script execution",
     "en": "No results from script execution",
-    "ru": null,
-    "de": null,
-    "es": null,
-    "fr": null,
-    "it": null
+    "ru": "No results from script execution",
+    "de": "No results from script execution",
+    "es": "No results from script execution",
+    "fr": "No results from script execution",
+    "it": "No results from script execution"
   },
   "error_occurred": {
     "source": "Error occurred",
     "en": "Error occurred",
-    "ru": null,
-    "de": null,
-    "es": null,
-    "fr": null,
-    "it": null
+    "ru": "Error occurred",
+    "de": "Error occurred",
+    "es": "Error occurred",
+    "fr": "Error occurred",
+    "it": "Error occurred"
   },
   "expense_display_error": {
     "source": "expense-display error",
     "en": "expense-display error",
-    "ru": null,
-    "de": null,
-    "es": null,
-    "fr": null,
-    "it": null
+    "ru": "expense-display error",
+    "de": "expense-display error",
+    "es": "expense-display error",
+    "fr": "expense-display error",
+    "it": "expense-display error"
   },
   "status_error": {
     "source": "status error",
     "en": "status error",
-    "ru": null,
-    "de": null,
-    "es": null,
-    "fr": null,
-    "it": null
+    "ru": "status error",
+    "de": "status error",
+    "es": "status error",
+    "fr": "status error",
+    "it": "status error"
   },
   "copied_to_clipboard": {
     "source": "Copied to clipboard!",
     "en": "Copied to clipboard!",
-    "ru": null,
-    "de": null,
-    "es": null,
-    "fr": null,
-    "it": null
+    "ru": "Copied to clipboard!",
+    "de": "Copied to clipboard!",
+    "es": "Copied to clipboard!",
+    "fr": "Copied to clipboard!",
+    "it": "Copied to clipboard!"
   },
   "failed_to_copy": {
     "source": "Failed to copy",
     "en": "Failed to copy",
-    "ru": null,
-    "de": null,
-    "es": null,
-    "fr": null,
-    "it": null
+    "ru": "Failed to copy",
+    "de": "Failed to copy",
+    "es": "Failed to copy",
+    "fr": "Failed to copy",
+    "it": "Failed to copy"
   },
   "error_copying_to": {
     "source": "Error copying to clipboard:",
     "en": "Error copying to clipboard:",
-    "ru": null,
-    "de": null,
-    "es": null,
-    "fr": null,
-    "it": null
+    "ru": "Error copying to clipboard:",
+    "de": "Error copying to clipboard:",
+    "es": "Error copying to clipboard:",
+    "fr": "Error copying to clipboard:",
+    "it": "Error copying to clipboard:"
   },
   "daily_budget": {
     "source": "daily budget",
     "en": "daily budget",
-    "ru": null,
-    "de": null,
-    "es": null,
-    "fr": null,
-    "it": null
+    "ru": "daily budget",
+    "de": "daily budget",
+    "es": "daily budget",
+    "fr": "daily budget",
+    "it": "daily budget"
   },
   "lifetime_budget": {
     "source": "lifetime budget",
     "en": "lifetime budget",
-    "ru": null,
-    "de": null,
-    "es": null,
-    "fr": null,
-    "it": null
+    "ru": "lifetime budget",
+    "de": "lifetime budget",
+    "es": "lifetime budget",
+    "fr": "lifetime budget",
+    "it": "lifetime budget"
   },
   "amount_spent_1": {
     "source": "amount spent",
     "en": "amount spent",
-    "ru": null,
-    "de": null,
-    "es": null,
-    "fr": null,
-    "it": null
+    "ru": "amount spent",
+    "de": "amount spent",
+    "es": "amount spent",
+    "fr": "amount spent",
+    "it": "amount spent"
   },
   "budgetcount": {
     "source": ", budgetCount,",
     "en": ", budgetCount,",
-    "ru": null,
-    "de": null,
-    "es": null,
-    "fr": null,
-    "it": null
+    "ru": ", budgetCount,",
+    "de": ", budgetCount,",
+    "es": ", budgetCount,",
+    "fr": ", budgetCount,",
+    "it": ", budgetCount,"
   },
   "no_spending_detected": {
     "source": "No spending detected for yesterday",
     "en": "No spending detected for yesterday",
-    "ru": null,
-    "de": null,
-    "es": null,
-    "fr": null,
-    "it": null
+    "ru": "No spending detected for yesterday",
+    "de": "No spending detected for yesterday",
+    "es": "No spending detected for yesterday",
+    "fr": "No spending detected for yesterday",
+    "it": "No spending detected for yesterday"
   },
   "failed_to_extract": {
     "source": "Failed to extract expense data:",
     "en": "Failed to extract expense data:",
-    "ru": null,
-    "de": null,
-    "es": null,
-    "fr": null,
-    "it": null
+    "ru": "Failed to extract expense data:",
+    "de": "Failed to extract expense data:",
+    "es": "Failed to extract expense data:",
+    "fr": "Failed to extract expense data:",
+    "it": "Failed to extract expense data:"
   },
   "last_updated_october": {
     "source": "Last updated: October 20, 2025",
     "en": "Last updated: October 20, 2025",
-    "ru": null,
-    "de": null,
-    "es": null,
-    "fr": null,
-    "it": null
+    "ru": "Last updated: October 20, 2025",
+    "de": "Last updated: October 20, 2025",
+    "es": "Last updated: October 20, 2025",
+    "fr": "Last updated: October 20, 2025",
+    "it": "Last updated: October 20, 2025"
   },
   "1_information_we": {
     "source": "1. Information We Collect",
     "en": "1. Information We Collect",
-    "ru": null,
-    "de": null,
-    "es": null,
-    "fr": null,
-    "it": null
+    "ru": "1. Information We Collect",
+    "de": "1. Information We Collect",
+    "es": "1. Information We Collect",
+    "fr": "1. Information We Collect",
+    "it": "1. Information We Collect"
   },
   "we_collect_the": {
     "source": "We collect the following types of information:",
     "en": "We collect the following types of information:",
-    "ru": null,
-    "de": null,
-    "es": null,
-    "fr": null,
-    "it": null
+    "ru": "We collect the following types of information:",
+    "de": "We collect the following types of information:",
+    "es": "We collect the following types of information:",
+    "fr": "We collect the following types of information:",
+    "it": "We collect the following types of information:"
   },
   "2_how_we": {
     "source": "2. How We Use Your Information",
     "en": "2. How We Use Your Information",
-    "ru": null,
-    "de": null,
-    "es": null,
-    "fr": null,
-    "it": null
+    "ru": "2. How We Use Your Information",
+    "de": "2. How We Use Your Information",
+    "es": "2. How We Use Your Information",
+    "fr": "2. How We Use Your Information",
+    "it": "2. How We Use Your Information"
   },
   "we_use_your": {
     "source": "We use your information to:",
     "en": "We use your information to:",
-    "ru": null,
-    "de": null,
-    "es": null,
-    "fr": null,
-    "it": null
+    "ru": "We use your information to:",
+    "de": "We use your information to:",
+    "es": "We use your information to:",
+    "fr": "We use your information to:",
+    "it": "We use your information to:"
   },
   "3_data_storage": {
     "source": "3. Data Storage and Security",
     "en": "3. Data Storage and Security",
-    "ru": null,
-    "de": null,
-    "es": null,
-    "fr": null,
-    "it": null
+    "ru": "3. Data Storage and Security",
+    "de": "3. Data Storage and Security",
+    "es": "3. Data Storage and Security",
+    "fr": "3. Data Storage and Security",
+    "it": "3. Data Storage and Security"
   },
   "4_data_sharing": {
     "source": "4. Data Sharing",
     "en": "4. Data Sharing",
-    "ru": null,
-    "de": null,
-    "es": null,
-    "fr": null,
-    "it": null
+    "ru": "4. Data Sharing",
+    "de": "4. Data Sharing",
+    "es": "4. Data Sharing",
+    "fr": "4. Data Sharing",
+    "it": "4. Data Sharing"
   },
   "5_your_rights": {
     "source": "5. Your Rights and Control",
     "en": "5. Your Rights and Control",
-    "ru": null,
-    "de": null,
-    "es": null,
-    "fr": null,
-    "it": null
+    "ru": "5. Your Rights and Control",
+    "de": "5. Your Rights and Control",
+    "es": "5. Your Rights and Control",
+    "fr": "5. Your Rights and Control",
+    "it": "5. Your Rights and Control"
   },
   "you_have_the": {
     "source": "You have the following rights:",
     "en": "You have the following rights:",
-    "ru": null,
-    "de": null,
-    "es": null,
-    "fr": null,
-    "it": null
+    "ru": "You have the following rights:",
+    "de": "You have the following rights:",
+    "es": "You have the following rights:",
+    "fr": "You have the following rights:",
+    "it": "You have the following rights:"
   },
   "6_cookies_and": {
     "source": "6. Cookies and Local Storage",
     "en": "6. Cookies and Local Storage",
-    "ru": null,
-    "de": null,
-    "es": null,
-    "fr": null,
-    "it": null
+    "ru": "6. Cookies and Local Storage",
+    "de": "6. Cookies and Local Storage",
+    "es": "6. Cookies and Local Storage",
+    "fr": "6. Cookies and Local Storage",
+    "it": "6. Cookies and Local Storage"
   },
   "we_use_the": {
     "source": "We use the following:",
     "en": "We use the following:",
-    "ru": null,
-    "de": null,
-    "es": null,
-    "fr": null,
-    "it": null
+    "ru": "We use the following:",
+    "de": "We use the following:",
+    "es": "We use the following:",
+    "fr": "We use the following:",
+    "it": "We use the following:"
   },
   "7_children_s_privacy": {
     "source": "7. Children's Privacy",
     "en": "7. Children's Privacy",
-    "ru": null,
-    "de": null,
-    "es": null,
-    "fr": null,
-    "it": null
+    "ru": "7. Children's Privacy",
+    "de": "7. Children's Privacy",
+    "es": "7. Children's Privacy",
+    "fr": "7. Children's Privacy",
+    "it": "7. Children's Privacy"
   },
   "8_third_party_services": {
     "source": "8. Third-Party Services",
     "en": "8. Third-Party Services",
-    "ru": null,
-    "de": null,
-    "es": null,
-    "fr": null,
-    "it": null
+    "ru": "8. Third-Party Services",
+    "de": "8. Third-Party Services",
+    "es": "8. Third-Party Services",
+    "fr": "8. Third-Party Services",
+    "it": "8. Third-Party Services"
   },
   "our_app_uses": {
     "source": "Our app uses the following third-party services:",
     "en": "Our app uses the following third-party services:",
-    "ru": null,
-    "de": null,
-    "es": null,
-    "fr": null,
-    "it": null
+    "ru": "Our app uses the following third-party services:",
+    "de": "Our app uses the following third-party services:",
+    "es": "Our app uses the following third-party services:",
+    "fr": "Our app uses the following third-party services:",
+    "it": "Our app uses the following third-party services:"
   },
   "9_data_retention": {
     "source": "9. Data Retention",
     "en": "9. Data Retention",
-    "ru": null,
-    "de": null,
-    "es": null,
-    "fr": null,
-    "it": null
+    "ru": "9. Data Retention",
+    "de": "9. Data Retention",
+    "es": "9. Data Retention",
+    "fr": "9. Data Retention",
+    "it": "9. Data Retention"
   },
   "10_international_users": {
     "source": "10. International Users",
     "en": "10. International Users",
-    "ru": null,
-    "de": null,
-    "es": null,
-    "fr": null,
-    "it": null
+    "ru": "10. International Users",
+    "de": "10. International Users",
+    "es": "10. International Users",
+    "fr": "10. International Users",
+    "it": "10. International Users"
   },
   "11_changes_to": {
     "source": "11. Changes to This Policy",
     "en": "11. Changes to This Policy",
-    "ru": null,
-    "de": null,
-    "es": null,
-    "fr": null,
-    "it": null
+    "ru": "11. Changes to This Policy",
+    "de": "11. Changes to This Policy",
+    "es": "11. Changes to This Policy",
+    "fr": "11. Changes to This Policy",
+    "it": "11. Changes to This Policy"
   },
   "we_may_update": {
     "source": "We may update this Privacy Policy from time to time. We will notify you of significant changes by:",
     "en": "We may update this Privacy Policy from time to time. We will notify you of significant changes by:",
-    "ru": null,
-    "de": null,
-    "es": null,
-    "fr": null,
-    "it": null
+    "ru": "We may update this Privacy Policy from time to time. We will notify you of significant changes by:",
+    "de": "We may update this Privacy Policy from time to time. We will notify you of significant changes by:",
+    "es": "We may update this Privacy Policy from time to time. We will notify you of significant changes by:",
+    "fr": "We may update this Privacy Policy from time to time. We will notify you of significant changes by:",
+    "it": "We may update this Privacy Policy from time to time. We will notify you of significant changes by:"
   },
   "continued_use_of": {
     "source": "Continued use of FluentFlow after changes constitutes acceptance of the updated policy.",
     "en": "Continued use of FluentFlow after changes constitutes acceptance of the updated policy.",
-    "ru": null,
-    "de": null,
-    "es": null,
-    "fr": null,
-    "it": null
+    "ru": "Continued use of FluentFlow after changes constitutes acceptance of the updated policy.",
+    "de": "Continued use of FluentFlow after changes constitutes acceptance of the updated policy.",
+    "es": "Continued use of FluentFlow after changes constitutes acceptance of the updated policy.",
+    "fr": "Continued use of FluentFlow after changes constitutes acceptance of the updated policy.",
+    "it": "Continued use of FluentFlow after changes constitutes acceptance of the updated policy."
   },
   "12_your_california": {
     "source": "12. Your California Privacy Rights (CCPA)",
     "en": "12. Your California Privacy Rights (CCPA)",
-    "ru": null,
-    "de": null,
-    "es": null,
-    "fr": null,
-    "it": null
+    "ru": "12. Your California Privacy Rights (CCPA)",
+    "de": "12. Your California Privacy Rights (CCPA)",
+    "es": "12. Your California Privacy Rights (CCPA)",
+    "fr": "12. Your California Privacy Rights (CCPA)",
+    "it": "12. Your California Privacy Rights (CCPA)"
   },
   "if_you_are": {
     "source": "If you are a California resident, you have additional rights:",
     "en": "If you are a California resident, you have additional rights:",
-    "ru": null,
-    "de": null,
-    "es": null,
-    "fr": null,
-    "it": null
+    "ru": "If you are a California resident, you have additional rights:",
+    "de": "If you are a California resident, you have additional rights:",
+    "es": "If you are a California resident, you have additional rights:",
+    "fr": "If you are a California resident, you have additional rights:",
+    "it": "If you are a California resident, you have additional rights:"
   },
   "13_gdpr_compliance": {
     "source": "13. GDPR Compliance (European Users)",
     "en": "13. GDPR Compliance (European Users)",
-    "ru": null,
-    "de": null,
-    "es": null,
-    "fr": null,
-    "it": null
+    "ru": "13. GDPR Compliance (European Users)",
+    "de": "13. GDPR Compliance (European Users)",
+    "es": "13. GDPR Compliance (European Users)",
+    "fr": "13. GDPR Compliance (European Users)",
+    "it": "13. GDPR Compliance (European Users)"
   },
   "if_you_are_1": {
     "source": "If you are in the European Economic Area (EEA), you have rights under GDPR:",
     "en": "If you are in the European Economic Area (EEA), you have rights under GDPR:",
-    "ru": null,
-    "de": null,
-    "es": null,
-    "fr": null,
-    "it": null
+    "ru": "If you are in the European Economic Area (EEA), you have rights under GDPR:",
+    "de": "If you are in the European Economic Area (EEA), you have rights under GDPR:",
+    "es": "If you are in the European Economic Area (EEA), you have rights under GDPR:",
+    "fr": "If you are in the European Economic Area (EEA), you have rights under GDPR:",
+    "it": "If you are in the European Economic Area (EEA), you have rights under GDPR:"
   },
   "if_you_have": {
     "source": "If you have any questions, concerns, or requests regarding this Privacy Policy or your data, please contact us:",
     "en": "If you have any questions, concerns, or requests regarding this Privacy Policy or your data, please contact us:",
-    "ru": null,
-    "de": null,
-    "es": null,
-    "fr": null,
-    "it": null
+    "ru": "If you have any questions, concerns, or requests regarding this Privacy Policy or your data, please contact us:",
+    "de": "If you have any questions, concerns, or requests regarding this Privacy Policy or your data, please contact us:",
+    "es": "If you have any questions, concerns, or requests regarding this Privacy Policy or your data, please contact us:",
+    "fr": "If you have any questions, concerns, or requests regarding this Privacy Policy or your data, please contact us:",
+    "it": "If you have any questions, concerns, or requests regarding this Privacy Policy or your data, please contact us:"
   },
   "support_fluentflow_app": {
     "source": "support@fluentflow.app",
     "en": "support@fluentflow.app",
-    "ru": null,
-    "de": null,
-    "es": null,
-    "fr": null,
-    "it": null
+    "ru": "support@fluentflow.app",
+    "de": "support@fluentflow.app",
+    "es": "support@fluentflow.app",
+    "fr": "support@fluentflow.app",
+    "it": "support@fluentflow.app"
   },
   "terms_of_service": {
     "source": "Terms of Service",
     "en": "Terms of Service",
-    "ru": null,
-    "de": null,
-    "es": null,
-    "fr": null,
-    "it": null
+    "ru": "Terms of Service",
+    "de": "Terms of Service",
+    "es": "Terms of Service",
+    "fr": "Terms of Service",
+    "it": "Terms of Service"
   },
   "_143": {
     "source": "Нет слов для изучения",
-    "en": null,
+    "en": "Нет слов для изучения",
     "ru": "Нет слов для изучения",
-    "de": null,
-    "es": null,
-    "fr": null,
-    "it": null
+    "de": "Нет слов для изучения",
+    "es": "Нет слов для изучения",
+    "fr": "Нет слов для изучения",
+    "it": "Нет слов для изучения"
   },
   "server_proxy_failed": {
     "source": "Server proxy failed, trying direct access:",
     "en": "Server proxy failed, trying direct access:",
-    "ru": null,
-    "de": null,
-    "es": null,
-    "fr": null,
-    "it": null
+    "ru": "Server proxy failed, trying direct access:",
+    "de": "Server proxy failed, trying direct access:",
+    "es": "Server proxy failed, trying direct access:",
+    "fr": "Server proxy failed, trying direct access:",
+    "it": "Server proxy failed, trying direct access:"
   },
   "offline_please": {
     "source": "Offline - please check your connection",
     "en": "Offline - please check your connection",
-    "ru": null,
-    "de": null,
-    "es": null,
-    "fr": null,
-    "it": null
+    "ru": "Offline - please check your connection",
+    "de": "Offline - please check your connection",
+    "es": "Offline - please check your connection",
+    "fr": "Offline - please check your connection",
+    "it": "Offline - please check your connection"
   },
   "service_unavailable": {
     "source": "Service Unavailable",
     "en": "Service Unavailable",
-    "ru": null,
-    "de": null,
-    "es": null,
-    "fr": null,
-    "it": null
+    "ru": "Service Unavailable",
+    "de": "Service Unavailable",
+    "es": "Service Unavailable",
+    "fr": "Service Unavailable",
+    "it": "Service Unavailable"
   },
   "network_unavailable_and": {
     "source": "Network unavailable and no cached data",
     "en": "Network unavailable and no cached data",
-    "ru": null,
-    "de": null,
-    "es": null,
-    "fr": null,
-    "it": null
+    "ru": "Network unavailable and no cached data",
+    "de": "Network unavailable and no cached data",
+    "es": "Network unavailable and no cached data",
+    "fr": "Network unavailable and no cached data",
+    "it": "Network unavailable and no cached data"
   },
   "survival_choice_selected": {
     "source": "survival-choice selected",
     "en": "survival-choice selected",
-    "ru": null,
-    "de": null,
-    "es": null,
-    "fr": null,
-    "it": null
+    "ru": "survival-choice selected",
+    "de": "survival-choice selected",
+    "es": "survival-choice selected",
+    "fr": "survival-choice selected",
+    "it": "survival-choice selected"
   },
   "_144": {
     "source": "Время вышло!",
-    "en": null,
+    "en": "Время вышло!",
     "ru": "Время вышло!",
-    "de": null,
-    "es": null,
-    "fr": null,
-    "it": null
+    "de": "Время вышло!",
+    "es": "Время вышло!",
+    "fr": "Время вышло!",
+    "it": "Время вышло!"
   },
   "_145": {
     "source": "Неправильно!",
-    "en": null,
+    "en": "Неправильно!",
     "ru": "Неправильно!",
-    "de": null,
-    "es": null,
-    "fr": null,
-    "it": null
+    "de": "Неправильно!",
+    "es": "Неправильно!",
+    "fr": "Неправильно!",
+    "it": "Неправильно!"
   },
   "survival_feedback_correct": {
     "source": "survival-feedback correct",
     "en": "survival-feedback correct",
-    "ru": null,
-    "de": null,
-    "es": null,
-    "fr": null,
-    "it": null
+    "ru": "survival-feedback correct",
+    "de": "survival-feedback correct",
+    "es": "survival-feedback correct",
+    "fr": "survival-feedback correct",
+    "it": "survival-feedback correct"
   },
   "timer_bar_left": {
     "source": "timer-bar left",
     "en": "timer-bar left",
-    "ru": null,
-    "de": null,
-    "es": null,
-    "fr": null,
-    "it": null
+    "ru": "timer-bar left",
+    "de": "timer-bar left",
+    "es": "timer-bar left",
+    "fr": "timer-bar left",
+    "it": "timer-bar left"
   },
   "timer_bar_right": {
     "source": "timer-bar right",
     "en": "timer-bar right",
-    "ru": null,
-    "de": null,
-    "es": null,
-    "fr": null,
-    "it": null
+    "ru": "timer-bar right",
+    "de": "timer-bar right",
+    "es": "timer-bar right",
+    "fr": "timer-bar right",
+    "it": "timer-bar right"
   },
   "new_notification_from": {
     "source": "New notification from FluentFlow",
     "en": "New notification from FluentFlow",
-    "ru": null,
-    "de": null,
-    "es": null,
-    "fr": null,
-    "it": null
+    "ru": "New notification from FluentFlow",
+    "de": "New notification from FluentFlow",
+    "es": "New notification from FluentFlow",
+    "fr": "New notification from FluentFlow",
+    "it": "New notification from FluentFlow"
   },
   "badge": {
     "source": ",\r\n        badge:",
     "en": ",\r\n        badge:",
-    "ru": null,
-    "de": null,
-    "es": null,
-    "fr": null,
-    "it": null
+    "ru": ",\r\n        badge:",
+    "de": ",\r\n        badge:",
+    "es": ",\r\n        badge:",
+    "fr": ",\r\n        badge:",
+    "it": ",\r\n        badge:"
   },
   "open_app": {
     "source": "Open App",
     "en": "Open App",
-    "ru": null,
-    "de": null,
-    "es": null,
-    "fr": null,
-    "it": null
+    "ru": "Open App",
+    "de": "Open App",
+    "es": "Open App",
+    "fr": "Open App",
+    "it": "Open App"
   },
   "1_acceptance_of": {
     "source": "1. Acceptance of Terms",
     "en": "1. Acceptance of Terms",
-    "ru": null,
-    "de": null,
-    "es": null,
-    "fr": null,
-    "it": null
+    "ru": "1. Acceptance of Terms",
+    "de": "1. Acceptance of Terms",
+    "es": "1. Acceptance of Terms",
+    "fr": "1. Acceptance of Terms",
+    "it": "1. Acceptance of Terms"
   },
   "2_description_of": {
     "source": "2. Description of Service",
     "en": "2. Description of Service",
-    "ru": null,
-    "de": null,
-    "es": null,
-    "fr": null,
-    "it": null
+    "ru": "2. Description of Service",
+    "de": "2. Description of Service",
+    "es": "2. Description of Service",
+    "fr": "2. Description of Service",
+    "it": "2. Description of Service"
   },
   "3_eligibility": {
     "source": "3. Eligibility",
     "en": "3. Eligibility",
-    "ru": null,
-    "de": null,
-    "es": null,
-    "fr": null,
-    "it": null
+    "ru": "3. Eligibility",
+    "de": "3. Eligibility",
+    "es": "3. Eligibility",
+    "fr": "3. Eligibility",
+    "it": "3. Eligibility"
   },
   "4_account_registration": {
     "source": "4. Account Registration",
     "en": "4. Account Registration",
-    "ru": null,
-    "de": null,
-    "es": null,
-    "fr": null,
-    "it": null
+    "ru": "4. Account Registration",
+    "de": "4. Account Registration",
+    "es": "4. Account Registration",
+    "fr": "4. Account Registration",
+    "it": "4. Account Registration"
   },
   "to_use_fluentflow": {
     "source": "To use FluentFlow, you must create an account. You agree to:",
     "en": "To use FluentFlow, you must create an account. You agree to:",
-    "ru": null,
-    "de": null,
-    "es": null,
-    "fr": null,
-    "it": null
+    "ru": "To use FluentFlow, you must create an account. You agree to:",
+    "de": "To use FluentFlow, you must create an account. You agree to:",
+    "es": "To use FluentFlow, you must create an account. You agree to:",
+    "fr": "To use FluentFlow, you must create an account. You agree to:",
+    "it": "To use FluentFlow, you must create an account. You agree to:"
   },
   "we_reserve_the": {
     "source": "We reserve the right to suspend or terminate accounts that violate these Terms.",
     "en": "We reserve the right to suspend or terminate accounts that violate these Terms.",
-    "ru": null,
-    "de": null,
-    "es": null,
-    "fr": null,
-    "it": null
+    "ru": "We reserve the right to suspend or terminate accounts that violate these Terms.",
+    "de": "We reserve the right to suspend or terminate accounts that violate these Terms.",
+    "es": "We reserve the right to suspend or terminate accounts that violate these Terms.",
+    "fr": "We reserve the right to suspend or terminate accounts that violate these Terms.",
+    "it": "We reserve the right to suspend or terminate accounts that violate these Terms."
   },
   "5_acceptable_use": {
     "source": "5. Acceptable Use",
     "en": "5. Acceptable Use",
-    "ru": null,
-    "de": null,
-    "es": null,
-    "fr": null,
-    "it": null
+    "ru": "5. Acceptable Use",
+    "de": "5. Acceptable Use",
+    "es": "5. Acceptable Use",
+    "fr": "5. Acceptable Use",
+    "it": "5. Acceptable Use"
   },
   "you_agree_to": {
     "source": "You agree to use FluentFlow only for lawful purposes. You may NOT:",
     "en": "You agree to use FluentFlow only for lawful purposes. You may NOT:",
-    "ru": null,
-    "de": null,
-    "es": null,
-    "fr": null,
-    "it": null
+    "ru": "You agree to use FluentFlow only for lawful purposes. You may NOT:",
+    "de": "You agree to use FluentFlow only for lawful purposes. You may NOT:",
+    "es": "You agree to use FluentFlow only for lawful purposes. You may NOT:",
+    "fr": "You agree to use FluentFlow only for lawful purposes. You may NOT:",
+    "it": "You agree to use FluentFlow only for lawful purposes. You may NOT:"
   },
   "6_intellectual_property": {
     "source": "6. Intellectual Property",
     "en": "6. Intellectual Property",
-    "ru": null,
-    "de": null,
-    "es": null,
-    "fr": null,
-    "it": null
+    "ru": "6. Intellectual Property",
+    "de": "6. Intellectual Property",
+    "es": "6. Intellectual Property",
+    "fr": "6. Intellectual Property",
+    "it": "6. Intellectual Property"
   },
   "7_user_content": {
     "source": "7. User Content",
     "en": "7. User Content",
-    "ru": null,
-    "de": null,
-    "es": null,
-    "fr": null,
-    "it": null
+    "ru": "7. User Content",
+    "de": "7. User Content",
+    "es": "7. User Content",
+    "fr": "7. User Content",
+    "it": "7. User Content"
   },
   "you_are_responsible": {
     "source": "You are responsible for the words, examples, and translations you add to FluentFlow. You agree that your content:",
     "en": "You are responsible for the words, examples, and translations you add to FluentFlow. You agree that your content:",
-    "ru": null,
-    "de": null,
-    "es": null,
-    "fr": null,
-    "it": null
+    "ru": "You are responsible for the words, examples, and translations you add to FluentFlow. You agree that your content:",
+    "de": "You are responsible for the words, examples, and translations you add to FluentFlow. You agree that your content:",
+    "es": "You are responsible for the words, examples, and translations you add to FluentFlow. You agree that your content:",
+    "fr": "You are responsible for the words, examples, and translations you add to FluentFlow. You agree that your content:",
+    "it": "You are responsible for the words, examples, and translations you add to FluentFlow. You agree that your content:"
   },
   "8_free_service": {
     "source": "8. Free Service",
     "en": "8. Free Service",
-    "ru": null,
-    "de": null,
-    "es": null,
-    "fr": null,
-    "it": null
+    "ru": "8. Free Service",
+    "de": "8. Free Service",
+    "es": "8. Free Service",
+    "fr": "8. Free Service",
+    "it": "8. Free Service"
   },
   "fluentflow_is_currently": {
     "source": "FluentFlow is currently provided",
     "en": "FluentFlow is currently provided",
-    "ru": null,
-    "de": null,
-    "es": null,
-    "fr": null,
-    "it": null
+    "ru": "FluentFlow is currently provided",
+    "de": "FluentFlow is currently provided",
+    "es": "FluentFlow is currently provided",
+    "fr": "FluentFlow is currently provided",
+    "it": "FluentFlow is currently provided"
   },
   "we_reserve_the_1": {
     "source": "We reserve the right to modify, suspend, or discontinue any part of the Service at any time.",
     "en": "We reserve the right to modify, suspend, or discontinue any part of the Service at any time.",
-    "ru": null,
-    "de": null,
-    "es": null,
-    "fr": null,
-    "it": null
+    "ru": "We reserve the right to modify, suspend, or discontinue any part of the Service at any time.",
+    "de": "We reserve the right to modify, suspend, or discontinue any part of the Service at any time.",
+    "es": "We reserve the right to modify, suspend, or discontinue any part of the Service at any time.",
+    "fr": "We reserve the right to modify, suspend, or discontinue any part of the Service at any time.",
+    "it": "We reserve the right to modify, suspend, or discontinue any part of the Service at any time."
   },
   "9_third_party_services": {
     "source": "9. Third-Party Services",
     "en": "9. Third-Party Services",
-    "ru": null,
-    "de": null,
-    "es": null,
-    "fr": null,
-    "it": null
+    "ru": "9. Third-Party Services",
+    "de": "9. Third-Party Services",
+    "es": "9. Third-Party Services",
+    "fr": "9. Third-Party Services",
+    "it": "9. Third-Party Services"
   },
   "fluentflow_may_integrate": {
     "source": "FluentFlow may integrate with third-party services:",
     "en": "FluentFlow may integrate with third-party services:",
-    "ru": null,
-    "de": null,
-    "es": null,
-    "fr": null,
-    "it": null
+    "ru": "FluentFlow may integrate with third-party services:",
+    "de": "FluentFlow may integrate with third-party services:",
+    "es": "FluentFlow may integrate with third-party services:",
+    "fr": "FluentFlow may integrate with third-party services:",
+    "it": "FluentFlow may integrate with third-party services:"
   },
   "your_use_of": {
     "source": "Your use of these services is subject to their respective terms and privacy policies. We are not responsible for third-party services.",
     "en": "Your use of these services is subject to their respective terms and privacy policies. We are not responsible for third-party services.",
-    "ru": null,
-    "de": null,
-    "es": null,
-    "fr": null,
-    "it": null
+    "ru": "Your use of these services is subject to their respective terms and privacy policies. We are not responsible for third-party services.",
+    "de": "Your use of these services is subject to their respective terms and privacy policies. We are not responsible for third-party services.",
+    "es": "Your use of these services is subject to their respective terms and privacy policies. We are not responsible for third-party services.",
+    "fr": "Your use of these services is subject to their respective terms and privacy policies. We are not responsible for third-party services.",
+    "it": "Your use of these services is subject to their respective terms and privacy policies. We are not responsible for third-party services."
   },
   "10_disclaimers_and": {
     "source": "10. Disclaimers and Limitation of Liability",
     "en": "10. Disclaimers and Limitation of Liability",
-    "ru": null,
-    "de": null,
-    "es": null,
-    "fr": null,
-    "it": null
+    "ru": "10. Disclaimers and Limitation of Liability",
+    "de": "10. Disclaimers and Limitation of Liability",
+    "es": "10. Disclaimers and Limitation of Liability",
+    "fr": "10. Disclaimers and Limitation of Liability",
+    "it": "10. Disclaimers and Limitation of Liability"
   },
   "12_data_and": {
     "source": "12. Data and Privacy",
     "en": "12. Data and Privacy",
-    "ru": null,
-    "de": null,
-    "es": null,
-    "fr": null,
-    "it": null
+    "ru": "12. Data and Privacy",
+    "de": "12. Data and Privacy",
+    "es": "12. Data and Privacy",
+    "fr": "12. Data and Privacy",
+    "it": "12. Data and Privacy"
   },
   "your_use_of_1": {
     "source": "Your use of FluentFlow is also governed by our",
     "en": "Your use of FluentFlow is also governed by our",
-    "ru": null,
-    "de": null,
-    "es": null,
-    "fr": null,
-    "it": null
+    "ru": "Your use of FluentFlow is also governed by our",
+    "de": "Your use of FluentFlow is also governed by our",
+    "es": "Your use of FluentFlow is also governed by our",
+    "fr": "Your use of FluentFlow is also governed by our",
+    "it": "Your use of FluentFlow is also governed by our"
   },
   "13_termination": {
     "source": "13. Termination",
     "en": "13. Termination",
-    "ru": null,
-    "de": null,
-    "es": null,
-    "fr": null,
-    "it": null
+    "ru": "13. Termination",
+    "de": "13. Termination",
+    "es": "13. Termination",
+    "fr": "13. Termination",
+    "it": "13. Termination"
   },
   "upon_termination_your": {
     "source": "Upon termination, your right to use the Service will immediately cease, and we may delete your account and data.",
     "en": "Upon termination, your right to use the Service will immediately cease, and we may delete your account and data.",
-    "ru": null,
-    "de": null,
-    "es": null,
-    "fr": null,
-    "it": null
+    "ru": "Upon termination, your right to use the Service will immediately cease, and we may delete your account and data.",
+    "de": "Upon termination, your right to use the Service will immediately cease, and we may delete your account and data.",
+    "es": "Upon termination, your right to use the Service will immediately cease, and we may delete your account and data.",
+    "fr": "Upon termination, your right to use the Service will immediately cease, and we may delete your account and data.",
+    "it": "Upon termination, your right to use the Service will immediately cease, and we may delete your account and data."
   },
   "14_changes_to": {
     "source": "14. Changes to Terms",
     "en": "14. Changes to Terms",
-    "ru": null,
-    "de": null,
-    "es": null,
-    "fr": null,
-    "it": null
+    "ru": "14. Changes to Terms",
+    "de": "14. Changes to Terms",
+    "es": "14. Changes to Terms",
+    "fr": "14. Changes to Terms",
+    "it": "14. Changes to Terms"
   },
   "we_reserve_the_2": {
     "source": "We reserve the right to modify these Terms at any time. If we make material changes, we will notify you by:",
     "en": "We reserve the right to modify these Terms at any time. If we make material changes, we will notify you by:",
-    "ru": null,
-    "de": null,
-    "es": null,
-    "fr": null,
-    "it": null
+    "ru": "We reserve the right to modify these Terms at any time. If we make material changes, we will notify you by:",
+    "de": "We reserve the right to modify these Terms at any time. If we make material changes, we will notify you by:",
+    "es": "We reserve the right to modify these Terms at any time. If we make material changes, we will notify you by:",
+    "fr": "We reserve the right to modify these Terms at any time. If we make material changes, we will notify you by:",
+    "it": "We reserve the right to modify these Terms at any time. If we make material changes, we will notify you by:"
   },
   "your_continued_use": {
     "source": "Your continued use of FluentFlow after changes constitute acceptance of the new Terms. If you do not agree to the changes, you must stop using the Service.",
     "en": "Your continued use of FluentFlow after changes constitute acceptance of the new Terms. If you do not agree to the changes, you must stop using the Service.",
-    "ru": null,
-    "de": null,
-    "es": null,
-    "fr": null,
-    "it": null
+    "ru": "Your continued use of FluentFlow after changes constitute acceptance of the new Terms. If you do not agree to the changes, you must stop using the Service.",
+    "de": "Your continued use of FluentFlow after changes constitute acceptance of the new Terms. If you do not agree to the changes, you must stop using the Service.",
+    "es": "Your continued use of FluentFlow after changes constitute acceptance of the new Terms. If you do not agree to the changes, you must stop using the Service.",
+    "fr": "Your continued use of FluentFlow after changes constitute acceptance of the new Terms. If you do not agree to the changes, you must stop using the Service.",
+    "it": "Your continued use of FluentFlow after changes constitute acceptance of the new Terms. If you do not agree to the changes, you must stop using the Service."
   },
   "15_governing_law": {
     "source": "15. Governing Law and Dispute Resolution",
     "en": "15. Governing Law and Dispute Resolution",
-    "ru": null,
-    "de": null,
-    "es": null,
-    "fr": null,
-    "it": null
+    "ru": "15. Governing Law and Dispute Resolution",
+    "de": "15. Governing Law and Dispute Resolution",
+    "es": "15. Governing Law and Dispute Resolution",
+    "fr": "15. Governing Law and Dispute Resolution",
+    "it": "15. Governing Law and Dispute Resolution"
   },
   "these_terms_shall": {
     "source": "These Terms shall be governed by and construed in accordance with the laws of [Your Jurisdiction], without regard to its conflict of law principles.",
     "en": "These Terms shall be governed by and construed in accordance with the laws of [Your Jurisdiction], without regard to its conflict of law principles.",
-    "ru": null,
-    "de": null,
-    "es": null,
-    "fr": null,
-    "it": null
+    "ru": "These Terms shall be governed by and construed in accordance with the laws of [Your Jurisdiction], without regard to its conflict of law principles.",
+    "de": "These Terms shall be governed by and construed in accordance with the laws of [Your Jurisdiction], without regard to its conflict of law principles.",
+    "es": "These Terms shall be governed by and construed in accordance with the laws of [Your Jurisdiction], without regard to its conflict of law principles.",
+    "fr": "These Terms shall be governed by and construed in accordance with the laws of [Your Jurisdiction], without regard to its conflict of law principles.",
+    "it": "These Terms shall be governed by and construed in accordance with the laws of [Your Jurisdiction], without regard to its conflict of law principles."
   },
   "16_severability": {
     "source": "16. Severability",
     "en": "16. Severability",
-    "ru": null,
-    "de": null,
-    "es": null,
-    "fr": null,
-    "it": null
+    "ru": "16. Severability",
+    "de": "16. Severability",
+    "es": "16. Severability",
+    "fr": "16. Severability",
+    "it": "16. Severability"
   },
   "18_contact_information": {
     "source": "18. Contact Information",
     "en": "18. Contact Information",
-    "ru": null,
-    "de": null,
-    "es": null,
-    "fr": null,
-    "it": null
+    "ru": "18. Contact Information",
+    "de": "18. Contact Information",
+    "es": "18. Contact Information",
+    "fr": "18. Contact Information",
+    "it": "18. Contact Information"
   },
   "if_you_have_1": {
     "source": "If you have any questions about these Terms, please contact us:",
     "en": "If you have any questions about these Terms, please contact us:",
-    "ru": null,
-    "de": null,
-    "es": null,
-    "fr": null,
-    "it": null
+    "ru": "If you have any questions about these Terms, please contact us:",
+    "de": "If you have any questions about these Terms, please contact us:",
+    "es": "If you have any questions about these Terms, please contact us:",
+    "fr": "If you have any questions about these Terms, please contact us:",
+    "it": "If you have any questions about these Terms, please contact us:"
   },
   "privacy_policy": {
     "source": "Privacy Policy",
     "en": "Privacy Policy",
-    "ru": null,
-    "de": null,
-    "es": null,
-    "fr": null,
-    "it": null
+    "ru": "Privacy Policy",
+    "de": "Privacy Policy",
+    "es": "Privacy Policy",
+    "fr": "Privacy Policy",
+    "it": "Privacy Policy"
   },
   "meta_ads_manager": {
     "source": "Meta Ads Manager - Test Data",
     "en": "Meta Ads Manager - Test Data",
-    "ru": null,
-    "de": null,
-    "es": null,
-    "fr": null,
-    "it": null
+    "ru": "Meta Ads Manager - Test Data",
+    "de": "Meta Ads Manager - Test Data",
+    "es": "Meta Ads Manager - Test Data",
+    "fr": "Meta Ads Manager - Test Data",
+    "it": "Meta Ads Manager - Test Data"
   },
   "campaign_performance_report": {
     "source": "Campaign Performance Report",
     "en": "Campaign Performance Report",
-    "ru": null,
-    "de": null,
-    "es": null,
-    "fr": null,
-    "it": null
+    "ru": "Campaign Performance Report",
+    "de": "Campaign Performance Report",
+    "es": "Campaign Performance Report",
+    "fr": "Campaign Performance Report",
+    "it": "Campaign Performance Report"
   },
   "summer_sale_campaign": {
     "source": "Summer Sale Campaign",
     "en": "Summer Sale Campaign",
-    "ru": null,
-    "de": null,
-    "es": null,
-    "fr": null,
-    "it": null
+    "ru": "Summer Sale Campaign",
+    "de": "Summer Sale Campaign",
+    "es": "Summer Sale Campaign",
+    "fr": "Summer Sale Campaign",
+    "it": "Summer Sale Campaign"
   },
   "15_234": {
     "source": "15,234",
     "en": "15,234",
-    "ru": null,
-    "de": null,
-    "es": null,
-    "fr": null,
-    "it": null
+    "ru": "15,234",
+    "de": "15,234",
+    "es": "15,234",
+    "fr": "15,234",
+    "it": "15,234"
   },
   "aug_25_2025": {
     "source": "Aug 25, 2025",
     "en": "Aug 25, 2025",
-    "ru": null,
-    "de": null,
-    "es": null,
-    "fr": null,
-    "it": null
+    "ru": "Aug 25, 2025",
+    "de": "Aug 25, 2025",
+    "es": "Aug 25, 2025",
+    "fr": "Aug 25, 2025",
+    "it": "Aug 25, 2025"
   },
   "back_to_school": {
     "source": "Back to School Ads",
     "en": "Back to School Ads",
-    "ru": null,
-    "de": null,
-    "es": null,
-    "fr": null,
-    "it": null
+    "ru": "Back to School Ads",
+    "de": "Back to School Ads",
+    "es": "Back to School Ads",
+    "fr": "Back to School Ads",
+    "it": "Back to School Ads"
   },
   "8_456": {
     "source": "8,456",
     "en": "8,456",
-    "ru": null,
-    "de": null,
-    "es": null,
-    "fr": null,
-    "it": null
+    "ru": "8,456",
+    "de": "8,456",
+    "es": "8,456",
+    "fr": "8,456",
+    "it": "8,456"
   },
   "32_10": {
     "source": "$32.10",
     "en": "$32.10",
-    "ru": null,
-    "de": null,
-    "es": null,
-    "fr": null,
-    "it": null
+    "ru": "$32.10",
+    "de": "$32.10",
+    "es": "$32.10",
+    "fr": "$32.10",
+    "it": "$32.10"
   },
   "aug_24_2025": {
     "source": "Aug 24, 2025",
     "en": "Aug 24, 2025",
-    "ru": null,
-    "de": null,
-    "es": null,
-    "fr": null,
-    "it": null
+    "ru": "Aug 24, 2025",
+    "de": "Aug 24, 2025",
+    "es": "Aug 24, 2025",
+    "fr": "Aug 24, 2025",
+    "it": "Aug 24, 2025"
   },
   "product_launch": {
     "source": "Product Launch",
     "en": "Product Launch",
-    "ru": null,
-    "de": null,
-    "es": null,
-    "fr": null,
-    "it": null
+    "ru": "Product Launch",
+    "de": "Product Launch",
+    "es": "Product Launch",
+    "fr": "Product Launch",
+    "it": "Product Launch"
   },
   "12_789": {
     "source": "12,789",
     "en": "12,789",
-    "ru": null,
-    "de": null,
-    "es": null,
-    "fr": null,
-    "it": null
+    "ru": "12,789",
+    "de": "12,789",
+    "es": "12,789",
+    "fr": "12,789",
+    "it": "12,789"
   },
   "78_95": {
     "source": "$78.95",
     "en": "$78.95",
-    "ru": null,
-    "de": null,
-    "es": null,
-    "fr": null,
-    "it": null
+    "ru": "$78.95",
+    "de": "$78.95",
+    "es": "$78.95",
+    "fr": "$78.95",
+    "it": "$78.95"
   },
   "daily_spend_summary": {
     "source": "Daily Spend Summary",
     "en": "Daily Spend Summary",
-    "ru": null,
-    "de": null,
-    "es": null,
-    "fr": null,
-    "it": null
+    "ru": "Daily Spend Summary",
+    "de": "Daily Spend Summary",
+    "es": "Daily Spend Summary",
+    "fr": "Daily Spend Summary",
+    "it": "Daily Spend Summary"
   },
   "yesterday_aug_26": {
     "source": "Yesterday (Aug 26, 2025):",
     "en": "Yesterday (Aug 26, 2025):",
-    "ru": null,
-    "de": null,
-    "es": null,
-    "fr": null,
-    "it": null
+    "ru": "Yesterday (Aug 26, 2025):",
+    "de": "Yesterday (Aug 26, 2025):",
+    "es": "Yesterday (Aug 26, 2025):",
+    "fr": "Yesterday (Aug 26, 2025):",
+    "it": "Yesterday (Aug 26, 2025):"
   },
   "total_spent_123_45": {
     "source": "Total Spent: $123.45",
     "en": "Total Spent: $123.45",
-    "ru": null,
-    "de": null,
-    "es": null,
-    "fr": null,
-    "it": null
+    "ru": "Total Spent: $123.45",
+    "de": "Total Spent: $123.45",
+    "es": "Total Spent: $123.45",
+    "fr": "Total Spent: $123.45",
+    "it": "Total Spent: $123.45"
   },
   "67_89": {
     "source": "$67.89",
     "en": "$67.89",
-    "ru": null,
-    "de": null,
-    "es": null,
-    "fr": null,
-    "it": null
+    "ru": "$67.89",
+    "de": "$67.89",
+    "es": "$67.89",
+    "fr": "$67.89",
+    "it": "$67.89"
   },
   "yesterday_s_spend_89_12": {
     "source": "Yesterday's spend: $89.12",
     "en": "Yesterday's spend: $89.12",
-    "ru": null,
-    "de": null,
-    "es": null,
-    "fr": null,
-    "it": null
+    "ru": "Yesterday's spend: $89.12",
+    "de": "Yesterday's spend: $89.12",
+    "es": "Yesterday's spend: $89.12",
+    "fr": "Yesterday's spend: $89.12",
+    "it": "Yesterday's spend: $89.12"
   },
   "56_78": {
     "source": "$56.78",
     "en": "$56.78",
-    "ru": null,
-    "de": null,
-    "es": null,
-    "fr": null,
-    "it": null
+    "ru": "$56.78",
+    "de": "$56.78",
+    "es": "$56.78",
+    "fr": "$56.78",
+    "it": "$56.78"
   },
   "234_56": {
     "source": "$234.56",
     "en": "$234.56",
-    "ru": null,
-    "de": null,
-    "es": null,
-    "fr": null,
-    "it": null
+    "ru": "$234.56",
+    "de": "$234.56",
+    "es": "$234.56",
+    "fr": "$234.56",
+    "it": "$234.56"
   },
   "late_night_campaign": {
     "source": "Late Night Campaign",
     "en": "Late Night Campaign",
-    "ru": null,
-    "de": null,
-    "es": null,
-    "fr": null,
-    "it": null
+    "ru": "Late Night Campaign",
+    "de": "Late Night Campaign",
+    "es": "Late Night Campaign",
+    "fr": "Late Night Campaign",
+    "it": "Late Night Campaign"
   },
   "3_456": {
     "source": "3,456",
     "en": "3,456",
-    "ru": null,
-    "de": null,
-    "es": null,
-    "fr": null,
-    "it": null
+    "ru": "3,456",
+    "de": "3,456",
+    "es": "3,456",
+    "fr": "3,456",
+    "it": "3,456"
   },
   "12_34": {
     "source": "$12.34",
     "en": "$12.34",
-    "ru": null,
-    "de": null,
-    "es": null,
-    "fr": null,
-    "it": null
+    "ru": "$12.34",
+    "de": "$12.34",
+    "es": "$12.34",
+    "fr": "$12.34",
+    "it": "$12.34"
   },
   "dark": {
     "source": ",\n            dark:",
     "en": ",\n            dark:",
-    "ru": null,
-    "de": null,
-    "es": null,
-    "fr": null,
-    "it": null
+    "ru": ",\n            dark:",
+    "de": ",\n            dark:",
+    "es": ",\n            dark:",
+    "fr": ",\n            dark:",
+    "it": ",\n            dark:"
   },
   "error": {
     "source": ",\r\n            error:",
     "en": ",\r\n            error:",
-    "ru": null,
-    "de": null,
-    "es": null,
-    "fr": null,
-    "it": null
+    "ru": ",\r\n            error:",
+    "de": ",\r\n            error:",
+    "es": ",\r\n            error:",
+    "fr": ",\r\n            error:",
+    "it": ",\r\n            error:"
   },
   "warning": {
     "source": ",\r\n            warning:",
     "en": ",\r\n            warning:",
-    "ru": null,
-    "de": null,
-    "es": null,
-    "fr": null,
-    "it": null
+    "ru": ",\r\n            warning:",
+    "de": ",\r\n            warning:",
+    "es": ",\r\n            warning:",
+    "fr": ",\r\n            warning:",
+    "it": ",\r\n            warning:"
   },
   "info": {
     "source": ",\r\n            info:",
     "en": ",\r\n            info:",
-    "ru": null,
-    "de": null,
-    "es": null,
-    "fr": null,
-    "it": null
+    "ru": ",\r\n            info:",
+    "de": ",\r\n            info:",
+    "es": ",\r\n            info:",
+    "fr": ",\r\n            info:",
+    "it": ",\r\n            info:"
   },
   "error_initializing_user": {
     "source": "Error initializing user manager:",
     "en": "Error initializing user manager:",
-    "ru": null,
-    "de": null,
-    "es": null,
-    "fr": null,
-    "it": null
+    "ru": "Error initializing user manager:",
+    "de": "Error initializing user manager:",
+    "es": "Error initializing user manager:",
+    "fr": "Error initializing user manager:",
+    "it": "Error initializing user manager:"
   },
   "login_failed": {
     "source": "Login failed",
     "en": "Login failed",
-    "ru": null,
-    "de": null,
-    "es": null,
-    "fr": null,
-    "it": null
+    "ru": "Login failed",
+    "de": "Login failed",
+    "es": "Login failed",
+    "fr": "Login failed",
+    "it": "Login failed"
   },
   "login_error": {
     "source": "Login error:",
     "en": "Login error:",
-    "ru": null,
-    "de": null,
-    "es": null,
-    "fr": null,
-    "it": null
+    "ru": "Login error:",
+    "de": "Login error:",
+    "es": "Login error:",
+    "fr": "Login error:",
+    "it": "Login error:"
   },
   "registration_failed": {
     "source": "Registration failed",
     "en": "Registration failed",
-    "ru": null,
-    "de": null,
-    "es": null,
-    "fr": null,
-    "it": null
+    "ru": "Registration failed",
+    "de": "Registration failed",
+    "es": "Registration failed",
+    "fr": "Registration failed",
+    "it": "Registration failed"
   },
   "registration_error": {
     "source": "Registration error:",
     "en": "Registration error:",
-    "ru": null,
-    "de": null,
-    "es": null,
-    "fr": null,
-    "it": null
+    "ru": "Registration error:",
+    "de": "Registration error:",
+    "es": "Registration error:",
+    "fr": "Registration error:",
+    "it": "Registration error:"
   },
   "google_login_error": {
     "source": "Google login error:",
     "en": "Google login error:",
-    "ru": null,
-    "de": null,
-    "es": null,
-    "fr": null,
-    "it": null
+    "ru": "Google login error:",
+    "de": "Google login error:",
+    "es": "Google login error:",
+    "fr": "Google login error:",
+    "it": "Google login error:"
   },
   "google_login": {
     "source": "Google login не реализован. Используйте обычный вход или регистрацию.",
-    "en": null,
+    "en": "Google login не реализован. Используйте обычный вход или регистрацию.",
     "ru": "Google login не реализован. Используйте обычный вход или регистрацию.",
-    "de": null,
-    "es": null,
-    "fr": null,
-    "it": null
+    "de": "Google login не реализован. Используйте обычный вход или регистрацию.",
+    "es": "Google login не реализован. Используйте обычный вход или регистрацию.",
+    "fr": "Google login не реализован. Используйте обычный вход или регистрацию.",
+    "it": "Google login не реализован. Используйте обычный вход или регистрацию."
   },
   "failed_to_load_3": {
     "source": "Failed to load language pairs",
     "en": "Failed to load language pairs",
-    "ru": null,
-    "de": null,
-    "es": null,
-    "fr": null,
-    "it": null
+    "ru": "Failed to load language pairs",
+    "de": "Failed to load language pairs",
+    "es": "Failed to load language pairs",
+    "fr": "Failed to load language pairs",
+    "it": "Failed to load language pairs"
   },
   "error_loading_language": {
     "source": "Error loading language pairs:",
     "en": "Error loading language pairs:",
-    "ru": null,
-    "de": null,
-    "es": null,
-    "fr": null,
-    "it": null
+    "ru": "Error loading language pairs:",
+    "de": "Error loading language pairs:",
+    "es": "Error loading language pairs:",
+    "fr": "Error loading language pairs:",
+    "it": "Error loading language pairs:"
   },
   "failed_to_create": {
     "source": "Failed to create language pair",
     "en": "Failed to create language pair",
-    "ru": null,
-    "de": null,
-    "es": null,
-    "fr": null,
-    "it": null
+    "ru": "Failed to create language pair",
+    "de": "Failed to create language pair",
+    "es": "Failed to create language pair",
+    "fr": "Failed to create language pair",
+    "it": "Failed to create language pair"
   },
   "failed_to_activate": {
     "source": "Failed to activate language pair",
     "en": "Failed to activate language pair",
-    "ru": null,
-    "de": null,
-    "es": null,
-    "fr": null,
-    "it": null
+    "ru": "Failed to activate language pair",
+    "de": "Failed to activate language pair",
+    "es": "Failed to activate language pair",
+    "fr": "Failed to activate language pair",
+    "it": "Failed to activate language pair"
   },
   "error_activating_language": {
     "source": "Error activating language pair:",
     "en": "Error activating language pair:",
-    "ru": null,
-    "de": null,
-    "es": null,
-    "fr": null,
-    "it": null
+    "ru": "Error activating language pair:",
+    "de": "Error activating language pair:",
+    "es": "Error activating language pair:",
+    "fr": "Error activating language pair:",
+    "it": "Error activating language pair:"
   },
   "failed_to_delete": {
     "source": "Failed to delete language pair",
     "en": "Failed to delete language pair",
-    "ru": null,
-    "de": null,
-    "es": null,
-    "fr": null,
-    "it": null
+    "ru": "Failed to delete language pair",
+    "de": "Failed to delete language pair",
+    "es": "Failed to delete language pair",
+    "fr": "Failed to delete language pair",
+    "it": "Failed to delete language pair"
   },
   "failed_to_update_1": {
     "source": "Failed to update lesson size",
     "en": "Failed to update lesson size",
-    "ru": null,
-    "de": null,
-    "es": null,
-    "fr": null,
-    "it": null
+    "ru": "Failed to update lesson size",
+    "de": "Failed to update lesson size",
+    "es": "Failed to update lesson size",
+    "fr": "Failed to update lesson size",
+    "it": "Failed to update lesson size"
   },
   "error_setting_lesson": {
     "source": "Error setting lesson size:",
     "en": "Error setting lesson size:",
-    "ru": null,
-    "de": null,
-    "es": null,
-    "fr": null,
-    "it": null
+    "ru": "Error setting lesson size:",
+    "de": "Error setting lesson size:",
+    "es": "Error setting lesson size:",
+    "fr": "Error setting lesson size:",
+    "it": "Error setting lesson size:"
   },
   "create_language_pair": {
     "source": "Create Language Pair",
