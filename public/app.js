@@ -935,7 +935,7 @@ schreiben,Sie schreibt einen Brief.,Писать,Она пишет письmо.`
                 }
             };
             answerArea.appendChild(input);
-            input.focus();
+            // input.focus(); // Disabled: Don't auto-focus to prevent keyboard popup on mobile
 
             const buttonContainer = document.createElement('div');
             buttonContainer.style.marginTop = '1rem';
@@ -1020,7 +1020,7 @@ schreiben,Sie schreibt einen Brief.,Писать,Она пишет письmо.`
                 }
             };
             answerArea.appendChild(input);
-            input.focus();
+            // input.focus(); // Disabled: Don't auto-focus to prevent keyboard popup on mobile
 
             const buttonContainer = document.createElement('div');
             buttonContainer.style.marginTop = '1rem';
@@ -1455,7 +1455,7 @@ schreiben,Sie schreibt einen Brief.,Писать,Она пишет письmо.`
         
         wordBuildingArea.appendChild(controls);
         answerArea.appendChild(wordBuildingArea);
-        wordInput.focus();
+        // wordInput.focus(); // Disabled: Don't auto-focus to prevent keyboard popup on mobile
     }
     
     handleLetterClick(tile, wordInput) {
@@ -1464,7 +1464,7 @@ schreiben,Sie schreibt einen Brief.,Писать,Она пишет письmо.`
         wordInput.value += tile.dataset.letter;
         tile.disabled = true;
         tile.classList.add('used');
-        wordInput.focus();
+        // wordInput.focus(); // Disabled: Don't auto-focus to prevent keyboard popup on mobile
     }
 
     handleWordBuildingBackspace(wordInput) {
@@ -1496,7 +1496,7 @@ schreiben,Sie schreibt einen Brief.,Писать,Она пишет письmо.`
         letterTiles.querySelectorAll('.letter-tile').forEach(tile => {
             tile.disabled = false;
         });
-        wordInput.focus();
+        // wordInput.focus(); // Disabled: Don't auto-focus to prevent keyboard popup on mobile
     }
     
     handleWordBuildingEnter(wordInput, question) {
