@@ -1629,13 +1629,13 @@
     "it": "Выйти"
   },
   "german_words_learning": {
-    "source": "German Words Learning Dashboard",
-    "en": "German Words Learning Dashboard",
-    "ru": "German Words Learning Dashboard",
-    "de": "German Words Learning Dashboard",
-    "es": "German Words Learning Dashboard",
-    "fr": "German Words Learning Dashboard",
-    "it": "German Words Learning Dashboard"
+    "source": "LexiBooster Dashboard",
+    "en": "LexiBooster Dashboard",
+    "ru": "LexiBooster Dashboard",
+    "de": "LexiBooster Dashboard",
+    "es": "LexiBooster Dashboard",
+    "fr": "LexiBooster Dashboard",
+    "it": "LexiBooster Dashboard"
   },
   "_67": {
     "source": "Изучаемые слова",
@@ -5328,13 +5328,13 @@
     "it": "Ripeti il tour interattivo delle funzionalità"
   },
   "welcome": {
-    "source": "Welcome to German Words Learning",
-    "en": "Welcome to German Words Learning",
-    "ru": "Добро пожаловать в German Words Learning",
-    "de": "Willkommen bei German Words Learning",
-    "es": "Bienvenido a German Words Learning",
-    "fr": "Bienvenue à German Words Learning",
-    "it": "Benvenuto su German Words Learning"
+    "source": "Welcome to LexiBooster",
+    "en": "Welcome to LexiBooster",
+    "ru": "Добро пожаловать в LexiBooster",
+    "de": "Willkommen bei LexiBooster",
+    "es": "Bienvenido a LexiBooster",
+    "fr": "Bienvenue à LexiBooster",
+    "it": "Benvenuto su LexiBooster"
   },
   "login": {
     "source": "Login",
@@ -5400,8 +5400,8 @@
     "it": "Conferma password"
   },
   "appTitle": {
-    "source": "German Words Learning",
-    "en": "German Words Learning",
+    "source": "LexiBooster",
+    "en": "LexiBooster",
     "ru": "Изучение немецких слов",
     "de": "Deutsche Wörter lernen",
     "es": "Aprendizaje de palabras alemanas",
