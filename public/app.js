@@ -1540,12 +1540,12 @@ schreiben,Sie schreibt einen Brief.,Писать,Она пишет письmо.`
         // Audio button will be added in feedback, no need for duplicate button here
         
         wordInput.disabled = true;
-        // Disable all controls
+        // Hide letter tiles and controls to save space on mobile
         const controls = wordInput.parentElement.querySelector('.word-building-controls');
-        controls.querySelectorAll('button').forEach(btn => btn.disabled = true);
+        controls.style.display = 'none';
         const tiles = wordInput.parentElement.querySelector('.letter-tiles');
-        tiles.querySelectorAll('.letter-tile').forEach(tile => tile.disabled = true);
-        
+        tiles.style.display = 'none';
+
         this.showNextButton();
     }
     
@@ -1553,12 +1553,12 @@ schreiben,Sie schreibt einen Brief.,Писать,Она пишет письmо.`
         wordInput.value = question.correctAnswer;
         wordInput.classList.add('incorrect');
         wordInput.disabled = true;
-        
-        // Disable all controls
+
+        // Hide letter tiles and controls to save space on mobile
         const controls = wordInput.parentElement.querySelector('.word-building-controls');
-        controls.querySelectorAll('button').forEach(btn => btn.disabled = true);
+        controls.style.display = 'none';
         const tiles = wordInput.parentElement.querySelector('.letter-tiles');
-        tiles.querySelectorAll('.letter-tile').forEach(tile => tile.disabled = true);
+        tiles.style.display = 'none';
         
         // Record as incorrect answer
         await database.updateWordProgress(question.wordId, false, question.type);
