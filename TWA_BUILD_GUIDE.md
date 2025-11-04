@@ -1,7 +1,7 @@
-# 📦 TWA Build Guide - LexiBooster Android APK/AAB
+# 📦 TWA Build Guide - LexyBooster Android APK/AAB
 
 ## 🎯 Goal
-Build an Android APK/AAB file for LexiBooster using Bubblewrap CLI (Google's official TWA tool).
+Build an Android APK/AAB file for LexyBooster using Bubblewrap CLI (Google's official TWA tool).
 
 **No Android Studio needed!** ✅
 
@@ -64,7 +64,7 @@ bubblewrap help
 
 ---
 
-### Step 3: Initialize Bubblewrap for LexiBooster
+### Step 3: Initialize Bubblewrap for LexyBooster
 
 Navigate to your project directory:
 ```bash
@@ -80,17 +80,17 @@ bubblewrap init --manifest https://words-learning-server-copy-production.up.rail
 
 #### Question 1: App name
 ```
-LexiBooster
+LexyBooster
 ```
 
 #### Question 2: Short app name
 ```
-LexiBooster
+LexyBooster
 ```
 
 #### Question 3: Application ID (package name)
 ```
-com.LexiBooster.app
+com.LexyBooster.app
 ```
 ⚠️ **IMPORTANT:** This is permanent! Cannot be changed after first upload to Google Play.
 
@@ -177,7 +177,7 @@ Files created:
 **IMPORTANT - Backup Your Keystore:**
 ```bash
 # Copy keystore to safe location
-cp android/keystore.jks ../LexiBooster-keystore-BACKUP.jks
+cp android/keystore.jks ../LexyBooster-keystore-BACKUP.jks
 
 # Also save to cloud (Google Drive, Dropbox)
 # Never commit to Git!
@@ -341,7 +341,7 @@ Content:
   "relation": ["delegate_permission/common.handle_all_urls"],
   "target": {
     "namespace": "android_app",
-    "package_name": "com.LexiBooster.app",
+    "package_name": "com.LexyBooster.app",
     "sha256_cert_fingerprints": [
       "YOUR_SHA256_FINGERPRINT_HERE"
     ]
@@ -368,7 +368,7 @@ https://developers.google.com/digital-asset-links/tools/generator
 
 Enter:
 - Website: `https://words-learning-server-copy-production.up.railway.app`
-- App package name: `com.LexiBooster.app`
+- App package name: `com.LexyBooster.app`
 
 Should show: ✅ "Verified"
 
@@ -400,10 +400,10 @@ Main configuration file created by Bubblewrap.
 **Key fields:**
 ```json
 {
-  "packageId": "com.LexiBooster.app",
+  "packageId": "com.LexyBooster.app",
   "host": "words-learning-server-copy-production.up.railway.app",
-  "name": "LexiBooster",
-  "launcherName": "LexiBooster",
+  "name": "LexyBooster",
+  "launcherName": "LexyBooster",
   "display": "standalone",
   "themeColor": "#6366f1",
   "backgroundColor": "#ffffff",
@@ -427,7 +427,7 @@ Android build configuration.
 android {
     compileSdkVersion 33
     defaultConfig {
-        applicationId "com.LexiBooster.app"
+        applicationId "com.LexyBooster.app"
         minSdkVersion 21
         targetSdkVersion 33
         versionCode 1
@@ -511,7 +511,7 @@ Next steps:
 
 4. **Package name is permanent:**
    - Cannot be changed after first Google Play upload
-   - Choose carefully: `com.LexiBooster.app`
+   - Choose carefully: `com.LexyBooster.app`
 
 5. **Version codes must increment:**
    - v1.0.0 = code 1

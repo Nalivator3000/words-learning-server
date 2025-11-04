@@ -1,4 +1,4 @@
-# 🏪 Google Play Console Setup Guide - LexiBooster
+# 🏪 Google Play Console Setup Guide - LexyBooster
 
 ## 📋 Prerequisites Checklist
 
@@ -37,7 +37,7 @@ Before starting, ensure you have:
 
 #### Step 1.3: Complete Developer Profile
 
-1. **Developer name**: `LexiBooster Team` or your name
+1. **Developer name**: `LexyBooster Team` or your name
 2. **Email**: Your contact email (public, visible to users)
 3. **Website** (optional but recommended):
    ```
@@ -68,7 +68,7 @@ Google requires identity verification for all new developers:
 
 **App Details:**
 ```
-App name: LexiBooster
+App name: LexyBooster
 Default language: English (United States)
 App or game: App
 Free or paid: Free
@@ -84,7 +84,7 @@ Navigate to: **Grow → Store presence → Main store listing**
 
 **App name:**
 ```
-LexiBooster: Language Learning & SRS
+LexyBooster: Language Learning & SRS
 ```
 (37 characters, max 50)
 
@@ -177,7 +177,7 @@ Navigate to: **Policy → App content → Content ratings**
 
 Click "Start questionnaire"
 
-#### IARC Questionnaire Answers for LexiBooster:
+#### IARC Questionnaire Answers for LexyBooster:
 
 **Section 1: General Questions**
 
@@ -241,7 +241,7 @@ Navigate to: **Policy → App content → Data safety**
 
 This section requires detailed answers about data collection.
 
-**For LexiBooster:**
+**For LexyBooster:**
 
 1. **Does your app collect or share any of the required user data types?**
    - Yes
@@ -334,9 +334,9 @@ Initial Release - v1.0.0
 
 **Release notes:**
 ```
-🎉 Welcome to LexiBooster!
+🎉 Welcome to LexyBooster!
 
-LexiBooster is now available on Google Play! Master any language with:
+LexyBooster is now available on Google Play! Master any language with:
 
 ✨ Features:
 • Spaced Repetition System (SRS) for optimal learning
@@ -465,10 +465,10 @@ Navigate to: **Dashboard → View release** to see missing items
 
 1. **App goes live** on Google Play Store
 2. You'll receive email confirmation
-3. Search for "LexiBooster" on Play Store
+3. Search for "LexyBooster" on Play Store
 4. Share the link:
    ```
-   https://play.google.com/store/apps/details?id=com.LexiBooster.app
+   https://play.google.com/store/apps/details?id=com.LexyBooster.app
    ```
 
 ### If Rejected ❌
@@ -550,7 +550,7 @@ Navigate to: **Dashboard → View release** to see missing items
 
 2. **Package name is permanent**
    - Once set, you cannot change it
-   - Choose carefully: `com.LexiBooster.app`
+   - Choose carefully: `com.LexyBooster.app`
 
 3. **$25 fee is one-time**
    - You can publish unlimited apps
@@ -571,7 +571,7 @@ Navigate to: **Dashboard → View release** to see missing items
 Once your app is live, you've successfully:
 - ✅ Created a Google Play Developer account
 - ✅ Published your first Android app
-- ✅ Made LexiBooster available to billions of Android users worldwide
+- ✅ Made LexyBooster available to billions of Android users worldwide
 
 **Next steps:**
 - Monitor metrics and reviews
@@ -587,7 +587,7 @@ Once your app is live, you've successfully:
 - Help Center: https://support.google.com/googleplay/android-developer
 - Policy Center: https://play.google.com/about/developer-content-policy/
 
-**LexiBooster Resources:**
+**LexyBooster Resources:**
 - Repository: https://github.com/Nalivator3000/words-learning-server
 - Privacy Policy: https://words-learning-server-copy-production.up.railway.app/privacy.html
 - Terms: https://words-learning-server-copy-production.up.railway.app/terms.html

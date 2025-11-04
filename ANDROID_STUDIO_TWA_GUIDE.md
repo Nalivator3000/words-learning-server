@@ -1,4 +1,4 @@
-# 📱 Android Studio TWA Guide - LexiBooster
+# 📱 Android Studio TWA Guide - LexyBooster
 
 ## Пошаговое руководство по созданию Android APK через Android Studio
 
@@ -38,19 +38,19 @@
 
 **Name:**
 ```
-LexiBooster
+LexyBooster
 ```
 
 **Package name:**
 ```
-com.lexibooster.app
+com.lexybooster.app
 ```
 
 ⚠️ **КРИТИЧЕСКИ ВАЖНО:** Package name нельзя изменить после публикации в Google Play!
 
 **Save location:**
 ```
-C:\Users\Nalivator3000\LexiBooster-Android
+C:\Users\Nalivator3000\LexyBooster-Android
 ```
 
 **Language:**
@@ -124,7 +124,7 @@ dependencies {
 
 1. В панели **Project** слева:
    ```
-   app → src → main → java → com → lexibooster → app
+   app → src → main → java → com → lexybooster → app
    ```
 
 2. Правой кнопкой на папке **app** → **New → Java Class**
@@ -139,7 +139,7 @@ dependencies {
 5. Замените весь код в созданном файле на:
 
 ```java
-package com.lexibooster.app;
+package com.lexybooster.app;
 
 import android.net.Uri;
 import android.os.Bundle;
@@ -175,14 +175,14 @@ public class LauncherActivity extends com.google.androidbrowserhelper.trusted.La
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
-    package="com.lexibooster.app">
+    package="com.lexybooster.app">
 
     <uses-permission android:name="android.permission.INTERNET" />
 
     <application
         android:allowBackup="true"
         android:icon="@mipmap/ic_launcher"
-        android:label="LexiBooster"
+        android:label="LexyBooster"
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/Theme.AppCompat.Light.NoActionBar"
@@ -260,7 +260,7 @@ public class LauncherActivity extends com.google.androidbrowserhelper.trusted.La
 
 6. APK находится в:
    ```
-   C:\Users\Nalivator3000\LexiBooster-Android\app\build\outputs\apk\debug\app-debug.apk
+   C:\Users\Nalivator3000\LexyBooster-Android\app\build\outputs\apk\debug\app-debug.apk
    ```
 
 ---
@@ -313,11 +313,11 @@ Debug APK нельзя загрузить в Google Play. Нужен **signed re
 
 4. Заполни:
    ```
-   Key store path: C:\Users\Nalivator3000\lexibooster-keystore.jks
+   Key store path: C:\Users\Nalivator3000\lexybooster-keystore.jks
    Password: [твой сильный пароль - СОХРАНИ ЕГО!]
    Confirm: [повтори пароль]
 
-   Alias: lexibooster-key
+   Alias: lexybooster-key
    Password: [тот же пароль]
    Confirm: [повтори]
 
@@ -325,8 +325,8 @@ Debug APK нельзя загрузить в Google Play. Нужен **signed re
 
    Certificate:
    First and Last Name: [твое имя]
-   Organizational Unit: LexiBooster
-   Organization: LexiBooster Team
+   Organizational Unit: LexyBooster
+   Organization: LexyBooster Team
    City: [твой город]
    State: [твой регион]
    Country Code: RU
@@ -344,7 +344,7 @@ Debug APK нельзя загрузить в Google Play. Нужен **signed re
 
 9. Signed APK будет в:
    ```
-   C:\Users\Nalivator3000\LexiBooster-Android\app\release\app-release.apk
+   C:\Users\Nalivator3000\LexyBooster-Android\app\release\app-release.apk
    ```
 
 ⚠️ **КРИТИЧЕСКИ ВАЖНО:**
@@ -372,7 +372,7 @@ AAB (Android App Bundle) - предпочтительный формат для 
 
 7. AAB будет в:
    ```
-   C:\Users\Nalivator3000\LexiBooster-Android\app\release\app-release.aab
+   C:\Users\Nalivator3000\LexyBooster-Android\app\release\app-release.aab
    ```
 
 ---
@@ -427,5 +427,5 @@ AAB (Android App Bundle) - предпочтительный формат для 
 ---
 
 **Создано:** 2025-10-26
-**Для проекта:** LexiBooster
+**Для проекта:** LexyBooster
 **Версия:** 1.0

@@ -124,7 +124,7 @@
 - [x] **Mobile UX fixes** ✅ DONE
   - ✅ Отключены XP popup уведомления
   - ✅ Исправлена загрузка переводов на production
-  - ✅ Ребрендинг: German Words Learning → LexiBooster
+  - ✅ Ребрендинг: German Words Learning → LexyBooster
   - ✅ Исправлено дублирование текста навигации
   - ✅ Отключен auto-focus клавиатуры
   - ✅ Скрытие letter tiles после ответа

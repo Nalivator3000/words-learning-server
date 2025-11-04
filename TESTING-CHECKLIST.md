@@ -191,7 +191,7 @@
 
 1. ✅ XP popup notifications disabled during exercises
 2. ✅ Translation keys no longer showing as [key_name]
-3. ✅ App title changed to "LexiBooster"
+3. ✅ App title changed to "LexyBooster"
 4. ✅ Navigation buttons no longer show duplicate text
 5. ✅ Keyboard doesn't auto-open in word building exercise
 6. ✅ Next button visible without scrolling after answer

@@ -1,4 +1,4 @@
-# 🔞 Content Rating Questionnaire - LexiBooster
+# 🔞 Content Rating Questionnaire - LexyBooster
 
 ## Quick Reference for IARC Content Rating
 
@@ -8,7 +8,7 @@ Use these answers when filling out the Google Play Console Content Rating questi
 
 ## 📋 General Information
 
-**App Name:** LexiBooster
+**App Name:** LexyBooster
 **Category:** Education, Reference, or News
 **Developer Email:** (Your email)
 **Expected Rating:** Everyone (3+) or Everyone 10+
@@ -198,7 +198,7 @@ Use these answers when filling out the Google Play Console Content Rating questi
 
 ## 📊 Expected Content Ratings
 
-Based on the answers above, LexiBooster should receive:
+Based on the answers above, LexyBooster should receive:
 
 ### Global Ratings:
 
@@ -274,7 +274,7 @@ Based on the answers above, LexiBooster should receive:
 
 4. **COPPA Compliance:**
    - If targeting children under 13, additional requirements apply
-   - LexiBooster is NOT specifically designed for children (safe answer)
+   - LexyBooster is NOT specifically designed for children (safe answer)
 
 ---
 
@@ -320,11 +320,11 @@ Update content rating if you add:
 - ✅ Ads (especially if third-party)
 - ✅ Access to sensitive permissions (camera, contacts, etc.)
 
-For LexiBooster's current feature set, **no updates needed** for foreseeable future.
+For LexyBooster's current feature set, **no updates needed** for foreseeable future.
 
 ---
 
 **Created:** 2025-10-25
-**App:** LexiBooster v1.0
+**App:** LexyBooster v1.0
 **Status:** Ready for submission
 **Last Reviewed:** 2025-10-25

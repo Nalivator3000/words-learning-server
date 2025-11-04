@@ -18,7 +18,7 @@
     ],
     "target": {
       "namespace": "android_app",
-      "package_name": "com.lexibooster.app",
+      "package_name": "com.lexybooster.app",
       "sha256_cert_fingerprints": [
         "1A66E0A7E4B1920ADA5CB6E2CC9FCFA6D0EB05E542E3C43B98C447B22D549A48"
       ]

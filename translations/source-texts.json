@@ -1629,13 +1629,13 @@
     "it": "Выйти"
   },
   "german_words_learning": {
-    "source": "LexiBooster Dashboard",
-    "en": "LexiBooster Dashboard",
-    "ru": "LexiBooster Dashboard",
-    "de": "LexiBooster Dashboard",
-    "es": "LexiBooster Dashboard",
-    "fr": "LexiBooster Dashboard",
-    "it": "LexiBooster Dashboard"
+    "source": "LexyBooster Dashboard",
+    "en": "LexyBooster Dashboard",
+    "ru": "LexyBooster Dashboard",
+    "de": "LexyBooster Dashboard",
+    "es": "LexyBooster Dashboard",
+    "fr": "LexyBooster Dashboard",
+    "it": "LexyBooster Dashboard"
   },
   "_67": {
     "source": "Изучаемые слова",
@@ -5328,13 +5328,13 @@
     "it": "Ripeti il tour interattivo delle funzionalità"
   },
   "welcome": {
-    "source": "Welcome to LexiBooster",
-    "en": "Welcome to LexiBooster",
-    "ru": "Добро пожаловать в LexiBooster",
-    "de": "Willkommen bei LexiBooster",
-    "es": "Bienvenido a LexiBooster",
-    "fr": "Bienvenue à LexiBooster",
-    "it": "Benvenuto su LexiBooster"
+    "source": "Welcome to LexyBooster",
+    "en": "Welcome to LexyBooster",
+    "ru": "Добро пожаловать в LexyBooster",
+    "de": "Willkommen bei LexyBooster",
+    "es": "Bienvenido a LexyBooster",
+    "fr": "Bienvenue à LexyBooster",
+    "it": "Benvenuto su LexyBooster"
   },
   "login": {
     "source": "Login",
@@ -5400,13 +5400,13 @@
     "it": "Conferma password"
   },
   "appTitle": {
-    "source": "LexiBooster",
-    "en": "LexiBooster",
-    "ru": "Изучение немецких слов",
-    "de": "Deutsche Wörter lernen",
-    "es": "Aprendizaje de palabras alemanas",
-    "fr": "Apprentissage des mots allemands",
-    "it": "Apprendimento parole tedesche"
+    "source": "LexyBooster",
+    "en": "LexyBooster",
+    "ru": "LexyBooster",
+    "de": "LexyBooster",
+    "es": "LexyBooster",
+    "fr": "LexyBooster",
+    "it": "LexyBooster"
   },
   "home": {
     "source": "Home",

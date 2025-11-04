@@ -90,7 +90,7 @@ DEBUG=false
 
 ```
 Railway Project
-├── Service: lexibooster-server
+├── Service: lexybooster-server
 │   ├── Variables:
 │   │   ├── DATABASE_URL (reference to Postgres)
 │   │   ├── NODE_ENV=production

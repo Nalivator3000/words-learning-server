@@ -215,8 +215,8 @@ app.use(cors({
 
 ```json
 {
-  "name": "LexiBooster - Language Learning & SRS",
-  "short_name": "LexiBooster",
+  "name": "LexyBooster - Language Learning & SRS",
+  "short_name": "LexyBooster",
   "start_url": "https://app.lexybooster.com/",
   "scope": "https://app.lexybooster.com/",
   ...

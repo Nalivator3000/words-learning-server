@@ -177,8 +177,8 @@ app.use(cors({
 
 ```json
 {
-  "name": "LexiBooster - Language Learning & SRS",
-  "short_name": "LexiBooster",
+  "name": "LexyBooster - Language Learning & SRS",
+  "short_name": "LexyBooster",
   "start_url": "https://lexybooster.com/",
   "scope": "https://lexybooster.com/",
   "display": "standalone",
@@ -242,7 +242,7 @@ https://www.ssllabs.com/ssltest/analyze.html?d=lexybooster.com
 https://lexybooster.com
 ```
 
-Должно загрузиться ваше приложение LexiBooster с зелёным замочком 🔒
+Должно загрузиться ваше приложение LexyBooster с зелёным замочком 🔒
 
 ### 4. Проверка API
 
@@ -312,7 +312,7 @@ curl https://lexybooster.com/api/health
 │         Railway (Port 8080)                 │
 │  • Node.js + Express                        │
 │  • PostgreSQL Database                      │
-│  • LexiBooster Application                  │
+│  • LexyBooster Application                  │
 └─────────────────────────────────────────────┘
 ```
 
