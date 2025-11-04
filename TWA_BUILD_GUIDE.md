@@ -73,8 +73,10 @@ cd c:/Users/Nalivator3000/words-learning-server
 
 Initialize TWA project:
 ```bash
-bubblewrap init --manifest https://words-learning-server-copy-production.up.railway.app/manifest.json
+bubblewrap init --manifest https://words-learning-server-production.up.railway.app/manifest.json
 ```
+
+**Note:** A pre-configured `twa-manifest.json` already exists in the project root with correct settings for v5.1.0.
 
 **Bubblewrap will ask questions. Here are the answers:**
 
@@ -90,7 +92,7 @@ LexyBooster
 
 #### Question 3: Application ID (package name)
 ```
-com.LexyBooster.app
+com.lexybooster.app
 ```
 ⚠️ **IMPORTANT:** This is permanent! Cannot be changed after first upload to Google Play.
 
@@ -126,12 +128,12 @@ default
 
 #### Question 9: Icon URL
 ```
-https://words-learning-server-copy-production.up.railway.app/icons/icon-512x512.png
+https://words-learning-server-production.up.railway.app/icons/icon-512x512.png
 ```
 
 #### Question 10: Maskable icon URL
 ```
-https://words-learning-server-copy-production.up.railway.app/icons/maskable-icon-512x512.png
+https://words-learning-server-production.up.railway.app/icons/icon-512x512-maskable.png
 ```
 
 #### Question 11: Shortcuts (optional)
@@ -414,8 +416,8 @@ Main configuration file created by Bubblewrap.
     "path": "./android/keystore.jks",
     "alias": "androiddebugkey"
   },
-  "appVersionName": "1.0.0",
-  "appVersionCode": 1
+  "appVersionName": "5.1.0",
+  "appVersionCode": 510
 }
 ```
 

@@ -1,0 +1,43 @@
+{
+  "packageId": "com.lexybooster.app",
+  "name": "LexyBooster",
+  "launcherName": "LexyBooster",
+  "displayMode": "standalone",
+  "orientation": "portrait",
+  "themeColor": "#6366f1",
+  "backgroundColor": "#1a1a2e",
+  "startUrl": "/?source=twa",
+  "iconUrl": "https://words-learning-server-production.up.railway.app/icons/icon-512x512.png",
+  "maskableIconUrl": "https://words-learning-server-production.up.railway.app/icons/icon-512x512-maskable.png",
+  "webManifestUrl": "https://words-learning-server-production.up.railway.app/manifest.json",
+  "host": "words-learning-server-production.up.railway.app",
+  "shortcuts": [
+    {
+      "name": "Study Words",
+      "short_name": "Study",
+      "url": "/?section=study",
+      "iconUrl": "https://words-learning-server-production.up.railway.app/icons/icon-96x96.png"
+    },
+    {
+      "name": "Review Words",
+      "short_name": "Review",
+      "url": "/?section=review",
+      "iconUrl": "https://words-learning-server-production.up.railway.app/icons/icon-96x96.png"
+    }
+  ],
+  "enableNotifications": true,
+  "features": {
+    "locationDelegation": {
+      "enabled": false
+    },
+    "playBilling": {
+      "enabled": false
+    }
+  },
+  "signingKey": {
+    "path": "./lexybooster-release-key.jks",
+    "alias": "lexybooster"
+  },
+  "appVersionName": "5.1.0",
+  "appVersionCode": 510
+}
