@@ -36,7 +36,7 @@
   },
   "signingKey": {
     "path": "./lexybooster-release-key.jks",
-    "alias": "lexybooster"
+    "alias": "lexibooster-upload"
   },
   "appVersionName": "5.1.0",
   "appVersionCode": 510
