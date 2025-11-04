@@ -5333,7 +5333,7 @@
     "ru": "Добро пожаловать в LexyBooster",
     "de": "Willkommen bei LexyBooster",
     "es": "Bienvenido a LexyBooster",
-    "fr": "Bienvenue à LexyBooster",
+    "fr": "Bienvenue sur LexyBooster",
     "it": "Benvenuto su LexyBooster"
   },
   "login": {
@@ -5465,11 +5465,11 @@
   "dashboard": {
     "source": "Dashboard",
     "en": "Dashboard",
-    "ru": "Панель управления",
+    "ru": "Главная",
     "de": "Dashboard",
-    "es": "Panel",
+    "es": "Panel de control",
     "fr": "Tableau de bord",
-    "it": "Pannello"
+    "it": "Pannello di controllo"
   },
   "studyingWords": {
     "source": "Studying",
