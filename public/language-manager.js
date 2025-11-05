@@ -659,53 +659,47 @@ class LanguageManager {
     // Audio language detection for TTS
     getAudioLanguageCode(text, languagePair) {
         if (!languagePair) {
-            console.log('⚠️ No language pair, using default de-DE');
-            return 'de-DE'; // Default fallback
+            console.log('⚠️ No language pair, using default en-US');
+            return 'en-US'; // Default fallback
         }
 
         const studyingLang = languagePair.fromLanguage;
         const nativeLang = languagePair.toLanguage;
 
         console.log(`🔍 Language detection for "${text}"`);
-        console.log(`   Studying: ${studyingLang}, Native: ${nativeLang}`);
+        console.log(`   Language pair: ${studyingLang} (studying) ↔ ${nativeLang} (native)`);
 
-        // Step 1: Check if text contains characters specific to native language
-        const hasNativeChars = this.detectNativeLanguage(text, nativeLang);
+        // Check if text is in studying language
+        const isStudyingLang = this.detectLanguage(text, studyingLang);
 
-        // Step 2: Check if text contains characters specific to studying language
-        const hasStudyingChars = this.detectNativeLanguage(text, studyingLang);
+        // Check if text is in native language
+        const isNativeLang = this.detectLanguage(text, nativeLang);
 
         let audioCode;
 
-        if (hasNativeChars && !hasStudyingChars) {
-            // Clear native language match
-            audioCode = this.getAudioCode(nativeLang);
-            console.log(`   ✅ Using NATIVE voice (detected chars): ${audioCode}`);
-        } else if (hasStudyingChars && !hasNativeChars) {
-            // Clear studying language match
+        if (isStudyingLang && !isNativeLang) {
+            // Text is clearly in studying language
             audioCode = this.getAudioCode(studyingLang);
-            console.log(`   ✅ Using STUDYING voice (detected chars): ${audioCode}`);
+            console.log(`   ✅ Detected STUDYING language → ${audioCode}`);
+        } else if (isNativeLang && !isStudyingLang) {
+            // Text is clearly in native language
+            audioCode = this.getAudioCode(nativeLang);
+            console.log(`   ✅ Detected NATIVE language → ${audioCode}`);
+        } else if (studyingLang === nativeLang) {
+            // Same language pair (e.g., Spanish → Spanish)
+            audioCode = this.getAudioCode(studyingLang);
+            console.log(`   ✅ Same language pair → ${audioCode}`);
         } else {
-            // Ambiguous or no special chars - use context-based heuristics
-            // If text is very short (1-3 words) and no special chars, likely studying language
-            const wordCount = text.trim().split(/\s+/).length;
-
-            if (wordCount <= 3 && !hasNativeChars) {
-                // Short text without native chars = likely studying language word
-                audioCode = this.getAudioCode(studyingLang);
-                console.log(`   ✅ Using STUDYING voice (short text heuristic): ${audioCode}`);
-            } else {
-                // Longer text = likely native language explanation/translation
-                audioCode = this.getAudioCode(nativeLang);
-                console.log(`   ✅ Using NATIVE voice (long text heuristic): ${audioCode}`);
-            }
+            // Ambiguous - default to studying language for words being learned
+            audioCode = this.getAudioCode(studyingLang);
+            console.log(`   ⚠️ Ambiguous, defaulting to STUDYING language → ${audioCode}`);
         }
 
         return audioCode;
     }
 
-    detectNativeLanguage(text, nativeLanguage) {
-        if (!text || !nativeLanguage) return false;
+    detectLanguage(text, language) {
+        if (!text || !language) return false;
 
         const lowerText = text.toLowerCase().trim();
 
@@ -716,7 +710,12 @@ class LanguageManager {
             'German': /[äöüßÄÖÜ]/,
             'Spanish': /[ñáéíóúüÑÁÉÍÓÚÜ¿¡]/,
             'French': /[àâäéèêëïîôöùûüÿçÀÂÄÉÈÊËÏÎÔÖÙÛÜŸÇ]/,
-            'Italian': /[àèéìíîòóùúÀÈÉÌÍÎÒÓÙÚ]/
+            'Italian': /[àèéìíîòóùúÀÈÉÌÍÎÒÓÙÚ]/,
+            'Portuguese': /[àáâãçéêíóôõúüÀÁÂÃÇÉÊÍÓÔÕÚÜ]/,
+            'Chinese': /[\u4e00-\u9fff]/,
+            'Japanese': /[\u3040-\u309f\u30a0-\u30ff]/,
+            'Korean': /[\uac00-\ud7af]/,
+            'Arabic': /[\u0600-\u06ff]/
         };
 
         // Common words dictionary for better detection
@@ -726,17 +725,18 @@ class LanguageManager {
             'French': ['le', 'de', 'un', 'être', 'et', 'à', 'il', 'avoir', 'ne', 'je', 'son', 'que', 'se', 'qui', 'ce', 'dans', 'en', 'du', 'elle', 'au', 'pour', 'pas', 'par', 'sur'],
             'Italian': ['il', 'di', 'e', 'la', 'un', 'a', 'per', 'è', 'che', 'in', 'da', 'non', 'con', 'si', 'dei', 'alla', 'delle', 'gli', 'una', 'sono'],
             'Russian': ['и', 'в', 'не', 'на', 'я', 'быть', 'он', 'с', 'что', 'а', 'это', 'весь', 'то', 'мочь', 'такой', 'для', 'как', 'но', 'так', 'она'],
-            'English': ['the', 'be', 'to', 'of', 'and', 'a', 'in', 'that', 'have', 'I', 'it', 'for', 'not', 'on', 'with', 'he', 'as', 'you', 'do', 'at']
+            'English': ['the', 'be', 'to', 'of', 'and', 'a', 'in', 'that', 'have', 'I', 'it', 'for', 'not', 'on', 'with', 'he', 'as', 'you', 'do', 'at'],
+            'Portuguese': ['o', 'a', 'de', 'que', 'e', 'do', 'da', 'em', 'um', 'para', 'é', 'com', 'não', 'uma', 'os', 'no', 'se', 'na', 'por', 'mais']
         };
 
         // Step 1: Check for language-specific characters
-        const pattern = patterns[nativeLanguage];
+        const pattern = patterns[language];
         if (pattern && pattern.test(text)) {
             return true;
         }
 
         // Step 2: Check for common words in the language
-        const words = commonWords[nativeLanguage];
+        const words = commonWords[language];
         if (words) {
             const textWords = lowerText.split(/\s+/);
             // If any word in text matches common words, it's likely this language
@@ -744,6 +744,11 @@ class LanguageManager {
         }
 
         return false;
+    }
+
+    // Backward compatibility alias
+    detectNativeLanguage(text, nativeLanguage) {
+        return this.detectLanguage(text, nativeLanguage);
     }
     
     getAudioCode(language) {
@@ -753,9 +758,14 @@ class LanguageManager {
             'German': 'de-DE',
             'Spanish': 'es-ES',
             'French': 'fr-FR',
-            'Italian': 'it-IT'
+            'Italian': 'it-IT',
+            'Portuguese': 'pt-PT',
+            'Chinese': 'zh-CN',
+            'Japanese': 'ja-JP',
+            'Korean': 'ko-KR',
+            'Arabic': 'ar-SA'
         };
-        
+
         return audioCodes[language] || 'en-US';
     }
 }
