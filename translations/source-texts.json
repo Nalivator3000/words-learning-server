@@ -4895,6 +4895,33 @@
     "fr": "Afficher la réponse",
     "it": "Mostra risposta"
   },
+  "skip": {
+    "source": "Skip",
+    "en": "Skip",
+    "ru": "Пропустить",
+    "de": "Überspringen",
+    "es": "Saltar",
+    "fr": "Passer",
+    "it": "Salta"
+  },
+  "skipped": {
+    "source": "Skipped",
+    "en": "Skipped",
+    "ru": "Пропущено",
+    "de": "Übersprungen",
+    "es": "Saltado",
+    "fr": "Passé",
+    "it": "Saltato"
+  },
+  "correctAnswerWas": {
+    "source": "The correct answer was",
+    "en": "The correct answer was",
+    "ru": "Правильный ответ",
+    "de": "Die richtige Antwort war",
+    "es": "La respuesta correcta era",
+    "fr": "La bonne réponse était",
+    "it": "La risposta corretta era"
+  },
   "quizCompleted": {
     "source": "Quiz Completed!",
     "en": "Quiz Completed!",

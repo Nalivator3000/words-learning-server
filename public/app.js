@@ -921,6 +921,19 @@ schreiben,Sie schreibt einen Brief.,Писать,Она пишет письmо.`
                 button.onclick = () => this.handleMultipleChoice(choice.text, button);
                 answerArea.appendChild(button);
             });
+
+            // Add skip button for multiple choice
+            const skipBtnContainer = document.createElement('div');
+            skipBtnContainer.style.marginTop = '1rem';
+            skipBtnContainer.style.textAlign = 'center';
+
+            const skipBtn = document.createElement('button');
+            skipBtn.className = 'action-btn show-answer-btn';
+            skipBtn.textContent = i18n.t('skip');
+            skipBtn.onclick = () => this.skipMultipleChoice();
+            skipBtnContainer.appendChild(skipBtn);
+
+            answerArea.appendChild(skipBtnContainer);
         } else if (question.type === 'wordBuilding') {
             this.renderWordBuildingInterface(question, answerArea);
         } else {
@@ -1006,6 +1019,19 @@ schreiben,Sie schreibt einen Brief.,Писать,Она пишет письmо.`
                 button.onclick = () => this.handleReviewMultipleChoice(choice.text, button);
                 answerArea.appendChild(button);
             });
+
+            // Add skip button for multiple choice in review mode
+            const skipBtnContainer = document.createElement('div');
+            skipBtnContainer.style.marginTop = '1rem';
+            skipBtnContainer.style.textAlign = 'center';
+
+            const skipBtn = document.createElement('button');
+            skipBtn.className = 'action-btn show-answer-btn';
+            skipBtn.textContent = i18n.t('skip');
+            skipBtn.onclick = () => this.skipReviewMultipleChoice();
+            skipBtnContainer.appendChild(skipBtn);
+
+            answerArea.appendChild(skipBtnContainer);
         } else if (question.type === 'wordBuilding') {
             this.renderWordBuildingInterface(question, answerArea);
         } else {
@@ -1055,7 +1081,7 @@ schreiben,Sie schreibt einen Brief.,Писать,Она пишет письmо.`
         const result = await quizManager.checkAnswer(answer);
         this.showAnswerFeedback(result, 'feedback');
         this.disableChoiceButtons();
-        
+
         if (result.correct) {
             buttonEl.classList.add('correct');
             // Add audio button to correct answer if it's foreign language
@@ -1075,6 +1101,35 @@ schreiben,Sie schreibt einen Brief.,Писать,Она пишет письmо.`
             });
         }
 
+        this.showNextButton();
+    }
+
+    async skipMultipleChoice() {
+        // Submit empty answer to mark as skipped
+        const result = await quizManager.checkAnswer('__SKIP__');
+
+        // Show feedback indicating skipped
+        const feedback = document.getElementById('feedback');
+        feedback.innerHTML = `
+            <div class="feedback-content skipped">
+                <p><strong>${i18n.t('skipped')}</strong></p>
+                <p>${i18n.t('correctAnswerWas')}: <strong>${result.correctAnswer}</strong></p>
+            </div>
+        `;
+        feedback.className = 'feedback incorrect';
+
+        // Highlight correct answer
+        document.querySelectorAll('.choice-btn').forEach(btn => {
+            const btnText = btn.textContent.replace(/^\d+\s*/, '').trim();
+            if (btnText === result.correctAnswer) {
+                btn.classList.add('correct');
+                if (this.shouldShowAudioButton(result.correctAnswer)) {
+                    this.addAudioToButton(btn, result.correctAnswer);
+                }
+            }
+        });
+
+        this.disableChoiceButtons();
         this.showNextButton();
     }
 
@@ -1107,7 +1162,7 @@ schreiben,Sie schreibt einen Brief.,Писать,Она пишет письmо.`
         const result = await quizManager.checkAnswer(answer);
         this.showAnswerFeedback(result, 'reviewFeedback');
         this.disableReviewChoiceButtons();
-        
+
         if (result.correct) {
             buttonEl.classList.add('correct');
             // Add audio button to correct answer if it's foreign language
@@ -1126,6 +1181,35 @@ schreiben,Sie schreibt einen Brief.,Писать,Она пишет письmо.`
             });
         }
 
+        this.showReviewNextButton();
+    }
+
+    async skipReviewMultipleChoice() {
+        // Submit empty answer to mark as skipped
+        const result = await quizManager.checkAnswer('__SKIP__');
+
+        // Show feedback indicating skipped
+        const feedback = document.getElementById('reviewFeedback');
+        feedback.innerHTML = `
+            <div class="feedback-content skipped">
+                <p><strong>${i18n.t('skipped')}</strong></p>
+                <p>${i18n.t('correctAnswerWas')}: <strong>${result.correctAnswer}</strong></p>
+            </div>
+        `;
+        feedback.className = 'feedback incorrect';
+
+        // Highlight correct answer
+        document.querySelectorAll('#reviewAnswerArea .choice-btn').forEach(btn => {
+            const btnText = btn.textContent.replace(/^\d+\s*/, '').trim();
+            if (btnText === result.correctAnswer) {
+                btn.classList.add('correct');
+                if (this.shouldShowAudioButton(result.correctAnswer)) {
+                    this.addAudioToButton(btn, result.correctAnswer);
+                }
+            }
+        });
+
+        this.disableReviewChoiceButtons();
         this.showReviewNextButton();
     }
 
