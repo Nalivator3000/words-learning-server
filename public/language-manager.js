@@ -669,18 +669,36 @@ class LanguageManager {
         console.log(`🔍 Language detection for "${text}"`);
         console.log(`   Studying: ${studyingLang}, Native: ${nativeLang}`);
 
-        // Improved language detection using specific character patterns
-        const isNativeLanguage = this.detectNativeLanguage(text, nativeLang);
+        // Step 1: Check if text contains characters specific to native language
+        const hasNativeChars = this.detectNativeLanguage(text, nativeLang);
 
-        console.log(`   Is native language (${nativeLang})? ${isNativeLanguage}`);
+        // Step 2: Check if text contains characters specific to studying language
+        const hasStudyingChars = this.detectNativeLanguage(text, studyingLang);
 
         let audioCode;
-        if (isNativeLanguage) {
+
+        if (hasNativeChars && !hasStudyingChars) {
+            // Clear native language match
             audioCode = this.getAudioCode(nativeLang);
-            console.log(`   ✅ Using NATIVE voice: ${audioCode}`);
-        } else {
+            console.log(`   ✅ Using NATIVE voice (detected chars): ${audioCode}`);
+        } else if (hasStudyingChars && !hasNativeChars) {
+            // Clear studying language match
             audioCode = this.getAudioCode(studyingLang);
-            console.log(`   ✅ Using STUDYING voice: ${audioCode}`);
+            console.log(`   ✅ Using STUDYING voice (detected chars): ${audioCode}`);
+        } else {
+            // Ambiguous or no special chars - use context-based heuristics
+            // If text is very short (1-3 words) and no special chars, likely studying language
+            const wordCount = text.trim().split(/\s+/).length;
+
+            if (wordCount <= 3 && !hasNativeChars) {
+                // Short text without native chars = likely studying language word
+                audioCode = this.getAudioCode(studyingLang);
+                console.log(`   ✅ Using STUDYING voice (short text heuristic): ${audioCode}`);
+            } else {
+                // Longer text = likely native language explanation/translation
+                audioCode = this.getAudioCode(nativeLang);
+                console.log(`   ✅ Using NATIVE voice (long text heuristic): ${audioCode}`);
+            }
         }
 
         return audioCode;
@@ -688,6 +706,8 @@ class LanguageManager {
 
     detectNativeLanguage(text, nativeLanguage) {
         if (!text || !nativeLanguage) return false;
+
+        const lowerText = text.toLowerCase().trim();
 
         // Language-specific character patterns
         const patterns = {
@@ -699,11 +719,31 @@ class LanguageManager {
             'Italian': /[àèéìíîòóùúÀÈÉÌÍÎÒÓÙÚ]/
         };
 
-        const pattern = patterns[nativeLanguage];
-        if (!pattern) return false;
+        // Common words dictionary for better detection
+        const commonWords = {
+            'German': ['der', 'die', 'das', 'ein', 'eine', 'und', 'ist', 'zu', 'mit', 'auf', 'für', 'von', 'dem', 'den', 'sich', 'nicht', 'auch', 'sein', 'werden', 'haben'],
+            'Spanish': ['el', 'la', 'de', 'que', 'y', 'a', 'en', 'un', 'ser', 'se', 'no', 'haber', 'por', 'con', 'su', 'para', 'como', 'estar', 'tener', 'hacer'],
+            'French': ['le', 'de', 'un', 'être', 'et', 'à', 'il', 'avoir', 'ne', 'je', 'son', 'que', 'se', 'qui', 'ce', 'dans', 'en', 'du', 'elle', 'au', 'pour', 'pas', 'par', 'sur'],
+            'Italian': ['il', 'di', 'e', 'la', 'un', 'a', 'per', 'è', 'che', 'in', 'da', 'non', 'con', 'si', 'dei', 'alla', 'delle', 'gli', 'una', 'sono'],
+            'Russian': ['и', 'в', 'не', 'на', 'я', 'быть', 'он', 'с', 'что', 'а', 'это', 'весь', 'то', 'мочь', 'такой', 'для', 'как', 'но', 'так', 'она'],
+            'English': ['the', 'be', 'to', 'of', 'and', 'a', 'in', 'that', 'have', 'I', 'it', 'for', 'not', 'on', 'with', 'he', 'as', 'you', 'do', 'at']
+        };
 
-        // Check if text contains characters specific to the native language
-        return pattern.test(text);
+        // Step 1: Check for language-specific characters
+        const pattern = patterns[nativeLanguage];
+        if (pattern && pattern.test(text)) {
+            return true;
+        }
+
+        // Step 2: Check for common words in the language
+        const words = commonWords[nativeLanguage];
+        if (words) {
+            const textWords = lowerText.split(/\s+/);
+            // If any word in text matches common words, it's likely this language
+            return textWords.some(word => words.includes(word));
+        }
+
+        return false;
     }
     
     getAudioCode(language) {
