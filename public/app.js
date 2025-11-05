@@ -1301,18 +1301,32 @@ schreiben,Sie schreibt einen Brief.,Писать,Она пишет письmо.`
     }
 
     showNextButton() {
+        const nextBtn = document.getElementById('nextBtn');
+        const finishBtn = document.getElementById('finishStudyBtn');
+
         if (quizManager.isQuizComplete()) {
-            document.getElementById('finishStudyBtn').classList.remove('hidden');
+            // On last question, show finish button instead of next
+            nextBtn.classList.add('hidden');
+            finishBtn.classList.remove('hidden');
         } else {
-            document.getElementById('nextBtn').classList.remove('hidden');
+            // On regular questions, show next button
+            nextBtn.classList.remove('hidden');
+            finishBtn.classList.add('hidden');
         }
     }
 
     showReviewNextButton() {
+        const nextBtn = document.getElementById('reviewNextBtn');
+        const finishBtn = document.getElementById('finishReviewBtn');
+
         if (quizManager.isQuizComplete()) {
-            document.getElementById('finishReviewBtn').classList.remove('hidden');
+            // On last question, show finish button instead of next
+            nextBtn.classList.add('hidden');
+            finishBtn.classList.remove('hidden');
         } else {
-            document.getElementById('reviewNextBtn').classList.remove('hidden');
+            // On regular questions, show next button
+            nextBtn.classList.remove('hidden');
+            finishBtn.classList.add('hidden');
         }
     }
 
