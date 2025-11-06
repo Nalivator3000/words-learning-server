@@ -9,13 +9,18 @@ Last Updated: 2025-10-24 | Status: 66% Complete | Next: Screenshots
 ## 🚀 START HERE
 
 ### New to the Project?
-**→ [README_ANDROID_RELEASE.md](README_ANDROID_RELEASE.md)** - Project overview & status
+**→ [README.md](README.md)** - Project overview
+**→ [DEVELOPMENT_WORKFLOW.md](DEVELOPMENT_WORKFLOW.md)** - **Development policies & workflow**
 
 ### Ready to Work?
-**→ [QUICK_START.md](QUICK_START.md)** - Priority action plan
+**→ [PLAN.md](PLAN.md)** - Full feature roadmap
+**→ [TODO-SUMMARY.md](TODO-SUMMARY.md)** - Extracted todo list
+**→ [BACKLOG.md](BACKLOG.md)** - Deferred features
 
-### Need Current Status?
-**→ [SESSION_REPORT.md](SESSION_REPORT.md)** - Latest work summary
+### Android Release (Separate Track)?
+**→ [QUICK_START.md](QUICK_START.md)** - Android release priority plan
+**→ [README_ANDROID_RELEASE.md](README_ANDROID_RELEASE.md)** - Android release overview
+**→ [SESSION_REPORT.md](SESSION_REPORT.md)** - Latest Android work summary
 
 ---
 
