@@ -129,6 +129,12 @@
             duelsLink.rel = 'stylesheet';
             duelsLink.href = 'duels-ui.css?v=' + Date.now();
             document.head.appendChild(duelsLink);
+
+            // Load duel gameplay CSS
+            const duelGameplayLink = document.createElement('link');
+            duelGameplayLink.rel = 'stylesheet';
+            duelGameplayLink.href = 'duel-gameplay.css?v=' + Date.now();
+            document.head.appendChild(duelGameplayLink);
         })();
     </script>
 </head>
@@ -960,6 +966,7 @@
     <script src="personal-insights-ui.js"></script>
     <script src="friends-ui.js"></script>
     <script src="duels-ui.js"></script>
+    <script src="duel-gameplay.js"></script>
     <script src="app.js"></script>
 </body>
 </html>

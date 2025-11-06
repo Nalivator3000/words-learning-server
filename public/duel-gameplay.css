@@ -1,0 +1,461 @@
+/* Duel Gameplay Styles */
+
+.duel-gameplay {
+    max-width: 900px;
+    margin: 0 auto;
+}
+
+/* Gameplay Header */
+.duel-gameplay-header {
+    background: var(--card-bg, rgba(255, 255, 255, 0.05));
+    backdrop-filter: blur(20px);
+    border-radius: 20px;
+    padding: 2rem;
+    margin-bottom: 2rem;
+    box-shadow: 0 8px 32px rgba(0, 0, 0, 0.2);
+}
+
+.duel-players {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin-bottom: 1.5rem;
+}
+
+.player-info {
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+    flex: 1;
+}
+
+.player-info.you {
+    justify-content: flex-start;
+}
+
+.player-info.opponent {
+    justify-content: flex-end;
+    flex-direction: row-reverse;
+}
+
+.player-avatar {
+    width: 60px;
+    height: 60px;
+    border-radius: 50%;
+    background: linear-gradient(135deg, var(--primary-color), var(--secondary-color));
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 2rem;
+    border: 3px solid rgba(255, 255, 255, 0.2);
+}
+
+.player-details {
+    display: flex;
+    flex-direction: column;
+    gap: 0.25rem;
+}
+
+.player-name {
+    font-size: 1.1rem;
+    font-weight: 600;
+    color: var(--text-color);
+}
+
+.player-score {
+    font-size: 1.5rem;
+    font-weight: 700;
+    background: linear-gradient(135deg, var(--primary-color), var(--secondary-color));
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+}
+
+.vs-divider {
+    font-size: 1.5rem;
+    font-weight: 700;
+    color: var(--text-secondary, rgba(255, 255, 255, 0.4));
+    padding: 0 1rem;
+}
+
+.duel-timer {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 0.5rem;
+    font-size: 1.5rem;
+    font-weight: 700;
+}
+
+.timer-icon {
+    font-size: 2rem;
+}
+
+.timer-value {
+    font-family: 'Courier New', monospace;
+    color: var(--primary-color);
+}
+
+/* Progress Bar */
+.duel-progress {
+    margin-bottom: 2rem;
+}
+
+.progress-text {
+    text-align: center;
+    margin-bottom: 0.5rem;
+    font-size: 1rem;
+    color: var(--text-secondary, rgba(255, 255, 255, 0.8));
+}
+
+.progress-bar {
+    width: 100%;
+    height: 12px;
+    background: rgba(255, 255, 255, 0.1);
+    border-radius: 6px;
+    overflow: hidden;
+}
+
+.progress-fill {
+    height: 100%;
+    background: linear-gradient(135deg, var(--primary-color), var(--secondary-color));
+    transition: width 0.3s ease;
+}
+
+/* Question Container */
+.duel-question-container {
+    min-height: 400px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.duel-question-card {
+    background: var(--card-bg, rgba(255, 255, 255, 0.05));
+    backdrop-filter: blur(20px);
+    border-radius: 20px;
+    padding: 3rem;
+    width: 100%;
+    box-shadow: 0 8px 32px rgba(0, 0, 0, 0.2);
+}
+
+.question-word {
+    text-align: center;
+    margin-bottom: 3rem;
+}
+
+.question-word h2 {
+    font-size: 3rem;
+    margin: 0;
+    background: linear-gradient(135deg, var(--primary-color), var(--secondary-color));
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+}
+
+.question-options {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 1rem;
+}
+
+.option-btn {
+    background: rgba(255, 255, 255, 0.05);
+    border: 2px solid rgba(255, 255, 255, 0.1);
+    border-radius: 12px;
+    padding: 1.5rem;
+    font-size: 1.1rem;
+    color: var(--text-color);
+    cursor: pointer;
+    transition: all 0.3s ease;
+    min-height: 80px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.option-btn:hover:not(:disabled) {
+    transform: translateY(-4px);
+    box-shadow: 0 8px 24px rgba(0, 0, 0, 0.3);
+    border-color: var(--primary-color);
+    background: rgba(99, 102, 241, 0.1);
+}
+
+.option-btn:disabled {
+    cursor: not-allowed;
+}
+
+.option-btn.correct {
+    background: linear-gradient(135deg, #10b981, #059669);
+    border-color: #10b981;
+    color: white;
+    animation: correctPulse 0.5s ease;
+}
+
+.option-btn.wrong {
+    background: rgba(239, 68, 68, 0.3);
+    border-color: #ef4444;
+    animation: wrongShake 0.5s ease;
+}
+
+@keyframes correctPulse {
+    0%, 100% { transform: scale(1); }
+    50% { transform: scale(1.05); }
+}
+
+@keyframes wrongShake {
+    0%, 100% { transform: translateX(0); }
+    25% { transform: translateX(-10px); }
+    75% { transform: translateX(10px); }
+}
+
+/* Exit Button */
+.exit-duel-btn {
+    background: rgba(255, 255, 255, 0.05);
+    border: 1px solid rgba(255, 255, 255, 0.2);
+    border-radius: 12px;
+    padding: 0.75rem 1.5rem;
+    color: var(--text-color);
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    margin: 2rem auto 0;
+    display: block;
+}
+
+.exit-duel-btn:hover {
+    background: rgba(255, 255, 255, 0.1);
+    transform: translateY(-2px);
+}
+
+/* Results Screen */
+.duel-results {
+    background: var(--card-bg, rgba(255, 255, 255, 0.05));
+    backdrop-filter: blur(20px);
+    border-radius: 20px;
+    padding: 3rem;
+    text-align: center;
+    box-shadow: 0 8px 32px rgba(0, 0, 0, 0.2);
+    max-width: 600px;
+    margin: 0 auto;
+}
+
+.results-icon {
+    font-size: 6rem;
+    margin-bottom: 1rem;
+    animation: resultBounce 0.6s ease;
+}
+
+@keyframes resultBounce {
+    0%, 100% { transform: scale(1); }
+    50% { transform: scale(1.2); }
+}
+
+.results-title {
+    font-size: 2.5rem;
+    margin: 0 0 2rem 0;
+    background: linear-gradient(135deg, var(--primary-color), var(--secondary-color));
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+}
+
+.duel-results.win .results-title {
+    background: linear-gradient(135deg, #10b981, #059669);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+}
+
+.duel-results.loss .results-title {
+    background: linear-gradient(135deg, #ef4444, #dc2626);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+}
+
+.results-scores {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 2rem;
+    margin-bottom: 2rem;
+}
+
+.score-card {
+    display: flex;
+    flex-direction: column;
+    gap: 0.5rem;
+}
+
+.score-label {
+    font-size: 1rem;
+    color: var(--text-secondary, rgba(255, 255, 255, 0.6));
+}
+
+.score-value {
+    font-size: 3rem;
+    font-weight: 700;
+    background: linear-gradient(135deg, var(--primary-color), var(--secondary-color));
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+}
+
+.score-divider {
+    font-size: 2rem;
+    font-weight: 700;
+    color: var(--text-secondary, rgba(255, 255, 255, 0.4));
+}
+
+.results-stats {
+    display: flex;
+    justify-content: center;
+    gap: 3rem;
+    margin-bottom: 2rem;
+    padding: 1.5rem;
+    background: rgba(255, 255, 255, 0.03);
+    border-radius: 12px;
+}
+
+.stat-item {
+    display: flex;
+    flex-direction: column;
+    gap: 0.5rem;
+    text-align: center;
+}
+
+.stat-label {
+    font-size: 0.9rem;
+    color: var(--text-secondary, rgba(255, 255, 255, 0.6));
+}
+
+.stat-value {
+    font-size: 1.5rem;
+    font-weight: 700;
+    color: var(--primary-color);
+}
+
+.results-actions {
+    display: flex;
+    gap: 1rem;
+    justify-content: center;
+}
+
+.results-actions .action-btn {
+    padding: 0.75rem 2rem;
+    border-radius: 12px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.3s ease;
+}
+
+.results-actions .action-btn.primary {
+    background: linear-gradient(135deg, var(--primary-color), var(--secondary-color));
+    border: none;
+    color: white;
+}
+
+.results-actions .action-btn.primary:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 6px 24px rgba(99, 102, 241, 0.4);
+}
+
+/* Dark Mode */
+body.dark-theme .duel-gameplay-header,
+body.dark-theme .duel-question-card,
+body.dark-theme .duel-results {
+    background: rgba(26, 26, 46, 0.8);
+}
+
+body.dark-theme .option-btn {
+    background: rgba(26, 26, 46, 0.6);
+    border-color: rgba(255, 255, 255, 0.05);
+}
+
+body.dark-theme .option-btn:hover:not(:disabled) {
+    background: rgba(26, 26, 46, 0.8);
+}
+
+/* Mobile Responsive */
+@media (max-width: 768px) {
+    .duel-gameplay-header {
+        padding: 1.5rem;
+    }
+
+    .duel-players {
+        flex-direction: column;
+        gap: 1rem;
+    }
+
+    .player-info {
+        width: 100%;
+    }
+
+    .player-info.opponent {
+        flex-direction: row;
+    }
+
+    .vs-divider {
+        padding: 0.5rem 0;
+    }
+
+    .player-avatar {
+        width: 50px;
+        height: 50px;
+        font-size: 1.5rem;
+    }
+
+    .question-word h2 {
+        font-size: 2rem;
+    }
+
+    .question-options {
+        grid-template-columns: 1fr;
+    }
+
+    .duel-question-card {
+        padding: 2rem;
+    }
+
+    .duel-results {
+        padding: 2rem;
+    }
+
+    .results-icon {
+        font-size: 4rem;
+    }
+
+    .results-title {
+        font-size: 2rem;
+    }
+
+    .results-scores {
+        flex-direction: column;
+        gap: 1rem;
+    }
+
+    .score-divider {
+        transform: rotate(90deg);
+    }
+
+    .results-stats {
+        flex-direction: column;
+        gap: 1rem;
+    }
+}
+
+@media (max-width: 480px) {
+    .duel-timer {
+        font-size: 1.2rem;
+    }
+
+    .timer-icon {
+        font-size: 1.5rem;
+    }
+
+    .option-btn {
+        padding: 1rem;
+        min-height: 60px;
+    }
+}

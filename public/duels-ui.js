@@ -627,10 +627,14 @@ class DuelsUI {
     }
 
     async continueDuel(duelId) {
-        // TODO: Implement actual duel gameplay
-        // For now, just show a message
-        if (window.showToast) {
-            showToast('Duel gameplay coming soon! 🎮', 'info');
+        // Start duel gameplay
+        if (window.duelGameplay) {
+            await window.duelGameplay.start(duelId, this.userId);
+        } else {
+            console.error('Duel gameplay not loaded');
+            if (window.showToast) {
+                showToast('Error: Duel gameplay not available', 'error');
+            }
         }
     }
 

@@ -6973,5 +6973,59 @@
     "es": "Esperando respuesta",
     "fr": "En attente de réponse",
     "it": "In attesa di risposta"
+  },
+  "you": {
+    "source": "You",
+    "en": "You",
+    "ru": "Вы",
+    "de": "Du",
+    "es": "Tú",
+    "fr": "Vous",
+    "it": "Tu"
+  },
+  "question": {
+    "source": "Question",
+    "en": "Question",
+    "ru": "Вопрос",
+    "de": "Frage",
+    "es": "Pregunta",
+    "fr": "Question",
+    "it": "Domanda"
+  },
+  "exit_duel": {
+    "source": "Exit Duel",
+    "en": "Exit Duel",
+    "ru": "Выйти из дуэли",
+    "de": "Duell verlassen",
+    "es": "Salir del duelo",
+    "fr": "Quitter le duel",
+    "it": "Esci dal duello"
+  },
+  "questions_answered": {
+    "source": "Questions",
+    "en": "Questions",
+    "ru": "Вопросов",
+    "de": "Fragen",
+    "es": "Preguntas",
+    "fr": "Questions",
+    "it": "Domande"
+  },
+  "accuracy": {
+    "source": "Accuracy",
+    "en": "Accuracy",
+    "ru": "Точность",
+    "de": "Genauigkeit",
+    "es": "Precisión",
+    "fr": "Précision",
+    "it": "Precisione"
+  },
+  "back_to_duels": {
+    "source": "Back to Duels",
+    "en": "Back to Duels",
+    "ru": "Назад к дуэлям",
+    "de": "Zurück zu Duellen",
+    "es": "Volver a duelos",
+    "fr": "Retour aux duels",
+    "it": "Torna ai duelli"
   }
 }
