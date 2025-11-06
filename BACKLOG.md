@@ -7,31 +7,35 @@
 
 ---
 
-## 🎮 Геймификация (отложено)
+## 🎮 Геймификация (частично готово)
 
-### Weekly Challenges UI
+### Weekly Challenges UI ✅ ГОТОВО
 - **Backend:** ✅ Готов
-- **Frontend:** ❌ Требуется
+- **Frontend:** ✅ Готов (коммит 760198c)
 - **Приоритет:** Medium
 - **Описание:** UI для недельных челленджей (Weekly XP Master, Word Collector, Streak Keeper)
+- **Доступ:** Только для whitelisted users (demo, test, admin)
 
-### Leagues/Лиги UI
+### Leagues/Лиги UI ✅ ГОТОВО
 - **Backend:** ✅ Готов (7 лиг, promotion/demotion)
-- **Frontend:** ❌ Требуется
+- **Frontend:** ✅ Готов (коммит 176e7ec)
 - **Приоритет:** Medium
 - **Описание:** Leaderboard по лигам, продвижение/понижение
+- **Доступ:** Только для whitelisted users (demo, test, admin)
 
-### Personal Insights UI
+### Personal Insights UI ✅ ГОТОВО
 - **Backend:** ✅ Готов (5 типов инсайтов)
-- **Frontend:** ❌ Требуется
+- **Frontend:** ✅ Готов (коммит db16a86)
 - **Приоритет:** Medium
-- **Описание:** Best learning time, Progress comparison, Streak patterns
+- **Описание:** Best learning time, Progress comparison, Streak patterns, Milestones
+- **Доступ:** Только для whitelisted users (demo, test, admin)
 
-### Personal Rating UI
+### Personal Rating UI ✅ ГОТОВО
 - **Backend:** ✅ Готов (Weekly/monthly XP history)
-- **Frontend:** ❌ Требуется
+- **Frontend:** ✅ Готов (коммит 760198c)
 - **Приоритет:** Medium
 - **Описание:** Графики прогресса по неделям/месяцам
+- **Доступ:** Только для whitelisted users (demo, test, admin)
 
 ### Визуальные бейджи
 - **Backend:** ✅ Частично готов
