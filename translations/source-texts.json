@@ -6217,5 +6217,176 @@
     "es": "La semana se reinicia cada lunes",
     "fr": "La semaine se réinitialise chaque lundi",
     "it": "La settimana si resetta ogni lunedì"
+  },
+  "weekly_challenges_title": {
+    "source": "Недельные задания",
+    "en": "Weekly Challenges",
+    "ru": "Недельные задания",
+    "de": "Wöchentliche Herausforderungen",
+    "es": "Desafíos semanales",
+    "fr": "Défis hebdomadaires",
+    "it": "Sfide settimanali"
+  },
+  "weekly_challenges_description": {
+    "source": "Выполняй недельные задания и получай большие награды!",
+    "en": "Complete weekly challenges and earn big rewards!",
+    "ru": "Выполняй недельные задания и получай большие награды!",
+    "de": "Erfülle wöchentliche Herausforderungen und erhalte große Belohnungen!",
+    "es": "¡Completa desafíos semanales y gana grandes recompensas!",
+    "fr": "Relevez les défis hebdomadaires et obtenez de grandes récompenses !",
+    "it": "Completa le sfide settimanali e ottieni grandi ricompense!"
+  },
+  "week_of": {
+    "source": "Неделя",
+    "en": "Week of",
+    "ru": "Неделя",
+    "de": "Woche vom",
+    "es": "Semana del",
+    "fr": "Semaine du",
+    "it": "Settimana del"
+  },
+  "completed_this_week": {
+    "source": "Выполнено на этой неделе",
+    "en": "Completed this week",
+    "ru": "Выполнено на этой неделе",
+    "de": "Diese Woche abgeschlossen",
+    "es": "Completado esta semana",
+    "fr": "Complété cette semaine",
+    "it": "Completato questa settimana"
+  },
+  "total_completed": {
+    "source": "Всего выполнено",
+    "en": "Total completed",
+    "ru": "Всего выполнено",
+    "de": "Insgesamt abgeschlossen",
+    "es": "Total completado",
+    "fr": "Total complété",
+    "it": "Totale completato"
+  },
+  "claim_reward": {
+    "source": "Забрать награду",
+    "en": "Claim Reward",
+    "ru": "Забрать награду",
+    "de": "Belohnung abholen",
+    "es": "Reclamar recompensa",
+    "fr": "Réclamer la récompense",
+    "it": "Reclama ricompensa"
+  },
+  "claimed": {
+    "source": "Получено",
+    "en": "Claimed",
+    "ru": "Получено",
+    "de": "Abgeholt",
+    "es": "Reclamado",
+    "fr": "Réclamé",
+    "it": "Reclamato"
+  },
+  "in_progress": {
+    "source": "В процессе",
+    "en": "In Progress...",
+    "ru": "В процессе...",
+    "de": "In Bearbeitung...",
+    "es": "En progreso...",
+    "fr": "En cours...",
+    "it": "In corso..."
+  },
+  "personal_rating_title": {
+    "source": "Мой рейтинг",
+    "en": "My Rating",
+    "ru": "Мой рейтинг",
+    "de": "Meine Bewertung",
+    "es": "Mi clasificación",
+    "fr": "Mon classement",
+    "it": "La mia valutazione"
+  },
+  "personal_rating_description": {
+    "source": "Отслеживай свой прогресс по неделям и месяцам!",
+    "en": "Track your progress by weeks and months!",
+    "ru": "Отслеживай свой прогресс по неделям и месяцам!",
+    "de": "Verfolgen Sie Ihren Fortschritt nach Wochen und Monaten!",
+    "es": "¡Rastrea tu progreso por semanas y meses!",
+    "fr": "Suivez vos progrès par semaines et par mois !",
+    "it": "Traccia i tuoi progressi per settimane e mesi!"
+  },
+  "weekly": {
+    "source": "Еженедельно",
+    "en": "Weekly",
+    "ru": "Еженедельно",
+    "de": "Wöchentlich",
+    "es": "Semanal",
+    "fr": "Hebdomadaire",
+    "it": "Settimanale"
+  },
+  "monthly": {
+    "source": "Ежемесячно",
+    "en": "Monthly",
+    "ru": "Ежемесячно",
+    "de": "Monatlich",
+    "es": "Mensual",
+    "fr": "Mensuel",
+    "it": "Mensile"
+  },
+  "total_xp": {
+    "source": "Всего XP",
+    "en": "Total XP",
+    "ru": "Всего XP",
+    "de": "Gesamt XP",
+    "es": "XP total",
+    "fr": "XP total",
+    "it": "XP totale"
+  },
+  "average_per_period": {
+    "source": "Средний",
+    "en": "Average",
+    "ru": "Средний",
+    "de": "Durchschnitt",
+    "es": "Promedio",
+    "fr": "Moyenne",
+    "it": "Media"
+  },
+  "current_period": {
+    "source": "Текущий",
+    "en": "Current",
+    "ru": "Текущий",
+    "de": "Aktuell",
+    "es": "Actual",
+    "fr": "Actuel",
+    "it": "Attuale"
+  },
+  "best_period": {
+    "source": "Лучший",
+    "en": "Best",
+    "ru": "Лучший",
+    "de": "Beste",
+    "es": "Mejor",
+    "fr": "Meilleur",
+    "it": "Migliore"
+  },
+  "no_data_yet": {
+    "source": "Данных пока нет. Начни обучение, чтобы увидеть свой прогресс!",
+    "en": "No data available yet. Start learning to see your progress!",
+    "ru": "Данных пока нет. Начни обучение, чтобы увидеть свой прогресс!",
+    "de": "Noch keine Daten verfügbar. Beginnen Sie mit dem Lernen, um Ihren Fortschritt zu sehen!",
+    "es": "Aún no hay datos disponibles. ¡Empieza a aprender para ver tu progreso!",
+    "fr": "Aucune donnée disponible pour le moment. Commencez à apprendre pour voir vos progrès !",
+    "it": "Nessun dato disponibile ancora. Inizia a imparare per vedere i tuoi progressi!"
+  },
+  "no_weekly_challenges": {
+    "source": "Недельные задания недоступны",
+    "en": "No weekly challenges available",
+    "ru": "Недельные задания недоступны",
+    "de": "Keine wöchentlichen Herausforderungen verfügbar",
+    "es": "No hay desafíos semanales disponibles",
+    "fr": "Aucun défi hebdomadaire disponible",
+    "it": "Nessuna sfida settimanale disponibile"
+  },
+  "try_again": {
+    "source": "Попробовать снова",
+    "en": "Try Again",
+    "ru": "Попробовать снова",
+    "de": "Erneut versuchen",
+    "es": "Intentar de nuevo",
+    "fr": "Réessayer",
+    "it": "Riprova"
   }
 }

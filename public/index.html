@@ -99,6 +99,18 @@
             leaguesLink.rel = 'stylesheet';
             leaguesLink.href = 'leagues-ui.css?v=' + Date.now();
             document.head.appendChild(leaguesLink);
+
+            // Load weekly challenges UI CSS
+            const weeklyChallengesLink = document.createElement('link');
+            weeklyChallengesLink.rel = 'stylesheet';
+            weeklyChallengesLink.href = 'weekly-challenges-ui.css?v=' + Date.now();
+            document.head.appendChild(weeklyChallengesLink);
+
+            // Load personal rating UI CSS
+            const personalRatingLink = document.createElement('link');
+            personalRatingLink.rel = 'stylesheet';
+            personalRatingLink.href = 'personal-rating-ui.css?v=' + Date.now();
+            document.head.appendChild(personalRatingLink);
         })();
     </script>
 </head>
@@ -145,6 +157,8 @@
                     <button id="reviewBtn" class="nav-btn" data-i18n="review" data-label="Review"></button>
                     <button id="challengesBtn" class="nav-btn" data-i18n="daily_challenges" data-label="Challenges"></button>
                     <button id="leaguesBtn" class="nav-btn" data-i18n="leagues_title" data-label="Leagues" style="display: none;"></button>
+                    <button id="weeklyChallengesBtn" class="nav-btn" data-i18n="weekly_challenges_title" data-label="Weekly" style="display: none;"></button>
+                    <button id="personalRatingBtn" class="nav-btn" data-i18n="personal_rating_title" data-label="Rating" style="display: none;"></button>
                     <button id="leaderboardBtn" class="nav-btn" data-i18n="leaderboard" data-label="Rating"></button>
                     <button id="statsBtn" class="nav-btn" data-i18n="statistics" data-label="Stats"></button>
                 </div>
@@ -708,6 +722,38 @@
                 </div>
             </section>
 
+            <!-- Weekly Challenges Section (Gamification - Limited Access) -->
+            <section id="weeklyChallengesSection" class="section">
+                <h2>📅 <span data-i18n="weekly_challenges_title">Недельные задания</span></h2>
+                <p class="section-description" data-i18n="weekly_challenges_description">
+                    Выполняй недельные задания и получай большие награды!
+                </p>
+
+                <div id="weeklyChallengesContent">
+                    <!-- Weekly Challenges UI will be rendered here by JavaScript -->
+                    <div class="loading-spinner">
+                        <div class="spinner"></div>
+                        <p data-i18n="loading">Загрузка...</p>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Personal Rating Section (Gamification - Limited Access) -->
+            <section id="personalRatingSection" class="section">
+                <h2>📊 <span data-i18n="personal_rating_title">Мой рейтинг</span></h2>
+                <p class="section-description" data-i18n="personal_rating_description">
+                    Отслеживай свой прогресс по неделям и месяцам!
+                </p>
+
+                <div id="personalRatingContent">
+                    <!-- Personal Rating UI will be rendered here by JavaScript -->
+                    <div class="loading-spinner">
+                        <div class="spinner"></div>
+                        <p data-i18n="loading">Загрузка...</p>
+                    </div>
+                </div>
+            </section>
+
             <!-- Bug Reports Section -->
             <section id="bugReportsSection" class="section">
                 <h2>🐛 <span data-i18n="bug_reports">Сообщить об ошибке</span></h2>
@@ -840,6 +886,8 @@
     <script src="onboarding.js"></script>
     <script src="features-ui.js"></script>
     <script src="leagues-ui.js"></script>
+    <script src="weekly-challenges-ui.js"></script>
+    <script src="personal-rating-ui.js"></script>
     <script src="app.js"></script>
 </body>
 </html>

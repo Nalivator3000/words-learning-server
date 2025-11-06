@@ -371,10 +371,16 @@ class LanguageLearningApp {
         document.getElementById('reviewBtn').addEventListener('click', () => this.showSection('review'));
         document.getElementById('challengesBtn').addEventListener('click', () => this.showSection('challenges'));
 
-        // Leagues button (only visible for whitelisted users)
+        // Gamification buttons (only visible for whitelisted users)
         if (userManager.hasGamificationAccess()) {
             document.getElementById('leaguesBtn').style.display = '';
             document.getElementById('leaguesBtn').addEventListener('click', () => this.showSection('leagues'));
+
+            document.getElementById('weeklyChallengesBtn').style.display = '';
+            document.getElementById('weeklyChallengesBtn').addEventListener('click', () => this.showSection('weeklyChallenges'));
+
+            document.getElementById('personalRatingBtn').style.display = '';
+            document.getElementById('personalRatingBtn').addEventListener('click', () => this.showSection('personalRating'));
         }
 
         document.getElementById('leaderboardBtn').addEventListener('click', () => this.showSection('leaderboard'));
@@ -567,6 +573,24 @@ class LanguageLearningApp {
                     await window.leaguesUI.init(userManager.currentUser.id);
                 } else {
                     await window.leaguesUI.refresh();
+                }
+            }
+        } else if (sectionName === 'weeklyChallenges') {
+            // Initialize Weekly Challenges UI (only for whitelisted users)
+            if (window.weeklyChallengesUI && userManager.hasGamificationAccess()) {
+                if (!window.weeklyChallengesUI.initialized) {
+                    await window.weeklyChallengesUI.init(userManager.currentUser.id);
+                } else {
+                    await window.weeklyChallengesUI.refresh();
+                }
+            }
+        } else if (sectionName === 'personalRating') {
+            // Initialize Personal Rating UI (only for whitelisted users)
+            if (window.personalRatingUI && userManager.hasGamificationAccess()) {
+                if (!window.personalRatingUI.initialized) {
+                    await window.personalRatingUI.init(userManager.currentUser.id);
+                } else {
+                    await window.personalRatingUI.refresh();
                 }
             }
         } else if (sectionName === 'leaderboard') {
