@@ -1463,6 +1463,11 @@ schreiben,Sie schreibt einen Brief.,Писать,Она пишет письmо.`
 
     async exportWords(status = null) {
         try {
+            // Show loading indicator
+            if (window.showToast) {
+                showToast('Экспорт слов...', 'info');
+            }
+
             const csvContent = await database.exportWords(status);
 
             if (!csvContent) {
@@ -1487,9 +1492,25 @@ schreiben,Sie schreibt einen Brief.,Писать,Она пишет письmо.`
             link.click();
             document.body.removeChild(link);
 
+            // Show success message
+            if (window.showToast) {
+                showToast('✓ Экспорт завершен', 'success');
+            }
+
         } catch (error) {
             console.error('Export error:', error);
-            alert(i18n.t('exportError'));
+
+            // Show user-friendly error message
+            let errorMsg = i18n.t('exportError');
+            if (error.message && error.message.includes('429')) {
+                errorMsg = 'Слишком много запросов. Пожалуйста, подождите немного и попробуйте снова.';
+            }
+
+            if (window.showToast) {
+                showToast(errorMsg, 'error');
+            } else {
+                alert(errorMsg);
+            }
         }
     }
 

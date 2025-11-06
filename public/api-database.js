@@ -53,8 +53,8 @@ class APIDatabase {
         };
     }
 
-    // Helper for API requests
-    async apiRequest(endpoint, options = {}) {
+    // Helper for API requests with retry logic for rate limiting
+    async apiRequest(endpoint, options = {}, retries = 3, retryDelay = 1000) {
         try {
             const response = await fetch(`${this.baseUrl}/api${endpoint}`, {
                 headers: {
@@ -65,6 +65,14 @@ class APIDatabase {
             });
 
             if (!response.ok) {
+                // Handle rate limiting (429) with exponential backoff
+                if (response.status === 429 && retries > 0) {
+                    console.warn(`⚠️ Rate limited (429), retrying in ${retryDelay}ms... (${retries} retries left)`);
+                    await new Promise(resolve => setTimeout(resolve, retryDelay));
+                    // Exponential backoff: double the delay for next retry
+                    return await this.apiRequest(endpoint, options, retries - 1, retryDelay * 2);
+                }
+
                 const error = await response.text();
                 throw new Error(`API Error: ${response.status} - ${error}`);
             }
