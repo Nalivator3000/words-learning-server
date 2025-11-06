@@ -100,6 +100,16 @@ class WeeklyChallengesUI {
             </div>
         `;
 
+        // Add event listeners for claim buttons
+        container.querySelectorAll('.claim-btn[data-challenge-id]').forEach(btn => {
+            btn.addEventListener('click', (e) => {
+                const challengeId = e.currentTarget.getAttribute('data-challenge-id');
+                if (challengeId) {
+                    this.claimReward(parseInt(challengeId));
+                }
+            });
+        });
+
         // Update i18n
         if (window.i18n) {
             i18n.updatePageTranslations();
@@ -169,7 +179,7 @@ class WeeklyChallengesUI {
             `;
         } else if (challenge.is_completed) {
             return `
-                <button class="claim-btn" onclick="weeklyChallengesUI.claimReward(${challenge.id})">
+                <button class="claim-btn" data-challenge-id="${challenge.id}">
                     <span data-i18n="claim_reward">Claim Reward</span>
                 </button>
             `;
@@ -238,11 +248,17 @@ class WeeklyChallengesUI {
         container.innerHTML = `
             <div class="error-state">
                 <p style="color: #ef4444;">❌ ${message}</p>
-                <button onclick="weeklyChallengesUI.refresh()" class="action-btn" style="margin-top: 1rem;">
+                <button class="action-btn retry-btn" style="margin-top: 1rem;">
                     <span data-i18n="try_again">Try Again</span>
                 </button>
             </div>
         `;
+
+        // Add event listener for retry button
+        const retryBtn = container.querySelector('.retry-btn');
+        if (retryBtn) {
+            retryBtn.addEventListener('click', () => this.refresh());
+        }
     }
 }
 

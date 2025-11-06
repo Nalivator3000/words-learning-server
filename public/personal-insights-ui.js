@@ -71,16 +71,13 @@ class PersonalInsightsUI {
             <div class="insights-header">
                 <h3 data-i18n="your_insights">Your Learning Insights</h3>
                 <div class="period-selector">
-                    <button class="period-btn ${this.period === 'week' ? 'active' : ''}"
-                            onclick="personalInsightsUI.changePeriod('week')">
+                    <button class="period-btn ${this.period === 'week' ? 'active' : ''}" data-period="week">
                         <span data-i18n="this_week">This Week</span>
                     </button>
-                    <button class="period-btn ${this.period === 'month' ? 'active' : ''}"
-                            onclick="personalInsightsUI.changePeriod('month')">
+                    <button class="period-btn ${this.period === 'month' ? 'active' : ''}" data-period="month">
                         <span data-i18n="this_month">This Month</span>
                     </button>
-                    <button class="period-btn ${this.period === 'all' ? 'active' : ''}"
-                            onclick="personalInsightsUI.changePeriod('all')">
+                    <button class="period-btn ${this.period === 'all' ? 'active' : ''}" data-period="all">
                         <span data-i18n="all_time">All Time</span>
                     </button>
                 </div>
@@ -90,6 +87,16 @@ class PersonalInsightsUI {
                 ${this.insights.map(insight => this.renderInsight(insight)).join('')}
             </div>
         `;
+
+        // Add event listeners for period buttons
+        container.querySelectorAll('.period-btn').forEach(btn => {
+            btn.addEventListener('click', (e) => {
+                const period = e.currentTarget.getAttribute('data-period');
+                if (period) {
+                    this.changePeriod(period);
+                }
+            });
+        });
 
         // Update i18n
         if (window.i18n) {
@@ -270,11 +277,17 @@ class PersonalInsightsUI {
             <div class="error-state">
                 <div class="error-icon">❌</div>
                 <p style="color: #ef4444;">${message}</p>
-                <button onclick="personalInsightsUI.refresh()" class="action-btn" style="margin-top: 1rem;">
+                <button class="action-btn retry-btn" style="margin-top: 1rem;">
                     <span data-i18n="try_again">Try Again</span>
                 </button>
             </div>
         `;
+
+        // Add event listener for retry button
+        const retryBtn = container.querySelector('.retry-btn');
+        if (retryBtn) {
+            retryBtn.addEventListener('click', () => this.refresh());
+        }
     }
 }
 

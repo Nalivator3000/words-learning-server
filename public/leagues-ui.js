@@ -99,7 +99,7 @@ class LeaguesUI {
                     ${this.tiers.map(tier => `
                         <button
                             class="tier-btn ${tier.tier_name === this.currentLeague.league_tier ? 'active' : ''}"
-                            onclick="leaguesUI.switchTier('${tier.tier_name}')"
+                            data-tier="${tier.tier_name}"
                             title="${tier.tier_name} (${tier.min_xp_required}+ XP)"
                             style="background: ${tier.color}20; border-color: ${tier.color};">
                             <span style="font-size: 1.5rem;">${tier.icon}</span>
@@ -126,6 +126,16 @@ class LeaguesUI {
                 </ul>
             </div>
         `;
+
+        // Add event listeners for tier buttons
+        container.querySelectorAll('.tier-btn[data-tier]').forEach(btn => {
+            btn.addEventListener('click', (e) => {
+                const tier = e.currentTarget.getAttribute('data-tier');
+                if (tier) {
+                    this.switchTier(tier);
+                }
+            });
+        });
 
         // Update i18n for new elements
         if (window.i18n) {

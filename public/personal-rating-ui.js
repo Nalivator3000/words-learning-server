@@ -73,12 +73,12 @@ class PersonalRatingUI {
                 <div class="view-switcher">
                     <button
                         class="view-btn ${this.currentView === 'weekly' ? 'active' : ''}"
-                        onclick="personalRatingUI.switchView('weekly')">
+                        data-view="weekly">
                         <span data-i18n="weekly">Weekly</span>
                     </button>
                     <button
                         class="view-btn ${this.currentView === 'monthly' ? 'active' : ''}"
-                        onclick="personalRatingUI.switchView('monthly')">
+                        data-view="monthly">
                         <span data-i18n="monthly">Monthly</span>
                     </button>
                 </div>
@@ -107,6 +107,16 @@ class PersonalRatingUI {
                 ${this.renderChart(data)}
             </div>
         `;
+
+        // Add event listeners for view buttons
+        container.querySelectorAll('.view-btn').forEach(btn => {
+            btn.addEventListener('click', (e) => {
+                const view = e.currentTarget.getAttribute('data-view');
+                if (view) {
+                    this.switchView(view);
+                }
+            });
+        });
 
         // Update i18n
         if (window.i18n) {
@@ -183,11 +193,17 @@ class PersonalRatingUI {
         container.innerHTML = `
             <div class="error-state">
                 <p style="color: #ef4444;">❌ ${message}</p>
-                <button onclick="personalRatingUI.refresh()" class="action-btn" style="margin-top: 1rem;">
+                <button class="action-btn retry-btn" style="margin-top: 1rem;">
                     <span data-i18n="try_again">Try Again</span>
                 </button>
             </div>
         `;
+
+        // Add event listener for retry button
+        const retryBtn = container.querySelector('.retry-btn');
+        if (retryBtn) {
+            retryBtn.addEventListener('click', () => this.refresh());
+        }
     }
 }
 
