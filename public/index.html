@@ -117,6 +117,12 @@
             personalInsightsLink.rel = 'stylesheet';
             personalInsightsLink.href = 'personal-insights-ui.css?v=' + Date.now();
             document.head.appendChild(personalInsightsLink);
+
+            // Load friends UI CSS
+            const friendsLink = document.createElement('link');
+            friendsLink.rel = 'stylesheet';
+            friendsLink.href = 'friends-ui.css?v=' + Date.now();
+            document.head.appendChild(friendsLink);
         })();
     </script>
 </head>
@@ -166,6 +172,7 @@
                     <button id="weeklyChallengesBtn" class="nav-btn" data-i18n="weekly_challenges_title" data-label="Weekly" style="display: none;"></button>
                     <button id="personalRatingBtn" class="nav-btn" data-i18n="personal_rating_title" data-label="Rating" style="display: none;"></button>
                     <button id="personalInsightsBtn" class="nav-btn" data-i18n="personal_insights_title" data-label="Insights" style="display: none;"></button>
+                    <button id="friendsBtn" class="nav-btn" data-i18n="friends_title" data-label="Friends" style="display: none;"></button>
                     <button id="leaderboardBtn" class="nav-btn" data-i18n="leaderboard" data-label="Rating"></button>
                     <button id="statsBtn" class="nav-btn" data-i18n="statistics" data-label="Stats"></button>
                 </div>
@@ -777,6 +784,22 @@
                 </div>
             </section>
 
+            <!-- Friends Section (Social - Limited Access) -->
+            <section id="friendsSection" class="section">
+                <h2>👥 <span data-i18n="friends_title">Friends</span></h2>
+                <p class="section-description" data-i18n="friends_description">
+                    Connect with other learners and track progress together!
+                </p>
+
+                <div id="friendsContent">
+                    <!-- Friends UI will be rendered here by JavaScript -->
+                    <div class="loading-spinner">
+                        <div class="spinner"></div>
+                        <p data-i18n="loading">Загрузка...</p>
+                    </div>
+                </div>
+            </section>
+
             <!-- Bug Reports Section -->
             <section id="bugReportsSection" class="section">
                 <h2>🐛 <span data-i18n="bug_reports">Сообщить об ошибке</span></h2>
@@ -912,6 +935,7 @@
     <script src="weekly-challenges-ui.js"></script>
     <script src="personal-rating-ui.js"></script>
     <script src="personal-insights-ui.js"></script>
+    <script src="friends-ui.js"></script>
     <script src="app.js"></script>
 </body>
 </html>

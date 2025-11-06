@@ -384,6 +384,9 @@ class LanguageLearningApp {
 
             document.getElementById('personalInsightsBtn').style.display = '';
             document.getElementById('personalInsightsBtn').addEventListener('click', () => this.showSection('personalInsights'));
+
+            document.getElementById('friendsBtn').style.display = '';
+            document.getElementById('friendsBtn').addEventListener('click', () => this.showSection('friends'));
         }
 
         document.getElementById('leaderboardBtn').addEventListener('click', () => this.showSection('leaderboard'));
@@ -603,6 +606,15 @@ class LanguageLearningApp {
                     await window.personalInsightsUI.init(userManager.currentUser.id);
                 } else {
                     await window.personalInsightsUI.refresh();
+                }
+            }
+        } else if (sectionName === 'friends') {
+            // Initialize Friends UI (only for whitelisted users)
+            if (window.friendsUI && userManager.hasGamificationAccess()) {
+                if (!window.friendsUI.initialized) {
+                    await window.friendsUI.init(userManager.currentUser.id);
+                } else {
+                    await window.friendsUI.refresh();
                 }
             }
         } else if (sectionName === 'leaderboard') {

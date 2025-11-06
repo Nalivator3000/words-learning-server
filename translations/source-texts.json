@@ -6487,5 +6487,239 @@
     "es": "Día",
     "fr": "Jour",
     "it": "Giorno"
+  },
+  "friends_title": {
+    "source": "Friends",
+    "en": "Friends",
+    "ru": "Друзья",
+    "de": "Freunde",
+    "es": "Amigos",
+    "fr": "Amis",
+    "it": "Amici"
+  },
+  "friends_description": {
+    "source": "Connect with other learners and track progress together!",
+    "en": "Connect with other learners and track progress together!",
+    "ru": "Общайтесь с другими учениками и отслеживайте прогресс вместе!",
+    "de": "Verbinden Sie sich mit anderen Lernenden und verfolgen Sie gemeinsam Fortschritte!",
+    "es": "¡Conéctate con otros estudiantes y sigue el progreso juntos!",
+    "fr": "Connectez-vous avec d'autres apprenants et suivez les progrès ensemble !",
+    "it": "Connettiti con altri studenti e monitora i progressi insieme!"
+  },
+  "my_friends": {
+    "source": "My Friends",
+    "en": "My Friends",
+    "ru": "Мои друзья",
+    "de": "Meine Freunde",
+    "es": "Mis amigos",
+    "fr": "Mes amis",
+    "it": "I miei amici"
+  },
+  "friend_requests": {
+    "source": "Requests",
+    "en": "Requests",
+    "ru": "Запросы",
+    "de": "Anfragen",
+    "es": "Solicitudes",
+    "fr": "Demandes",
+    "it": "Richieste"
+  },
+  "find_friends": {
+    "source": "Find Friends",
+    "en": "Find Friends",
+    "ru": "Найти друзей",
+    "de": "Freunde finden",
+    "es": "Buscar amigos",
+    "fr": "Trouver des amis",
+    "it": "Trova amici"
+  },
+  "activity_feed": {
+    "source": "Activity",
+    "en": "Activity",
+    "ru": "Активность",
+    "de": "Aktivität",
+    "es": "Actividad",
+    "fr": "Activité",
+    "it": "Attività"
+  },
+  "no_friends_yet": {
+    "source": "No friends yet",
+    "en": "No friends yet",
+    "ru": "Пока нет друзей",
+    "de": "Noch keine Freunde",
+    "es": "Aún no hay amigos",
+    "fr": "Pas encore d'amis",
+    "it": "Ancora nessun amico"
+  },
+  "find_friends_hint": {
+    "source": "Search for users to add your first friend!",
+    "en": "Search for users to add your first friend!",
+    "ru": "Ищите пользователей, чтобы добавить первого друга!",
+    "de": "Suchen Sie nach Benutzern, um Ihren ersten Freund hinzuzufügen!",
+    "es": "¡Busca usuarios para agregar tu primer amigo!",
+    "fr": "Recherchez des utilisateurs pour ajouter votre premier ami !",
+    "it": "Cerca utenti per aggiungere il tuo primo amico!"
+  },
+  "view_profile": {
+    "source": "Profile",
+    "en": "Profile",
+    "ru": "Профиль",
+    "de": "Profil",
+    "es": "Perfil",
+    "fr": "Profil",
+    "it": "Profilo"
+  },
+  "remove_friend": {
+    "source": "Remove",
+    "en": "Remove",
+    "ru": "Удалить",
+    "de": "Entfernen",
+    "es": "Eliminar",
+    "fr": "Retirer",
+    "it": "Rimuovi"
+  },
+  "received_requests": {
+    "source": "Received Requests",
+    "en": "Received Requests",
+    "ru": "Входящие запросы",
+    "de": "Empfangene Anfragen",
+    "es": "Solicitudes recibidas",
+    "fr": "Demandes reçues",
+    "it": "Richieste ricevute"
+  },
+  "no_received_requests": {
+    "source": "No pending requests",
+    "en": "No pending requests",
+    "ru": "Нет ожидающих запросов",
+    "de": "Keine ausstehenden Anfragen",
+    "es": "No hay solicitudes pendientes",
+    "fr": "Aucune demande en attente",
+    "it": "Nessuna richiesta in sospeso"
+  },
+  "sent_requests": {
+    "source": "Sent Requests",
+    "en": "Sent Requests",
+    "ru": "Исходящие запросы",
+    "de": "Gesendete Anfragen",
+    "es": "Solicitudes enviadas",
+    "fr": "Demandes envoyées",
+    "it": "Richieste inviate"
+  },
+  "no_sent_requests": {
+    "source": "No pending sent requests",
+    "en": "No pending sent requests",
+    "ru": "Нет отправленных запросов",
+    "de": "Keine ausstehenden gesendeten Anfragen",
+    "es": "No hay solicitudes enviadas pendientes",
+    "fr": "Aucune demande envoyée en attente",
+    "it": "Nessuna richiesta inviata in sospeso"
+  },
+  "accept": {
+    "source": "Accept",
+    "en": "Accept",
+    "ru": "Принять",
+    "de": "Akzeptieren",
+    "es": "Aceptar",
+    "fr": "Accepter",
+    "it": "Accetta"
+  },
+  "decline": {
+    "source": "Decline",
+    "en": "Decline",
+    "ru": "Отклонить",
+    "de": "Ablehnen",
+    "es": "Rechazar",
+    "fr": "Décliner",
+    "it": "Rifiuta"
+  },
+  "pending": {
+    "source": "Pending",
+    "en": "Pending",
+    "ru": "В ожидании",
+    "de": "Ausstehend",
+    "es": "Pendiente",
+    "fr": "En attente",
+    "it": "In sospeso"
+  },
+  "search": {
+    "source": "Search",
+    "en": "Search",
+    "ru": "Поиск",
+    "de": "Suchen",
+    "es": "Buscar",
+    "fr": "Rechercher",
+    "it": "Cerca"
+  },
+  "search_hint": {
+    "source": "Enter a username to find friends",
+    "en": "Enter a username to find friends",
+    "ru": "Введите имя пользователя для поиска друзей",
+    "de": "Benutzernamen eingeben, um Freunde zu finden",
+    "es": "Ingresa un nombre de usuario para encontrar amigos",
+    "fr": "Entrez un nom d'utilisateur pour trouver des amis",
+    "it": "Inserisci un nome utente per trovare amici"
+  },
+  "search_username": {
+    "source": "Search by username...",
+    "en": "Search by username...",
+    "ru": "Поиск по имени пользователя...",
+    "de": "Nach Benutzernamen suchen...",
+    "es": "Buscar por nombre de usuario...",
+    "fr": "Rechercher par nom d'utilisateur...",
+    "it": "Cerca per nome utente..."
+  },
+  "you": {
+    "source": "You",
+    "en": "You",
+    "ru": "Вы",
+    "de": "Sie",
+    "es": "Tú",
+    "fr": "Vous",
+    "it": "Tu"
+  },
+  "already_friends": {
+    "source": "Friends",
+    "en": "Friends",
+    "ru": "Друзья",
+    "de": "Freunde",
+    "es": "Amigos",
+    "fr": "Amis",
+    "it": "Amici"
+  },
+  "request_sent": {
+    "source": "Request Sent",
+    "en": "Request Sent",
+    "ru": "Запрос отправлен",
+    "de": "Anfrage gesendet",
+    "es": "Solicitud enviada",
+    "fr": "Demande envoyée",
+    "it": "Richiesta inviata"
+  },
+  "add_friend": {
+    "source": "Add Friend",
+    "en": "Add Friend",
+    "ru": "Добавить в друзья",
+    "de": "Freund hinzufügen",
+    "es": "Agregar amigo",
+    "fr": "Ajouter un ami",
+    "it": "Aggiungi amico"
+  },
+  "no_activity": {
+    "source": "No activity yet",
+    "en": "No activity yet",
+    "ru": "Пока нет активности",
+    "de": "Noch keine Aktivität",
+    "es": "Aún no hay actividad",
+    "fr": "Pas encore d'activité",
+    "it": "Ancora nessuna attività"
+  },
+  "activity_hint": {
+    "source": "Friend activities will appear here",
+    "en": "Friend activities will appear here",
+    "ru": "Активность друзей будет отображаться здесь",
+    "de": "Freundesaktivitäten werden hier angezeigt",
+    "es": "Las actividades de amigos aparecerán aquí",
+    "fr": "Les activités des amis apparaîtront ici",
+    "it": "Le attività degli amici appariranno qui"
   }
 }
