@@ -6388,5 +6388,104 @@
     "es": "Intentar de nuevo",
     "fr": "Réessayer",
     "it": "Riprova"
+  },
+  "personal_insights_title": {
+    "source": "Персональные инсайты",
+    "en": "Personal Insights",
+    "ru": "Персональные инсайты",
+    "de": "Persönliche Einblicke",
+    "es": "Perspectivas personales",
+    "fr": "Perspectives personnelles",
+    "it": "Approfondimenti personali"
+  },
+  "personal_insights_description": {
+    "source": "Узнай больше о своём стиле обучения и прогрессе!",
+    "en": "Learn more about your learning style and progress!",
+    "ru": "Узнай больше о своём стиле обучения и прогрессе!",
+    "de": "Erfahren Sie mehr über Ihren Lernstil und Fortschritt!",
+    "es": "¡Aprende más sobre tu estilo de aprendizaje y progreso!",
+    "fr": "Apprenez-en plus sur votre style d'apprentissage et vos progrès !",
+    "it": "Scopri di più sul tuo stile di apprendimento e sui tuoi progressi!"
+  },
+  "your_insights": {
+    "source": "Ваши инсайты",
+    "en": "Your Learning Insights",
+    "ru": "Ваши инсайты",
+    "de": "Ihre Lerneinblicke",
+    "es": "Sus perspectivas de aprendizaje",
+    "fr": "Vos perspectives d'apprentissage",
+    "it": "I tuoi approfondimenti di apprendimento"
+  },
+  "this_week": {
+    "source": "Эта неделя",
+    "en": "This Week",
+    "ru": "Эта неделя",
+    "de": "Diese Woche",
+    "es": "Esta semana",
+    "fr": "Cette semaine",
+    "it": "Questa settimana"
+  },
+  "this_month": {
+    "source": "Этот месяц",
+    "en": "This Month",
+    "ru": "Этот месяц",
+    "de": "Dieser Monat",
+    "es": "Este mes",
+    "fr": "Ce mois",
+    "it": "Questo mese"
+  },
+  "all_time": {
+    "source": "За всё время",
+    "en": "All Time",
+    "ru": "За всё время",
+    "de": "Alle Zeit",
+    "es": "Todo el tiempo",
+    "fr": "Tout le temps",
+    "it": "Tutto il tempo"
+  },
+  "no_insights_yet": {
+    "source": "Начни учиться, чтобы разблокировать персональные инсайты!",
+    "en": "Start learning to unlock personalized insights!",
+    "ru": "Начни учиться, чтобы разблокировать персональные инсайты!",
+    "de": "Beginnen Sie mit dem Lernen, um personalisierte Einblicke freizuschalten!",
+    "es": "¡Comienza a aprender para desbloquear perspectivas personalizadas!",
+    "fr": "Commencez à apprendre pour débloquer des perspectives personnalisées !",
+    "it": "Inizia a imparare per sbloccare approfondimenti personalizzati!"
+  },
+  "insights_hint": {
+    "source": "Проходи квизы, учи слова и поддерживай стрики, чтобы увидеть свои паттерны обучения.",
+    "en": "Complete quizzes, learn words, and maintain streaks to see your learning patterns.",
+    "ru": "Проходи квизы, учи слова и поддерживай стрики, чтобы увидеть свои паттерны обучения.",
+    "de": "Absolvieren Sie Quizze, lernen Sie Wörter und halten Sie Serien aufrecht, um Ihre Lernmuster zu sehen.",
+    "es": "Completa cuestionarios, aprende palabras y mantén rachas para ver tus patrones de aprendizaje.",
+    "fr": "Complétez des quiz, apprenez des mots et maintenez des séries pour voir vos modèles d'apprentissage.",
+    "it": "Completa i quiz, impara parole e mantieni le serie per vedere i tuoi modelli di apprendimento."
+  },
+  "peak_hour": {
+    "source": "Пиковый час",
+    "en": "Peak Hour",
+    "ru": "Пиковый час",
+    "de": "Spitzenzeit",
+    "es": "Hora pico",
+    "fr": "Heure de pointe",
+    "it": "Ora di punta"
+  },
+  "previous_period": {
+    "source": "Предыдущий",
+    "en": "Previous",
+    "ru": "Предыдущий",
+    "de": "Vorherige",
+    "es": "Anterior",
+    "fr": "Précédent",
+    "it": "Precedente"
+  },
+  "day": {
+    "source": "День",
+    "en": "Day",
+    "ru": "День",
+    "de": "Tag",
+    "es": "Día",
+    "fr": "Jour",
+    "it": "Giorno"
   }
 }

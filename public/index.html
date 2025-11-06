@@ -111,6 +111,12 @@
             personalRatingLink.rel = 'stylesheet';
             personalRatingLink.href = 'personal-rating-ui.css?v=' + Date.now();
             document.head.appendChild(personalRatingLink);
+
+            // Load personal insights UI CSS
+            const personalInsightsLink = document.createElement('link');
+            personalInsightsLink.rel = 'stylesheet';
+            personalInsightsLink.href = 'personal-insights-ui.css?v=' + Date.now();
+            document.head.appendChild(personalInsightsLink);
         })();
     </script>
 </head>
@@ -159,6 +165,7 @@
                     <button id="leaguesBtn" class="nav-btn" data-i18n="leagues_title" data-label="Leagues" style="display: none;"></button>
                     <button id="weeklyChallengesBtn" class="nav-btn" data-i18n="weekly_challenges_title" data-label="Weekly" style="display: none;"></button>
                     <button id="personalRatingBtn" class="nav-btn" data-i18n="personal_rating_title" data-label="Rating" style="display: none;"></button>
+                    <button id="personalInsightsBtn" class="nav-btn" data-i18n="personal_insights_title" data-label="Insights" style="display: none;"></button>
                     <button id="leaderboardBtn" class="nav-btn" data-i18n="leaderboard" data-label="Rating"></button>
                     <button id="statsBtn" class="nav-btn" data-i18n="statistics" data-label="Stats"></button>
                 </div>
@@ -754,6 +761,22 @@
                 </div>
             </section>
 
+            <!-- Personal Insights Section (Gamification - Limited Access) -->
+            <section id="personalInsightsSection" class="section">
+                <h2>💡 <span data-i18n="personal_insights_title">Персональные инсайты</span></h2>
+                <p class="section-description" data-i18n="personal_insights_description">
+                    Узнай больше о своём стиле обучения и прогрессе!
+                </p>
+
+                <div id="personalInsightsContent">
+                    <!-- Personal Insights UI will be rendered here by JavaScript -->
+                    <div class="loading-spinner">
+                        <div class="spinner"></div>
+                        <p data-i18n="loading">Загрузка...</p>
+                    </div>
+                </div>
+            </section>
+
             <!-- Bug Reports Section -->
             <section id="bugReportsSection" class="section">
                 <h2>🐛 <span data-i18n="bug_reports">Сообщить об ошибке</span></h2>
@@ -888,6 +911,7 @@
     <script src="leagues-ui.js"></script>
     <script src="weekly-challenges-ui.js"></script>
     <script src="personal-rating-ui.js"></script>
+    <script src="personal-insights-ui.js"></script>
     <script src="app.js"></script>
 </body>
 </html>

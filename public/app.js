@@ -381,6 +381,9 @@ class LanguageLearningApp {
 
             document.getElementById('personalRatingBtn').style.display = '';
             document.getElementById('personalRatingBtn').addEventListener('click', () => this.showSection('personalRating'));
+
+            document.getElementById('personalInsightsBtn').style.display = '';
+            document.getElementById('personalInsightsBtn').addEventListener('click', () => this.showSection('personalInsights'));
         }
 
         document.getElementById('leaderboardBtn').addEventListener('click', () => this.showSection('leaderboard'));
@@ -591,6 +594,15 @@ class LanguageLearningApp {
                     await window.personalRatingUI.init(userManager.currentUser.id);
                 } else {
                     await window.personalRatingUI.refresh();
+                }
+            }
+        } else if (sectionName === 'personalInsights') {
+            // Initialize Personal Insights UI (only for whitelisted users)
+            if (window.personalInsightsUI && userManager.hasGamificationAccess()) {
+                if (!window.personalInsightsUI.initialized) {
+                    await window.personalInsightsUI.init(userManager.currentUser.id);
+                } else {
+                    await window.personalInsightsUI.refresh();
                 }
             }
         } else if (sectionName === 'leaderboard') {
