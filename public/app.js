@@ -387,6 +387,9 @@ class LanguageLearningApp {
 
             document.getElementById('friendsBtn').style.display = '';
             document.getElementById('friendsBtn').addEventListener('click', () => this.showSection('friends'));
+
+            document.getElementById('duelsBtn').style.display = '';
+            document.getElementById('duelsBtn').addEventListener('click', () => this.showSection('duels'));
         }
 
         document.getElementById('leaderboardBtn').addEventListener('click', () => this.showSection('leaderboard'));
@@ -615,6 +618,15 @@ class LanguageLearningApp {
                     await window.friendsUI.init(userManager.currentUser.id);
                 } else {
                     await window.friendsUI.refresh();
+                }
+            }
+        } else if (sectionName === 'duels') {
+            // Initialize Duels UI (only for whitelisted users)
+            if (window.duelsUI && userManager.hasGamificationAccess()) {
+                if (!window.duelsUI.initialized) {
+                    await window.duelsUI.init(userManager.currentUser.id);
+                } else {
+                    await window.duelsUI.refresh();
                 }
             }
         } else if (sectionName === 'leaderboard') {

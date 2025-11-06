@@ -6721,5 +6721,257 @@
     "es": "Las actividades de amigos aparecerán aquí",
     "fr": "Les activités des amis apparaîtront ici",
     "it": "Le attività degli amici appariranno qui"
+  },
+  "duels_title": {
+    "source": "Duels",
+    "en": "Duels",
+    "ru": "Дуэли",
+    "de": "Duelle",
+    "es": "Duelos",
+    "fr": "Duels",
+    "it": "Duelli"
+  },
+  "duels_description": {
+    "source": "Challenge your friends to 1v1 word battles and compete for the top spot!",
+    "en": "Challenge your friends to 1v1 word battles and compete for the top spot!",
+    "ru": "Вызывай друзей на словесные битвы 1 на 1 и соревнуйся за первое место!",
+    "de": "Fordere deine Freunde zu 1v1-Wortkämpfen heraus und kämpfe um die Spitze!",
+    "es": "¡Desafía a tus amigos a batallas de palabras 1v1 y compite por el primer puesto!",
+    "fr": "Défiez vos amis dans des batailles de mots 1v1 et luttez pour la première place !",
+    "it": "Sfida i tuoi amici a battaglie di parole 1v1 e gareggia per il primo posto!"
+  },
+  "active_duels": {
+    "source": "Active Duels",
+    "en": "Active Duels",
+    "ru": "Активные дуэли",
+    "de": "Aktive Duelle",
+    "es": "Duelos activos",
+    "fr": "Duels actifs",
+    "it": "Duelli attivi"
+  },
+  "pending_duels": {
+    "source": "Pending",
+    "en": "Pending",
+    "ru": "Ожидают",
+    "de": "Ausstehend",
+    "es": "Pendientes",
+    "fr": "En attente",
+    "it": "In attesa"
+  },
+  "duel_history": {
+    "source": "History",
+    "en": "History",
+    "ru": "История",
+    "de": "Verlauf",
+    "es": "Historial",
+    "fr": "Historique",
+    "it": "Cronologia"
+  },
+  "duel_stats": {
+    "source": "Statistics",
+    "en": "Statistics",
+    "ru": "Статистика",
+    "de": "Statistiken",
+    "es": "Estadísticas",
+    "fr": "Statistiques",
+    "it": "Statistiche"
+  },
+  "new_duel": {
+    "source": "New Duel",
+    "en": "New Duel",
+    "ru": "Новая дуэль",
+    "de": "Neues Duell",
+    "es": "Nuevo duelo",
+    "fr": "Nouveau duel",
+    "it": "Nuovo duello"
+  },
+  "challenge_friend": {
+    "source": "Challenge a Friend",
+    "en": "Challenge a Friend",
+    "ru": "Бросить вызов другу",
+    "de": "Einen Freund herausfordern",
+    "es": "Desafiar a un amigo",
+    "fr": "Défier un ami",
+    "it": "Sfida un amico"
+  },
+  "select_friend": {
+    "source": "Select friend to challenge",
+    "en": "Select friend to challenge",
+    "ru": "Выберите друга для вызова",
+    "de": "Wähle einen Freund zum Herausfordern",
+    "es": "Selecciona un amigo para desafiar",
+    "fr": "Sélectionnez un ami à défier",
+    "it": "Seleziona un amico da sfidare"
+  },
+  "send_challenge": {
+    "source": "Send Challenge",
+    "en": "Send Challenge",
+    "ru": "Отправить вызов",
+    "de": "Herausforderung senden",
+    "es": "Enviar desafío",
+    "fr": "Envoyer le défi",
+    "it": "Invia sfida"
+  },
+  "accept_duel": {
+    "source": "Accept",
+    "en": "Accept",
+    "ru": "Принять",
+    "de": "Annehmen",
+    "es": "Aceptar",
+    "fr": "Accepter",
+    "it": "Accetta"
+  },
+  "decline_duel": {
+    "source": "Decline",
+    "en": "Decline",
+    "ru": "Отклонить",
+    "de": "Ablehnen",
+    "es": "Rechazar",
+    "fr": "Refuser",
+    "it": "Rifiuta"
+  },
+  "continue_duel": {
+    "source": "Continue",
+    "en": "Continue",
+    "ru": "Продолжить",
+    "de": "Fortfahren",
+    "es": "Continuar",
+    "fr": "Continuer",
+    "it": "Continua"
+  },
+  "your_score": {
+    "source": "You",
+    "en": "You",
+    "ru": "Вы",
+    "de": "Du",
+    "es": "Tú",
+    "fr": "Vous",
+    "it": "Tu"
+  },
+  "opponent_score": {
+    "source": "Opponent",
+    "en": "Opponent",
+    "ru": "Противник",
+    "de": "Gegner",
+    "es": "Oponente",
+    "fr": "Adversaire",
+    "it": "Avversario"
+  },
+  "time_left": {
+    "source": "Time left",
+    "en": "Time left",
+    "ru": "Осталось времени",
+    "de": "Zeit übrig",
+    "es": "Tiempo restante",
+    "fr": "Temps restant",
+    "it": "Tempo rimasto"
+  },
+  "duel_win": {
+    "source": "Victory",
+    "en": "Victory",
+    "ru": "Победа",
+    "de": "Sieg",
+    "es": "Victoria",
+    "fr": "Victoire",
+    "it": "Vittoria"
+  },
+  "duel_loss": {
+    "source": "Defeat",
+    "en": "Defeat",
+    "ru": "Поражение",
+    "de": "Niederlage",
+    "es": "Derrota",
+    "fr": "Défaite",
+    "it": "Sconfitta"
+  },
+  "duel_draw": {
+    "source": "Draw",
+    "en": "Draw",
+    "ru": "Ничья",
+    "de": "Unentschieden",
+    "es": "Empate",
+    "fr": "Match nul",
+    "it": "Pareggio"
+  },
+  "total_duels": {
+    "source": "Total Duels",
+    "en": "Total Duels",
+    "ru": "Всего дуэлей",
+    "de": "Gesamt Duelle",
+    "es": "Duelos totales",
+    "fr": "Total de duels",
+    "it": "Duelli totali"
+  },
+  "win_rate": {
+    "source": "Win Rate",
+    "en": "Win Rate",
+    "ru": "Процент побед",
+    "de": "Gewinnrate",
+    "es": "Tasa de victorias",
+    "fr": "Taux de victoire",
+    "it": "Tasso di vittoria"
+  },
+  "no_active_duels": {
+    "source": "No active duels",
+    "en": "No active duels",
+    "ru": "Нет активных дуэлей",
+    "de": "Keine aktiven Duelle",
+    "es": "No hay duelos activos",
+    "fr": "Pas de duels actifs",
+    "it": "Nessun duello attivo"
+  },
+  "no_pending_duels": {
+    "source": "No pending challenges",
+    "en": "No pending challenges",
+    "ru": "Нет ожидающих вызовов",
+    "de": "Keine ausstehenden Herausforderungen",
+    "es": "No hay desafíos pendientes",
+    "fr": "Pas de défis en attente",
+    "it": "Nessuna sfida in sospeso"
+  },
+  "no_duel_history": {
+    "source": "No completed duels yet",
+    "en": "No completed duels yet",
+    "ru": "Пока нет завершенных дуэлей",
+    "de": "Noch keine abgeschlossenen Duelle",
+    "es": "Aún no hay duelos completados",
+    "fr": "Pas encore de duels terminés",
+    "it": "Nessun duello completato ancora"
+  },
+  "challenge_friends_hint": {
+    "source": "Challenge your friends to start battling!",
+    "en": "Challenge your friends to start battling!",
+    "ru": "Вызовите друзей на бой!",
+    "de": "Fordere deine Freunde zum Kampf heraus!",
+    "es": "¡Desafía a tus amigos para empezar a batallar!",
+    "fr": "Défiez vos amis pour commencer à combattre !",
+    "it": "Sfida i tuoi amici per iniziare a combattere!"
+  },
+  "incoming_challenge": {
+    "source": "Incoming challenge from",
+    "en": "Incoming challenge from",
+    "ru": "Входящий вызов от",
+    "de": "Eingehende Herausforderung von",
+    "es": "Desafío entrante de",
+    "fr": "Défi entrant de",
+    "it": "Sfida in arrivo da"
+  },
+  "challenged": {
+    "source": "You challenged",
+    "en": "You challenged",
+    "ru": "Вы вызвали",
+    "de": "Du hast herausgefordert",
+    "es": "Has desafiado a",
+    "fr": "Vous avez défié",
+    "it": "Hai sfidato"
+  },
+  "waiting_response": {
+    "source": "Waiting for response",
+    "en": "Waiting for response",
+    "ru": "Ожидание ответа",
+    "de": "Warte auf Antwort",
+    "es": "Esperando respuesta",
+    "fr": "En attente de réponse",
+    "it": "In attesa di risposta"
   }
 }

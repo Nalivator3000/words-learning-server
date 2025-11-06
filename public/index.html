@@ -123,6 +123,12 @@
             friendsLink.rel = 'stylesheet';
             friendsLink.href = 'friends-ui.css?v=' + Date.now();
             document.head.appendChild(friendsLink);
+
+            // Load duels UI CSS
+            const duelsLink = document.createElement('link');
+            duelsLink.rel = 'stylesheet';
+            duelsLink.href = 'duels-ui.css?v=' + Date.now();
+            document.head.appendChild(duelsLink);
         })();
     </script>
 </head>
@@ -173,6 +179,7 @@
                     <button id="personalRatingBtn" class="nav-btn" data-i18n="personal_rating_title" data-label="Rating" style="display: none;"></button>
                     <button id="personalInsightsBtn" class="nav-btn" data-i18n="personal_insights_title" data-label="Insights" style="display: none;"></button>
                     <button id="friendsBtn" class="nav-btn" data-i18n="friends_title" data-label="Friends" style="display: none;"></button>
+                    <button id="duelsBtn" class="nav-btn" data-i18n="duels_title" data-label="Duels" style="display: none;"></button>
                     <button id="leaderboardBtn" class="nav-btn" data-i18n="leaderboard" data-label="Rating"></button>
                     <button id="statsBtn" class="nav-btn" data-i18n="statistics" data-label="Stats"></button>
                 </div>
@@ -800,6 +807,22 @@
                 </div>
             </section>
 
+            <!-- Duels Section -->
+            <section id="duelsSection" class="section">
+                <h2>⚔️ <span data-i18n="duels_title">Duels</span></h2>
+                <p class="section-description" data-i18n="duels_description">
+                    Challenge your friends to 1v1 word battles and compete for the top spot!
+                </p>
+
+                <div id="duelsContent">
+                    <!-- Duels UI will be rendered here by JavaScript -->
+                    <div class="loading-spinner">
+                        <div class="spinner"></div>
+                        <p data-i18n="loading">Загрузка...</p>
+                    </div>
+                </div>
+            </section>
+
             <!-- Bug Reports Section -->
             <section id="bugReportsSection" class="section">
                 <h2>🐛 <span data-i18n="bug_reports">Сообщить об ошибке</span></h2>
@@ -936,6 +959,7 @@
     <script src="personal-rating-ui.js"></script>
     <script src="personal-insights-ui.js"></script>
     <script src="friends-ui.js"></script>
+    <script src="duels-ui.js"></script>
     <script src="app.js"></script>
 </body>
 </html>
