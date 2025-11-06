@@ -6145,5 +6145,77 @@
     "es": "Closed",
     "fr": "Closed",
     "it": "Closed"
+  },
+  "leagues_title": {
+    "source": "Лиги",
+    "en": "Leagues",
+    "ru": "Лиги",
+    "de": "Ligen",
+    "es": "Ligas",
+    "fr": "Ligues",
+    "it": "Leghe"
+  },
+  "leagues_description": {
+    "source": "Соревнуйся с другими учениками! Зарабатывай XP и поднимайся по лигам.",
+    "en": "Compete with other learners! Earn XP and climb the leagues.",
+    "ru": "Соревнуйся с другими учениками! Зарабатывай XP и поднимайся по лигам.",
+    "de": "Tritt gegen andere Lernende an! Verdiene XP und steige in den Ligen auf.",
+    "es": "¡Compite con otros estudiantes! Gana XP y sube de liga.",
+    "fr": "Affrontez d'autres apprenants ! Gagnez de l'XP et montez dans les ligues.",
+    "it": "Gareggia con altri studenti! Guadagna XP e sali nelle leghe."
+  },
+  "leaderboard": {
+    "source": "Таблица лидеров",
+    "en": "Leaderboard",
+    "ru": "Таблица лидеров",
+    "de": "Bestenliste",
+    "es": "Clasificación",
+    "fr": "Classement",
+    "it": "Classifica"
+  },
+  "howItWorks": {
+    "source": "Как это работает",
+    "en": "How it works",
+    "ru": "Как это работает",
+    "de": "Wie es funktioniert",
+    "es": "Cómo funciona",
+    "fr": "Comment ça marche",
+    "it": "Come funziona"
+  },
+  "leagueRule1": {
+    "source": "Зарабатывай XP в течение недели, чтобы подняться в рейтинге",
+    "en": "Earn XP during the week to climb the leaderboard",
+    "ru": "Зарабатывай XP в течение недели, чтобы подняться в рейтинге",
+    "de": "Verdiene XP während der Woche, um in der Bestenliste aufzusteigen",
+    "es": "Gana XP durante la semana para subir en la clasificación",
+    "fr": "Gagnez de l'XP pendant la semaine pour grimper dans le classement",
+    "it": "Guadagna XP durante la settimana per salire in classifica"
+  },
+  "leagueRule2": {
+    "source": "Топ 20% игроков повышаются в лиге",
+    "en": "Top 20% get promoted to the next league",
+    "ru": "Топ 20% игроков повышаются в лиге",
+    "de": "Die Top 20% steigen in die nächste Liga auf",
+    "es": "El 20% superior sube a la siguiente liga",
+    "fr": "Les 20% meilleurs sont promus à la ligue suivante",
+    "it": "Il 20% migliore viene promosso alla lega successiva"
+  },
+  "leagueRule3": {
+    "source": "Нижние 20% понижаются в лиге",
+    "en": "Bottom 20% get demoted to the previous league",
+    "ru": "Нижние 20% понижаются в лиге",
+    "de": "Die unteren 20% steigen in die vorherige Liga ab",
+    "es": "El 20% inferior baja a la liga anterior",
+    "fr": "Les 20% moins bons sont rétrogradés à la ligue précédente",
+    "it": "Il 20% peggiore viene retrocesso alla lega precedente"
+  },
+  "leagueRule4": {
+    "source": "Неделя сбрасывается каждый понедельник",
+    "en": "Week resets every Monday",
+    "ru": "Неделя сбрасывается каждый понедельник",
+    "de": "Die Woche wird jeden Montag zurückgesetzt",
+    "es": "La semana se reinicia cada lunes",
+    "fr": "La semaine se réinitialise chaque lundi",
+    "it": "La settimana si resetta ogni lunedì"
   }
 }

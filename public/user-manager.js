@@ -376,6 +376,38 @@ class UserManager {
     isLoggedIn() {
         return !!this.currentUser;
     }
+
+    hasGamificationAccess() {
+        if (!this.currentUser) return false;
+
+        // Whitelisted users for gamification features
+        const allowedUsers = [
+            1, // Demo user
+            // Add more user IDs here as needed
+        ];
+
+        // Whitelisted usernames (case-insensitive)
+        const allowedUsernames = [
+            'demo',
+            'test',
+            'admin'
+        ];
+
+        // Check by user ID
+        if (allowedUsers.includes(this.currentUser.id)) {
+            return true;
+        }
+
+        // Check by username
+        if (this.currentUser.username) {
+            const username = this.currentUser.username.toLowerCase();
+            if (allowedUsernames.includes(username)) {
+                return true;
+            }
+        }
+
+        return false;
+    }
 }
 
 const userManager = new UserManager();

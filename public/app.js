@@ -370,6 +370,13 @@ class LanguageLearningApp {
         document.getElementById('studyBtn').addEventListener('click', () => this.showSection('study'));
         document.getElementById('reviewBtn').addEventListener('click', () => this.showSection('review'));
         document.getElementById('challengesBtn').addEventListener('click', () => this.showSection('challenges'));
+
+        // Leagues button (only visible for whitelisted users)
+        if (userManager.hasGamificationAccess()) {
+            document.getElementById('leaguesBtn').style.display = '';
+            document.getElementById('leaguesBtn').addEventListener('click', () => this.showSection('leagues'));
+        }
+
         document.getElementById('leaderboardBtn').addEventListener('click', () => this.showSection('leaderboard'));
         document.getElementById('statsBtn').addEventListener('click', () => this.showSection('stats'));
 
@@ -553,6 +560,15 @@ class LanguageLearningApp {
             await window.featuresUI.loadStreakFreezes();
         } else if (sectionName === 'bugReports') {
             await window.featuresUI.loadRecentBugReports();
+        } else if (sectionName === 'leagues') {
+            // Initialize Leagues UI (only for whitelisted users)
+            if (window.leaguesUI && userManager.hasGamificationAccess()) {
+                if (!window.leaguesUI.initialized) {
+                    await window.leaguesUI.init(userManager.currentUser.id);
+                } else {
+                    await window.leaguesUI.refresh();
+                }
+            }
         } else if (sectionName === 'leaderboard') {
             await this.loadLeaderboard('global');
         } else if (sectionName === 'stats') {
