@@ -11,7 +11,7 @@ class Gamification {
     // Fetch user stats (XP, level, streaks)
     async getUserStats(userId) {
         try {
-            const response = await fetch(`${this.apiUrl}/api/gamification/stats/${userId}`);
+            const response = await fetch(`/api/gamification/stats/${userId}`);
             if (!response.ok) throw new Error('Failed to fetch stats');
 
             this.currentStats = await response.json();
@@ -25,7 +25,7 @@ class Gamification {
     // Fetch XP history
     async getXPLog(userId, limit = 50) {
         try {
-            const response = await fetch(`${this.apiUrl}/api/gamification/xp-log/${userId}?limit=${limit}`);
+            const response = await fetch(`/api/gamification/xp-log/${userId}?limit=${limit}`);
             if (!response.ok) throw new Error('Failed to fetch XP log');
 
             return await response.json();
@@ -38,7 +38,7 @@ class Gamification {
     // Fetch activity calendar data
     async getActivityCalendar(userId, days = 365) {
         try {
-            const response = await fetch(`${this.apiUrl}/api/gamification/activity/${userId}?days=${days}`);
+            const response = await fetch(`/api/gamification/activity/${userId}?days=${days}`);
             if (!response.ok) throw new Error('Failed to fetch activity');
 
             this.activityData = await response.json();
@@ -52,7 +52,7 @@ class Gamification {
     // Fetch all achievements
     async getAllAchievements() {
         try {
-            const response = await fetch(`${this.apiUrl}/api/gamification/achievements`);
+            const response = await fetch(`/api/gamification/achievements`);
             if (!response.ok) throw new Error('Failed to fetch achievements');
 
             return await response.json();
@@ -65,7 +65,7 @@ class Gamification {
     // Fetch user's unlocked achievements
     async getUserAchievements(userId) {
         try {
-            const response = await fetch(`${this.apiUrl}/api/gamification/achievements/${userId}`);
+            const response = await fetch(`/api/gamification/achievements/${userId}`);
             if (!response.ok) throw new Error('Failed to fetch user achievements');
 
             return await response.json();
@@ -78,7 +78,7 @@ class Gamification {
     // Fetch achievement progress
     async getAchievementProgress(userId) {
         try {
-            const response = await fetch(`${this.apiUrl}/api/gamification/achievements/${userId}/progress`);
+            const response = await fetch(`/api/gamification/achievements/${userId}/progress`);
             if (!response.ok) throw new Error('Failed to fetch achievement progress');
 
             return await response.json();
@@ -91,7 +91,7 @@ class Gamification {
     // Fetch global leaderboard
     async getGlobalLeaderboard(limit = 100) {
         try {
-            const response = await fetch(`${this.apiUrl}/api/gamification/leaderboard/global?limit=${limit}`);
+            const response = await fetch(`/api/gamification/leaderboard/global?limit=${limit}`);
             if (!response.ok) throw new Error('Failed to fetch global leaderboard');
 
             return await response.json();
@@ -104,7 +104,7 @@ class Gamification {
     // Fetch weekly leaderboard
     async getWeeklyLeaderboard(limit = 100) {
         try {
-            const response = await fetch(`${this.apiUrl}/api/gamification/leaderboard/weekly?limit=${limit}`);
+            const response = await fetch(`/api/gamification/leaderboard/weekly?limit=${limit}`);
             if (!response.ok) throw new Error('Failed to fetch weekly leaderboard');
 
             return await response.json();
@@ -117,7 +117,7 @@ class Gamification {
     // Fetch user's rank
     async getUserRank(userId) {
         try {
-            const response = await fetch(`${this.apiUrl}/api/gamification/leaderboard/rank/${userId}`);
+            const response = await fetch(`/api/gamification/leaderboard/rank/${userId}`);
             if (!response.ok) throw new Error('Failed to fetch user rank');
 
             return await response.json();
@@ -130,7 +130,7 @@ class Gamification {
     // Fetch daily goals
     async getDailyGoals(userId) {
         try {
-            const response = await fetch(`${this.apiUrl}/api/gamification/daily-goals/${userId}`);
+            const response = await fetch(`/api/gamification/daily-goals/${userId}`);
             if (!response.ok) throw new Error('Failed to fetch daily goals');
 
             return await response.json();
@@ -143,7 +143,7 @@ class Gamification {
     // Update daily goal targets
     async updateDailyGoals(userId, xpGoal, wordsGoal, quizzesGoal) {
         try {
-            const response = await fetch(`${this.apiUrl}/api/gamification/daily-goals/${userId}`, {
+            const response = await fetch(`/api/gamification/daily-goals/${userId}`, {
                 method: 'PUT',
                 headers: { 'Content-Type': 'application/json' },
                 body: JSON.stringify({ xpGoal, wordsGoal, quizzesGoal })
