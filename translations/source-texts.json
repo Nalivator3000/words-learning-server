@@ -7027,5 +7027,95 @@
     "es": "Volver a duelos",
     "fr": "Retour aux duels",
     "it": "Torna ai duelli"
+  },
+  "profile_title": {
+    "source": "Profile",
+    "en": "Profile",
+    "ru": "Профиль",
+    "de": "Profil",
+    "es": "Perfil",
+    "fr": "Profil",
+    "it": "Profilo"
+  },
+  "edit_profile": {
+    "source": "Edit Profile",
+    "en": "Edit Profile",
+    "ru": "Редактировать профиль",
+    "de": "Profil bearbeiten",
+    "es": "Editar perfil",
+    "fr": "Modifier le profil",
+    "it": "Modifica profilo"
+  },
+  "languages": {
+    "source": "Languages",
+    "en": "Languages",
+    "ru": "Языки",
+    "de": "Sprachen",
+    "es": "Idiomas",
+    "fr": "Langues",
+    "it": "Lingue"
+  },
+  "views": {
+    "source": "Views",
+    "en": "Views",
+    "ru": "Просмотры",
+    "de": "Ansichten",
+    "es": "Vistas",
+    "fr": "Vues",
+    "it": "Visualizzazioni"
+  },
+  "total_xp": {
+    "source": "Total XP",
+    "en": "Total XP",
+    "ru": "Всего XP",
+    "de": "Gesamt XP",
+    "es": "XP total",
+    "fr": "XP total",
+    "it": "XP totale"
+  },
+  "words_learned": {
+    "source": "Words Learned",
+    "en": "Words Learned",
+    "ru": "Выучено слов",
+    "de": "Gelernte Wörter",
+    "es": "Palabras aprendidas",
+    "fr": "Mots appris",
+    "it": "Parole apprese"
+  },
+  "perfect_quizzes": {
+    "source": "Perfect",
+    "en": "Perfect",
+    "ru": "Идеальных",
+    "de": "Perfekt",
+    "es": "Perfectos",
+    "fr": "Parfaits",
+    "it": "Perfetti"
+  },
+  "achievements_showcase": {
+    "source": "Featured Achievements",
+    "en": "Featured Achievements",
+    "ru": "Избранные достижения",
+    "de": "Ausgewählte Erfolge",
+    "es": "Logros destacados",
+    "fr": "Réalisations en vedette",
+    "it": "Traguardi in evidenza"
+  },
+  "no_showcase": {
+    "source": "No achievements showcased yet",
+    "en": "No achievements showcased yet",
+    "ru": "Пока нет избранных достижений",
+    "de": "Noch keine Erfolge präsentiert",
+    "es": "Aún no hay logros destacados",
+    "fr": "Aucune réalisation présentée pour le moment",
+    "it": "Nessun traguardo in evidenza ancora"
+  },
+  "back": {
+    "source": "Back",
+    "en": "Back",
+    "ru": "Назад",
+    "de": "Zurück",
+    "es": "Volver",
+    "fr": "Retour",
+    "it": "Indietro"
   }
 }

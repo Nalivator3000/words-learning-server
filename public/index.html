@@ -135,6 +135,12 @@
             duelGameplayLink.rel = 'stylesheet';
             duelGameplayLink.href = 'duel-gameplay.css?v=' + Date.now();
             document.head.appendChild(duelGameplayLink);
+
+            // Load profile UI CSS
+            const profileLink = document.createElement('link');
+            profileLink.rel = 'stylesheet';
+            profileLink.href = 'profile-ui.css?v=' + Date.now();
+            document.head.appendChild(profileLink);
         })();
     </script>
 </head>
@@ -829,6 +835,19 @@
                 </div>
             </section>
 
+            <!-- Profile Section (View only - no nav button) -->
+            <section id="profileSection" class="section">
+                <h2>👤 <span data-i18n="profile_title">Profile</span></h2>
+
+                <div id="profileContent">
+                    <!-- Profile UI will be rendered here by JavaScript -->
+                    <div class="loading-spinner">
+                        <div class="spinner"></div>
+                        <p data-i18n="loading">Загрузка...</p>
+                    </div>
+                </div>
+            </section>
+
             <!-- Bug Reports Section -->
             <section id="bugReportsSection" class="section">
                 <h2>🐛 <span data-i18n="bug_reports">Сообщить об ошибке</span></h2>
@@ -967,6 +986,7 @@
     <script src="friends-ui.js"></script>
     <script src="duels-ui.js"></script>
     <script src="duel-gameplay.js"></script>
+    <script src="profile-ui.js"></script>
     <script src="app.js"></script>
 </body>
 </html>

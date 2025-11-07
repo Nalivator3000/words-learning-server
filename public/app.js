@@ -629,6 +629,15 @@ class LanguageLearningApp {
                     await window.duelsUI.refresh();
                 }
             }
+        } else if (sectionName === 'profile') {
+            // Initialize Profile UI (only for whitelisted users)
+            // Profile is shown via profileUI.viewProfile(userId), not via navigation
+            if (window.profileUI && userManager.hasGamificationAccess()) {
+                if (!window.profileUI.initialized) {
+                    await window.profileUI.init(userManager.currentUser.id);
+                }
+                // Profile content is already rendered by viewProfile()
+            }
         } else if (sectionName === 'leaderboard') {
             await this.loadLeaderboard('global');
         } else if (sectionName === 'stats') {

@@ -422,6 +422,16 @@ class FriendsUI {
             });
         });
 
+        // View profile buttons
+        container.querySelectorAll('.view-profile-btn').forEach(btn => {
+            btn.addEventListener('click', (e) => {
+                const userId = e.currentTarget.getAttribute('data-user-id');
+                if (userId && window.profileUI) {
+                    window.profileUI.viewProfile(parseInt(userId));
+                }
+            });
+        });
+
         // Switch tab buttons (in empty states)
         container.querySelectorAll('.switch-tab-btn').forEach(btn => {
             btn.addEventListener('click', (e) => {
