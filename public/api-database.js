@@ -111,8 +111,16 @@ class APIDatabase {
         console.log(`🔍 getRandomWords: status="${status}", count=${count}`);
 
         try {
-            // Use server endpoint for random words
-            const result = await this.apiRequest(`/words/random/${status}/${count}`);
+            // Get user context
+            const { userId, languagePairId } = this.getUserContext();
+
+            if (!userId || !languagePairId) {
+                throw new Error('Missing userId or languagePairId');
+            }
+
+            // Use server endpoint for random words with user context
+            const params = new URLSearchParams({ userId, languagePairId });
+            const result = await this.apiRequest(`/words/random/${status}/${count}?${params.toString()}`);
             console.log(`🎯 getRandomWords: returning ${result.length} words from server`);
             return Array.isArray(result) ? result : [];
         } catch (error) {
@@ -130,7 +138,15 @@ class APIDatabase {
     }
 
     async getReviewWords(count = 10) {
-        return await this.apiRequest(`/words/random/review/${count}`);
+        // Get user context
+        const { userId, languagePairId } = this.getUserContext();
+
+        if (!userId || !languagePairId) {
+            throw new Error('Missing userId or languagePairId');
+        }
+
+        const params = new URLSearchParams({ userId, languagePairId });
+        return await this.apiRequest(`/words/random/review/${count}?${params.toString()}`);
     }
 
     async updateWordProgress(wordId, isCorrect, quizType) {
