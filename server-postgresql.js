@@ -10660,6 +10660,31 @@ app.get('/api/users/:userId/insights', async (req, res) => {
 });
 
 // ========================================
+// LANGUAGE PAIR ENDPOINTS
+// ========================================
+
+// Get language pair by ID
+app.get('/api/language-pair/:id', async (req, res) => {
+    try {
+        const { id } = req.params;
+
+        const result = await db.query(
+            'SELECT * FROM language_pairs WHERE id = $1',
+            [parseInt(id)]
+        );
+
+        if (result.rows.length === 0) {
+            return res.status(404).json({ error: 'Language pair not found' });
+        }
+
+        res.json(result.rows[0]);
+    } catch (err) {
+        logger.error('Error getting language pair:', err);
+        res.status(500).json({ error: err.message });
+    }
+});
+
+// ========================================
 // WORDS ENDPOINTS
 // ========================================
 

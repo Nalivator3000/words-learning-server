@@ -5,9 +5,9 @@ class WordListsUI {
     constructor() {
         this.userId = null;
         this.languagePairId = null;
+        this.languagePair = null;
         this.wordLists = [];
         this.currentFilter = {
-            language: '',
             category: '',
             difficulty: '',
             topic: ''
@@ -19,9 +19,11 @@ class WordListsUI {
     async init(userId, languagePairId) {
         this.userId = userId;
         this.languagePairId = languagePairId;
-        console.log('Word Lists UI: Initializing for user', userId);
+        console.log('Word Lists UI: Initializing for user', userId, 'with language pair', languagePairId);
 
         try {
+            // Load language pair information
+            await this.loadLanguagePair();
             await this.loadWordLists();
             this.render();
             this.initialized = true;
@@ -31,12 +33,29 @@ class WordListsUI {
         }
     }
 
+    async loadLanguagePair() {
+        try {
+            const response = await fetch(`/api/language-pair/${this.languagePairId}`);
+            if (!response.ok) throw new Error('Failed to load language pair');
+
+            this.languagePair = await response.json();
+            console.log('Language pair loaded:', this.languagePair);
+        } catch (error) {
+            console.error('Error loading language pair:', error);
+            throw error;
+        }
+    }
+
     async loadWordLists() {
         try {
             let url = '/api/word-lists';
             const params = new URLSearchParams();
 
-            if (this.currentFilter.language) params.append('language', this.currentFilter.language);
+            // Always filter by the user's selected language pair
+            if (this.languagePair && this.languagePair.from_lang) {
+                params.append('language', this.languagePair.from_lang);
+            }
+
             if (this.currentFilter.category) params.append('category', this.currentFilter.category);
             if (this.currentFilter.difficulty) params.append('difficulty', this.currentFilter.difficulty);
             if (this.currentFilter.topic) params.append('topic', this.currentFilter.topic);
@@ -60,22 +79,19 @@ class WordListsUI {
         const container = document.getElementById('wordListsContent');
         if (!container) return;
 
+        const languageName = this.languagePair ? this.languagePair.name : 'Loading...';
+        const fromLang = this.languagePair ? this.languagePair.from_lang.toUpperCase() : '';
+
         container.innerHTML = `
             <div class="word-lists-container">
+                <!-- Current Language Info -->
+                <div class="current-language-info">
+                    <span class="language-label" data-i18n="showing_lists_for">Showing lists for:</span>
+                    <span class="language-value">${languageName} (${fromLang})</span>
+                </div>
+
                 <!-- Filters -->
                 <div class="word-lists-filters">
-                    <div class="filter-group">
-                        <label data-i18n="language">Language</label>
-                        <select id="languageFilter" class="filter-select">
-                            <option value="" data-i18n="all_languages">All Languages</option>
-                            <option value="de" ${this.currentFilter.language === 'de' ? 'selected' : ''}>Deutsch</option>
-                            <option value="en" ${this.currentFilter.language === 'en' ? 'selected' : ''}>English</option>
-                            <option value="es" ${this.currentFilter.language === 'es' ? 'selected' : ''}>Español</option>
-                            <option value="fr" ${this.currentFilter.language === 'fr' ? 'selected' : ''}>Français</option>
-                            <option value="it" ${this.currentFilter.language === 'it' ? 'selected' : ''}>Italiano</option>
-                        </select>
-                    </div>
-
                     <div class="filter-group">
                         <label data-i18n="difficulty">Difficulty</label>
                         <select id="difficultyFilter" class="filter-select">
@@ -202,17 +218,9 @@ class WordListsUI {
 
     attachEventListeners() {
         // Filter listeners
-        const languageFilter = document.getElementById('languageFilter');
         const difficultyFilter = document.getElementById('difficultyFilter');
         const topicFilter = document.getElementById('topicFilter');
         const resetBtn = document.getElementById('resetFiltersBtn');
-
-        if (languageFilter) {
-            languageFilter.addEventListener('change', (e) => {
-                this.currentFilter.language = e.target.value;
-                this.refresh();
-            });
-        }
 
         if (difficultyFilter) {
             difficultyFilter.addEventListener('change', (e) => {
@@ -231,7 +239,6 @@ class WordListsUI {
         if (resetBtn) {
             resetBtn.addEventListener('click', () => {
                 this.currentFilter = {
-                    language: '',
                     category: '',
                     difficulty: '',
                     topic: ''

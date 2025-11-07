@@ -6,6 +6,30 @@
     gap: 24px;
 }
 
+/* Current Language Info */
+.current-language-info {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    padding: 16px 20px;
+    background: rgba(99, 102, 241, 0.1);
+    backdrop-filter: blur(10px);
+    border: 1px solid rgba(99, 102, 241, 0.3);
+    border-radius: 12px;
+    font-size: 1rem;
+}
+
+.current-language-info .language-label {
+    color: rgba(255, 255, 255, 0.7);
+    font-weight: 500;
+}
+
+.current-language-info .language-value {
+    color: white;
+    font-weight: 700;
+    font-size: 1.1rem;
+}
+
 /* Filters Section */
 .word-lists-filters {
     display: flex;

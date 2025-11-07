@@ -7342,5 +7342,14 @@
     "es": "usuarios",
     "fr": "utilisateurs",
     "it": "utenti"
+  },
+  "showing_lists_for": {
+    "source": "Showing lists for:",
+    "en": "Showing lists for:",
+    "ru": "Показаны списки для:",
+    "de": "Listen angezeigt für:",
+    "es": "Mostrando listas para:",
+    "fr": "Affichage des listes pour:",
+    "it": "Visualizzazione elenchi per:"
   }
 }
