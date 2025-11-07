@@ -5363,6 +5363,15 @@
     "fr": "Bienvenue sur LexyBooster",
     "it": "Benvenuto su LexyBooster"
   },
+  "loading": {
+    "source": "Loading...",
+    "en": "Loading...",
+    "ru": "Загрузка...",
+    "de": "Lädt...",
+    "es": "Cargando...",
+    "fr": "Chargement...",
+    "it": "Caricamento..."
+  },
   "login": {
     "source": "Login",
     "en": "Login",
