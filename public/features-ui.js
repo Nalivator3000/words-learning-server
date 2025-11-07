@@ -64,7 +64,7 @@ class FeaturesUI {
         container.innerHTML = '<div class="loading-spinner"><div class="spinner"></div><p>' + i18n.t('loading') + '</p></div>';
 
         try {
-            const response = await fetch(`${API_URL}/api/challenges/daily/${this.userId}`);
+            const response = await fetch(`/api/challenges/daily/${this.userId}`);
             const data = await response.json();
 
             if (data.challenges && data.challenges.length > 0) {
@@ -154,7 +154,7 @@ class FeaturesUI {
 
     async claimChallengeReward(challengeId) {
         try {
-            const response = await fetch(`${API_URL}/api/challenges/claim-reward/${challengeId}`, {
+            const response = await fetch(`/api/challenges/claim-reward/${challengeId}`, {
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json' },
                 body: JSON.stringify({ userId: this.userId })
@@ -185,7 +185,7 @@ class FeaturesUI {
         if (!this.userId) return;
 
         try {
-            const response = await fetch(`${API_URL}/api/streak-freeze/${this.userId}`);
+            const response = await fetch(`/api/streak-freeze/${this.userId}`);
             const data = await response.json();
 
             this.renderActiveFreezes(data.freezes || []);
@@ -249,7 +249,7 @@ class FeaturesUI {
         if (!this.userId) return;
 
         try {
-            const response = await fetch(`${API_URL}/api/streak-freeze/use`, {
+            const response = await fetch(`/api/streak-freeze/use`, {
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json' },
                 body: JSON.stringify({
@@ -276,7 +276,7 @@ class FeaturesUI {
         if (!this.userId) return;
 
         try {
-            const response = await fetch(`${API_URL}/api/streak-freeze/${this.userId}/claim-free`, {
+            const response = await fetch(`/api/streak-freeze/${this.userId}/claim-free`, {
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json' }
             });
@@ -299,7 +299,7 @@ class FeaturesUI {
         if (!this.userId) return;
 
         try {
-            const response = await fetch(`${API_URL}/api/streak-freeze/${this.userId}/history`);
+            const response = await fetch(`/api/streak-freeze/${this.userId}/history`);
             const data = await response.json();
 
             this.renderFreezeHistory(data.history || []);
@@ -352,7 +352,7 @@ class FeaturesUI {
         }
 
         try {
-            const response = await fetch(`${API_URL}/api/bugs/report`, {
+            const response = await fetch(`/api/bugs/report`, {
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json' },
                 body: JSON.stringify({
@@ -389,7 +389,7 @@ class FeaturesUI {
         container.innerHTML = '<div class="loading-spinner"><div class="spinner"></div></div>';
 
         try {
-            const response = await fetch(`${API_URL}/api/bugs/user/${this.userId}?limit=5`);
+            const response = await fetch(`/api/bugs/user/${this.userId}?limit=5`);
             const data = await response.json();
 
             this.renderBugReports(data.reports || []);
