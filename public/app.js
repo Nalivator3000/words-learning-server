@@ -960,7 +960,23 @@ schreiben,Sie schreibt einen Brief.,Писать,Она пишет письmо.`
             this.renderQuestion(this.currentQuizData);
         } catch (error) {
             console.error('Error starting study quiz:', error);
-            alert(error.message);
+
+            // Show friendly message for no words
+            if (error.message.includes('No words')) {
+                if (window.showToast) {
+                    showToast(i18n?.t('no_words_to_study') || 'No words to study. Please import some words first!', 'info');
+                } else {
+                    alert(i18n?.t('no_words_to_study') || 'No words to study. Please import some words first!');
+                }
+                // Redirect to import section
+                this.showSection('import');
+            } else {
+                if (window.showToast) {
+                    showToast(error.message, 'error');
+                } else {
+                    alert(error.message);
+                }
+            }
         }
     }
 
@@ -974,7 +990,23 @@ schreiben,Sie schreibt einen Brief.,Писать,Она пишет письmо.`
             this.renderReviewQuestion(this.currentQuizData);
         } catch (error) {
             console.error('Error starting review quiz:', error);
-            alert(error.message);
+
+            // Show friendly message for no words
+            if (error.message.includes('No words')) {
+                if (window.showToast) {
+                    showToast(i18n?.t('no_words_to_review') || 'No words to review. Study some words first!', 'info');
+                } else {
+                    alert(i18n?.t('no_words_to_review') || 'No words to review. Study some words first!');
+                }
+                // Redirect to study section
+                this.showSection('study');
+            } else {
+                if (window.showToast) {
+                    showToast(error.message, 'error');
+                } else {
+                    alert(error.message);
+                }
+            }
         }
     }
 

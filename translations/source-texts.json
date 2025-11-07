@@ -5068,12 +5068,21 @@
   },
   "no_words_to_study": {
     "source": "No words для изучения",
-    "en": "No words to study",
-    "ru": "Нет слов для изучения",
-    "de": "Keine Wörter zum Lernen",
-    "es": "No hay palabras para estudiar",
-    "fr": "Aucun mot à étudier",
-    "it": "Nessuna parola da studiare"
+    "en": "No words to study. Please import some words first!",
+    "ru": "Нет слов для изучения. Пожалуйста, импортируйте слова!",
+    "de": "Keine Wörter zum Lernen. Bitte importieren Sie zuerst Wörter!",
+    "es": "No hay palabras para estudiar. ¡Por favor, importe algunas palabras primero!",
+    "fr": "Aucun mot à étudier. Veuillez d'abord importer des mots!",
+    "it": "Nessuna parola da studiare. Per favore, importa prima alcune parole!"
+  },
+  "no_words_to_review": {
+    "source": "Нет слов для повторения",
+    "en": "No words to review. Study some words first!",
+    "ru": "Нет слов для повторения. Сначала изучите слова!",
+    "de": "Keine Wörter zum Wiederholen. Lernen Sie zuerst einige Wörter!",
+    "es": "No hay palabras para revisar. ¡Estudie algunas palabras primero!",
+    "fr": "Aucun mot à réviser. Étudiez d'abord des mots!",
+    "it": "Nessuna parola da rivedere. Studia prima alcune parole!"
   },
   "google_sheets_error": {
     "source": "Ошибка при загрузке Google Таблиц",
