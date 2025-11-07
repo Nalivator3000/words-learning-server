@@ -1,0 +1,71 @@
+{
+  "name": "German Basic Nouns - Food",
+  "description": "10 most common German nouns related to food and eating",
+  "from_lang": "de",
+  "to_lang": "en",
+  "category": "vocabulary",
+  "difficulty_level": "beginner",
+  "topic": "food",
+  "words": [
+    {
+      "word": "das Brot",
+      "translation": "bread",
+      "example": "Ich esse gern Brot zum Frühstück.",
+      "exampleTranslation": "I like to eat bread for breakfast."
+    },
+    {
+      "word": "das Wasser",
+      "translation": "water",
+      "example": "Trinken Sie bitte viel Wasser!",
+      "exampleTranslation": "Please drink a lot of water!"
+    },
+    {
+      "word": "der Apfel",
+      "translation": "apple",
+      "example": "Der Apfel ist rot und süß.",
+      "exampleTranslation": "The apple is red and sweet."
+    },
+    {
+      "word": "die Milch",
+      "translation": "milk",
+      "example": "Die Milch ist frisch und kalt.",
+      "exampleTranslation": "The milk is fresh and cold."
+    },
+    {
+      "word": "der Käse",
+      "translation": "cheese",
+      "example": "Ich liebe Käse aus der Schweiz.",
+      "exampleTranslation": "I love cheese from Switzerland."
+    },
+    {
+      "word": "das Fleisch",
+      "translation": "meat",
+      "example": "Essen Sie Fleisch oder sind Sie Vegetarier?",
+      "exampleTranslation": "Do you eat meat or are you vegetarian?"
+    },
+    {
+      "word": "die Kartoffel",
+      "translation": "potato",
+      "example": "Kartoffeln sind sehr gesund.",
+      "exampleTranslation": "Potatoes are very healthy."
+    },
+    {
+      "word": "der Fisch",
+      "translation": "fish",
+      "example": "Wir essen jeden Freitag Fisch.",
+      "exampleTranslation": "We eat fish every Friday."
+    },
+    {
+      "word": "das Ei",
+      "translation": "egg",
+      "example": "Zum Frühstück esse ich zwei Eier.",
+      "exampleTranslation": "I eat two eggs for breakfast."
+    },
+    {
+      "word": "der Kaffee",
+      "translation": "coffee",
+      "example": "Morgens trinke ich immer eine Tasse Kaffee.",
+      "exampleTranslation": "In the morning I always drink a cup of coffee."
+    }
+  ]
+}

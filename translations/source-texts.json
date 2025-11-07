@@ -7207,5 +7207,140 @@
     "es": "No hay logros en esta categoría",
     "fr": "Aucune réalisation dans cette catégorie",
     "it": "Nessun traguardo in questa categoria"
+  },
+  "word_lists": {
+    "source": "Word Lists",
+    "en": "Word Lists",
+    "ru": "Списки слов",
+    "de": "Wortlisten",
+    "es": "Listas de palabras",
+    "fr": "Listes de mots",
+    "it": "Liste di parole"
+  },
+  "word_lists_description": {
+    "source": "Browse and import curated word collections by topic, level, and language",
+    "en": "Browse and import curated word collections by topic, level, and language",
+    "ru": "Просматривайте и импортируйте подборки слов по темам, уровням и языкам",
+    "de": "Durchsuchen und importieren Sie kuratierte Wortsammlungen nach Thema, Level und Sprache",
+    "es": "Explora e importa colecciones de palabras curadas por tema, nivel e idioma",
+    "fr": "Parcourez et importez des collections de mots organisées par thème, niveau et langue",
+    "it": "Sfoglia e importa collezioni di parole curate per argomento, livello e lingua"
+  },
+  "all_languages": {
+    "source": "All Languages",
+    "en": "All Languages",
+    "ru": "Все языки",
+    "de": "Alle Sprachen",
+    "es": "Todos los idiomas",
+    "fr": "Toutes les langues",
+    "it": "Tutte le lingue"
+  },
+  "all_levels": {
+    "source": "All Levels",
+    "en": "All Levels",
+    "ru": "Все уровни",
+    "de": "Alle Stufen",
+    "es": "Todos los niveles",
+    "fr": "Tous les niveaux",
+    "it": "Tutti i livelli"
+  },
+  "all_topics": {
+    "source": "All Topics",
+    "en": "All Topics",
+    "ru": "Все темы",
+    "de": "Alle Themen",
+    "es": "Todos los temas",
+    "fr": "Tous les sujets",
+    "it": "Tutti gli argomenti"
+  },
+  "topic_food": {
+    "source": "Food",
+    "en": "Food",
+    "ru": "Еда",
+    "de": "Essen",
+    "es": "Comida",
+    "fr": "Nourriture",
+    "it": "Cibo"
+  },
+  "topic_travel": {
+    "source": "Travel",
+    "en": "Travel",
+    "ru": "Путешествия",
+    "de": "Reisen",
+    "es": "Viajes",
+    "fr": "Voyages",
+    "it": "Viaggi"
+  },
+  "topic_business": {
+    "source": "Business",
+    "en": "Business",
+    "ru": "Бизнес",
+    "de": "Geschäft",
+    "es": "Negocios",
+    "fr": "Affaires",
+    "it": "Affari"
+  },
+  "topic_daily_life": {
+    "source": "Daily Life",
+    "en": "Daily Life",
+    "ru": "Повседневная жизнь",
+    "de": "Alltag",
+    "es": "Vida diaria",
+    "fr": "Vie quotidienne",
+    "it": "Vita quotidiana"
+  },
+  "topic_nature": {
+    "source": "Nature",
+    "en": "Nature",
+    "ru": "Природа",
+    "de": "Natur",
+    "es": "Naturaleza",
+    "fr": "Nature",
+    "it": "Natura"
+  },
+  "reset_filters": {
+    "source": "Reset Filters",
+    "en": "Reset Filters",
+    "ru": "Сбросить фильтры",
+    "de": "Filter zurücksetzen",
+    "es": "Restablecer filtros",
+    "fr": "Réinitialiser les filtres",
+    "it": "Reimposta filtri"
+  },
+  "no_word_lists": {
+    "source": "No word lists found",
+    "en": "No word lists found",
+    "ru": "Списки слов не найдены",
+    "de": "Keine Wortlisten gefunden",
+    "es": "No se encontraron listas de palabras",
+    "fr": "Aucune liste de mots trouvée",
+    "it": "Nessuna lista di parole trovata"
+  },
+  "view_list": {
+    "source": "View List",
+    "en": "View List",
+    "ru": "Посмотреть список",
+    "de": "Liste ansehen",
+    "es": "Ver lista",
+    "fr": "Voir la liste",
+    "it": "Visualizza lista"
+  },
+  "import_list": {
+    "source": "Import",
+    "en": "Import",
+    "ru": "Импортировать",
+    "de": "Importieren",
+    "es": "Importar",
+    "fr": "Importer",
+    "it": "Importa"
+  },
+  "users": {
+    "source": "users",
+    "en": "users",
+    "ru": "пользователей",
+    "de": "Benutzer",
+    "es": "usuarios",
+    "fr": "utilisateurs",
+    "it": "utenti"
   }
 }

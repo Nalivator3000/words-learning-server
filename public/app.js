@@ -367,6 +367,7 @@ class LanguageLearningApp {
         // Navigation
         document.getElementById('homeBtn').addEventListener('click', () => this.showSection('home'));
         document.getElementById('importBtn').addEventListener('click', () => this.showSection('import'));
+        document.getElementById('wordListsBtn').addEventListener('click', () => this.showSection('wordLists'));
         document.getElementById('studyBtn').addEventListener('click', () => this.showSection('study'));
         document.getElementById('reviewBtn').addEventListener('click', () => this.showSection('review'));
         document.getElementById('challengesBtn').addEventListener('click', () => this.showSection('challenges'));
@@ -648,6 +649,15 @@ class LanguageLearningApp {
                     await window.achievementsUI.init(userManager.currentUser.id);
                 } else {
                     await window.achievementsUI.refresh();
+                }
+            }
+        } else if (sectionName === 'wordLists') {
+            // Initialize Word Lists UI
+            if (window.wordListsUI) {
+                if (!window.wordListsUI.initialized) {
+                    await window.wordListsUI.init(userManager.currentUser.id, this.languagePairId);
+                } else {
+                    await window.wordListsUI.refresh();
                 }
             }
         } else if (sectionName === 'leaderboard') {

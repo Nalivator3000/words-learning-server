@@ -147,6 +147,12 @@
             achievementsLink.rel = 'stylesheet';
             achievementsLink.href = 'achievements-ui.css?v=' + Date.now();
             document.head.appendChild(achievementsLink);
+
+            // Load word lists UI CSS
+            const wordListsLink = document.createElement('link');
+            wordListsLink.rel = 'stylesheet';
+            wordListsLink.href = 'word-lists-ui.css?v=' + Date.now();
+            document.head.appendChild(wordListsLink);
         })();
     </script>
 </head>
@@ -189,6 +195,7 @@
                 <div class="nav-buttons">
                     <button id="homeBtn" class="nav-btn active" data-i18n="home" data-label="Home"></button>
                     <button id="importBtn" class="nav-btn" data-i18n="import" data-label="Import"></button>
+                    <button id="wordListsBtn" class="nav-btn" data-i18n="word_lists" data-label="Word Lists"></button>
                     <button id="studyBtn" class="nav-btn" data-i18n="study" data-label="Study"></button>
                     <button id="reviewBtn" class="nav-btn" data-i18n="review" data-label="Review"></button>
                     <button id="challengesBtn" class="nav-btn" data-i18n="daily_challenges" data-label="Challenges"></button>
@@ -282,6 +289,22 @@
                     </div>
                 </div>
                 <div id="importStatus" class="status-message"></div>
+            </section>
+
+            <!-- Word Lists Section -->
+            <section id="wordListsSection" class="section">
+                <h2>📚 <span data-i18n="word_lists">Word Lists</span></h2>
+                <p class="section-description" data-i18n="word_lists_description">
+                    Browse and import curated word collections by topic, level, and language
+                </p>
+
+                <div id="wordListsContent">
+                    <!-- Word Lists UI will be rendered here by JavaScript -->
+                    <div class="loading-spinner">
+                        <div class="spinner"></div>
+                        <p data-i18n="loading">Загрузка...</p>
+                    </div>
+                </div>
             </section>
 
             <!-- Study Section -->
@@ -1011,6 +1034,7 @@
     <script src="duel-gameplay.js"></script>
     <script src="profile-ui.js"></script>
     <script src="achievements-ui.js"></script>
+    <script src="word-lists-ui.js"></script>
     <script src="app.js"></script>
 </body>
 </html>

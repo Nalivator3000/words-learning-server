@@ -520,6 +520,19 @@ async function initDatabase() {
             )
         `);
 
+        // Add topic field to global_word_collections
+        await db.query(`
+            DO $$
+            BEGIN
+                IF NOT EXISTS (
+                    SELECT 1 FROM information_schema.columns
+                    WHERE table_name = 'global_word_collections' AND column_name = 'topic'
+                ) THEN
+                    ALTER TABLE global_word_collections ADD COLUMN topic VARCHAR(100);
+                END IF;
+            END $$;
+        `);
+
         // Bug Reporting System: Add is_beta_tester flag to users
         await db.query(`
             DO $$
@@ -7220,6 +7233,188 @@ app.post('/api/achievements/progress', async (req, res) => {
     } catch (err) {
         await db.query('ROLLBACK');
         logger.error('Error updating achievement progress:', err);
+        res.status(500).json({ error: err.message });
+    }
+});
+
+// ========================================
+// WORD LISTS ENDPOINTS
+// ========================================
+
+// Get all word lists (global collections)
+app.get('/api/word-lists', async (req, res) => {
+    try {
+        const { language, category, difficulty, topic } = req.query;
+
+        let query = 'SELECT * FROM global_word_collections WHERE is_public = true';
+        const params = [];
+        let paramIndex = 1;
+
+        if (language) {
+            query += ` AND from_lang = $${paramIndex}`;
+            params.push(language);
+            paramIndex++;
+        }
+
+        if (category) {
+            query += ` AND category = $${paramIndex}`;
+            params.push(category);
+            paramIndex++;
+        }
+
+        if (difficulty) {
+            query += ` AND difficulty_level = $${paramIndex}`;
+            params.push(difficulty);
+            paramIndex++;
+        }
+
+        if (topic) {
+            query += ` AND topic = $${paramIndex}`;
+            params.push(topic);
+            paramIndex++;
+        }
+
+        query += ' ORDER BY createdAt DESC';
+
+        const result = await db.query(query, params);
+        res.json(result.rows);
+    } catch (err) {
+        logger.error('Error getting word lists:', err);
+        res.status(500).json({ error: err.message });
+    }
+});
+
+// Get single word list with words
+app.get('/api/word-lists/:id', async (req, res) => {
+    try {
+        const { id } = req.params;
+
+        const collection = await db.query(
+            'SELECT * FROM global_word_collections WHERE id = $1',
+            [parseInt(id)]
+        );
+
+        if (collection.rows.length === 0) {
+            return res.status(404).json({ error: 'Word list not found' });
+        }
+
+        const words = await db.query(
+            'SELECT * FROM global_collection_words WHERE collection_id = $1 ORDER BY order_index ASC',
+            [parseInt(id)]
+        );
+
+        res.json({
+            ...collection.rows[0],
+            words: words.rows
+        });
+    } catch (err) {
+        logger.error('Error getting word list:', err);
+        res.status(500).json({ error: err.message });
+    }
+});
+
+// Create word list (admin/system only)
+app.post('/api/word-lists', async (req, res) => {
+    try {
+        const {
+            name,
+            description,
+            from_lang,
+            to_lang,
+            category,
+            difficulty_level,
+            topic,
+            words
+        } = req.body;
+
+        if (!name || !from_lang || !to_lang) {
+            return res.status(400).json({ error: 'Missing required fields: name, from_lang, to_lang' });
+        }
+
+        await db.query('BEGIN');
+
+        // Create collection
+        const collection = await db.query(`
+            INSERT INTO global_word_collections (name, description, from_lang, to_lang, category, difficulty_level, topic, word_count)
+            VALUES ($1, $2, $3, $4, $5, $6, $7, $8)
+            RETURNING *
+        `, [name, description, from_lang, to_lang, category, difficulty_level, topic, words?.length || 0]);
+
+        const collectionId = collection.rows[0].id;
+
+        // Add words if provided
+        if (words && words.length > 0) {
+            for (let i = 0; i < words.length; i++) {
+                const word = words[i];
+                await db.query(`
+                    INSERT INTO global_collection_words (collection_id, word, translation, example, exampleTranslation, order_index)
+                    VALUES ($1, $2, $3, $4, $5, $6)
+                `, [collectionId, word.word, word.translation, word.example, word.exampleTranslation, i]);
+            }
+        }
+
+        await db.query('COMMIT');
+
+        res.json({
+            success: true,
+            collection: collection.rows[0]
+        });
+    } catch (err) {
+        await db.query('ROLLBACK');
+        logger.error('Error creating word list:', err);
+        res.status(500).json({ error: err.message });
+    }
+});
+
+// Add word list to user's words
+app.post('/api/word-lists/:id/import', async (req, res) => {
+    try {
+        const { id } = req.params;
+        const { userId, languagePairId } = req.body;
+
+        if (!userId || !languagePairId) {
+            return res.status(400).json({ error: 'Missing required fields: userId, languagePairId' });
+        }
+
+        // Get collection words
+        const words = await db.query(
+            'SELECT * FROM global_collection_words WHERE collection_id = $1 ORDER BY order_index ASC',
+            [parseInt(id)]
+        );
+
+        await db.query('BEGIN');
+
+        // Add each word to user's collection
+        for (const word of words.rows) {
+            // Check if word already exists for this user
+            const existing = await db.query(
+                'SELECT id FROM words WHERE user_id = $1 AND language_pair_id = $2 AND word = $3',
+                [parseInt(userId), parseInt(languagePairId), word.word]
+            );
+
+            if (existing.rows.length === 0) {
+                await db.query(`
+                    INSERT INTO words (user_id, language_pair_id, word, translation)
+                    VALUES ($1, $2, $3, $4)
+                `, [parseInt(userId), parseInt(languagePairId), word.word, word.translation]);
+            }
+        }
+
+        // Update usage count
+        await db.query(
+            'UPDATE global_word_collections SET usage_count = usage_count + 1 WHERE id = $1',
+            [parseInt(id)]
+        );
+
+        await db.query('COMMIT');
+
+        res.json({
+            success: true,
+            imported_count: words.rows.length
+        });
+    } catch (err) {
+        await db.query('ROLLBACK');
+        logger.error('Error importing word list:', err);
         res.status(500).json({ error: err.message });
     }
 });
