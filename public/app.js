@@ -390,6 +390,9 @@ class LanguageLearningApp {
 
             document.getElementById('duelsBtn').style.display = '';
             document.getElementById('duelsBtn').addEventListener('click', () => this.showSection('duels'));
+
+            document.getElementById('achievementsBtn').style.display = '';
+            document.getElementById('achievementsBtn').addEventListener('click', () => this.showSection('achievements'));
         }
 
         document.getElementById('leaderboardBtn').addEventListener('click', () => this.showSection('leaderboard'));
@@ -637,6 +640,15 @@ class LanguageLearningApp {
                     await window.profileUI.init(userManager.currentUser.id);
                 }
                 // Profile content is already rendered by viewProfile()
+            }
+        } else if (sectionName === 'achievements') {
+            // Initialize Achievements UI (only for whitelisted users)
+            if (window.achievementsUI && userManager.hasGamificationAccess()) {
+                if (!window.achievementsUI.initialized) {
+                    await window.achievementsUI.init(userManager.currentUser.id);
+                } else {
+                    await window.achievementsUI.refresh();
+                }
             }
         } else if (sectionName === 'leaderboard') {
             await this.loadLeaderboard('global');

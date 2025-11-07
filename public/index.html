@@ -141,6 +141,12 @@
             profileLink.rel = 'stylesheet';
             profileLink.href = 'profile-ui.css?v=' + Date.now();
             document.head.appendChild(profileLink);
+
+            // Load achievements UI CSS
+            const achievementsLink = document.createElement('link');
+            achievementsLink.rel = 'stylesheet';
+            achievementsLink.href = 'achievements-ui.css?v=' + Date.now();
+            document.head.appendChild(achievementsLink);
         })();
     </script>
 </head>
@@ -192,6 +198,7 @@
                     <button id="personalInsightsBtn" class="nav-btn" data-i18n="personal_insights_title" data-label="Insights" style="display: none;"></button>
                     <button id="friendsBtn" class="nav-btn" data-i18n="friends_title" data-label="Friends" style="display: none;"></button>
                     <button id="duelsBtn" class="nav-btn" data-i18n="duels_title" data-label="Duels" style="display: none;"></button>
+                    <button id="achievementsBtn" class="nav-btn" data-i18n="achievements_title" data-label="Achievements" style="display: none;"></button>
                     <button id="leaderboardBtn" class="nav-btn" data-i18n="leaderboard" data-label="Rating"></button>
                     <button id="statsBtn" class="nav-btn" data-i18n="statistics" data-label="Stats"></button>
                 </div>
@@ -848,6 +855,22 @@
                 </div>
             </section>
 
+            <!-- Achievements Section (Limited Access) -->
+            <section id="achievementsSection" class="section">
+                <h2>🏆 <span data-i18n="achievements_title">Achievements</span></h2>
+                <p class="section-description" data-i18n="achievements_description">
+                    Unlock achievements as you learn and progress!
+                </p>
+
+                <div id="achievementsContent">
+                    <!-- Achievements UI will be rendered here by JavaScript -->
+                    <div class="loading-spinner">
+                        <div class="spinner"></div>
+                        <p data-i18n="loading">Загрузка...</p>
+                    </div>
+                </div>
+            </section>
+
             <!-- Bug Reports Section -->
             <section id="bugReportsSection" class="section">
                 <h2>🐛 <span data-i18n="bug_reports">Сообщить об ошибке</span></h2>
@@ -987,6 +1010,7 @@
     <script src="duels-ui.js"></script>
     <script src="duel-gameplay.js"></script>
     <script src="profile-ui.js"></script>
+    <script src="achievements-ui.js"></script>
     <script src="app.js"></script>
 </body>
 </html>

@@ -7117,5 +7117,95 @@
     "es": "Volver",
     "fr": "Retour",
     "it": "Indietro"
+  },
+  "achievements_title": {
+    "source": "Achievements",
+    "en": "Achievements",
+    "ru": "Достижения",
+    "de": "Erfolge",
+    "es": "Logros",
+    "fr": "Réalisations",
+    "it": "Traguardi"
+  },
+  "achievements_description": {
+    "source": "Unlock achievements as you learn and progress!",
+    "en": "Unlock achievements as you learn and progress!",
+    "ru": "Открывайте достижения по мере обучения и прогресса!",
+    "de": "Schalte Erfolge frei, während du lernst und Fortschritte machst!",
+    "es": "¡Desbloquea logros mientras aprendes y progresas!",
+    "fr": "Débloquez des réalisations en apprenant et en progressant !",
+    "it": "Sblocca traguardi mentre impari e progredisci!"
+  },
+  "achievements_unlocked": {
+    "source": "Achievements Unlocked",
+    "en": "Achievements Unlocked",
+    "ru": "Достижений открыто",
+    "de": "Erfolge freigeschaltet",
+    "es": "Logros desbloqueados",
+    "fr": "Réalisations débloquées",
+    "it": "Traguardi sbloccati"
+  },
+  "complete": {
+    "source": "Complete",
+    "en": "Complete",
+    "ru": "Выполнено",
+    "de": "Abgeschlossen",
+    "es": "Completado",
+    "fr": "Complété",
+    "it": "Completato"
+  },
+  "all_categories": {
+    "source": "All",
+    "en": "All",
+    "ru": "Все",
+    "de": "Alle",
+    "es": "Todos",
+    "fr": "Tous",
+    "it": "Tutti"
+  },
+  "learning_achievements": {
+    "source": "Learning",
+    "en": "Learning",
+    "ru": "Обучение",
+    "de": "Lernen",
+    "es": "Aprendizaje",
+    "fr": "Apprentissage",
+    "it": "Apprendimento"
+  },
+  "social_achievements": {
+    "source": "Social",
+    "en": "Social",
+    "ru": "Социальные",
+    "de": "Soziales",
+    "es": "Sociales",
+    "fr": "Sociales",
+    "it": "Sociali"
+  },
+  "milestone_achievements": {
+    "source": "Milestones",
+    "en": "Milestones",
+    "ru": "Вехи",
+    "de": "Meilensteine",
+    "es": "Hitos",
+    "fr": "Jalons",
+    "it": "Traguardi"
+  },
+  "special_achievements": {
+    "source": "Special",
+    "en": "Special",
+    "ru": "Особые",
+    "de": "Besondere",
+    "es": "Especiales",
+    "fr": "Spéciales",
+    "it": "Speciali"
+  },
+  "no_achievements_category": {
+    "source": "No achievements in this category",
+    "en": "No achievements in this category",
+    "ru": "Нет достижений в этой категории",
+    "de": "Keine Erfolge in dieser Kategorie",
+    "es": "No hay logros en esta categoría",
+    "fr": "Aucune réalisation dans cette catégorie",
+    "it": "Nessun traguardo in questa categoria"
   }
 }
