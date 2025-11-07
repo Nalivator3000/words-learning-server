@@ -1189,6 +1189,12 @@ schreiben,Sie schreibt einen Brief.,Писать,Она пишет письmо.`
         this.showAnswerFeedback(result, 'feedback');
         this.disableChoiceButtons();
 
+        // Hide skip button after answer is selected
+        const skipBtn = document.querySelector('.show-answer-btn');
+        if (skipBtn) {
+            skipBtn.style.display = 'none';
+        }
+
         if (result.correct) {
             buttonEl.classList.add('correct');
             // Add audio button to correct answer if it's foreign language
@@ -1269,6 +1275,12 @@ schreiben,Sie schreibt einen Brief.,Писать,Она пишет письmо.`
         const result = await quizManager.checkAnswer(answer);
         this.showAnswerFeedback(result, 'reviewFeedback');
         this.disableReviewChoiceButtons();
+
+        // Hide skip button after answer is selected
+        const skipBtn = document.querySelector('#reviewAnswerArea .show-answer-btn');
+        if (skipBtn) {
+            skipBtn.style.display = 'none';
+        }
 
         if (result.correct) {
             buttonEl.classList.add('correct');
