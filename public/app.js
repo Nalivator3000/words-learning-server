@@ -964,7 +964,13 @@ schreiben,Sie schreibt einen Brief.,Писать,Она пишет письmо.`
 
     async startStudyQuiz(quizType) {
         try {
+            console.log('🎮 Starting study quiz, type:', quizType);
+            console.log('👤 Current user:', userManager.getCurrentUser());
+            console.log('🌍 Current language pair:', userManager.getCurrentLanguagePair());
+
             const lessonSize = userManager.getLessonSize();
+            console.log('📚 Lesson size:', lessonSize);
+
             this.currentQuizData = await quizManager.startQuiz('study', quizType, lessonSize);
             this.showQuizInterface();
             this.renderQuestion(this.currentQuizData);
