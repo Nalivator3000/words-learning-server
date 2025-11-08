@@ -654,8 +654,9 @@ class LanguageLearningApp {
         } else if (sectionName === 'wordLists') {
             // Initialize Word Lists UI
             if (window.wordListsUI) {
+                const languagePair = userManager.getCurrentLanguagePair();
                 if (!window.wordListsUI.initialized) {
-                    await window.wordListsUI.init(userManager.currentUser.id, this.languagePairId);
+                    await window.wordListsUI.init(userManager.currentUser.id, languagePair?.id);
                 } else {
                     await window.wordListsUI.refresh();
                 }
