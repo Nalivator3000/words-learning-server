@@ -557,11 +557,10 @@ class LanguageLearningApp {
 
         // Listen for language changes to re-render quiz if active
         window.addEventListener('languageChanged', () => {
-            // Re-render current quiz question if quiz is active
-            if (this.currentSection === 'study' && quizManager.currentQuestion) {
-                this.renderQuestion(quizManager.getCurrentQuizData());
-            } else if (this.currentSection === 'review' && quizManager.currentReviewQuestion) {
-                this.renderReviewQuestion(quizManager.getCurrentReviewQuizData());
+            // For now, just log that language changed during quiz
+            // TODO: Implement proper quiz re-render when language changes
+            if (this.currentSection === 'study' || this.currentSection === 'review') {
+                console.log('⚠️ Language changed during quiz. Please restart quiz to see translations.');
             }
         });
     }
