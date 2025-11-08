@@ -82,6 +82,7 @@ app.use(generalLimiter);
 // Security headers - Helmet.js
 app.use(helmet({
     contentSecurityPolicy: {
+        useDefaults: false,
         directives: {
             defaultSrc: ["'self'"],
             scriptSrc: ["'self'", "'unsafe-inline'", "https://cdn.jsdelivr.net", "https://cdnjs.cloudflare.com"],
@@ -91,7 +92,11 @@ app.use(helmet({
             connectSrc: ["'self'", "http://localhost:3000", "http://localhost:*"],
             frameSrc: ["'none'"],
             objectSrc: ["'none'"],
-            upgradeInsecureRequests: []
+            baseUri: ["'self'"],
+            formAction: ["'self'"],
+            frameAncestors: ["'self'"],
+            scriptSrcAttr: ["'none'"]
+            // upgradeInsecureRequests explicitly NOT included for localhost development
         }
     },
     crossOriginEmbedderPolicy: false, // Disable for external resources
