@@ -103,7 +103,7 @@ class APIDatabase {
         // Request large limit to get all words (default server limit is 50)
         params.append('limit', '10000');
 
-        const result = await this.apiRequest(`/words?${params.toString()}`);
+        const result = await this.apiRequest(`/api/words?${params.toString()}`);
         return Array.isArray(result) ? result : [];
     }
 
@@ -114,12 +114,16 @@ class APIDatabase {
             // Get user context
             const { userId, languagePairId } = this.getUserContext();
 
+            console.log(`🔍 getRandomWords: userId=${userId}, languagePairId=${languagePairId}`);
+            console.log(`🔍 getRandomWords: userId type=${typeof userId}, languagePairId type=${typeof languagePairId}`);
+
             if (!userId || !languagePairId) {
-                throw new Error('Missing userId or languagePairId');
+                throw new Error(`Missing userId (${userId}) or languagePairId (${languagePairId})`);
             }
 
             // Use server endpoint for random words with user context
             const params = new URLSearchParams({ userId, languagePairId });
+            console.log(`🔍 getRandomWords: URL params = ${params.toString()}`);
             const result = await this.apiRequest(`/api/words/random/${status}/${count}?${params.toString()}`);
             console.log(`🎯 getRandomWords: returning ${result.length} words from server`);
             return Array.isArray(result) ? result : [];
