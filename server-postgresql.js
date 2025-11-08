@@ -88,7 +88,7 @@ app.use(helmet({
             styleSrc: ["'self'", "'unsafe-inline'", "https://cdn.jsdelivr.net", "https://cdnjs.cloudflare.com", "https://fonts.googleapis.com"],
             fontSrc: ["'self'", "https://fonts.gstatic.com", "https://cdnjs.cloudflare.com"],
             imgSrc: ["'self'", "data:", "https:", "blob:"],
-            connectSrc: ["'self'"],
+            connectSrc: ["'self'", "http://localhost:3000", "http://localhost:*"],
             frameSrc: ["'none'"],
             objectSrc: ["'none'"],
             upgradeInsecureRequests: []
