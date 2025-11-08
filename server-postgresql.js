@@ -11034,7 +11034,7 @@ app.put('/api/words/:id/progress', async (req, res) => {
                 totalPoints: newTotalPoints,
                 percentage,
                 status: newStatus,
-                xp: xpResult, // Include XP info in response
+                // xp: xpResult, // XP notifications disabled
                 achievements: newAchievements // Include newly unlocked achievements
             });
         } else {
