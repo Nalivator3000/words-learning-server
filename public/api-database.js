@@ -90,7 +90,7 @@ class APIDatabase {
             throw new Error('Words array is required');
         }
 
-        return await this.apiRequest('/words/bulk', {
+        return await this.apiRequest('/api/words/bulk', {
             method: 'POST',
             body: JSON.stringify(words)
         });
@@ -120,7 +120,7 @@ class APIDatabase {
 
             // Use server endpoint for random words with user context
             const params = new URLSearchParams({ userId, languagePairId });
-            const result = await this.apiRequest(`/words/random/${status}/${count}?${params.toString()}`);
+            const result = await this.apiRequest(`/api/words/random/${status}/${count}?${params.toString()}`);
             console.log(`🎯 getRandomWords: returning ${result.length} words from server`);
             return Array.isArray(result) ? result : [];
         } catch (error) {
@@ -146,11 +146,11 @@ class APIDatabase {
         }
 
         const params = new URLSearchParams({ userId, languagePairId });
-        return await this.apiRequest(`/words/random/review/${count}?${params.toString()}`);
+        return await this.apiRequest(`/api/words/random/review/${count}?${params.toString()}`);
     }
 
     async updateWordProgress(wordId, isCorrect, quizType) {
-        return await this.apiRequest(`/words/${wordId}/progress`, {
+        return await this.apiRequest(`/api/words/${wordId}/progress`, {
             method: 'PUT',
             body: JSON.stringify({
                 correct: isCorrect,
@@ -160,13 +160,13 @@ class APIDatabase {
     }
 
     async deleteWord(wordId) {
-        return await this.apiRequest(`/words/${wordId}`, {
+        return await this.apiRequest(`/api/words/${wordId}`, {
             method: 'DELETE'
         });
     }
 
     async updateWordStatus(wordId, newStatus) {
-        return await this.apiRequest(`/words/${wordId}/status`, {
+        return await this.apiRequest(`/api/words/${wordId}/status`, {
             method: 'PUT',
             body: JSON.stringify({ status: newStatus })
         });
@@ -178,7 +178,7 @@ class APIDatabase {
             throw new Error('User context not available');
         }
 
-        return await this.apiRequest(`/words/bulk/reset-to-studying?userId=${userId}&languagePairId=${languagePairId}`, {
+        return await this.apiRequest(`/api/words/bulk/reset-to-studying?userId=${userId}&languagePairId=${languagePairId}`, {
             method: 'PUT'
         });
     }
@@ -190,13 +190,13 @@ class APIDatabase {
             return { expiredCount: 0 };
         }
 
-        return await this.apiRequest(`/words/check-expired-reviews?userId=${userId}&languagePairId=${languagePairId}`, {
+        return await this.apiRequest(`/api/words/check-expired-reviews?userId=${userId}&languagePairId=${languagePairId}`, {
             method: 'POST'
         });
     }
 
     async getWordCounts() {
-        return await this.apiRequest('/words/counts');
+        return await this.apiRequest('/api/words/counts');
     }
 
     async getAllWords() {
@@ -249,21 +249,21 @@ class APIDatabase {
 
     // Word management methods
     async updateWordStatus(wordId, newStatus) {
-        return await this.apiRequest(`/words/${wordId}`, {
+        return await this.apiRequest(`/api/words/${wordId}`, {
             method: 'PUT',
             body: JSON.stringify({ status: newStatus })
         });
     }
 
     async updateWord(wordId, updates) {
-        return await this.apiRequest(`/words/${wordId}`, {
+        return await this.apiRequest(`/api/words/${wordId}`, {
             method: 'PUT',
             body: JSON.stringify(updates)
         });
     }
 
     async deleteWord(wordId) {
-        return await this.apiRequest(`/words/${wordId}`, {
+        return await this.apiRequest(`/api/words/${wordId}`, {
             method: 'DELETE'
         });
     }
