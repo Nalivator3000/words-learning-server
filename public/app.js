@@ -551,9 +551,19 @@ class LanguageLearningApp {
         document.getElementById('uiLanguageSelect').addEventListener('change', (e) => {
             languageManager.setUILanguage(e.target.value);
         });
-        
+
         // Set current UI language in selector
         document.getElementById('uiLanguageSelect').value = languageManager.getUILanguage();
+
+        // Listen for language changes to re-render quiz if active
+        window.addEventListener('languageChanged', () => {
+            // Re-render current quiz question if quiz is active
+            if (this.currentSection === 'study' && quizManager.currentQuestion) {
+                this.renderQuestion(quizManager.getCurrentQuizData());
+            } else if (this.currentSection === 'review' && quizManager.currentReviewQuestion) {
+                this.renderReviewQuestion(quizManager.getCurrentReviewQuizData());
+            }
+        });
     }
 
 
