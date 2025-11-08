@@ -15,9 +15,16 @@ A **browser extension** is intercepting and blocking fetch requests. The files `
 
 ### Solution
 
-**✅ FIXED:** Added `http://localhost:*` to CSP `connectSrc` directive in server-postgresql.js (commit c367ef6).
+**✅ FIXED:** Disabled `upgradeInsecureRequests` in CSP for localhost development (commit a0ca15c).
 
-The CSP now allows browser extensions to intercept fetch requests in development mode. Simply **refresh the page** and the error should disappear.
+The root cause was that helmet.js was automatically adding `upgrade-insecure-requests` directive, which forced all HTTP requests to be upgraded to HTTPS. This caused browser extensions to fail when trying to connect to `http://localhost:3000`.
+
+Changes made:
+- Added `http://localhost:*` to CSP `connectSrc` directive
+- Set `useDefaults: false` to prevent helmet from adding default CSP directives
+- Explicitly removed `upgradeInsecureRequests` from CSP
+
+Simply **refresh the page** (Ctrl+Shift+R for hard refresh) and the error should disappear.
 
 #### Alternative Solutions (if issue persists):
 
