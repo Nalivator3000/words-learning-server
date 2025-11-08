@@ -56,7 +56,7 @@ class APIDatabase {
     // Helper for API requests with retry logic for rate limiting
     async apiRequest(endpoint, options = {}, retries = 3, retryDelay = 1000) {
         try {
-            const response = await fetch(`${this.baseUrl}/api${endpoint}`, {
+            const response = await fetch(`${this.baseUrl}${endpoint}`, {
                 headers: {
                     'Content-Type': 'application/json',
                     ...options.headers
