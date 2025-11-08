@@ -2272,7 +2272,7 @@ schreiben,Sie schreibt einen Brief.,Писать,Она пишет письmо.`
             const wordsGoal = parseInt(document.getElementById('dailyWordsGoalInput').value);
             const exercisesGoal = parseInt(document.getElementById('dailyExercisesGoalInput').value);
 
-            const response = await fetch(`${database.apiUrl}/api/daily-goals/${user.id}/targets`, {
+            const response = await fetch(`/api/daily-goals/${user.id}/targets`, {
                 method: 'PUT',
                 headers: {
                     'Content-Type': 'application/json',
@@ -2305,7 +2305,7 @@ schreiben,Sie schreibt einen Brief.,Писать,Она пишет письmо.`
             const user = userManager.getCurrentUser();
             if (!user) return;
 
-            const response = await fetch(`${database.apiUrl}/api/daily-goals/${user.id}`);
+            const response = await fetch(`/api/daily-goals/${user.id}`);
             if (!response.ok) return;
 
             const goals = await response.json();
