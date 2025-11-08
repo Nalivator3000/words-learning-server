@@ -1024,7 +1024,7 @@ schreiben,Sie schreibt einen Brief.,Писать,Она пишет письmо.`
     renderQuestion(quizData) {
         const { question, questionNumber, totalQuestions, progress } = quizData;
         
-        document.getElementById('questionCounter').textContent = `Question ${questionNumber} of ${totalQuestions}`;
+        document.getElementById('questionCounter').textContent = `${i18n?.t('question') || 'Question'} ${questionNumber} ${i18n?.t('of') || 'of'} ${totalQuestions}`;
         document.getElementById('progressFill').style.width = `${progress}%`;
         
         const questionTextEl = document.getElementById('questionText');
@@ -1122,7 +1122,7 @@ schreiben,Sie schreibt einen Brief.,Писать,Она пишет письmо.`
     renderReviewQuestion(quizData) {
         const { question, questionNumber, totalQuestions, progress } = quizData;
         
-        document.getElementById('reviewQuestionCounter').textContent = `Question ${questionNumber} of ${totalQuestions}`;
+        document.getElementById('reviewQuestionCounter').textContent = `${i18n?.t('question') || 'Question'} ${questionNumber} ${i18n?.t('of') || 'of'} ${totalQuestions}`;
         document.getElementById('reviewProgressFill').style.width = `${progress}%`;
         
         const questionTextEl = document.getElementById('reviewQuestionText');

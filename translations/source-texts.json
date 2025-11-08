@@ -7369,5 +7369,14 @@
     "es": "Mostrando listas para:",
     "fr": "Affichage des listes pour:",
     "it": "Visualizzazione elenchi per:"
+  },
+  "of": {
+    "source": "of",
+    "en": "of",
+    "ru": "из",
+    "de": "von",
+    "es": "de",
+    "fr": "sur",
+    "it": "di"
   }
 }
