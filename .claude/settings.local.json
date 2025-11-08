@@ -89,7 +89,10 @@
       "Bash(keytool -genkey:*)",
       "Bash(keytool:*)",
       "Bash(for pwd in \"lexibooster2024\" \"LexiBooster2024\" \"Lexibooster123\" \"lexibooster!\" \"LexiBooster!\" \"lexi2024\" \"lexi123\" \"lexibooster1\" \"LexiBooster1\")",
-      "Bash(do echo \"Trying: $pwd\")"
+      "Bash(do echo \"Trying: $pwd\")",
+      "Bash(export BUBBLEWRAP_KEYSTORE_PASSWORD=\"LexiBooster2025!\")",
+      "Bash(while read file)",
+      "Bash(do echo '=== $file ===')"
     ],
     "deny": [],
     "ask": []
