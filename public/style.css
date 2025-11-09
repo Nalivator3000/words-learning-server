@@ -4709,3 +4709,34 @@ input:focus, textarea:focus, select:focus {
         display: none;
     }
 }
+
+/* ============================================
+   Word Action Buttons
+   ============================================ */
+
+.word-action-btn {
+    transition: all 0.2s ease;
+}
+
+.word-action-btn:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+    opacity: 0.9;
+}
+
+.word-action-btn:active {
+    transform: translateY(0);
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+}
+
+.delete-btn:hover {
+    background: #d32f2f !important;
+}
+
+.learned-btn:hover {
+    background: #388e3c !important;
+}
+
+.next-stage-btn:hover {
+    background: #1976d2 !important;
+}

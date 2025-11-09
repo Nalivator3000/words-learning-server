@@ -441,6 +441,24 @@ class LanguageLearningApp {
         document.getElementById('exportLearnedBtn').addEventListener('click', () => this.exportWords('learned'));
         document.getElementById('exportAllBtn').addEventListener('click', () => this.exportWords());
 
+        // Reset all progress functionality
+        const resetBtn = document.getElementById('resetAllToStudyingBtn');
+        if (resetBtn) {
+            resetBtn.addEventListener('click', () => this.resetAllProgress());
+        } else {
+            console.warn('⚠️ resetAllToStudyingBtn not found during initial setup - will retry later');
+            // Try again after a short delay (in case the element loads later)
+            setTimeout(() => {
+                const retryResetBtn = document.getElementById('resetAllToStudyingBtn');
+                if (retryResetBtn) {
+                    retryResetBtn.addEventListener('click', () => this.resetAllProgress());
+                    console.log('✅ resetAllToStudyingBtn event listener added on retry');
+                } else {
+                    console.error('❌ resetAllToStudyingBtn still not found after retry');
+                }
+            }, 1000);
+        }
+
         // Settings functionality
         document.getElementById('addLanguagePairBtn').addEventListener('click', () => this.showLanguagePairDialog());
         document.getElementById('lessonSizeInput').addEventListener('change', (e) => this.updateLessonSize(e.target.value));
@@ -449,6 +467,14 @@ class LanguageLearningApp {
 
         // Voice settings functionality
         this.setupVoiceSettings();
+
+        // Event delegation for dynamically loaded buttons
+        document.addEventListener('click', (e) => {
+            if (e.target && e.target.id === 'resetAllToStudyingBtn') {
+                console.log('🔄 Reset button clicked via event delegation');
+                this.resetAllProgress();
+            }
+        });
     }
 
     setupAuthListeners() {
@@ -831,8 +857,56 @@ class LanguageLearningApp {
             scoreContainer.appendChild(scoreDiv);
             scoreContainer.appendChild(progressBar);
 
+            // Action buttons
+            const actionsDiv = document.createElement('div');
+            actionsDiv.className = 'word-actions';
+            actionsDiv.style.cssText = 'display: flex; gap: 5px; margin-top: 10px; flex-wrap: wrap;';
+
+            // Delete button (always shown)
+            const deleteBtn = document.createElement('button');
+            deleteBtn.className = 'word-action-btn delete-btn';
+            deleteBtn.innerHTML = '🗑️';
+            deleteBtn.title = 'Delete word';
+            deleteBtn.style.cssText = 'padding: 5px 10px; background: #f44336; color: white; border: none; border-radius: 4px; cursor: pointer; font-size: 14px;';
+            deleteBtn.onclick = async () => {
+                if (confirm(`Delete word "${word.word}"?`)) {
+                    await this.deleteWordFromList(word.id);
+                }
+            };
+            actionsDiv.appendChild(deleteBtn);
+
+            // Mark as learned button (if not already learned)
+            if (word.status !== 'learned') {
+                const learnedBtn = document.createElement('button');
+                learnedBtn.className = 'word-action-btn learned-btn';
+                learnedBtn.innerHTML = '✅';
+                learnedBtn.title = 'Mark as learned';
+                learnedBtn.style.cssText = 'padding: 5px 10px; background: #4caf50; color: white; border: none; border-radius: 4px; cursor: pointer; font-size: 14px;';
+                learnedBtn.onclick = async () => {
+                    await this.markWordAsLearned(word.id);
+                };
+                actionsDiv.appendChild(learnedBtn);
+            }
+
+            // Move to next review stage button (if in review)
+            if (word.status === 'studying' || word.status === 'review_7') {
+                const nextStageBtn = document.createElement('button');
+                nextStageBtn.className = 'word-action-btn next-stage-btn';
+                nextStageBtn.innerHTML = '⏭️';
+                const nextStatus = word.status === 'studying' ? 'review (7 days)' : 'review (30 days)';
+                nextStageBtn.title = `Move to ${nextStatus}`;
+                nextStageBtn.style.cssText = 'padding: 5px 10px; background: #2196f3; color: white; border: none; border-radius: 4px; cursor: pointer; font-size: 14px;';
+                nextStageBtn.onclick = async () => {
+                    await this.moveWordToNextStage(word.id, word.status);
+                };
+                actionsDiv.appendChild(nextStageBtn);
+            }
+
+            console.log(`🔧 Rendering word "${word.word}" (status: ${word.status}) with ${actionsDiv.children.length} action button(s)`);
+
             item.appendChild(wordContent);
             item.appendChild(scoreContainer);
+            item.appendChild(actionsDiv);
             container.appendChild(item);
         });
     }
@@ -1564,6 +1638,109 @@ schreiben,Sie schreibt einen Brief.,Писать,Она пишет письmо.`
         console.warn('deleteWord: Not implemented on server');
     }
 
+    async deleteWordFromList(wordId) {
+        try {
+            const response = await fetch(`/api/words/${wordId}`, {
+                method: 'DELETE'
+            });
+
+            if (!response.ok) {
+                throw new Error('Failed to delete word');
+            }
+
+            if (window.showToast) {
+                showToast('✅ Word deleted', 'success');
+            }
+
+            // Reload word lists and stats
+            await this.updateWordLists();
+            await this.updateStats();
+
+        } catch (error) {
+            console.error('Error deleting word:', error);
+            if (window.showToast) {
+                showToast('❌ Failed to delete word', 'error');
+            } else {
+                alert('Failed to delete word');
+            }
+        }
+    }
+
+    async markWordAsLearned(wordId) {
+        try {
+            const response = await fetch(`/api/words/${wordId}/status`, {
+                method: 'PUT',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify({ status: 'learned' })
+            });
+
+            if (!response.ok) {
+                throw new Error('Failed to mark word as learned');
+            }
+
+            if (window.showToast) {
+                showToast('✅ Word marked as learned', 'success');
+            }
+
+            // Reload word lists and stats
+            await this.updateWordLists();
+            await this.updateStats();
+
+        } catch (error) {
+            console.error('Error marking word as learned:', error);
+            if (window.showToast) {
+                showToast('❌ Failed to mark as learned', 'error');
+            } else {
+                alert('Failed to mark word as learned');
+            }
+        }
+    }
+
+    async moveWordToNextStage(wordId, currentStatus) {
+        try {
+            // Determine next status
+            let nextStatus;
+            if (currentStatus === 'studying') {
+                nextStatus = 'review_7';
+            } else if (currentStatus === 'review_7') {
+                nextStatus = 'review_30';
+            } else {
+                return; // No next stage
+            }
+
+            const response = await fetch(`/api/words/${wordId}/status`, {
+                method: 'PUT',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify({ status: nextStatus })
+            });
+
+            if (!response.ok) {
+                throw new Error('Failed to move word to next stage');
+            }
+
+            const statusName = nextStatus === 'review_7' ? 'Review (7 days)' : 'Review (30 days)';
+            if (window.showToast) {
+                showToast(`✅ Moved to ${statusName}`, 'success');
+            }
+
+            // Reload word lists and stats
+            await this.updateWordLists();
+            await this.updateStats();
+
+        } catch (error) {
+            console.error('Error moving word to next stage:', error);
+            if (window.showToast) {
+                showToast('❌ Failed to move word', 'error');
+            } else {
+                alert('Failed to move word to next stage');
+            }
+        }
+    }
+
     async moveWordToStatus(wordId, newStatus) {
         // Feature temporarily disabled - requires server endpoint
         alert(i18n.t('moveFeatureDisabled'));
@@ -1571,9 +1748,72 @@ schreiben,Sie schreibt einen Brief.,Писать,Она пишет письmо.`
     }
 
     async resetAllWordsToStudying() {
-        // Feature temporarily disabled - requires server endpoint
-        alert(i18n.t('resetFeatureDisabled'));
-        console.warn('resetAllWordsToStudying: Not implemented on server');
+        // Show confirmation dialog
+        const confirmed = confirm(
+            'Are you sure you want to reset ALL words to "studying" status and clear all progress?\n\n' +
+            'This action is IRREVERSIBLE!\n\n' +
+            'All XP, correct/incorrect counts, and review dates will be lost.'
+        );
+
+        if (!confirmed) {
+            return;
+        }
+
+        try {
+            const user = userManager.getCurrentUser();
+            const languagePair = languageManager.getActiveLanguagePair();
+
+            if (!user || !languagePair) {
+                alert('Please select a language pair first.');
+                return;
+            }
+
+            // Show loading indicator
+            if (window.showToast) {
+                showToast('Resetting all progress...', 'info');
+            }
+
+            const response = await fetch(
+                `/api/words/bulk/reset-to-studying?userId=${user.id}&languagePairId=${languagePair.id}`,
+                {
+                    method: 'PUT',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    }
+                }
+            );
+
+            if (!response.ok) {
+                throw new Error('Failed to reset progress');
+            }
+
+            const result = await response.json();
+
+            // Show success message
+            if (window.showToast) {
+                showToast(`✅ ${result.updatedCount} words reset to studying status!`, 'success');
+            } else {
+                alert(`Successfully reset ${result.updatedCount} words to studying status!`);
+            }
+
+            // Reload words and stats
+            await this.loadWords();
+            await this.updateStats();
+            this.renderWords();
+
+        } catch (error) {
+            console.error('Error resetting progress:', error);
+            if (window.showToast) {
+                showToast('❌ Failed to reset progress', 'error');
+            } else {
+                alert('Failed to reset progress: ' + error.message);
+            }
+        }
+    }
+
+    async resetAllProgress() {
+        // Alias for resetAllWordsToStudying
+        await this.resetAllWordsToStudying();
     }
 
     async exportWords(status = null) {
