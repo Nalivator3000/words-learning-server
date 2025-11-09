@@ -85,17 +85,18 @@ app.use(helmet({
         useDefaults: false,
         directives: {
             defaultSrc: ["'self'"],
-            scriptSrc: ["'self'", "'unsafe-inline'", "https://cdn.jsdelivr.net", "https://cdnjs.cloudflare.com"],
+            scriptSrc: ["'self'", "'unsafe-inline'", "'unsafe-eval'", "https://cdn.jsdelivr.net", "https://cdnjs.cloudflare.com"],
             styleSrc: ["'self'", "'unsafe-inline'", "https://cdn.jsdelivr.net", "https://cdnjs.cloudflare.com", "https://fonts.googleapis.com"],
             fontSrc: ["'self'", "https://fonts.gstatic.com", "https://cdnjs.cloudflare.com"],
             imgSrc: ["'self'", "data:", "https:", "blob:"],
-            connectSrc: ["'self'", "http://localhost:3000", "http://localhost:*"],
+            mediaSrc: ["'self'", "https://ssl.gstatic.com", "https://*.gstatic.com"],
+            connectSrc: ["'self'", "http://localhost:3000", "http://localhost:*", "ws://localhost:*", "wss://localhost:*"],
             frameSrc: ["'none'"],
             objectSrc: ["'none'"],
             baseUri: ["'self'"],
             formAction: ["'self'"],
             frameAncestors: ["'self'"],
-            scriptSrcAttr: ["'none'"]
+            scriptSrcAttr: ["'unsafe-inline'"]
             // upgradeInsecureRequests explicitly NOT included for localhost development
         }
     },
@@ -11245,13 +11246,15 @@ app.post('/api/words/import', upload.single('csvFile'), async (req, res) => {
             const translation = row.Translation || row.Перевод || row.translation;
             const example = row.Example || row.Пример || row.example || '';
             const exampleTranslation = row['Example Translation'] || row['Перевод примера'] || row.exampleTranslation || '';
-            
+            const totalPoints = parseInt(row['Total Points'] || row['Опыт'] || row.totalPoints || row['XP'] || '0') || 0;
+
             if (word && translation) {
                 words.push({
                     word: word.trim(),
                     translation: translation.trim(),
                     example: example.trim(),
-                    exampleTranslation: exampleTranslation.trim()
+                    exampleTranslation: exampleTranslation.trim(),
+                    totalPoints: totalPoints
                 });
             }
         })
@@ -11270,13 +11273,14 @@ app.post('/api/words/import', upload.single('csvFile'), async (req, res) => {
                 
                 for (const wordObj of words) {
                     await db.query(
-                        `INSERT INTO words (word, translation, example, exampleTranslation)
-                         VALUES ($1, $2, $3, $4)`,
+                        `INSERT INTO words (word, translation, example, exampleTranslation, totalPoints)
+                         VALUES ($1, $2, $3, $4, $5)`,
                         [
                             wordObj.word,
                             wordObj.translation,
                             wordObj.example,
-                            wordObj.exampleTranslation
+                            wordObj.exampleTranslation,
+                            wordObj.totalPoints || 0
                         ]
                     );
                 }

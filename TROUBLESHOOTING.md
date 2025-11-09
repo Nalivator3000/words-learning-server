@@ -15,16 +15,19 @@ A **browser extension** is intercepting and blocking fetch requests. The files `
 
 ### Solution
 
-**✅ FIXED:** Disabled `upgradeInsecureRequests` in CSP for localhost development (commit a0ca15c).
+**✅ FIXED:** Relaxed CSP settings for localhost development to allow browser extensions.
 
-The root cause was that helmet.js was automatically adding `upgrade-insecure-requests` directive, which forced all HTTP requests to be upgraded to HTTPS. This caused browser extensions to fail when trying to connect to `http://localhost:3000`.
+The root cause was that helmet.js CSP was blocking browser extension scripts from executing. Browser extensions inject scripts like `traffic.js` and `requests.js` that need special permissions.
 
 Changes made:
-- Added `http://localhost:*` to CSP `connectSrc` directive
+- Added `'unsafe-eval'` to `scriptSrc` directive (allows extension scripts to execute)
+- Added `http://localhost:*` to CSP `connectSrc` directive (allows localhost connections)
+- Added `ws://localhost:*` and `wss://localhost:*` to `connectSrc` (allows WebSocket connections)
+- Changed `scriptSrcAttr` from `"'none'"` to `"'unsafe-inline'"` (allows inline event handlers)
 - Set `useDefaults: false` to prevent helmet from adding default CSP directives
 - Explicitly removed `upgradeInsecureRequests` from CSP
 
-Simply **refresh the page** (Ctrl+Shift+R for hard refresh) and the error should disappear.
+Simply **restart the server and refresh the page** (Ctrl+Shift+R for hard refresh) and the error should disappear.
 
 #### Alternative Solutions (if issue persists):
 
