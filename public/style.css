@@ -262,9 +262,36 @@
 [data-theme="dark"] .leaderboard-item,
 [data-theme="dark"] .review-stat-card,
 [data-theme="dark"] .word-item {
-    background: rgba(55, 65, 81, 0.7);
+    background: rgba(30, 41, 59, 0.95);
     border: 1px solid rgba(255, 255, 255, 0.1);
     transition: all 0.3s ease;
+}
+
+/* Darken stat card gradients for dark theme */
+[data-theme="dark"] .stat-card::before {
+    opacity: 0.4 !important;
+}
+
+[data-theme="dark"] .stat-card:nth-child(1)::before {
+    background: linear-gradient(135deg,
+        rgba(109, 40, 217, 0.5),
+        rgba(139, 92, 246, 0.5)) !important;
+}
+
+[data-theme="dark"] .stat-card:nth-child(2)::before {
+    background: linear-gradient(135deg,
+        rgba(234, 88, 12, 0.5),
+        rgba(249, 115, 22, 0.5)) !important;
+}
+
+[data-theme="dark"] .stat-card:nth-child(3)::before {
+    background: linear-gradient(135deg,
+        rgba(5, 150, 105, 0.5),
+        rgba(16, 185, 129, 0.5)) !important;
+}
+
+[data-theme="dark"] .stat-card:hover::before {
+    opacity: 0.6 !important;
 }
 
 [data-theme="dark"] .stats-card:hover,
