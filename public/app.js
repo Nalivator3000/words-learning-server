@@ -1761,7 +1761,7 @@ schreiben,Sie schreibt einen Brief.,Писать,Она пишет письmо.`
 
         try {
             const user = userManager.getCurrentUser();
-            const languagePair = languageManager.getActiveLanguagePair();
+            const languagePair = userManager.getCurrentLanguagePair();
 
             if (!user || !languagePair) {
                 alert('Please select a language pair first.');
