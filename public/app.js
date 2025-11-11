@@ -1652,9 +1652,18 @@ schreiben,Sie schreibt einen Brief.,Писать,Она пишет письmо.`
                 showToast('✅ Word deleted', 'success');
             }
 
-            // Reload word lists and stats
+            // Reload word lists and stats with delay to avoid rate limiting
             await this.updateWordLists();
-            await this.updateStats();
+
+            // Small delay before updating stats to avoid 429 errors
+            await new Promise(resolve => setTimeout(resolve, 200));
+
+            try {
+                await this.updateStats();
+            } catch (statsError) {
+                console.warn('Stats update failed (non-critical):', statsError);
+                // Don't show error to user - word was deleted successfully
+            }
 
         } catch (error) {
             console.error('Error deleting word:', error);
@@ -1684,9 +1693,18 @@ schreiben,Sie schreibt einen Brief.,Писать,Она пишет письmо.`
                 showToast('✅ Word marked as learned', 'success');
             }
 
-            // Reload word lists and stats
+            // Reload word lists and stats with delay to avoid rate limiting
             await this.updateWordLists();
-            await this.updateStats();
+
+            // Small delay before updating stats to avoid 429 errors
+            await new Promise(resolve => setTimeout(resolve, 200));
+
+            try {
+                await this.updateStats();
+            } catch (statsError) {
+                console.warn('Stats update failed (non-critical):', statsError);
+                // Don't show error to user - word status was updated successfully
+            }
 
         } catch (error) {
             console.error('Error marking word as learned:', error);
@@ -1727,9 +1745,18 @@ schreiben,Sie schreibt einen Brief.,Писать,Она пишет письmо.`
                 showToast(`✅ Moved to ${statusName}`, 'success');
             }
 
-            // Reload word lists and stats
+            // Reload word lists and stats with delay to avoid rate limiting
             await this.updateWordLists();
-            await this.updateStats();
+
+            // Small delay before updating stats to avoid 429 errors
+            await new Promise(resolve => setTimeout(resolve, 200));
+
+            try {
+                await this.updateStats();
+            } catch (statsError) {
+                console.warn('Stats update failed (non-critical):', statsError);
+                // Don't show error to user - word status was updated successfully
+            }
 
         } catch (error) {
             console.error('Error moving word to next stage:', error);
