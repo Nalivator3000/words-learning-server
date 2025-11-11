@@ -1718,29 +1718,54 @@ schreiben,Sie schreibt einen Brief.,Писать,Она пишет письmо.`
 
     async moveWordToNextStage(wordId, currentStatus) {
         try {
-            // Determine next status
+            // First, get the word to check its reviewCycle
+            const word = await database.getWordById(wordId);
+            if (!word) {
+                throw new Error('Word not found');
+            }
+
+            // SRS interval schedule (in days) - same as server
+            const srsIntervals = [1, 3, 7, 14, 30, 60, 120];
+
             let nextStatus;
+            let reviewCycle = word.reviewcycle || word.reviewCycle || 0;
+
             if (currentStatus === 'studying') {
-                nextStatus = 'review_7';
-            } else if (currentStatus === 'review_7') {
-                nextStatus = 'review_30';
+                // Move from studying to first review interval
+                const intervalDays = srsIntervals[reviewCycle];
+                nextStatus = `review_${intervalDays}`;
+            } else if (currentStatus.startsWith('review_')) {
+                // Already in review - move to next interval
+                reviewCycle++;
+                if (reviewCycle < srsIntervals.length) {
+                    const intervalDays = srsIntervals[reviewCycle];
+                    nextStatus = `review_${intervalDays}`;
+                } else {
+                    // Completed all cycles - mark as learned
+                    nextStatus = 'learned';
+                }
             } else {
                 return; // No next stage
             }
 
-            const response = await fetch(`/api/words/${wordId}/status`, {
+            const response = await fetch(`/api/words/${wordId}/manual-advance`, {
                 method: 'PUT',
                 headers: {
                     'Content-Type': 'application/json'
                 },
-                body: JSON.stringify({ status: nextStatus })
+                body: JSON.stringify({
+                    status: nextStatus,
+                    reviewCycle: nextStatus === 'learned' ? reviewCycle : reviewCycle
+                })
             });
 
             if (!response.ok) {
                 throw new Error('Failed to move word to next stage');
             }
 
-            const statusName = nextStatus === 'review_7' ? 'Review (7 days)' : 'Review (30 days)';
+            const statusName = nextStatus === 'learned'
+                ? 'Learned'
+                : `Review (${nextStatus.replace('review_', '')} days)`;
             if (window.showToast) {
                 showToast(`✅ Moved to ${statusName}`, 'success');
             }

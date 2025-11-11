@@ -97,7 +97,11 @@ class APIDatabase {
     }
 
     async getWordsByStatus(status) {
+        const { userId, languagePairId } = this.getUserContext();
+
         const params = new URLSearchParams();
+        if (userId) params.append('userId', userId);
+        if (languagePairId) params.append('languagePairId', languagePairId);
         if (status) params.append('status', status);
 
         // Request large limit to get all words (default server limit is 50)
@@ -151,6 +155,10 @@ class APIDatabase {
 
         const params = new URLSearchParams({ userId, languagePairId });
         return await this.apiRequest(`/api/words/random/review/${count}?${params.toString()}`);
+    }
+
+    async getWordById(wordId) {
+        return await this.apiRequest(`/api/words/${wordId}`);
     }
 
     async updateWordProgress(wordId, isCorrect, quizType) {
@@ -220,13 +228,12 @@ class APIDatabase {
     convertToCSV(words) {
         if (!words || words.length === 0) return '';
 
-        const headers = ['Слово', 'Приmер', 'Перевод', 'Перевод приmера', 'Статус', 'Правильных ответов', 'Неправильных ответов', 'Дата добавления', 'Последнее изучение'];
-
         const rows = words.map(word => [
             word.word,
             word.example || '',
             word.translation,
             word.example_translation || word.exampleTranslation || '',
+            word.total_points || word.totalPoints || word.totalpoints || 0,
             this.getStatusText(word.status),
             word.correct_count || word.correctCount || 0,
             word.incorrect_count || word.incorrectCount || 0,
@@ -234,7 +241,7 @@ class APIDatabase {
             word.last_studied ? new Date(word.last_studied).toLocaleDateString() : ''
         ]);
 
-        const csvContent = [headers, ...rows]
+        const csvContent = rows
             .map(row => row.map(field => `"${field}"`).join(','))
             .join('\n');
 
@@ -242,10 +249,22 @@ class APIDatabase {
     }
 
     getStatusText(status) {
+        // Try to use i18n if available
+        if (window.i18n) {
+            const statusKey = `status_${status}`;
+            const translated = window.i18n.t(statusKey);
+            // If translation exists (not in brackets like [status_xyz]), use it
+            if (translated && !translated.startsWith('[')) {
+                return translated;
+            }
+        }
+
+        // Fallback to English status names
         const statusMap = {
-            'studying': 'Изучается',
-            'review_7': 'Повторение 7 days',
-            'review_30': 'Повторение 30 days',
+            'studying': 'Studying',
+            'review': 'Review',
+            'review_7': 'Review (7 days)',
+            'review_30': 'Review (30 days)',
             'learned': 'Learned'
         };
         return statusMap[status] || status;

@@ -11085,7 +11085,7 @@ app.put('/api/words/:id/status', async (req, res) => {
             return res.status(400).json({ error: 'Status is required' });
         }
 
-        const validStatuses = ['studying', 'review_7', 'review_30', 'learned'];
+        const validStatuses = ['studying', 'review_1', 'review_3', 'review_7', 'review_14', 'review_30', 'review_60', 'review_120', 'learned'];
         if (!validStatuses.includes(status)) {
             return res.status(400).json({ error: 'Invalid status' });
         }
@@ -11102,6 +11102,53 @@ app.put('/api/words/:id/status', async (req, res) => {
         res.json({ message: 'Word status updated successfully' });
     } catch (err) {
         logger.error('Error updating word status:', err);
+        res.status(500).json({ error: err.message });
+    }
+});
+
+// Manual advance word to next review stage (respects SRS intervals)
+app.put('/api/words/:id/manual-advance', async (req, res) => {
+    try {
+        const { id } = req.params;
+        const { status, reviewCycle } = req.body;
+
+        if (!status) {
+            return res.status(400).json({ error: 'Status is required' });
+        }
+
+        const validStatuses = ['studying', 'review_1', 'review_3', 'review_7', 'review_14', 'review_30', 'review_60', 'review_120', 'learned'];
+        if (!validStatuses.includes(status)) {
+            return res.status(400).json({ error: 'Invalid status' });
+        }
+
+        // Calculate nextReviewDate based on status
+        let nextReviewDate = null;
+        if (status.startsWith('review_')) {
+            const days = parseInt(status.replace('review_', ''));
+            nextReviewDate = new Date();
+            nextReviewDate.setDate(nextReviewDate.getDate() + days);
+        }
+
+        // Update status, reviewCycle, correctCount (set to 100), and nextReviewDate
+        const result = await db.query(
+            `UPDATE words
+             SET status = $1,
+                 reviewCycle = $2,
+                 correctCount = CASE WHEN $1 = 'studying' THEN 0 ELSE 100 END,
+                 nextReviewDate = $3,
+                 updatedAt = CURRENT_TIMESTAMP
+             WHERE id = $4`,
+            [status, reviewCycle, nextReviewDate, id]
+        );
+
+        if (result.rowCount === 0) {
+            return res.status(404).json({ error: 'Word not found' });
+        }
+
+        logger.info(`🔧 Manual advance: Word ${id} → ${status} (cycle ${reviewCycle}), nextReview: ${nextReviewDate}`);
+        res.json({ message: 'Word advanced successfully', status, reviewCycle, nextReviewDate });
+    } catch (err) {
+        logger.error('Error manually advancing word:', err);
         res.status(500).json({ error: err.message });
     }
 });
