@@ -296,7 +296,7 @@ class LanguageLearningApp {
 
         if (correctCount === 0) {
             className = 'score-none';
-            text = `Не изучено 🌱`;
+            text = `${i18n.t('notStudied')} 🌱`;
         } else if (score >= 90) {
             className = 'score-complete';
             text = `${correctCount}/100 points (${score}%) ✅`;
@@ -1189,7 +1189,10 @@ schreiben,Sie schreibt einen Brief.,Писать,Она пишет письmо.`
             const isTouchDevice = 'ontouchstart' in window || navigator.maxTouchPoints > 0;
             if (!isTouchDevice) {
                 // Small delay to ensure element is fully rendered
-                setTimeout(() => input.focus(), 0);
+                setTimeout(() => {
+                    input.focus();
+                    console.log('🎯 Auto-focused typing input');
+                }, 100);
             }
 
             const buttonContainer = document.createElement('div');
@@ -1292,7 +1295,10 @@ schreiben,Sie schreibt einen Brief.,Писать,Она пишет письmо.`
             // Auto-focus on desktop only (not on mobile to prevent keyboard popup)
             const isTouchDevice = 'ontouchstart' in window || navigator.maxTouchPoints > 0;
             if (!isTouchDevice) {
-                setTimeout(() => input.focus(), 0);
+                setTimeout(() => {
+                    input.focus();
+                    console.log('🎯 Auto-focused review typing input');
+                }, 100);
             }
 
             const buttonContainer = document.createElement('div');
@@ -1384,13 +1390,20 @@ schreiben,Sie schreibt einen Brief.,Писать,Она пишет письmо.`
 
         this.disableChoiceButtons();
 
-        // Hide skip button
+        // Transform skip button into next/finish button
         const skipBtn = document.querySelector('.show-answer-btn');
         if (skipBtn) {
-            skipBtn.style.display = 'none';
-        }
+            skipBtn.classList.remove('show-answer-btn');
+            skipBtn.classList.add('action-btn');
 
-        this.showNextButton();
+            if (quizManager.isQuizComplete()) {
+                skipBtn.textContent = i18n.t('finish');
+                skipBtn.onclick = () => this.finishStudy();
+            } else {
+                skipBtn.textContent = i18n.t('next');
+                skipBtn.onclick = () => this.nextQuestion();
+            }
+        }
     }
 
     async handleTypingAnswer(answer, inputEl) {
@@ -1481,13 +1494,20 @@ schreiben,Sie schreibt einen Brief.,Писать,Она пишет письmо.`
 
         this.disableReviewChoiceButtons();
 
-        // Hide skip button
+        // Transform skip button into next/finish button
         const skipBtn = document.querySelector('#reviewAnswerArea .show-answer-btn');
         if (skipBtn) {
-            skipBtn.style.display = 'none';
-        }
+            skipBtn.classList.remove('show-answer-btn');
+            skipBtn.classList.add('action-btn');
 
-        this.showReviewNextButton();
+            if (quizManager.isQuizComplete()) {
+                skipBtn.textContent = i18n.t('finish');
+                skipBtn.onclick = () => this.finishReview();
+            } else {
+                skipBtn.textContent = i18n.t('next');
+                skipBtn.onclick = () => this.nextReviewQuestion();
+            }
+        }
     }
 
     async handleReviewTypingAnswer(answer, inputEl) {
@@ -2069,11 +2089,11 @@ schreiben,Sie schreibt einen Brief.,Писать,Она пишет письmо.`
         submitBtn.onclick = () => this.handleWordBuildingSubmit(wordInput, question);
         controls.appendChild(submitBtn);
 
-        const showAnswerBtn = document.createElement('button');
-        showAnswerBtn.className = 'action-btn show-answer-btn';
-        showAnswerBtn.textContent = i18n.t('showAnswer');
-        showAnswerBtn.onclick = () => this.showWordBuildingAnswer(wordInput, question);
-        controls.appendChild(showAnswerBtn);
+        const skipBtn = document.createElement('button');
+        skipBtn.className = 'action-btn show-answer-btn';
+        skipBtn.textContent = i18n.t('skip');
+        skipBtn.onclick = () => this.skipWordBuilding(wordInput, question);
+        controls.appendChild(skipBtn);
         
         wordBuildingArea.appendChild(controls);
         answerArea.appendChild(wordBuildingArea);
@@ -2129,8 +2149,8 @@ schreiben,Sie schreibt einen Brief.,Писать,Она пишет письmо.`
             wordInput.dataset.enterPressed = 'true';
             
             if (!wordInput.value.trim()) {
-                // If field is empty, show answer
-                this.showWordBuildingAnswer(wordInput, question);
+                // If field is empty, skip question
+                this.skipWordBuilding(wordInput, question);
             } else {
                 // If field has input, submit answer
                 this.handleWordBuildingSubmit(wordInput, question);
@@ -2171,30 +2191,49 @@ schreiben,Sie schreibt einen Brief.,Писать,Она пишет письmо.`
         this.showNextButton();
     }
     
-    async showWordBuildingAnswer(wordInput, question) {
+    async skipWordBuilding(wordInput, question) {
+        // Submit empty answer to mark as skipped
+        const result = await quizManager.checkAnswer('__SKIP__');
+
         wordInput.value = question.correctAnswer;
         wordInput.classList.add('incorrect');
         wordInput.disabled = true;
 
-        // Hide letter tiles and controls to save space on mobile
-        const controls = wordInput.parentElement.querySelector('.word-building-controls');
-        controls.style.display = 'none';
+        // Hide letter tiles
         const tiles = wordInput.parentElement.querySelector('.letter-tiles');
         tiles.style.display = 'none';
-        
-        // Record as incorrect answer
-        await database.updateWordProgress(question.wordId, false, question.type);
-        
+
         // Show feedback
-        const feedback = `Правильный ответ: ${question.correctAnswer}`;
-        this.showAnswerFeedback({ 
-            correct: false, 
-            partiallyCorrect: false, 
-            feedback: feedback,
-            correctAnswer: question.correctAnswer
-        }, 'feedback');
-        
-        this.showNextButton();
+        const feedback = document.getElementById('feedback');
+        feedback.innerHTML = `
+            <div class="feedback-content skipped">
+                <p><strong>${i18n.t('skipped')}</strong></p>
+                <p>${i18n.t('correctAnswerWas')}: <strong>${result.correctAnswer}</strong></p>
+            </div>
+        `;
+        feedback.className = 'feedback incorrect';
+
+        // Transform skip button into next/finish button
+        const skipBtn = wordInput.parentElement.querySelector('.show-answer-btn');
+        if (skipBtn) {
+            skipBtn.classList.remove('show-answer-btn');
+            skipBtn.classList.add('action-btn');
+
+            if (quizManager.isQuizComplete()) {
+                skipBtn.textContent = i18n.t('finish');
+                skipBtn.onclick = () => this.finishStudy();
+            } else {
+                skipBtn.textContent = i18n.t('next');
+                skipBtn.onclick = () => this.nextQuestion();
+            }
+        }
+
+        // Hide submit and clear buttons
+        const controls = wordInput.parentElement.querySelector('.word-building-controls');
+        const submitBtn = controls.querySelector('button:not(.clear-word-btn)');
+        const clearBtn = controls.querySelector('.clear-word-btn');
+        if (submitBtn) submitBtn.style.display = 'none';
+        if (clearBtn) clearBtn.style.display = 'none';
     }
 
     async showAnswer(inputEl) {

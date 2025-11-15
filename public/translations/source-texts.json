@@ -493,5 +493,10 @@
     "en": "The correct answer was",
     "ru": "Правильный ответ",
     "de": "Die richtige Antwort war"
+  },
+  "notStudied": {
+    "en": "Not studied",
+    "ru": "Не изучено",
+    "de": "Nicht gelernt"
   }
 }
