@@ -762,15 +762,21 @@ class LanguageLearningApp {
 
     async updateWordLists() {
         try {
-            const [studying, review7, review30, learned] = await Promise.all([
+            // Load all review statuses (review_1, review_3, review_7, review_14, review_30, review_60, review_120)
+            const [studying, review1, review3, review7, review14, review30, review60, review120, learned] = await Promise.all([
                 database.getWordsByStatus('studying'),
+                database.getWordsByStatus('review_1'),
+                database.getWordsByStatus('review_3'),
                 database.getWordsByStatus('review_7'),
+                database.getWordsByStatus('review_14'),
                 database.getWordsByStatus('review_30'),
+                database.getWordsByStatus('review_60'),
+                database.getWordsByStatus('review_120'),
                 database.getWordsByStatus('learned')
             ]);
 
             this.renderWordList('studyingList', studying);
-            this.renderWordList('reviewList', [...review7, ...review30]);
+            this.renderWordList('reviewList', [...review1, ...review3, ...review7, ...review14, ...review30, ...review60, ...review120]);
             this.renderWordList('learnedList', learned);
         } catch (error) {
             console.error('Error updating word lists:', error);
@@ -782,7 +788,7 @@ class LanguageLearningApp {
         container.innerHTML = '';
 
         if (words.length === 0) {
-            container.innerHTML = '<p style="text-align: center; color: #6c757d;">No words</p>';
+            container.innerHTML = `<p style="text-align: center; color: #6c757d;">${i18n?.t('noWords') || 'No words'}</p>`;
             return;
         }
 
@@ -1177,7 +1183,14 @@ schreiben,Sie schreibt einen Brief.,Писать,Она пишет письmо.`
                 }
             };
             answerArea.appendChild(input);
-            // input.focus(); // Disabled: Don't auto-focus to prevent keyboard popup on mobile
+
+            // Auto-focus on desktop only (not on mobile to prevent keyboard popup)
+            // Check if device is not touch-enabled
+            const isTouchDevice = 'ontouchstart' in window || navigator.maxTouchPoints > 0;
+            if (!isTouchDevice) {
+                // Small delay to ensure element is fully rendered
+                setTimeout(() => input.focus(), 0);
+            }
 
             const buttonContainer = document.createElement('div');
             buttonContainer.style.marginTop = '1rem';
@@ -1275,7 +1288,12 @@ schreiben,Sie schreibt einen Brief.,Писать,Она пишет письmо.`
                 }
             };
             answerArea.appendChild(input);
-            // input.focus(); // Disabled: Don't auto-focus to prevent keyboard popup on mobile
+
+            // Auto-focus on desktop only (not on mobile to prevent keyboard popup)
+            const isTouchDevice = 'ontouchstart' in window || navigator.maxTouchPoints > 0;
+            if (!isTouchDevice) {
+                setTimeout(() => input.focus(), 0);
+            }
 
             const buttonContainer = document.createElement('div');
             buttonContainer.style.marginTop = '1rem';
@@ -1365,15 +1383,22 @@ schreiben,Sie schreibt einen Brief.,Писать,Она пишет письmо.`
         });
 
         this.disableChoiceButtons();
+
+        // Hide skip button
+        const skipBtn = document.querySelector('.show-answer-btn');
+        if (skipBtn) {
+            skipBtn.style.display = 'none';
+        }
+
         this.showNextButton();
     }
 
     async handleTypingAnswer(answer, inputEl) {
         if (!answer.trim()) return;
-        
+
         const result = await quizManager.checkAnswer(answer);
         this.showAnswerFeedback(result, 'feedback');
-        
+
         if (result.correct) {
             inputEl.classList.add('correct');
         } else if (result.partiallyCorrect) {
@@ -1381,16 +1406,20 @@ schreiben,Sie schreibt einen Brief.,Писать,Она пишет письmо.`
         } else {
             inputEl.classList.add('incorrect');
         }
-        
+
         // Audio button will be added in feedback, no need for duplicate button here
-        
-        inputEl.disabled = true;
+
+        // Make field readonly instead of disabled (keeps focus and allows Enter key)
+        inputEl.readOnly = true;
         // Disable all buttons in the container
         const buttonContainer = inputEl.parentElement.querySelector('div');
         if (buttonContainer) {
             buttonContainer.querySelectorAll('button').forEach(btn => btn.disabled = true);
         }
         this.showNextButton();
+
+        // Keep focus on input for Enter key to work for next question
+        inputEl.focus();
     }
 
     async handleReviewMultipleChoice(answer, buttonEl) {
@@ -1451,15 +1480,22 @@ schreiben,Sie schreibt einen Brief.,Писать,Она пишет письmо.`
         });
 
         this.disableReviewChoiceButtons();
+
+        // Hide skip button
+        const skipBtn = document.querySelector('#reviewAnswerArea .show-answer-btn');
+        if (skipBtn) {
+            skipBtn.style.display = 'none';
+        }
+
         this.showReviewNextButton();
     }
 
     async handleReviewTypingAnswer(answer, inputEl) {
         if (!answer.trim()) return;
-        
+
         const result = await quizManager.checkAnswer(answer);
         this.showAnswerFeedback(result, 'reviewFeedback');
-        
+
         if (result.correct) {
             inputEl.classList.add('correct');
         } else if (result.partiallyCorrect) {
@@ -1467,16 +1503,20 @@ schreiben,Sie schreibt einen Brief.,Писать,Она пишет письmо.`
         } else {
             inputEl.classList.add('incorrect');
         }
-        
+
         // Audio button will be added in feedback, no need for duplicate button here
-        
-        inputEl.disabled = true;
+
+        // Make field readonly instead of disabled (keeps focus and allows Enter key)
+        inputEl.readOnly = true;
         // Disable all buttons in the container
         const buttonContainer = inputEl.parentElement.querySelector('div');
         if (buttonContainer) {
             buttonContainer.querySelectorAll('button').forEach(btn => btn.disabled = true);
         }
         this.showReviewNextButton();
+
+        // Keep focus on input for Enter key to work for next question
+        inputEl.focus();
     }
 
     showAnswerFeedback(result, feedbackId) {
@@ -1922,12 +1962,21 @@ schreiben,Sie schreibt einen Brief.,Писать,Она пишет письmо.`
     }
 
     handleEnterPress(inputEl) {
-        if (inputEl.disabled) return;
-        
-        // If enter not pressed yet, submit answer or show answer if empty
+        // If field is readonly, it means answer was already submitted
+        // Allow Enter to proceed to next question or finish
+        if (inputEl.readOnly) {
+            if (!document.getElementById('nextBtn').classList.contains('hidden')) {
+                this.nextQuestion();
+            } else if (!document.getElementById('finishStudyBtn').classList.contains('hidden')) {
+                this.finishQuiz();
+            }
+            return;
+        }
+
+        // Field is editable - first Enter press
         if (inputEl.dataset.enterPressed === 'false') {
             inputEl.dataset.enterPressed = 'true';
-            
+
             if (!inputEl.value.trim()) {
                 // If field is empty, show answer
                 this.showAnswer(inputEl);
@@ -1935,36 +1984,31 @@ schreiben,Sie schreibt einen Brief.,Писать,Она пишет письmо.`
                 // If field has input, submit answer
                 this.handleTypingAnswer(inputEl.value, inputEl);
             }
-        } else {
-            // Second enter press - go to next question
-            if (!document.getElementById('nextBtn').classList.contains('hidden')) {
-                this.nextQuestion();
-            } else if (!document.getElementById('finishStudyBtn').classList.contains('hidden')) {
-                this.finishQuiz();
-            }
         }
     }
 
     handleReviewEnterPress(inputEl) {
-        if (inputEl.disabled) return;
-        
-        // If enter not pressed yet, submit answer or show answer if empty
+        // If field is readonly, it means answer was already submitted
+        // Allow Enter to proceed to next question or finish
+        if (inputEl.readOnly) {
+            if (!document.getElementById('reviewNextBtn').classList.contains('hidden')) {
+                this.nextReviewQuestion();
+            } else if (!document.getElementById('finishReviewBtn').classList.contains('hidden')) {
+                this.finishReview();
+            }
+            return;
+        }
+
+        // Field is editable - first Enter press
         if (inputEl.dataset.enterPressed === 'false') {
             inputEl.dataset.enterPressed = 'true';
-            
+
             if (!inputEl.value.trim()) {
                 // If field is empty, show answer
                 this.showReviewAnswer(inputEl);
             } else {
                 // If field has input, submit answer
                 this.handleReviewTypingAnswer(inputEl.value, inputEl);
-            }
-        } else {
-            // Second enter press - go to next question
-            if (!document.getElementById('reviewNextBtn').classList.contains('hidden')) {
-                this.nextReviewQuestion();
-            } else if (!document.getElementById('finishReviewBtn').classList.contains('hidden')) {
-                this.finishReview();
             }
         }
     }
@@ -2156,61 +2200,69 @@ schreiben,Sie schreibt einen Brief.,Писать,Она пишет письmо.`
     async showAnswer(inputEl) {
         // Get the current question
         const question = quizManager.questions[quizManager.currentQuestionIndex];
-        
+
         // Show the correct answer in the input field
         inputEl.value = question.correctAnswer;
         inputEl.classList.add('incorrect');
-        inputEl.disabled = true;
-        
+        // Make field readonly instead of disabled (keeps focus and allows Enter key)
+        inputEl.readOnly = true;
+
         // Disable all buttons
         const buttonContainer = inputEl.parentElement.querySelector('div');
         if (buttonContainer) {
             buttonContainer.querySelectorAll('button').forEach(btn => btn.disabled = true);
         }
-        
+
         // Record as incorrect answer
         await database.updateWordProgress(question.wordId, false, question.type);
-        
+
         // Show feedback
         const feedback = `Правильный ответ: ${question.correctAnswer}`;
-        this.showAnswerFeedback({ 
-            correct: false, 
-            partiallyCorrect: false, 
+        this.showAnswerFeedback({
+            correct: false,
+            partiallyCorrect: false,
             feedback: feedback,
             correctAnswer: question.correctAnswer
         }, 'feedback');
-        
+
         this.showNextButton();
+
+        // Keep focus on input for Enter key to work for next question
+        inputEl.focus();
     }
 
     async showReviewAnswer(inputEl) {
         // Get the current question
         const question = quizManager.questions[quizManager.currentQuestionIndex];
-        
+
         // Show the correct answer in the input field
         inputEl.value = question.correctAnswer;
         inputEl.classList.add('incorrect');
-        inputEl.disabled = true;
-        
+        // Make field readonly instead of disabled (keeps focus and allows Enter key)
+        inputEl.readOnly = true;
+
         // Disable all buttons
         const buttonContainer = inputEl.parentElement.querySelector('div');
         if (buttonContainer) {
             buttonContainer.querySelectorAll('button').forEach(btn => btn.disabled = true);
         }
-        
+
         // Record as incorrect answer
         await database.updateWordProgress(question.wordId, false, question.type);
-        
+
         // Show feedback
         const feedback = `Правильный ответ: ${question.correctAnswer}`;
-        this.showAnswerFeedback({ 
-            correct: false, 
-            partiallyCorrect: false, 
+        this.showAnswerFeedback({
+            correct: false,
+            partiallyCorrect: false,
             feedback: feedback,
             correctAnswer: question.correctAnswer
         }, 'reviewFeedback');
-        
+
         this.showReviewNextButton();
+
+        // Keep focus on input for Enter key to work for next question
+        inputEl.focus();
     }
 
     shouldShowAudioButton(text) {
@@ -3012,7 +3064,7 @@ schreiben,Sie schreibt einen Brief.,Писать,Она пишет письmо.`
             const langVoices = allVoices.filter(v => v.lang.startsWith(prefix));
 
             // Clear existing options except "Auto"
-            select.innerHTML = '<option value="auto">Auto (recommended)</option>';
+            select.innerHTML = `<option value="auto">${i18n?.t('autoRecommended') || 'Auto (recommended)'}</option>`;
 
             // Add available voices
             langVoices.forEach(voice => {

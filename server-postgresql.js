@@ -72,7 +72,7 @@ const authLimiter = rateLimit({
 
 const apiLimiter = rateLimit({
     windowMs: 1 * 60 * 1000, // 1 minute
-    max: 120, // Limit each IP to 120 requests per minute (increased for active learning)
+    max: 300, // Limit each IP to 300 requests per minute (5 per second for active learning)
     message: 'Too many API requests, please slow down.',
 });
 
@@ -90,7 +90,7 @@ app.use(helmet({
             fontSrc: ["'self'", "https://fonts.gstatic.com", "https://cdnjs.cloudflare.com"],
             imgSrc: ["'self'", "data:", "https:", "blob:"],
             mediaSrc: ["'self'", "https://ssl.gstatic.com", "https://*.gstatic.com"],
-            connectSrc: ["'self'", "http://localhost:3000", "http://localhost:*", "ws://localhost:*", "wss://localhost:*"],
+            connectSrc: ["'self'", "http://localhost:3000", "http://localhost:*", "ws://localhost:*", "wss://localhost:*", "chrome-extension:", "moz-extension:", "chrome-extension://*", "moz-extension://*"],
             frameSrc: ["'none'"],
             objectSrc: ["'none'"],
             baseUri: ["'self'"],
@@ -119,6 +119,52 @@ app.use(helmet({
 
 app.use(cors());
 app.use(express.json());
+
+// Cache busting middleware - Add version query parameter and set cache headers
+const APP_VERSION = require('./package.json').version;
+
+// Custom static file serving with proper cache headers
+app.use((req, res, next) => {
+    // Set cache headers based on file type
+    if (req.path.endsWith('.html')) {
+        // HTML files - always revalidate
+        res.setHeader('Cache-Control', 'no-cache, no-store, must-revalidate');
+        res.setHeader('Pragma', 'no-cache');
+        res.setHeader('Expires', '0');
+    } else if (req.path.match(/\.(js|css)$/)) {
+        // JS/CSS files - cache but revalidate with ETag
+        res.setHeader('Cache-Control', 'public, max-age=0, must-revalidate');
+        res.setHeader('ETag', APP_VERSION);
+    } else if (req.path.match(/\.(jpg|jpeg|png|gif|ico|svg|woff|woff2|ttf|eot)$/)) {
+        // Static assets - long cache
+        res.setHeader('Cache-Control', 'public, max-age=31536000, immutable');
+    }
+    next();
+});
+
+// Serve index.html with version injection
+app.get('/', (req, res) => {
+    const indexPath = path.join(__dirname, 'public', 'index.html');
+    let html = fs.readFileSync(indexPath, 'utf8');
+
+    // Inject version into HTML comment
+    html = html.replace(
+        /<!-- Version: v[\d\.]+-[\w-]+ -->/,
+        `<!-- Version: v${APP_VERSION} - ${new Date().toISOString()} -->`
+    );
+
+    // Add version query parameter to all script tags
+    html = html.replace(
+        /<script src="([^"]+\.js)"/g,
+        `<script src="$1?v=${APP_VERSION}"`
+    );
+
+    res.setHeader('Cache-Control', 'no-cache, no-store, must-revalidate');
+    res.setHeader('Pragma', 'no-cache');
+    res.setHeader('Expires', '0');
+    res.send(html);
+});
+
 app.use(express.static(path.join(__dirname, 'public')));
 
 // Serve translations folder
@@ -2756,40 +2802,40 @@ app.get('/api/analytics/exercise-stats/:userId', async (req, res) => {
     try {
         const { userId } = req.params;
 
-        // This is a simulated endpoint since we don't currently track exercise type stats
-        // In a real implementation, you'd add exercise_type tracking to the xp_log or a new table
-
-        // For now, return simulated data based on question types from xp_log descriptions
+        // Get real exercise statistics from word_learning_progress
         const result = await db.query(
             `SELECT
-                CASE
-                    WHEN description LIKE '%multipleChoice%' OR description LIKE '%multiple:%' THEN 'multiple_choice'
-                    WHEN description LIKE '%wordBuilding%' OR description LIKE '%word_building%' THEN 'word_building'
-                    WHEN description LIKE '%typing%' THEN 'typing'
-                    ELSE 'flashcard'
-                END as exercise_type,
-                COUNT(*) as correct_count,
-                0 as incorrect_count
-             FROM xp_log
-             WHERE user_id = $1 AND action_type = 'quiz_answer'
+                exercise_type,
+                SUM(correct_count) as correct_count,
+                SUM(GREATEST(learn_attempts - correct_count, 0)) as incorrect_count
+             FROM word_learning_progress
+             WHERE user_id = $1
              GROUP BY exercise_type`,
             [parseInt(userId)]
         );
 
-        // Add some default values if no data
-        const types = ['multiple_choice', 'word_building', 'typing', 'flashcard'];
+        // Map exercise types to standard names
+        const typeMapping = {
+            'flashcards': 'flashcard',
+            'multiple_choice': 'multiple_choice',
+            'typing': 'typing',
+            'word_building': 'word_building'
+        };
+
         const statsMap = {};
 
         result.rows.forEach(row => {
-            statsMap[row.exercise_type] = {
-                exercise_type: row.exercise_type,
-                correct_count: parseInt(row.correct_count),
-                incorrect_count: Math.floor(parseInt(row.correct_count) * 0.15) // Simulate 15% error rate
+            const standardType = typeMapping[row.exercise_type] || row.exercise_type;
+            statsMap[standardType] = {
+                exercise_type: standardType,
+                correct_count: parseInt(row.correct_count) || 0,
+                incorrect_count: parseInt(row.incorrect_count) || 0
             };
         });
 
-        // Fill in missing types
-        types.forEach(type => {
+        // Fill in missing types with zeros
+        const allTypes = ['multiple_choice', 'word_building', 'typing', 'flashcard'];
+        allTypes.forEach(type => {
             if (!statsMap[type]) {
                 statsMap[type] = {
                     exercise_type: type,
@@ -7250,15 +7296,23 @@ app.post('/api/achievements/progress', async (req, res) => {
 // Get all word lists (global collections)
 app.get('/api/word-lists', async (req, res) => {
     try {
-        const { language, category, difficulty, topic } = req.query;
+        const { language, from_lang, to_lang, category, difficulty, topic } = req.query;
 
         let query = 'SELECT * FROM global_word_collections WHERE is_public = true';
         const params = [];
         let paramIndex = 1;
 
-        if (language) {
+        // Support legacy 'language' parameter (maps to from_lang)
+        if (language || from_lang) {
             query += ` AND from_lang = $${paramIndex}`;
-            params.push(language);
+            params.push(language || from_lang);
+            paramIndex++;
+        }
+
+        // Filter by target language
+        if (to_lang) {
+            query += ` AND to_lang = $${paramIndex}`;
+            params.push(to_lang);
             paramIndex++;
         }
 
@@ -10761,14 +10815,17 @@ app.get('/api/words/counts', async (req, res) => {
         result.rows.forEach(row => {
             if (row.status === 'studying') {
                 counts.studying = parseInt(row.count);
-            } else if (row.status === 'review_7') {
-                counts.review7 = parseInt(row.count);
+            } else if (row.status.startsWith('review_')) {
+                // All review statuses (review_1, review_3, review_7, review_14, review_30, review_60, review_120)
                 counts.review += parseInt(row.count);
-            } else if (row.status === 'review_30') {
-                counts.review30 = parseInt(row.count);
-                counts.review += parseInt(row.count);
-            } else if (row.status === 'learned') {
-                counts.learned = parseInt(row.count);
+                // Keep backward compatibility with old review7/review30 fields
+                if (row.status === 'review_7') {
+                    counts.review7 = parseInt(row.count);
+                } else if (row.status === 'review_30') {
+                    counts.review30 = parseInt(row.count);
+                }
+            } else if (row.status === 'learned' || row.status === 'mastered') {
+                counts.learned += parseInt(row.count);
             }
         });
 
@@ -10918,21 +10975,21 @@ app.put('/api/words/:id/progress', async (req, res) => {
 
         const word = wordResult.rows[0];
 
-        // Point system based on question type (3x multiplier for faster progression)
-        // Multiple choice: 6 points, Word building: 15 points, Typing: 30 points
+        // Point system based on question type (XP = points)
+        // Multiple choice: 2 points, Word building: 4 points, Typing: 7 points
         // Survival mode: 0 points (excluded by client)
         const pointsMap = {
-            'multiple': 6,              // 2 * 3
-            'multipleChoice': 6,        // 2 * 3
-            'reverse_multiple': 6,      // 2 * 3
-            'reverseMultipleChoice': 6, // 2 * 3
-            'word_building': 15,        // 5 * 3
-            'wordBuilding': 15,         // 5 * 3
-            'typing': 30,               // 10 * 3
-            'complex': 15               // 5 * 3 (weighted average)
+            'multiple': 2,              // Multiple choice (4 options)
+            'multipleChoice': 2,
+            'reverse_multiple': 2,
+            'reverseMultipleChoice': 2,
+            'word_building': 4,         // Word building (assemble from letters)
+            'wordBuilding': 4,
+            'typing': 7,                // Typing (write the word)
+            'complex': 4                // Complex (weighted average)
         };
 
-        const points = pointsMap[questionType] || 6; // Default 6 points (2 * 3)
+        const points = pointsMap[questionType] || 2; // Default 2 points
 
         // Point system: correctCount accumulates earned points (max 100)
         // totalPoints is always 100 (fixed maximum)
@@ -10950,9 +11007,10 @@ app.put('/api/words/:id/progress', async (req, res) => {
         // Calculate percentage: (correctCount / 100) * 100 = correctCount
         const percentage = newCorrectCount;
 
-        // Improved Spaced Repetition System (SRS)
-        // Cycle: studying (reach 100 pts) → review_N (wait N days) → studying (cycle++) → repeat
-        // Intervals: 1, 3, 7, 14, 30, 60, 120 days (optimized for memory retention)
+        // Improved Spaced Repetition System (SRS) with Progressive Thresholds
+        // Each stage requires reaching a threshold to advance (total 100 points across all stages)
+        // Thresholds: 20 → 35 → 50 → 65 → 80 → 90 → 100
+        // User only needs to reach the next threshold, not start from 0 each time
         let newStatus = word.status;
         let newReviewCycle = word.reviewcycle || 0;
         let nextReviewDate = null;
@@ -10960,25 +11018,61 @@ app.put('/api/words/:id/progress', async (req, res) => {
         // SRS interval schedule (in days)
         const srsIntervals = [1, 3, 7, 14, 30, 60, 120];
 
-        if (word.status === 'studying' && newCorrectCount >= 100) {
-            // Reached 100 points - move to review phase
-            if (newReviewCycle < srsIntervals.length) {
+        // Progressive thresholds for each stage (cumulative points needed)
+        const stageThresholds = [20, 35, 50, 65, 80, 90, 100];
+
+        // Get the threshold for current stage
+        const currentThreshold = stageThresholds[newReviewCycle] || 100;
+
+        if (word.status === 'studying' && newCorrectCount >= currentThreshold) {
+            // Reached threshold - move to review phase or next stage
+            if (newReviewCycle < srsIntervals.length - 1) {
+                // Move to next review stage
                 const intervalDays = srsIntervals[newReviewCycle];
                 newStatus = `review_${intervalDays}`;
                 nextReviewDate = new Date();
                 nextReviewDate.setDate(nextReviewDate.getDate() + intervalDays);
-                logger.info(`📅 Word ${id} completed cycle ${newReviewCycle + 1}! Review in ${intervalDays} days: ${nextReviewDate.toISOString()}`);
+                logger.info(`📅 Word ${id} reached ${newCorrectCount} points (threshold: ${currentThreshold})! Review in ${intervalDays} days`);
+            } else if (newReviewCycle === srsIntervals.length - 1 && newCorrectCount >= 100) {
+                // Last stage completed with 100 points - mark as mastered
+                newStatus = 'mastered';
+                logger.info(`🎉 Word ${id} fully mastered with 100 points after ${newReviewCycle + 1} cycles!`);
             } else {
-                // After completing all intervals (7+ cycles), mark as learned
-                newStatus = 'learned';
-                logger.info(`🎉 Word ${id} fully learned after ${newReviewCycle + 1} cycles!`);
+                // Last review cycle, but not yet 100 points
+                const intervalDays = srsIntervals[newReviewCycle];
+                newStatus = `review_${intervalDays}`;
+                nextReviewDate = new Date();
+                nextReviewDate.setDate(nextReviewDate.getDate() + intervalDays);
             }
         } else if (!correct && word.status.startsWith('review_')) {
-            // Failed review during waiting period - restart cycle with same interval
+            // Failed review during waiting period - back to studying mode, keep points
             newStatus = 'studying';
-            newCorrectCount = 0;
             nextReviewDate = null;
-            logger.info(`❌ Word ${id} failed review (cycle ${newReviewCycle + 1}), restarting cycle from 0 points`);
+            logger.info(`❌ Word ${id} failed review (cycle ${newReviewCycle + 1}, ${newCorrectCount} points), back to studying`);
+        } else if (word.status.startsWith('review_') && correct && newCorrectCount >= currentThreshold) {
+            // Successfully reviewed - advance to next cycle
+            newReviewCycle++;
+
+            // Check if word has already reached the next threshold
+            const nextThreshold = stageThresholds[newReviewCycle] || 100;
+
+            if (newCorrectCount >= nextThreshold && newReviewCycle < srsIntervals.length) {
+                // Already reached next threshold - move directly to next review stage
+                const intervalDays = srsIntervals[newReviewCycle];
+                newStatus = `review_${intervalDays}`;
+                nextReviewDate = new Date();
+                nextReviewDate.setDate(nextReviewDate.getDate() + intervalDays);
+                logger.info(`✅ Word ${id} review completed! Already at ${newCorrectCount} points (threshold: ${nextThreshold}), moving to review_${intervalDays}`);
+            } else if (newReviewCycle >= srsIntervals.length - 1 && newCorrectCount >= 100) {
+                // Reached final stage with 100 points
+                newStatus = 'mastered';
+                logger.info(`🎉 Word ${id} fully mastered with 100 points!`);
+            } else {
+                // Below next threshold - back to studying
+                newStatus = 'studying';
+                nextReviewDate = null;
+                logger.info(`✅ Word ${id} review completed! Advancing to cycle ${newReviewCycle + 1}, back to studying`);
+            }
         }
 
         const updateQuery = `UPDATE words
@@ -10992,29 +11086,29 @@ app.put('/api/words/:id/progress', async (req, res) => {
 
         logger.info(`📊 Word ${id} progress: ${newCorrectCount}/${newTotalPoints} points (${percentage}%) - Status: ${newStatus}, Cycle: ${newReviewCycle}`);
 
-        // Gamification: Award XP for quiz answers
+        // Gamification: Award XP for quiz answers (XP = points earned)
         const userId = word.user_id;
         let xpEarned = 0;
         let xpResult = null;
 
         if (correct) {
-            // Award XP based on question difficulty
+            // Award XP equal to points earned (same as pointsMap above)
             const xpMap = {
-                'multiple': 5,
-                'multipleChoice': 5,
-                'reverse_multiple': 5,
-                'reverseMultipleChoice': 5,
-                'word_building': 10,
-                'wordBuilding': 10,
-                'typing': 15,
-                'complex': 10
+                'multiple': 2,              // Same as points
+                'multipleChoice': 2,
+                'reverse_multiple': 2,
+                'reverseMultipleChoice': 2,
+                'word_building': 4,         // Same as points
+                'wordBuilding': 4,
+                'typing': 7,                // Same as points
+                'complex': 4
             };
 
-            xpEarned = xpMap[questionType] || 5;
+            xpEarned = xpMap[questionType] || 2;
 
-            // Bonus XP for completing a word (reaching learned status)
-            if (newStatus === 'learned' && word.status !== 'learned') {
-                xpEarned += 50; // Bonus XP for fully learning a word
+            // Bonus XP for mastering a word (reaching mastered status)
+            if (newStatus === 'mastered' && word.status !== 'mastered') {
+                xpEarned += 50; // Bonus XP for fully mastering a word (100 points)
                 xpResult = await awardXP(userId, 'word_learned', xpEarned, `Learned: ${word.word}`);
             } else {
                 xpResult = await awardXP(userId, 'quiz_answer', xpEarned, `${questionType}: ${word.word}`);
@@ -11129,24 +11223,52 @@ app.put('/api/words/:id/manual-advance', async (req, res) => {
             nextReviewDate.setDate(nextReviewDate.getDate() + days);
         }
 
-        // Update status, reviewCycle, correctCount (set to 100), and nextReviewDate
+        // Calculate correct points based on review cycle (progressive thresholds)
+        const stageThresholds = [20, 35, 50, 65, 80, 90, 100];
+        let correctCount = 0;
+
+        if (status === 'studying') {
+            // Reset to 0 if moving back to studying
+            correctCount = 0;
+        } else if (status === 'learned' || status === 'mastered') {
+            // Set to 100 if fully learned/mastered
+            correctCount = 100;
+        } else if (reviewCycle !== undefined && reviewCycle >= 0 && reviewCycle < stageThresholds.length) {
+            // Set to threshold for the current cycle
+            correctCount = stageThresholds[reviewCycle];
+        } else {
+            // Default to threshold based on status
+            const cycleFromStatus = {
+                'review_1': 0,
+                'review_3': 1,
+                'review_7': 2,
+                'review_14': 3,
+                'review_30': 4,
+                'review_60': 5,
+                'review_120': 6
+            };
+            const cycle = cycleFromStatus[status] || 0;
+            correctCount = stageThresholds[cycle];
+        }
+
+        // Update status, reviewCycle, correctCount, and nextReviewDate
         const result = await db.query(
             `UPDATE words
              SET status = $1,
                  reviewCycle = $2,
-                 correctCount = CASE WHEN $1 = 'studying' THEN 0 ELSE 100 END,
-                 nextReviewDate = $3,
+                 correctCount = $3,
+                 nextReviewDate = $4,
                  updatedAt = CURRENT_TIMESTAMP
-             WHERE id = $4`,
-            [status, reviewCycle, nextReviewDate, id]
+             WHERE id = $5`,
+            [status, reviewCycle, correctCount, nextReviewDate, id]
         );
 
         if (result.rowCount === 0) {
             return res.status(404).json({ error: 'Word not found' });
         }
 
-        logger.info(`🔧 Manual advance: Word ${id} → ${status} (cycle ${reviewCycle}), nextReview: ${nextReviewDate}`);
-        res.json({ message: 'Word advanced successfully', status, reviewCycle, nextReviewDate });
+        logger.info(`🔧 Manual advance: Word ${id} → ${status} (cycle ${reviewCycle}, ${correctCount} points), nextReview: ${nextReviewDate}`);
+        res.json({ message: 'Word advanced successfully', status, reviewCycle, correctCount, nextReviewDate });
     } catch (err) {
         logger.error('Error manually advancing word:', err);
         res.status(500).json({ error: err.message });
@@ -14323,6 +14445,164 @@ app.put('/api/daily-goals/:userId/targets', async (req, res) => {
         });
     } catch (err) {
         logger.error('Error updating daily goals:', err);
+        res.status(500).json({ error: err.message });
+    }
+});
+
+// Check for words with mismatched points and stages
+app.get('/api/check-points-mismatch', async (req, res) => {
+    try {
+        logger.info('🔍 Checking for words with mismatched points and stages...');
+
+        const stageThresholds = [20, 35, 50, 65, 80, 90, 100];
+        const srsIntervals = [1, 3, 7, 14, 30, 60, 120];
+
+        const result = await db.query(`
+            SELECT id, word, correctcount, status, reviewcycle
+            FROM words
+            WHERE status IN ('studying', 'review_1', 'review_3', 'review_7', 'review_14', 'review_30', 'review_60', 'review_120', 'learned', 'mastered')
+            ORDER BY correctcount DESC
+        `);
+
+        const mismatches = [];
+
+        for (const word of result.rows) {
+            const points = word.correctcount || 0;
+            const status = word.status;
+            const currentCycle = word.reviewcycle || 0;
+
+            let expectedCycle = -1;
+            for (let i = 0; i < stageThresholds.length; i++) {
+                if (points >= stageThresholds[i]) {
+                    expectedCycle = i;
+                } else {
+                    break;
+                }
+            }
+
+            let expectedStatus = 'studying';
+            if (points >= 100) {
+                expectedStatus = 'mastered';
+            } else if (expectedCycle >= 0 && expectedCycle < srsIntervals.length) {
+                expectedStatus = `review_${srsIntervals[expectedCycle]}`;
+            }
+
+            const statusMismatch = status !== expectedStatus && !(status === 'learned' && expectedStatus === 'mastered');
+
+            if (statusMismatch) {
+                mismatches.push({
+                    id: word.id,
+                    word: word.word,
+                    points: points,
+                    currentStatus: status,
+                    currentCycle: currentCycle,
+                    expectedStatus: expectedStatus,
+                    expectedCycle: expectedCycle >= 0 ? expectedCycle : null
+                });
+            }
+        }
+
+        logger.info(`Found ${mismatches.length} mismatches out of ${result.rows.length} words`);
+
+        res.json({
+            success: true,
+            totalWords: result.rows.length,
+            mismatchCount: mismatches.length,
+            mismatches: mismatches
+        });
+    } catch (err) {
+        logger.error('❌ Error checking mismatches:', err);
+        res.status(500).json({ error: err.message });
+    }
+});
+
+// Temporary migration endpoint to update word statuses based on new threshold system
+app.post('/api/migrate-word-statuses', async (req, res) => {
+    try {
+        logger.info('🔄 Starting word status migration...');
+
+        // SRS intervals and thresholds
+        const srsIntervals = [1, 3, 7, 14, 30, 60, 120];
+        const stageThresholds = [20, 35, 50, 65, 80, 90, 100];
+
+        // Get all words that are currently "studying", "learning", or in review
+        const result = await db.query(`
+            SELECT id, word, correctcount, status, reviewcycle
+            FROM words
+            WHERE status IN ('studying', 'learning') OR status LIKE 'review_%'
+            ORDER BY correctcount DESC
+        `);
+
+        logger.info(`Found ${result.rows.length} words to check`);
+
+        let updatedCount = 0;
+        let skippedCount = 0;
+        const updates = [];
+
+        for (const word of result.rows) {
+            const correctCount = word.correctcount || 0;
+
+            // Determine the correct review cycle based on points (ignoring old cycle)
+            let newReviewCycle = 0;
+            for (let i = 0; i < stageThresholds.length; i++) {
+                if (correctCount >= stageThresholds[i]) {
+                    newReviewCycle = i;
+                } else {
+                    break;
+                }
+            }
+
+            // If word has reached at least the first threshold (20 points)
+            if (correctCount >= stageThresholds[0] && newReviewCycle < srsIntervals.length) {
+                const intervalDays = srsIntervals[newReviewCycle];
+                const newStatus = `review_${intervalDays}`;
+                const oldCycle = word.reviewcycle || 0;
+
+                // Only update if status or cycle is different
+                if (word.status !== newStatus || oldCycle !== newReviewCycle) {
+                    const nextReviewDate = new Date();
+                    nextReviewDate.setDate(nextReviewDate.getDate() + intervalDays);
+
+                    await db.query(
+                        `UPDATE words
+                         SET status = $1, reviewcycle = $2, nextreviewdate = $3, updatedAt = CURRENT_TIMESTAMP
+                         WHERE id = $4`,
+                        [newStatus, newReviewCycle, nextReviewDate, word.id]
+                    );
+
+                    logger.info(`✅ Updated: "${word.word}" (${correctCount} pts) → cycle ${oldCycle}→${newReviewCycle}, ${word.status}→${newStatus}`);
+                    updates.push({
+                        word: word.word,
+                        points: correctCount,
+                        oldStatus: word.status,
+                        oldCycle: oldCycle,
+                        newStatus: newStatus,
+                        newCycle: newReviewCycle,
+                        reviewInDays: intervalDays
+                    });
+                    updatedCount++;
+                } else {
+                    skippedCount++;
+                }
+            } else {
+                skippedCount++;
+            }
+        }
+
+        logger.info(`📊 Migration complete! Updated: ${updatedCount}, Skipped: ${skippedCount}`);
+
+        res.json({
+            success: true,
+            message: 'Word status migration completed',
+            stats: {
+                total: result.rows.length,
+                updated: updatedCount,
+                skipped: skippedCount
+            },
+            updates: updates
+        });
+    } catch (err) {
+        logger.error('❌ Migration failed:', err);
         res.status(500).json({ error: err.message });
     }
 });

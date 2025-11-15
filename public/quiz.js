@@ -165,19 +165,19 @@ class QuizManager {
         if (question.type === 'multipleChoice' || question.type === 'reverseMultipleChoice') {
             isCorrect = userAnswer === question.correctAnswer;
             feedback = isCorrect ?
-                'Correct!' :
-                `Incorrect. Correct answer: ${question.correctAnswer}`;
+                (i18n?.t('correct') || 'Correct!') :
+                `${i18n?.t('incorrectCorrectAnswer') || 'Incorrect. Correct answer:'} ${question.correctAnswer}`;
         } else if (question.type === 'wordBuilding') {
             const result = this.checkTypingAnswerDetailed(userAnswer, question.correctAnswer);
             isCorrect = result.correct;
             isPartiallyCorrect = result.partiallyCorrect;
 
             if (isCorrect) {
-                feedback = 'Correct!';
+                feedback = i18n?.t('correct') || 'Correct!';
             } else if (isPartiallyCorrect) {
-                feedback = `Almost! Correct answer: ${question.correctAnswer}`;
+                feedback = `${i18n?.t('almostCorrectAnswer') || 'Almost! Correct answer:'} ${question.correctAnswer}`;
             } else {
-                feedback = `Incorrect. Correct answer: ${question.correctAnswer}`;
+                feedback = `${i18n?.t('incorrectCorrectAnswer') || 'Incorrect. Correct answer:'} ${question.correctAnswer}`;
             }
         } else if (question.type === 'typing') {
             const result = this.checkTypingAnswerDetailed(userAnswer, question.correctAnswer);
@@ -185,11 +185,11 @@ class QuizManager {
             isPartiallyCorrect = result.partiallyCorrect;
 
             if (isCorrect) {
-                feedback = 'Correct!';
+                feedback = i18n?.t('correct') || 'Correct!';
             } else if (isPartiallyCorrect) {
-                feedback = `Almost! Correct answer: ${question.correctAnswer}`;
+                feedback = `${i18n?.t('almostCorrectAnswer') || 'Almost! Correct answer:'} ${question.correctAnswer}`;
             } else {
-                feedback = `Incorrect. Correct answer: ${question.correctAnswer}`;
+                feedback = `${i18n?.t('incorrectCorrectAnswer') || 'Incorrect. Correct answer:'} ${question.correctAnswer}`;
             }
         }
 
@@ -198,7 +198,19 @@ class QuizManager {
         }
 
         // Update word progress in database (treat partial as correct for progress)
-        const progressResult = await database.updateWordProgress(question.wordId, isCorrect || isPartiallyCorrect, question.type);
+        let progressResult = null;
+        try {
+            progressResult = await database.updateWordProgress(question.wordId, isCorrect || isPartiallyCorrect, question.type);
+        } catch (error) {
+            if (error.message === 'RATE_LIMIT_EXCEEDED') {
+                // Rate limit exceeded - show user-friendly message but don't fail the quiz
+                console.warn('⚠️ Progress not saved due to rate limiting. Please slow down.');
+                feedback += ' (Progress not saved - please slow down)';
+            } else {
+                // Other errors - log but continue
+                console.error('Failed to update word progress:', error);
+            }
+        }
 
         // Show XP notification if gamification is enabled and XP was awarded
         if (window.gamification && progressResult && progressResult.xp) {

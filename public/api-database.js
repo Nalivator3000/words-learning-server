@@ -66,11 +66,17 @@ class APIDatabase {
 
             if (!response.ok) {
                 // Handle rate limiting (429) with exponential backoff
-                if (response.status === 429 && retries > 0) {
-                    console.warn(`⚠️ Rate limited (429), retrying in ${retryDelay}ms... (${retries} retries left)`);
-                    await new Promise(resolve => setTimeout(resolve, retryDelay));
-                    // Exponential backoff: double the delay for next retry
-                    return await this.apiRequest(endpoint, options, retries - 1, retryDelay * 2);
+                if (response.status === 429) {
+                    if (retries > 0) {
+                        console.warn(`⚠️ Rate limited (429), retrying in ${retryDelay}ms... (${retries} retries left)`);
+                        await new Promise(resolve => setTimeout(resolve, retryDelay));
+                        // Exponential backoff: double the delay for next retry
+                        return await this.apiRequest(endpoint, options, retries - 1, retryDelay * 2);
+                    } else {
+                        // No more retries left - show user-friendly message
+                        console.error('❌ Rate limit exceeded. Please slow down.');
+                        throw new Error('RATE_LIMIT_EXCEEDED');
+                    }
                 }
 
                 const error = await response.text();
@@ -79,7 +85,10 @@ class APIDatabase {
 
             return await response.json();
         } catch (error) {
-            console.error(`❌ API request failed: ${endpoint}`, error);
+            // Don't log network errors twice
+            if (error.message !== 'RATE_LIMIT_EXCEEDED') {
+                console.error(`❌ API request failed: ${endpoint}`, error);
+            }
             throw error;
         }
     }

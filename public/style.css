@@ -267,31 +267,37 @@
     transition: all 0.3s ease;
 }
 
-/* Darken stat card gradients for dark theme */
+/* Darken stat card backgrounds and gradients for dark theme */
+[data-theme="dark"] .stat-card {
+    background: rgba(17, 24, 39, 0.85) !important;
+    backdrop-filter: blur(12px) saturate(150%);
+    -webkit-backdrop-filter: blur(12px) saturate(150%);
+}
+
 [data-theme="dark"] .stat-card::before {
-    opacity: 0.4 !important;
+    opacity: 0.25 !important;
 }
 
 [data-theme="dark"] .stat-card:nth-child(1)::before {
     background: linear-gradient(135deg,
-        rgba(109, 40, 217, 0.5),
-        rgba(139, 92, 246, 0.5)) !important;
+        rgba(109, 40, 217, 0.35),
+        rgba(139, 92, 246, 0.35)) !important;
 }
 
 [data-theme="dark"] .stat-card:nth-child(2)::before {
     background: linear-gradient(135deg,
-        rgba(234, 88, 12, 0.5),
-        rgba(249, 115, 22, 0.5)) !important;
+        rgba(234, 88, 12, 0.35),
+        rgba(249, 115, 22, 0.35)) !important;
 }
 
 [data-theme="dark"] .stat-card:nth-child(3)::before {
     background: linear-gradient(135deg,
-        rgba(5, 150, 105, 0.5),
-        rgba(16, 185, 129, 0.5)) !important;
+        rgba(5, 150, 105, 0.35),
+        rgba(16, 185, 129, 0.35)) !important;
 }
 
 [data-theme="dark"] .stat-card:hover::before {
-    opacity: 0.6 !important;
+    opacity: 0.4 !important;
 }
 
 [data-theme="dark"] .stats-card:hover,
@@ -939,6 +945,7 @@ textarea {
 
 .header-left {
     flex-shrink: 0;
+    margin-right: var(--space-8);
 }
 
 .header-left h1 {
@@ -968,6 +975,7 @@ textarea {
     align-items: center;
     gap: var(--space-6);
     flex-shrink: 0;
+    margin-left: var(--space-8);
 }
 
 .user-info-bar {
@@ -1676,6 +1684,16 @@ textarea {
     background: rgba(244, 63, 94, 0.1);
 }
 
+/* Keep cursor visible for readonly inputs (for Enter key navigation) */
+.text-input[readonly] {
+    cursor: default;
+}
+
+.text-input[readonly]:focus {
+    outline: none;
+    box-shadow: none;
+}
+
 .answer-input {
     width: 100%;
     max-width: 400px;
@@ -2040,6 +2058,30 @@ textarea {
     background: var(--secondary-600);
     transform: translateY(-2px);
     box-shadow: var(--shadow-3d-md);
+}
+
+/* Help link styling */
+.help-link {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    padding: 6px 12px;
+    background: linear-gradient(135deg, var(--primary-500), var(--secondary-500));
+    color: white !important;
+    border-radius: var(--radius-lg);
+    font-size: var(--text-sm);
+    font-weight: 600;
+    transition: all 0.3s ease;
+    box-shadow: var(--shadow-sm);
+}
+
+.help-link:hover {
+    transform: translateY(-2px);
+    box-shadow: var(--shadow-3d-sm);
+}
+
+[data-theme="dark"] .help-link {
+    background: linear-gradient(135deg, var(--primary-600), var(--secondary-600));
 }
 
 /* Review Info */

@@ -1,0 +1,497 @@
+{
+  "login": {
+    "en": "Log In",
+    "ru": "Войти",
+    "de": "Anmelden"
+  },
+  "register": {
+    "en": "Register",
+    "ru": "Регистрация",
+    "de": "Registrieren"
+  },
+  "email": {
+    "en": "Email",
+    "ru": "Email",
+    "de": "E-Mail"
+  },
+  "password": {
+    "en": "Password",
+    "ru": "Пароль",
+    "de": "Passwort"
+  },
+  "confirmPassword": {
+    "en": "Confirm Password",
+    "ru": "Подтвердите пароль",
+    "de": "Passwort bestätigen"
+  },
+  "name": {
+    "en": "Name",
+    "ru": "Имя",
+    "de": "Name"
+  },
+  "loginWithGoogle": {
+    "en": "Log in with Google",
+    "ru": "Войти через Google",
+    "de": "Mit Google anmelden"
+  },
+  "home": {
+    "en": "Home",
+    "ru": "Главная",
+    "de": "Startseite"
+  },
+  "import": {
+    "en": "Import",
+    "ru": "Импорт",
+    "de": "Importieren"
+  },
+  "word_lists": {
+    "en": "Word Lists",
+    "ru": "Списки слов",
+    "de": "Wortlisten"
+  },
+  "study": {
+    "en": "Study",
+    "ru": "Изучение",
+    "de": "Lernen"
+  },
+  "review": {
+    "en": "Review",
+    "ru": "Повторение",
+    "de": "Wiederholung"
+  },
+  "daily_challenges": {
+    "en": "Challenges",
+    "ru": "Испытания",
+    "de": "Herausforderungen"
+  },
+  "leagues_title": {
+    "en": "Leagues",
+    "ru": "Лиги",
+    "de": "Ligen"
+  },
+  "weekly_challenges_title": {
+    "en": "Weekly",
+    "ru": "Недельные",
+    "de": "Wöchentlich"
+  },
+  "personal_rating_title": {
+    "en": "Rating",
+    "ru": "Рейтинг",
+    "de": "Bewertung"
+  },
+  "personal_insights_title": {
+    "en": "Insights",
+    "ru": "Аналитика",
+    "de": "Einblicke"
+  },
+  "friends_title": {
+    "en": "Friends",
+    "ru": "Друзья",
+    "de": "Freunde"
+  },
+  "duels_title": {
+    "en": "Duels",
+    "ru": "Дуэли",
+    "de": "Duelle"
+  },
+  "achievements_title": {
+    "en": "Achievements",
+    "ru": "Достижения",
+    "de": "Erfolge"
+  },
+  "leaderboard": {
+    "en": "Leaderboard",
+    "ru": "Лидеры",
+    "de": "Bestenliste"
+  },
+  "statistics": {
+    "en": "Statistics",
+    "ru": "Статистика",
+    "de": "Statistiken"
+  },
+  "settings": {
+    "en": "Settings",
+    "ru": "Настройки",
+    "de": "Einstellungen"
+  },
+  "logout": {
+    "en": "Log Out",
+    "ru": "Выйти",
+    "de": "Abmelden"
+  },
+  "quickStudy": {
+    "en": "Quick Study",
+    "ru": "Быстрое изучение",
+    "de": "Schnelles Lernen"
+  },
+  "quickReview": {
+    "en": "Quick Review",
+    "ru": "Быстрое повторение",
+    "de": "Schnelle Wiederholung"
+  },
+  "multipleChoice": {
+    "en": "Multiple Choice",
+    "ru": "Выбор из вариантов",
+    "de": "Multiple Choice"
+  },
+  "reverseChoice": {
+    "en": "Reverse Choice",
+    "ru": "Обратный выбор",
+    "de": "Umgekehrte Auswahl"
+  },
+  "wordBuilding": {
+    "en": "Word Building",
+    "ru": "Сборка слова",
+    "de": "Wortbildung"
+  },
+  "typing": {
+    "en": "Typing",
+    "ru": "Ввод с клавиатуры",
+    "de": "Eingabe"
+  },
+  "survivalMode": {
+    "en": "Survival Mode",
+    "ru": "Режим выживания",
+    "de": "Überlebensmodus"
+  },
+  "complexMode": {
+    "en": "Complex Mode",
+    "ru": "Комплексный режим",
+    "de": "Komplexer Modus"
+  },
+  "next": {
+    "en": "Next",
+    "ru": "Далее",
+    "de": "Weiter"
+  },
+  "finish": {
+    "en": "Finish",
+    "ru": "Завершить",
+    "de": "Beenden"
+  },
+  "word_1": {
+    "en": "Word 1",
+    "ru": "Слово 1",
+    "de": "Wort 1"
+  },
+  "downloadTemplate": {
+    "en": "Download CSV Template",
+    "ru": "Скачать шаблон CSV",
+    "de": "CSV-Vorlage herunterladen"
+  },
+  "selectFile": {
+    "en": "Select File",
+    "ru": "Выбрать файл",
+    "de": "Datei auswählen"
+  },
+  "googleSheetsUrl": {
+    "en": "Google Sheets URL",
+    "ru": "Ссылка на Google Таблицу",
+    "de": "Google Sheets URL"
+  },
+  "importFromCsv": {
+    "en": "From CSV File",
+    "ru": "Из CSV файла",
+    "de": "Aus CSV-Datei"
+  },
+  "importFromGoogle": {
+    "en": "From Google Sheets",
+    "ru": "Из Google Таблиц",
+    "de": "Aus Google Sheets"
+  },
+  "howItWorks": {
+    "en": "How it works",
+    "ru": "Как это работает",
+    "de": "Wie es funktioniert"
+  },
+  "howItWorksTitle": {
+    "en": "How does the spaced repetition system work?",
+    "ru": "Как работает система интервального повторения?",
+    "de": "Wie funktioniert das System der gestaffelten Wiederholung?"
+  },
+  "uiLanguage": {
+    "en": "Interface Language",
+    "ru": "Язык интерфейса",
+    "de": "Oberflächensprache"
+  },
+  "selectLanguage": {
+    "en": "Select language",
+    "ru": "Выберите язык",
+    "de": "Sprache wählen"
+  },
+  "learningLanguage": {
+    "en": "Learning Language",
+    "ru": "Изучаемый язык",
+    "de": "Lernsprache"
+  },
+  "nativeLanguage": {
+    "en": "Native Language",
+    "ru": "Родной язык",
+    "de": "Muttersprache"
+  },
+  "darkTheme": {
+    "en": "Dark Theme",
+    "ru": "Темная тема",
+    "de": "Dunkles Thema"
+  },
+  "save": {
+    "en": "Save",
+    "ru": "Сохранить",
+    "de": "Speichern"
+  },
+  "cancel": {
+    "en": "Cancel",
+    "ru": "Отмена",
+    "de": "Abbrechen"
+  },
+  "delete": {
+    "en": "Delete",
+    "ru": "Удалить",
+    "de": "Löschen"
+  },
+  "edit": {
+    "en": "Edit",
+    "ru": "Редактировать",
+    "de": "Bearbeiten"
+  },
+  "add": {
+    "en": "Add",
+    "ru": "Добавить",
+    "de": "Hinzufügen"
+  },
+  "close": {
+    "en": "Close",
+    "ru": "Закрыть",
+    "de": "Schließen"
+  },
+  "search": {
+    "en": "Search",
+    "ru": "Поиск",
+    "de": "Suchen"
+  },
+  "filter": {
+    "en": "Filter",
+    "ru": "Фильтр",
+    "de": "Filter"
+  },
+  "sort": {
+    "en": "Sort",
+    "ru": "Сортировка",
+    "de": "Sortieren"
+  },
+  "all": {
+    "en": "All",
+    "ru": "Все",
+    "de": "Alle"
+  },
+  "loading": {
+    "en": "Loading...",
+    "ru": "Загрузка...",
+    "de": "Laden..."
+  },
+  "error": {
+    "en": "Error",
+    "ru": "Ошибка",
+    "de": "Fehler"
+  },
+  "success": {
+    "en": "Success",
+    "ru": "Успешно",
+    "de": "Erfolgreich"
+  },
+  "confirm": {
+    "en": "Confirm",
+    "ru": "Подтвердить",
+    "de": "Bestätigen"
+  },
+  "yes": {
+    "en": "Yes",
+    "ru": "Да",
+    "de": "Ja"
+  },
+  "no": {
+    "en": "No",
+    "ru": "Нет",
+    "de": "Nein"
+  },
+  "total": {
+    "en": "Total",
+    "ru": "Всего",
+    "de": "Gesamt"
+  },
+  "words": {
+    "en": "Words",
+    "ru": "Слов",
+    "de": "Wörter"
+  },
+  "points": {
+    "en": "Points",
+    "ru": "Баллов",
+    "de": "Punkte"
+  },
+  "level": {
+    "en": "Level",
+    "ru": "Уровень",
+    "de": "Level"
+  },
+  "streak": {
+    "en": "Streak",
+    "ru": "Серия",
+    "de": "Serie"
+  },
+  "today": {
+    "en": "Today",
+    "ru": "Сегодня",
+    "de": "Heute"
+  },
+  "week": {
+    "en": "Week",
+    "ru": "Неделя",
+    "de": "Woche"
+  },
+  "month": {
+    "en": "Month",
+    "ru": "Месяц",
+    "de": "Monat"
+  },
+  "year": {
+    "en": "Year",
+    "ru": "Год",
+    "de": "Jahr"
+  },
+  "app_update_available": {
+    "en": "A new version is available! Refresh to update?",
+    "ru": "Доступна новая версия! Обновить?",
+    "de": "Eine neue Version ist verfügbar! Aktualisieren?"
+  },
+  "question": {
+    "en": "Question",
+    "ru": "Вопрос",
+    "de": "Frage"
+  },
+  "of": {
+    "en": "of",
+    "ru": "из",
+    "de": "von"
+  },
+  "correct": {
+    "en": "Correct!",
+    "ru": "Правильно!",
+    "de": "Richtig!"
+  },
+  "incorrect": {
+    "en": "Incorrect",
+    "ru": "Неправильно",
+    "de": "Falsch"
+  },
+  "correctAnswer": {
+    "en": "Correct answer:",
+    "ru": "Правильный ответ:",
+    "de": "Richtige Antwort:"
+  },
+  "showAnswer": {
+    "en": "Show Answer",
+    "ru": "Показать ответ",
+    "de": "Antwort anzeigen"
+  },
+  "clear": {
+    "en": "Clear",
+    "ru": "Очистить",
+    "de": "Löschen"
+  },
+  "submit": {
+    "en": "Submit",
+    "ru": "Ответить",
+    "de": "Absenden"
+  },
+  "buildTheWord": {
+    "en": "Build the word...",
+    "ru": "Соберите слово...",
+    "de": "Baue das Wort..."
+  },
+  "enterAnswer": {
+    "en": "Enter answer...",
+    "ru": "Введите ответ...",
+    "de": "Antwort eingeben..."
+  },
+  "quizCompleted": {
+    "en": "Quiz completed!",
+    "ru": "Тест завершен!",
+    "de": "Quiz abgeschlossen!"
+  },
+  "reviewCompleted": {
+    "en": "Review completed!",
+    "ru": "Повторение завершено!",
+    "de": "Wiederholung abgeschlossen!"
+  },
+  "result": {
+    "en": "Result",
+    "ru": "Результат",
+    "de": "Ergebnis"
+  },
+  "score": {
+    "en": "Score",
+    "ru": "Счет",
+    "de": "Punktzahl"
+  },
+  "noWords": {
+    "en": "No words",
+    "ru": "Нет слов",
+    "de": "Keine Wörter"
+  },
+  "autoRecommended": {
+    "en": "Auto (recommended)",
+    "ru": "Авто (рекомендуется)",
+    "de": "Auto (empfohlen)"
+  },
+  "almost": {
+    "en": "Almost!",
+    "ru": "Почти!",
+    "de": "Fast!"
+  },
+  "incorrectCorrectAnswer": {
+    "en": "Incorrect. Correct answer:",
+    "ru": "Неправильно. Правильный ответ:",
+    "de": "Falsch. Richtige Antwort:"
+  },
+  "almostCorrectAnswer": {
+    "en": "Almost! Correct answer:",
+    "ru": "Почти! Правильный ответ:",
+    "de": "Fast! Richtige Antwort:"
+  },
+  "fromCSVFile": {
+    "en": "From CSV File",
+    "ru": "Из CSV файла",
+    "de": "Aus CSV-Datei"
+  },
+  "fromGoogleSheets": {
+    "en": "From Google Sheets",
+    "ru": "Из Google Таблиц",
+    "de": "Aus Google Sheets"
+  },
+  "exportData": {
+    "en": "Export Data",
+    "ru": "Экспорт данных",
+    "de": "Daten exportieren"
+  },
+  "selectFile": {
+    "en": "Select File",
+    "ru": "Выбрать файл",
+    "de": "Datei auswählen"
+  },
+  "skip": {
+    "en": "Skip",
+    "ru": "Пропустить",
+    "de": "Überspringen"
+  },
+  "skipped": {
+    "en": "Skipped",
+    "ru": "Пропущено",
+    "de": "Übersprungen"
+  },
+  "correctAnswerWas": {
+    "en": "The correct answer was",
+    "ru": "Правильный ответ",
+    "de": "Die richtige Antwort war"
+  }
+}

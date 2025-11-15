@@ -276,13 +276,13 @@
 
                 <div class="import-options">
                     <div class="import-card">
-                        <h3>From CSV File</h3>
+                        <h3 data-i18n="fromCSVFile">From CSV File</h3>
                         <p>Upload CSV file with columns: Word, Example, Translation, Example Translation</p>
                         <input type="file" id="csvInput" accept=".csv" style="display: none;">
-                        <button id="csvImportBtn" class="action-btn">Select File</button>
+                        <button id="csvImportBtn" class="action-btn" data-i18n="selectFile">Select File</button>
                     </div>
                     <div class="import-card">
-                        <h3>From Google Sheets</h3>
+                        <h3 data-i18n="fromGoogleSheets">From Google Sheets</h3>
                         <p>Paste link to public Google spreadsheet</p>
                         <input type="text" id="googleSheetsUrl" placeholder="https://docs.google.com/spreadsheets/...">
                         <button id="googleImportBtn" class="action-btn" data-i18n="import">Импорт</button>
@@ -409,10 +409,15 @@
 
             <!-- Statistics Section -->
             <section id="statsSection" class="section">
-                <h2>Statistics</h2>
+                <div style="display: flex; align-items: center; gap: 12px; margin-bottom: 16px;">
+                    <h2 style="margin: 0;">Statistics</h2>
+                    <a href="srs-explanation.html" target="_blank" class="help-link" title="How does the spaced repetition system work?">
+                        ℹ️ How it works
+                    </a>
+                </div>
                 <div class="stats-detailed">
                     <div class="export-section">
-                        <h3>Export Data</h3>
+                        <h3 data-i18n="exportData">Export Data</h3>
                         <button id="exportStudyingBtn" class="export-btn">Export Learning Words</button>
                         <button id="exportReviewBtn" class="export-btn">Export Review Words</button>
                         <button id="exportLearnedBtn" class="export-btn">Export Learned Words</button>
@@ -981,7 +986,7 @@
 
         <!-- Version Info -->
 <!--         <footer style="position: fixed; bottom: 10px; right: 10px; background: rgba(0,0,0,0.7); color: white; padding: 5px 10px; border-radius: 5px; font-size: 12px; z-index: 10000;">
-            v5.0.0-FIX-f0e645b
+            v5.1.1-UPDATE-18f07ab
         </footer> -->
 
         <!-- New Version Indicator -->
