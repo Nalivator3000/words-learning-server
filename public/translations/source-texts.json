@@ -518,5 +518,10 @@
     "en": "Learned",
     "ru": "Изучено",
     "de": "Gelernt"
+  },
+  "appTitle": {
+    "en": "LexiBooster",
+    "ru": "LexiBooster",
+    "de": "LexiBooster"
   }
 }
