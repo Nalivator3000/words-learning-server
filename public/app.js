@@ -1434,10 +1434,15 @@ schreiben,Sie schreibt einen Brief.,Писать,Она пишет письmо.`
         if (buttonContainer) {
             buttonContainer.querySelectorAll('button').forEach(btn => btn.disabled = true);
         }
-        this.showNextButton();
 
-        // Keep focus on input for Enter key to work for next question
-        inputEl.focus();
+        // On last question, automatically finish after a short delay
+        if (quizManager.isQuizComplete()) {
+            setTimeout(() => this.finishStudy(), 1500);
+        } else {
+            this.showNextButton();
+            // Keep focus on input for Enter key to work for next question
+            inputEl.focus();
+        }
     }
 
     async handleReviewMultipleChoice(answer, buttonEl) {
@@ -1543,10 +1548,15 @@ schreiben,Sie schreibt einen Brief.,Писать,Она пишет письmо.`
         if (buttonContainer) {
             buttonContainer.querySelectorAll('button').forEach(btn => btn.disabled = true);
         }
-        this.showReviewNextButton();
 
-        // Keep focus on input for Enter key to work for next question
-        inputEl.focus();
+        // On last question, automatically finish after a short delay
+        if (quizManager.isQuizComplete()) {
+            setTimeout(() => this.finishReview(), 1500);
+        } else {
+            this.showReviewNextButton();
+            // Keep focus on input for Enter key to work for next question
+            inputEl.focus();
+        }
     }
 
     showAnswerFeedback(result, feedbackId) {
@@ -2198,7 +2208,12 @@ schreiben,Sie schreibt einen Brief.,Писать,Она пишет письmо.`
         const tiles = wordInput.parentElement.querySelector('.letter-tiles');
         tiles.style.display = 'none';
 
-        this.showNextButton();
+        // On last question, automatically finish after a short delay
+        if (quizManager.isQuizComplete()) {
+            setTimeout(() => this.finishStudy(), 1500);
+        } else {
+            this.showNextButton();
+        }
     }
     
     async skipWordBuilding(wordInput, question) {
