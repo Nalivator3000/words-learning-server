@@ -11074,8 +11074,36 @@ app.put('/api/words/:id/progress', async (req, res) => {
             }
         }
 
-        // AUTO-PROMOTION: Check if word in review status has reached next threshold through studying
-        // This handles case where user continues studying words that are waiting for review
+        // AUTO-PROMOTION: Check if word has reached higher thresholds
+        // This handles cases where user continues studying words beyond initial threshold
+
+        // For studying words: check if they've reached a review threshold
+        if (newStatus === 'studying') {
+            // Find the highest threshold reached
+            for (let i = stageThresholds.length - 1; i >= 0; i--) {
+                if (newCorrectCount >= stageThresholds[i]) {
+                    // Check if this threshold corresponds to a higher review cycle than current
+                    if (i > newReviewCycle) {
+                        newReviewCycle = i;
+                        const intervalDays = srsIntervals[i];
+                        newStatus = `review_${intervalDays}`;
+                        nextReviewDate = new Date();
+                        nextReviewDate.setDate(nextReviewDate.getDate() + intervalDays);
+                        logger.info(`🚀 AUTO-PROMOTION (studying): Word ${id} at ${newCorrectCount} points (threshold: ${stageThresholds[i]})! Promoted to review_${intervalDays}`);
+                        break;
+                    }
+                }
+            }
+
+            // Check for mastered status
+            if (newCorrectCount >= 100 && newReviewCycle >= srsIntervals.length - 1) {
+                newStatus = 'mastered';
+                nextReviewDate = null;
+                logger.info(`🎉 AUTO-PROMOTION (studying): Word ${id} reached 100 points! Promoted to mastered!`);
+            }
+        }
+
+        // For review words: check if they've reached next threshold through studying
         if (word.status.startsWith('review_') && newStatus === word.status) {
             // Word is still in review status (not changed above)
             // Check if points have reached the next cycle's threshold
@@ -11090,13 +11118,13 @@ app.put('/api/words/:id/progress', async (req, res) => {
                     newReviewCycle = nextCycle;
                     nextReviewDate = new Date();
                     nextReviewDate.setDate(nextReviewDate.getDate() + intervalDays);
-                    logger.info(`🚀 AUTO-PROMOTION: Word ${id} at ${newCorrectCount} points reached next threshold (${nextThreshold})! Promoted to review_${intervalDays}`);
+                    logger.info(`🚀 AUTO-PROMOTION (review): Word ${id} at ${newCorrectCount} points reached next threshold (${nextThreshold})! Promoted to review_${intervalDays}`);
                 } else if (newCorrectCount >= 100) {
                     // Reached 100 points - mastered!
                     newStatus = 'mastered';
                     newReviewCycle = srsIntervals.length - 1;
                     nextReviewDate = null;
-                    logger.info(`🎉 AUTO-PROMOTION: Word ${id} reached 100 points! Promoted to mastered!`);
+                    logger.info(`🎉 AUTO-PROMOTION (review): Word ${id} reached 100 points! Promoted to mastered!`);
                 }
             }
         }
