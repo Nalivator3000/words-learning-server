@@ -1908,7 +1908,6 @@ async function initializeLeagueTiers() {
 async function initializeBadges() {
     const badges = [
         // Achievement-based badges
-        { key: 'first_steps', name: 'First Steps', description: 'Completed onboarding', icon: '👣', rarity: 'common', category: 'achievement' },
         { key: 'word_master', name: 'Word Master', description: 'Learned 1000 words', icon: '📚', rarity: 'epic', category: 'achievement' },
         { key: 'streak_legend', name: 'Streak Legend', description: '365-day streak', icon: '🔥', rarity: 'legendary', category: 'streak' },
         { key: 'perfectionist', name: 'Perfectionist', description: '100 perfect quizzes', icon: '💯', rarity: 'rare', category: 'accuracy' },
@@ -11072,6 +11071,33 @@ app.put('/api/words/:id/progress', async (req, res) => {
                 newStatus = 'studying';
                 nextReviewDate = null;
                 logger.info(`✅ Word ${id} review completed! Advancing to cycle ${newReviewCycle + 1}, back to studying`);
+            }
+        }
+
+        // AUTO-PROMOTION: Check if word in review status has reached next threshold through studying
+        // This handles case where user continues studying words that are waiting for review
+        if (word.status.startsWith('review_') && newStatus === word.status) {
+            // Word is still in review status (not changed above)
+            // Check if points have reached the next cycle's threshold
+            const nextCycle = newReviewCycle + 1;
+            const nextThreshold = stageThresholds[nextCycle];
+
+            if (nextThreshold && newCorrectCount >= nextThreshold) {
+                // Auto-promote to next review cycle
+                if (nextCycle < srsIntervals.length) {
+                    const intervalDays = srsIntervals[nextCycle];
+                    newStatus = `review_${intervalDays}`;
+                    newReviewCycle = nextCycle;
+                    nextReviewDate = new Date();
+                    nextReviewDate.setDate(nextReviewDate.getDate() + intervalDays);
+                    logger.info(`🚀 AUTO-PROMOTION: Word ${id} at ${newCorrectCount} points reached next threshold (${nextThreshold})! Promoted to review_${intervalDays}`);
+                } else if (newCorrectCount >= 100) {
+                    // Reached 100 points - mastered!
+                    newStatus = 'mastered';
+                    newReviewCycle = srsIntervals.length - 1;
+                    nextReviewDate = null;
+                    logger.info(`🎉 AUTO-PROMOTION: Word ${id} reached 100 points! Promoted to mastered!`);
+                }
             }
         }
 
