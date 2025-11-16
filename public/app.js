@@ -1360,7 +1360,12 @@ schreiben,Sie schreibt einen Brief.,Писать,Она пишет письmо.`
             });
         }
 
-        this.showNextButton();
+        // On last question, automatically finish after a short delay
+        if (quizManager.isQuizComplete()) {
+            setTimeout(() => this.finishStudy(), 1500);
+        } else {
+            this.showNextButton();
+        }
     }
 
     async skipMultipleChoice() {
@@ -1464,7 +1469,12 @@ schreiben,Sie schreibt einen Brief.,Писать,Она пишет письmо.`
             });
         }
 
-        this.showReviewNextButton();
+        // On last question, automatically finish after a short delay
+        if (quizManager.isQuizComplete()) {
+            setTimeout(() => this.finishReview(), 1500);
+        } else {
+            this.showReviewNextButton();
+        }
     }
 
     async skipReviewMultipleChoice() {
