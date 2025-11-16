@@ -498,5 +498,25 @@
     "en": "Not studied",
     "ru": "Не изучено",
     "de": "Nicht gelernt"
+  },
+  "dashboard": {
+    "en": "Dashboard",
+    "ru": "Панель управления",
+    "de": "Dashboard"
+  },
+  "studyingWords": {
+    "en": "Studying",
+    "ru": "Изучение",
+    "de": "Lernen"
+  },
+  "reviewWords": {
+    "en": "Review",
+    "ru": "Повторение",
+    "de": "Wiederholung"
+  },
+  "learnedWords": {
+    "en": "Learned",
+    "ru": "Изучено",
+    "de": "Gelernt"
   }
 }
