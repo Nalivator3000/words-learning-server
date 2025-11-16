@@ -523,5 +523,10 @@
     "en": "LexiBooster",
     "ru": "LexiBooster",
     "de": "LexiBooster"
+  },
+  "play_audio": {
+    "en": "Play audio",
+    "ru": "Воспроизвести аудио",
+    "de": "Audio abspielen"
   }
 }
