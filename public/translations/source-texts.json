@@ -528,5 +528,10 @@
     "en": "Play audio",
     "ru": "Воспроизвести аудио",
     "de": "Audio abspielen"
+  },
+  "selectMode": {
+    "en": "Select Mode",
+    "ru": "Выберите режим",
+    "de": "Modus wählen"
   }
 }
