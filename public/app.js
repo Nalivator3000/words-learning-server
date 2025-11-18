@@ -2076,6 +2076,11 @@ schreiben,Sie schreibt einen Brief.,Писать,Она пишет письmо.`
         wordInput.className = 'word-building-input';
         wordInput.placeholder = i18n.t('buildTheWord');
         wordInput.dataset.enterPressed = 'false';
+
+        // Prevent mobile keyboard from appearing automatically
+        wordInput.readOnly = true;
+        wordInput.inputMode = 'none'; // Prevent keyboard on mobile
+
         wordInput.onkeypress = (e) => {
             if (e.key === 'Enter') {
                 this.handleWordBuildingEnter(wordInput, question);
@@ -2087,6 +2092,15 @@ schreiben,Sie schreibt einen Brief.,Писать,Она пишет письmо.`
                 this.handleWordBuildingBackspace(wordInput);
             }
         };
+
+        // Allow user to click and type manually if they want (desktop)
+        wordInput.onclick = () => {
+            if (!wordInput.disabled && window.innerWidth > 768) {
+                wordInput.readOnly = false;
+                wordInput.inputMode = 'text';
+            }
+        };
+
         wordBuildingArea.appendChild(wordInput);
         
         // Letter tiles
@@ -2135,7 +2149,14 @@ schreiben,Sie schreibt einen Brief.,Писать,Она пишет письmо.`
     handleLetterClick(tile, wordInput) {
         if (tile.disabled || wordInput.disabled) return;
 
+        // Temporarily remove readonly to update value
+        const wasReadOnly = wordInput.readOnly;
+        wordInput.readOnly = false;
         wordInput.value += tile.dataset.letter;
+        if (wasReadOnly) {
+            wordInput.readOnly = true; // Restore readonly state
+        }
+
         tile.disabled = true;
         tile.classList.add('used');
         // wordInput.focus(); // Disabled: Don't auto-focus to prevent keyboard popup on mobile
@@ -2147,8 +2168,16 @@ schreiben,Sie schreibt einen Brief.,Писать,Она пишет письmо.`
         // Get the last letter
         const lastLetter = wordInput.value.slice(-1);
 
+        // Temporarily remove readonly to update value
+        const wasReadOnly = wordInput.readOnly;
+        wordInput.readOnly = false;
+
         // Remove last letter from input
         wordInput.value = wordInput.value.slice(0, -1);
+
+        if (wasReadOnly) {
+            wordInput.readOnly = true; // Restore readonly state
+        }
 
         // Find and re-enable the first disabled tile with this letter
         const letterTiles = wordInput.parentElement.querySelector('.letter-tiles');
@@ -2165,10 +2194,20 @@ schreiben,Sie schreibt einen Brief.,Писать,Она пишет письmо.`
     
     clearBuiltWord(wordInput, letterTiles) {
         if (wordInput.disabled) return;
-        
+
+        // Temporarily remove readonly to update value
+        const wasReadOnly = wordInput.readOnly;
+        wordInput.readOnly = false;
+
         wordInput.value = '';
+
+        if (wasReadOnly) {
+            wordInput.readOnly = true; // Restore readonly state
+        }
+
         letterTiles.querySelectorAll('.letter-tile').forEach(tile => {
             tile.disabled = false;
+            tile.classList.remove('used');
         });
         // wordInput.focus(); // Disabled: Don't auto-focus to prevent keyboard popup on mobile
     }
