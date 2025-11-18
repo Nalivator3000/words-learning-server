@@ -1,7 +1,7 @@
 // Service Worker for Words Learning App
-// Version 5.0.0
+// Version 5.1.2
 
-const CACHE_VERSION = 'v5.0.0';
+const CACHE_VERSION = 'v5.1.2';
 const CACHE_NAME = `words-learning-${CACHE_VERSION}`;
 
 // Files to cache for offline use
@@ -75,6 +75,14 @@ self.addEventListener('activate', (event) => {
     );
 });
 
+// Message event - handle commands from the app
+self.addEventListener('message', (event) => {
+    if (event.data && event.data.type === 'SKIP_WAITING') {
+        console.log('⏭️ Service Worker: Skipping waiting...');
+        self.skipWaiting();
+    }
+});
+
 // Fetch event - serve from cache with network fallback
 self.addEventListener('fetch', (event) => {
     const { request } = event;
@@ -91,13 +99,28 @@ self.addEventListener('fetch', (event) => {
         return;
     }
 
-    // Static assets: Cache-first strategy
+    // HTML, JS, CSS: Network-first to get updates immediately
+    if (isDynamicAsset(url.pathname)) {
+        event.respondWith(networkFirstStrategy(request));
+        return;
+    }
+
+    // Other static assets (images, fonts): Cache-first strategy
     event.respondWith(cacheFirstStrategy(request));
 });
 
 // Check if request is an API call
 function isApiRequest(pathname) {
     return API_ENDPOINTS.some(endpoint => pathname.startsWith(endpoint));
+}
+
+// Check if request is for dynamic assets that should always be fresh
+function isDynamicAsset(pathname) {
+    return pathname.endsWith('.html') ||
+           pathname.endsWith('.js') ||
+           pathname.endsWith('.css') ||
+           pathname === '/' ||
+           pathname.includes('/translations/');
 }
 
 // Cache-first strategy (for static assets)

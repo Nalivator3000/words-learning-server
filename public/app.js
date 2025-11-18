@@ -2347,16 +2347,23 @@ schreiben,Sie schreibt einen Brief.,Писать,Она пишет письmо.`
 
         // Small delay to ensure DOM is updated
         setTimeout(() => {
-            const quizArea = buttonElement.closest('.quiz-area, .survival-area');
-            if (quizArea) {
-                // Smooth scroll to bottom to show the button
-                buttonElement.scrollIntoView({
-                    behavior: 'smooth',
-                    block: 'nearest',
-                    inline: 'nearest'
-                });
+            // Scroll button into view with some padding at the bottom
+            buttonElement.scrollIntoView({
+                behavior: 'smooth',
+                block: 'end',  // Align to bottom of visible area
+                inline: 'nearest'
+            });
+
+            // Add extra scroll padding on mobile for better visibility
+            if (window.innerWidth <= 768) {
+                setTimeout(() => {
+                    window.scrollBy({
+                        top: -20,  // Add 20px padding from bottom
+                        behavior: 'smooth'
+                    });
+                }, 150);
             }
-        }, 100);
+        }, 150);
     }
 
     shouldShowAudioButton(text) {

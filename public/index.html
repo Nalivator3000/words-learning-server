@@ -53,10 +53,7 @@
                                 if (newWorker.state === 'installed' && navigator.serviceWorker.controller) {
                                     // New version available
                                     console.log('🔄 New version available! Refresh to update.');
-                                    if (confirm(i18n.t('app_update_available'))) {
-                                        newWorker.postMessage({ type: 'SKIP_WAITING' });
-                                        window.location.reload();
-                                    }
+                                    showUpdateNotification(newWorker);
                                 }
                             });
                         });
@@ -70,6 +67,65 @@
             navigator.serviceWorker.addEventListener('controllerchange', () => {
                 console.log('🔄 Service Worker updated, reloading...');
                 window.location.reload();
+            });
+        }
+
+        // Show update notification banner
+        function showUpdateNotification(newWorker) {
+            // Create notification banner
+            const banner = document.createElement('div');
+            banner.id = 'update-banner';
+            banner.style.cssText = `
+                position: fixed;
+                top: 0;
+                left: 0;
+                right: 0;
+                background: linear-gradient(135deg, #6366f1 0%, #8b5cf6 100%);
+                color: white;
+                padding: 16px 20px;
+                text-align: center;
+                z-index: 10000;
+                box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
+                animation: slideDown 0.3s ease-out;
+            `;
+
+            banner.innerHTML = `
+                <div style="max-width: 600px; margin: 0 auto; display: flex; align-items: center; justify-content: center; gap: 16px; flex-wrap: wrap;">
+                    <span style="font-weight: 600;">🔄 ${i18n?.t ? i18n.t('app_update_available') : 'A new version is available!'}</span>
+                    <button id="update-btn" style="
+                        background: white;
+                        color: #6366f1;
+                        border: none;
+                        padding: 8px 20px;
+                        border-radius: 8px;
+                        font-weight: 600;
+                        cursor: pointer;
+                        transition: transform 0.2s;
+                    " onmouseover="this.style.transform='scale(1.05)'" onmouseout="this.style.transform='scale(1)'">
+                        ${i18n?.t ? i18n.t('confirm') : 'Update Now'}
+                    </button>
+                </div>
+            `;
+
+            document.body.appendChild(banner);
+
+            // Add animation styles
+            if (!document.getElementById('update-banner-style')) {
+                const style = document.createElement('style');
+                style.id = 'update-banner-style';
+                style.textContent = `
+                    @keyframes slideDown {
+                        from { transform: translateY(-100%); }
+                        to { transform: translateY(0); }
+                    }
+                `;
+                document.head.appendChild(style);
+            }
+
+            // Handle update button click
+            document.getElementById('update-btn').addEventListener('click', () => {
+                newWorker.postMessage({ type: 'SKIP_WAITING' });
+                banner.remove();
             });
         }
 
