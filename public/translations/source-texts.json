@@ -533,5 +533,40 @@
     "en": "Select Mode",
     "ru": "Выберите режим",
     "de": "Modus wählen"
+  },
+  "no_weekly_challenges": {
+    "en": "No weekly challenges available",
+    "ru": "Нет недельных испытаний",
+    "de": "Keine wöchentlichen Herausforderungen verfügbar"
+  },
+  "week_of": {
+    "en": "Week of",
+    "ru": "Неделя от",
+    "de": "Woche vom"
+  },
+  "completed_this_week": {
+    "en": "Completed",
+    "ru": "Завершено",
+    "de": "Abgeschlossen"
+  },
+  "total_completed": {
+    "en": "Total",
+    "ru": "Всего",
+    "de": "Gesamt"
+  },
+  "claimed": {
+    "en": "Claimed",
+    "ru": "Получено",
+    "de": "Beansprucht"
+  },
+  "claim_reward": {
+    "en": "Claim Reward",
+    "ru": "Получить награду",
+    "de": "Belohnung abholen"
+  },
+  "in_progress": {
+    "en": "In Progress...",
+    "ru": "В процессе...",
+    "de": "In Bearbeitung..."
   }
 }
