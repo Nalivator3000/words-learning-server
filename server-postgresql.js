@@ -11020,111 +11020,81 @@ app.put('/api/words/:id/progress', async (req, res) => {
         // Progressive thresholds for each stage (cumulative points needed)
         const stageThresholds = [20, 35, 50, 65, 80, 90, 100];
 
-        // Get the threshold for current stage
-        const currentThreshold = stageThresholds[newReviewCycle] || 100;
+        // AUTO-PROMOTION FIRST: Check if word has reached higher thresholds
+        // This must happen BEFORE regular status checks to properly handle all cases
 
-        if (word.status === 'studying' && newCorrectCount >= currentThreshold) {
-            // Reached threshold - move to review phase or next stage
-            if (newReviewCycle < srsIntervals.length - 1) {
-                // Move to next review stage
-                const intervalDays = srsIntervals[newReviewCycle];
-                newStatus = `review_${intervalDays}`;
-                nextReviewDate = new Date();
-                nextReviewDate.setDate(nextReviewDate.getDate() + intervalDays);
-                logger.info(`📅 Word ${id} reached ${newCorrectCount} points (threshold: ${currentThreshold})! Review in ${intervalDays} days`);
-            } else if (newReviewCycle === srsIntervals.length - 1 && newCorrectCount >= 100) {
-                // Last stage completed with 100 points - mark as mastered
-                newStatus = 'mastered';
-                logger.info(`🎉 Word ${id} fully mastered with 100 points after ${newReviewCycle + 1} cycles!`);
-            } else {
-                // Last review cycle, but not yet 100 points
-                const intervalDays = srsIntervals[newReviewCycle];
-                newStatus = `review_${intervalDays}`;
-                nextReviewDate = new Date();
-                nextReviewDate.setDate(nextReviewDate.getDate() + intervalDays);
-            }
-        } else if (!correct && word.status.startsWith('review_')) {
-            // Failed review during waiting period - back to studying mode, keep points
-            newStatus = 'studying';
-            nextReviewDate = null;
-            logger.info(`❌ Word ${id} failed review (cycle ${newReviewCycle + 1}, ${newCorrectCount} points), back to studying`);
-        } else if (word.status.startsWith('review_') && correct && newCorrectCount >= currentThreshold) {
-            // Successfully reviewed - advance to next cycle
-            newReviewCycle++;
-
-            // Check if word has already reached the next threshold
-            const nextThreshold = stageThresholds[newReviewCycle] || 100;
-
-            if (newCorrectCount >= nextThreshold && newReviewCycle < srsIntervals.length) {
-                // Already reached next threshold - move directly to next review stage
-                const intervalDays = srsIntervals[newReviewCycle];
-                newStatus = `review_${intervalDays}`;
-                nextReviewDate = new Date();
-                nextReviewDate.setDate(nextReviewDate.getDate() + intervalDays);
-                logger.info(`✅ Word ${id} review completed! Already at ${newCorrectCount} points (threshold: ${nextThreshold}), moving to review_${intervalDays}`);
-            } else if (newReviewCycle >= srsIntervals.length - 1 && newCorrectCount >= 100) {
-                // Reached final stage with 100 points
-                newStatus = 'mastered';
-                logger.info(`🎉 Word ${id} fully mastered with 100 points!`);
-            } else {
-                // Below next threshold - back to studying
-                newStatus = 'studying';
-                nextReviewDate = null;
-                logger.info(`✅ Word ${id} review completed! Advancing to cycle ${newReviewCycle + 1}, back to studying`);
+        // Find the highest threshold reached based on current points
+        let targetReviewCycle = newReviewCycle;
+        for (let i = stageThresholds.length - 1; i >= 0; i--) {
+            if (newCorrectCount >= stageThresholds[i]) {
+                targetReviewCycle = i;
+                break;
             }
         }
 
-        // AUTO-PROMOTION: Check if word has reached higher thresholds
-        // This handles cases where user continues studying words beyond initial threshold
+        // Check if we should promote the word to a higher stage
+        if (targetReviewCycle > newReviewCycle) {
+            // Auto-promote to higher review cycle
+            newReviewCycle = targetReviewCycle;
 
-        // For studying words: check if they've reached a review threshold
-        if (newStatus === 'studying') {
-            // Find the highest threshold reached
-            for (let i = stageThresholds.length - 1; i >= 0; i--) {
-                if (newCorrectCount >= stageThresholds[i]) {
-                    // Check if this threshold corresponds to a higher review cycle than current
-                    if (i > newReviewCycle) {
-                        newReviewCycle = i;
-                        const intervalDays = srsIntervals[i];
-                        newStatus = `review_${intervalDays}`;
-                        nextReviewDate = new Date();
-                        nextReviewDate.setDate(nextReviewDate.getDate() + intervalDays);
-                        logger.info(`🚀 AUTO-PROMOTION (studying): Word ${id} at ${newCorrectCount} points (threshold: ${stageThresholds[i]})! Promoted to review_${intervalDays}`);
-                        break;
-                    }
-                }
-            }
-
-            // Check for mastered status
             if (newCorrectCount >= 100 && newReviewCycle >= srsIntervals.length - 1) {
+                // Reached 100 points - mastered!
                 newStatus = 'mastered';
                 nextReviewDate = null;
-                logger.info(`🎉 AUTO-PROMOTION (studying): Word ${id} reached 100 points! Promoted to mastered!`);
+                logger.info(`🎉 AUTO-PROMOTION: Word ${id} reached 100 points (from ${word.status})! Promoted to mastered!`);
+            } else if (newReviewCycle < srsIntervals.length) {
+                // Promote to appropriate review stage
+                const intervalDays = srsIntervals[newReviewCycle];
+                newStatus = `review_${intervalDays}`;
+                nextReviewDate = new Date();
+                nextReviewDate.setDate(nextReviewDate.getDate() + intervalDays);
+                logger.info(`🚀 AUTO-PROMOTION: Word ${id} at ${newCorrectCount} points (threshold: ${stageThresholds[newReviewCycle]})! Promoted from ${word.status} to review_${intervalDays} (cycle ${newReviewCycle})`);
             }
-        }
+        } else {
+            // No auto-promotion needed, apply regular logic
+            const currentThreshold = stageThresholds[newReviewCycle] || 100;
 
-        // For review words: check if they've reached next threshold through studying
-        if (word.status.startsWith('review_') && newStatus === word.status) {
-            // Word is still in review status (not changed above)
-            // Check if points have reached the next cycle's threshold
-            const nextCycle = newReviewCycle + 1;
-            const nextThreshold = stageThresholds[nextCycle];
-
-            if (nextThreshold && newCorrectCount >= nextThreshold) {
-                // Auto-promote to next review cycle
-                if (nextCycle < srsIntervals.length) {
-                    const intervalDays = srsIntervals[nextCycle];
+            if (word.status === 'studying' && newCorrectCount >= currentThreshold) {
+                // Reached threshold - move to review phase
+                if (newReviewCycle < srsIntervals.length - 1) {
+                    const intervalDays = srsIntervals[newReviewCycle];
                     newStatus = `review_${intervalDays}`;
-                    newReviewCycle = nextCycle;
                     nextReviewDate = new Date();
                     nextReviewDate.setDate(nextReviewDate.getDate() + intervalDays);
-                    logger.info(`🚀 AUTO-PROMOTION (review): Word ${id} at ${newCorrectCount} points reached next threshold (${nextThreshold})! Promoted to review_${intervalDays}`);
-                } else if (newCorrectCount >= 100) {
-                    // Reached 100 points - mastered!
+                    logger.info(`📅 Word ${id} reached ${newCorrectCount} points (threshold: ${currentThreshold})! Review in ${intervalDays} days`);
+                } else if (newReviewCycle === srsIntervals.length - 1 && newCorrectCount >= 100) {
+                    // Last stage completed with 100 points
                     newStatus = 'mastered';
-                    newReviewCycle = srsIntervals.length - 1;
+                    logger.info(`🎉 Word ${id} fully mastered with 100 points after ${newReviewCycle + 1} cycles!`);
+                }
+            } else if (!correct && word.status.startsWith('review_')) {
+                // Failed review during waiting period - back to studying mode, keep points
+                newStatus = 'studying';
+                nextReviewDate = null;
+                logger.info(`❌ Word ${id} failed review (cycle ${newReviewCycle + 1}, ${newCorrectCount} points), back to studying`);
+            } else if (word.status.startsWith('review_') && correct && newCorrectCount >= currentThreshold) {
+                // Successfully reviewed - advance to next cycle
+                newReviewCycle++;
+
+                // Check if word has already reached the next threshold
+                const nextThreshold = stageThresholds[newReviewCycle] || 100;
+
+                if (newCorrectCount >= nextThreshold && newReviewCycle < srsIntervals.length) {
+                    // Already reached next threshold - move directly to next review stage
+                    const intervalDays = srsIntervals[newReviewCycle];
+                    newStatus = `review_${intervalDays}`;
+                    nextReviewDate = new Date();
+                    nextReviewDate.setDate(nextReviewDate.getDate() + intervalDays);
+                    logger.info(`✅ Word ${id} review completed! Already at ${newCorrectCount} points (threshold: ${nextThreshold}), moving to review_${intervalDays}`);
+                } else if (newReviewCycle >= srsIntervals.length - 1 && newCorrectCount >= 100) {
+                    // Reached final stage with 100 points
+                    newStatus = 'mastered';
+                    logger.info(`🎉 Word ${id} fully mastered with 100 points!`);
+                } else {
+                    // Below next threshold - back to studying
+                    newStatus = 'studying';
                     nextReviewDate = null;
-                    logger.info(`🎉 AUTO-PROMOTION (review): Word ${id} reached 100 points! Promoted to mastered!`);
+                    logger.info(`✅ Word ${id} review completed! Advancing to cycle ${newReviewCycle + 1}, back to studying`);
                 }
             }
         }
