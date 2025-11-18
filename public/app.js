@@ -1629,10 +1629,16 @@ schreiben,Sie schreibt einen Brief.,Писать,Она пишет письmо.`
             // On last question, show finish button instead of next
             nextBtn.classList.add('hidden');
             finishBtn.classList.remove('hidden');
+
+            // Scroll to show the button on mobile
+            this.scrollToButton(finishBtn);
         } else {
             // On regular questions, show next button
             nextBtn.classList.remove('hidden');
             finishBtn.classList.add('hidden');
+
+            // Scroll to show the button on mobile
+            this.scrollToButton(nextBtn);
         }
     }
 
@@ -1644,10 +1650,16 @@ schreiben,Sie schreibt einen Brief.,Писать,Она пишет письmо.`
             // On last question, show finish button instead of next
             nextBtn.classList.add('hidden');
             finishBtn.classList.remove('hidden');
+
+            // Scroll to show the button on mobile
+            this.scrollToButton(finishBtn);
         } else {
             // On regular questions, show next button
             nextBtn.classList.remove('hidden');
             finishBtn.classList.add('hidden');
+
+            // Scroll to show the button on mobile
+            this.scrollToButton(nextBtn);
         }
     }
 
@@ -2329,9 +2341,27 @@ schreiben,Sie schreibt einen Brief.,Писать,Она пишет письmо.`
         inputEl.focus();
     }
 
+    scrollToButton(buttonElement) {
+        // Scroll to make button visible on mobile devices
+        if (!buttonElement) return;
+
+        // Small delay to ensure DOM is updated
+        setTimeout(() => {
+            const quizArea = buttonElement.closest('.quiz-area, .survival-area');
+            if (quizArea) {
+                // Smooth scroll to bottom to show the button
+                buttonElement.scrollIntoView({
+                    behavior: 'smooth',
+                    block: 'nearest',
+                    inline: 'nearest'
+                });
+            }
+        }, 100);
+    }
+
     shouldShowAudioButton(text) {
         if (!text || !text.trim()) return false;
-        
+
         // Check if TTS is available
         if (!this.audioManager.isAvailable()) {
             return false;
