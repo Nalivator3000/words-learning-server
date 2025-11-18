@@ -4782,3 +4782,83 @@ input:focus, textarea:focus, select:focus {
 .next-stage-btn:hover {
     background: #1976d2 !important;
 }
+
+/* Mobile Responsive Styles for Word Statistics */
+@media (max-width: 768px) {
+    /* Make word cards stack vertically on mobile */
+    .difficult-word-item {
+        flex-direction: column;
+        align-items: flex-start;
+        gap: 12px;
+        padding: 12px;
+    }
+
+    /* Reduce word rank size */
+    .word-rank {
+        font-size: 14px;
+        min-width: 24px;
+    }
+
+    /* Make word pair wrap properly */
+    .word-pair {
+        flex-direction: column;
+        align-items: flex-start;
+        gap: 6px;
+        margin-bottom: 8px;
+        width: 100%;
+    }
+
+    /* Reduce font sizes for better mobile fit */
+    .word-foreign {
+        font-size: 15px;
+        word-break: break-word;
+    }
+
+    .word-translation {
+        font-size: 14px;
+        word-break: break-word;
+    }
+
+    /* Stack word stats vertically on mobile */
+    .word-stats {
+        flex-direction: column;
+        gap: 6px;
+        width: 100%;
+    }
+
+    /* Make stat items smaller */
+    .word-stat {
+        font-size: 12px;
+        white-space: nowrap;
+        overflow: hidden;
+        text-overflow: ellipsis;
+    }
+
+    /* Reduce stat icon size */
+    .stat-icon {
+        font-size: 12px;
+    }
+
+    /* Make practice button smaller on mobile */
+    .practice-word-btn {
+        width: 36px;
+        height: 36px;
+        font-size: 16px;
+        align-self: flex-end;
+    }
+
+    /* Word list cards - also improve mobile layout */
+    .word-lists-grid {
+        grid-template-columns: 1fr;
+        gap: 16px;
+    }
+
+    .list-meta {
+        flex-direction: column;
+        gap: 8px;
+    }
+
+    .meta-item {
+        font-size: 0.8rem;
+    }
+}
