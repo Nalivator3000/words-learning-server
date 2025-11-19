@@ -568,5 +568,555 @@
     "en": "In Progress...",
     "ru": "В процессе...",
     "de": "In Bearbeitung..."
+  },
+  "accept": {
+    "en": "Accept",
+    "ru": "Принять",
+    "de": "Akzeptieren"
+  },
+  "achievements": {
+    "en": "Achievements",
+    "ru": "Достижения",
+    "de": "Erfolge"
+  },
+  "achievements_showcase": {
+    "en": "Achievements Showcase",
+    "ru": "Витрина достижений",
+    "de": "Erfolge-Galerie"
+  },
+  "achievements_unlocked": {
+    "en": "Achievements Unlocked",
+    "ru": "Достижения разблокированы",
+    "de": "Erfolge freigeschaltet"
+  },
+  "active_duels": {
+    "en": "Active Duels",
+    "ru": "Активные дуэли",
+    "de": "Aktive Duelle"
+  },
+  "activities": {
+    "en": "Activities",
+    "ru": "Активность",
+    "de": "Aktivitäten"
+  },
+  "activity_feed": {
+    "en": "Activity Feed",
+    "ru": "Лента активности",
+    "de": "Aktivitäts-Feed"
+  },
+  "activity_hint": {
+    "en": "See what your friends are learning",
+    "ru": "Смотри, что изучают твои друзья",
+    "de": "Sehen Sie, was Ihre Freunde lernen"
+  },
+  "add_friend": {
+    "en": "Add Friend",
+    "ru": "Добавить друга",
+    "de": "Freund hinzufügen"
+  },
+  "advanced": {
+    "en": "Advanced",
+    "ru": "Продвинутый",
+    "de": "Fortgeschritten"
+  },
+  "all_categories": {
+    "en": "All Categories",
+    "ru": "Все категории",
+    "de": "Alle Kategorien"
+  },
+  "all_levels": {
+    "en": "All Levels",
+    "ru": "Все уровни",
+    "de": "Alle Stufen"
+  },
+  "all_time": {
+    "en": "All Time",
+    "ru": "За все время",
+    "de": "Gesamtzeit"
+  },
+  "all_topics": {
+    "en": "All Topics",
+    "ru": "Все темы",
+    "de": "Alle Themen"
+  },
+  "already_friends": {
+    "en": "Already friends",
+    "ru": "Уже друзья",
+    "de": "Bereits befreundet"
+  },
+  "average_per_period": {
+    "en": "Average per period",
+    "ru": "Среднее за период",
+    "de": "Durchschnitt pro Zeitraum"
+  },
+  "average_score": {
+    "en": "Average Score",
+    "ru": "Средний балл",
+    "de": "Durchschnittliche Punktzahl"
+  },
+  "awaiting_response": {
+    "en": "Awaiting response",
+    "ru": "Ожидает ответа",
+    "de": "Wartet auf Antwort"
+  },
+  "back": {
+    "en": "Back",
+    "ru": "Назад",
+    "de": "Zurück"
+  },
+  "beginner": {
+    "en": "Beginner",
+    "ru": "Начинающий",
+    "de": "Anfänger"
+  },
+  "best_period": {
+    "en": "Best period",
+    "ru": "Лучший период",
+    "de": "Beste Periode"
+  },
+  "challenge_friend": {
+    "en": "Challenge Friend",
+    "ru": "Вызвать на дуэль",
+    "de": "Freund herausfordern"
+  },
+  "challenge_friend_hint": {
+    "en": "Challenge your friends to a duel",
+    "ru": "Вызови друзей на дуэль",
+    "de": "Fordern Sie Ihre Freunde zu einem Duell heraus"
+  },
+  "complete": {
+    "en": "Complete",
+    "ru": "Завершить",
+    "de": "Abschließen"
+  },
+  "completed": {
+    "en": "Completed",
+    "ru": "Завершено",
+    "de": "Abgeschlossen"
+  },
+  "continue_duel": {
+    "en": "Continue Duel",
+    "ru": "Продолжить дуэль",
+    "de": "Duell fortsetzen"
+  },
+  "count": {
+    "en": "Count",
+    "ru": "Количество",
+    "de": "Anzahl"
+  },
+  "current_period": {
+    "en": "Current period",
+    "ru": "Текущий период",
+    "de": "Aktueller Zeitraum"
+  },
+  "current_streak": {
+    "en": "Current Streak",
+    "ru": "Текущая серия",
+    "de": "Aktuelle Serie"
+  },
+  "day": {
+    "en": "Day",
+    "ru": "День",
+    "de": "Tag"
+  },
+  "decline": {
+    "en": "Decline",
+    "ru": "Отклонить",
+    "de": "Ablehnen"
+  },
+  "difficulty": {
+    "en": "Difficulty",
+    "ru": "Сложность",
+    "de": "Schwierigkeit"
+  },
+  "draws": {
+    "en": "Draws",
+    "ru": "Ничьи",
+    "de": "Unentschieden"
+  },
+  "duel_history": {
+    "en": "Duel History",
+    "ru": "История дуэлей",
+    "de": "Duell-Historie"
+  },
+  "edit_profile": {
+    "en": "Edit Profile",
+    "ru": "Редактировать профиль",
+    "de": "Profil bearbeiten"
+  },
+  "find_friends": {
+    "en": "Find Friends",
+    "ru": "Найти друзей",
+    "de": "Freunde finden"
+  },
+  "find_friends_hint": {
+    "en": "Search for users to add as friends",
+    "ru": "Ищи пользователей и добавляй в друзья",
+    "de": "Suchen Sie nach Benutzern, um sie als Freunde hinzuzufügen"
+  },
+  "friend_requests": {
+    "en": "Friend Requests",
+    "ru": "Запросы в друзья",
+    "de": "Freundschaftsanfragen"
+  },
+  "history_hint": {
+    "en": "View your past duels",
+    "ru": "Посмотри историю своих дуэлей",
+    "de": "Sehen Sie Ihre vergangenen Duelle"
+  },
+  "import_list": {
+    "en": "Import List",
+    "ru": "Импортировать список",
+    "de": "Liste importieren"
+  },
+  "incoming_challenges": {
+    "en": "Incoming Challenges",
+    "ru": "Входящие вызовы",
+    "de": "Eingehende Herausforderungen"
+  },
+  "insights_hint": {
+    "en": "Detailed statistics about your learning",
+    "ru": "Подробная статистика твоего обучения",
+    "de": "Detaillierte Statistiken über Ihr Lernen"
+  },
+  "intermediate": {
+    "en": "Intermediate",
+    "ru": "Средний",
+    "de": "Mittelstufe"
+  },
+  "languages": {
+    "en": "Languages",
+    "ru": "Языки",
+    "de": "Sprachen"
+  },
+  "leagueRule1": {
+    "en": "Complete daily challenges and weekly quests",
+    "ru": "Выполняй ежедневные и недельные задания",
+    "de": "Erfüllen Sie tägliche und wöchentliche Aufgaben"
+  },
+  "leagueRule2": {
+    "en": "Top 3 players advance to the next league",
+    "ru": "Топ-3 игрока переходят в следующую лигу",
+    "de": "Die besten 3 Spieler steigen in die nächste Liga auf"
+  },
+  "leagueRule3": {
+    "en": "Bottom 3 players are relegated",
+    "ru": "Нижние 3 игрока вылетают в предыдущую лигу",
+    "de": "Die unteren 3 Spieler steigen ab"
+  },
+  "leagueRule4": {
+    "en": "Season resets every Monday",
+    "ru": "Сезон обновляется каждый понедельник",
+    "de": "Die Saison wird jeden Montag zurückgesetzt"
+  },
+  "learning_achievements": {
+    "en": "Learning Achievements",
+    "ru": "Учебные достижения",
+    "de": "Lernerfolge"
+  },
+  "losses": {
+    "en": "Losses",
+    "ru": "Поражения",
+    "de": "Niederlagen"
+  },
+  "milestone_achievements": {
+    "en": "Milestone Achievements",
+    "ru": "Достижения-вехи",
+    "de": "Meilenstein-Erfolge"
+  },
+  "minutes": {
+    "en": "minutes",
+    "ru": "минут",
+    "de": "Minuten"
+  },
+  "monthly": {
+    "en": "Monthly",
+    "ru": "Месячные",
+    "de": "Monatlich"
+  },
+  "my_friends": {
+    "en": "My Friends",
+    "ru": "Мои друзья",
+    "de": "Meine Freunde"
+  },
+  "no_achievements_category": {
+    "en": "No achievements in this category yet",
+    "ru": "В этой категории пока нет достижений",
+    "de": "Noch keine Erfolge in dieser Kategorie"
+  },
+  "no_active_duels": {
+    "en": "No active duels",
+    "ru": "Нет активных дуэлей",
+    "de": "Keine aktiven Duelle"
+  },
+  "no_activity": {
+    "en": "No activity yet",
+    "ru": "Пока нет активности",
+    "de": "Noch keine Aktivität"
+  },
+  "no_data_yet": {
+    "en": "No data yet",
+    "ru": "Пока нет данных",
+    "de": "Noch keine Daten"
+  },
+  "no_friends_yet": {
+    "en": "No friends yet",
+    "ru": "Пока нет друзей",
+    "de": "Noch keine Freunde"
+  },
+  "no_history": {
+    "en": "No history yet",
+    "ru": "Пока нет истории",
+    "de": "Noch keine Historie"
+  },
+  "no_insights_yet": {
+    "en": "No insights yet. Start learning!",
+    "ru": "Пока нет данных. Начни учиться!",
+    "de": "Noch keine Einblicke. Beginnen Sie zu lernen!"
+  },
+  "no_pending_duels": {
+    "en": "No pending duels",
+    "ru": "Нет ожидающих дуэлей",
+    "de": "Keine ausstehenden Duelle"
+  },
+  "no_received_requests": {
+    "en": "No received requests",
+    "ru": "Нет входящих запросов",
+    "de": "Keine erhaltenen Anfragen"
+  },
+  "no_sent_requests": {
+    "en": "No sent requests",
+    "ru": "Нет отправленных запросов",
+    "de": "Keine gesendeten Anfragen"
+  },
+  "no_showcase": {
+    "en": "No achievements in showcase yet",
+    "ru": "В витрине пока нет достижений",
+    "de": "Noch keine Erfolge in der Galerie"
+  },
+  "no_stats": {
+    "en": "No statistics yet",
+    "ru": "Пока нет статистики",
+    "de": "Noch keine Statistiken"
+  },
+  "no_word_lists": {
+    "en": "No word lists yet",
+    "ru": "Пока нет списков слов",
+    "de": "Noch keine Wortlisten"
+  },
+  "outgoing_challenges": {
+    "en": "Outgoing Challenges",
+    "ru": "Исходящие вызовы",
+    "de": "Ausgehende Herausforderungen"
+  },
+  "peak_hour": {
+    "en": "Peak hour",
+    "ru": "Пиковый час",
+    "de": "Hauptstunde"
+  },
+  "pending": {
+    "en": "Pending",
+    "ru": "Ожидается",
+    "de": "Ausstehend"
+  },
+  "pending_duels": {
+    "en": "Pending Duels",
+    "ru": "Ожидающие дуэли",
+    "de": "Ausstehende Duelle"
+  },
+  "pending_duels_hint": {
+    "en": "Duels waiting for your response",
+    "ru": "Дуэли, ожидающие твоего ответа",
+    "de": "Duelle, die auf Ihre Antwort warten"
+  },
+  "perfect_quizzes": {
+    "en": "Perfect quizzes",
+    "ru": "Идеальные квизы",
+    "de": "Perfekte Quiz"
+  },
+  "previous_period": {
+    "en": "Previous period",
+    "ru": "Предыдущий период",
+    "de": "Vorheriger Zeitraum"
+  },
+  "questions": {
+    "en": "Questions",
+    "ru": "Вопросы",
+    "de": "Fragen"
+  },
+  "quizzes_completed": {
+    "en": "Quizzes completed",
+    "ru": "Квизов завершено",
+    "de": "Abgeschlossene Quiz"
+  },
+  "received_requests": {
+    "en": "Received Requests",
+    "ru": "Входящие запросы",
+    "de": "Erhaltene Anfragen"
+  },
+  "remove_friend": {
+    "en": "Remove Friend",
+    "ru": "Удалить друга",
+    "de": "Freund entfernen"
+  },
+  "request_sent": {
+    "en": "Request sent",
+    "ru": "Запрос отправлен",
+    "de": "Anfrage gesendet"
+  },
+  "reset_filters": {
+    "en": "Reset Filters",
+    "ru": "Сбросить фильтры",
+    "de": "Filter zurücksetzen"
+  },
+  "search_hint": {
+    "en": "Search by name or email",
+    "ru": "Поиск по имени или email",
+    "de": "Suche nach Name oder E-Mail"
+  },
+  "send_challenge": {
+    "en": "Send Challenge",
+    "ru": "Отправить вызов",
+    "de": "Herausforderung senden"
+  },
+  "sent_requests": {
+    "en": "Sent Requests",
+    "ru": "Отправленные запросы",
+    "de": "Gesendete Anfragen"
+  },
+  "showing_lists_for": {
+    "en": "Showing lists for",
+    "ru": "Показаны списки для",
+    "de": "Listen anzeigen für"
+  },
+  "social_achievements": {
+    "en": "Social Achievements",
+    "ru": "Социальные достижения",
+    "de": "Soziale Erfolge"
+  },
+  "special_achievements": {
+    "en": "Special Achievements",
+    "ru": "Особые достижения",
+    "de": "Besondere Erfolge"
+  },
+  "stats_hint": {
+    "en": "Track your learning progress",
+    "ru": "Отслеживай свой прогресс в обучении",
+    "de": "Verfolgen Sie Ihren Lernfortschritt"
+  },
+  "this_month": {
+    "en": "This Month",
+    "ru": "В этом месяце",
+    "de": "Diesen Monat"
+  },
+  "this_week": {
+    "en": "This Week",
+    "ru": "На этой неделе",
+    "de": "Diese Woche"
+  },
+  "topic": {
+    "en": "Topic",
+    "ru": "Тема",
+    "de": "Thema"
+  },
+  "topic_business": {
+    "en": "Business",
+    "ru": "Бизнес",
+    "de": "Geschäftlich"
+  },
+  "topic_daily_life": {
+    "en": "Daily Life",
+    "ru": "Повседневная жизнь",
+    "de": "Alltag"
+  },
+  "topic_food": {
+    "en": "Food",
+    "ru": "Еда",
+    "de": "Essen"
+  },
+  "topic_nature": {
+    "en": "Nature",
+    "ru": "Природа",
+    "de": "Natur"
+  },
+  "topic_travel": {
+    "en": "Travel",
+    "ru": "Путешествия",
+    "de": "Reisen"
+  },
+  "total_duels": {
+    "en": "Total Duels",
+    "ru": "Всего дуэлей",
+    "de": "Duelle insgesamt"
+  },
+  "total_xp": {
+    "en": "Total XP",
+    "ru": "Всего XP",
+    "de": "XP insgesamt"
+  },
+  "try_again": {
+    "en": "Try Again",
+    "ru": "Попробовать снова",
+    "de": "Erneut versuchen"
+  },
+  "users": {
+    "en": "Users",
+    "ru": "Пользователи",
+    "de": "Benutzer"
+  },
+  "view_list": {
+    "en": "View List",
+    "ru": "Посмотреть список",
+    "de": "Liste anzeigen"
+  },
+  "view_profile": {
+    "en": "View Profile",
+    "ru": "Посмотреть профиль",
+    "de": "Profil anzeigen"
+  },
+  "views": {
+    "en": "Views",
+    "ru": "Просмотры",
+    "de": "Ansichten"
+  },
+  "vs": {
+    "en": "vs",
+    "ru": "против",
+    "de": "gegen"
+  },
+  "waiting": {
+    "en": "Waiting",
+    "ru": "Ожидание",
+    "de": "Warten"
+  },
+  "weekly": {
+    "en": "Weekly",
+    "ru": "Недельные",
+    "de": "Wöchentlich"
+  },
+  "win_rate": {
+    "en": "Win Rate",
+    "ru": "Процент побед",
+    "de": "Gewinnrate"
+  },
+  "wins": {
+    "en": "Wins",
+    "ru": "Победы",
+    "de": "Siege"
+  },
+  "words_learned": {
+    "en": "Words Learned",
+    "ru": "Слов изучено",
+    "de": "Gelernte Wörter"
+  },
+  "you": {
+    "en": "You",
+    "ru": "Вы",
+    "de": "Sie"
+  },
+  "your_insights": {
+    "en": "Your Insights",
+    "ru": "Ваша аналитика",
+    "de": "Ihre Einblicke"
   }
 }
