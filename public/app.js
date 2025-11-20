@@ -2159,6 +2159,9 @@ schreiben,Sie schreibt einen Brief.,Писать,Она пишет письmо.`
 
         tile.disabled = true;
         tile.classList.add('used');
+
+        // Check if all letters are used and disable skip button
+        this.updateSkipButtonState(wordInput);
         // wordInput.focus(); // Disabled: Don't auto-focus to prevent keyboard popup on mobile
     }
 
@@ -2190,6 +2193,9 @@ schreiben,Sie schreibt einen Brief.,Писать,Она пишет письmо.`
                 break;
             }
         }
+
+        // Re-enable skip button since not all letters are used
+        this.updateSkipButtonState(wordInput);
     }
     
     clearBuiltWord(wordInput, letterTiles) {
@@ -2209,9 +2215,41 @@ schreiben,Sie schreibt einen Brief.,Писать,Она пишет письmо.`
             tile.disabled = false;
             tile.classList.remove('used');
         });
+
+        // Re-enable skip button since not all letters are used
+        this.updateSkipButtonState(wordInput);
         // wordInput.focus(); // Disabled: Don't auto-focus to prevent keyboard popup on mobile
     }
-    
+
+    updateSkipButtonState(wordInput) {
+        if (!wordInput || wordInput.disabled) return;
+
+        // Find the letter tiles and skip button
+        const wordBuildingArea = wordInput.parentElement;
+        if (!wordBuildingArea) return;
+
+        const letterTiles = wordBuildingArea.querySelector('.letter-tiles');
+        if (!letterTiles) return;
+
+        const skipBtn = wordBuildingArea.querySelector('.show-answer-btn');
+        if (!skipBtn) return;
+
+        // Check if all tiles are used (disabled)
+        const tiles = letterTiles.querySelectorAll('.letter-tile');
+        const allTilesUsed = Array.from(tiles).every(tile => tile.disabled);
+
+        // Disable skip button if all letters are used, enable otherwise
+        if (allTilesUsed) {
+            skipBtn.disabled = true;
+            skipBtn.style.opacity = '0.5';
+            skipBtn.style.cursor = 'not-allowed';
+        } else {
+            skipBtn.disabled = false;
+            skipBtn.style.opacity = '1';
+            skipBtn.style.cursor = 'pointer';
+        }
+    }
+
     handleWordBuildingEnter(wordInput, question) {
         if (wordInput.disabled) return;
         
