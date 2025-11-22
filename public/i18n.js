@@ -27,7 +27,11 @@ class I18nManager {
      */
     async loadTranslations() {
         try {
-            const response = await fetch('/translations/source-texts.json');
+            // Add cache-busting parameter to force fresh fetch
+            const cacheBuster = Date.now();
+            const response = await fetch(`/translations/source-texts.json?v=${cacheBuster}`, {
+                cache: 'no-cache'
+            });
             if (!response.ok) {
                 throw new Error(`Failed to load translations: ${response.status}`);
             }

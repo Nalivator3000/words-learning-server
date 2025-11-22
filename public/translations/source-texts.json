@@ -1118,5 +1118,40 @@
     "en": "Your Insights",
     "ru": "Ваша аналитика",
     "de": "Ihre Einblicke"
+  },
+  "welcome": {
+    "en": "Welcome",
+    "ru": "Добро пожаловать",
+    "de": "Willkommen"
+  },
+  "challenges_description": {
+    "en": "Complete daily challenges to earn rewards",
+    "ru": "Выполняйте ежедневные задания для получения наград",
+    "de": "Absolviere tägliche Herausforderungen, um Belohnungen zu erhalten"
+  },
+  "no_challenges_today": {
+    "en": "No challenges available today",
+    "ru": "Сегодня нет доступных заданий",
+    "de": "Heute keine Herausforderungen verfügbar"
+  },
+  "challenges_completed_today": {
+    "en": "Challenges Completed Today",
+    "ru": "Заданий выполнено сегодня",
+    "de": "Heute abgeschlossene Herausforderungen"
+  },
+  "challenges_streak": {
+    "en": "Challenge Streak",
+    "ru": "Серия заданий",
+    "de": "Herausforderungs-Serie"
+  },
+  "days_short": {
+    "en": "days",
+    "ru": "дн.",
+    "de": "Tage"
+  },
+  "challenges_total": {
+    "en": "Total Challenges",
+    "ru": "Всего заданий",
+    "de": "Herausforderungen gesamt"
   }
 }
