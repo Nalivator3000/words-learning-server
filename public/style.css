@@ -4904,3 +4904,28 @@ input:focus, textarea:focus, select:focus {
     background: var(--color-surface);
     color: var(--color-text-primary);
 }
+
+/* Mobile: Show settings buttons alongside title */
+@media (max-width: 768px) {
+    .header-right {
+        position: absolute;
+        top: var(--space-3);
+        right: var(--space-4);
+        display: flex;
+        align-items: center;
+        gap: var(--space-2);
+        z-index: 10;
+    }
+
+    .settings-btn,
+    .theme-toggle {
+        width: 40px;
+        height: 40px;
+        font-size: var(--text-xl);
+    }
+
+    /* Ensure header has relative positioning for absolute header-right */
+    .app-header {
+        position: relative;
+    }
+}
