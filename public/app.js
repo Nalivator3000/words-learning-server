@@ -2317,7 +2317,7 @@ schreiben,Sie schreibt einen Brief.,Писать,Она пишет письmо.`
         const tiles = wordInput.parentElement.querySelector('.letter-tiles');
         tiles.style.display = 'none';
 
-        // Show feedback
+        // Show feedback with audio button
         const feedback = document.getElementById('feedback');
         feedback.innerHTML = `
             <div class="feedback-content skipped">
@@ -2326,6 +2326,13 @@ schreiben,Sie schreibt einen Brief.,Писать,Она пишет письmо.`
             </div>
         `;
         feedback.className = 'feedback incorrect';
+
+        // Add audio button for the correct answer if it's German text
+        if (result.correctAnswer && this.shouldShowAudioButton(result.correctAnswer)) {
+            const audioBtn = this.createAudioButton(result.correctAnswer, 'audio-btn-small');
+            audioBtn.style.marginLeft = '10px';
+            feedback.appendChild(audioBtn);
+        }
 
         // Transform skip button into next/finish button
         const skipBtn = wordInput.parentElement.querySelector('.show-answer-btn');
