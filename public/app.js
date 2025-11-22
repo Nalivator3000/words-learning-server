@@ -531,6 +531,8 @@ class LanguageLearningApp {
         const email = document.getElementById('registerEmail').value;
         const password = document.getElementById('registerPassword').value;
         const confirmPassword = document.getElementById('registerPasswordConfirm').value;
+        const nativeLang = document.getElementById('registerNativeLang')?.value || 'en';
+        const targetLang = document.getElementById('registerTargetLang')?.value || 'es';
         
         if (!name || !email || !password || !confirmPassword) {
             this.showAuthError(i18n.t('fill_all_fields'));
@@ -548,7 +550,7 @@ class LanguageLearningApp {
         }
         
         try {
-            await userManager.register(name, email, password);
+            await userManager.register(name, email, password, nativeLang, targetLang);
             this.showSection('home');
             await this.updateStats();
             await this.loadGamificationHeader(); // Load XP/level/streak display

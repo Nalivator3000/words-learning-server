@@ -2191,20 +2191,20 @@ app.use('/api', (req, res, next) => {
 // Authentication endpoints
 app.post('/api/auth/register', authLimiter, async (req, res) => {
     try {
-        const { name, email, password } = req.body;
+        const { name, email, password, nativeLang, targetLang } = req.body;
 
         if (!name || !email || !password) {
-            return res.status(400).json({ error: 'Все поля обязательны' });
+            return res.status(400).json({ error: 'All fields are required' });
         }
 
         if (password.length < 6) {
-            return res.status(400).json({ error: 'Пароль должен быть минимум 6 символов' });
+            return res.status(400).json({ error: 'Password must be at least 6 characters' });
         }
 
         // Check if user exists
         const existingUser = await db.query('SELECT id FROM users WHERE email = $1', [email]);
         if (existingUser.rows.length > 0) {
-            return res.status(400).json({ error: 'Пользователь с таким email уже существует' });
+            return res.status(400).json({ error: 'User with this email already exists' });
         }
 
         // Create user
@@ -2216,10 +2216,25 @@ app.post('/api/auth/register', authLimiter, async (req, res) => {
 
         const user = result.rows[0];
 
-        // Create default language pair
+        // Language names mapping
+        const languageNames = {
+            'en': 'English', 'de': 'German', 'es': 'Spanish', 'fr': 'French',
+            'ru': 'Russian', 'uk': 'Ukrainian', 'pt': 'Portuguese', 'it': 'Italian',
+            'zh': 'Chinese', 'ja': 'Japanese', 'ko': 'Korean'
+        };
+
+        // Default: nativeLang → targetLang. If not provided: en → es (or device lang → en)
+        const userNativeLang = nativeLang || 'en';
+        const userTargetLang = targetLang || (userNativeLang === 'en' ? 'es' : 'en');
+
+        const nativeName = languageNames[userNativeLang] || userNativeLang.toUpperCase();
+        const targetName = languageNames[userTargetLang] || userTargetLang.toUpperCase();
+        const pairName = `${targetName} → ${nativeName}`;
+
+        // Create language pair (from_lang = target language to learn, to_lang = native language)
         const langPairResult = await db.query(
             'INSERT INTO language_pairs (user_id, name, from_lang, to_lang, is_active) VALUES ($1, $2, $3, $4, $5) RETURNING *',
-            [user.id, 'Немецкий → Русский', 'de', 'ru', true]
+            [user.id, pairName, userTargetLang, userNativeLang, true]
         );
 
         res.json({

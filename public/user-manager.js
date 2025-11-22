@@ -97,14 +97,14 @@ class UserManager {
         }
     }
 
-    async register(name, email, password) {
+    async register(name, email, password, nativeLang, targetLang) {
         try {
             const response = await fetch(`${this.apiUrl}/api/auth/register`, {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json',
                 },
-                body: JSON.stringify({ name, email, password })
+                body: JSON.stringify({ name, email, password, nativeLang, targetLang })
             });
 
             if (!response.ok) {

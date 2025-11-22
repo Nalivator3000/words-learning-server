@@ -1,7 +1,7 @@
 // Service Worker for Words Learning App
-// Version 5.1.8
+// Version 5.1.9
 
-const CACHE_VERSION = 'v5.1.8';
+const CACHE_VERSION = 'v5.1.9';
 const CACHE_NAME = `words-learning-${CACHE_VERSION}`;
 
 // Files to cache for offline use
