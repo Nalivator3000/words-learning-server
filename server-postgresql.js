@@ -10847,8 +10847,15 @@ app.get('/api/words/random/:status/:count', async (req, res) => {
             query = 'SELECT * FROM words WHERE status = $1 AND user_id = $2 AND language_pair_id = $3 ORDER BY RANDOM() LIMIT $4';
             params = ['studying', parseInt(userId), parseInt(languagePairId), parseInt(count)];
         } else if (status === 'review') {
-            query = 'SELECT * FROM words WHERE status IN ($1, $2) AND user_id = $3 AND language_pair_id = $4 ORDER BY RANDOM() LIMIT $5';
-            params = ['review_7', 'review_30', parseInt(userId), parseInt(languagePairId), parseInt(count)];
+            // Include ALL review stages from SRS intervals: 1, 3, 7, 14, 30, 60, 120 days
+            // Also check nextReviewDate to only return words that are due for review
+            query = `SELECT * FROM words
+                     WHERE status LIKE 'review_%'
+                     AND user_id = $1
+                     AND language_pair_id = $2
+                     AND (nextReviewDate IS NULL OR nextReviewDate <= CURRENT_TIMESTAMP)
+                     ORDER BY RANDOM() LIMIT $3`;
+            params = [parseInt(userId), parseInt(languagePairId), parseInt(count)];
         } else {
             query = 'SELECT * FROM words WHERE status = $1 AND user_id = $2 AND language_pair_id = $3 ORDER BY RANDOM() LIMIT $4';
             params = [status, parseInt(userId), parseInt(languagePairId), parseInt(count)];
