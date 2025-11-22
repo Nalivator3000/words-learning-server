@@ -11046,7 +11046,7 @@ app.put('/api/words/:id/progress', async (req, res) => {
         // This must happen BEFORE regular status checks to properly handle all cases
 
         // Find the highest threshold reached based on current points
-        let targetReviewCycle = newReviewCycle;
+        let targetReviewCycle = -1; // Start at -1 to trigger promotion for studying words at first threshold
         for (let i = stageThresholds.length - 1; i >= 0; i--) {
             if (newCorrectCount >= stageThresholds[i]) {
                 targetReviewCycle = i;
@@ -11055,7 +11055,8 @@ app.put('/api/words/:id/progress', async (req, res) => {
         }
 
         // Check if we should promote the word to a higher stage
-        if (targetReviewCycle > newReviewCycle) {
+        const shouldPromote = (word.status === "studying" && targetReviewCycle >= 0) || (word.status !== "studying" && targetReviewCycle > newReviewCycle);
+        if (shouldPromote) {
             // Auto-promote to higher review cycle
             newReviewCycle = targetReviewCycle;
 
