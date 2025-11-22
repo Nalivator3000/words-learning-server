@@ -217,7 +217,13 @@ class APIDatabase {
     }
 
     async getWordCounts() {
-        return await this.apiRequest('/api/words/counts');
+        const { userId, languagePairId } = this.getUserContext();
+
+        const params = new URLSearchParams();
+        if (userId) params.append('userId', userId);
+        if (languagePairId) params.append('languagePairId', languagePairId);
+
+        return await this.apiRequest(`/api/words/counts?${params.toString()}`);
     }
 
     async getAllWords() {
