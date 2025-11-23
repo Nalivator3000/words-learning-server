@@ -48,11 +48,42 @@ class UserManager {
 
     showUserInterface() {
         if (this.currentUser) {
-            document.getElementById('userInfo').textContent = this.currentUser.name;
-            if (this.currentLanguagePair) {
-                document.getElementById('userInfo').textContent += ` (${this.currentLanguagePair.name})`;
+            const userInfoEl = document.getElementById('userInfo');
+            // Only show user info for demo users
+            if (this.isDemoUser()) {
+                userInfoEl.textContent = this.currentUser.name;
+                if (this.currentLanguagePair) {
+                    userInfoEl.textContent += ` (${this.currentLanguagePair.name})`;
+                }
+                userInfoEl.style.display = '';
+            } else {
+                userInfoEl.textContent = '';
+                userInfoEl.style.display = 'none';
             }
         }
+    }
+
+    isDemoUser() {
+        if (!this.currentUser) return false;
+
+        // Demo user IDs
+        const demoUserIds = [1];
+
+        // Demo usernames (case-insensitive)
+        const demoUsernames = ['demo', 'test', 'admin'];
+
+        if (demoUserIds.includes(this.currentUser.id)) {
+            return true;
+        }
+
+        if (this.currentUser.name) {
+            const name = this.currentUser.name.toLowerCase();
+            if (demoUsernames.some(demo => name.includes(demo))) {
+                return true;
+            }
+        }
+
+        return false;
     }
 
     async login(email, password) {
