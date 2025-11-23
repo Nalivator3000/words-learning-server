@@ -1153,5 +1153,10 @@
     "en": "Total Challenges",
     "ru": "Всего заданий",
     "de": "Herausforderungen gesamt"
+  },
+  "importWords": {
+    "en": "Import Words",
+    "ru": "Импорт слов",
+    "de": "Wörter importieren"
   }
 }
