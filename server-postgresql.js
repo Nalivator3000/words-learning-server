@@ -527,7 +527,7 @@ async function initDatabase() {
                 user_id INTEGER REFERENCES users(id) ON DELETE CASCADE,
                 goal_date DATE NOT NULL,
                 xp_goal INTEGER DEFAULT 50,
-                words_goal INTEGER DEFAULT 5,
+                words_goal INTEGER DEFAULT 20,
                 quizzes_goal INTEGER DEFAULT 10,
                 xp_progress INTEGER DEFAULT 0,
                 words_progress INTEGER DEFAULT 0,
@@ -2057,7 +2057,7 @@ async function updateDailyGoals(userId, wordsLearned = 0, quizzesCompleted = 0, 
             // Create new daily goal with default values
             await db.query(
                 `INSERT INTO daily_goals (user_id, goal_date, xp_goal, words_goal, quizzes_goal)
-                 VALUES ($1, $2, 50, 5, 10)`,
+                 VALUES ($1, $2, 50, 20, 10)`,
                 [userId, today]
             );
             goal = await db.query(
@@ -2755,7 +2755,7 @@ app.put('/api/gamification/daily-goals/:userId', async (req, res) => {
             await db.query(
                 `INSERT INTO daily_goals (user_id, goal_date, xp_goal, words_goal, quizzes_goal)
                  VALUES ($1, $2, $3, $4, $5)`,
-                [parseInt(userId), today, xpGoal || 50, wordsGoal || 5, quizzesGoal || 10]
+                [parseInt(userId), today, xpGoal || 50, wordsGoal || 20, quizzesGoal || 10]
             );
         } else {
             await db.query(
@@ -11161,8 +11161,24 @@ app.put('/api/words/:id/progress', async (req, res) => {
                 xpResult = await awardXP(userId, 'quiz_answer', xpEarned, `${questionType}: ${word.word}`);
             }
 
+            // Check if word advanced to next stage (for daily goal tracking)
+            let wordsAdvanced = 0;
+            const oldReviewCycle = word.reviewCycle || 0;
+
+            // Count as "word learned" for daily goal if:
+            // 1. Word moved from studying to review stage
+            // 2. Word advanced to a higher review cycle
+            // 3. Word became mastered
+            if (newStatus === 'mastered' && word.status !== 'mastered') {
+                wordsAdvanced = 1;
+            } else if (word.status === 'studying' && newStatus.startsWith('review_')) {
+                wordsAdvanced = 1;
+            } else if (word.status.startsWith('review_') && newReviewCycle > oldReviewCycle) {
+                wordsAdvanced = 1;
+            }
+
             // Update daily activity
-            await updateDailyActivity(userId, 0, 1, xpEarned);
+            await updateDailyActivity(userId, wordsAdvanced, 1, xpEarned);
 
             // Update total_words_learned if word just became learned
             if (newStatus === 'learned' && word.status !== 'learned') {
