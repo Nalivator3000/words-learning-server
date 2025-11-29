@@ -21,10 +21,10 @@ class AudioManager {
     loadVoiceSettings() {
         try {
             const saved = localStorage.getItem('voiceSettings');
-            return saved ? JSON.parse(saved) : { rate: 0.8, pitch: 1.0, volume: 1.0 };
+            return saved ? JSON.parse(saved) : { rate: 0.8, pitch: 1.0, volume: 1.0, autoPlay: true };
         } catch (error) {
             console.error('Failed to load voice settings:', error);
-            return { rate: 0.8, pitch: 1.0, volume: 1.0 };
+            return { rate: 0.8, pitch: 1.0, volume: 1.0, autoPlay: true };
         }
     }
 
@@ -50,6 +50,16 @@ class AudioManager {
     setVoiceVolume(volume) {
         this.voiceSettings.volume = parseFloat(volume);
         this.saveVoiceSettings();
+    }
+
+    setAutoPlay(enabled) {
+        this.voiceSettings.autoPlay = Boolean(enabled);
+        this.saveVoiceSettings();
+        console.log('✅ Auto-play setting updated:', this.voiceSettings.autoPlay);
+    }
+
+    isAutoPlayEnabled() {
+        return this.voiceSettings.autoPlay !== false; // Default to true if not set
     }
 
     saveCustomVoices() {
@@ -3229,6 +3239,18 @@ schreiben,Sie schreibt einen Brief.,Писать,Она пишет письmо.`
                 }, 4000);
 
                 this.audioManager.speak(testText, langCode);
+            });
+        }
+
+        // Auto-play checkbox
+        const autoPlayCheckbox = document.getElementById('autoPlayCheckbox');
+        if (autoPlayCheckbox) {
+            // Set initial state from saved settings
+            autoPlayCheckbox.checked = this.audioManager.isAutoPlayEnabled();
+
+            autoPlayCheckbox.addEventListener('change', (e) => {
+                this.audioManager.setAutoPlay(e.target.checked);
+                console.log('🔊 Auto-play toggled:', e.target.checked);
             });
         }
     }

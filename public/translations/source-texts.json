@@ -1158,5 +1158,20 @@
     "en": "Import Words",
     "ru": "Импорт слов",
     "de": "Wörter importieren"
+  },
+  "audio_settings": {
+    "en": "🔊 Audio Settings",
+    "ru": "🔊 Настройки озвучки",
+    "de": "🔊 Audio-Einstellungen"
+  },
+  "auto_play_words": {
+    "en": "Auto-play words",
+    "ru": "Автоматическое воспроизведение слов",
+    "de": "Wörter automatisch abspielen"
+  },
+  "auto_play_description": {
+    "en": "Automatically pronounce the correct answer after checking in exercises",
+    "ru": "Автоматически озвучивать правильный ответ после проверки в упражнениях",
+    "de": "Automatisch die richtige Antwort nach der Überprüfung in Übungen aussprechen"
   }
 }

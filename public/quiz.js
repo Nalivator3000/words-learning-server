@@ -234,6 +234,36 @@ class QuizManager {
             });
         }
 
+        // Auto-play audio for correct answer if enabled
+        if (window.app && window.app.audioManager && window.app.audioManager.isAutoPlayEnabled()) {
+            // Determine which word to pronounce based on question type
+            let wordToSpeak = question.correctAnswer;
+            let langCode = null;
+
+            // For reverse questions, speak the original word (German/target language)
+            if (question.type === 'reverseMultipleChoice') {
+                wordToSpeak = question.word;
+                // Auto-detect language or use current language pair
+                const currentPair = window.userManager ? window.userManager.getCurrentLanguagePair() : null;
+                if (currentPair && window.languageManager) {
+                    langCode = window.languageManager.getAudioLanguageCode(wordToSpeak, currentPair);
+                }
+            } else {
+                // For normal questions (multipleChoice, typing, wordBuilding), speak the German word
+                wordToSpeak = question.word;
+                const currentPair = window.userManager ? window.userManager.getCurrentLanguagePair() : null;
+                if (currentPair && window.languageManager) {
+                    langCode = window.languageManager.getAudioLanguageCode(wordToSpeak, currentPair);
+                }
+            }
+
+            // Play the audio after a short delay to let the user see the feedback first
+            setTimeout(() => {
+                window.app.audioManager.speak(wordToSpeak, langCode);
+                console.log(`🔊 Auto-playing: "${wordToSpeak}" (${langCode || 'auto-detect'})`);
+            }, 300);
+        }
+
         return {
             correct: isCorrect,
             partiallyCorrect: isPartiallyCorrect,
