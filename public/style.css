@@ -608,6 +608,15 @@
     border-color: var(--status-error);
 }
 
+[data-theme="dark"] .progress-bar {
+    background: rgba(55, 65, 81, 0.8);
+    border: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+[data-theme="dark"] .counter {
+    color: var(--neutral-300);
+}
+
 /* Reset and Base Styles */
 * {
     margin: 0;
