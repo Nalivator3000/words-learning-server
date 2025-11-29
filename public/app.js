@@ -379,7 +379,6 @@ class LanguageLearningApp {
         document.getElementById('importBtn').addEventListener('click', () => this.showSection('import'));
         document.getElementById('wordListsBtn').addEventListener('click', () => this.showSection('wordLists'));
         document.getElementById('studyBtn').addEventListener('click', () => this.showSection('study'));
-        document.getElementById('reviewBtn').addEventListener('click', () => this.showSection('review'));
         document.getElementById('challengesBtn').addEventListener('click', () => this.showSection('challenges'));
 
         // Gamification buttons (only visible for whitelisted users)

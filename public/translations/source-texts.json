@@ -1173,5 +1173,20 @@
     "en": "Automatically pronounce the correct answer after checking in exercises",
     "ru": "Автоматически озвучивать правильный ответ после проверки в упражнениях",
     "de": "Automatisch die richtige Antwort nach der Überprüfung in Übungen aussprechen"
+  },
+  "startReview": {
+    "en": "Start Review",
+    "ru": "Начать повторение",
+    "de": "Wiederholung starten"
+  },
+  "review_7days": {
+    "en": "7 days",
+    "ru": "7 дней",
+    "de": "7 Tage"
+  },
+  "review_30days": {
+    "en": "30 days",
+    "ru": "30 дней",
+    "de": "30 Tage"
   }
 }
