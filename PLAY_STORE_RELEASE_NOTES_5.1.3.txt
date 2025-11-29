@@ -1,0 +1,24 @@
+LexyBooster v5.1.3 - Enhanced Learning Experience
+
+✨ NEW FEATURES
+• Auto-play audio: Words automatically pronounced after quiz answers
+• Enhanced daily goals: Now tracks word progression through review stages
+• Daily goal increased to 20 words for better learning rhythm
+
+🎨 IMPROVEMENTS
+• Navigation streamlined: Review section integrated into Statistics
+• Light theme contrast significantly improved
+• Achievement cards more visible and professional
+• Better readability across all UI elements
+
+🐛 FIXES
+• Fixed translation placeholders
+• Resolved light theme visibility issues
+• Improved color contrast throughout the app
+
+📊 PERFORMANCE
+• Faster UI rendering
+• Optimized audio playback
+• Smoother navigation transitions
+
+Thank you for using LexyBooster! Keep learning! 🚀
