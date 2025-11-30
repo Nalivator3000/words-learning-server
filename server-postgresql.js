@@ -159,6 +159,12 @@ app.get('/', (req, res) => {
         `<script src="$1?v=${APP_VERSION}"`
     );
 
+    // Inject APP_VERSION as a global variable for client-side cache busting
+    html = html.replace(
+        /<script>/,
+        `<script>window.APP_VERSION = "${APP_VERSION}";</script>\n    <script>`
+    );
+
     res.setHeader('Cache-Control', 'no-cache, no-store, must-revalidate');
     res.setHeader('Pragma', 'no-cache');
     res.setHeader('Expires', '0');
