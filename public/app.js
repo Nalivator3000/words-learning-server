@@ -854,7 +854,27 @@ class LanguageLearningApp {
             const dateAdded = createdAt ? new Date(createdAt).toLocaleDateString('ru-RU') : 'N/A';
             const dateStudied = lastReviewed ? new Date(lastReviewed).toLocaleDateString('ru-RU') : i18n.t('not_studied');
 
-            metaDiv.innerHTML = `📅 Added: ${dateAdded} | 📚 Studied: ${dateStudied}`;
+            let metaHTML = `📅 Added: ${dateAdded} | 📚 Studied: ${dateStudied}`;
+
+            // Add review stage badge if word is in review
+            if (word.status && word.status.startsWith('review_')) {
+                const stageMap = {
+                    'review_1': { label: '1 day', emoji: '🌱', color: '#10b981' },
+                    'review_3': { label: '3 days', emoji: '🌿', color: '#3b82f6' },
+                    'review_7': { label: '7 days', emoji: '🌳', color: '#8b5cf6' },
+                    'review_14': { label: '14 days', emoji: '🎋', color: '#ec4899' },
+                    'review_30': { label: '30 days', emoji: '🏆', color: '#f59e0b' },
+                    'review_60': { label: '60 days', emoji: '⭐', color: '#ef4444' },
+                    'review_120': { label: '120 days', emoji: '👑', color: '#6366f1' }
+                };
+
+                const stage = stageMap[word.status];
+                if (stage) {
+                    metaHTML += ` | <span style="display: inline-flex; align-items: center; gap: 4px; background: ${stage.color}; color: white; padding: 2px 8px; border-radius: 12px; font-size: 11px; font-weight: 600;">${stage.emoji} ${stage.label}</span>`;
+                }
+            }
+
+            metaDiv.innerHTML = metaHTML;
 
             wordContent.appendChild(wordMain);
             wordContent.appendChild(metaDiv);
