@@ -2728,7 +2728,7 @@ app.get('/api/gamification/daily-goals/:userId', async (req, res) => {
             // Create default goal if doesn't exist
             await db.query(
                 `INSERT INTO daily_goals (user_id, goal_date, xp_goal, words_goal, quizzes_goal)
-                 VALUES ($1, $2, 50, 5, 10)`,
+                 VALUES ($1, $2, 50, 20, 10)`,
                 [parseInt(userId), today]
             );
             goal = await db.query(
