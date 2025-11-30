@@ -512,15 +512,35 @@
                 <div class="stats-detailed">
                     <!-- Review Section -->
                     <div class="review-info-box">
-                        <h3 data-i18n="review">Повторение</h3>
-                        <div class="review-stats">
+                        <h3 class="review-title" data-i18n="review">Повторение</h3>
+                        <div class="review-stats-grid">
                             <div class="review-stat-item">
-                                <span data-i18n="review_7days">7 days:</span>
+                                <span class="review-label" data-i18n="review_1day">1 day</span>
+                                <span id="review1Count" class="count-badge">0</span>
+                            </div>
+                            <div class="review-stat-item">
+                                <span class="review-label" data-i18n="review_3days">3 days</span>
+                                <span id="review3Count" class="count-badge">0</span>
+                            </div>
+                            <div class="review-stat-item">
+                                <span class="review-label" data-i18n="review_7days">7 days</span>
                                 <span id="review7Count" class="count-badge">0</span>
                             </div>
                             <div class="review-stat-item">
-                                <span data-i18n="review_30days">30 days:</span>
+                                <span class="review-label" data-i18n="review_14days">14 days</span>
+                                <span id="review14Count" class="count-badge">0</span>
+                            </div>
+                            <div class="review-stat-item">
+                                <span class="review-label" data-i18n="review_30days">30 days</span>
                                 <span id="review30Count" class="count-badge">0</span>
+                            </div>
+                            <div class="review-stat-item">
+                                <span class="review-label" data-i18n="review_60days">60 days</span>
+                                <span id="review60Count" class="count-badge">0</span>
+                            </div>
+                            <div class="review-stat-item">
+                                <span class="review-label" data-i18n="review_120days">120 days</span>
+                                <span id="review120Count" class="count-badge">0</span>
                             </div>
                         </div>
                         <button id="startReviewBtn" class="action-btn" data-i18n="startReview">Начать повторение</button>

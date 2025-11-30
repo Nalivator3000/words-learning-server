@@ -1179,14 +1179,39 @@
     "ru": "Начать повторение",
     "de": "Wiederholung starten"
   },
+  "review_1day": {
+    "en": "1 day",
+    "ru": "1 день",
+    "de": "1 Tag"
+  },
+  "review_3days": {
+    "en": "3 days",
+    "ru": "3 дня",
+    "de": "3 Tage"
+  },
   "review_7days": {
     "en": "7 days",
     "ru": "7 дней",
     "de": "7 Tage"
   },
+  "review_14days": {
+    "en": "14 days",
+    "ru": "14 дней",
+    "de": "14 Tage"
+  },
   "review_30days": {
     "en": "30 days",
     "ru": "30 дней",
     "de": "30 Tage"
+  },
+  "review_60days": {
+    "en": "60 days",
+    "ru": "60 дней",
+    "de": "60 Tage"
+  },
+  "review_120days": {
+    "en": "120 days",
+    "ru": "120 дней",
+    "de": "120 Tage"
   }
 }

@@ -740,8 +740,15 @@ class LanguageLearningApp {
     async updateReviewStats() {
         try {
             const counts = await database.getWordCounts();
-            document.getElementById('review7Count').textContent = counts.review7;
-            document.getElementById('review30Count').textContent = counts.review30;
+
+            // Update all review stage counts
+            document.getElementById('review1Count').textContent = counts.review_1 || 0;
+            document.getElementById('review3Count').textContent = counts.review_3 || 0;
+            document.getElementById('review7Count').textContent = counts.review_7 || 0;
+            document.getElementById('review14Count').textContent = counts.review_14 || 0;
+            document.getElementById('review30Count').textContent = counts.review_30 || 0;
+            document.getElementById('review60Count').textContent = counts.review_60 || 0;
+            document.getElementById('review120Count').textContent = counts.review_120 || 0;
 
             document.getElementById('startReviewBtn').disabled = counts.review === 0;
         } catch (error) {

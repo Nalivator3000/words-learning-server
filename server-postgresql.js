@@ -10829,7 +10829,15 @@ app.get('/api/words/counts', async (req, res) => {
             review: 0,
             review7: 0,
             review30: 0,
-            learned: 0
+            learned: 0,
+            // Detailed review stages
+            review_1: 0,
+            review_3: 0,
+            review_7: 0,
+            review_14: 0,
+            review_30: 0,
+            review_60: 0,
+            review_120: 0
         };
 
         result.rows.forEach(row => {
@@ -10838,6 +10846,11 @@ app.get('/api/words/counts', async (req, res) => {
             } else if (row.status.startsWith('review_')) {
                 // All review statuses (review_1, review_3, review_7, review_14, review_30, review_60, review_120)
                 counts.review += parseInt(row.count);
+                // Detailed stage counts
+                const stage = row.status; // e.g., 'review_7'
+                if (counts.hasOwnProperty(stage)) {
+                    counts[stage] = parseInt(row.count);
+                }
                 // Keep backward compatibility with old review7/review30 fields
                 if (row.status === 'review_7') {
                     counts.review7 = parseInt(row.count);
