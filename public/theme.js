@@ -2,7 +2,9 @@
 class ThemeManager {
     constructor() {
         this.themeToggleBtn = null;
+        this.themeToggleBtnNav = null;
         this.themeIcon = null;
+        this.themeIconNav = null;
         this.currentTheme = 'light';
 
         // Icons for different themes
@@ -14,14 +16,20 @@ class ThemeManager {
 
     init() {
         this.themeToggleBtn = document.getElementById('themeToggle');
+        this.themeToggleBtnNav = document.getElementById('themeToggleNav');
         this.themeIcon = this.themeToggleBtn?.querySelector('.theme-icon');
+        this.themeIconNav = this.themeToggleBtnNav?.querySelector('.theme-icon-nav');
 
         // Load saved theme or detect system preference
         this.loadTheme();
 
-        // Add event listener
+        // Add event listeners to both buttons
         if (this.themeToggleBtn) {
             this.themeToggleBtn.addEventListener('click', () => this.toggleTheme());
+        }
+
+        if (this.themeToggleBtnNav) {
+            this.themeToggleBtnNav.addEventListener('click', () => this.toggleTheme());
         }
 
         // Listen for system theme changes
@@ -53,9 +61,13 @@ class ThemeManager {
         // Update HTML attribute
         document.documentElement.setAttribute('data-theme', theme);
 
-        // Update icon
+        // Update both icons
         if (this.themeIcon) {
             this.themeIcon.textContent = this.icons[theme];
+        }
+
+        if (this.themeIconNav) {
+            this.themeIconNav.textContent = this.icons[theme];
         }
 
         // Save to localStorage
@@ -66,13 +78,15 @@ class ThemeManager {
         const newTheme = this.currentTheme === 'light' ? 'dark' : 'light';
         this.setTheme(newTheme);
 
-        // Add animation to the icon
-        if (this.themeIcon) {
-            this.themeIcon.style.transform = 'rotate(360deg)';
+        // Add animation to both icons
+        const icons = [this.themeIcon, this.themeIconNav].filter(Boolean);
+        icons.forEach(icon => {
+            icon.style.transition = 'transform 0.3s ease';
+            icon.style.transform = 'rotate(360deg)';
             setTimeout(() => {
-                this.themeIcon.style.transform = 'rotate(0deg)';
+                icon.style.transform = 'rotate(0deg)';
             }, 300);
-        }
+        });
     }
 
     getTheme() {

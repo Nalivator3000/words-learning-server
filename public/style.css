@@ -3057,8 +3057,14 @@ input:focus, textarea:focus, select:focus {
     #homeBtn,
     #studyBtn,
     #leaderboardBtn,
-    #statsBtn {
+    #statsBtn,
+    #themeToggleNav {
         display: flex !important;
+    }
+
+    /* Hide old theme toggle on mobile, show only nav one */
+    .theme-toggle {
+        display: none !important;
     }
 
     .nav-btn {
@@ -3115,6 +3121,21 @@ input:focus, textarea:focus, select:focus {
     #leaderboardBtn::before { content: '🏆'; }
     #statsBtn::before { content: '📊'; }
 
+    /* Theme toggle in nav - special handling */
+    #themeToggleNav {
+        position: relative;
+    }
+
+    #themeToggleNav::before {
+        content: '';
+        display: none;
+    }
+
+    #themeToggleNav .theme-icon-nav {
+        font-size: var(--text-xl);
+        line-height: 1;
+    }
+
     /* Add data-label attributes for labels */
     #homeBtn { --label: "Home"; }
     #importBtn { --label: "Import"; }
@@ -3122,6 +3143,7 @@ input:focus, textarea:focus, select:focus {
     #reviewBtn { --label: "Review"; }
     #leaderboardBtn { --label: "Rating"; }
     #statsBtn { --label: "Stats"; }
+    #themeToggleNav { --label: "Theme"; }
 
     /* Add padding to body to account for fixed bottom nav */
     body {
