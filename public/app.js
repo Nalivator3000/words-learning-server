@@ -144,12 +144,17 @@ class AudioManager {
             return null;
         }
 
+        // Detect mobile device
+        const isMobile = /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent);
+
         // Bad voice names to filter out (low quality TTS)
         const badVoicePatterns = [
             /espeak/i,
             /festival/i,
             /pico/i,
-            /flite/i
+            /flite/i,
+            /android/i,  // Android default TTS is often low quality
+            /samsung/i   // Samsung TTS is often robotic
         ];
 
         // Filter out known bad voices
@@ -163,8 +168,17 @@ class AudioManager {
         const scoreVoice = (voice) => {
             let score = 0;
 
-            // Priority 1: Local voices (offline, faster)
-            if (voice.localService) score += 100;
+            // Priority 1: High-quality voices (on mobile, non-local may be better)
+            // On mobile, cloud voices are often higher quality than local TTS
+            if (isMobile) {
+                // Prefer cloud/remote voices on mobile (they're usually better quality)
+                if (!voice.localService) score += 80;
+                // But still give some score to local voices
+                else score += 40;
+            } else {
+                // On desktop, prefer local voices (faster, work offline)
+                if (voice.localService) score += 100;
+            }
 
             // Priority 2: Exact language match (de-DE better than de-US)
             const exactMatch = {
@@ -180,15 +194,18 @@ class AudioManager {
                 score += 50;
             }
 
-            // Priority 3: Quality TTS engines (Google, Microsoft, Apple)
+            // Priority 3: Quality TTS engines (Google, Microsoft, Apple, Yandex)
             const qualityEngines = [
-                { pattern: /google/i, score: 40 },
-                { pattern: /microsoft/i, score: 35 },
-                { pattern: /apple/i, score: 35 },
-                { pattern: /natural/i, score: 30 },
-                { pattern: /premium/i, score: 30 },
-                { pattern: /neural/i, score: 25 },
-                { pattern: /enhanced/i, score: 20 }
+                { pattern: /google/i, score: 45 },
+                { pattern: /microsoft/i, score: 40 },
+                { pattern: /apple/i, score: 40 },
+                { pattern: /yandex/i, score: 38 },  // Good for Russian
+                { pattern: /natural/i, score: 35 },
+                { pattern: /premium/i, score: 35 },
+                { pattern: /neural/i, score: 30 },
+                { pattern: /wavenet/i, score: 30 },  // Google WaveNet
+                { pattern: /enhanced/i, score: 25 },
+                { pattern: /HD/i, score: 20 }
             ];
 
             qualityEngines.forEach(({ pattern, score: engineScore }) => {
@@ -200,6 +217,11 @@ class AudioManager {
                 score += 10;
             }
 
+            // Female voices often sound more natural
+            if (/female|woman|girl|frau|femme/i.test(voice.name)) {
+                score += 5;
+            }
+
             return score;
         };
 
@@ -208,7 +230,15 @@ class AudioManager {
 
         const bestVoice = sortedVoices[0];
 
-        console.log(`🎯 Best voice for ${languagePrefix}: ${bestVoice.name} (score: ${scoreVoice(bestVoice)})`);
+        console.log(`🎯 Best voice for ${languagePrefix}: ${bestVoice.name} (score: ${scoreVoice(bestVoice)}, local: ${bestVoice.localService}, lang: ${bestVoice.lang})`);
+
+        // Log top 3 voices for debugging
+        if (sortedVoices.length > 1) {
+            console.log(`   Alternatives:`);
+            sortedVoices.slice(1, 4).forEach((v, i) => {
+                console.log(`   ${i + 2}. ${v.name} (score: ${scoreVoice(v)}, local: ${v.localService})`);
+            });
+        }
 
         return bestVoice;
     }
@@ -218,7 +248,7 @@ class AudioManager {
             console.log('AudioManager: Empty text, skipping TTS');
             return;
         }
-        
+
         // Auto-detect language if not provided
         if (!languageCode) {
             const currentPair = userManager ? userManager.getCurrentLanguagePair() : null;
@@ -228,25 +258,39 @@ class AudioManager {
                 languageCode = 'de-DE'; // Default fallback
             }
         }
-        
+
         console.log(`AudioManager: Speaking "${text}" in ${languageCode}`);
-        
+
         // Stop any current speech
         this.synth.cancel();
-        
+
         const utterance = new SpeechSynthesisUtterance(text);
         utterance.lang = languageCode;
-        utterance.rate = this.voiceSettings.rate; // User-configured speed
-        utterance.pitch = this.voiceSettings.pitch; // User-configured pitch
-        utterance.volume = this.voiceSettings.volume; // User-configured volume
-        
+
         // Use appropriate voice for language
         const voice = this.voices[languageCode];
         if (voice) {
             utterance.voice = voice;
             console.log(`AudioManager: Using voice "${voice.name}" for ${languageCode}`);
+
+            // Adjust settings based on voice type
+            // Remote/cloud voices often need different settings than local voices
+            if (voice.localService) {
+                // Local voices - use user settings
+                utterance.rate = this.voiceSettings.rate;
+                utterance.pitch = this.voiceSettings.pitch;
+                utterance.volume = this.voiceSettings.volume;
+            } else {
+                // Remote/cloud voices - slightly slower for better clarity
+                utterance.rate = Math.max(0.75, this.voiceSettings.rate * 0.95);
+                utterance.pitch = this.voiceSettings.pitch;
+                utterance.volume = this.voiceSettings.volume;
+            }
         } else {
             console.warn(`AudioManager: No voice found for ${languageCode}, using default`);
+            utterance.rate = this.voiceSettings.rate;
+            utterance.pitch = this.voiceSettings.pitch;
+            utterance.volume = this.voiceSettings.volume;
         }
         
         // Add error handling
