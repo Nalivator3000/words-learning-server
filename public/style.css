@@ -3216,19 +3216,20 @@ input:focus, textarea:focus, select:focus {
         font-size: var(--text-3xl);
     }
 
-    /* Quiz/Exercise mobile optimization - FIXED LAYOUT NO JUMPING */
+    /* Quiz/Exercise mobile optimization - NO WASTED SPACE */
     .quiz-area {
         padding: var(--space-2) var(--space-3) var(--space-1) var(--space-3);
         /* Use dynamic viewport height for mobile browsers */
         /* Account for: body padding-top (12px) + container padding-top (16px) + header (~50px) + bottom nav (~60px) = ~140px */
-        min-height: calc(100dvh - 140px);
+        min-height: auto;
         max-height: calc(100dvh - 140px);
         overflow-y: auto;
         overflow-x: hidden;
         display: grid;
-        grid-template-rows: 6px auto minmax(auto, 10vh) minmax(0, 1fr) auto 56px;
+        grid-template-rows: 6px auto minmax(auto, 10vh) auto auto 56px;
         gap: var(--space-1);
         align-items: start;
+        align-content: start;
     }
 
     .progress-bar {
