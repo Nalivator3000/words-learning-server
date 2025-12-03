@@ -3219,8 +3219,9 @@ input:focus, textarea:focus, select:focus {
     /* Quiz/Exercise mobile optimization - FIXED LAYOUT NO JUMPING */
     .quiz-area {
         padding: var(--space-2) var(--space-3) var(--space-1) var(--space-3);
-        /* Use dynamic viewport height for mobile browsers - account for header (~60px) + bottom nav (~55px) */
-        height: calc(100dvh - 115px);
+        /* Use dynamic viewport height for mobile browsers */
+        /* Account for: body padding-top (12px) + container padding-top (16px) + header (~50px) + bottom nav (~60px) = ~140px */
+        height: calc(100dvh - 140px);
         max-height: none;
         overflow: hidden; /* No scrolling! */
         display: grid;
