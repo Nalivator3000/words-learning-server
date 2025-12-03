@@ -940,14 +940,22 @@
         flex-direction: column;
         align-items: flex-start;
         gap: 10px;
+        padding: 12px;
+    }
+
+    .goal-icon {
+        font-size: 28px;
     }
 
     .goal-info {
         width: 100%;
+        min-width: 0;
     }
 
     .goal-progress-bar {
         width: 100%;
+        flex: none;
+        min-width: 0;
     }
 }
 
