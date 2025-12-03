@@ -2947,23 +2947,33 @@ input:focus, textarea:focus, select:focus {
         --space-6: 1rem;
     }
 
+    /* Add padding to body to account for mobile browser UI */
+    body {
+        padding-top: max(env(safe-area-inset-top), 8px);
+    }
+
     .container {
-        padding: var(--space-4);
+        padding: var(--space-2) var(--space-4);
     }
 
     .app-header {
         padding: var(--space-4);
+        margin-top: var(--space-2);
     }
 
     .header-left h1 {
-        font-size: var(--text-2xl);
+        font-size: var(--text-lg);
+        white-space: normal;
+        line-height: 1.2;
     }
 
     /* Mobile navigation - Bottom Navigation Bar (2025 Trend) */
     .app-header {
         flex-direction: column;
-        padding: var(--space-3) var(--space-4);
+        padding: var(--space-2) var(--space-3);
         margin-bottom: var(--space-2);
+        gap: var(--space-2);
+        border-radius: var(--radius-xl);
     }
 
     .header-left {
@@ -2971,6 +2981,20 @@ input:focus, textarea:focus, select:focus {
         display: flex;
         justify-content: space-between;
         align-items: center;
+        gap: var(--space-2);
+    }
+
+    .header-right {
+        gap: var(--space-2);
+        margin-left: 0;
+    }
+
+    .settings-btn {
+        width: 36px !important;
+        height: 36px !important;
+        min-width: 36px !important;
+        padding: 0 !important;
+        font-size: var(--text-lg) !important;
     }
 
     .header-nav {
@@ -3065,6 +3089,23 @@ input:focus, textarea:focus, select:focus {
         padding-bottom: calc(var(--space-8) + env(safe-area-inset-bottom));
     }
 
+    /* User info bar mobile optimization */
+    .user-info-bar {
+        flex-direction: column;
+        gap: var(--space-3);
+        padding: 0 var(--space-3) var(--space-3) var(--space-3);
+        align-items: stretch;
+    }
+
+    .user-info {
+        font-size: var(--text-xs);
+        text-align: center;
+    }
+
+    .gamification-header-container {
+        max-width: 100%;
+    }
+
     .quick-actions {
         grid-template-columns: 1fr;
         gap: var(--space-4);
@@ -3078,11 +3119,22 @@ input:focus, textarea:focus, select:focus {
 
     .study-modes {
         grid-template-columns: 1fr;
+        gap: var(--space-3);
     }
 
     .mode-btn {
-        min-height: 120px;
-        padding: var(--space-6);
+        min-height: 100px;
+        padding: var(--space-4) var(--space-5);
+        font-size: var(--text-base);
+    }
+
+    .mode-btn h3 {
+        font-size: var(--text-lg);
+        margin-bottom: var(--space-1);
+    }
+
+    .mode-btn p {
+        font-size: var(--text-xs);
     }
 
     .stats-grid {
