@@ -3245,7 +3245,7 @@ input:focus, textarea:focus, select:focus {
         background: transparent;
     }
 
-    /* Fixed action button area */
+    /* Fixed action button area - both buttons in same grid cell */
     #nextBtn,
     #finishStudyBtn,
     #reviewNextBtn,
@@ -3254,6 +3254,8 @@ input:focus, textarea:focus, select:focus {
         max-height: 56px !important;
         margin: 0 !important;
         padding: var(--space-3) !important;
+        grid-row: 6;  /* Both buttons occupy row 6 */
+        grid-column: 1;
     }
 
     .answer-options {
