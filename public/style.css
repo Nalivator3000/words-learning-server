@@ -3033,6 +3033,19 @@ input:focus, textarea:focus, select:focus {
         width: 100%;
     }
 
+    /* Hide all nav buttons by default on mobile, then show only key ones */
+    .nav-btn {
+        display: none !important;
+    }
+
+    /* Show only 5 main navigation buttons on mobile */
+    #homeBtn,
+    #studyBtn,
+    #leaderboardBtn,
+    #statsBtn {
+        display: flex !important;
+    }
+
     .nav-btn {
         flex: 1;
         padding: var(--space-2);
@@ -3086,6 +3099,7 @@ input:focus, textarea:focus, select:focus {
     #importBtn::before { content: '📥'; }
     #studyBtn::before { content: '📚'; }
     #reviewBtn::before { content: '🔄'; }
+    #leaderboardBtn::before { content: '🏆'; }
     #statsBtn::before { content: '📊'; }
 
     /* Add data-label attributes for labels */
@@ -3093,6 +3107,7 @@ input:focus, textarea:focus, select:focus {
     #importBtn { --label: "Import"; }
     #studyBtn { --label: "Study"; }
     #reviewBtn { --label: "Review"; }
+    #leaderboardBtn { --label: "Rating"; }
     #statsBtn { --label: "Stats"; }
 
     /* Add padding to body to account for fixed bottom nav */
