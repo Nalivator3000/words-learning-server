@@ -144,9 +144,6 @@ class AudioManager {
             return null;
         }
 
-        // Detect mobile device
-        const isMobile = /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent);
-
         // Bad voice names to filter out (low quality TTS)
         const badVoicePatterns = [
             /espeak/i,
@@ -168,16 +165,9 @@ class AudioManager {
         const scoreVoice = (voice) => {
             let score = 0;
 
-            // Priority 1: High-quality voices (on mobile, non-local may be better)
-            // On mobile, cloud voices are often higher quality than local TTS
-            if (isMobile) {
-                // Prefer cloud/remote voices on mobile (they're usually better quality)
-                if (!voice.localService) score += 80;
-                // But still give some score to local voices
-                else score += 40;
-            } else {
-                // On desktop, prefer local voices (faster, work offline)
-                if (voice.localService) score += 100;
+            // Priority 1: Prefer local voices (faster, work offline, consistent quality)
+            if (voice.localService) {
+                score += 100;
             }
 
             // Priority 2: Exact language match (de-DE better than de-US)
