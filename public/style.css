@@ -2998,10 +2998,22 @@ input:focus, textarea:focus, select:focus {
     }
 
     .header-right {
-        display: flex;
+        display: flex !important;
         gap: var(--space-2);
         margin-left: 0;
         flex-shrink: 0;
+        z-index: 20;
+    }
+
+    .theme-toggle {
+        width: 36px !important;
+        height: 36px !important;
+        min-width: 36px !important;
+        padding: 0 !important;
+        font-size: var(--text-xl) !important;
+        display: flex !important;
+        align-items: center;
+        justify-content: center;
     }
 
     .settings-btn {
@@ -3010,20 +3022,23 @@ input:focus, textarea:focus, select:focus {
         min-width: 36px !important;
         padding: 0 !important;
         font-size: var(--text-lg) !important;
+        display: flex !important;
+        align-items: center;
+        justify-content: center;
     }
 
     .header-nav {
         order: 3;
         width: 100%;
         position: fixed;
-        bottom: 0;
+        bottom: env(safe-area-inset-bottom, 0);
         left: 0;
         right: 0;
-        background: rgba(255, 255, 255, 0.98);
+        background: rgba(255, 255, 255, 0.95);
         backdrop-filter: blur(20px);
         border-top: 1px solid rgba(0, 0, 0, 0.1);
-        box-shadow: 0 -4px 20px rgba(0, 0, 0, 0.1);
-        padding: var(--space-2) var(--space-4) calc(var(--space-2) + env(safe-area-inset-bottom));
+        box-shadow: 0 -2px 10px rgba(0, 0, 0, 0.1);
+        padding: var(--space-1) var(--space-2) var(--space-1);
         z-index: 1000;
     }
 
@@ -3048,39 +3063,37 @@ input:focus, textarea:focus, select:focus {
 
     .nav-btn {
         flex: 1;
-        padding: var(--space-2);
+        padding: var(--space-1) var(--space-1);
         text-align: center;
-        font-size: var(--text-xs);
+        font-size: 0;
+        line-height: 0;
         display: flex;
         flex-direction: column;
         align-items: center;
-        gap: var(--space-1);
-        border-radius: var(--radius-lg);
+        gap: 2px;
+        border-radius: var(--radius-md);
         background: transparent;
         border: none;
         cursor: pointer;
         transition: all 0.2s;
-        min-width: 60px;
-    }
-
-    .nav-btn {
-        /* Hide the text content set by data-i18n on mobile */
-        font-size: 0;
-        line-height: 0;
+        min-width: 50px;
+        max-width: 80px;
     }
 
     .nav-btn::before {
-        font-size: var(--text-2xl);
+        font-size: var(--text-xl);
         margin: 0;
         display: block;
+        line-height: 1;
     }
 
     .nav-btn::after {
         content: attr(data-label);
-        font-size: var(--text-xs);
+        font-size: 11px;
         font-weight: 500;
         margin-top: 2px;
-        line-height: normal;
+        line-height: 1;
+        white-space: nowrap;
     }
 
     .nav-btn:hover {
@@ -3112,11 +3125,11 @@ input:focus, textarea:focus, select:focus {
 
     /* Add padding to body to account for fixed bottom nav */
     body {
-        padding-bottom: calc(70px + env(safe-area-inset-bottom));
+        padding-bottom: calc(55px + env(safe-area-inset-bottom));
     }
 
     .container {
-        padding-bottom: calc(var(--space-8) + env(safe-area-inset-bottom));
+        padding-bottom: calc(60px + env(safe-area-inset-bottom));
     }
 
     /* User info bar mobile optimization */
