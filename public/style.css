@@ -2952,16 +2952,17 @@ input:focus, textarea:focus, select:focus {
 
     /* Add padding to body to account for mobile browser UI */
     body {
-        padding-top: max(env(safe-area-inset-top), 8px);
+        padding-top: max(env(safe-area-inset-top), 12px);
     }
 
     .container {
-        padding: var(--space-2) var(--space-4);
+        padding: var(--space-4) var(--space-4);
+        padding-top: max(env(safe-area-inset-top), 16px);
     }
 
     .app-header {
-        padding: var(--space-4);
-        margin-top: var(--space-2);
+        padding: var(--space-3);
+        margin-top: 0;
     }
 
     .header-left h1 {
@@ -2972,24 +2973,35 @@ input:focus, textarea:focus, select:focus {
 
     /* Mobile navigation - Bottom Navigation Bar (2025 Trend) */
     .app-header {
-        flex-direction: column;
+        flex-direction: row;
+        flex-wrap: wrap;
         padding: var(--space-2) var(--space-3);
         margin-bottom: var(--space-2);
         gap: var(--space-2);
         border-radius: var(--radius-xl);
+        position: relative;
+        z-index: 10;
     }
 
     .header-left {
-        width: 100%;
+        flex: 1;
+        min-width: 0;
         display: flex;
-        justify-content: space-between;
         align-items: center;
-        gap: var(--space-2);
+        margin-right: auto;
+    }
+
+    .header-left h1 {
+        overflow: hidden;
+        text-overflow: ellipsis;
+        white-space: nowrap;
     }
 
     .header-right {
+        display: flex;
         gap: var(--space-2);
         margin-left: 0;
+        flex-shrink: 0;
     }
 
     .settings-btn {
