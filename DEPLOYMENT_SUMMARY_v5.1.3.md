@@ -1,7 +1,7 @@
-# 🚀 Deployment Summary - LexyBooster v5.1.3
+# 🚀 Deployment Summary - LexyBooster v5.1.4
 
 ## 📋 Overview
-This deployment includes major improvements to daily goals, review system, cache busting, and UI enhancements.
+This deployment includes major improvements to daily goals, review system, cache busting, mobile optimization, and UI enhancements.
 
 ## 🎯 Critical Changes Requiring Action
 
@@ -80,9 +80,34 @@ Users will need to:
 - Works after quiz answers for all exercise types
 - Intelligent language detection
 
+### Mobile Optimization (6 commits)
+1. **Bottom Navigation Bar**
+   - Moved from top to bottom (iOS/Android pattern)
+   - Reduced from 13 to 5 essential buttons
+   - Safe area inset support for notched devices
+   - Theme toggle integrated as 5th button
+
+2. **Quiz Layout Stability**
+   - Fixed button clipping at bottom of screen
+   - Eliminated empty space below buttons
+   - Stable grid layout (no jumping when buttons appear/disappear)
+   - Adaptive feedback text (wraps properly, no overflow)
+
+3. **Voice Quality Unification**
+   - Removed mobile-specific cloud voice logic
+   - All platforms now use high-quality local voices
+   - Unified scoring algorithm (local voices score 100)
+   - Filter bad engines (Android TTS, Samsung TTS)
+
+4. **Theme Toggle Enhancement**
+   - Dual-button support (header + navigation)
+   - Single icon display (🌙 for light, ☀️ for dark)
+   - Synchronized updates across both buttons
+   - Smooth rotation animation
+
 ### Android App (1 commit)
-- Version bumped to 5.1.3
-- AAB built and ready: `lexybooster-v5.1.3.aab`
+- Version bumped to 5.1.4
+- AAB built and ready: `lexybooster-v5.1.4.aab`
 - Updated shortcuts (Review → Statistics)
 
 ## 📊 Database State
@@ -121,21 +146,23 @@ node update-today-goals.js
 - `server-postgresql.js` - Daily goals, review stats API, cache busting
 
 ### Frontend
-- `public/index.html` - Review section, cache busting
-- `public/app.js` - Review stats, review badges, auto-play
-- `public/service-worker.js` - Version update
-- `public/style.css` - Dark theme fixes, review grid
+- `public/index.html` - Review section, cache busting, theme toggle in nav
+- `public/app.js` - Review stats, review badges, auto-play, unified voice selection
+- `public/service-worker.js` - Version update (v5.1.4)
+- `public/style.css` - Dark theme fixes, review grid, mobile optimizations
+- `public/theme.js` - Dual-button theme toggle support
 - `public/gamification.css` - Light theme fixes
 - `public/achievements-ui.css` - Light theme fixes
 - `public/translations/source-texts.json` - New keys
 
 ### Build
-- `package.json` - v5.1.3
+- `package.json` - v5.1.4
 - `twa-manifest.json` - Android app config
 
 ### Documentation
 - `CACHE_BUSTING_SOLUTION.md`
 - `DEPLOYMENT_SUMMARY_v5.1.3.md` (this file)
+- `RAILWAY_DEPLOYMENT_GUIDE.md` - Updated for v5.1.4
 - `RELEASE_NOTES_5.1.3.md`
 - `PLAY_STORE_RELEASE_NOTES_5.1.3.txt`
 
@@ -165,6 +192,10 @@ node update-today-goals.js
 - [ ] Verify review section shows all 7 stages with counts
 - [ ] Verify review badges appear on word cards
 - [ ] Test auto-play audio feature
+- [ ] Test mobile navigation (bottom bar with 5 buttons)
+- [ ] Test mobile quiz layout (no clipping, no empty space)
+- [ ] Test voice quality on mobile (should match web)
+- [ ] Test theme toggle (single icon display)
 - [ ] Check mobile app cache updates
 - [ ] Upload AAB to Google Play Store
 
@@ -202,6 +233,18 @@ curl "https://your-app.railway.app/api/words/counts?userId=5&languagePairId=7"
 2. Clear app cache
 3. Reopen app (will fetch new Service Worker)
 
+### Issue: Mobile quiz buttons still clipped
+**Solution:**
+1. Hard refresh browser (Ctrl+F5)
+2. Clear Service Worker cache
+3. Verify all CSS loads with ?v=5.1.4
+
+### Issue: Voice quality still bad on mobile
+**Solution:**
+1. Verify app.js loads with ?v=5.1.4
+2. Check Service Worker version (should be v5.1.4)
+3. Hard refresh to clear cache
+
 ## 📈 Expected Results
 
 After successful deployment:
@@ -225,9 +268,16 @@ After successful deployment:
    - Shows current SRS stage
    - Visual progression indicators
 
-4. **Cache:**
-   - Service Worker v5.1.3 active
-   - All files load with ?v=5.1.3
+4. **Mobile Experience:**
+   - Bottom navigation bar with 5 buttons
+   - Quiz layout stable (no jumping or clipping)
+   - Voice quality matches web version
+   - Theme toggle shows single icon (🌙 or ☀️)
+   - Feedback text wraps properly
+
+5. **Cache:**
+   - Service Worker v5.1.4 active
+   - All files load with ?v=5.1.4
    - No stale cache issues
 
 ## 🎉 Success Criteria
@@ -236,16 +286,21 @@ Deployment is successful when:
 - ✅ Daily goals show 20 (not 5)
 - ✅ Review section shows correct counts (not all 0)
 - ✅ Review badges appear on word cards
+- ✅ Mobile navigation at bottom with 5 buttons
+- ✅ Mobile quiz layout stable (no clipping, no jumping, no empty space)
+- ✅ Voice quality identical on mobile and web
+- ✅ Theme toggle shows single icon
 - ✅ No console errors
 - ✅ Mobile users can update within 24h
-- ✅ New features work as expected
+- ✅ All new features work as expected
 
 ---
 
-**Build Date:** November 30, 2025
-**Version:** 5.1.3
-**Commits:** 11
-**Files Changed:** 20+
+**Build Date:** December 4, 2025
+**Version:** 5.1.4
+**Commits:** 17+
+**Files Changed:** 25+
 **Migration Scripts:** 4
+**Major Focus:** Mobile optimization and voice quality unification
 
 Ready to deploy! 🚀
