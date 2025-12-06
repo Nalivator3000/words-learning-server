@@ -412,7 +412,12 @@
 
             <!-- Word Lists Section -->
             <section id="wordListsSection" class="section">
-                <h2>📚 <span data-i18n="word_lists">Word Lists</span></h2>
+                <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 1rem;">
+                    <h2 style="margin: 0;">📚 <span data-i18n="word_lists">Word Lists</span></h2>
+                    <button id="addWordBtn" class="btn-success" style="font-size: 0.9rem; padding: 0.5rem 1rem;">
+                        ➕ <span data-i18n="add_word">Добавить слово</span>
+                    </button>
+                </div>
                 <p class="section-description" data-i18n="word_lists_description">
                     Browse and import curated word collections by topic, level, and language
                 </p>
@@ -1157,7 +1162,7 @@
 
         <!-- Version Info -->
 <!--         <footer style="position: fixed; bottom: 10px; right: 10px; background: rgba(0,0,0,0.7); color: white; padding: 5px 10px; border-radius: 5px; font-size: 12px; z-index: 10000;">
-            v5.1.3-UI-03f11df
+            v5.2.2-UPDATE-7cc4d95
         </footer> -->
 
         <!-- New Version Indicator -->
@@ -1197,6 +1202,7 @@
     <script src="audio-manager.js"></script>
     <script src="language-manager.js"></script>
     <script src="auth-validation.js"></script>
+    <script src="add-word-ui.js"></script>
     <script src="user-manager.js"></script>
     <script src="survival-mode.js"></script>
     <script src="gamification.js"></script>

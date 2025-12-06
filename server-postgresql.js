@@ -383,6 +383,58 @@ async function initDatabase() {
             END $$;
         `);
 
+        // Migration: Add is_custom column to track user-created words
+        await db.query(`
+            DO $$
+            BEGIN
+                IF NOT EXISTS (
+                    SELECT 1 FROM information_schema.columns
+                    WHERE table_name = 'words' AND column_name = 'is_custom'
+                ) THEN
+                    ALTER TABLE words ADD COLUMN is_custom BOOLEAN DEFAULT false;
+                END IF;
+            END $$;
+        `);
+
+        // Migration: Add source column to track word origin
+        await db.query(`
+            DO $$
+            BEGIN
+                IF NOT EXISTS (
+                    SELECT 1 FROM information_schema.columns
+                    WHERE table_name = 'words' AND column_name = 'source'
+                ) THEN
+                    ALTER TABLE words ADD COLUMN source VARCHAR(50) DEFAULT 'default';
+                END IF;
+            END $$;
+        `);
+
+        // Migration: Add notes column for user annotations
+        await db.query(`
+            DO $$
+            BEGIN
+                IF NOT EXISTS (
+                    SELECT 1 FROM information_schema.columns
+                    WHERE table_name = 'words' AND column_name = 'notes'
+                ) THEN
+                    ALTER TABLE words ADD COLUMN notes TEXT;
+                END IF;
+            END $$;
+        `);
+
+        // Migration: Add category/tags column for word organization
+        await db.query(`
+            DO $$
+            BEGIN
+                IF NOT EXISTS (
+                    SELECT 1 FROM information_schema.columns
+                    WHERE table_name = 'words' AND column_name = 'tags'
+                ) THEN
+                    ALTER TABLE words ADD COLUMN tags TEXT[];
+                END IF;
+            END $$;
+        `);
+
         // Gamification: User stats table for XP and levels
         await db.query(`
             CREATE TABLE IF NOT EXISTS user_stats (
@@ -11089,10 +11141,49 @@ app.get('/api/words/random/:status/:count', async (req, res) => {
     }
 });
 
+// Get translation suggestions for a word
+app.post('/api/words/translate', async (req, res) => {
+    try {
+        const { word, sourceLang, targetLang } = req.body;
+
+        if (!word || !sourceLang || !targetLang) {
+            return res.status(400).json({ error: 'Word and language codes are required' });
+        }
+
+        // For now, return a simple response indicating that external API integration is needed
+        // In production, this would call LibreTranslate, Google Translate API, or DeepL API
+        const suggestions = [
+            {
+                translation: `${word} (translation)`,
+                context: 'Auto-generated suggestion',
+                commonality: 'common',
+                examples: [
+                    {
+                        source: `Example sentence with ${word}`,
+                        target: `Пример предложения с ${word}`
+                    }
+                ]
+            }
+        ];
+
+        // Simulated response structure for future API integration
+        res.json({
+            word,
+            sourceLang,
+            targetLang,
+            suggestions,
+            note: 'Translation suggestions require external API configuration (LibreTranslate/DeepL/Google Translate)'
+        });
+    } catch (err) {
+        logger.error('Translation error:', err);
+        res.status(500).json({ error: err.message });
+    }
+});
+
 // Add new word
 app.post('/api/words', async (req, res) => {
     try {
-        const { word, translation, example, exampleTranslation, userId, languagePairId } = req.body;
+        const { word, translation, example, exampleTranslation, userId, languagePairId, isCustom, source, notes, tags } = req.body;
 
         if (!word || !translation) {
             res.status(400).json({ error: 'Word and translation are required' });
@@ -11104,10 +11195,32 @@ app.post('/api/words', async (req, res) => {
             return;
         }
 
-        const query = `INSERT INTO words (word, translation, example, exampleTranslation, user_id, language_pair_id)
-                       VALUES ($1, $2, $3, $4, $5, $6) RETURNING id`;
+        // Check if word already exists for this user and language pair
+        const existingWord = await db.query(
+            'SELECT id FROM words WHERE LOWER(word) = LOWER($1) AND user_id = $2 AND language_pair_id = $3',
+            [word, userId, languagePairId]
+        );
 
-        const result = await db.query(query, [word, translation, example || '', exampleTranslation || '', userId, languagePairId]);
+        if (existingWord.rows.length > 0) {
+            return res.status(400).json({ error: 'Это слово уже есть в вашем списке' });
+        }
+
+        const query = `INSERT INTO words (word, translation, example, exampleTranslation, user_id, language_pair_id, is_custom, source, notes, tags)
+                       VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9, $10) RETURNING id`;
+
+        const result = await db.query(query, [
+            word,
+            translation,
+            example || '',
+            exampleTranslation || '',
+            userId,
+            languagePairId,
+            isCustom || false,
+            source || 'user_added',
+            notes || null,
+            tags || null
+        ]);
+
         res.json({ id: result.rows[0].id, message: 'Word added successfully' });
     } catch (err) {
         res.status(500).json({ error: err.message });

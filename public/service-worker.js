@@ -1,7 +1,7 @@
 // Service Worker for Words Learning App
-// Version 5.2.1 - Registration UX Enhancements
+// Version 5.2.2 - Manual Word Addition
 
-const CACHE_VERSION = 'v5.2.1';
+const CACHE_VERSION = 'v5.2.2';
 const CACHE_NAME = `words-learning-${CACHE_VERSION}`;
 
 // Files to cache for offline use
@@ -13,6 +13,7 @@ const STATIC_ASSETS = [
     '/i18n.js',
     '/audio-manager.js',
     '/auth-validation.js',
+    '/add-word-ui.js',
     '/app.js',
     '/api-database.js',
     '/quiz.js',
