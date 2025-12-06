@@ -351,7 +351,31 @@
   - [ ] Turkish TTS voices
   - [ ] Word database import (5000+ common words)
 
-### 3.4 Import & Management Tools
+### 3.4 Manual Word Addition (Priority: HIGH)
+- [ ] **Smart word input system**
+  - [ ] User enters word in target language
+  - [ ] Auto-fetch translation suggestions from translation API
+  - [ ] Display multiple translation options with context
+  - [ ] Allow user to select one or multiple translations
+  - [ ] Allow user to enter custom translation manually
+  - [ ] Save word to user's personal word list
+
+- [ ] **Translation suggestions features**
+  - [ ] Integration with translation API (Google Translate/DeepL)
+  - [ ] Show word frequency/commonality indicator
+  - [ ] Display usage examples for each translation option
+  - [ ] Show word gender (for gendered languages)
+  - [ ] Display plural forms when relevant
+  - [ ] Detect and handle phrases (multi-word expressions)
+
+- [ ] **Word validation & enhancement**
+  - [ ] Check if word already exists in user's list
+  - [ ] Suggest CEFR level automatically
+  - [ ] Allow user to assign word to custom categories/tags
+  - [ ] Optional: Add personal notes/mnemonics
+  - [ ] Optional: Add custom pronunciation hints
+
+### 3.5 Import & Management Tools
 - [ ] **Word set import tools**
   - [ ] CSV/Excel import for word sets
   - [ ] Validation & deduplication
@@ -364,6 +388,8 @@
   - [ ] Filter by language pair
   - [ ] Add/remove word sets from study plan
   - [ ] Track progress per word set
+  - [ ] Manage personal word list (manually added words)
+  - [ ] Export personal word list to CSV
 
 ---
 
