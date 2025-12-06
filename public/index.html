@@ -237,8 +237,22 @@
             
             <div id="registerForm" class="auth-form">
                 <input type="text" id="registerName" data-i18n="name" placeholder="Иmя" required>
-                <input type="email" id="registerEmail" data-i18n="email" placeholder="Email" required>
-                <input type="password" id="registerPassword" data-i18n="password" placeholder="Пароль" required>
+
+                <div class="input-wrapper">
+                    <input type="email" id="registerEmail" data-i18n="email" placeholder="Email" required>
+                    <div id="emailValidation" class="validation-message"></div>
+                </div>
+
+                <div class="input-wrapper">
+                    <input type="password" id="registerPassword" data-i18n="password" placeholder="Пароль (минимум 6 символов)" required minlength="6">
+                    <div id="passwordStrength" class="password-strength">
+                        <div class="strength-bar">
+                            <div id="strengthBar" class="strength-fill"></div>
+                        </div>
+                        <div id="strengthText" class="strength-text"></div>
+                    </div>
+                </div>
+
                 <input type="password" id="registerPasswordConfirm" data-i18n="confirmPassword" placeholder="Подтвердите пароль" required>
 
                 <div class="language-selection">
@@ -275,9 +289,16 @@
                     </select>
                 </div>
 
+                <div class="terms-checkbox">
+                    <label>
+                        <input type="checkbox" id="acceptTerms" required>
+                        <span>Я принимаю <a href="#" id="termsLink">Условия использования</a> и <a href="#" id="privacyLink">Политику конфиденциальности</a></span>
+                    </label>
+                </div>
+
                 <button id="registerBtn" class="auth-btn" data-i18n="register">Регистрация</button>
             </div>
-            
+
             <div id="authError" class="auth-error"></div>
         </div>
     </div>
@@ -1175,6 +1196,7 @@
     <script src="i18n.js"></script>
     <script src="audio-manager.js"></script>
     <script src="language-manager.js"></script>
+    <script src="auth-validation.js"></script>
     <script src="user-manager.js"></script>
     <script src="survival-mode.js"></script>
     <script src="gamification.js"></script>
