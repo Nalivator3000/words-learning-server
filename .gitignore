@@ -22,3 +22,5 @@ app-release*.apk
 app-release*.aab
 android/
 .bubblewrap/
+test-results/
+playwright-report/

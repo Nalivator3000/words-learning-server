@@ -51,9 +51,14 @@ class WordListsUI {
             let url = '/api/word-lists';
             const params = new URLSearchParams();
 
-            // Always filter by the user's selected language pair
-            if (this.languagePair && this.languagePair.from_lang) {
-                params.append('language', this.languagePair.from_lang);
+            // Always filter by the user's selected language pair (both from_lang and to_lang)
+            if (this.languagePair) {
+                if (this.languagePair.from_lang) {
+                    params.append('from_lang', this.languagePair.from_lang);
+                }
+                if (this.languagePair.to_lang) {
+                    params.append('to_lang', this.languagePair.to_lang);
+                }
             }
 
             if (this.currentFilter.category) params.append('category', this.currentFilter.category);

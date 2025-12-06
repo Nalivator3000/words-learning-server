@@ -677,20 +677,24 @@ class LanguageManager {
 
         let audioCode;
 
-        if (isStudyingLang && !isNativeLang) {
+        if (isNativeLang && !isStudyingLang) {
+            // Text is clearly in native language - PRIORITY CHECK
+            audioCode = this.getAudioCode(nativeLang);
+            console.log(`   ✅ Detected NATIVE language → ${audioCode}`);
+        } else if (isStudyingLang && !isNativeLang) {
             // Text is clearly in studying language
             audioCode = this.getAudioCode(studyingLang);
             console.log(`   ✅ Detected STUDYING language → ${audioCode}`);
-        } else if (isNativeLang && !isStudyingLang) {
-            // Text is clearly in native language
-            audioCode = this.getAudioCode(nativeLang);
-            console.log(`   ✅ Detected NATIVE language → ${audioCode}`);
         } else if (studyingLang === nativeLang) {
             // Same language pair (e.g., Spanish → Spanish)
             audioCode = this.getAudioCode(studyingLang);
             console.log(`   ✅ Same language pair → ${audioCode}`);
+        } else if (isNativeLang) {
+            // Both detected or ambiguous - prefer native language if detected
+            audioCode = this.getAudioCode(nativeLang);
+            console.log(`   ⚠️ Ambiguous, but native language detected → ${audioCode}`);
         } else {
-            // Ambiguous - default to studying language for words being learned
+            // Fallback to studying language
             audioCode = this.getAudioCode(studyingLang);
             console.log(`   ⚠️ Ambiguous, defaulting to STUDYING language → ${audioCode}`);
         }

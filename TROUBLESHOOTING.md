@@ -23,6 +23,7 @@ Changes made:
 - Added `'unsafe-eval'` to `scriptSrc` directive (allows extension scripts to execute)
 - Added `http://localhost:*` to CSP `connectSrc` directive (allows localhost connections)
 - Added `ws://localhost:*` and `wss://localhost:*` to `connectSrc` (allows WebSocket connections)
+- Added `chrome-extension:` and `moz-extension:` to `connectSrc` (allows browser extension connections)
 - Changed `scriptSrcAttr` from `"'none'"` to `"'unsafe-inline'"` (allows inline event handlers)
 - Set `useDefaults: false` to prevent helmet from adding default CSP directives
 - Explicitly removed `upgradeInsecureRequests` from CSP
