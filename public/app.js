@@ -444,6 +444,8 @@ class LanguageLearningApp {
 
         // User menu - direct to settings
         document.getElementById('userMenuBtn').addEventListener('click', () => this.showSection('settings'));
+        document.getElementById('settingsNavBtn').addEventListener('click', () => this.showSection('settings'));
+
 
         // Leaderboard tabs
         document.getElementById('globalLeaderboardTab').addEventListener('click', () => this.loadLeaderboard('global'));
@@ -536,6 +538,11 @@ class LanguageLearningApp {
         });
         document.getElementById('registerPasswordConfirm').addEventListener('keypress', (e) => {
             if (e.key === 'Enter') this.handleRegister();
+        
+        // Menu toggle button for quiz on mobile
+        document.getElementById('menuToggleBtn').addEventListener('click', () => {
+            document.body.classList.toggle('menu-visible');
+        });
         });
     }
 
@@ -1181,11 +1188,19 @@ schreiben,Sie schreibt einen Brief.,Писать,Она пишет письmо.`
     showQuizInterface() {
         document.getElementById('studyModeSelect').style.display = 'none';
         document.getElementById('quizArea').classList.remove('hidden');
+        // Add quiz-active class for mobile header hiding
+        if (window.innerWidth <= 768) {
+            document.body.classList.add('quiz-active');
+        }
     }
 
     showReviewInterface() {
         document.getElementById('reviewModeSelect').style.display = 'none';
         document.getElementById('reviewQuizArea').classList.remove('hidden');
+        // Add quiz-active class for mobile header hiding
+        if (window.innerWidth <= 768) {
+            document.body.classList.add('quiz-active');
+        }
     }
 
     renderQuestion(quizData) {
@@ -1797,11 +1812,15 @@ schreiben,Sie schreibt einen Brief.,Писать,Она пишет письmо.`
         document.getElementById('studyModeSelect').style.display = 'block';
         document.getElementById('quizArea').classList.add('hidden');
         document.getElementById('survivalArea').classList.add('hidden');
+        // Remove quiz-active class
+        document.body.classList.remove('quiz-active', 'menu-visible');
     }
 
     resetReviewInterface() {
         document.getElementById('reviewModeSelect').style.display = 'block';
         document.getElementById('reviewQuizArea').classList.add('hidden');
+        // Remove quiz-active class
+        document.body.classList.remove('quiz-active', 'menu-visible');
     }
 
     async deleteWord(wordId) {

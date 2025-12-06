@@ -3058,11 +3058,17 @@ input:focus, textarea:focus, select:focus {
     #studyBtn,
     #leaderboardBtn,
     #statsBtn,
+    #settingsNavBtn,
     #themeToggleNav {
         display: flex !important;
     }
 
-    /* Hide old theme toggle on mobile, show only nav one */
+    /* Hide header-right (old theme toggle and settings) on mobile */
+    .header-right {
+        display: none !important;
+    }
+
+    /* Hide theme toggle on mobile, show only nav one */
     .theme-toggle {
         display: none !important;
     }
@@ -3605,6 +3611,64 @@ input:focus, textarea:focus, select:focus {
     .quick-actions .action-btn {
         font-size: var(--text-lg);
         min-height: 70px;
+    }
+
+    /* Hide header during quiz on mobile for maximum space */
+    body.quiz-active .app-header {
+        transform: translateY(-100%);
+        transition: transform 0.3s ease;
+    }
+
+    /* Show header when toggled */
+    body.quiz-active.menu-visible .app-header {
+        transform: translateY(0);
+    }
+
+    /* Floating menu toggle button */
+    .menu-toggle-btn {
+        position: fixed;
+        top: 8px;
+        right: 8px;
+        width: 40px;
+        height: 40px;
+        background: linear-gradient(135deg, var(--primary-500), var(--primary-600));
+        color: white;
+        border: none;
+        border-radius: 50%;
+        font-size: 20px;
+        display: none;
+        align-items: center;
+        justify-content: center;
+        z-index: 1001;
+        box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
+        cursor: pointer;
+        transition: all 0.3s ease;
+    }
+
+    .menu-toggle-btn:hover {
+        transform: scale(1.1);
+        box-shadow: 0 6px 16px rgba(0, 0, 0, 0.3);
+    }
+
+    .menu-toggle-btn:active {
+        transform: scale(0.95);
+    }
+
+    /* Show toggle button during quiz */
+    body.quiz-active .menu-toggle-btn {
+        display: flex;
+    }
+
+    /* Adjust quiz-area height when header is hidden */
+    body.quiz-active .quiz-area {
+        /* Account for: bottom nav (~60px) + minimal padding = ~70px */
+        max-height: calc(100dvh - 70px);
+    }
+
+    /* When menu is visible during quiz */
+    body.quiz-active.menu-visible .quiz-area {
+        /* Back to normal calculation with header */
+        max-height: calc(100dvh - 140px);
     }
 }
 
