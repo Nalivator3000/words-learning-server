@@ -3444,6 +3444,21 @@ input:focus, textarea:focus, select:focus {
         min-width: 32px;
         min-height: 32px;
     }
+
+    /* Remove box shadows from all buttons on mobile */
+    .btn, .action-btn {
+        box-shadow: none !important;
+    }
+
+    .btn:hover, .action-btn:hover {
+        box-shadow: none !important;
+        transform: none !important;
+    }
+
+    .btn::after, .action-btn::after {
+        display: none !important;
+    }
+
     .word-display {
         min-height: 40px;
         font-size: var(--text-lg);
