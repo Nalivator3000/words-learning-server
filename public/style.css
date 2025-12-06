@@ -3126,6 +3126,7 @@ input:focus, textarea:focus, select:focus {
     #reviewBtn::before { content: '🔄'; }
     #leaderboardBtn::before { content: '🏆'; }
     #statsBtn::before { content: '📊'; }
+    #settingsNavBtn::before { content: '⚙️'; }
 
     /* Theme toggle in nav - special handling */
     #themeToggleNav {
