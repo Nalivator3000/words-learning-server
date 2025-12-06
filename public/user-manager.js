@@ -168,29 +168,10 @@ class UserManager {
 
     async loginWithGoogle() {
         try {
-            // Check if Google API is loaded
-            if (typeof google === 'undefined' || !google.accounts) {
-                // Fallback to demo version if Google API not available
-                return this.loginWithGoogleDemo();
-            }
-
-            // Real Google OAuth implementation (TODO: implement server-side)
-            return this.loginWithGoogleDemo();
-
+            // Redirect to Google OAuth endpoint
+            window.location.href = '/auth/google';
         } catch (error) {
             console.error('Google login error:', error);
-            // Fallback to demo
-            return this.loginWithGoogleDemo();
-        }
-    }
-
-    async loginWithGoogleDemo() {
-        try {
-            // Demo version for local testing
-            alert(i18n.t('google_login_not_implemented'));
-            return false;
-        } catch (error) {
-            console.error('Google login demo error:', error);
             throw error;
         }
     }

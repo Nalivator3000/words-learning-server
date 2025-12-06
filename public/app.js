@@ -3174,8 +3174,46 @@ class SwipeHandler {
 }
 
 // Initialize app when DOM is loaded
-document.addEventListener('DOMContentLoaded', () => {
+document.addEventListener('DOMContentLoaded', async () => {
     window.app = new LanguageLearningApp();
     window.swipeHandler = new SwipeHandler();
     console.log('👆 Swipe gestures enabled! Swipe right to go to next question.');
+
+    // Handle OAuth callback
+    const urlParams = new URLSearchParams(window.location.search);
+    if (urlParams.get('login') === 'success') {
+        // Fetch user data from session
+        try {
+            const response = await fetch('/api/auth/user');
+            if (response.ok) {
+                const data = await response.json();
+                userManager.currentUser = data.user;
+                localStorage.setItem('currentUser', JSON.stringify(data.user));
+
+                // Load language pairs
+                await userManager.loadUserLanguagePairs();
+
+                // Close auth modal
+                document.getElementById('authModal').style.display = 'none';
+
+                // Navigate to home
+                window.app.showSection('home');
+                await window.app.updateStats();
+                await window.app.loadGamificationHeader();
+
+                // Show success message
+                const provider = urlParams.get('provider') || 'Google';
+                console.log(`✅ Logged in successfully with ${provider}`);
+            }
+        } catch (error) {
+            console.error('Error fetching user after OAuth:', error);
+        }
+
+        // Clean up URL
+        window.history.replaceState({}, document.title, '/');
+    } else if (urlParams.get('error')) {
+        console.error('OAuth error:', urlParams.get('error'));
+        alert('Authentication failed. Please try again.');
+        window.history.replaceState({}, document.title, '/');
+    }
 });

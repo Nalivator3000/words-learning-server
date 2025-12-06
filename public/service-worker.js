@@ -1,7 +1,7 @@
 // Service Worker for Words Learning App
-// Version 5.1.5
+// Version 5.2.0 - Google OAuth Support
 
-const CACHE_VERSION = 'v5.1.5';
+const CACHE_VERSION = 'v5.2.0';
 const CACHE_NAME = `words-learning-${CACHE_VERSION}`;
 
 // Files to cache for offline use

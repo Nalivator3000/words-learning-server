@@ -9,6 +9,9 @@ const multer = require('multer');
 const csv = require('csv-parser');
 const fs = require('fs');
 const crypto = require('crypto');
+const session = require('express-session');
+const passport = require('passport');
+const GoogleStrategy = require('passport-google-oauth20').Strategy;
 require('dotenv').config();
 
 const app = express();
@@ -125,6 +128,85 @@ app.use(helmet({
 app.use(cors());
 app.use(express.json());
 
+// Session configuration (required for Passport)
+app.use(session({
+    secret: process.env.SESSION_SECRET || crypto.randomBytes(32).toString('hex'),
+    resave: false,
+    saveUninitialized: false,
+    cookie: {
+        secure: process.env.NODE_ENV === 'production', // HTTPS only in production
+        httpOnly: true,
+        maxAge: 24 * 60 * 60 * 1000 // 24 hours
+    }
+}));
+
+// Initialize Passport
+app.use(passport.initialize());
+app.use(passport.session());
+
+// Passport serialization
+passport.serializeUser((user, done) => {
+    done(null, user.id);
+});
+
+passport.deserializeUser(async (id, done) => {
+    try {
+        const result = await db.query('SELECT * FROM users WHERE id = $1', [id]);
+        done(null, result.rows[0]);
+    } catch (error) {
+        done(error, null);
+    }
+});
+
+// Google OAuth Strategy
+if (process.env.GOOGLE_CLIENT_ID && process.env.GOOGLE_CLIENT_SECRET) {
+    passport.use(new GoogleStrategy({
+        clientID: process.env.GOOGLE_CLIENT_ID,
+        clientSecret: process.env.GOOGLE_CLIENT_SECRET,
+        callbackURL: process.env.GOOGLE_CALLBACK_URL || '/auth/google/callback'
+    },
+    async (accessToken, refreshToken, profile, done) => {
+        try {
+            // Check if user exists
+            let user = await db.query('SELECT * FROM users WHERE google_id = $1', [profile.id]);
+
+            if (user.rows.length > 0) {
+                // User exists, return user
+                return done(null, user.rows[0]);
+            }
+
+            // Check if email already exists (user registered with password)
+            const emailCheck = await db.query('SELECT * FROM users WHERE email = $1', [profile.emails[0].value]);
+
+            if (emailCheck.rows.length > 0) {
+                // Link Google account to existing user
+                await db.query(
+                    'UPDATE users SET google_id = $1 WHERE email = $2',
+                    [profile.id, profile.emails[0].value]
+                );
+                return done(null, emailCheck.rows[0]);
+            }
+
+            // Create new user
+            const newUser = await db.query(
+                `INSERT INTO users (name, email, google_id, password, registered_at)
+                 VALUES ($1, $2, $3, $4, NOW())
+                 RETURNING *`,
+                [
+                    profile.displayName || profile.emails[0].value.split('@')[0],
+                    profile.emails[0].value,
+                    profile.id,
+                    null // No password for OAuth users
+                ]
+            );
+
+            return done(null, newUser.rows[0]);
+        } catch (error) {
+            return done(error, null);
+        }
+    }));
+}
+
 // Cache busting middleware - Add version query parameter and set cache headers
 const APP_VERSION = require('./package.json').version;
 
@@ -193,12 +275,50 @@ async function initDatabase() {
                 id SERIAL PRIMARY KEY,
                 name VARCHAR(255) NOT NULL,
                 email VARCHAR(255) UNIQUE NOT NULL,
-                password VARCHAR(255) NOT NULL,
+                password VARCHAR(255),
                 provider VARCHAR(50) DEFAULT 'local',
                 picture TEXT,
+                google_id VARCHAR(255) UNIQUE,
+                apple_id VARCHAR(255) UNIQUE,
                 createdAt TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
                 updatedAt TIMESTAMP DEFAULT CURRENT_TIMESTAMP
             )
+        `);
+
+        // Add google_id column if it doesn't exist (migration)
+        await db.query(`
+            DO $$
+            BEGIN
+                IF NOT EXISTS (
+                    SELECT 1 FROM information_schema.columns
+                    WHERE table_name='users' AND column_name='google_id'
+                ) THEN
+                    ALTER TABLE users ADD COLUMN google_id VARCHAR(255) UNIQUE;
+                END IF;
+            END $$;
+        `);
+
+        // Add apple_id column if it doesn't exist (migration)
+        await db.query(`
+            DO $$
+            BEGIN
+                IF NOT EXISTS (
+                    SELECT 1 FROM information_schema.columns
+                    WHERE table_name='users' AND column_name='apple_id'
+                ) THEN
+                    ALTER TABLE users ADD COLUMN apple_id VARCHAR(255) UNIQUE;
+                END IF;
+            END $$;
+        `);
+
+        // Make password nullable for OAuth users (migration)
+        await db.query(`
+            DO $$
+            BEGIN
+                ALTER TABLE users ALTER COLUMN password DROP NOT NULL;
+            EXCEPTION
+                WHEN OTHERS THEN NULL;
+            END $$;
         `);
 
         // Create language_pairs table
@@ -2305,6 +2425,68 @@ app.post('/api/auth/login', authLimiter, async (req, res) => {
         logger.error('Login error:', err);
         res.status(500).json({ error: err.message });
     }
+});
+
+// Google OAuth routes
+app.get('/auth/google',
+    passport.authenticate('google', { scope: ['profile', 'email'] })
+);
+
+app.get('/auth/google/callback',
+    passport.authenticate('google', { failureRedirect: '/?error=google_auth_failed' }),
+    async (req, res) => {
+        try {
+            // User is authenticated, create language pair if new user
+            const user = req.user;
+
+            // Check if user has language pairs
+            const langPairsResult = await db.query(
+                'SELECT * FROM language_pairs WHERE user_id = $1',
+                [user.id]
+            );
+
+            // If no language pairs, create default one
+            if (langPairsResult.rows.length === 0) {
+                await db.query(
+                    'INSERT INTO language_pairs (user_id, name, from_lang, to_lang, is_active) VALUES ($1, $2, $3, $4, $5)',
+                    [user.id, 'German → English', 'de', 'en', true]
+                );
+            }
+
+            // Redirect to home with success
+            res.redirect('/?login=success&provider=google');
+        } catch (error) {
+            logger.error('Google callback error:', error);
+            res.redirect('/?error=google_auth_error');
+        }
+    }
+);
+
+// Get current user (for checking session)
+app.get('/api/auth/user', (req, res) => {
+    if (req.isAuthenticated()) {
+        res.json({
+            user: {
+                id: req.user.id,
+                name: req.user.name,
+                email: req.user.email,
+                provider: req.user.google_id ? 'google' : 'local',
+                picture: req.user.picture
+            }
+        });
+    } else {
+        res.status(401).json({ error: 'Not authenticated' });
+    }
+});
+
+// Logout
+app.post('/api/auth/logout', (req, res) => {
+    req.logout((err) => {
+        if (err) {
+            return res.status(500).json({ error: 'Logout failed' });
+        }
+        res.json({ success: true });
+    });
 });
 
 // Language pairs endpoints
