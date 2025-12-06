@@ -25,7 +25,11 @@
     "generate:store-assets": "npm run generate:icons && npm run generate:feature-graphic",
     "test": "node test-production.js",
     "test:api": "node test-api-endpoints.js",
-    "test:validate": "node test-validation.js"
+    "test:validate": "node test-validation.js",
+    "test:e2e": "playwright test",
+    "test:e2e:ui": "playwright test --ui",
+    "test:e2e:mobile": "playwright test --project='iPhone SE' --project='iPhone 12 Pro' --project='Galaxy S21'",
+    "test:e2e:report": "playwright show-report"
   },
   "dependencies": {
     "compression": "^1.8.1",
@@ -46,6 +50,7 @@
     "terser": "^5.44.0"
   },
   "devDependencies": {
+    "@playwright/test": "^1.57.0",
     "autoprefixer": "^10.4.21",
     "nodemon": "^3.0.1",
     "postcss": "^8.5.6",
