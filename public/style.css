@@ -674,12 +674,12 @@ body {
     background: var(--gradient-rainbow);
     background-attachment: fixed;
     min-height: 100vh;
+    overflow-x: hidden; /* Prevent horizontal scroll */
     -webkit-font-smoothing: antialiased;
     -moz-osx-font-smoothing: grayscale;
     /* Prevent double-tap zoom on mobile */
     touch-action: manipulation;
     -ms-touch-action: manipulation;
-    overflow-x: hidden;
 }
 
 /* Prevent zoom on all interactive elements */

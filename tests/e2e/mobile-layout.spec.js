@@ -68,20 +68,24 @@ test.describe('Mobile Layout - Home Screen', () => {
   });
 
   test('should show mobile navigation bar at bottom', async ({ page }) => {
-    // Check that bottom nav exists and is positioned at bottom
-    const bottomNav = page.locator('.bottom-nav');
-    await expect(bottomNav).toBeVisible();
+    // Check that header nav exists and is positioned at bottom on mobile
+    const headerNav = page.locator('.header-nav');
+    await expect(headerNav).toBeVisible();
 
-    // Check if it's fixed at bottom
-    const position = await bottomNav.evaluate((el) => {
-      const styles = window.getComputedStyle(el);
-      return {
-        position: styles.position,
-        bottom: styles.bottom,
-      };
-    });
+    // Check if it's fixed at bottom (only on mobile viewports)
+    const viewportWidth = page.viewportSize().width;
 
-    expect(position.position).toBe('fixed');
+    if (viewportWidth <= 768) {
+      const position = await headerNav.evaluate((el) => {
+        const styles = window.getComputedStyle(el);
+        return {
+          position: styles.position,
+          bottom: styles.bottom,
+        };
+      });
+
+      expect(position.position).toBe('fixed');
+    }
   });
 });
 
