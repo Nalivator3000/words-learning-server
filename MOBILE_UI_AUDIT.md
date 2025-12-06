@@ -228,19 +228,76 @@ This audit covers all mobile screens and UI components to identify remaining lay
 4. ✅ Empty space below quiz buttons → Fixed (commit 6eae574)
 5. ✅ Service worker cache missing files → Fixed (commit 9fcce3a)
 
-### Remaining Issues ⚠️
-- TBD (will be identified during audit)
+### Critical Issues Found (Automated Tests) 🚨
+**Test Run Date**: 2025-12-06 | **Results**: 13 passed, 15 failed, 2 skipped
+
+#### 🔴 CRITICAL - Horizontal Scroll (3 devices affected)
+- **Devices**: iPhone 12 Pro, Galaxy S21
+- **Test**: `should not have horizontal scroll on iPhone SE`
+- **Issue**: `bodyWidth (507px) > viewportWidth (360-390px)`
+- **Impact**: Users can scroll horizontally, breaking layout
+- **Priority**: P0 - Must fix immediately
+- **Files to check**: `style.css`, all CSS affecting body/main container widths
+
+#### 🔴 CRITICAL - Bottom Navigation Missing (3 devices)
+- **Devices**: All (iPhone SE, iPhone 12 Pro, Galaxy S21)
+- **Test**: `should show mobile navigation bar at bottom`
+- **Issue**: `.bottom-nav` element not found or not visible
+- **Impact**: Users cannot navigate between sections on mobile
+- **Priority**: P0 - Must fix immediately
+- **Files to check**: `public/index.html`, `style.css` (bottom-nav styles)
+
+#### 🟠 HIGH - Quick Actions Require Auth (3 devices)
+- **Devices**: All (iPhone SE, iPhone 12 Pro, Galaxy S21)
+- **Test**: `should display quick action buttons with proper tap targets`
+- **Issue**: `.quick-actions` not visible without login
+- **Impact**: Unauthenticated users don't see quick actions
+- **Priority**: P1 - Design decision needed (show for unauth or keep as is)
+
+#### 🟠 HIGH - Study Button Not Found (3 devices)
+- **Devices**: All (iPhone SE, iPhone 12 Pro, Galaxy S21)
+- **Test**: `should hide header in quiz mode on mobile`
+- **Issue**: `#studyBtn` not found, test times out
+- **Impact**: Cannot test quiz mode header hiding behavior
+- **Priority**: P1 - Verify element ID or update test
+
+#### 🟡 MEDIUM - Script Tags Not Loading (3 devices)
+- **Devices**: All (iPhone SE, iPhone 12 Pro, Galaxy S21)
+- **Test**: `should have minimal bundle size`
+- **Issue**: `document.querySelectorAll('script[src]')` returns 0 scripts
+- **Impact**: Test cannot measure bundle size
+- **Priority**: P2 - Test issue, not app issue (scripts load via other means)
+
+#### 🟢 LOW - Stats Grid Column Issue (1 device)
+- **Device**: iPhone SE (375px width)
+- **Test**: `should display stats grid correctly on mobile`
+- **Issue**: Expected `gridTemplateColumns: "1fr"`, got `"none"`
+- **Impact**: Stats grid layout may not be optimal on narrow screens
+- **Priority**: P2 - Auth required, verify after login
+
+### Passing Tests ✅
+1. ✅ No horizontal scroll on iPhone SE (375px) - Galaxy S21 PASSED
+2. ✅ Readable font sizes (≥14px) - All devices PASSED
+3. ✅ Proper contrast ratios - All devices PASSED
+4. ✅ Page load time <5s - All devices PASSED
+5. ✅ No empty space below quiz buttons - All devices PASSED
 
 ---
 
 ## 7. Next Steps
 
 1. ✅ Create audit document (this file)
-2. [ ] **Manual testing**: Test each screen on real mobile device
-3. [ ] **Document issues**: Screenshot and describe each problem found
-4. [ ] **Prioritize fixes**: Critical → High → Medium → Low
-5. [ ] **Implement fixes**: Start with critical issues
-6. [ ] **Setup automated tests**: After manual fixes complete
+2. ✅ **Setup automated tests**: Playwright configured with 3 mobile devices
+3. ✅ **Run initial test suite**: Identified 15 failures, 13 passes
+4. [ ] **Fix P0 Critical Issues**:
+   - [ ] Fix horizontal scroll on iPhone 12 Pro & Galaxy S21
+   - [ ] Implement/fix `.bottom-nav` mobile navigation
+5. [ ] **Fix P1 High Priority Issues**:
+   - [ ] Verify `#studyBtn` element or update test
+   - [ ] Decide on `.quick-actions` visibility for unauth users
+6. [ ] **Rerun tests**: Verify fixes work across all devices
+7. [ ] **Manual testing**: Test on real mobile device after automated fixes
+8. [ ] **Performance optimization**: Load time, bundle size, lazy loading
 
 ---
 
