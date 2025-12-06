@@ -1215,6 +1215,14 @@ schreiben,Sie schreibt einen Brief.,Писать,Она пишет письmо.`
             const exampleAudioBtn = this.createAudioButton(question.example);
             questionTextEl.querySelectorAll('div')[1]?.appendChild(exampleAudioBtn);
         }
+        // Apply adaptive font sizing based on text length
+        const textLength = question.questionText.length + (question.example ? question.example.length : 0);
+        questionTextEl.classList.remove('text-long', 'text-extra-long');
+        if (textLength > 100) {
+            questionTextEl.classList.add('text-extra-long');
+        } else if (textLength > 50) {
+            questionTextEl.classList.add('text-long');
+        }
 
         const answerArea = document.getElementById('answerArea');
         answerArea.innerHTML = '';
@@ -1231,7 +1239,7 @@ schreiben,Sie schreibt einen Brief.,Писать,Она пишет письmо.`
 
             // Add skip button for multiple choice
             const skipBtnContainer = document.createElement('div');
-            skipBtnContainer.style.marginTop = '1rem';
+            skipBtnContainer.style.marginTop = '0.5rem';
             skipBtnContainer.style.textAlign = 'center';
 
             const skipBtn = document.createElement('button');
@@ -1339,7 +1347,7 @@ schreiben,Sie schreibt einen Brief.,Писать,Она пишет письmо.`
 
             // Add skip button for multiple choice in review mode
             const skipBtnContainer = document.createElement('div');
-            skipBtnContainer.style.marginTop = '1rem';
+            skipBtnContainer.style.marginTop = '0.5rem';
             skipBtnContainer.style.textAlign = 'center';
 
             const skipBtn = document.createElement('button');
