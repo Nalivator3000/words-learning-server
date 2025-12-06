@@ -7,10 +7,12 @@ class WordListsUI {
         this.languagePairId = null;
         this.languagePair = null;
         this.wordLists = [];
+        this.wordSets = [];  // CEFR word sets
         this.currentFilter = {
             category: '',
             difficulty: '',
-            topic: ''
+            topic: '',
+            level: ''  // For CEFR levels (A1, A2, B1, B2, C1, C2)
         };
         this.selectedList = null;
         this.initialized = false;
@@ -48,6 +50,19 @@ class WordListsUI {
 
     async loadWordLists() {
         try {
+            // Load both traditional word lists and CEFR word sets
+            await Promise.all([
+                this.loadTraditionalWordLists(),
+                this.loadWordSets()
+            ]);
+        } catch (error) {
+            console.error('Error loading word lists:', error);
+            throw error;
+        }
+    }
+
+    async loadTraditionalWordLists() {
+        try {
             let url = '/api/word-lists';
             const params = new URLSearchParams();
 
@@ -70,13 +85,56 @@ class WordListsUI {
             }
 
             const response = await fetch(url);
-            if (!response.ok) throw new Error('Failed to load word lists');
+            if (!response.ok) {
+                console.warn('Traditional word lists not available');
+                this.wordLists = [];
+                return;
+            }
 
             this.wordLists = await response.json();
-            console.log('Word lists loaded:', this.wordLists);
+            console.log('Traditional word lists loaded:', this.wordLists);
         } catch (error) {
-            console.error('Error loading word lists:', error);
-            throw error;
+            console.warn('Error loading traditional word lists:', error);
+            this.wordLists = [];
+        }
+    }
+
+    async loadWordSets() {
+        try {
+            // Build language pair code (e.g., "de-en")
+            const langPairCode = this.languagePair
+                ? `${this.languagePair.from_lang}-${this.languagePair.to_lang}`
+                : null;
+
+            if (!langPairCode) {
+                this.wordSets = [];
+                return;
+            }
+
+            let url = `/api/word-sets?languagePair=${langPairCode}`;
+
+            // Add CEFR level filter if set
+            if (this.currentFilter.level) {
+                url += `&level=${this.currentFilter.level}`;
+            }
+
+            // Add theme filter if set
+            if (this.currentFilter.theme) {
+                url += `&theme=${this.currentFilter.theme}`;
+            }
+
+            const response = await fetch(url);
+            if (!response.ok) {
+                console.warn('Word sets not available');
+                this.wordSets = [];
+                return;
+            }
+
+            this.wordSets = await response.json();
+            console.log('Word sets loaded:', this.wordSets);
+        } catch (error) {
+            console.warn('Error loading word sets:', error);
+            this.wordSets = [];
         }
     }
 
@@ -97,6 +155,19 @@ class WordListsUI {
 
                 <!-- Filters -->
                 <div class="word-lists-filters">
+                    <div class="filter-group">
+                        <label>CEFR Level</label>
+                        <select id="cefrLevelFilter" class="filter-select">
+                            <option value="">All Levels</option>
+                            <option value="A1" ${this.currentFilter.level === 'A1' ? 'selected' : ''}>A1 - Beginner</option>
+                            <option value="A2" ${this.currentFilter.level === 'A2' ? 'selected' : ''}>A2 - Elementary</option>
+                            <option value="B1" ${this.currentFilter.level === 'B1' ? 'selected' : ''}>B1 - Intermediate</option>
+                            <option value="B2" ${this.currentFilter.level === 'B2' ? 'selected' : ''}>B2 - Upper-Intermediate</option>
+                            <option value="C1" ${this.currentFilter.level === 'C1' ? 'selected' : ''}>C1 - Advanced</option>
+                            <option value="C2" ${this.currentFilter.level === 'C2' ? 'selected' : ''}>C2 - Proficient</option>
+                        </select>
+                    </div>
+
                     <div class="filter-group">
                         <label data-i18n="difficulty">Difficulty</label>
                         <select id="difficultyFilter" class="filter-select">
@@ -154,16 +225,97 @@ class WordListsUI {
     }
 
     renderWordLists() {
-        if (this.wordLists.length === 0) {
+        const hasWordSets = this.wordSets && this.wordSets.length > 0;
+        const hasWordLists = this.wordLists && this.wordLists.length > 0;
+
+        if (!hasWordSets && !hasWordLists) {
             return `
                 <div class="empty-state">
                     <div class="empty-icon">📚</div>
                     <p data-i18n="no_word_lists">No word lists found</p>
+                    <small style="color: rgba(255,255,255,0.6); margin-top: 8px; display: block;">
+                        Try running: node populate-cefr-word-sets.js
+                    </small>
                 </div>
             `;
         }
 
-        return this.wordLists.map(list => this.renderWordListCard(list)).join('');
+        let html = '';
+
+        // Render CEFR Word Sets first
+        if (hasWordSets) {
+            html += `
+                <div class="word-sets-section">
+                    <h3 style="margin: 1rem 0; color: rgba(255,255,255,0.9); font-size: 1.1rem;">
+                        📖 CEFR Word Sets
+                    </h3>
+                    <div class="word-sets-grid">
+                        ${this.wordSets.map(set => this.renderWordSetCard(set)).join('')}
+                    </div>
+                </div>
+            `;
+        }
+
+        // Render Traditional Word Lists
+        if (hasWordLists) {
+            html += `
+                <div class="traditional-lists-section" style="margin-top: 2rem;">
+                    <h3 style="margin: 1rem 0; color: rgba(255,255,255,0.9); font-size: 1.1rem;">
+                        📚 Traditional Word Lists
+                    </h3>
+                    <div class="traditional-lists-grid">
+                        ${this.wordLists.map(list => this.renderWordListCard(list)).join('')}
+                    </div>
+                </div>
+            `;
+        }
+
+        return html;
+    }
+
+    renderWordSetCard(set) {
+        const levelColors = {
+            'A1': '#22c55e',  // Green
+            'A2': '#84cc16',  // Lime
+            'B1': '#eab308',  // Yellow
+            'B2': '#f97316',  // Orange
+            'C1': '#ef4444',  // Red
+            'C2': '#a855f7'   // Purple
+        };
+
+        const levelColor = levelColors[set.level] || '#6366f1';
+
+        return `
+            <div class="word-set-card" data-set-id="${set.id}" style="cursor: pointer;">
+                <div class="list-card-header">
+                    <div class="list-title-row">
+                        <h4 class="list-title">${set.name}</h4>
+                        <span class="list-level-badge" style="background: ${levelColor};">
+                            ${set.level}
+                        </span>
+                    </div>
+                    <p class="list-description">${set.description || 'No description available'}</p>
+                </div>
+
+                <div class="list-card-stats">
+                    <div class="stat-item">
+                        <span class="stat-icon">📝</span>
+                        <span class="stat-value">${set.word_count || 0}</span>
+                        <span class="stat-label">words</span>
+                    </div>
+                    ${set.theme ? `
+                        <div class="stat-item">
+                            <span class="stat-icon">🏷️</span>
+                            <span class="stat-value">${set.theme}</span>
+                        </div>
+                    ` : ''}
+                </div>
+
+                <button class="import-btn" onclick="window.wordListsUI.importWordSet(${set.id}); event.stopPropagation();">
+                    ⬇️ Import
+                </button>
+            </div>
+        `;
     }
 
     renderWordListCard(list) {
@@ -223,9 +375,17 @@ class WordListsUI {
 
     attachEventListeners() {
         // Filter listeners
+        const cefrLevelFilter = document.getElementById('cefrLevelFilter');
         const difficultyFilter = document.getElementById('difficultyFilter');
         const topicFilter = document.getElementById('topicFilter');
         const resetBtn = document.getElementById('resetFiltersBtn');
+
+        if (cefrLevelFilter) {
+            cefrLevelFilter.addEventListener('change', (e) => {
+                this.currentFilter.level = e.target.value;
+                this.refresh();
+            });
+        }
 
         if (difficultyFilter) {
             difficultyFilter.addEventListener('change', (e) => {
@@ -246,7 +406,8 @@ class WordListsUI {
                 this.currentFilter = {
                     category: '',
                     difficulty: '',
-                    topic: ''
+                    topic: '',
+                    level: ''
                 };
                 this.refresh();
             });
@@ -398,6 +559,62 @@ class WordListsUI {
             console.error('Error importing word list:', error);
             if (window.showToast) {
                 showToast('Failed to import word list', 'error');
+            }
+        }
+    }
+
+    async importWordSet(setId) {
+        if (!this.userId || !this.languagePairId) {
+            if (window.showToast) {
+                showToast('Please select a language pair first', 'error');
+            }
+            return;
+        }
+
+        try {
+            if (window.showToast) {
+                showToast('Importing word set...', 'info');
+            }
+
+            const response = await fetch(`/api/word-sets/${setId}/import`, {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify({
+                    userId: this.userId,
+                    languagePairId: this.languagePairId
+                })
+            });
+
+            if (!response.ok) {
+                const error = await response.json();
+                throw new Error(error.error || 'Failed to import word set');
+            }
+
+            const result = await response.json();
+
+            const message = result.skipped > 0
+                ? `Imported ${result.imported} new words (${result.skipped} already in your collection)`
+                : `Successfully imported ${result.imported} words!`;
+
+            if (window.showToast) {
+                showToast(message, 'success');
+            }
+
+            // Refresh word manager and stats if available
+            if (window.wordManager) {
+                await window.wordManager.loadWords();
+                window.wordManager.renderWords();
+            }
+
+            if (window.app && window.app.updateStats) {
+                await window.app.updateStats();
+            }
+        } catch (error) {
+            console.error('Error importing word set:', error);
+            if (window.showToast) {
+                showToast(error.message || 'Failed to import word set', 'error');
             }
         }
     }

@@ -435,6 +435,55 @@ async function initDatabase() {
             END $$;
         `);
 
+        // Phase 3.1: Word Sets for CEFR levels and themes
+        await db.query(`
+            CREATE TABLE IF NOT EXISTS word_sets (
+                id SERIAL PRIMARY KEY,
+                name VARCHAR(255) NOT NULL,
+                description TEXT,
+                language_pair VARCHAR(10) NOT NULL,
+                level VARCHAR(5),
+                theme VARCHAR(100),
+                word_count INTEGER DEFAULT 0,
+                is_official BOOLEAN DEFAULT true,
+                created_by INTEGER REFERENCES users(id) ON DELETE SET NULL,
+                created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+                updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+            )
+        `);
+
+        await db.query(`
+            CREATE TABLE IF NOT EXISTS word_set_items (
+                id SERIAL PRIMARY KEY,
+                word_set_id INTEGER REFERENCES word_sets(id) ON DELETE CASCADE,
+                word_id INTEGER REFERENCES words(id) ON DELETE CASCADE,
+                order_index INTEGER DEFAULT 0,
+                added_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+                UNIQUE(word_set_id, word_id)
+            )
+        `);
+
+        // Create index for faster word set queries
+        await db.query(`
+            CREATE INDEX IF NOT EXISTS idx_word_sets_language_pair
+            ON word_sets(language_pair)
+        `);
+
+        await db.query(`
+            CREATE INDEX IF NOT EXISTS idx_word_sets_level
+            ON word_sets(level)
+        `);
+
+        await db.query(`
+            CREATE INDEX IF NOT EXISTS idx_word_sets_theme
+            ON word_sets(theme)
+        `);
+
+        await db.query(`
+            CREATE INDEX IF NOT EXISTS idx_word_set_items_word_set
+            ON word_set_items(word_set_id)
+        `);
+
         // Gamification: User stats table for XP and levels
         await db.query(`
             CREATE TABLE IF NOT EXISTS user_stats (
@@ -2631,9 +2680,245 @@ app.delete('/api/users/:userId/language-pairs/:pairId', async (req, res) => {
     }
 });
 
+// ============================================
+// WORD SETS API - Phase 3.1 CEFR-Based Word Sets
+// ============================================
+
+// Get all word sets (with optional filtering)
+app.get('/api/word-sets', async (req, res) => {
+    try {
+        const { languagePair, level, theme, isOfficial } = req.query;
+
+        let query = 'SELECT * FROM word_sets WHERE 1=1';
+        const params = [];
+        let paramIndex = 1;
+
+        if (languagePair) {
+            query += ` AND language_pair = $${paramIndex}`;
+            params.push(languagePair);
+            paramIndex++;
+        }
+
+        if (level) {
+            query += ` AND level = $${paramIndex}`;
+            params.push(level);
+            paramIndex++;
+        }
+
+        if (theme) {
+            query += ` AND theme = $${paramIndex}`;
+            params.push(theme);
+            paramIndex++;
+        }
+
+        if (isOfficial !== undefined) {
+            query += ` AND is_official = $${paramIndex}`;
+            params.push(isOfficial === 'true');
+            paramIndex++;
+        }
+
+        query += ' ORDER BY level ASC, theme ASC, name ASC';
+
+        const result = await db.query(query, params);
+        res.json(result.rows);
+    } catch (err) {
+        logger.error('Error fetching word sets:', err);
+        res.status(500).json({ error: err.message });
+    }
+});
+
+// Get a specific word set with its words
+app.get('/api/word-sets/:setId', async (req, res) => {
+    try {
+        const { setId } = req.params;
+
+        const setResult = await db.query(
+            'SELECT * FROM word_sets WHERE id = $1',
+            [setId]
+        );
+
+        if (setResult.rows.length === 0) {
+            return res.status(404).json({ error: 'Word set not found' });
+        }
+
+        const wordsResult = await db.query(`
+            SELECT w.*, wsi.order_index
+            FROM words w
+            JOIN word_set_items wsi ON w.id = wsi.word_id
+            WHERE wsi.word_set_id = $1
+            ORDER BY wsi.order_index ASC
+        `, [setId]);
+
+        res.json({
+            ...setResult.rows[0],
+            words: wordsResult.rows
+        });
+    } catch (err) {
+        logger.error('Error fetching word set:', err);
+        res.status(500).json({ error: err.message });
+    }
+});
+
+// Create a new word set
+app.post('/api/word-sets', async (req, res) => {
+    try {
+        const { name, description, languagePair, level, theme, isOfficial, createdBy } = req.body;
+
+        if (!name || !languagePair) {
+            return res.status(400).json({ error: 'Name and language pair are required' });
+        }
+
+        const result = await db.query(`
+            INSERT INTO word_sets (name, description, language_pair, level, theme, is_official, created_by)
+            VALUES ($1, $2, $3, $4, $5, $6, $7)
+            RETURNING *
+        `, [name, description, languagePair, level, theme, isOfficial || true, createdBy || null]);
+
+        res.json(result.rows[0]);
+    } catch (err) {
+        logger.error('Error creating word set:', err);
+        res.status(500).json({ error: err.message });
+    }
+});
+
+// Add words to a word set
+app.post('/api/word-sets/:setId/words', async (req, res) => {
+    try {
+        const { setId } = req.params;
+        const { wordIds } = req.body;
+
+        if (!Array.isArray(wordIds) || wordIds.length === 0) {
+            return res.status(400).json({ error: 'wordIds array is required' });
+        }
+
+        // Get current max order_index
+        const maxOrderResult = await db.query(
+            'SELECT COALESCE(MAX(order_index), -1) as max_order FROM word_set_items WHERE word_set_id = $1',
+            [setId]
+        );
+        let currentOrder = maxOrderResult.rows[0].max_order + 1;
+
+        // Insert word set items
+        const insertPromises = wordIds.map(async (wordId) => {
+            try {
+                await db.query(`
+                    INSERT INTO word_set_items (word_set_id, word_id, order_index)
+                    VALUES ($1, $2, $3)
+                    ON CONFLICT (word_set_id, word_id) DO NOTHING
+                `, [setId, wordId, currentOrder]);
+                currentOrder++;
+            } catch (err) {
+                logger.warn(`Failed to add word ${wordId} to set ${setId}:`, err.message);
+            }
+        });
+
+        await Promise.all(insertPromises);
+
+        // Update word count
+        const countResult = await db.query(
+            'SELECT COUNT(*) FROM word_set_items WHERE word_set_id = $1',
+            [setId]
+        );
+
+        await db.query(
+            'UPDATE word_sets SET word_count = $1, updated_at = CURRENT_TIMESTAMP WHERE id = $2',
+            [parseInt(countResult.rows[0].count), setId]
+        );
+
+        res.json({ message: 'Words added to set successfully', count: wordIds.length });
+    } catch (err) {
+        logger.error('Error adding words to set:', err);
+        res.status(500).json({ error: err.message });
+    }
+});
+
+// Import words from a word set to user's collection
+app.post('/api/word-sets/:setId/import', async (req, res) => {
+    try {
+        const { setId } = req.params;
+        const { userId, languagePairId } = req.body;
+
+        if (!userId || !languagePairId) {
+            return res.status(400).json({ error: 'userId and languagePairId are required' });
+        }
+
+        // Get all words from the set
+        const wordsResult = await db.query(`
+            SELECT w.*
+            FROM words w
+            JOIN word_set_items wsi ON w.id = wsi.word_id
+            WHERE wsi.word_set_id = $1
+            ORDER BY wsi.order_index ASC
+        `, [setId]);
+
+        if (wordsResult.rows.length === 0) {
+            return res.status(404).json({ error: 'Word set is empty or not found' });
+        }
+
+        let importedCount = 0;
+        let skippedCount = 0;
+
+        for (const word of wordsResult.rows) {
+            // Check if word already exists for this user
+            const existingWord = await db.query(
+                'SELECT id FROM words WHERE LOWER(word) = LOWER($1) AND user_id = $2 AND language_pair_id = $3',
+                [word.word, userId, languagePairId]
+            );
+
+            if (existingWord.rows.length === 0) {
+                // Import the word
+                await db.query(`
+                    INSERT INTO words (word, translation, example, exampleTranslation, user_id, language_pair_id, source)
+                    VALUES ($1, $2, $3, $4, $5, $6, $7)
+                `, [
+                    word.word,
+                    word.translation,
+                    word.example || '',
+                    word.exampletranslation || '',
+                    userId,
+                    languagePairId,
+                    `word_set_${setId}`
+                ]);
+                importedCount++;
+            } else {
+                skippedCount++;
+            }
+        }
+
+        res.json({
+            message: 'Word set imported successfully',
+            imported: importedCount,
+            skipped: skippedCount,
+            total: wordsResult.rows.length
+        });
+    } catch (err) {
+        logger.error('Error importing word set:', err);
+        res.status(500).json({ error: err.message });
+    }
+});
+
+// Delete a word set
+app.delete('/api/word-sets/:setId', async (req, res) => {
+    try {
+        const { setId } = req.params;
+
+        // word_set_items will be automatically deleted due to ON DELETE CASCADE
+        await db.query('DELETE FROM word_sets WHERE id = $1', [setId]);
+
+        res.json({ message: 'Word set deleted successfully' });
+    } catch (err) {
+        logger.error('Error deleting word set:', err);
+        res.status(500).json({ error: err.message });
+    }
+});
+
+// ============================================
+// END WORD SETS API
+// ============================================
+
 app.put('/api/users/:userId/lesson-size', async (req, res) => {
     try {
-        const { userId } = req.params;
+        const { userId} = req.params;
         const { lessonSize } = req.body;
 
         // Update lesson size for the active language pair
