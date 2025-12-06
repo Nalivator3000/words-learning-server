@@ -403,3 +403,110 @@
 
 **Last Updated**: 2025-12-06
 **Next Review**: After Phase 1 completion
+
+---
+
+## 📚 Phase 6: Word Sets System & Multi-Language Support (Priority: HIGH)
+
+### 6.1 Word Sets by Levels (CEFR Standard)
+- [ ] **Define level structure**
+  - [ ] A1 (Beginner) - 500-750 most common words
+  - [ ] A2 (Elementary) - 1000-1500 words
+  - [ ] B1 (Intermediate) - 2000-3000 words
+  - [ ] B2 (Upper Intermediate) - 4000-5000 words
+  - [ ] C1 (Advanced) - 5000+ words
+  - [ ] C2 (Proficiency) - 8000+ specialized words
+
+- [ ] **Level selection UI**
+  - [ ] Level selector on word import page
+  - [ ] Visual progress indicators per level
+  - [ ] Level completion badges
+  - [ ] Graduation to next level mechanism
+
+- [ ] **Word set metadata**
+  - [ ] Frequency ranking
+  - [ ] Difficulty score
+  - [ ] Usage context tags
+  - [ ] Audio availability indicator
+
+### 6.2 Thematic Word Sets
+- [ ] **Define theme categories**
+  - [ ] 🍕 Food & Dining
+  - [ ] 🏠 Home & Family
+  - [ ] 💼 Work & Office
+  - [ ] ✈️ Travel & Tourism
+  - [ ] 🏥 Health & Medicine
+  - [ ] 🎓 Education
+  - [ ] 🎨 Hobbies & Entertainment
+  - [ ] 🛒 Shopping
+  - [ ] 🌍 Nature & Environment
+  - [ ] 💬 Communication & Social
+  - [ ] 🏛️ Culture & History
+  - [ ] 💻 Technology
+  - [ ] ⚖️ Law & Politics
+  - [ ] 💰 Finance & Economy
+  - [ ] 🔬 Science
+
+- [ ] **Theme selection interface**
+  - [ ] Grid view with theme icons
+  - [ ] Theme description & word count
+  - [ ] Difficulty level per theme
+  - [ ] Mix-and-match themes for custom sets
+
+- [ ] **Theme-based study modes**
+  - [ ] Thematic quizzes
+  - [ ] Context sentences from theme
+  - [ ] Real-world scenarios
+  - [ ] Theme completion tracking
+
+### 6.3 Extended Language Support
+
+#### Arabic (العربية) Support
+- [ ] **Frontend integration**
+  - [ ] RTL (Right-to-Left) layout support
+  - [ ] Arabic font optimization
+  - [ ] Keyboard input handling
+
+- [ ] **TTS & Audio**
+  - [ ] Add Arabic voices to AudioManager
+  - [ ] Test pronunciation quality
+
+- [ ] **Content**
+  - [ ] Arabic word sets (MSA - Modern Standard Arabic)
+
+#### Romanian (Română) Support
+- [ ] **Character support** - Diacritics: ă, â, î, ș, ț
+- [ ] **TTS & Audio** - Romanian voices
+- [ ] **Content** - Romanian word sets by level
+
+#### Serbian (Српски / Srpski) Support
+- [ ] **Script support** - Cyrillic (Српски) + Latin (Srpski)
+- [ ] **TTS & Audio** - Serbian voices
+- [ ] **Content** - Serbian word sets (both scripts)
+
+#### Polish (Polski) Support
+- [ ] **Character support** - Polish diacritics: ą, ć, ę, ł, ń, ó, ś, ź, ż
+- [ ] **TTS & Audio** - Polish voices
+- [ ] **Content** - Polish word sets
+
+#### Turkish (Türkçe) Support
+- [ ] **Character support** - Turkish alphabet: ç, ğ, ı, İ, ö, ş, ü
+- [ ] **TTS & Audio** - Turkish voices
+- [ ] **Content** - Turkish word sets
+
+### 6.4 Implementation Plan
+**Week 11-12: Word Sets System**
+- Design & implement level/theme selection UI
+- Create database schema for word sets
+- Import initial German-Russian sets (A1-B2)
+
+**Week 13: Languages Part 1**
+- Add Arabic, Romanian, Serbian support
+
+**Week 14: Languages Part 2**
+- Add Polish, Turkish support
+- Create starter word sets for all languages
+
+---
+
+**Phase 6 Added**: 2025-12-06
