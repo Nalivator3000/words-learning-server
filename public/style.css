@@ -3616,13 +3616,21 @@ input:focus, textarea:focus, select:focus {
 
     /* Hide header during quiz on mobile for maximum space */
     body.quiz-active .app-header {
+        position: fixed;
         transform: translateY(-100%);
         transition: transform 0.3s ease;
+        pointer-events: none;
     }
 
     /* Show header when toggled */
     body.quiz-active.menu-visible .app-header {
         transform: translateY(0);
+        pointer-events: auto;
+    }
+
+    /* Move quiz area up when header is hidden */
+    body.quiz-active .container {
+        padding-top: 0 !important;
     }
 
     /* Floating menu toggle button */
@@ -3662,11 +3670,21 @@ input:focus, textarea:focus, select:focus {
 
     /* Adjust quiz-area height when header is hidden */
     body.quiz-active .quiz-area {
-        /* Account for: bottom nav (~60px) + minimal padding = ~70px */
-        max-height: calc(100dvh - 70px);
+        /* Account for: bottom nav (~60px) only */
+        max-height: calc(100dvh - 60px);
+        margin-top: 0;
     }
 
     /* When menu is visible during quiz */
+    body.quiz-active.menu-visible .quiz-area {
+        /* Back to normal calculation with header */
+        max-height: calc(100dvh - 140px);
+    }
+
+    /* Hide user info bar during quiz */
+    body.quiz-active .user-info-bar {
+        display: none;
+    }
     body.quiz-active.menu-visible .quiz-area {
         /* Back to normal calculation with header */
         max-height: calc(100dvh - 140px);
