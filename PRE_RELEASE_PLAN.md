@@ -130,9 +130,9 @@
 
 ---
 
-## 📱 Phase 3: Android App Optimization (Priority: HIGH)
+## 📱 Phase 5: Android App Optimization (Priority: MEDIUM)
 
-### 3.1 Current APK Audit
+### 5.1 Current APK Audit
 - [ ] **Review existing TWA setup**
   - [ ] Check twa-manifest.json
   - [ ] Verify assetlinks.json
@@ -145,7 +145,7 @@
   - [ ] Memory usage profiling
   - [ ] Battery consumption test
 
-### 3.2 Android-Specific Features
+### 5.2 Android-Specific Features
 - [ ] **TWA enhancements**
   - [ ] Add custom splash screen
   - [ ] Implement status bar theming
@@ -164,7 +164,7 @@
   - [ ] Sync when online
   - [ ] Offline indicator
 
-### 3.3 Play Store Optimization
+### 5.3 Play Store Optimization
 - [ ] **Update store listing**
   - [ ] New screenshots (mobile-optimized UI)
   - [ ] Update feature graphic
@@ -183,7 +183,7 @@
   - [ ] Open testing (if needed)
   - [ ] Pre-launch report review
 
-### 3.4 Build & Release Process
+### 5.4 Build & Release Process
 - [ ] **Automated builds**
   - [ ] GitHub Actions workflow
   - [ ] Version bumping automation
@@ -198,9 +198,9 @@
 
 ---
 
-## 🍎 Phase 4: iOS App Development (Priority: MEDIUM)
+## 🍎 Phase 6: iOS App Development (Priority: LOW)
 
-### 4.1 Apple Developer Setup
+### 6.1 Apple Developer Setup
 - [ ] **Developer account**
   - [ ] Enroll in Apple Developer Program ($99/year)
   - [ ] Configure certificates
@@ -213,7 +213,7 @@
   - [ ] Upload screenshots
   - [ ] Set pricing & availability
 
-### 4.2 iOS App Development
+### 6.2 iOS App Development
 - [ ] **Choose approach**
   - [ ] Option A: Native Swift/SwiftUI wrapper (best performance)
   - [ ] Option B: Capacitor/Ionic (cross-platform, faster)
@@ -232,7 +232,7 @@
   - [ ] Widget support
   - [ ] Siri Shortcuts
 
-### 4.3 iOS Testing
+### 6.3 iOS Testing
 - [ ] **Device testing**
   - [ ] iPhone SE (smallest screen)
   - [ ] iPhone 14 Pro (notch)
@@ -250,7 +250,7 @@
   - [ ] Collect feedback
   - [ ] Iterate based on feedback
 
-### 4.4 App Store Submission
+### 6.4 App Store Submission
 - [ ] **Prepare assets**
   - [ ] App icon (1024x1024)
   - [ ] Screenshots (all required sizes)
@@ -271,9 +271,105 @@
 
 ---
 
-## 📊 Phase 5: Quality Assurance (Ongoing)
+## 📚 Phase 3: Word Sets & Extended Languages (Priority: HIGH)
 
-### 5.1 Manual Testing Checklist
+### 3.1 CEFR-Based Word Sets
+- [ ] **Level-based word sets (A1-C2)**
+  - [ ] A1: Beginner (500-1000 words)
+  - [ ] A2: Elementary (1000-1500 words)
+  - [ ] B1: Intermediate (1500-2000 words)
+  - [ ] B2: Upper-Intermediate (2000-3000 words)
+  - [ ] C1: Advanced (3000-4000 words)
+  - [ ] C2: Proficient (4000+ words)
+
+- [ ] **Database schema for word sets**
+  ```sql
+  CREATE TABLE word_sets (
+    id SERIAL PRIMARY KEY,
+    name VARCHAR(255),
+    description TEXT,
+    language_pair VARCHAR(10),
+    level VARCHAR(5), -- 'A1', 'A2', 'B1', 'B2', 'C1', 'C2'
+    theme VARCHAR(100),
+    word_count INTEGER,
+    is_official BOOLEAN DEFAULT true,
+    created_at TIMESTAMP
+  );
+
+  CREATE TABLE word_set_items (
+    id SERIAL PRIMARY KEY,
+    word_set_id INTEGER REFERENCES word_sets(id),
+    word_id INTEGER REFERENCES words(id),
+    order_index INTEGER
+  );
+  ```
+
+### 3.2 Thematic Word Sets (15+ Themes)
+- [ ] **Common themes**
+  - [ ] Travel & Tourism
+  - [ ] Business & Work
+  - [ ] Food & Cooking
+  - [ ] Health & Medicine
+  - [ ] Technology & Internet
+  - [ ] Education & School
+  - [ ] Sports & Fitness
+  - [ ] Family & Relationships
+  - [ ] Weather & Nature
+  - [ ] Shopping & Money
+  - [ ] Arts & Culture
+  - [ ] Transportation
+  - [ ] Home & Living
+  - [ ] Emotions & Feelings
+  - [ ] Time & Calendar
+
+### 3.3 Extended Language Support (5 New Languages)
+- [ ] **Arabic (ar)**
+  - [ ] RTL (Right-to-Left) layout support
+  - [ ] Arabic script rendering
+  - [ ] Diacritics handling (optional)
+  - [ ] High-quality TTS voices (Google, Microsoft)
+  - [ ] Word database import (5000+ common words)
+
+- [ ] **Romanian (ro)**
+  - [ ] Diacritics support (ă, â, î, ș, ț)
+  - [ ] Romanian TTS voices
+  - [ ] Word database import (5000+ common words)
+
+- [ ] **Serbian (sr)**
+  - [ ] Dual-script support (Cyrillic + Latin)
+  - [ ] Script toggle option
+  - [ ] Serbian TTS voices (both scripts)
+  - [ ] Word database import (5000+ common words)
+
+- [ ] **Polish (pl)**
+  - [ ] Polish diacritics (ą, ć, ę, ł, ń, ó, ś, ź, ż)
+  - [ ] Polish TTS voices
+  - [ ] Word database import (5000+ common words)
+
+- [ ] **Turkish (tr)**
+  - [ ] Turkish-specific characters (ğ, ı, ö, ü, ş, ç)
+  - [ ] Turkish TTS voices
+  - [ ] Word database import (5000+ common words)
+
+### 3.4 Import & Management Tools
+- [ ] **Word set import tools**
+  - [ ] CSV/Excel import for word sets
+  - [ ] Validation & deduplication
+  - [ ] Bulk assignment to levels/themes
+  - [ ] Preview before import
+
+- [ ] **User word set features**
+  - [ ] Browse word sets by level
+  - [ ] Browse word sets by theme
+  - [ ] Filter by language pair
+  - [ ] Add/remove word sets from study plan
+  - [ ] Track progress per word set
+
+---
+
+## 📊 Phase 4: Quality Assurance (Ongoing)
+
+### 4.1 Manual Testing Checklist
 - [ ] **Core flows**
   - [ ] Registration & Login
   - [ ] Study quiz completion
@@ -288,7 +384,7 @@
   - [ ] Low battery mode
   - [ ] Accessibility features
 
-### 5.2 User Acceptance Testing
+### 4.2 User Acceptance Testing
 - [ ] **Beta testing program**
   - [ ] Recruit 10-20 beta testers
   - [ ] Provide testing guidelines
@@ -300,7 +396,7 @@
   - [ ] Quick wins for UX improvements
   - [ ] Log future enhancements
 
-### 5.3 Performance Benchmarks
+### 4.3 Performance Benchmarks
 - [ ] **Define metrics**
   - [ ] Load time < 3s on 3G
   - [ ] Time to Interactive < 5s
@@ -328,23 +424,30 @@
 - Enhance registration flow
 - Test auth flows thoroughly
 
-### Week 5-6: Android Optimization
+### Week 5-7: Word Sets & Extended Languages
+- Implement CEFR word sets (A1-C2)
+- Create 15+ thematic word sets
+- Add support for 5 new languages (Arabic, Romanian, Serbian, Polish, Turkish)
+- Build word set management UI
+- Import word databases
+
+### Week 8-9: Quality Assurance
+- Comprehensive manual testing
+- Beta testing program
+- Performance benchmarking
+- Bug fixes and optimizations
+
+### Week 10-12: Android Optimization (Optional)
 - Audit current Android app
 - Implement Android-specific features
 - Update Play Store listing
-- Internal testing
+- Internal testing and release
 
-### Week 7-8: iOS Development
+### Week 13-15: iOS Development (Optional)
 - Setup Apple Developer account
 - Develop iOS app (wrapper or native)
 - TestFlight beta testing
 - Prepare App Store submission
-
-### Week 9-10: Final QA & Launch
-- Comprehensive manual testing
-- Beta user feedback incorporation
-- Performance optimization
-- Soft launch preparation
 
 ---
 
@@ -395,118 +498,26 @@
 
 ## 📝 Notes
 
-- **Phase 1 (Mobile UI)** is **CRITICAL** - blocks everything else
-- **Phase 2 (Auth)** is **HIGH** - needed for user retention
-- **Phase 3 (Android)** can start after Phase 1 completion
-- **Phase 4 (iOS)** can be parallel to Phase 3
+### Priority Order
+- **Phase 1 (Mobile UI)** is **CRITICAL** - must complete first, blocks everything else
+- **Phase 2 (Auth)** is **HIGH** - essential for user retention and security
+- **Phase 3 (Word Sets & Languages)** is **HIGH** - core content expansion for growth
+- **Phase 4 (QA)** is **HIGH** - continuous throughout all phases, intensifies before launch
+- **Phase 5 (Android)** is **MEDIUM** - optional for initial web release, can defer
+- **Phase 6 (iOS)** is **LOW** - optional for initial release, lowest priority
+
+### Development Philosophy
+- Focus on **web platform first** - PWA works on all devices
+- **Android and iOS native apps are optional** enhancements, not requirements
+- They should always be the **last two items** in any release plan
+- Web version must be excellent before investing in native apps
+- Native apps add distribution, not core functionality
+
+### Execution Strategy
+- Complete Phases 1-4 for **minimum viable release**
+- Launch web version to gather user feedback
+- Only proceed to Phases 5-6 if there's proven demand and resources
 - Keep updating this plan as priorities shift
 
 **Last Updated**: 2025-12-06
 **Next Review**: After Phase 1 completion
-
----
-
-## 📚 Phase 6: Word Sets System & Multi-Language Support (Priority: HIGH)
-
-### 6.1 Word Sets by Levels (CEFR Standard)
-- [ ] **Define level structure**
-  - [ ] A1 (Beginner) - 500-750 most common words
-  - [ ] A2 (Elementary) - 1000-1500 words
-  - [ ] B1 (Intermediate) - 2000-3000 words
-  - [ ] B2 (Upper Intermediate) - 4000-5000 words
-  - [ ] C1 (Advanced) - 5000+ words
-  - [ ] C2 (Proficiency) - 8000+ specialized words
-
-- [ ] **Level selection UI**
-  - [ ] Level selector on word import page
-  - [ ] Visual progress indicators per level
-  - [ ] Level completion badges
-  - [ ] Graduation to next level mechanism
-
-- [ ] **Word set metadata**
-  - [ ] Frequency ranking
-  - [ ] Difficulty score
-  - [ ] Usage context tags
-  - [ ] Audio availability indicator
-
-### 6.2 Thematic Word Sets
-- [ ] **Define theme categories**
-  - [ ] 🍕 Food & Dining
-  - [ ] 🏠 Home & Family
-  - [ ] 💼 Work & Office
-  - [ ] ✈️ Travel & Tourism
-  - [ ] 🏥 Health & Medicine
-  - [ ] 🎓 Education
-  - [ ] 🎨 Hobbies & Entertainment
-  - [ ] 🛒 Shopping
-  - [ ] 🌍 Nature & Environment
-  - [ ] 💬 Communication & Social
-  - [ ] 🏛️ Culture & History
-  - [ ] 💻 Technology
-  - [ ] ⚖️ Law & Politics
-  - [ ] 💰 Finance & Economy
-  - [ ] 🔬 Science
-
-- [ ] **Theme selection interface**
-  - [ ] Grid view with theme icons
-  - [ ] Theme description & word count
-  - [ ] Difficulty level per theme
-  - [ ] Mix-and-match themes for custom sets
-
-- [ ] **Theme-based study modes**
-  - [ ] Thematic quizzes
-  - [ ] Context sentences from theme
-  - [ ] Real-world scenarios
-  - [ ] Theme completion tracking
-
-### 6.3 Extended Language Support
-
-#### Arabic (العربية) Support
-- [ ] **Frontend integration**
-  - [ ] RTL (Right-to-Left) layout support
-  - [ ] Arabic font optimization
-  - [ ] Keyboard input handling
-
-- [ ] **TTS & Audio**
-  - [ ] Add Arabic voices to AudioManager
-  - [ ] Test pronunciation quality
-
-- [ ] **Content**
-  - [ ] Arabic word sets (MSA - Modern Standard Arabic)
-
-#### Romanian (Română) Support
-- [ ] **Character support** - Diacritics: ă, â, î, ș, ț
-- [ ] **TTS & Audio** - Romanian voices
-- [ ] **Content** - Romanian word sets by level
-
-#### Serbian (Српски / Srpski) Support
-- [ ] **Script support** - Cyrillic (Српски) + Latin (Srpski)
-- [ ] **TTS & Audio** - Serbian voices
-- [ ] **Content** - Serbian word sets (both scripts)
-
-#### Polish (Polski) Support
-- [ ] **Character support** - Polish diacritics: ą, ć, ę, ł, ń, ó, ś, ź, ż
-- [ ] **TTS & Audio** - Polish voices
-- [ ] **Content** - Polish word sets
-
-#### Turkish (Türkçe) Support
-- [ ] **Character support** - Turkish alphabet: ç, ğ, ı, İ, ö, ş, ü
-- [ ] **TTS & Audio** - Turkish voices
-- [ ] **Content** - Turkish word sets
-
-### 6.4 Implementation Plan
-**Week 11-12: Word Sets System**
-- Design & implement level/theme selection UI
-- Create database schema for word sets
-- Import initial German-Russian sets (A1-B2)
-
-**Week 13: Languages Part 1**
-- Add Arabic, Romanian, Serbian support
-
-**Week 14: Languages Part 2**
-- Add Polish, Turkish support
-- Create starter word sets for all languages
-
----
-
-**Phase 6 Added**: 2025-12-06
