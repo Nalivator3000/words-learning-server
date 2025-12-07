@@ -245,14 +245,18 @@ class LanguageLearningApp {
     async handleLogin() {
         const email = document.getElementById('loginEmail').value;
         const password = document.getElementById('loginPassword').value;
-        
+
         if (!email || !password) {
             this.showAuthError(i18n.t('fill_all_fields'));
             return;
         }
-        
+
         try {
             await userManager.login(email, password);
+
+            // Close auth modal
+            document.getElementById('authModal').style.display = 'none';
+
             this.showSection('home');
             await this.updateStats();
             await this.loadGamificationHeader(); // Load XP/level/streak display
@@ -286,6 +290,10 @@ class LanguageLearningApp {
         
         try {
             await userManager.register(name, email, password, nativeLang, targetLang);
+
+            // Close auth modal
+            document.getElementById('authModal').style.display = 'none';
+
             this.showSection('home');
             await this.updateStats();
             await this.loadGamificationHeader(); // Load XP/level/streak display
@@ -297,6 +305,10 @@ class LanguageLearningApp {
     async handleGoogleLogin() {
         try {
             await userManager.loginWithGoogle();
+
+            // Close auth modal
+            document.getElementById('authModal').style.display = 'none';
+
             this.showSection('home');
             await this.updateStats();
             await this.loadGamificationHeader(); // Load XP/level/streak display
