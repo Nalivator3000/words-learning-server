@@ -3537,6 +3537,7 @@ input:focus, textarea:focus, select:focus {
         gap: 8px;
         align-items: start;
         align-content: start;
+        box-shadow: none;
     }
 
     .progress-bar {
