@@ -220,13 +220,13 @@
 
 /* Dark theme glass morphism adjustments */
 [data-theme="dark"] .auth-modal {
-    background: rgba(0, 0, 0, 0.7);
+    background: rgba(0, 0, 0, 0.85);
 }
 
 [data-theme="dark"] .auth-content {
     background: linear-gradient(135deg,
-        rgba(31, 41, 55, 0.9) 0%,
-        rgba(17, 24, 39, 0.85) 100%);
+        rgba(31, 41, 55, 0.98) 0%,
+        rgba(17, 24, 39, 0.95) 100%);
     border: 1px solid rgba(255, 255, 255, 0.1);
 }
 
