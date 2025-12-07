@@ -223,11 +223,11 @@ class LanguageLearningApp {
         });
         document.getElementById('registerPasswordConfirm').addEventListener('keypress', (e) => {
             if (e.key === 'Enter') this.handleRegister();
-        
+        });
+
         // Menu toggle button for quiz on mobile
         document.getElementById('menuToggleBtn').addEventListener('click', () => {
             document.body.classList.toggle('menu-visible');
-        });
         });
     }
 
