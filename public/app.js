@@ -478,6 +478,7 @@ class LanguageLearningApp {
     async updateReviewStats() {
         try {
             const counts = await database.getWordCounts();
+            console.log('📊 Review stats received:', counts);
 
             // Update all review stage counts
             document.getElementById('review1Count').textContent = counts.review_1 || 0;
@@ -487,6 +488,17 @@ class LanguageLearningApp {
             document.getElementById('review30Count').textContent = counts.review_30 || 0;
             document.getElementById('review60Count').textContent = counts.review_60 || 0;
             document.getElementById('review120Count').textContent = counts.review_120 || 0;
+
+            console.log('✅ Updated review counts:', {
+                review_1: counts.review_1 || 0,
+                review_3: counts.review_3 || 0,
+                review_7: counts.review_7 || 0,
+                review_14: counts.review_14 || 0,
+                review_30: counts.review_30 || 0,
+                review_60: counts.review_60 || 0,
+                review_120: counts.review_120 || 0,
+                total: counts.review || 0
+            });
 
             document.getElementById('startReviewBtn').disabled = counts.review === 0;
         } catch (error) {
