@@ -76,6 +76,17 @@ class LanguageLearningApp {
             if (isLoggedIn) {
                 this.showSection('home');
                 await this.updateStats();
+
+                // Check if user needs onboarding (from OAuth redirect)
+                const urlParams = new URLSearchParams(window.location.search);
+                if (urlParams.get('needsOnboarding') === 'true') {
+                    console.log('🎯 New user needs onboarding');
+                    if (window.onboardingManager) {
+                        window.onboardingManager.show();
+                    }
+                    // Clean up URL
+                    window.history.replaceState({}, document.title, '/');
+                }
             }
         } catch (error) {
             console.error('Failed to initialize app:', error);

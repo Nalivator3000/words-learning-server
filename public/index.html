@@ -304,6 +304,125 @@
         </div>
     </div>
 
+    <!-- Onboarding Wizard Modal -->
+    <div id="onboardingModal" class="onboarding-modal" style="display: none;">
+        <div class="onboarding-content">
+            <!-- Progress indicators -->
+            <div class="onboarding-progress">
+                <div class="progress-step active" data-step="1">1</div>
+                <div class="progress-line"></div>
+                <div class="progress-step" data-step="2">2</div>
+                <div class="progress-line"></div>
+                <div class="progress-step" data-step="3">3</div>
+            </div>
+
+            <!-- Step 1: Language Pair -->
+            <div id="onboardingStep1" class="onboarding-step active">
+                <h2 data-i18n="onboarding_languages_title">Choose Your Languages</h2>
+                <p data-i18n="onboarding_languages_desc">Select your native language and the language you want to learn</p>
+
+                <div class="language-selection">
+                    <label data-i18n="i_speak">I speak:</label>
+                    <select id="onboardingNativeLang" class="onboarding-select">
+                        <option value="en">🇬🇧 English</option>
+                        <option value="de">🇩🇪 German</option>
+                        <option value="es">🇪🇸 Spanish</option>
+                        <option value="fr">🇫🇷 French</option>
+                        <option value="ru">🇷🇺 Russian</option>
+                        <option value="uk">🇺🇦 Ukrainian</option>
+                        <option value="pt">🇵🇹 Portuguese</option>
+                        <option value="it">🇮🇹 Italian</option>
+                        <option value="zh">🇨🇳 Chinese</option>
+                        <option value="ja">🇯🇵 Japanese</option>
+                        <option value="ko">🇰🇷 Korean</option>
+                    </select>
+                </div>
+
+                <div class="language-selection">
+                    <label data-i18n="i_want_to_learn">I want to learn:</label>
+                    <select id="onboardingTargetLang" class="onboarding-select">
+                        <option value="en">🇬🇧 English</option>
+                        <option value="de" selected>🇩🇪 German</option>
+                        <option value="es">🇪🇸 Spanish</option>
+                        <option value="fr">🇫🇷 French</option>
+                        <option value="ru">🇷🇺 Russian</option>
+                        <option value="uk">🇺🇦 Ukrainian</option>
+                        <option value="pt">🇵🇹 Portuguese</option>
+                        <option value="it">🇮🇹 Italian</option>
+                        <option value="zh">🇨🇳 Chinese</option>
+                        <option value="ja">🇯🇵 Japanese</option>
+                        <option value="ko">🇰🇷 Korean</option>
+                    </select>
+                </div>
+
+                <button id="onboardingNext1" class="onboarding-btn primary" data-i18n="next">Next</button>
+            </div>
+
+            <!-- Step 2: Daily Goal -->
+            <div id="onboardingStep2" class="onboarding-step">
+                <h2 data-i18n="onboarding_goal_title">Set Your Daily Goal</h2>
+                <p data-i18n="onboarding_goal_desc">How much time can you dedicate to learning each day?</p>
+
+                <div class="time-options">
+                    <button class="time-option" data-minutes="5">
+                        <span class="time-number">5</span>
+                        <span class="time-label" data-i18n="minutes">min</span>
+                        <span class="time-words">~5 words/day</span>
+                    </button>
+                    <button class="time-option" data-minutes="10">
+                        <span class="time-number">10</span>
+                        <span class="time-label" data-i18n="minutes">min</span>
+                        <span class="time-words">~10 words/day</span>
+                    </button>
+                    <button class="time-option selected" data-minutes="15">
+                        <span class="time-number">15</span>
+                        <span class="time-label" data-i18n="minutes">min</span>
+                        <span class="time-words">~15 words/day</span>
+                    </button>
+                    <button class="time-option" data-minutes="20">
+                        <span class="time-number">20</span>
+                        <span class="time-label" data-i18n="minutes">min</span>
+                        <span class="time-words">~20 words/day</span>
+                    </button>
+                    <button class="time-option" data-minutes="30">
+                        <span class="time-number">30</span>
+                        <span class="time-label" data-i18n="minutes">min</span>
+                        <span class="time-words">~30 words/day</span>
+                    </button>
+                </div>
+
+                <div class="onboarding-nav">
+                    <button id="onboardingBack2" class="onboarding-btn secondary" data-i18n="back">Back</button>
+                    <button id="onboardingNext2" class="onboarding-btn primary" data-i18n="next">Next</button>
+                </div>
+            </div>
+
+            <!-- Step 3: Theme -->
+            <div id="onboardingStep3" class="onboarding-step">
+                <h2 data-i18n="onboarding_theme_title">Choose Your Theme</h2>
+                <p data-i18n="onboarding_theme_desc">Select the appearance you prefer</p>
+
+                <div class="theme-options">
+                    <button class="theme-option selected" data-theme="dark">
+                        <div class="theme-icon">🌙</div>
+                        <div class="theme-name" data-i18n="dark_theme">Dark</div>
+                        <div class="theme-preview dark-preview"></div>
+                    </button>
+                    <button class="theme-option" data-theme="light">
+                        <div class="theme-icon">☀️</div>
+                        <div class="theme-name" data-i18n="light_theme">Light</div>
+                        <div class="theme-preview light-preview"></div>
+                    </button>
+                </div>
+
+                <div class="onboarding-nav">
+                    <button id="onboardingBack3" class="onboarding-btn secondary" data-i18n="back">Back</button>
+                    <button id="onboardingFinish" class="onboarding-btn primary" data-i18n="get_started">Get Started!</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
     <div class="container">
         <header class="app-header">
             <div class="header-left">
@@ -1202,7 +1321,7 @@
     <script src="survival-mode.js"></script>
     <script src="gamification.js"></script>
     <script src="analytics.js"></script>
-    <!-- <script src="onboarding.js"></script> -->
+    <script src="onboarding.js"></script>
     <script src="features-ui.js"></script>
     <script src="leagues-ui.js"></script>
     <script src="weekly-challenges-ui.js"></script>

@@ -2498,25 +2498,21 @@ app.get('/auth/google/callback',
     passport.authenticate('google', { failureRedirect: '/?error=google_auth_failed' }),
     async (req, res) => {
         try {
-            // User is authenticated, create language pair if new user
+            // User is authenticated
             const user = req.user;
 
-            // Check if user has language pairs
+            // Check if user has language pairs (determines if onboarding needed)
             const langPairsResult = await db.query(
                 'SELECT * FROM language_pairs WHERE user_id = $1',
                 [user.id]
             );
 
-            // If no language pairs, create default one
+            // If no language pairs, user needs onboarding
             if (langPairsResult.rows.length === 0) {
-                await db.query(
-                    'INSERT INTO language_pairs (user_id, name, from_lang, to_lang, is_active) VALUES ($1, $2, $3, $4, $5)',
-                    [user.id, 'German → English', 'de', 'en', true]
-                );
+                res.redirect('/?login=success&provider=google&needsOnboarding=true');
+            } else {
+                res.redirect('/?login=success&provider=google');
             }
-
-            // Redirect to home with success
-            res.redirect('/?login=success&provider=google');
         } catch (error) {
             logger.error('Google callback error:', error);
             res.redirect('/?error=google_auth_error');
@@ -2549,6 +2545,86 @@ app.post('/api/auth/logout', (req, res) => {
         }
         res.json({ success: true });
     });
+});
+
+// Complete onboarding - Save user preferences and create language pair
+app.post('/api/auth/complete-onboarding', async (req, res) => {
+    try {
+        const { nativeLang, targetLang, dailyGoalMinutes, theme } = req.body;
+
+        // Get user ID from session (for OAuth) or from request body
+        const userId = req.user?.id || req.body.userId;
+
+        if (!userId) {
+            return res.status(401).json({ error: 'User not authenticated' });
+        }
+
+        if (!nativeLang || !targetLang) {
+            return res.status(400).json({ error: 'Language pair is required' });
+        }
+
+        // Language names mapping
+        const languageNames = {
+            'en': 'English', 'de': 'German', 'es': 'Spanish', 'fr': 'French',
+            'ru': 'Russian', 'uk': 'Ukrainian', 'pt': 'Portuguese', 'it': 'Italian',
+            'zh': 'Chinese', 'ja': 'Japanese', 'ko': 'Korean'
+        };
+
+        const nativeName = languageNames[nativeLang] || nativeLang.toUpperCase();
+        const targetName = languageNames[targetLang] || targetLang.toUpperCase();
+        const pairName = `${targetName} → ${nativeName}`;
+
+        // Create language pair (from_lang = target language to learn, to_lang = native language)
+        const langPairResult = await db.query(
+            'INSERT INTO language_pairs (user_id, name, from_lang, to_lang, is_active) VALUES ($1, $2, $3, $4, $5) RETURNING *',
+            [userId, pairName, targetLang, nativeLang, true]
+        );
+
+        // Create or update user_profile with daily_goal_minutes
+        const profileResult = await db.query(`
+            INSERT INTO user_profiles (user_id, daily_goal_minutes)
+            VALUES ($1, $2)
+            ON CONFLICT (user_id)
+            DO UPDATE SET daily_goal_minutes = $2, updatedAt = CURRENT_TIMESTAMP
+            RETURNING *
+        `, [userId, dailyGoalMinutes || 15]);
+
+        logger.info(`✅ Onboarding completed for user ${userId}: ${pairName}, ${dailyGoalMinutes} min/day, ${theme} theme`);
+
+        res.json({
+            success: true,
+            languagePair: langPairResult.rows[0],
+            profile: profileResult.rows[0],
+            theme: theme
+        });
+    } catch (err) {
+        logger.error('Onboarding completion error:', err);
+        res.status(500).json({ error: err.message });
+    }
+});
+
+// Check if user needs onboarding
+app.get('/api/user/needs-onboarding', async (req, res) => {
+    try {
+        const userId = req.query.userId;
+
+        if (!userId) {
+            return res.status(400).json({ error: 'userId is required' });
+        }
+
+        // Check if user has language pairs
+        const langPairsResult = await db.query(
+            'SELECT * FROM language_pairs WHERE user_id = $1',
+            [userId]
+        );
+
+        res.json({
+            needsOnboarding: langPairsResult.rows.length === 0
+        });
+    } catch (err) {
+        logger.error('Check onboarding error:', err);
+        res.status(500).json({ error: err.message });
+    }
 });
 
 // Language pairs endpoints
