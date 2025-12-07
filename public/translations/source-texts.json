@@ -1214,4 +1214,50 @@
     "ru": "120 дней",
     "de": "120 Tage"
   }
+,
+  "sync": {
+    "en": "Sync",
+    "ru": "Синхронизация",
+    "de": "Synchronisation"
+  },
+  "Synchronization": {
+    "en": "Synchronization",
+    "ru": "Синхронизация",
+    "de": "Synchronisation"
+  },
+  "training_intro": {
+    "en": "Training Introduction",
+    "ru": "Введение в обучение",
+    "de": "Trainingseinführung"
+  },
+  "app_features_tour": {
+    "en": "Repeat interactive tour",
+    "ru": "Повторить интерактивный тур",
+    "de": "Interaktive Tour wiederholen"
+  },
+  "start_tour_again": {
+    "en": "Start Tour Again",
+    "ru": "Начать тур заново",
+    "de": "Tour erneut starten"
+  },
+  "languagePairs": {
+    "en": "Language Pairs",
+    "ru": "Языковые пары",
+    "de": "Sprachpaare"
+  },
+  "addLanguagePair": {
+    "en": "Add Language Pair",
+    "ru": "Добавить языковую пару",
+    "de": "Sprachpaar hinzufügen"
+  },
+  "studySettings": {
+    "en": "Study Settings",
+    "ru": "Настройки обучения",
+    "de": "Lerneinstellungen"
+  },
+  "wordsPerLesson": {
+    "en": "Words Per Lesson",
+    "ru": "Слов в уроке",
+    "de": "Wörter pro Lektion"
+  }
 }
