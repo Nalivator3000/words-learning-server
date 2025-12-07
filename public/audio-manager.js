@@ -165,12 +165,40 @@ class AudioManager {
         const scoreVoice = (voice) => {
             let score = 0;
 
-            // Priority 1: Prefer local voices (faster, work offline, consistent quality)
-            if (voice.localService) {
-                score += 100;
+            // Priority 1: Quality TTS engines FIRST (most important for mobile)
+            const qualityEngines = [
+                { pattern: /google/i, score: 150 },      // Highest priority
+                { pattern: /microsoft/i, score: 140 },
+                { pattern: /apple/i, score: 135 },
+                { pattern: /yandex/i, score: 130 },      // Good for Russian
+                { pattern: /natural/i, score: 120 },
+                { pattern: /premium/i, score: 120 },
+                { pattern: /neural/i, score: 110 },
+                { pattern: /wavenet/i, score: 110 },     // Google WaveNet
+                { pattern: /enhanced/i, score: 100 },
+                { pattern: /HD/i, score: 90 }
+            ];
+
+            let hasQualityEngine = false;
+            qualityEngines.forEach(({ pattern, score: engineScore }) => {
+                if (pattern.test(voice.name)) {
+                    score += engineScore;
+                    hasQualityEngine = true;
+                }
+            });
+
+            // Priority 2: Prefer remote/cloud voices if they're quality engines
+            // Mobile browsers often have better cloud voices than local ones
+            if (!voice.localService && hasQualityEngine) {
+                score += 50; // Bonus for remote quality voices
             }
 
-            // Priority 2: Exact language match (de-DE better than de-US)
+            // Priority 3: Local voices get bonus only if they're quality engines
+            if (voice.localService && hasQualityEngine) {
+                score += 30; // Smaller bonus for local quality voices
+            }
+
+            // Priority 4: Exact language match (de-DE better than de-US)
             const exactMatch = {
                 'ru': ['ru-RU', 'ru_RU'],
                 'en': ['en-US', 'en-GB', 'en_US', 'en_GB'],
@@ -184,25 +212,7 @@ class AudioManager {
                 score += 50;
             }
 
-            // Priority 3: Quality TTS engines (Google, Microsoft, Apple, Yandex)
-            const qualityEngines = [
-                { pattern: /google/i, score: 45 },
-                { pattern: /microsoft/i, score: 40 },
-                { pattern: /apple/i, score: 40 },
-                { pattern: /yandex/i, score: 38 },  // Good for Russian
-                { pattern: /natural/i, score: 35 },
-                { pattern: /premium/i, score: 35 },
-                { pattern: /neural/i, score: 30 },
-                { pattern: /wavenet/i, score: 30 },  // Google WaveNet
-                { pattern: /enhanced/i, score: 25 },
-                { pattern: /HD/i, score: 20 }
-            ];
-
-            qualityEngines.forEach(({ pattern, score: engineScore }) => {
-                if (pattern.test(voice.name)) score += engineScore;
-            });
-
-            // Slight preference for voices with the language in the name
+            // Priority 5: Slight preference for voices with the language in the name
             if (new RegExp(languagePrefix, 'i').test(voice.name)) {
                 score += 10;
             }
