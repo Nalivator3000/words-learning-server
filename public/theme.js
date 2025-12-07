@@ -5,7 +5,7 @@ class ThemeManager {
         this.themeToggleBtnNav = null;
         this.themeIcon = null;
         this.themeIconNav = null;
-        this.currentTheme = 'light';
+        this.currentTheme = 'dark';
 
         // Icons for different themes
         this.icons = {
@@ -49,9 +49,8 @@ class ThemeManager {
         if (savedTheme) {
             this.setTheme(savedTheme);
         } else {
-            // Check system preference
-            const prefersDark = window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches;
-            this.setTheme(prefersDark ? 'dark' : 'light');
+            // Default to dark theme
+            this.setTheme('dark');
         }
     }
 
