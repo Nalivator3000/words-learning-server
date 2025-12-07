@@ -189,8 +189,8 @@ if (process.env.GOOGLE_CLIENT_ID && process.env.GOOGLE_CLIENT_SECRET) {
 
             // Create new user
             const newUser = await db.query(
-                `INSERT INTO users (name, email, google_id, password, registered_at)
-                 VALUES ($1, $2, $3, $4, NOW())
+                `INSERT INTO users (name, email, google_id, password)
+                 VALUES ($1, $2, $3, $4)
                  RETURNING *`,
                 [
                     profile.displayName || profile.emails[0].value.split('@')[0],
