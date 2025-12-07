@@ -17,6 +17,9 @@ require('dotenv').config();
 const app = express();
 const PORT = process.env.PORT || 3001;
 
+// Trust proxy for Railway/production deployment
+app.set('trust proxy', 1);
+
 // Simple logging system for production
 const logger = {
     info: (message) => {
