@@ -752,6 +752,17 @@ async function initDatabase() {
             )
         `);
 
+        // Gamification: XP History (tracking XP gains)
+        await db.query(`
+            CREATE TABLE IF NOT EXISTS xp_history (
+                id SERIAL PRIMARY KEY,
+                user_id INTEGER REFERENCES users(id) ON DELETE CASCADE,
+                xp_amount INTEGER NOT NULL,
+                action_type VARCHAR(100),
+                createdat TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+            )
+        `);
+
         // Gamification: Daily goals
         await db.query(`
             CREATE TABLE IF NOT EXISTS daily_goals (
@@ -1793,22 +1804,22 @@ async function initDatabase() {
         await db.query(`CREATE INDEX IF NOT EXISTS idx_daily_goals_user_date ON daily_goals(user_id, goal_date DESC)`);
 
         // User achievements optimization
-        await db.query(`CREATE INDEX IF NOT EXISTS idx_user_achievements_user ON user_achievements(user_id, createdat DESC)`);
+        await db.query(`CREATE INDEX IF NOT EXISTS idx_user_achievements_user ON user_achievements(user_id, unlocked_at DESC)`);
 
         // Friendships optimization
-        await db.query(`CREATE INDEX IF NOT EXISTS idx_friendships_user1 ON friendships(user1_id, status)`);
-        await db.query(`CREATE INDEX IF NOT EXISTS idx_friendships_user2 ON friendships(user2_id, status)`);
+        await db.query(`CREATE INDEX IF NOT EXISTS idx_friendships_user ON friendships(user_id, status)`);
+        await db.query(`CREATE INDEX IF NOT EXISTS idx_friendships_friend ON friendships(friend_id, status)`);
 
         // Friend activities optimization
         await db.query(`CREATE INDEX IF NOT EXISTS idx_friend_activities_user ON friend_activities(user_id, createdat DESC)`);
 
         // Reports optimization
-        await db.query(`CREATE INDEX IF NOT EXISTS idx_reports_user ON reports(user_id, created_at DESC)`);
+        await db.query(`CREATE INDEX IF NOT EXISTS idx_reports_user ON reports(user_id, createdAt DESC)`);
         await db.query(`CREATE INDEX IF NOT EXISTS idx_reports_status ON reports(status, priority)`);
 
         // Challenge progress optimization
         await db.query(`CREATE INDEX IF NOT EXISTS idx_user_challenges_date ON user_daily_challenges(user_id, challenge_date DESC)`);
-        await db.query(`CREATE INDEX IF NOT EXISTS idx_user_challenges_status ON user_daily_challenges(user_id, status)`);
+        await db.query(`CREATE INDEX IF NOT EXISTS idx_user_challenges_completed ON user_daily_challenges(user_id, is_completed)`);
 
         // Weekly challenges optimization
         await db.query(`CREATE INDEX IF NOT EXISTS idx_weekly_challenges_user ON weekly_challenges(user_id, week_start_date DESC)`);
@@ -1817,12 +1828,12 @@ async function initDatabase() {
         await db.query(`CREATE INDEX IF NOT EXISTS idx_league_history_user ON league_history(user_id, week_start_date DESC)`);
 
         // Leaderboard cache optimization
-        await db.query(`CREATE INDEX IF NOT EXISTS idx_leaderboard_cache ON leaderboard_cache(leaderboard_type, rank)`);
+        await db.query(`CREATE INDEX IF NOT EXISTS idx_leaderboard_cache ON leaderboard_cache(leaderboard_type, rank_position)`);
         await db.query(`CREATE INDEX IF NOT EXISTS idx_leaderboard_user ON leaderboard_cache(user_id, leaderboard_type)`);
 
         // Global word collections optimization
-        await db.query(`CREATE INDEX IF NOT EXISTS idx_global_collections_lang ON global_word_collections(from_language, to_language, category)`);
-        await db.query(`CREATE INDEX IF NOT EXISTS idx_global_collections_difficulty ON global_word_collections(difficulty_level, is_active)`);
+        await db.query(`CREATE INDEX IF NOT EXISTS idx_global_collections_lang ON global_word_collections(from_lang, to_lang, category)`);
+        await db.query(`CREATE INDEX IF NOT EXISTS idx_global_collections_difficulty ON global_word_collections(difficulty_level, is_public)`);
 
         // Tournaments optimization
         await db.query(`CREATE INDEX IF NOT EXISTS idx_tournaments_status ON tournaments(status, start_date)`);
@@ -2056,60 +2067,7 @@ async function checkFeatureAccess(userId, featureKey) {
 }
 
 // Achievements: Initialize predefined achievements
-async function initializeAchievements() {
-    const achievements = [
-        // Learning milestones
-        { key: 'first_steps', title: 'Первые шаги', description: 'Выучите 10 слов', icon: '👣', category: 'learning', difficulty: 'easy', reward_xp: 50, reward_coins: 10, target: 10 },
-        { key: 'vocabulary_builder', title: 'Строитель словаря', description: 'Выучите 100 слов', icon: '📚', category: 'learning', difficulty: 'medium', reward_xp: 200, reward_coins: 50, target: 100 },
-        { key: 'word_master', title: 'Мастер слов', description: 'Выучите 500 слов', icon: '🎓', category: 'learning', difficulty: 'hard', reward_xp: 1000, reward_coins: 250, target: 500 },
-        { key: 'polyglot', title: 'Полиглот', description: 'Создайте 3 языковые пары', icon: '🌍', category: 'learning', difficulty: 'medium', reward_xp: 150, reward_coins: 30, target: 3 },
-
-        // Streak achievements
-        { key: 'week_warrior', title: 'Воин недели', description: 'Стрик 7 дней', icon: '🔥', category: 'streak', difficulty: 'easy', reward_xp: 100, reward_coins: 20, target: 7 },
-        { key: 'marathon_runner', title: 'Марафонец', description: 'Стрик 30 дней', icon: '🏃', category: 'streak', difficulty: 'hard', reward_xp: 500, reward_coins: 100, target: 30 },
-        { key: 'legendary_streak', title: 'Легендарный стрик', description: 'Стрик 100 дней', icon: '⭐', category: 'streak', difficulty: 'legendary', reward_xp: 2000, reward_coins: 500, target: 100 },
-
-        // Accuracy achievements
-        { key: 'perfectionist', title: 'Перфекционист', description: '100% правильных ответов в 10 квизах', icon: '💯', category: 'accuracy', difficulty: 'medium', reward_xp: 150, reward_coins: 30, target: 10 },
-        { key: 'sharpshooter', title: 'Снайпер', description: '100% правильных ответов в 50 квизах', icon: '🎯', category: 'accuracy', difficulty: 'hard', reward_xp: 500, reward_coins: 100, target: 50 },
-
-        // Time-based achievements
-        { key: 'night_owl', title: 'Ночной ученик', description: 'Изучайте слова после 22:00', icon: '🌙', category: 'time', difficulty: 'easy', reward_xp: 50, reward_coins: 10, is_secret: true, target: 1 },
-        { key: 'early_bird', title: 'Ранняя пташка', description: 'Изучайте слова до 6:00', icon: '🌅', category: 'time', difficulty: 'easy', reward_xp: 50, reward_coins: 10, is_secret: true, target: 1 },
-
-        // XP achievements
-        { key: 'xp_collector', title: 'Коллекционер XP', description: 'Заработайте 1000 XP', icon: '💎', category: 'xp', difficulty: 'medium', reward_xp: 200, reward_coins: 50, target: 1000 },
-        { key: 'xp_master', title: 'Мастер XP', description: 'Заработайте 10000 XP', icon: '👑', category: 'xp', difficulty: 'hard', reward_xp: 1000, reward_coins: 250, target: 10000 },
-
-        // Social achievements
-        { key: 'social_butterfly', title: 'Общительный', description: 'Добавьте 5 друзей', icon: '🦋', category: 'social', difficulty: 'easy', reward_xp: 100, reward_coins: 20, target: 5 },
-        { key: 'challenge_master', title: 'Мастер челленджей', description: 'Выполните 30 челленджей', icon: '🏆', category: 'challenges', difficulty: 'hard', reward_xp: 500, reward_coins: 100, target: 30 }
-    ];
-
-    for (const achievement of achievements) {
-        try {
-            await db.query(`
-                INSERT INTO achievements (achievement_key, title, description, icon, category, difficulty, reward_xp, reward_coins, is_secret)
-                VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9)
-                ON CONFLICT (achievement_key) DO NOTHING
-            `, [
-                achievement.key,
-                achievement.title,
-                achievement.description,
-                achievement.icon,
-                achievement.category,
-                achievement.difficulty,
-                achievement.reward_xp,
-                achievement.reward_coins,
-                achievement.is_secret || false
-            ]);
-        } catch (err) {
-            logger.error(`Error initializing achievement ${achievement.key}:`, err.message);
-        }
-    }
-
-    logger.info('✅ Achievements initialized');
-}
+// DUPLICATE REMOVED - Using original initializeAchievements function at line 1843
 
 // Leagues: Initialize league tiers
 async function initializeLeagueTiers() {
