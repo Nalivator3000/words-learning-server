@@ -350,6 +350,10 @@ class LanguageLearningApp {
         document.querySelectorAll('.section').forEach(section => section.classList.remove('active'));
         document.getElementById(`${sectionName}Section`).classList.add('active');
 
+        // Remove quiz-active class when navigating away from quiz sections
+        // This ensures the header is visible on non-quiz pages
+        document.body.classList.remove('quiz-active', 'menu-visible');
+
         this.currentSection = sectionName;
 
         // Update data for specific sections
