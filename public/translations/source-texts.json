@@ -1259,5 +1259,75 @@
     "en": "Words Per Lesson",
     "ru": "Слов в уроке",
     "de": "Wörter pro Lektion"
+  },
+  "onboarding_languages_title": {
+    "en": "Choose Your Languages",
+    "ru": "Выберите языки",
+    "de": "Wählen Sie Ihre Sprachen"
+  },
+  "onboarding_languages_desc": {
+    "en": "Select your native language and the language you want to learn",
+    "ru": "Выберите родной язык и язык, который хотите изучать",
+    "de": "Wählen Sie Ihre Muttersprache und die Sprache, die Sie lernen möchten"
+  },
+  "i_speak": {
+    "en": "I speak:",
+    "ru": "Я говорю:",
+    "de": "Ich spreche:"
+  },
+  "i_want_to_learn": {
+    "en": "I want to learn:",
+    "ru": "Я хочу изучать:",
+    "de": "Ich möchte lernen:"
+  },
+  "onboarding_goal_title": {
+    "en": "Set Your Daily Goal",
+    "ru": "Установите ежедневную цель",
+    "de": "Setzen Sie Ihr Tagesziel"
+  },
+  "onboarding_goal_desc": {
+    "en": "How much time can you dedicate to learning each day?",
+    "ru": "Сколько времени вы можете уделять обучению каждый день?",
+    "de": "Wie viel Zeit können Sie täglich dem Lernen widmen?"
+  },
+  "minutes": {
+    "en": "min",
+    "ru": "мин",
+    "de": "Min"
+  },
+  "onboarding_theme_title": {
+    "en": "Choose Your Theme",
+    "ru": "Выберите тему",
+    "de": "Wählen Sie Ihr Thema"
+  },
+  "onboarding_theme_desc": {
+    "en": "Select the appearance you prefer",
+    "ru": "Выберите предпочитаемый внешний вид",
+    "de": "Wählen Sie das bevorzugte Erscheinungsbild"
+  },
+  "dark_theme": {
+    "en": "Dark",
+    "ru": "Темная",
+    "de": "Dunkel"
+  },
+  "light_theme": {
+    "en": "Light",
+    "ru": "Светлая",
+    "de": "Hell"
+  },
+  "next": {
+    "en": "Next",
+    "ru": "Далее",
+    "de": "Weiter"
+  },
+  "back": {
+    "en": "Back",
+    "ru": "Назад",
+    "de": "Zurück"
+  },
+  "get_started": {
+    "en": "Get Started!",
+    "ru": "Начать!",
+    "de": "Los geht's!"
   }
 }
