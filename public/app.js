@@ -65,6 +65,11 @@ class LanguageLearningApp {
             // Initialize language management
             languageManager.init();
 
+            // Check if user needs onboarding BEFORE user init
+            // This allows showing onboarding for new users who just logged in via OAuth
+            const urlParams = new URLSearchParams(window.location.search);
+            const needsOnboarding = urlParams.get('needsOnboarding') === 'true';
+
             // Initialize user management
             const isLoggedIn = await userManager.init();
 
@@ -77,16 +82,22 @@ class LanguageLearningApp {
                 this.showSection('home');
                 await this.updateStats();
 
-                // Check if user needs onboarding (from OAuth redirect)
-                const urlParams = new URLSearchParams(window.location.search);
-                if (urlParams.get('needsOnboarding') === 'true') {
+                // Show onboarding if needed
+                if (needsOnboarding) {
                     console.log('🎯 New user needs onboarding');
                     if (window.onboardingManager) {
-                        window.onboardingManager.show();
+                        // Small delay to ensure everything is loaded
+                        setTimeout(() => {
+                            window.onboardingManager.show();
+                        }, 300);
                     }
                     // Clean up URL
                     window.history.replaceState({}, document.title, '/');
                 }
+            } else if (needsOnboarding) {
+                // User needs onboarding but is not logged in yet
+                // This can happen if they just registered/logged in
+                console.log('🎯 User needs onboarding (will show after login)');
             }
         } catch (error) {
             console.error('Failed to initialize app:', error);

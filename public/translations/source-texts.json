@@ -1329,5 +1329,20 @@
     "en": "Get Started!",
     "ru": "Начать!",
     "de": "Los geht's!"
+  },
+  "words_goal": {
+    "en": "Words",
+    "ru": "Слова",
+    "de": "Wörter"
+  },
+  "xp_goal": {
+    "en": "XP",
+    "ru": "Опыт",
+    "de": "XP"
+  },
+  "tasks_goal": {
+    "en": "Tasks",
+    "ru": "Задания",
+    "de": "Aufgaben"
   }
 }

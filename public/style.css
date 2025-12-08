@@ -5983,6 +5983,29 @@ input:focus, textarea:focus, select:focus {
     box-shadow: 0 0 0 3px rgba(99, 102, 241, 0.1);
 }
 
+/* Goal Formula Display */
+.goal-formula {
+    background: linear-gradient(135deg, rgba(99, 102, 241, 0.1), rgba(139, 92, 246, 0.1));
+    border: 2px solid var(--primary-500);
+    border-radius: var(--radius-xl);
+    padding: var(--space-4);
+    margin-bottom: var(--space-6);
+    text-align: center;
+}
+
+.formula-text {
+    font-size: var(--text-base);
+    color: var(--text-primary);
+    margin: 0;
+    font-weight: 500;
+}
+
+.formula-text strong {
+    color: var(--primary-500);
+    font-weight: 700;
+    font-size: var(--text-lg);
+}
+
 /* Time Options */
 .time-options {
     display: grid;
@@ -6027,14 +6050,14 @@ input:focus, textarea:focus, select:focus {
     opacity: 0.8;
 }
 
-.time-words {
+.time-goals {
     font-size: var(--text-xs);
     opacity: 0.7;
     margin-top: var(--space-1);
 }
 
 .time-option.selected .time-label,
-.time-option.selected .time-words {
+.time-option.selected .time-goals {
     opacity: 0.9;
 }
 

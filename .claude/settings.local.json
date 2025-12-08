@@ -110,7 +110,11 @@
       "Bash(cp:*)",
       "Bash(npm run test:e2e:mobile:*)",
       "Bash(git credential-manager:*)",
-      "Bash(npx playwright install webkit)"
+      "Bash(npx playwright install webkit)",
+      "Bash(if [ -f .env ])",
+      "Bash(then echo \"EXISTS\")",
+      "Bash(else echo \"NOT_FOUND\")",
+      "Bash(npx playwright test:*)"
     ],
     "deny": [],
     "ask": []

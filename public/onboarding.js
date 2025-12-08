@@ -39,6 +39,11 @@ class OnboardingManager {
                 // Add selection to clicked button
                 btn.classList.add('selected');
                 this.selections.dailyGoalMinutes = parseInt(btn.dataset.minutes);
+
+                // Update goal preview
+                const minutes = this.selections.dailyGoalMinutes;
+                document.getElementById('xpGoalPreview').textContent = minutes * 10;
+                document.getElementById('tasksGoalPreview').textContent = minutes * 10;
             });
         });
 

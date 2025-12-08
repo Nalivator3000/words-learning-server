@@ -2580,16 +2580,23 @@ app.post('/api/auth/complete-onboarding', async (req, res) => {
             [userId, pairName, targetLang, nativeLang, true]
         );
 
-        // Create or update user_profile with daily_goal_minutes
+        // Create or update user_profile with all daily goals
+        // Formula: daily_xp_goal = daily_goal_minutes * 10, daily_tasks_goal = daily_goal_minutes * 10, daily_word_goal = 5 (fixed)
+        const minutes = dailyGoalMinutes || 15;
         const profileResult = await db.query(`
-            INSERT INTO user_profiles (user_id, daily_goal_minutes)
-            VALUES ($1, $2)
+            INSERT INTO user_profiles (user_id, daily_goal_minutes, daily_xp_goal, daily_tasks_goal, daily_word_goal)
+            VALUES ($1, $2, $3, $4, $5)
             ON CONFLICT (user_id)
-            DO UPDATE SET daily_goal_minutes = $2, updatedAt = CURRENT_TIMESTAMP
+            DO UPDATE SET
+                daily_goal_minutes = $2,
+                daily_xp_goal = $3,
+                daily_tasks_goal = $4,
+                daily_word_goal = $5,
+                updatedAt = CURRENT_TIMESTAMP
             RETURNING *
-        `, [userId, dailyGoalMinutes || 15]);
+        `, [userId, minutes, minutes * 10, minutes * 10, 5]);
 
-        logger.info(`✅ Onboarding completed for user ${userId}: ${pairName}, ${dailyGoalMinutes} min/day, ${theme} theme`);
+        logger.info(`✅ Onboarding completed for user ${userId}: ${pairName}, ${minutes} min/day (${minutes * 10} XP, ${minutes * 10} tasks, 5 words), ${theme} theme`);
 
         res.json({
             success: true,
