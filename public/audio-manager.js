@@ -159,7 +159,13 @@ class AudioManager {
             !badVoicePatterns.some(pattern => pattern.test(voice.name))
         );
 
-        const voicesToConsider = goodVoices.length > 0 ? goodVoices : languageVoices;
+        // CRITICAL: If no quality voices available, return null instead of using bad voices
+        if (goodVoices.length === 0) {
+            console.warn(`⚠️ No quality voices found for ${languagePrefix}. Only low-quality TTS available - skipping.`);
+            return null;
+        }
+
+        const voicesToConsider = goodVoices;
 
         // Quality score function
         const scoreVoice = (voice) => {
@@ -287,10 +293,9 @@ class AudioManager {
                 utterance.volume = this.voiceSettings.volume;
             }
         } else {
-            console.warn(`AudioManager: No voice found for ${languageCode}, using default`);
-            utterance.rate = this.voiceSettings.rate;
-            utterance.pitch = this.voiceSettings.pitch;
-            utterance.volume = this.voiceSettings.volume;
+            // No quality voice available - skip TTS completely
+            console.warn(`❌ AudioManager: No quality voice available for ${languageCode}. Skipping TTS to avoid low-quality audio.`);
+            return; // Exit without speaking
         }
         
         // Add error handling
