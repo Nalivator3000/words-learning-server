@@ -153,6 +153,13 @@ class LanguageLearningApp {
         document.getElementById('userMenuBtn').addEventListener('click', () => this.showSection('settings'));
         document.getElementById('settingsNavBtn').addEventListener('click', () => this.showSection('settings'));
 
+        // Logout button in settings
+        document.getElementById('logoutBtnSettings').addEventListener('click', () => {
+            if (confirm(i18n.t ? i18n.t('confirm_logout') || 'Are you sure you want to log out?' : 'Are you sure you want to log out?')) {
+                userManager.logout();
+            }
+        });
+
 
         // Leaderboard tabs
         document.getElementById('globalLeaderboardTab').addEventListener('click', () => this.loadLeaderboard('global'));

@@ -4016,6 +4016,12 @@ input:focus, textarea:focus, select:focus {
         /* Back to normal calculation with header */
         max-height: calc(100dvh - 140px);
     }
+
+/* Hide menu toggle button on desktop (screens wider than 475px) */
+@media (min-width: 476px) {
+    .menu-toggle-btn {
+        display: none !important;
+    }
 }
 
 /* Touch device optimizations */
