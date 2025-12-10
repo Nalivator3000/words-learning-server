@@ -149,8 +149,37 @@ class LanguageLearningApp {
         document.getElementById('leaderboardBtn').addEventListener('click', () => this.showSection('leaderboard'));
         document.getElementById('statsBtn').addEventListener('click', () => this.showSection('stats'));
 
-        // User menu - direct to settings
-        document.getElementById('userMenuBtn').addEventListener('click', () => this.showSection('settings'));
+        // User menu - toggle dropdown
+        document.getElementById('userMenuBtn').addEventListener('click', (e) => {
+            e.stopPropagation();
+            const userMenu = document.getElementById('userMenu');
+            userMenu.classList.toggle('hidden');
+        });
+
+        // Close user menu when clicking outside
+        document.addEventListener('click', (e) => {
+            const userMenu = document.getElementById('userMenu');
+            const userMenuBtn = document.getElementById('userMenuBtn');
+            if (!userMenu.contains(e.target) && e.target !== userMenuBtn) {
+                userMenu.classList.add('hidden');
+            }
+        });
+
+        // Settings button in user menu
+        document.getElementById('settingsBtn').addEventListener('click', () => {
+            this.showSection('settings');
+            document.getElementById('userMenu').classList.add('hidden');
+        });
+
+        // Logout button in user menu
+        document.getElementById('logoutBtn').addEventListener('click', () => {
+            if (confirm(i18n.t ? i18n.t('confirm_logout') || 'Are you sure you want to log out?' : 'Are you sure you want to log out?')) {
+                userManager.logout();
+            }
+            document.getElementById('userMenu').classList.add('hidden');
+        });
+
+        // Settings button in nav
         document.getElementById('settingsNavBtn').addEventListener('click', () => this.showSection('settings'));
 
         // Logout button in settings
