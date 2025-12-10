@@ -3947,12 +3947,16 @@ input:focus, textarea:focus, select:focus {
         transform: translateY(-100%);
         transition: transform 0.3s ease;
         pointer-events: none;
+        visibility: hidden;
+        opacity: 0;
     }
 
     /* Show header when toggled */
     body.quiz-active.menu-visible .app-header {
         transform: translateY(0);
         pointer-events: auto;
+        visibility: visible;
+        opacity: 1;
     }
 
     /* Move quiz area up when header is hidden */
