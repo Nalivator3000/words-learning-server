@@ -265,7 +265,7 @@ class AudioManager {
             }
         }
 
-        console.log(`AudioManager: Speaking "${text}" in ${languageCode}`);
+        console.log(`🔊 AudioManager: Attempting to speak "${text}" in ${languageCode}`);
 
         // Stop any current speech
         this.synth.cancel();
@@ -295,6 +295,7 @@ class AudioManager {
         } else {
             // No quality voice available - skip TTS completely
             console.warn(`❌ AudioManager: No quality voice available for ${languageCode}. Skipping TTS to avoid low-quality audio.`);
+            console.warn(`❌ Available voices for this language were filtered out as low-quality (Android TTS, Samsung TTS, etc.)`);
             return; // Exit without speaking
         }
         
@@ -326,6 +327,53 @@ class AudioManager {
             lang: voice.lang,
             localService: voice.localService
         }));
+    }
+
+    // Diagnostic function to log all available voices and their quality assessment
+    diagnoseVoices() {
+        console.log('🔍 VOICE DIAGNOSTICS:');
+        console.log('='.repeat(50));
+
+        const allVoices = this.synth.getVoices();
+        console.log(`Total voices available: ${allVoices.length}`);
+
+        const badVoicePatterns = [
+            /espeak/i,
+            /festival/i,
+            /pico/i,
+            /flite/i,
+            /android/i,
+            /samsung/i
+        ];
+
+        const languages = ['ru', 'en', 'de', 'es', 'fr', 'it'];
+
+        languages.forEach(lang => {
+            console.log(`\n📋 ${lang.toUpperCase()} voices:`);
+            const langVoices = allVoices.filter(v => v.lang.startsWith(lang));
+
+            if (langVoices.length === 0) {
+                console.log('  ❌ No voices found');
+                return;
+            }
+
+            langVoices.forEach(voice => {
+                const isBad = badVoicePatterns.some(pattern => pattern.test(voice.name));
+                const status = isBad ? '❌ FILTERED' : '✅ ALLOWED';
+                console.log(`  ${status} ${voice.name} (${voice.lang}) ${voice.localService ? '📍 Local' : '☁️ Cloud'}`);
+            });
+        });
+
+        console.log('\n' + '='.repeat(50));
+        console.log('Currently selected voices:');
+        Object.keys(this.voices).forEach(langCode => {
+            const voice = this.voices[langCode];
+            if (voice) {
+                console.log(`  ✅ ${langCode}: ${voice.name}`);
+            } else {
+                console.log(`  ❌ ${langCode}: No quality voice available`);
+            }
+        });
     }
 }
 
