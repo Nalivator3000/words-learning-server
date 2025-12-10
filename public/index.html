@@ -71,8 +71,10 @@
             });
         }
 
-        // Show update notification banner
+        // Show update notification banner with auto-update
         function showUpdateNotification(newWorker) {
+            console.log('🔄 New version detected! Auto-updating in 3 seconds...');
+
             // Create notification banner
             const banner = document.createElement('div');
             banner.id = 'update-banner';
@@ -90,10 +92,11 @@
                 animation: slideDown 0.3s ease-out;
             `;
 
+            let countdown = 3;
             banner.innerHTML = `
                 <div style="max-width: 600px; margin: 0 auto; display: flex; align-items: center; justify-content: center; gap: 16px; flex-wrap: wrap;">
-                    <span style="font-weight: 600;">🔄 ${i18n?.t ? i18n.t('app_update_available') : 'A new version is available!'}</span>
-                    <button id="update-btn" style="
+                    <span style="font-weight: 600;">🔄 New version available! Updating in <span id="countdown">${countdown}</span>s...</span>
+                    <button id="update-now-btn" style="
                         background: white;
                         color: #6366f1;
                         border: none;
@@ -103,7 +106,7 @@
                         cursor: pointer;
                         transition: transform 0.2s;
                     " onmouseover="this.style.transform='scale(1.05)'" onmouseout="this.style.transform='scale(1)'">
-                        ${i18n?.t ? i18n.t('confirm') : 'Update Now'}
+                        Update Now
                     </button>
                 </div>
             `;
@@ -123,8 +126,23 @@
                 document.head.appendChild(style);
             }
 
-            // Handle update button click
-            document.getElementById('update-btn').addEventListener('click', () => {
+            // Countdown timer
+            const countdownInterval = setInterval(() => {
+                countdown--;
+                const countdownEl = document.getElementById('countdown');
+                if (countdownEl) {
+                    countdownEl.textContent = countdown;
+                }
+
+                if (countdown <= 0) {
+                    clearInterval(countdownInterval);
+                    newWorker.postMessage({ type: 'SKIP_WAITING' });
+                }
+            }, 1000);
+
+            // Handle manual update button click
+            document.getElementById('update-now-btn')?.addEventListener('click', () => {
+                clearInterval(countdownInterval);
                 newWorker.postMessage({ type: 'SKIP_WAITING' });
                 banner.remove();
             });
@@ -1323,32 +1341,32 @@
     <!-- Chart.js for analytics visualizations -->
     <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.1/dist/chart.umd.min.js"></script>
 
-    <script src="theme.js?v=5.2.4"></script>
-    <script src="toast.js?v=5.2.4"></script>
-    <script src="api-database.js?v=5.2.4"></script>
-    <script src="quiz.js?v=5.2.4"></script>
-    <script src="i18n.js?v=5.2.4"></script>
-    <script src="audio-manager.js?v=5.2.4"></script>
-    <script src="language-manager.js?v=5.2.4"></script>
-    <script src="auth-validation.js?v=5.2.4"></script>
-    <script src="add-word-ui.js?v=5.2.4"></script>
-    <script src="user-manager.js?v=5.2.4"></script>
-    <script src="survival-mode.js?v=5.2.4"></script>
-    <script src="gamification.js?v=5.2.4"></script>
-    <script src="analytics.js?v=5.2.4"></script>
-    <script src="onboarding.js?v=5.2.4"></script>
-    <script src="features-ui.js?v=5.2.4"></script>
-    <script src="leagues-ui.js?v=5.2.4"></script>
-    <script src="weekly-challenges-ui.js?v=5.2.4"></script>
-    <script src="personal-rating-ui.js?v=5.2.4"></script>
-    <script src="personal-insights-ui.js?v=5.2.4"></script>
-    <script src="friends-ui.js?v=5.2.4"></script>
-    <script src="duels-ui.js?v=5.2.4"></script>
-    <script src="duel-gameplay.js?v=5.2.4"></script>
-    <script src="profile-ui.js?v=5.2.4"></script>
-    <script src="achievements-ui.js?v=5.2.4"></script>
-    <script src="word-lists-ui.js?v=5.2.4"></script>
-    <script src="app.js?v=5.2.4"></script>
+    <script src="theme.js?v=5.2.5"></script>
+    <script src="toast.js?v=5.2.5"></script>
+    <script src="api-database.js?v=5.2.5"></script>
+    <script src="quiz.js?v=5.2.5"></script>
+    <script src="i18n.js?v=5.2.5"></script>
+    <script src="audio-manager.js?v=5.2.5"></script>
+    <script src="language-manager.js?v=5.2.5"></script>
+    <script src="auth-validation.js?v=5.2.5"></script>
+    <script src="add-word-ui.js?v=5.2.5"></script>
+    <script src="user-manager.js?v=5.2.5"></script>
+    <script src="survival-mode.js?v=5.2.5"></script>
+    <script src="gamification.js?v=5.2.5"></script>
+    <script src="analytics.js?v=5.2.5"></script>
+    <script src="onboarding.js?v=5.2.5"></script>
+    <script src="features-ui.js?v=5.2.5"></script>
+    <script src="leagues-ui.js?v=5.2.5"></script>
+    <script src="weekly-challenges-ui.js?v=5.2.5"></script>
+    <script src="personal-rating-ui.js?v=5.2.5"></script>
+    <script src="personal-insights-ui.js?v=5.2.5"></script>
+    <script src="friends-ui.js?v=5.2.5"></script>
+    <script src="duels-ui.js?v=5.2.5"></script>
+    <script src="duel-gameplay.js?v=5.2.5"></script>
+    <script src="profile-ui.js?v=5.2.5"></script>
+    <script src="achievements-ui.js?v=5.2.5"></script>
+    <script src="word-lists-ui.js?v=5.2.5"></script>
+    <script src="app.js?v=5.2.5"></script>
 
     <script>
         // Auto-detect device language and pre-select in registration form

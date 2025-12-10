@@ -1,7 +1,7 @@
 // Service Worker for Words Learning App
-// Version 5.2.4 - Force Audio Manager Update
+// Version 5.2.5 - Auto-update without user action
 
-const CACHE_VERSION = 'v5.2.4';
+const CACHE_VERSION = 'v5.2.5';
 const CACHE_NAME = `words-learning-${CACHE_VERSION}`;
 
 // Files to cache for offline use
