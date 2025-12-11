@@ -1391,6 +1391,19 @@
                 console.log('🌍 Auto-detected language:', browserLang, '→ Native:', nativeLang, ', Target:', targetLang);
             }
         });
+
+        // Load Eruda mobile console for demo user
+        const currentUser = JSON.parse(localStorage.getItem('user') || '{}');
+        if (currentUser.email === 'demo@fluentflow.app') {
+            console.log('🔧 Loading Eruda console for demo user...');
+            const script = document.createElement('script');
+            script.src = 'https://cdn.jsdelivr.net/npm/eruda';
+            script.onload = function() {
+                eruda.init();
+                console.log('✅ Eruda mobile console loaded! Click the green icon in bottom-right corner.');
+            };
+            document.body.appendChild(script);
+        }
     </script>
 </body>
 </html>
