@@ -162,8 +162,11 @@ class AudioManager {
         // CRITICAL: If no quality voices available, return null instead of using bad voices
         if (goodVoices.length === 0) {
             console.warn(`⚠️ No quality voices found for ${languagePrefix}. Only low-quality TTS available - skipping.`);
+            console.warn(`❌ FILTERED OUT VOICES:`, languageVoices.map(v => v.name));
             return null;
         }
+
+        console.log(`✅ Found ${goodVoices.length} quality voices for ${languagePrefix}:`, goodVoices.map(v => v.name));
 
         const voicesToConsider = goodVoices;
 
