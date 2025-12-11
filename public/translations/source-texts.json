@@ -119,6 +119,16 @@
     "ru": "Выйти",
     "de": "Abmelden"
   },
+  "account": {
+    "en": "Account",
+    "ru": "Аккаунт",
+    "de": "Konto"
+  },
+  "confirm_logout": {
+    "en": "Are you sure you want to log out?",
+    "ru": "Вы уверены, что хотите выйти?",
+    "de": "Möchten Sie sich wirklich abmelden?"
+  },
   "quickStudy": {
     "en": "Quick Study",
     "ru": "Быстрое изучение",
