@@ -1,7 +1,7 @@
 // Service Worker for Words Learning App
-// Version 5.3.0 - Fix missing translation keys
+// Version 5.3.1 - Improve dark theme import cards styling
 
-const CACHE_VERSION = 'v5.3.0';
+const CACHE_VERSION = 'v5.3.1';
 const CACHE_NAME = `words-learning-${CACHE_VERSION}`;
 
 // Files to cache for offline use

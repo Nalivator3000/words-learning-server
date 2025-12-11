@@ -5441,8 +5441,10 @@ input:focus, textarea:focus, select:focus {
 
 /* Import Cards Dark Theme */
 [data-theme="dark"] .import-card {
-    background: rgba(45, 55, 72, 0.95);
-    border: 1px solid rgba(255, 255, 255, 0.1);
+    background: rgba(31, 41, 55, 0.98);
+    backdrop-filter: blur(20px);
+    border: 1px solid rgba(99, 102, 241, 0.3);
+    box-shadow: 0 8px 32px rgba(0, 0, 0, 0.3);
 }
 
 [data-theme="dark"] .import-card h3 {
