@@ -1418,6 +1418,11 @@ textarea {
     z-index: 10002;
 }
 
+/* Adjust user menu position in quiz mode (when header is hidden) */
+body.quiz-active .user-menu {
+    top: 20px;
+}
+
 .user-menu:not(.hidden) {
     transform: scale(1) translateY(0);
     opacity: 1;

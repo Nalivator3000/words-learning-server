@@ -1,7 +1,7 @@
 // Service Worker for Words Learning App
-// Version 5.2.6 - Voice selection logging for debugging
+// Version 5.2.7 - Fix user menu positioning in quiz mode
 
-const CACHE_VERSION = 'v5.2.6';
+const CACHE_VERSION = 'v5.2.7';
 const CACHE_NAME = `words-learning-${CACHE_VERSION}`;
 
 // Files to cache for offline use
