@@ -8,6 +8,7 @@ yarn-error.log*
 uploads/
 *.log
 .DS_Store
+audio-cache/
 
 # Claude logs (local only)
 .claude/action-log.md

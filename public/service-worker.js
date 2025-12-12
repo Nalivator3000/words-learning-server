@@ -1,7 +1,7 @@
 // Service Worker for Words Learning App
-// Version 5.3.5 - Mobile: Premium voices only, no fallback
+// Version 5.4.0 - Google Cloud TTS API integration
 
-const CACHE_VERSION = 'v5.3.5';
+const CACHE_VERSION = 'v5.4.0';
 const CACHE_NAME = `words-learning-${CACHE_VERSION}`;
 
 // Files to cache for offline use

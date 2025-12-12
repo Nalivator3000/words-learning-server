@@ -12,6 +12,7 @@ const crypto = require('crypto');
 const session = require('express-session');
 const passport = require('passport');
 const GoogleStrategy = require('passport-google-oauth20').Strategy;
+const textToSpeech = require('@google-cloud/text-to-speech');
 require('dotenv').config();
 
 const app = express();
@@ -15315,6 +15316,82 @@ app.post('/api/migrate-word-statuses', async (req, res) => {
     } catch (err) {
         logger.error('❌ Migration failed:', err);
         res.status(500).json({ error: err.message });
+    }
+});
+
+// ============================================================================
+// GOOGLE CLOUD TEXT-TO-SPEECH API
+// ============================================================================
+
+// Initialize Google TTS client (will use GOOGLE_APPLICATION_CREDENTIALS env var)
+const ttsClient = process.env.GOOGLE_TTS_API_KEY ? new textToSpeech.TextToSpeechClient({
+    apiKey: process.env.GOOGLE_TTS_API_KEY
+}) : null;
+
+// Audio cache directory
+const AUDIO_CACHE_DIR = path.join(__dirname, 'audio-cache');
+if (!fs.existsSync(AUDIO_CACHE_DIR)) {
+    fs.mkdirSync(AUDIO_CACHE_DIR, { recursive: true });
+}
+
+// TTS endpoint with caching
+app.get('/api/tts', async (req, res) => {
+    try {
+        const { text, lang = 'de-DE' } = req.query;
+
+        if (!text) {
+            return res.status(400).json({ error: 'Text parameter is required' });
+        }
+
+        if (!ttsClient) {
+            return res.status(503).json({ error: 'Google TTS is not configured. Set GOOGLE_TTS_API_KEY in environment variables.' });
+        }
+
+        // Create cache filename based on text and language
+        const cacheKey = crypto.createHash('md5').update(`${text}-${lang}`).digest('hex');
+        const cacheFile = path.join(AUDIO_CACHE_DIR, `${cacheKey}.mp3`);
+
+        // Check if audio is already cached
+        if (fs.existsSync(cacheFile)) {
+            logger.info(`📦 Serving cached audio for: "${text}"`);
+            res.set('Content-Type', 'audio/mpeg');
+            res.set('Cache-Control', 'public, max-age=31536000'); // Cache for 1 year
+            return res.sendFile(cacheFile);
+        }
+
+        // Generate audio using Google Cloud TTS
+        logger.info(`🔊 Generating TTS for: "${text}" (${lang})`);
+
+        const request = {
+            input: { text },
+            voice: {
+                languageCode: lang,
+                // Use Neural2 voices for best quality (if available)
+                name: lang === 'de-DE' ? 'de-DE-Neural2-C' :
+                      lang === 'en-US' ? 'en-US-Neural2-F' :
+                      lang === 'ru-RU' ? 'ru-RU-Wavenet-A' : undefined
+            },
+            audioConfig: {
+                audioEncoding: 'MP3',
+                speakingRate: 0.9, // Slightly slower for learning
+                pitch: 0.0
+            },
+        };
+
+        const [response] = await ttsClient.synthesizeSpeech(request);
+
+        // Save to cache
+        fs.writeFileSync(cacheFile, response.audioContent, 'binary');
+        logger.info(`✅ Audio generated and cached: ${cacheKey}.mp3`);
+
+        // Send audio
+        res.set('Content-Type', 'audio/mpeg');
+        res.set('Cache-Control', 'public, max-age=31536000');
+        res.send(Buffer.from(response.audioContent, 'binary'));
+
+    } catch (err) {
+        logger.error('❌ TTS generation failed:', err);
+        res.status(500).json({ error: 'Failed to generate speech', details: err.message });
     }
 });
 

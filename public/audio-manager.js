@@ -302,48 +302,98 @@ class AudioManager {
 
         console.log(`🔊 AudioManager: Attempting to speak "${text}" in ${languageCode}`);
 
-        // Stop any current speech
+        // HYBRID APPROACH: Use Google TTS API on mobile, Web Speech API on desktop
+        const isMobile = /Android|iPhone|iPad|iPod|Mobile/i.test(navigator.userAgent);
+        const voice = this.voices[languageCode];
+
+        // On mobile: Try Google TTS API first, fallback to Web Speech if API not available
+        if (isMobile) {
+            if (!voice) {
+                console.warn(`⚠️ No premium voices on mobile. Trying Google TTS API...`);
+                this.speakWithGoogleTTS(text, languageCode);
+                return;
+            }
+            // If premium voice exists on mobile, use it
+            console.log(`✅ Premium voice found on mobile: ${voice.name}`);
+        }
+
+        // Desktop or mobile with premium voice: Use Web Speech API
         this.synth.cancel();
 
         const utterance = new SpeechSynthesisUtterance(text);
         utterance.lang = languageCode;
 
-        // Use appropriate voice for language
-        const voice = this.voices[languageCode];
         if (voice) {
             utterance.voice = voice;
             console.log(`AudioManager: Using voice "${voice.name}" for ${languageCode}`);
 
             // Adjust settings based on voice type
-            // Remote/cloud voices often need different settings than local voices
             if (voice.localService) {
-                // Local voices - use user settings
                 utterance.rate = this.voiceSettings.rate;
                 utterance.pitch = this.voiceSettings.pitch;
                 utterance.volume = this.voiceSettings.volume;
             } else {
-                // Remote/cloud voices - slightly slower for better clarity
                 utterance.rate = Math.max(0.75, this.voiceSettings.rate * 0.95);
                 utterance.pitch = this.voiceSettings.pitch;
                 utterance.volume = this.voiceSettings.volume;
             }
         } else {
-            // No quality voice available - skip TTS completely
-            console.warn(`❌ AudioManager: No quality voice available for ${languageCode}. Skipping TTS to avoid low-quality audio.`);
-            console.warn(`❌ Available voices for this language were filtered out as low-quality (Android TTS, Samsung TTS, etc.)`);
-            return; // Exit without speaking
+            // No quality voice available on desktop - skip
+            console.warn(`❌ AudioManager: No quality voice available for ${languageCode}.`);
+            return;
         }
-        
-        // Add error handling
+
         utterance.onerror = (event) => {
             console.error('Speech synthesis error:', event.error);
         };
-        
+
         utterance.onend = () => {
             console.log('AudioManager: Speech finished');
         };
-        
+
         this.synth.speak(utterance);
+    }
+
+    // Google Cloud TTS API method (for mobile devices)
+    async speakWithGoogleTTS(text, languageCode) {
+        try {
+            console.log(`🌐 Using Google TTS API for: "${text}" (${languageCode})`);
+
+            const response = await fetch(`/api/tts?text=${encodeURIComponent(text)}&lang=${languageCode}`);
+
+            if (!response.ok) {
+                const error = await response.json();
+                console.error('❌ Google TTS API error:', error);
+                console.warn('💡 Fallback: No audio will be played');
+                return;
+            }
+
+            // Get audio blob
+            const audioBlob = await response.blob();
+            const audioUrl = URL.createObjectURL(audioBlob);
+
+            // Play audio using HTML5 Audio
+            const audio = new Audio(audioUrl);
+            audio.volume = this.voiceSettings.volume;
+            audio.playbackRate = this.voiceSettings.rate;
+
+            audio.onended = () => {
+                URL.revokeObjectURL(audioUrl);
+                console.log('✅ Google TTS audio finished');
+            };
+
+            audio.onerror = (err) => {
+                console.error('❌ Audio playback error:', err);
+                URL.revokeObjectURL(audioUrl);
+            };
+
+            await audio.play();
+            console.log('🔊 Playing Google TTS audio...');
+
+        } catch (err) {
+            console.error('❌ Failed to use Google TTS API:', err);
+            console.warn('💡 No audio will be played (API not configured or network error)');
+        }
     }
 
     stop() {
