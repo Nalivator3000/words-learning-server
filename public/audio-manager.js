@@ -144,8 +144,8 @@ class AudioManager {
             return null;
         }
 
-        // WHITELIST APPROACH: Only allow high-quality TTS engines
-        const allowedVoicePatterns = [
+        // HYBRID APPROACH: Whitelist quality engines + Block known bad voices
+        const qualityVoicePatterns = [
             /google/i,      // Google TTS (best quality)
             /microsoft/i,   // Microsoft Azure TTS
             /apple/i,       // Apple Siri voices
@@ -153,18 +153,34 @@ class AudioManager {
             /nuance/i,      // Nuance (professional TTS)
         ];
 
-        // Only keep voices from trusted engines
-        const goodVoices = languageVoices.filter(voice =>
-            allowedVoicePatterns.some(pattern => pattern.test(voice.name))
+        const badVoicePatterns = [
+            /android/i,     // Android TTS (robotic)
+            /samsung/i,     // Samsung TTS (robotic)
+            /espeak/i,      // Espeak (very robotic)
+            /pico/i,        // Pico TTS (old)
+        ];
+
+        // First, try to find quality voices
+        let goodVoices = languageVoices.filter(voice =>
+            qualityVoicePatterns.some(pattern => pattern.test(voice.name))
         );
 
         console.log(`🔍 All available voices for ${languagePrefix}:`, languageVoices.map(v => v.name));
         console.log(`✅ Quality voices (whitelisted):`, goodVoices.map(v => v.name));
 
-        // CRITICAL: If no quality voices available, return null instead of using bad voices
+        // If no quality voices, use ANY voice EXCEPT the bad ones
         if (goodVoices.length === 0) {
-            console.warn(`❌ NO QUALITY VOICES for ${languagePrefix}! All voices filtered out.`);
-            console.warn(`❌ Only low-quality TTS available (Android/Samsung/etc.) - SKIPPING audio to avoid bad experience.`);
+            console.warn(`⚠️ No premium voices found. Using browser default voices (excluding Android/Samsung TTS).`);
+            goodVoices = languageVoices.filter(voice =>
+                !badVoicePatterns.some(pattern => pattern.test(voice.name))
+            );
+            console.log(`🔄 Fallback voices (excluding bad TTS):`, goodVoices.map(v => v.name));
+        }
+
+        // If still no voices, give up
+        if (goodVoices.length === 0) {
+            console.warn(`❌ NO ACCEPTABLE VOICES for ${languagePrefix}! Only Android/Samsung TTS available.`);
+            console.warn(`❌ SKIPPING audio to avoid bad experience.`);
             return null;
         }
 

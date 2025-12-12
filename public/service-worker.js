@@ -1,7 +1,7 @@
 // Service Worker for Words Learning App
-// Version 5.3.2 - Aggressive voice whitelist (Google/Microsoft/Apple only)
+// Version 5.3.3 - Hybrid voice filtering (whitelist + blacklist fallback)
 
-const CACHE_VERSION = 'v5.3.2';
+const CACHE_VERSION = 'v5.3.3';
 const CACHE_NAME = `words-learning-${CACHE_VERSION}`;
 
 // Files to cache for offline use
