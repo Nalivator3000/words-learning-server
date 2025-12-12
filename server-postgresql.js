@@ -15323,10 +15323,22 @@ app.post('/api/migrate-word-statuses', async (req, res) => {
 // GOOGLE CLOUD TEXT-TO-SPEECH API
 // ============================================================================
 
-// Initialize Google TTS client (will use GOOGLE_APPLICATION_CREDENTIALS env var)
-const ttsClient = process.env.GOOGLE_TTS_API_KEY ? new textToSpeech.TextToSpeechClient({
-    apiKey: process.env.GOOGLE_TTS_API_KEY
-}) : null;
+// Initialize Google TTS client
+let ttsClient = null;
+try {
+    if (process.env.GOOGLE_APPLICATION_CREDENTIALS_JSON) {
+        // Parse JSON credentials from environment variable
+        const credentials = JSON.parse(process.env.GOOGLE_APPLICATION_CREDENTIALS_JSON);
+        ttsClient = new textToSpeech.TextToSpeechClient({
+            credentials
+        });
+        logger.info('✅ Google TTS client initialized with Service Account credentials');
+    } else {
+        logger.warn('⚠️ Google TTS not configured. Set GOOGLE_APPLICATION_CREDENTIALS_JSON environment variable.');
+    }
+} catch (err) {
+    logger.error('❌ Failed to initialize Google TTS client:', err.message);
+}
 
 // Audio cache directory
 const AUDIO_CACHE_DIR = path.join(__dirname, 'audio-cache');
