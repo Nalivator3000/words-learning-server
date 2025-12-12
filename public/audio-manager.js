@@ -144,29 +144,29 @@ class AudioManager {
             return null;
         }
 
-        // Bad voice names to filter out (low quality TTS)
-        const badVoicePatterns = [
-            /espeak/i,
-            /festival/i,
-            /pico/i,
-            /flite/i,
-            /android/i,  // Android default TTS is often low quality
-            /samsung/i   // Samsung TTS is often robotic
+        // WHITELIST APPROACH: Only allow high-quality TTS engines
+        const allowedVoicePatterns = [
+            /google/i,      // Google TTS (best quality)
+            /microsoft/i,   // Microsoft Azure TTS
+            /apple/i,       // Apple Siri voices
+            /amazon/i,      // Amazon Polly
+            /nuance/i,      // Nuance (professional TTS)
         ];
 
-        // Filter out known bad voices
+        // Only keep voices from trusted engines
         const goodVoices = languageVoices.filter(voice =>
-            !badVoicePatterns.some(pattern => pattern.test(voice.name))
+            allowedVoicePatterns.some(pattern => pattern.test(voice.name))
         );
+
+        console.log(`🔍 All available voices for ${languagePrefix}:`, languageVoices.map(v => v.name));
+        console.log(`✅ Quality voices (whitelisted):`, goodVoices.map(v => v.name));
 
         // CRITICAL: If no quality voices available, return null instead of using bad voices
         if (goodVoices.length === 0) {
-            console.warn(`⚠️ No quality voices found for ${languagePrefix}. Only low-quality TTS available - skipping.`);
-            console.warn(`❌ FILTERED OUT VOICES:`, languageVoices.map(v => v.name));
+            console.warn(`❌ NO QUALITY VOICES for ${languagePrefix}! All voices filtered out.`);
+            console.warn(`❌ Only low-quality TTS available (Android/Samsung/etc.) - SKIPPING audio to avoid bad experience.`);
             return null;
         }
-
-        console.log(`✅ Found ${goodVoices.length} quality voices for ${languagePrefix}:`, goodVoices.map(v => v.name));
 
         const voicesToConsider = goodVoices;
 

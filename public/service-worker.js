@@ -1,7 +1,7 @@
 // Service Worker for Words Learning App
-// Version 5.3.1 - Improve dark theme import cards styling
+// Version 5.3.2 - Aggressive voice whitelist (Google/Microsoft/Apple only)
 
-const CACHE_VERSION = 'v5.3.1';
+const CACHE_VERSION = 'v5.3.2';
 const CACHE_NAME = `words-learning-${CACHE_VERSION}`;
 
 // Files to cache for offline use
