@@ -174,20 +174,30 @@ class AudioManager {
         console.log(`🔍 All available voices for ${languagePrefix}:`, languageVoices.map(v => v.name));
         console.log(`✅ Quality voices (whitelisted):`, goodVoices.map(v => v.name));
 
-        // If no quality voices, use ANY voice EXCEPT the bad ones
-        if (goodVoices.length === 0) {
-            console.warn(`⚠️ No premium voices found. Using browser default voices (excluding Android/Samsung TTS).`);
-            goodVoices = languageVoices.filter(voice =>
-                !badVoicePatterns.some(pattern => pattern.test(voice.name))
-            );
-            console.log(`🔄 Fallback voices (excluding bad TTS):`, goodVoices.map(v => v.name));
-        }
+        // Detect if mobile device
+        const isMobile = /Android|iPhone|iPad|iPod|Mobile/i.test(navigator.userAgent);
 
-        // If still no voices, give up
+        // If no premium voices found
         if (goodVoices.length === 0) {
-            console.warn(`❌ NO ACCEPTABLE VOICES for ${languagePrefix}! Only Android/Samsung TTS available.`);
-            console.warn(`❌ SKIPPING audio to avoid bad experience.`);
-            return null;
+            if (isMobile) {
+                // MOBILE: No fallback - premium voices only or no audio
+                console.warn(`❌ NO PREMIUM VOICES on mobile for ${languagePrefix}!`);
+                console.warn(`❌ Mobile devices often have low-quality TTS. DISABLING audio.`);
+                console.warn(`💡 Available voices:`, languageVoices.map(v => v.name));
+                return null;
+            } else {
+                // DESKTOP: Allow fallback to browser voices (usually decent)
+                console.warn(`⚠️ No premium voices found on desktop. Using browser default voices.`);
+                goodVoices = languageVoices.filter(voice =>
+                    !badVoicePatterns.some(pattern => pattern.test(voice.name))
+                );
+                console.log(`🔄 Fallback voices (desktop):`, goodVoices.map(v => v.name));
+
+                if (goodVoices.length === 0) {
+                    console.warn(`❌ NO ACCEPTABLE VOICES for ${languagePrefix}!`);
+                    return null;
+                }
+            }
         }
 
         const voicesToConsider = goodVoices;
