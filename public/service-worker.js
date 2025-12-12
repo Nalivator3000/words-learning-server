@@ -1,7 +1,7 @@
 // Service Worker for Words Learning App
-// Version 5.3.3 - Hybrid voice filtering (whitelist + blacklist fallback)
+// Version 5.3.4 - Stricter bad voice filtering (TTS, default, generic names)
 
-const CACHE_VERSION = 'v5.3.3';
+const CACHE_VERSION = 'v5.3.4';
 const CACHE_NAME = `words-learning-${CACHE_VERSION}`;
 
 // Files to cache for offline use

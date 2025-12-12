@@ -158,6 +158,12 @@ class AudioManager {
             /samsung/i,     // Samsung TTS (robotic)
             /espeak/i,      // Espeak (very robotic)
             /pico/i,        // Pico TTS (old)
+            /\btts\b/i,     // Generic TTS (usually bad)
+            /speech.*synth/i,  // Generic speech synthesis
+            /robot/i,       // Obviously robotic
+            /male\s*\d+/i,  // Generic male1, male2, etc.
+            /female\s*\d+/i, // Generic female1, female2, etc.
+            /default/i,     // Default voice (usually bad)
         ];
 
         // First, try to find quality voices
