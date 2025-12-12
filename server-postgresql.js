@@ -15356,7 +15356,7 @@ app.get('/api/tts', async (req, res) => {
         }
 
         if (!ttsClient) {
-            return res.status(503).json({ error: 'Google TTS is not configured. Set GOOGLE_TTS_API_KEY in environment variables.' });
+            return res.status(503).json({ error: 'Google TTS is not configured. Set GOOGLE_APPLICATION_CREDENTIALS_JSON in environment variables.' });
         }
 
         // Create cache filename based on text and language
