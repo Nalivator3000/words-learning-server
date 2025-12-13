@@ -304,20 +304,16 @@ class AudioManager {
 
         // HYBRID APPROACH: Use Google TTS API on mobile, Web Speech API on desktop
         const isMobile = /Android|iPhone|iPad|iPod|Mobile/i.test(navigator.userAgent);
-        const voice = this.voices[languageCode];
 
-        // On mobile: Try Google TTS API first, fallback to Web Speech if API not available
+        // On mobile: ALWAYS use Google TTS API for high quality
         if (isMobile) {
-            if (!voice) {
-                console.warn(`⚠️ No premium voices on mobile. Trying Google TTS API...`);
-                this.speakWithGoogleTTS(text, languageCode);
-                return;
-            }
-            // If premium voice exists on mobile, use it
-            console.log(`✅ Premium voice found on mobile: ${voice.name}`);
+            console.log(`📱 Mobile detected - using Google TTS API`);
+            this.speakWithGoogleTTS(text, languageCode);
+            return;
         }
 
-        // Desktop or mobile with premium voice: Use Web Speech API
+        // Desktop: Use Web Speech API with quality voice filtering
+        const voice = this.voices[languageCode];
         this.synth.cancel();
 
         const utterance = new SpeechSynthesisUtterance(text);

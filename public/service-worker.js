@@ -1,7 +1,7 @@
 // Service Worker for Words Learning App
-// Version 5.4.2 - CSS-based quiz menu dropdown visibility
+// Version 5.4.3 - Always use Google TTS on mobile
 
-const CACHE_VERSION = 'v5.4.2';
+const CACHE_VERSION = 'v5.4.3';
 const CACHE_NAME = `words-learning-${CACHE_VERSION}`;
 
 // Files to cache for offline use
