@@ -161,12 +161,22 @@ class LanguageLearningApp {
             const userMenu = document.getElementById('userMenu');
             const userMenuBtn = document.getElementById('userMenuBtn');
             const menuToggleBtn = document.getElementById('menuToggleBtn');
+            const appHeader = document.querySelector('.app-header');
 
-            // Don't close if clicking on menu button, user menu itself, or toggle button
+            // Don't close if clicking on menu button, user menu itself, toggle button, or header
             if (!userMenu.contains(e.target) &&
                 e.target !== userMenuBtn &&
-                e.target !== menuToggleBtn) {
-                userMenu.classList.add('hidden');
+                e.target !== menuToggleBtn &&
+                !appHeader.contains(e.target)) {
+
+                // If in quiz mode with menu visible, close the whole header
+                if (document.body.classList.contains('quiz-active') &&
+                    document.body.classList.contains('menu-visible')) {
+                    document.body.classList.remove('menu-visible');
+                } else {
+                    // Normal mode - just hide the dropdown
+                    userMenu.classList.add('hidden');
+                }
             }
         });
 
@@ -293,20 +303,8 @@ class LanguageLearningApp {
             e.stopPropagation();
             e.preventDefault();
 
-            const wasVisible = document.body.classList.contains('menu-visible');
+            // Simply toggle menu visibility - CSS handles the dropdown display
             document.body.classList.toggle('menu-visible');
-
-            // Also toggle the user menu dropdown
-            const userMenu = document.getElementById('userMenu');
-            if (!wasVisible) {
-                // Opening menu - show dropdown with slight delay to avoid immediate closing
-                setTimeout(() => {
-                    userMenu.classList.remove('hidden');
-                }, 10);
-            } else {
-                // Closing menu - hide dropdown
-                userMenu.classList.add('hidden');
-            }
         });
     }
 

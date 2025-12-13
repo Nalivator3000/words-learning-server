@@ -4026,6 +4026,14 @@ input:focus, textarea:focus, select:focus {
         max-height: calc(100dvh - 140px);
     }
 
+    /* Show user menu dropdown when menu is visible during quiz */
+    body.quiz-active.menu-visible .user-menu {
+        transform: scale(1) translateY(0) !important;
+        opacity: 1 !important;
+        pointer-events: auto !important;
+        display: block !important;
+    }
+
 /* Hide menu toggle button on desktop (screens wider than 475px) */
 @media (min-width: 476px) {
     .menu-toggle-btn {
