@@ -160,7 +160,12 @@ class LanguageLearningApp {
         document.addEventListener('click', (e) => {
             const userMenu = document.getElementById('userMenu');
             const userMenuBtn = document.getElementById('userMenuBtn');
-            if (!userMenu.contains(e.target) && e.target !== userMenuBtn) {
+            const menuToggleBtn = document.getElementById('menuToggleBtn');
+
+            // Don't close if clicking on menu button, user menu itself, or toggle button
+            if (!userMenu.contains(e.target) &&
+                e.target !== userMenuBtn &&
+                e.target !== menuToggleBtn) {
                 userMenu.classList.add('hidden');
             }
         });
@@ -286,14 +291,18 @@ class LanguageLearningApp {
         // Menu toggle button for quiz on mobile
         document.getElementById('menuToggleBtn').addEventListener('click', (e) => {
             e.stopPropagation();
+            e.preventDefault();
+
             const wasVisible = document.body.classList.contains('menu-visible');
             document.body.classList.toggle('menu-visible');
 
             // Also toggle the user menu dropdown
             const userMenu = document.getElementById('userMenu');
             if (!wasVisible) {
-                // Opening menu - show dropdown
-                userMenu.classList.remove('hidden');
+                // Opening menu - show dropdown with slight delay to avoid immediate closing
+                setTimeout(() => {
+                    userMenu.classList.remove('hidden');
+                }, 10);
             } else {
                 // Closing menu - hide dropdown
                 userMenu.classList.add('hidden');
