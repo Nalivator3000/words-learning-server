@@ -284,8 +284,20 @@ class LanguageLearningApp {
         });
 
         // Menu toggle button for quiz on mobile
-        document.getElementById('menuToggleBtn').addEventListener('click', () => {
+        document.getElementById('menuToggleBtn').addEventListener('click', (e) => {
+            e.stopPropagation();
+            const wasVisible = document.body.classList.contains('menu-visible');
             document.body.classList.toggle('menu-visible');
+
+            // Also toggle the user menu dropdown
+            const userMenu = document.getElementById('userMenu');
+            if (!wasVisible) {
+                // Opening menu - show dropdown
+                userMenu.classList.remove('hidden');
+            } else {
+                // Closing menu - hide dropdown
+                userMenu.classList.add('hidden');
+            }
         });
     }
 

@@ -1,7 +1,7 @@
 // Service Worker for Words Learning App
-// Version 5.4.0 - Google Cloud TTS API integration
+// Version 5.4.1 - Fix quiz menu toggle to show dropdown
 
-const CACHE_VERSION = 'v5.4.0';
+const CACHE_VERSION = 'v5.4.1';
 const CACHE_NAME = `words-learning-${CACHE_VERSION}`;
 
 // Files to cache for offline use
