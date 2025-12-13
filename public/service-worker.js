@@ -1,7 +1,7 @@
 // Service Worker for Words Learning App
-// Version 5.4.5 - Fix cache busting for audio-manager and app.js
+// Version 5.4.6 - Proper query param handling + delete old sw.js
 
-const CACHE_VERSION = 'v5.4.5';
+const CACHE_VERSION = 'v5.4.6';
 const CACHE_NAME = `words-learning-${CACHE_VERSION}`;
 
 // Files to cache for offline use
@@ -168,17 +168,29 @@ async function cacheFirstStrategy(request) {
     }
 }
 
-// Network-first strategy (for API requests)
+// Network-first strategy (for API requests and dynamic assets)
 async function networkFirstStrategy(request) {
     try {
-        // Try network first
-        console.log('🌐 Service Worker: API request to network:', request.url);
+        // Try network first - always fetch fresh version
+        console.log('🌐 Service Worker: Fetching from network:', request.url);
         const networkResponse = await fetch(request);
 
-        // Cache successful responses
+        // Cache successful responses (use URL without query params as cache key for JS/CSS)
         if (networkResponse.ok && request.method === 'GET') {
             const cache = await caches.open(CACHE_NAME);
-            cache.put(request, networkResponse.clone());
+            const url = new URL(request.url);
+
+            // For JS/CSS files, strip version query param before caching
+            if (url.pathname.endsWith('.js') || url.pathname.endsWith('.css')) {
+                const cacheKey = new Request(url.pathname, {
+                    method: request.method,
+                    headers: request.headers
+                });
+                console.log(`💾 Caching ${url.pathname} (stripped query params)`);
+                cache.put(cacheKey, networkResponse.clone());
+            } else {
+                cache.put(request, networkResponse.clone());
+            }
         }
 
         return networkResponse;
@@ -186,9 +198,19 @@ async function networkFirstStrategy(request) {
         console.warn('⚠️ Service Worker: Network failed, trying cache:', error);
 
         // Fall back to cache if network fails
-        const cachedResponse = await caches.match(request);
+        // Try to match without query params for JS/CSS
+        const url = new URL(request.url);
+        let cachedResponse;
+
+        if (url.pathname.endsWith('.js') || url.pathname.endsWith('.css')) {
+            console.log(`🔍 Looking for cached ${url.pathname} (ignoring version)`);
+            cachedResponse = await caches.match(url.pathname);
+        } else {
+            cachedResponse = await caches.match(request);
+        }
+
         if (cachedResponse) {
-            console.log('💾 Service Worker: Serving API response from cache:', request.url);
+            console.log('💾 Service Worker: Serving from cache:', request.url);
             return cachedResponse;
         }
 
