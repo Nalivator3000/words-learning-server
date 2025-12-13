@@ -1037,6 +1037,7 @@ schreiben,Sie schreibt einen Brief.,Писать,Она пишет письmо.`
                 const button = document.createElement('button');
                 button.className = 'choice-btn';
                 button.dataset.choiceIndex = index;
+                button.dataset.choiceText = choice.text; // Store clean text for audio
                 button.innerHTML = `<span class="choice-number">${index + 1}</span> ${choice.text}`;
                 button.onclick = () => this.handleMultipleChoice(choice.text, button);
                 answerArea.appendChild(button);
@@ -1145,6 +1146,7 @@ schreiben,Sie schreibt einen Brief.,Писать,Она пишет письmо.`
                 const button = document.createElement('button');
                 button.className = 'choice-btn';
                 button.dataset.choiceIndex = index;
+                button.dataset.choiceText = choice.text; // Store clean text for audio
                 button.innerHTML = `<span class="choice-number">${index + 1}</span> ${choice.text}`;
                 button.onclick = () => this.handleReviewMultipleChoice(choice.text, button);
                 answerArea.appendChild(button);
@@ -2376,7 +2378,10 @@ schreiben,Sie schreibt einen Brief.,Писать,Она пишет письmо.`
     addAudioToButton(buttonEl, text) {
         // Check if audio button already exists
         if (buttonEl.querySelector('.audio-btn-inline')) return;
-        
+
+        // Use dataset.choiceText if available (to avoid speaking the choice number)
+        const textToSpeak = buttonEl.dataset?.choiceText || text;
+
         const audioBtn = document.createElement('span');
         audioBtn.className = 'audio-btn-inline';
         audioBtn.innerHTML = ' 🔊';
@@ -2386,7 +2391,7 @@ schreiben,Sie schreibt einen Brief.,Писать,Она пишет письmо.`
         audioBtn.onclick = (e) => {
             e.preventDefault();
             e.stopPropagation();
-            this.audioManager.speak(text);
+            this.audioManager.speak(textToSpeak);
         };
         buttonEl.appendChild(audioBtn);
     }

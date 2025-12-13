@@ -1,7 +1,7 @@
 // Service Worker for Words Learning App
-// Version 5.4.3 - Always use Google TTS on mobile
+// Version 5.4.4 - Don't speak choice numbers in quiz
 
-const CACHE_VERSION = 'v5.4.3';
+const CACHE_VERSION = 'v5.4.4';
 const CACHE_NAME = `words-learning-${CACHE_VERSION}`;
 
 // Files to cache for offline use
