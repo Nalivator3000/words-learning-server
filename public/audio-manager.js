@@ -301,16 +301,21 @@ class AudioManager {
         }
 
         console.log(`🔊 AudioManager: Attempting to speak "${text}" in ${languageCode}`);
+        console.log(`📱 User-Agent: ${navigator.userAgent}`);
 
         // HYBRID APPROACH: Use Google TTS API on mobile, Web Speech API on desktop
         const isMobile = /Android|iPhone|iPad|iPod|Mobile/i.test(navigator.userAgent);
+        console.log(`📱 Is Mobile Device: ${isMobile}`);
 
         // On mobile: ALWAYS use Google TTS API for high quality
         if (isMobile) {
             console.log(`📱 Mobile detected - using Google TTS API`);
+            console.log(`🌐 Calling speakWithGoogleTTS("${text}", "${languageCode}")`);
             this.speakWithGoogleTTS(text, languageCode);
             return;
         }
+
+        console.log(`💻 Desktop detected - using Web Speech API`);
 
         // Desktop: Use Web Speech API with quality voice filtering
         const voice = this.voices[languageCode];

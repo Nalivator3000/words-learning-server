@@ -1,7 +1,7 @@
 // Service Worker for Words Learning App
-// Version 5.4.4 - Don't speak choice numbers in quiz
+// Version 5.4.5 - Fix cache busting for audio-manager and app.js
 
-const CACHE_VERSION = 'v5.4.4';
+const CACHE_VERSION = 'v5.4.5';
 const CACHE_NAME = `words-learning-${CACHE_VERSION}`;
 
 // Files to cache for offline use
