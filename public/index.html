@@ -1402,10 +1402,10 @@
             }
         });
 
-        // Load Eruda mobile console for demo user
-        const currentUser = JSON.parse(localStorage.getItem('user') || '{}');
-        if (currentUser.email === 'demo@fluentflow.app') {
-            console.log('🔧 Loading Eruda console for demo user...');
+        // Load Eruda mobile console for debugging
+        const isMobileDevice = /Android|iPhone|iPad|iPod|Mobile/i.test(navigator.userAgent);
+        if (isMobileDevice) {
+            console.log('🔧 Loading Eruda console for mobile debugging...');
             const script = document.createElement('script');
             script.src = 'https://cdn.jsdelivr.net/npm/eruda';
             script.onload = function() {
