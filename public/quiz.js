@@ -259,8 +259,14 @@ class QuizManager {
 
             // Play the audio after a short delay to let the user see the feedback first
             setTimeout(() => {
-                window.app.audioManager.speak(wordToSpeak, langCode);
+                // Only play if wordToSpeak is valid
+                if (wordToSpeak && typeof wordToSpeak === 'string' && wordToSpeak.trim()) {
+                    window.app.audioManager.speak(wordToSpeak, langCode);
                 console.log(`🔊 Auto-playing: "${wordToSpeak}" (${langCode || 'auto-detect'})`);
+                } else {
+                    console.warn(`⚠️ Skipping audio playback - invalid word:`, wordToSpeak);
+                    console.warn(`Question data:`, {word: question.word, correctAnswer: question.correctAnswer, type: question.type});
+                }
             }, 300);
         }
 
