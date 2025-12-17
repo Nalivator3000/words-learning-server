@@ -301,61 +301,13 @@ class AudioManager {
         }
 
         console.log(`🔊 AudioManager: Attempting to speak "${text}" in ${languageCode}`);
-        console.log(`📱 User-Agent: ${navigator.userAgent}`);
 
-        // HYBRID APPROACH: Use Google TTS API on mobile, Web Speech API on desktop
-        const isMobile = /Android|iPhone|iPad|iPod|Mobile/i.test(navigator.userAgent);
-        console.log(`📱 Is Mobile Device: ${isMobile}`);
-
-        // On mobile: ALWAYS use Google TTS API for high quality
-        if (isMobile) {
-            console.log(`📱 Mobile detected - using Google TTS API`);
-            console.log(`🌐 Calling speakWithGoogleTTS("${text}", "${languageCode}")`);
-            this.speakWithGoogleTTS(text, languageCode);
-            return;
-        }
-
-        console.log(`💻 Desktop detected - using Web Speech API`);
-
-        // Desktop: Use Web Speech API with quality voice filtering
-        const voice = this.voices[languageCode];
-        this.synth.cancel();
-
-        const utterance = new SpeechSynthesisUtterance(text);
-        utterance.lang = languageCode;
-
-        if (voice) {
-            utterance.voice = voice;
-            console.log(`AudioManager: Using voice "${voice.name}" for ${languageCode}`);
-
-            // Adjust settings based on voice type
-            if (voice.localService) {
-                utterance.rate = this.voiceSettings.rate;
-                utterance.pitch = this.voiceSettings.pitch;
-                utterance.volume = this.voiceSettings.volume;
-            } else {
-                utterance.rate = Math.max(0.75, this.voiceSettings.rate * 0.95);
-                utterance.pitch = this.voiceSettings.pitch;
-                utterance.volume = this.voiceSettings.volume;
-            }
-        } else {
-            // No quality voice available on desktop - skip
-            console.warn(`❌ AudioManager: No quality voice available for ${languageCode}.`);
-            return;
-        }
-
-        utterance.onerror = (event) => {
-            console.error('Speech synthesis error:', event.error);
-        };
-
-        utterance.onend = () => {
-            console.log('AudioManager: Speech finished');
-        };
-
-        this.synth.speak(utterance);
+        // ALWAYS use Google TTS API for all devices (browser TTS disabled)
+        console.log(`🌐 Using Google TTS API for high-quality speech`);
+        this.speakWithGoogleTTS(text, languageCode);
     }
 
-    // Google Cloud TTS API method (for mobile devices)
+    // Google Cloud TTS API method (for all devices)
     async speakWithGoogleTTS(text, languageCode) {
         try {
             console.log(`🌐 Using Google TTS API for: "${text}" (${languageCode})`);
