@@ -6231,3 +6231,42 @@ input:focus, textarea:focus, select:focus {
         width: 40px;
     }
 }
+/* Hide bottom navigation during quiz */
+body.quiz-active .header-nav {
+    transform: translateY(100%);
+    transition: transform 0.3s ease;
+    pointer-events: none;
+    visibility: hidden;
+    opacity: 0;
+}
+
+/* Show bottom navigation when menu is visible during quiz */
+body.quiz-active.menu-visible .header-nav {
+    transform: translateY(0);
+    pointer-events: auto;
+    visibility: visible;
+    opacity: 1;
+}
+
+/* Adjust quiz-area height when both header and bottom nav are hidden */
+body.quiz-active .quiz-area {
+    /* Full viewport height when both header and bottom nav are hidden */
+    max-height: 100dvh;
+    margin-top: 0;
+}
+
+/* When menu is visible during quiz - restore normal height calculation */
+body.quiz-active.menu-visible .quiz-area {
+    /* Account for: header (~60px) + bottom nav (~60px) + padding */
+    max-height: calc(100dvh - 120px);
+}
+
+/* Same for survival area */
+body.quiz-active .survival-area {
+    max-height: 100dvh;
+    margin-top: 0;
+}
+
+body.quiz-active.menu-visible .survival-area {
+    max-height: calc(100dvh - 120px);
+}
