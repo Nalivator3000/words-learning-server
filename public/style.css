@@ -3962,6 +3962,7 @@ input:focus, textarea:focus, select:focus {
 
     /* Show header when toggled */
     body.quiz-active.menu-visible .app-header {
+        padding-top: max(env(safe-area-inset-top), 12px);
         transform: translateY(0);
         pointer-events: auto;
         visibility: visible;
@@ -4008,18 +4009,6 @@ input:focus, textarea:focus, select:focus {
         display: flex;
     }
 
-    /* Adjust quiz-area height when header is hidden */
-    body.quiz-active .quiz-area {
-        /* Account for: bottom nav (~60px) only */
-        max-height: calc(100dvh - 60px);
-        margin-top: 0;
-    }
-
-    /* When menu is visible during quiz */
-    body.quiz-active.menu-visible .quiz-area {
-        /* Back to normal calculation with header */
-        max-height: calc(100dvh - 140px);
-    }
 
     /* Hide user info bar during quiz */
     body.quiz-active .user-info-bar {
@@ -6255,7 +6244,7 @@ body.quiz-active.menu-visible .header-nav {
 /* Adjust quiz-area height when both header and bottom nav are hidden */
 body.quiz-active .quiz-area {
     /* Full viewport height when both header and bottom nav are hidden */
-    max-height: 100dvh;
+    max-height: calc(100dvh - env(safe-area-inset-top, 0px) - env(safe-area-inset-bottom, 0px));
     margin-top: 0;
 }
 
@@ -6267,7 +6256,7 @@ body.quiz-active.menu-visible .quiz-area {
 
 /* Same for survival area */
 body.quiz-active .survival-area {
-    max-height: 100dvh;
+    max-height: calc(100dvh - env(safe-area-inset-top, 0px) - env(safe-area-inset-bottom, 0px));
     margin-top: 0;
 }
 
