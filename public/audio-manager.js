@@ -309,43 +309,171 @@ class AudioManager {
 
     // Google Cloud TTS API method (for all devices)
     async speakWithGoogleTTS(text, languageCode) {
-        try {
-            console.log(`🌐 Using Google TTS API for: "${text}" (${languageCode})`);
+        const logPrefix = `[TTS-Client]`;
+        const timestamp = new Date().toISOString();
 
-            const response = await fetch(`/api/tts?text=${encodeURIComponent(text)}&lang=${languageCode}`);
+        try {
+            console.log(`${logPrefix} 🌐 [${timestamp}] Starting TTS request`);
+            console.log(`${logPrefix} 📝 Text: "${text}"`);
+            console.log(`${logPrefix} 🌍 Language: ${languageCode}`);
+            console.log(`${logPrefix} 🔧 Settings:`, {
+                volume: this.voiceSettings.volume,
+                rate: this.voiceSettings.rate,
+                autoPlay: this.voiceSettings.autoPlay
+            });
+
+            const url = `/api/tts?text=${encodeURIComponent(text)}&lang=${languageCode}`;
+            console.log(`${logPrefix} 🔗 Request URL: ${url}`);
+            console.log(`${logPrefix} 📡 Sending fetch request...`);
+
+            const fetchStart = performance.now();
+            const response = await fetch(url);
+            const fetchEnd = performance.now();
+
+            console.log(`${logPrefix} ⏱️ Fetch completed in ${(fetchEnd - fetchStart).toFixed(2)}ms`);
+            console.log(`${logPrefix} 📊 Response status: ${response.status} ${response.statusText}`);
+            console.log(`${logPrefix} 📋 Response headers:`, {
+                contentType: response.headers.get('content-type'),
+                contentLength: response.headers.get('content-length'),
+                cacheControl: response.headers.get('cache-control')
+            });
 
             if (!response.ok) {
-                const error = await response.json();
-                console.error('❌ Google TTS API error:', error);
-                console.warn('💡 Fallback: No audio will be played');
+                console.error(`${logPrefix} ❌ Response not OK: ${response.status}`);
+                let errorDetails;
+                try {
+                    errorDetails = await response.json();
+                    console.error(`${logPrefix} ❌ Error details:`, errorDetails);
+                } catch (parseErr) {
+                    console.error(`${logPrefix} ❌ Failed to parse error response:`, parseErr);
+                    errorDetails = { error: 'Unknown error', status: response.status };
+                }
+                console.warn(`${logPrefix} 💡 No audio will be played due to API error`);
                 return;
             }
 
-            // Get audio blob
+            console.log(`${logPrefix} 📦 Converting response to blob...`);
             const audioBlob = await response.blob();
+            console.log(`${logPrefix} ✅ Blob created:`, {
+                size: audioBlob.size,
+                type: audioBlob.type
+            });
+
+            if (audioBlob.size === 0) {
+                console.error(`${logPrefix} ❌ Empty audio blob received!`);
+                return;
+            }
+
             const audioUrl = URL.createObjectURL(audioBlob);
+            console.log(`${logPrefix} 🔗 Object URL created: ${audioUrl.substring(0, 50)}...`);
 
             // Play audio using HTML5 Audio
+            console.log(`${logPrefix} 🎵 Creating Audio element...`);
             const audio = new Audio(audioUrl);
             audio.volume = this.voiceSettings.volume;
             audio.playbackRate = this.voiceSettings.rate;
 
+            console.log(`${logPrefix} ⚙️ Audio element configured:`, {
+                volume: audio.volume,
+                playbackRate: audio.playbackRate,
+                readyState: audio.readyState
+            });
+
+            // Add detailed event listeners
+            audio.onloadstart = () => {
+                console.log(`${logPrefix} 📥 Audio loading started`);
+            };
+
+            audio.onloadedmetadata = () => {
+                console.log(`${logPrefix} 📊 Metadata loaded:`, {
+                    duration: audio.duration,
+                    networkState: audio.networkState,
+                    readyState: audio.readyState
+                });
+            };
+
+            audio.oncanplay = () => {
+                console.log(`${logPrefix} ✅ Audio can play (buffered enough)`);
+            };
+
+            audio.onplay = () => {
+                console.log(`${logPrefix} ▶️ Audio playback started`);
+            };
+
+            audio.onplaying = () => {
+                console.log(`${logPrefix} 🔊 Audio is playing...`);
+            };
+
             audio.onended = () => {
                 URL.revokeObjectURL(audioUrl);
-                console.log('✅ Google TTS audio finished');
+                console.log(`${logPrefix} ✅ Audio playback finished successfully`);
+                console.log(`${logPrefix} 🧹 Object URL revoked`);
             };
 
             audio.onerror = (err) => {
-                console.error('❌ Audio playback error:', err);
+                console.error(`${logPrefix} ❌ Audio playback error:`, {
+                    error: err,
+                    code: audio.error?.code,
+                    message: audio.error?.message,
+                    networkState: audio.networkState,
+                    readyState: audio.readyState
+                });
                 URL.revokeObjectURL(audioUrl);
+                console.log(`${logPrefix} 🧹 Object URL revoked after error`);
             };
 
-            await audio.play();
-            console.log('🔊 Playing Google TTS audio...');
+            audio.onpause = () => {
+                console.log(`${logPrefix} ⏸️ Audio paused`);
+            };
+
+            audio.onstalled = () => {
+                console.warn(`${logPrefix} ⚠️ Audio download stalled`);
+            };
+
+            audio.onsuspend = () => {
+                console.log(`${logPrefix} 💤 Audio download suspended`);
+            };
+
+            audio.onwaiting = () => {
+                console.log(`${logPrefix} ⏳ Audio buffering...`);
+            };
+
+            console.log(`${logPrefix} 🚀 Calling audio.play()...`);
+            const playPromise = audio.play();
+
+            if (playPromise !== undefined) {
+                playPromise
+                    .then(() => {
+                        console.log(`${logPrefix} ✅ Play promise resolved - playback started successfully`);
+                    })
+                    .catch((playError) => {
+                        console.error(`${logPrefix} ❌ Play promise rejected:`, {
+                            name: playError.name,
+                            message: playError.message,
+                            stack: playError.stack
+                        });
+
+                        // Provide specific error guidance
+                        if (playError.name === 'NotAllowedError') {
+                            console.error(`${logPrefix} 🚫 Autoplay blocked by browser. User interaction required.`);
+                        } else if (playError.name === 'NotSupportedError') {
+                            console.error(`${logPrefix} 🚫 Audio format not supported by browser`);
+                        } else if (playError.name === 'AbortError') {
+                            console.error(`${logPrefix} 🚫 Playback aborted before starting`);
+                        }
+                    });
+            } else {
+                console.warn(`${logPrefix} ⚠️ audio.play() returned undefined (older browser)`);
+            }
 
         } catch (err) {
-            console.error('❌ Failed to use Google TTS API:', err);
-            console.warn('💡 No audio will be played (API not configured or network error)');
+            console.error(`${logPrefix} ❌ Fatal error in TTS function:`, {
+                name: err.name,
+                message: err.message,
+                stack: err.stack
+            });
+            console.error(`${logPrefix} 📍 Error occurred at:`, new Error().stack);
+            console.warn(`${logPrefix} 💡 No audio will be played (API not configured or network error)`);
         }
     }
 
