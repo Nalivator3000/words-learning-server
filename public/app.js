@@ -303,8 +303,41 @@ class LanguageLearningApp {
             e.stopPropagation();
             e.preventDefault();
 
-            // Simply toggle menu visibility - CSS handles the dropdown display
-            document.body.classList.toggle('menu-visible');
+            // Toggle dropdown menu visibility
+            const dropdownMenu = document.getElementById('quizDropdownMenu');
+            dropdownMenu.classList.toggle('hidden');
+        });
+
+        // Close menu button
+        document.getElementById('closeMenuBtn')?.addEventListener('click', (e) => {
+            e.stopPropagation();
+            const dropdownMenu = document.getElementById('quizDropdownMenu');
+            dropdownMenu.classList.add('hidden');
+        });
+
+        // Quiz dropdown navigation buttons
+        document.querySelectorAll('.quiz-nav-btn').forEach(btn => {
+            btn.addEventListener('click', (e) => {
+                const section = e.currentTarget.getAttribute('data-nav');
+                if (section) {
+                    this.showSection(section);
+                    // Close dropdown after navigation
+                    document.getElementById('quizDropdownMenu').classList.add('hidden');
+                }
+            });
+        });
+
+        // Close dropdown when clicking outside
+        document.addEventListener('click', (e) => {
+            const dropdownMenu = document.getElementById('quizDropdownMenu');
+            const menuToggleBtn = document.getElementById('menuToggleBtn');
+
+            if (dropdownMenu &&
+                !dropdownMenu.contains(e.target) &&
+                e.target !== menuToggleBtn &&
+                !dropdownMenu.classList.contains('hidden')) {
+                dropdownMenu.classList.add('hidden');
+            }
         });
     }
 
