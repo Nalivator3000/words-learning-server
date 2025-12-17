@@ -101,7 +101,7 @@ app.use(helmet({
             styleSrc: ["'self'", "'unsafe-inline'", "https://cdn.jsdelivr.net", "https://cdnjs.cloudflare.com", "https://fonts.googleapis.com"],
             fontSrc: ["'self'", "https://fonts.gstatic.com", "https://cdnjs.cloudflare.com"],
             imgSrc: ["'self'", "data:", "https:", "blob:"],
-            mediaSrc: ["'self'", "https://ssl.gstatic.com", "https://*.gstatic.com"],
+            mediaSrc: ["'self'", "blob:", "https://ssl.gstatic.com", "https://*.gstatic.com"],
             connectSrc: ["'self'", "http://localhost:3000", "http://localhost:*", "ws://localhost:*", "wss://localhost:*", "chrome-extension:", "moz-extension:", "chrome-extension://*", "moz-extension://*"],
             frameSrc: ["'none'"],
             objectSrc: ["'none'"],
