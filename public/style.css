@@ -6300,3 +6300,39 @@ body.quiz-active .survival-area {
 body.quiz-active.menu-visible .survival-area {
     max-height: calc(100dvh - 120px);
 }
+
+/* Review Notification (Demo Account) */
+.review-notification {
+    background: linear-gradient(135deg, #fbbf24 0%, #f59e0b 100%);
+    color: white;
+    padding: 12px 16px;
+    border-radius: 12px;
+    margin: 16px 0;
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    font-weight: 600;
+    font-size: 15px;
+    box-shadow: 0 4px 12px rgba(245, 158, 11, 0.3);
+    animation: pulse 2s ease-in-out infinite;
+}
+
+.review-notification.hidden {
+    display: none;
+}
+
+.notification-icon {
+    font-size: 24px;
+    animation: ring 1s ease-in-out infinite;
+}
+
+@keyframes ring {
+    0%, 100% { transform: rotate(0deg); }
+    10%, 30% { transform: rotate(-10deg); }
+    20% { transform: rotate(10deg); }
+}
+
+@keyframes pulse {
+    0%, 100% { transform: scale(1); box-shadow: 0 4px 12px rgba(245, 158, 11, 0.3); }
+    50% { transform: scale(1.02); box-shadow: 0 6px 16px rgba(245, 158, 11, 0.4); }
+}

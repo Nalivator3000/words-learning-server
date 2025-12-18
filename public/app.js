@@ -598,6 +598,23 @@ class LanguageLearningApp {
             });
 
             document.getElementById('startReviewBtn').disabled = counts.review === 0;
+
+            // Show review notification for demo account only
+            const user = userManager.getCurrentUser();
+            const reviewNotification = document.getElementById('reviewNotification');
+            const reviewNotificationText = document.getElementById('reviewNotificationText');
+
+            if (user && user.email === 'demo@fluentflow.app' && reviewNotification && reviewNotificationText) {
+                const readyToReview = counts.review || 0;
+                if (readyToReview > 0) {
+                    reviewNotificationText.textContent = `${readyToReview} word${readyToReview > 1 ? 's' : ''} ready to review today!`;
+                    reviewNotification.classList.remove('hidden');
+                } else {
+                    reviewNotification.classList.add('hidden');
+                }
+            } else if (reviewNotification) {
+                reviewNotification.classList.add('hidden');
+            }
         } catch (error) {
             console.error('Error updating review stats:', error);
         }

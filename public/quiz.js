@@ -17,12 +17,33 @@ class QuizManager {
         this.questions = [];
         this.wordCount = 0;
 
-        // Get words based on mode
-        let words;
+        // Get words - ALWAYS mix new words and reviews for better learning
+        let words = [];
+
         if (mode === 'study') {
-            words = await database.getRandomWords('studying', questionCount);
+            // In study mode: 70% new words, 30% reviews (if available)
+            const newWordsCount = Math.ceil(questionCount * 0.7);
+            const reviewCount = questionCount - newWordsCount;
+
+            const newWords = await database.getRandomWords('studying', newWordsCount);
+            const reviewWords = await database.getReviewWords(reviewCount);
+
+            words = [...newWords, ...reviewWords];
+
+            // Shuffle to mix new and review words
+            words.sort(() => 0.5 - Math.random());
         } else if (mode === 'review') {
-            words = await database.getReviewWords(questionCount);
+            // In review mode: 70% reviews, 30% new words (if available)
+            const reviewCount = Math.ceil(questionCount * 0.7);
+            const newWordsCount = questionCount - reviewCount;
+
+            const reviewWords = await database.getReviewWords(reviewCount);
+            const newWords = await database.getRandomWords('studying', newWordsCount);
+
+            words = [...reviewWords, ...newWords];
+
+            // Shuffle to mix review and new words
+            words.sort(() => 0.5 - Math.random());
         }
 
         if (words.length === 0) {
