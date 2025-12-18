@@ -4023,6 +4023,13 @@ input:focus, textarea:focus, select:focus {
         display: flex;
     }
 
+    /* Move burger down when menu is visible to avoid blocking navigation */
+    body.quiz-active.menu-visible .menu-toggle-btn {
+        top: auto;
+        bottom: 70px;
+        right: 8px;
+    }
+
     /* Adjust quiz-area height when header is hidden */
     body.quiz-active .quiz-area {
         /* Account for: bottom nav (~60px) only */
