@@ -3959,11 +3959,14 @@ input:focus, textarea:focus, select:focus {
         visibility: hidden;
         opacity: 0;
         margin: 0;
+        padding-top: 0;
     }
 
     /* Show header when toggled */
     body.quiz-active.menu-visible .app-header {
-        padding-top: max(env(safe-area-inset-top), 12px);
+        /* Add safe space for mobile browser chrome + extra padding */
+        top: max(env(safe-area-inset-top), 8px);
+        padding-top: 12px;
         transform: translateY(0);
         pointer-events: auto;
         visibility: visible;
@@ -4029,9 +4032,9 @@ input:focus, textarea:focus, select:focus {
 
     /* When menu is visible during quiz */
     body.quiz-active.menu-visible .quiz-area {
-        /* Account for header (~70px) + bottom nav (~60px) + padding */
-        max-height: calc(100dvh - 140px);
-        margin-top: 70px;
+        /* Account for header position (8px + header height ~70px) + bottom nav (~60px) */
+        max-height: calc(100dvh - 145px);
+        margin-top: 85px;
         padding-top: 0;
     }
 
