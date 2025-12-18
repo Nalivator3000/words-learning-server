@@ -37,14 +37,19 @@ class Gamification {
 
     // Fetch activity calendar data
     async getActivityCalendar(userId, days = 365) {
+        console.log(`📅 Fetching activity calendar for user ${userId}, days: ${days}`);
         try {
             const response = await fetch(`/api/gamification/activity/${userId}?days=${days}`);
-            if (!response.ok) throw new Error('Failed to fetch activity');
+            if (!response.ok) {
+                console.error('❌ Activity API response not OK:', response.status, response.statusText);
+                throw new Error('Failed to fetch activity');
+            }
 
             this.activityData = await response.json();
+            console.log(`✅ Activity data received: ${this.activityData.length} days`, this.activityData);
             return this.activityData;
         } catch (err) {
-            console.error('Error fetching activity:', err);
+            console.error('❌ Error fetching activity:', err);
             return [];
         }
     }
@@ -181,6 +186,7 @@ class Gamification {
 
     // Render detailed stats page
     renderStatsPage(containerElement, stats, xpLog, activityData) {
+        console.log('📊 renderStatsPage called with:', { stats, xpLogLength: xpLog?.length, activityDataLength: activityData?.length });
         if (!stats) return;
 
         const { level, totalXP, currentLevelXP, xpForNextLevel, progress, currentStreak, longestStreak, totalWordsLearned, totalQuizzesCompleted } = stats;
@@ -242,6 +248,7 @@ class Gamification {
         `;
 
         // Render activity calendar
+        console.log('📅 Checking activity data:', { hasData: activityData && activityData.length > 0, dataLength: activityData?.length });
         if (activityData && activityData.length > 0) {
             this.renderActivityCalendar(document.getElementById('activity-calendar'), activityData);
         }
