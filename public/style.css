@@ -1950,7 +1950,7 @@ body.quiz-active .user-menu {
     background: white;
     border: 2px solid var(--neutral-200);
     padding: var(--space-4) var(--space-5);
-    margin-bottom: var(--space-3);
+    margin-bottom: var(--space-4);
     border-radius: var(--radius-xl);
     cursor: pointer;
     font-size: var(--text-lg);
@@ -1980,7 +1980,8 @@ body.quiz-active .user-menu {
     background: var(--primary-50);
     transform: translateY(-2px);
     box-shadow: var(--shadow-3d-md);
-    z-index: 10;
+    z-index: 100;
+    margin-bottom: var(--space-5);
 }
 
 .choice-btn.correct {
