@@ -3977,12 +3977,12 @@ input:focus, textarea:focus, select:focus {
 
     /* Restore container padding when menu is visible */
     body.quiz-active.menu-visible .container {
-        padding-top: calc(60px + env(safe-area-inset-top, 0px)) !important;
+        padding-top: 0 !important;
     }
 
     /* Push section content down when menu is visible */
     body.quiz-active.menu-visible .section {
-        margin-top: calc(60px + env(safe-area-inset-top, 0px));
+        margin-top: 0;
     }
 
     /* Floating menu toggle button */
@@ -4029,9 +4029,10 @@ input:focus, textarea:focus, select:focus {
 
     /* When menu is visible during quiz */
     body.quiz-active.menu-visible .quiz-area {
-        /* Account for header (~80px) + bottom nav (~60px) + small padding */
-        max-height: calc(100dvh - 150px);
-        margin-top: 80px;
+        /* Account for header (~70px) + bottom nav (~60px) + padding */
+        max-height: calc(100dvh - 140px);
+        margin-top: 70px;
+        padding-top: 0;
     }
 
     /* Hide user info bar during quiz */
