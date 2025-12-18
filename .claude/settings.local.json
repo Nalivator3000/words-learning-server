@@ -130,7 +130,8 @@
       "Bash(find:*)",
       "Bash(docker ps:*)",
       "Bash(npx:*)",
-      "Bash(sqlite3:*)"
+      "Bash(sqlite3:*)",
+      "Bash(git rebase:*)"
     ],
     "deny": [],
     "ask": []

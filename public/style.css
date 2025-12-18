@@ -3952,12 +3952,13 @@ input:focus, textarea:focus, select:focus {
         top: 0;
         left: 0;
         right: 0;
-        z-index: 999;
+        z-index: 1000;
         transform: translateY(-100%);
         transition: transform 0.3s ease;
         pointer-events: none;
         visibility: hidden;
         opacity: 0;
+        margin: 0;
     }
 
     /* Show header when toggled */
@@ -4019,14 +4020,28 @@ input:focus, textarea:focus, select:focus {
         display: flex;
     }
 
+    /* Adjust quiz-area height when header is hidden */
+    body.quiz-active .quiz-area {
+        /* Account for: bottom nav (~60px) only */
+        max-height: calc(100dvh - 60px);
+        margin-top: 0;
+    }
+
+    /* When menu is visible during quiz */
+    body.quiz-active.menu-visible .quiz-area {
+        /* Account for header (~80px) + bottom nav (~60px) + small padding */
+        max-height: calc(100dvh - 150px);
+        margin-top: 80px;
+    }
 
     /* Hide user info bar during quiz */
     body.quiz-active .user-info-bar {
         display: none;
     }
-    body.quiz-active.menu-visible .quiz-area {
-        /* Back to normal calculation with header */
-        max-height: calc(100dvh - 140px);
+
+    /* Show user info bar when menu is visible */
+    body.quiz-active.menu-visible .user-info-bar {
+        display: flex;
     }
 
     /* Show user menu dropdown when menu is visible during quiz */
