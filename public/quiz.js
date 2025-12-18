@@ -88,6 +88,7 @@ class QuizManager {
             example: correctWord.exampleTranslation,
             choices: choices,
             correctAnswer: correctWord.word,
+            word: correctWord.word,
             wordId: correctWord.id
         };
     }
@@ -113,6 +114,7 @@ class QuizManager {
             example: correctWord.example,
             choices: choices,
             correctAnswer: correctWord.translation,
+            word: correctWord.word,
             wordId: correctWord.id
         };
     }
@@ -130,6 +132,7 @@ class QuizManager {
             example: word.exampleTranslation,
             letters: shuffledLetters,
             correctAnswer: word.word,
+            word: word.word,
             wordId: word.id
         };
     }
@@ -140,6 +143,7 @@ class QuizManager {
             questionText: word.translation,
             example: word.exampleTranslation,
             correctAnswer: word.word,
+            word: word.word,
             wordId: word.id
         };
     }
