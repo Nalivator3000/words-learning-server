@@ -3979,6 +3979,11 @@ input:focus, textarea:focus, select:focus {
         padding-top: calc(60px + env(safe-area-inset-top, 0px)) !important;
     }
 
+    /* Push section content down when menu is visible */
+    body.quiz-active.menu-visible .section {
+        margin-top: calc(60px + env(safe-area-inset-top, 0px));
+    }
+
     /* Floating menu toggle button */
     .menu-toggle-btn {
         position: fixed;
