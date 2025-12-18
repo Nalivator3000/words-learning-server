@@ -304,8 +304,20 @@ class LanguageLearningApp {
             e.stopPropagation();
             e.preventDefault();
 
+            console.log('🍔 Menu toggle clicked');
+            console.log('Before toggle:', {
+                quizActive: document.body.classList.contains('quiz-active'),
+                menuVisible: document.body.classList.contains('menu-visible')
+            });
+
             // Toggle menu visibility - shows both header and bottom navigation
             document.body.classList.toggle('menu-visible');
+
+            console.log('After toggle:', {
+                quizActive: document.body.classList.contains('quiz-active'),
+                menuVisible: document.body.classList.contains('menu-visible'),
+                bodyClasses: Array.from(document.body.classList)
+            });
         });
     }
 
