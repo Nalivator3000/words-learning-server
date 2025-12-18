@@ -1957,6 +1957,8 @@ body.quiz-active .user-menu {
     text-align: left;
     transition: var(--transition-base);
     box-shadow: var(--shadow-3d-sm);
+    position: relative;
+    z-index: 1;
 }
 
 .choice-number {
@@ -1978,6 +1980,7 @@ body.quiz-active .user-menu {
     background: var(--primary-50);
     transform: translateY(-2px);
     box-shadow: var(--shadow-3d-md);
+    z-index: 10;
 }
 
 .choice-btn.correct {
