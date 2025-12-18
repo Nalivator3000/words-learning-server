@@ -3974,6 +3974,11 @@ input:focus, textarea:focus, select:focus {
         padding-top: 0 !important;
     }
 
+    /* Restore container padding when menu is visible */
+    body.quiz-active.menu-visible .container {
+        padding-top: calc(60px + env(safe-area-inset-top, 0px)) !important;
+    }
+
     /* Floating menu toggle button */
     .menu-toggle-btn {
         position: fixed;
