@@ -1,6 +1,6 @@
 {
   "name": "lexybooster-server",
-  "version": "5.2.6",
+  "version": "5.2.7",
   "description": "LexyBooster - Language learning app with SRS and gamification",
   "main": "server-postgresql.js",
   "scripts": {

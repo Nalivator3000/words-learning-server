@@ -1899,6 +1899,7 @@ body.quiz-active .user-menu {
 
 .answer-area {
     margin-bottom: var(--space-8);
+    padding: 0 var(--space-2);
 }
 
 .answer-options {
@@ -1951,15 +1952,13 @@ body.quiz-active .user-menu {
     background: white;
     border: 2px solid var(--neutral-200);
     padding: var(--space-4) var(--space-5);
-    margin-bottom: var(--space-4);
+    margin-bottom: var(--space-3);
     border-radius: var(--radius-xl);
     cursor: pointer;
     font-size: var(--text-lg);
     text-align: left;
     transition: var(--transition-base);
     box-shadow: var(--shadow-3d-sm);
-    position: relative;
-    z-index: 1;
 }
 
 .choice-number {
@@ -1979,10 +1978,7 @@ body.quiz-active .user-menu {
 .choice-btn:hover {
     border-color: var(--primary-500);
     background: var(--primary-50);
-    transform: translateY(-2px);
     box-shadow: var(--shadow-3d-md);
-    z-index: 100;
-    margin-bottom: var(--space-5);
 }
 
 .choice-btn.correct {
