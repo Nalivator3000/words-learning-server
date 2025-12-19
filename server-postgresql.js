@@ -7887,21 +7887,45 @@ app.get('/api/word-lists', async (req, res) => {
     try {
         const { language, from_lang, to_lang, category, difficulty, topic } = req.query;
 
+        // Helper function to convert language names to codes
+        const languageMap = {
+            'German': 'de',
+            'English': 'en',
+            'Russian': 'ru',
+            'Spanish': 'es',
+            'French': 'fr',
+            'Italian': 'it',
+            'Portuguese': 'pt',
+            'Chinese': 'zh',
+            'Japanese': 'ja',
+            'Korean': 'ko'
+        };
+
+        const normalizeLanguage = (lang) => {
+            if (!lang) return null;
+            // If it's already a 2-letter code, return as-is
+            if (lang.length === 2) return lang.toLowerCase();
+            // Otherwise, try to map from full name to code
+            return languageMap[lang] || lang.toLowerCase();
+        };
+
         let query = 'SELECT * FROM global_word_collections WHERE is_public = true';
         const params = [];
         let paramIndex = 1;
 
         // Support legacy 'language' parameter (maps to from_lang)
         if (language || from_lang) {
+            const normalizedLang = normalizeLanguage(language || from_lang);
             query += ` AND from_lang = $${paramIndex}`;
-            params.push(language || from_lang);
+            params.push(normalizedLang);
             paramIndex++;
         }
 
         // Filter by target language
         if (to_lang) {
+            const normalizedLang = normalizeLanguage(to_lang);
             query += ` AND to_lang = $${paramIndex}`;
-            params.push(to_lang);
+            params.push(normalizedLang);
             paramIndex++;
         }
 
