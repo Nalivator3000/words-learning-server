@@ -15468,6 +15468,18 @@ app.get('/api/debug/word-stats/:userId/:languagePairId', async (req, res) => {
     }
 });
 
+// Temporary endpoint to run thematic collections import
+app.post('/api/admin/import-thematic-collections', async (req, res) => {
+    try {
+        const { createThematicCollections } = require('./scripts/create-german-a1-thematic-collections.js');
+        await createThematicCollections();
+        res.json({ success: true, message: 'Thematic collections imported successfully' });
+    } catch (error) {
+        logger.error('Failed to import thematic collections:', error);
+        res.status(500).json({ error: error.message });
+    }
+});
+
 app.get('/', (req, res) => {
     res.sendFile(path.join(__dirname, 'public', 'index.html'));
 });
