@@ -84,6 +84,7 @@ class WordListsUI {
                 url += '?' + params.toString();
             }
 
+            console.log('📋 Fetching word lists from:', url);
             const response = await fetch(url);
             if (!response.ok) {
                 console.warn('Traditional word lists not available');
@@ -92,7 +93,8 @@ class WordListsUI {
             }
 
             this.wordLists = await response.json();
-            console.log('Traditional word lists loaded:', this.wordLists);
+            console.log('✅ Traditional word lists loaded:', this.wordLists.length, 'lists');
+            console.log('Lists:', this.wordLists.map(l => l.name));
         } catch (error) {
             console.warn('Error loading traditional word lists:', error);
             this.wordLists = [];
