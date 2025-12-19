@@ -99,35 +99,8 @@
 .word-sets-grid {
     display: grid;
     gap: 20px;
-    /* Default: 1 column for mobile */
-    grid-template-columns: 1fr;
-}
-
-/* Tablet: 2 columns (768px+) */
-@media (min-width: 768px) {
-    .word-lists-grid,
-    .traditional-lists-grid,
-    .word-sets-grid {
-        grid-template-columns: repeat(2, 1fr);
-    }
-}
-
-/* Desktop: 3 columns (1024px+) */
-@media (min-width: 1024px) {
-    .word-lists-grid,
-    .traditional-lists-grid,
-    .word-sets-grid {
-        grid-template-columns: repeat(3, 1fr);
-    }
-}
-
-/* Large Desktop: 4 columns (1536px+) */
-@media (min-width: 1536px) {
-    .word-lists-grid,
-    .traditional-lists-grid,
-    .word-sets-grid {
-        grid-template-columns: repeat(4, 1fr);
-    }
+    /* Auto-fit with minimum 300px width */
+    grid-template-columns: repeat(auto-fill, minmax(min(300px, 100%), 1fr));
 }
 
 /* Word List Card */
@@ -143,6 +116,7 @@
     cursor: pointer;
     position: relative;
     overflow: hidden;
+    min-height: 280px;
 }
 
 .word-list-card::before {
@@ -216,6 +190,9 @@
     color: white;
     margin: 0;
     line-height: 1.4;
+    word-wrap: break-word;
+    overflow-wrap: break-word;
+    hyphens: auto;
 }
 
 .list-description {
@@ -223,6 +200,12 @@
     color: rgba(255, 255, 255, 0.7);
     line-height: 1.6;
     margin: 0;
+    word-wrap: break-word;
+    overflow-wrap: break-word;
+    display: -webkit-box;
+    -webkit-line-clamp: 3;
+    -webkit-box-orient: vertical;
+    overflow: hidden;
 }
 
 .list-meta {
@@ -272,6 +255,7 @@
     position: relative;
     overflow: hidden;
     gap: 16px;
+    min-height: 240px;
 }
 
 .word-set-card::before {
