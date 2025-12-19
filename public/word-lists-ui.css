@@ -99,8 +99,17 @@
 .word-sets-grid {
     display: grid;
     gap: 20px;
-    /* Auto-fit with minimum 300px width */
-    grid-template-columns: repeat(auto-fill, minmax(min(300px, 100%), 1fr));
+    /* Auto-fit: cards will be min 320px, max equal width */
+    grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+}
+
+/* For very narrow screens, allow cards to shrink below 320px */
+@media (max-width: 400px) {
+    .word-lists-grid,
+    .traditional-lists-grid,
+    .word-sets-grid {
+        grid-template-columns: 1fr;
+    }
 }
 
 /* Word List Card */
