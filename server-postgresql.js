@@ -15431,6 +15431,43 @@ app.get('/api/tts', async (req, res) => {
     }
 });
 
+// Diagnostic endpoint to check word distribution
+app.get('/api/debug/word-stats/:userId/:languagePairId', async (req, res) => {
+    try {
+        const { userId, languagePairId } = req.params;
+
+        const stats = await db.query(`
+            SELECT
+                status,
+                COUNT(*) as count,
+                array_agg(word ORDER BY word LIMIT 5) as sample_words
+            FROM words
+            WHERE user_id = $1 AND language_pair_id = $2
+            GROUP BY status
+            ORDER BY status
+        `, [parseInt(userId), parseInt(languagePairId)]);
+
+        const reviewWords = await db.query(`
+            SELECT id, word, status, points, next_review_date, interval_days
+            FROM words
+            WHERE user_id = $1 AND language_pair_id = $2
+            AND status LIKE 'review_%'
+            AND (next_review_date IS NULL OR next_review_date <= CURRENT_DATE)
+            ORDER BY next_review_date
+            LIMIT 10
+        `, [parseInt(userId), parseInt(languagePairId)]);
+
+        res.json({
+            statusDistribution: stats.rows,
+            readyForReview: reviewWords.rows,
+            totalReadyForReview: reviewWords.rows.length
+        });
+    } catch (err) {
+        logger.error('Error getting word stats:', err);
+        res.status(500).json({ error: err.message });
+    }
+});
+
 app.get('/', (req, res) => {
     res.sendFile(path.join(__dirname, 'public', 'index.html'));
 });
