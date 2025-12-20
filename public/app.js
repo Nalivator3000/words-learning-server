@@ -149,11 +149,10 @@ class LanguageLearningApp {
         document.getElementById('leaderboardBtn').addEventListener('click', () => this.showSection('leaderboard'));
         document.getElementById('statsBtn').addEventListener('click', () => this.showSection('stats'));
 
-        // User menu - toggle dropdown
+        // User menu - direct navigation to settings
         document.getElementById('userMenuBtn').addEventListener('click', (e) => {
             e.stopPropagation();
-            const userMenu = document.getElementById('userMenu');
-            userMenu.classList.toggle('hidden');
+            this.showSection('settings');
         });
 
         // Close user menu when clicking outside
