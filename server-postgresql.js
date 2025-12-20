@@ -11495,6 +11495,93 @@ app.get('/api/words/random/:status/:count', async (req, res) => {
     }
 });
 
+// Get proportionally distributed random words for quiz
+app.get('/api/words/random-proportional/:count', async (req, res) => {
+    try {
+        const { count } = req.params;
+        const { userId, languagePairId } = req.query;
+        const totalWords = parseInt(count);
+
+        // Get counts for each status
+        const countsQuery = `
+            SELECT status, COUNT(*) as count
+            FROM words
+            WHERE user_id = $1 AND language_pair_id = $2
+            AND status IN ('studying', 'review_1', 'review_3', 'review_7', 'review_14', 'review_30', 'review_60', 'review_120')
+            GROUP BY status
+        `;
+        const countsResult = await db.query(countsQuery, [parseInt(userId), parseInt(languagePairId)]);
+
+        // Calculate total available words and proportions
+        const statusCounts = {};
+        let totalAvailable = 0;
+
+        countsResult.rows.forEach(row => {
+            statusCounts[row.status] = parseInt(row.count);
+            totalAvailable += parseInt(row.count);
+        });
+
+        if (totalAvailable === 0) {
+            return res.json([]);
+        }
+
+        // Calculate how many words to take from each status proportionally
+        const statusAllocations = {};
+        let allocatedSoFar = 0;
+
+        for (const [status, count] of Object.entries(statusCounts)) {
+            const proportion = count / totalAvailable;
+            const allocation = Math.round(proportion * totalWords);
+            statusAllocations[status] = Math.min(allocation, count); // Don't allocate more than available
+            allocatedSoFar += statusAllocations[status];
+        }
+
+        // Adjust if we allocated too few or too many words due to rounding
+        const diff = totalWords - allocatedSoFar;
+        if (diff !== 0) {
+            // Find the status with the most words and adjust it
+            const sortedStatuses = Object.entries(statusCounts).sort((a, b) => b[1] - a[1]);
+            for (const [status, count] of sortedStatuses) {
+                if (diff > 0 && statusAllocations[status] < count) {
+                    // Need to add more
+                    const canAdd = Math.min(diff, count - statusAllocations[status]);
+                    statusAllocations[status] += canAdd;
+                    break;
+                } else if (diff < 0 && statusAllocations[status] > 0) {
+                    // Need to remove some
+                    const canRemove = Math.min(Math.abs(diff), statusAllocations[status]);
+                    statusAllocations[status] -= canRemove;
+                    break;
+                }
+            }
+        }
+
+        // Fetch words from each status
+        const allWords = [];
+        for (const [status, allocation] of Object.entries(statusAllocations)) {
+            if (allocation > 0) {
+                const wordsQuery = `
+                    SELECT * FROM words
+                    WHERE status = $1 AND user_id = $2 AND language_pair_id = $3
+                    AND (nextReviewDate IS NULL OR nextReviewDate <= CURRENT_TIMESTAMP)
+                    ORDER BY RANDOM()
+                    LIMIT $4
+                `;
+                const wordsResult = await db.query(wordsQuery, [status, parseInt(userId), parseInt(languagePairId), allocation]);
+                allWords.push(...wordsResult.rows);
+            }
+        }
+
+        // Final shuffle to mix all statuses
+        allWords.sort(() => Math.random() - 0.5);
+
+        res.json(allWords);
+    } catch (err) {
+        console.error('Proportional random words error:', err);
+        res.status(500).json({ error: err.message });
+    }
+});
+
 // Get translation suggestions for a word
 app.post('/api/words/translate', async (req, res) => {
     try {

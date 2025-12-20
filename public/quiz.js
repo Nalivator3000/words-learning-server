@@ -17,78 +17,10 @@ class QuizManager {
         this.questions = [];
         this.wordCount = 0;
 
-        // Get words - ALWAYS mix new words and reviews for better learning
-        let words = [];
-
-        if (mode === 'study') {
-            // In study mode: prefer new words, but fill with reviews if needed
-            const targetNewWords = Math.ceil(questionCount * 0.7);
-            const targetReviewWords = questionCount - targetNewWords;
-
-            const newWords = await database.getRandomWords('studying', targetNewWords);
-            const reviewWords = await database.getReviewWords(targetReviewWords);
-
-            words = [...newWords, ...reviewWords];
-
-            // If we don't have enough words, try to get more from the opposite category
-            if (words.length < questionCount) {
-                const shortage = questionCount - words.length;
-
-                if (newWords.length < targetNewWords) {
-                    // Need more reviews to fill the gap
-                    const existingIds = new Set(words.map(w => w.id));
-                    const additionalReviews = await database.getReviewWords(targetReviewWords + shortage);
-                    const uniqueAdditional = additionalReviews.filter(w => !existingIds.has(w.id));
-                    words = [...words, ...uniqueAdditional.slice(0, shortage)];
-                } else if (reviewWords.length < targetReviewWords) {
-                    // Need more new words to fill the gap
-                    const existingIds = new Set(words.map(w => w.id));
-                    const additionalNew = await database.getRandomWords('studying', targetNewWords + shortage);
-                    const uniqueAdditional = additionalNew.filter(w => !existingIds.has(w.id));
-                    words = [...words, ...uniqueAdditional.slice(0, shortage)];
-                }
-            }
-
-            // Ensure we don't exceed questionCount
-            words = words.slice(0, questionCount);
-
-            // Shuffle to mix new and review words
-            words.sort(() => 0.5 - Math.random());
-        } else if (mode === 'review') {
-            // In review mode: prefer reviews, but fill with new words if needed
-            const targetReviewWords = Math.ceil(questionCount * 0.7);
-            const targetNewWords = questionCount - targetReviewWords;
-
-            const reviewWords = await database.getReviewWords(targetReviewWords);
-            const newWords = await database.getRandomWords('studying', targetNewWords);
-
-            words = [...reviewWords, ...newWords];
-
-            // If we don't have enough words, try to get more from the opposite category
-            if (words.length < questionCount) {
-                const shortage = questionCount - words.length;
-
-                if (reviewWords.length < targetReviewWords) {
-                    // Need more new words to fill the gap
-                    const existingIds = new Set(words.map(w => w.id));
-                    const additionalNew = await database.getRandomWords('studying', targetNewWords + shortage);
-                    const uniqueAdditional = additionalNew.filter(w => !existingIds.has(w.id));
-                    words = [...words, ...uniqueAdditional.slice(0, shortage)];
-                } else if (newWords.length < targetNewWords) {
-                    // Need more reviews to fill the gap
-                    const existingIds = new Set(words.map(w => w.id));
-                    const additionalReviews = await database.getReviewWords(targetReviewWords + shortage);
-                    const uniqueAdditional = additionalReviews.filter(w => !existingIds.has(w.id));
-                    words = [...words, ...uniqueAdditional.slice(0, shortage)];
-                }
-            }
-
-            // Ensure we don't exceed questionCount
-            words = words.slice(0, questionCount);
-
-            // Shuffle to mix review and new words
-            words.sort(() => 0.5 - Math.random());
-        }
+        // Get words proportionally from all statuses (studying, review_1, review_3, etc.)
+        // This ensures variety and prevents seeing the same words repeatedly
+        // Words are distributed based on the proportion of each status in the user's vocabulary
+        let words = await database.getProportionalWords(questionCount);
 
         if (words.length === 0) {
             throw new Error(i18n.t('no_words_to_study'));
