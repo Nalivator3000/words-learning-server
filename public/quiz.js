@@ -21,26 +21,64 @@ class QuizManager {
         let words = [];
 
         if (mode === 'study') {
-            // In study mode: 70% new words, 30% reviews (if available)
-            const newWordsCount = Math.ceil(questionCount * 0.7);
-            const reviewCount = questionCount - newWordsCount;
+            // In study mode: prefer new words, but fill with reviews if needed
+            const targetNewWords = Math.ceil(questionCount * 0.7);
+            const targetReviewWords = questionCount - targetNewWords;
 
-            const newWords = await database.getRandomWords('studying', newWordsCount);
-            const reviewWords = await database.getReviewWords(reviewCount);
+            const newWords = await database.getRandomWords('studying', targetNewWords);
+            const reviewWords = await database.getReviewWords(targetReviewWords);
 
             words = [...newWords, ...reviewWords];
+
+            // If we don't have enough words, try to get more from the opposite category
+            if (words.length < questionCount) {
+                const shortage = questionCount - words.length;
+
+                if (newWords.length < targetNewWords) {
+                    // Need more reviews to fill the gap
+                    const existingIds = new Set(words.map(w => w.id));
+                    const additionalReviews = await database.getReviewWords(targetReviewWords + shortage);
+                    const uniqueAdditional = additionalReviews.filter(w => !existingIds.has(w.id));
+                    words = [...words, ...uniqueAdditional];
+                } else if (reviewWords.length < targetReviewWords) {
+                    // Need more new words to fill the gap
+                    const existingIds = new Set(words.map(w => w.id));
+                    const additionalNew = await database.getRandomWords('studying', targetNewWords + shortage);
+                    const uniqueAdditional = additionalNew.filter(w => !existingIds.has(w.id));
+                    words = [...words, ...uniqueAdditional];
+                }
+            }
 
             // Shuffle to mix new and review words
             words.sort(() => 0.5 - Math.random());
         } else if (mode === 'review') {
-            // In review mode: 70% reviews, 30% new words (if available)
-            const reviewCount = Math.ceil(questionCount * 0.7);
-            const newWordsCount = questionCount - reviewCount;
+            // In review mode: prefer reviews, but fill with new words if needed
+            const targetReviewWords = Math.ceil(questionCount * 0.7);
+            const targetNewWords = questionCount - targetReviewWords;
 
-            const reviewWords = await database.getReviewWords(reviewCount);
-            const newWords = await database.getRandomWords('studying', newWordsCount);
+            const reviewWords = await database.getReviewWords(targetReviewWords);
+            const newWords = await database.getRandomWords('studying', targetNewWords);
 
             words = [...reviewWords, ...newWords];
+
+            // If we don't have enough words, try to get more from the opposite category
+            if (words.length < questionCount) {
+                const shortage = questionCount - words.length;
+
+                if (reviewWords.length < targetReviewWords) {
+                    // Need more new words to fill the gap
+                    const existingIds = new Set(words.map(w => w.id));
+                    const additionalNew = await database.getRandomWords('studying', targetNewWords + shortage);
+                    const uniqueAdditional = additionalNew.filter(w => !existingIds.has(w.id));
+                    words = [...words, ...uniqueAdditional];
+                } else if (newWords.length < targetNewWords) {
+                    // Need more reviews to fill the gap
+                    const existingIds = new Set(words.map(w => w.id));
+                    const additionalReviews = await database.getReviewWords(targetReviewWords + shortage);
+                    const uniqueAdditional = additionalReviews.filter(w => !existingIds.has(w.id));
+                    words = [...words, ...uniqueAdditional];
+                }
+            }
 
             // Shuffle to mix review and new words
             words.sort(() => 0.5 - Math.random());
