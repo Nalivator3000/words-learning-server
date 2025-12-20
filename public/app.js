@@ -159,23 +159,15 @@ class LanguageLearningApp {
         document.addEventListener('click', (e) => {
             const userMenu = document.getElementById('userMenu');
             const userMenuBtn = document.getElementById('userMenuBtn');
-            const menuToggleBtn = document.getElementById('menuToggleBtn');
             const appHeader = document.querySelector('.app-header');
 
-            // Don't close if clicking on menu button, user menu itself, toggle button, or header
+            // Don't close if clicking on menu button, user menu itself, or header
             if (!userMenu.contains(e.target) &&
                 e.target !== userMenuBtn &&
-                e.target !== menuToggleBtn &&
                 !appHeader.contains(e.target)) {
 
-                // If in quiz mode with menu visible, close the whole header
-                if (document.body.classList.contains('quiz-active') &&
-                    document.body.classList.contains('menu-visible')) {
-                    document.body.classList.remove('menu-visible');
-                } else {
-                    // Normal mode - just hide the dropdown
-                    userMenu.classList.add('hidden');
-                }
+                // Normal mode - just hide the dropdown
+                userMenu.classList.add('hidden');
             }
         });
 
@@ -297,27 +289,6 @@ class LanguageLearningApp {
             if (e.key === 'Enter') this.handleRegister();
         });
 
-
-        // Menu toggle button for quiz on mobile - shows full header + bottom nav
-        document.getElementById('menuToggleBtn').addEventListener('click', (e) => {
-            e.stopPropagation();
-            e.preventDefault();
-
-            console.log('🍔 Menu toggle clicked');
-            console.log('Before toggle:', {
-                quizActive: document.body.classList.contains('quiz-active'),
-                menuVisible: document.body.classList.contains('menu-visible')
-            });
-
-            // Toggle menu visibility - shows both header and bottom navigation
-            document.body.classList.toggle('menu-visible');
-
-            console.log('After toggle:', {
-                quizActive: document.body.classList.contains('quiz-active'),
-                menuVisible: document.body.classList.contains('menu-visible'),
-                bodyClasses: Array.from(document.body.classList)
-            });
-        });
     }
 
     switchAuthTab(tab) {
