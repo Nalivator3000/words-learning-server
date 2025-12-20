@@ -39,15 +39,18 @@ class QuizManager {
                     const existingIds = new Set(words.map(w => w.id));
                     const additionalReviews = await database.getReviewWords(targetReviewWords + shortage);
                     const uniqueAdditional = additionalReviews.filter(w => !existingIds.has(w.id));
-                    words = [...words, ...uniqueAdditional];
+                    words = [...words, ...uniqueAdditional.slice(0, shortage)];
                 } else if (reviewWords.length < targetReviewWords) {
                     // Need more new words to fill the gap
                     const existingIds = new Set(words.map(w => w.id));
                     const additionalNew = await database.getRandomWords('studying', targetNewWords + shortage);
                     const uniqueAdditional = additionalNew.filter(w => !existingIds.has(w.id));
-                    words = [...words, ...uniqueAdditional];
+                    words = [...words, ...uniqueAdditional.slice(0, shortage)];
                 }
             }
+
+            // Ensure we don't exceed questionCount
+            words = words.slice(0, questionCount);
 
             // Shuffle to mix new and review words
             words.sort(() => 0.5 - Math.random());
@@ -70,15 +73,18 @@ class QuizManager {
                     const existingIds = new Set(words.map(w => w.id));
                     const additionalNew = await database.getRandomWords('studying', targetNewWords + shortage);
                     const uniqueAdditional = additionalNew.filter(w => !existingIds.has(w.id));
-                    words = [...words, ...uniqueAdditional];
+                    words = [...words, ...uniqueAdditional.slice(0, shortage)];
                 } else if (newWords.length < targetNewWords) {
                     // Need more reviews to fill the gap
                     const existingIds = new Set(words.map(w => w.id));
                     const additionalReviews = await database.getReviewWords(targetReviewWords + shortage);
                     const uniqueAdditional = additionalReviews.filter(w => !existingIds.has(w.id));
-                    words = [...words, ...uniqueAdditional];
+                    words = [...words, ...uniqueAdditional.slice(0, shortage)];
                 }
             }
+
+            // Ensure we don't exceed questionCount
+            words = words.slice(0, questionCount);
 
             // Shuffle to mix review and new words
             words.sort(() => 0.5 - Math.random());
