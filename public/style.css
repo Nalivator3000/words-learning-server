@@ -4066,7 +4066,8 @@ input:focus, textarea:focus, select:focus {
 
 /* Hide menu toggle button on desktop (screens wider than 475px) */
 @media (min-width: 476px) {
-    .menu-toggle-btn {
+    .menu-toggle-btn,
+    body.quiz-active .menu-toggle-btn {
         display: none !important;
     }
 }
