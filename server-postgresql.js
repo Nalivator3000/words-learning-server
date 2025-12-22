@@ -8267,6 +8267,10 @@ app.get('/api/word-lists/:id', async (req, res) => {
 
             return res.json({
                 ...collectionData,
+                from_lang: source_lang,
+                to_lang: native_lang || 'en',
+                topic: collectionData.theme,
+                difficulty_level: collectionData.level,
                 words: words.rows.map(w => ({ word_id: w.source_word_id }))
             });
         }
@@ -8287,8 +8291,13 @@ app.get('/api/word-lists/:id', async (req, res) => {
             ORDER BY cw.order_index
         `, [source_lang, parseInt(id)]);
 
+        // Transform to match old API format for frontend compatibility
         res.json({
             ...collectionData,
+            from_lang: source_lang,  // Source language being learned
+            to_lang: native_lang || 'en',  // Native language
+            topic: collectionData.theme,  // Map theme to topic
+            difficulty_level: collectionData.level,  // CEFR level
             words: words.rows
         });
     } catch (err) {
