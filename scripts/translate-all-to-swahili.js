@@ -1,100 +1,133 @@
 const { Pool } = require('pg');
-const translate = require('@vitalets/google-translate-api');
 
 const pool = new Pool({
   connectionString: 'postgresql://postgres:uPGJKLcZLFGTZeRbnzPOVTlzWRObbnKO@mainline.proxy.rlwy.net:54625/railway',
   ssl: { rejectUnauthorized: false }
 });
 
-// Helper function to add delay between requests to avoid rate limiting
-function delay(ms) {
-  return new Promise(resolve => setTimeout(resolve, ms));
+// Use the free Google Translate API for translations
+async function translateWithGoogleAPI(text) {
+  const https = require('https');
+
+  return new Promise((resolve, reject) => {
+    const encodedText = encodeURIComponent(text);
+    const url = `https://translate.googleapis.com/translate_a/single?client=gtx&sl=de&tl=sw&dt=t&q=${encodedText}`;
+
+    https.get(url, (res) => {
+      let data = '';
+      res.on('data', chunk => data += chunk);
+      res.on('end', () => {
+        try {
+          const parsed = JSON.parse(data);
+          if (parsed && parsed[0] && parsed[0][0] && parsed[0][0][0]) {
+            resolve(parsed[0][0][0]);
+          } else {
+            resolve(null);
+          }
+        } catch (e) {
+          console.error(`Failed to parse translation for: "${text}"`, e.message);
+          resolve(null);
+        }
+      });
+    }).on('error', (err) => {
+      console.error(`Network error for: "${text}"`, err.message);
+      resolve(null);
+    });
+  });
 }
 
-// Helper function to extract base word from German word with article
-function extractBaseWord(germanWord) {
-  // Remove articles (der, die, das, ein, eine) for better translation
-  const withoutArticle = germanWord
-    .replace(/^(der|die|das|ein|eine)\s+/i, '')
-    .trim();
+// Enhanced translation function with German grammar context
+async function translateGermanToSwahili(germanWord) {
+  // Clean the word
+  let word = germanWord.trim();
 
-  return withoutArticle || germanWord;
-}
+  // Handle articles and extract gender information
+  let gender = '';
+  let baseWord = word;
 
-// Helper function to translate a single word with retry logic
-async function translateWord(germanWord, retries = 3) {
-  const baseWord = extractBaseWord(germanWord);
-
-  for (let attempt = 1; attempt <= retries; attempt++) {
-    try {
-      const result = await translate(baseWord, { from: 'de', to: 'sw' });
-      return result.text;
-    } catch (error) {
-      if (attempt === retries) {
-        console.error(`   ❌ Failed to translate "${germanWord}" after ${retries} attempts:`, error.message);
-        return null;
-      }
-
-      // Exponential backoff: 1s, 2s, 4s
-      const waitTime = Math.pow(2, attempt - 1) * 1000;
-      console.log(`   ⚠️  Retry ${attempt}/${retries} for "${germanWord}" in ${waitTime}ms...`);
-      await delay(waitTime);
-    }
+  if (word.startsWith('der ')) {
+    gender = 'm'; // masculine
+    baseWord = word.substring(4);
+  } else if (word.startsWith('die ')) {
+    gender = 'f'; // feminine
+    baseWord = word.substring(4);
+  } else if (word.startsWith('das ')) {
+    gender = 'n'; // neuter
+    baseWord = word.substring(4);
+  } else if (word.startsWith('ein ')) {
+    baseWord = word.substring(4);
+  } else if (word.startsWith('eine ')) {
+    baseWord = word.substring(5);
   }
 
-  return null;
+  // Translate the base word
+  let translation = await translateWithGoogleAPI(baseWord);
+
+  if (!translation) {
+    return null;
+  }
+
+  // For nouns with articles, try to preserve Swahili grammar hints
+  // Swahili uses noun classes but we can add gender hints for learners
+  if (gender && translation) {
+    // Just return the translation without article since Swahili doesn't use articles
+    // But we keep the capitalization for nouns
+    return translation;
+  }
+
+  return translation;
 }
 
 async function translateAllToSwahili() {
   const client = await pool.connect();
 
   try {
-    console.log('🌍 Translating ALL German words → Swahili...\n');
-    console.log('📊 Fetching German words from database...\n');
+    console.log('🇹🇿 Starting German → Swahili translation for ALL words...\n');
 
-    // Get total count first
-    const countResult = await client.query(`
-      SELECT COUNT(*) as total FROM source_words_german
-    `);
+    // Get total count
+    const countResult = await client.query('SELECT COUNT(*) as total FROM source_words_german');
     const totalWords = parseInt(countResult.rows[0].total);
-    console.log(`Found ${totalWords} total German words in database\n`);
+    console.log(`📊 Total German words in database: ${totalWords.toLocaleString()}\n`);
 
-    // Fetch all German words ordered by ID
+    // Check existing translations
+    const existingResult = await client.query(`
+      SELECT COUNT(*) as count FROM target_translations_swahili
+      WHERE source_lang = 'de'
+    `);
+    const existingCount = parseInt(existingResult.rows[0].count);
+    console.log(`✓ Already translated: ${existingCount.toLocaleString()}`);
+    console.log(`⏳ Remaining: ${(totalWords - existingCount).toLocaleString()}\n`);
+
+    if (existingCount >= totalWords) {
+      console.log('✅ All words already translated! Nothing to do.');
+      return;
+    }
+
+    // Fetch all German words that don't have Swahili translations yet
     const words = await client.query(`
-      SELECT id, word, level, example_de
-      FROM source_words_german
-      ORDER BY id
+      SELECT sw.id, sw.word, sw.level, sw.example_de
+      FROM source_words_german sw
+      LEFT JOIN target_translations_swahili ts ON ts.source_word_id = sw.id AND ts.source_lang = 'de'
+      WHERE ts.id IS NULL
+      ORDER BY sw.id
     `);
 
-    console.log(`Starting translation process...\n`);
-    console.log('─'.repeat(60));
+    console.log(`🔄 Processing ${words.rows.length.toLocaleString()} words...\n`);
 
     let translated = 0;
-    let skipped = 0;
     let failed = 0;
+    let batchInserts = [];
+    const BATCH_SIZE = 100;
     const failedWords = [];
-    const batchSize = 50;
-    let batchCount = 0;
+
+    const startTime = Date.now();
+    let lastProgressTime = Date.now();
 
     for (let i = 0; i < words.rows.length; i++) {
       const row = words.rows[i];
 
-      // Check if translation already exists
-      const existing = await client.query(`
-        SELECT id FROM target_translations_swahili
-        WHERE source_lang = 'de' AND source_word_id = $1
-      `, [row.id]);
-
-      if (existing.rows.length > 0) {
-        skipped++;
-        if (skipped % 100 === 0) {
-          console.log(`⏭️  Skipped (already exists): ${skipped}`);
-        }
-        continue;
-      }
-
-      // Translate the word
-      const translation = await translateWord(row.word);
+      // Get Swahili translation
+      const translation = await translateGermanToSwahili(row.word);
 
       if (!translation) {
         failed++;
@@ -103,83 +136,107 @@ async function translateAllToSwahili() {
           word: row.word,
           level: row.level
         });
+
+        // Show progress every 100 words or every 5 seconds
+        const now = Date.now();
+        if ((i + 1) % 100 === 0 || now - lastProgressTime >= 5000) {
+          const percentage = ((i + 1) / words.rows.length * 100).toFixed(1);
+          const elapsed = ((now - startTime) / 1000).toFixed(0);
+          const rate = ((i + 1) / (now - startTime) * 1000).toFixed(1);
+          const eta = (((words.rows.length - i - 1) / rate) / 60).toFixed(1);
+          console.log(`⏳ Progress: ${i + 1}/${words.rows.length} (${percentage}%) | ${rate} words/sec | ETA: ${eta} min | Translated: ${translated} | Failed: ${failed}`);
+          lastProgressTime = now;
+        }
+
         continue;
       }
 
-      // Insert translation into database
-      try {
-        await client.query(`
-          INSERT INTO target_translations_swahili
-          (source_lang, source_word_id, translation)
-          VALUES ('de', $1, $2)
-          ON CONFLICT (source_lang, source_word_id)
-          DO UPDATE SET
-            translation = EXCLUDED.translation,
-            updated_at = NOW()
-        `, [row.id, translation]);
+      // Add to batch
+      batchInserts.push({
+        source_word_id: row.id,
+        translation: translation
+      });
 
-        translated++;
+      translated++;
 
-        // Progress updates
-        if (translated % 50 === 0) {
-          const progress = ((i + 1) / words.rows.length * 100).toFixed(1);
-          console.log(`✓ Translated: ${translated} | Progress: ${progress}% | Failed: ${failed} | Skipped: ${skipped}`);
+      // Insert batch every 100 translations or at the end
+      if (batchInserts.length >= BATCH_SIZE || i === words.rows.length - 1) {
+        if (batchInserts.length > 0) {
+          try {
+            // Build multi-row insert query
+            const values = batchInserts.map((item, idx) => {
+              const offset = idx * 2;
+              return `('de', $${offset + 1}, $${offset + 2})`;
+            }).join(', ');
+
+            const params = batchInserts.flatMap(item => [item.source_word_id, item.translation]);
+
+            await client.query(`
+              INSERT INTO target_translations_swahili
+              (source_lang, source_word_id, translation)
+              VALUES ${values}
+              ON CONFLICT (source_lang, source_word_id) DO NOTHING
+            `, params);
+
+            const now = Date.now();
+            const percentage = ((i + 1) / words.rows.length * 100).toFixed(1);
+            const elapsed = ((now - startTime) / 1000).toFixed(0);
+            const rate = ((i + 1) / (now - startTime) * 1000).toFixed(1);
+            const eta = (((words.rows.length - i - 1) / rate) / 60).toFixed(1);
+            console.log(`✓ Batch inserted: ${batchInserts.length} | Progress: ${i + 1}/${words.rows.length} (${percentage}%) | ${rate} words/sec | ETA: ${eta} min`);
+
+            batchInserts = [];
+            lastProgressTime = now;
+          } catch (err) {
+            console.error(`❌ Batch insert failed:`, err.message);
+          }
         }
-
-        // Add small delay to avoid overwhelming the API
-        if (translated % 10 === 0) {
-          await delay(500); // 500ms delay every 10 words
-        }
-
-      } catch (dbError) {
-        console.error(`   ❌ Database error for word "${row.word}":`, dbError.message);
-        failed++;
-        failedWords.push({
-          id: row.id,
-          word: row.word,
-          level: row.level,
-          error: 'Database insertion failed'
-        });
       }
+
+      // Small delay to avoid rate limiting (100ms between requests)
+      await new Promise(resolve => setTimeout(resolve, 100));
     }
 
-    console.log('\n' + '─'.repeat(60));
-    console.log('\n✅ Translation complete!\n');
-    console.log('📈 Summary:');
-    console.log(`   Total words in database: ${totalWords}`);
-    console.log(`   Successfully translated: ${translated}`);
-    console.log(`   Already existed (skipped): ${skipped}`);
-    console.log(`   Failed to translate: ${failed}`);
-    console.log(`   Coverage: ${((translated + skipped) / totalWords * 100).toFixed(2)}%`);
+    const endTime = Date.now();
+    const totalTime = ((endTime - startTime) / 1000 / 60).toFixed(1);
+    const avgRate = (translated / (endTime - startTime) * 1000).toFixed(1);
+
+    console.log('\n' + '='.repeat(70));
+    console.log('✅ TRANSLATION COMPLETE!');
+    console.log('='.repeat(70));
+    console.log(`📊 Statistics:`);
+    console.log(`   Total words processed: ${words.rows.length.toLocaleString()}`);
+    console.log(`   Successfully translated: ${translated.toLocaleString()}`);
+    console.log(`   Failed: ${failed.toLocaleString()}`);
+    console.log(`   Total time: ${totalTime} minutes`);
+    console.log(`   Average rate: ${avgRate} words/second`);
+    console.log('='.repeat(70));
+
+    // Verify final count
+    const finalResult = await client.query(`
+      SELECT COUNT(*) as count FROM target_translations_swahili
+      WHERE source_lang = 'de'
+    `);
+    const finalCount = parseInt(finalResult.rows[0].count);
+    console.log(`\n✓ Total Swahili translations in database: ${finalCount.toLocaleString()}/${totalWords.toLocaleString()}`);
 
     if (failedWords.length > 0) {
-      console.log(`\n⚠️  Failed translations (${failedWords.length} words):`);
-      console.log('\nFirst 50 failed words:');
+      console.log(`\n⚠️  Words that failed to translate (first 50):`);
       failedWords.slice(0, 50).forEach((w, idx) => {
-        console.log(`   ${idx + 1}. ID ${w.id}: "${w.word}" [${w.level}]${w.error ? ` - ${w.error}` : ''}`);
+        console.log(`   ${idx + 1}. [${w.level}] "${w.word}" (ID: ${w.id})`);
       });
 
       if (failedWords.length > 50) {
         console.log(`   ... and ${failedWords.length - 50} more`);
       }
 
-      // Save failed words to a file for review
-      const fs = require('fs');
-      const failedWordsJson = JSON.stringify(failedWords, null, 2);
-      fs.writeFileSync('scripts/failed-swahili-translations.json', failedWordsJson);
-      console.log('\n💾 Failed words saved to: scripts/failed-swahili-translations.json');
+      console.log(`\n💡 Tip: You can re-run this script to retry failed translations.`);
     }
 
-    // Verify final count
-    const finalCount = await client.query(`
-      SELECT COUNT(*) as count FROM target_translations_swahili
-      WHERE source_lang = 'de'
-    `);
-
-    console.log(`\n✅ Total Swahili translations in database: ${finalCount.rows[0].count}`);
+    console.log('\n🎉 German → Swahili translation job complete!');
 
   } catch (err) {
-    console.error('\n❌ Critical error during translation:', err);
+    console.error('\n❌ Error during translation:', err);
     throw err;
   } finally {
     client.release();
@@ -188,13 +245,7 @@ async function translateAllToSwahili() {
 }
 
 // Run the translation
-console.log('🚀 Starting Swahili translation script...\n');
-translateAllToSwahili()
-  .then(() => {
-    console.log('\n🎉 Script completed successfully!');
-    process.exit(0);
-  })
-  .catch((err) => {
-    console.error('\n💥 Script failed:', err);
-    process.exit(1);
-  });
+translateAllToSwahili().catch(err => {
+  console.error('Fatal error:', err);
+  process.exit(1);
+});
