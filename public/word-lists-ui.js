@@ -85,8 +85,18 @@ class WordListsUI {
                 url += '?' + params.toString();
             }
 
+            // Add cache-busting parameter
+            const separator = url.includes('?') ? '&' : '?';
+            url += `${separator}_t=${Date.now()}`;
+
             console.log('📋 Fetching word lists from:', url);
-            const response = await fetch(url);
+            const response = await fetch(url, {
+                cache: 'no-cache',
+                headers: {
+                    'Cache-Control': 'no-cache',
+                    'Pragma': 'no-cache'
+                }
+            });
             if (!response.ok) {
                 console.warn('Traditional word lists not available');
                 this.wordLists = [];
@@ -453,10 +463,21 @@ class WordListsUI {
                 url += `?native_lang=${this.languagePair.from_lang}`;
             }
 
-            const response = await fetch(url);
-            if (!response.ok) throw new Error('Failed to load word list details');
+            const response = await fetch(url, {
+                cache: 'no-cache',
+                headers: {
+                    'Cache-Control': 'no-cache',
+                    'Pragma': 'no-cache'
+                }
+            });
+            if (!response.ok) {
+                const errorText = await response.text();
+                console.error('API Error:', response.status, errorText);
+                throw new Error('Failed to load word list details');
+            }
 
             const list = await response.json();
+            console.log('📋 Word list loaded:', list);
             this.selectedList = list;
 
             const modal = document.getElementById('wordListModal');
@@ -471,15 +492,15 @@ class WordListsUI {
                         <div class="list-detail-info">
                             <p class="list-detail-description">${list.description || 'No description'}</p>
                             <div class="list-detail-meta">
-                                <span><strong>${list.word_count}</strong> <span data-i18n="words">words</span></span>
-                                <span><strong>${list.from_lang.toUpperCase()}</strong> → <strong>${list.to_lang.toUpperCase()}</strong></span>
-                                <span><strong>${list.difficulty_level}</strong></span>
+                                <span><strong>${list.word_count || 0}</strong> <span data-i18n="words">words</span></span>
+                                ${list.from_lang && list.to_lang ? `<span><strong>${list.from_lang.toUpperCase()}</strong> → <strong>${list.to_lang.toUpperCase()}</strong></span>` : ''}
+                                ${list.difficulty_level ? `<span><strong>${list.difficulty_level}</strong></span>` : ''}
                                 ${list.topic ? `<span><strong>${list.topic}</strong></span>` : ''}
                             </div>
                         </div>
 
                         <div class="words-list">
-                            ${list.words.map((word, index) => `
+                            ${(list.words || []).map((word, index) => `
                                 <div class="word-item">
                                     <div class="word-number">${index + 1}</div>
                                     <div class="word-content">
