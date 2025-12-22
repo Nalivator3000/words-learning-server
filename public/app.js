@@ -159,23 +159,10 @@ class LanguageLearningApp {
         document.addEventListener('click', (e) => {
             const userMenu = document.getElementById('userMenu');
             const userMenuBtn = document.getElementById('userMenuBtn');
-            const menuToggleBtn = document.getElementById('menuToggleBtn');
-            const appHeader = document.querySelector('.app-header');
 
-            // Don't close if clicking on menu button, user menu itself, toggle button, or header
-            if (!userMenu.contains(e.target) &&
-                e.target !== userMenuBtn &&
-                e.target !== menuToggleBtn &&
-                !appHeader.contains(e.target)) {
-
-                // If in quiz mode with menu visible, close the whole header
-                if (document.body.classList.contains('quiz-active') &&
-                    document.body.classList.contains('menu-visible')) {
-                    document.body.classList.remove('menu-visible');
-                } else {
-                    // Normal mode - just hide the dropdown
-                    userMenu.classList.add('hidden');
-                }
+            // Don't close if clicking on menu button or user menu itself
+            if (!userMenu.contains(e.target) && e.target !== userMenuBtn) {
+                userMenu.classList.add('hidden');
             }
         });
 
@@ -297,14 +284,6 @@ class LanguageLearningApp {
             if (e.key === 'Enter') this.handleRegister();
         });
 
-        // Menu toggle button for quiz on mobile - shows full header + bottom nav
-        document.getElementById('menuToggleBtn').addEventListener('click', (e) => {
-            e.stopPropagation();
-            e.preventDefault();
-
-            // Toggle menu visibility - shows both header and bottom navigation
-            document.body.classList.toggle('menu-visible');
-        });
     }
 
     switchAuthTab(tab) {
@@ -426,9 +405,7 @@ class LanguageLearningApp {
         document.querySelectorAll('.section').forEach(section => section.classList.remove('active'));
         document.getElementById(`${sectionName}Section`).classList.add('active');
 
-        // Remove quiz-active class when navigating away from quiz sections
-        // This ensures the header is visible on non-quiz pages
-        document.body.classList.remove('quiz-active', 'menu-visible');
+        // No need to manage quiz-active anymore - nav always visible
 
         this.currentSection = sectionName;
 
@@ -997,19 +974,11 @@ schreiben,Sie schreibt einen Brief.,Писать,Она пишет письmо.`
     showQuizInterface() {
         document.getElementById('studyModeSelect').style.display = 'none';
         document.getElementById('quizArea').classList.remove('hidden');
-        // Add quiz-active class for mobile header hiding
-        if (window.innerWidth <= 768) {
-            document.body.classList.add('quiz-active');
-        }
     }
 
     showReviewInterface() {
         document.getElementById('reviewModeSelect').style.display = 'none';
         document.getElementById('reviewQuizArea').classList.remove('hidden');
-        // Add quiz-active class for mobile header hiding
-        if (window.innerWidth <= 768) {
-            document.body.classList.add('quiz-active');
-        }
     }
 
     renderQuestion(quizData) {
@@ -1623,15 +1592,13 @@ schreiben,Sie schreibt einen Brief.,Писать,Она пишет письmо.`
         document.getElementById('studyModeSelect').style.display = 'block';
         document.getElementById('quizArea').classList.add('hidden');
         document.getElementById('survivalArea').classList.add('hidden');
-        // Remove quiz-active class
-        document.body.classList.remove('quiz-active', 'menu-visible');
+        // Nav always visible now
     }
 
     resetReviewInterface() {
         document.getElementById('reviewModeSelect').style.display = 'block';
         document.getElementById('reviewQuizArea').classList.add('hidden');
-        // Remove quiz-active class
-        document.body.classList.remove('quiz-active', 'menu-visible');
+        // Nav always visible now
     }
 
     async deleteWord(wordId) {

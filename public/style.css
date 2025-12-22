@@ -3989,88 +3989,13 @@ input:focus, textarea:focus, select:focus {
         margin-top: 0;
     }
 
-    /* Floating menu toggle button */
-    .menu-toggle-btn {
-        position: fixed;
-        top: 8px;
-        right: 8px;
-        width: 40px;
-        height: 40px;
-        background: linear-gradient(135deg, var(--primary-500), var(--primary-600));
-        color: white;
-        border: none;
-        border-radius: 50%;
-        font-size: 20px;
-        display: none; /* Hidden by default */
-        align-items: center;
-        justify-content: center;
-        z-index: 1001;
-        box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
-        cursor: pointer;
-        transition: all 0.3s ease;
-    }
+    /* Burger menu removed - bottom nav always visible on mobile */
 
-    .menu-toggle-btn:hover {
-        transform: scale(1.1);
-        box-shadow: 0 6px 16px rgba(0, 0, 0, 0.3);
-    }
-
-    .menu-toggle-btn:active {
-        transform: scale(0.95);
-    }
-
-    /* Show toggle button ONLY during quiz on mobile */
-    body.quiz-active .menu-toggle-btn {
-        display: flex;
-    }
-
-    /* Move burger down when menu is visible to avoid blocking navigation */
-    body.quiz-active.menu-visible .menu-toggle-btn {
-        top: auto;
-        bottom: 70px;
-        right: 8px;
-    }
-
-    /* Adjust quiz-area height when header is hidden */
-    body.quiz-active .quiz-area {
-        /* Account for: bottom nav (~60px) only */
+    /* Keep bottom nav always visible on mobile */
+    /* Quiz takes full height minus bottom nav */
+    .quiz-area {
         max-height: calc(100dvh - 60px);
-        margin-top: 0;
     }
-
-    /* When menu is visible during quiz */
-    body.quiz-active.menu-visible .quiz-area {
-        /* Account for header position (8px + header height ~70px) + bottom nav (~60px) */
-        max-height: calc(100dvh - 145px);
-        margin-top: 85px;
-        padding-top: 0;
-    }
-
-    /* Hide user info bar during quiz */
-    body.quiz-active .user-info-bar {
-        display: none;
-    }
-
-    /* Show user info bar when menu is visible */
-    body.quiz-active.menu-visible .user-info-bar {
-        display: flex;
-    }
-
-    /* Show user menu dropdown when menu is visible during quiz */
-    body.quiz-active.menu-visible .user-menu {
-        transform: scale(1) translateY(0) !important;
-        opacity: 1 !important;
-        pointer-events: auto !important;
-        display: block !important;
-    }
-
-/* Hide menu toggle button on desktop (screens wider than 768px) */
-@media (min-width: 769px) {
-    .menu-toggle-btn,
-    body.quiz-active .menu-toggle-btn {
-        display: none !important;
-    }
-}
 
 /* Touch device optimizations */
 @media (hover: none) and (pointer: coarse) {
