@@ -214,22 +214,13 @@ class WordListsUI {
                 </div>
             </div>
 
-            <!-- Word List Detail Modal -->
-            <div id="wordListModal" class="modal" style="display: none;">
-                <div class="modal-content word-list-modal">
-                    <div class="modal-header">
-                        <h3 id="modalListTitle"></h3>
-                        <button class="close-btn" id="closeModalBtn">&times;</button>
-                    </div>
-                    <div id="modalListContent" class="modal-body">
-                        <!-- Dynamic content -->
-                    </div>
-                </div>
-            </div>
         `;
 
         // Add event listeners
         this.attachEventListeners();
+
+        // Create modal outside of main container for proper z-index stacking
+        this.createModal();
 
         // Update i18n
         if (window.i18n) {
@@ -386,6 +377,50 @@ class WordListsUI {
         `;
     }
 
+    createModal() {
+        // Remove existing modal if it exists
+        const existingModal = document.getElementById('wordListModal');
+        if (existingModal) {
+            existingModal.remove();
+        }
+
+        // Create modal at body level (not inside wordListsContent)
+        const modalHTML = `
+            <div id="wordListModal" class="modal" style="display: none;">
+                <div class="modal-content word-list-modal">
+                    <div class="modal-header">
+                        <h3 id="modalListTitle"></h3>
+                        <button class="close-btn" id="closeModalBtn">&times;</button>
+                    </div>
+                    <div id="modalListContent" class="modal-body">
+                        <!-- Dynamic content -->
+                    </div>
+                </div>
+            </div>
+        `;
+
+        // Append to body
+        document.body.insertAdjacentHTML('beforeend', modalHTML);
+
+        // Attach modal event listeners
+        const closeModalBtn = document.getElementById('closeModalBtn');
+        if (closeModalBtn) {
+            closeModalBtn.addEventListener('click', () => {
+                this.closeModal();
+            });
+        }
+
+        // Close modal when clicking on backdrop
+        const modal = document.getElementById('wordListModal');
+        if (modal) {
+            modal.addEventListener('click', (e) => {
+                if (e.target === modal) {
+                    this.closeModal();
+                }
+            });
+        }
+    }
+
     attachEventListeners() {
         // Filter listeners
         const cefrLevelFilter = document.getElementById('cefrLevelFilter');
@@ -445,14 +480,6 @@ class WordListsUI {
                 }
             });
         });
-
-        // Modal close button
-        const closeModalBtn = document.getElementById('closeModalBtn');
-        if (closeModalBtn) {
-            closeModalBtn.addEventListener('click', () => {
-                this.closeModal();
-            });
-        }
     }
 
     async viewWordList(listId) {
