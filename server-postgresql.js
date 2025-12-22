@@ -8378,7 +8378,7 @@ app.post('/api/word-lists/:id/import', async (req, res) => {
             return res.status(404).json({ error: 'Language pair not found' });
         }
 
-        const native_lang = langPair.rows[0].from_lang;  // from_lang is native language
+        const native_lang = langPair.rows[0].to_lang;  // to_lang is native language
 
         // Get collection info
         const collection = await db.query(
