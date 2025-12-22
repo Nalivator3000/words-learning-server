@@ -484,7 +484,19 @@ class WordListsUI {
             const modalTitle = document.getElementById('modalListTitle');
             const modalContent = document.getElementById('modalListContent');
 
+            if (!modal) {
+                console.error('❌ Modal element not found: wordListModal');
+                throw new Error('Modal element not found');
+            }
+            if (!modalTitle) {
+                console.error('❌ Modal title element not found: modalListTitle');
+            }
+            if (!modalContent) {
+                console.error('❌ Modal content element not found: modalListContent');
+            }
+
             if (modal && modalTitle && modalContent) {
+                console.log('✅ All modal elements found, displaying modal...');
                 modalTitle.textContent = list.name;
 
                 modalContent.innerHTML = `
@@ -527,7 +539,10 @@ class WordListsUI {
                     </div>
                 `;
 
+                console.log('📺 Setting modal display to flex...');
                 modal.style.display = 'flex';
+                console.log('📺 Modal display set:', modal.style.display);
+                console.log('📺 Modal computed style:', window.getComputedStyle(modal).display);
 
                 // Add import button listener
                 const importBtn = document.getElementById('importFromModalBtn');
