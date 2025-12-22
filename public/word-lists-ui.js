@@ -505,6 +505,8 @@ class WordListsUI {
 
             const list = await response.json();
             console.log('📋 Word list loaded:', list);
+            console.log('📋 Words data:', list.words);
+            console.log('📋 First word example:', list.words && list.words[0]);
             this.selectedList = list;
 
             const modal = document.getElementById('wordListModal');
@@ -544,13 +546,13 @@ class WordListsUI {
                                     <div class="word-number">${index + 1}</div>
                                     <div class="word-content">
                                         <div class="word-main">
-                                            <strong>${word.word}</strong>
-                                            <span class="word-translation">${word.translation}</span>
+                                            <strong>${word.word || 'N/A'}</strong>
+                                            <span class="word-translation">${word.translation || 'N/A'}</span>
                                         </div>
                                         ${word.example ? `
                                             <div class="word-example">
                                                 <div class="example-text">${word.example}</div>
-                                                ${word.exampletranslation ? `<div class="example-translation">${word.exampletranslation}</div>` : ''}
+                                                ${word.exampletranslation || word.exampleTranslation ? `<div class="example-translation">${word.exampletranslation || word.exampleTranslation}</div>` : ''}
                                             </div>
                                         ` : ''}
                                     </div>
