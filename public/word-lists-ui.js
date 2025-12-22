@@ -486,8 +486,8 @@ class WordListsUI {
         try {
             // Build URL with native language parameter if available
             let url = `/api/word-lists/${listId}`;
-            if (this.languagePair && this.languagePair.from_lang) {
-                url += `?native_lang=${this.languagePair.from_lang}`;
+            if (this.languagePair && this.languagePair.to_lang) {
+                url += `?native_lang=${this.languagePair.to_lang}`;
             }
 
             const response = await fetch(url, {
