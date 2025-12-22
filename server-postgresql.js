@@ -8282,7 +8282,6 @@ app.get('/api/word-lists/:id', async (req, res) => {
                 sw.word,
                 tt.translation,
                 sw.example_de as example,
-                tt.example_native as exampleTranslation,
                 cw.order_index
             FROM universal_collection_words cw
             JOIN source_words_${source_lang === 'de' ? 'german' : source_lang} sw ON cw.source_word_id = sw.id
@@ -8419,8 +8418,7 @@ app.post('/api/word-lists/:id/import', async (req, res) => {
             SELECT
                 sw.word,
                 tt.translation,
-                sw.example_de as example,
-                tt.example_native as exampleTranslation
+                sw.example_de as example
             FROM universal_collection_words cw
             JOIN source_words_${source_lang === 'de' ? 'german' : source_lang} sw ON cw.source_word_id = sw.id
             LEFT JOIN target_translations_${targetLangTable} tt ON tt.source_word_id = sw.id AND tt.source_lang = $1

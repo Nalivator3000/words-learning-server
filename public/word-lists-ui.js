@@ -505,8 +505,14 @@ class WordListsUI {
 
             const list = await response.json();
             console.log('📋 Word list loaded:', list);
+            console.log('📋 Words array length:', list.words ? list.words.length : 'NO WORDS ARRAY');
             console.log('📋 Words data:', list.words);
-            console.log('📋 First word example:', list.words && list.words[0]);
+            if (list.words && list.words.length > 0) {
+                console.log('📋 First word:', list.words[0]);
+                console.log('📋 First word keys:', Object.keys(list.words[0]));
+            } else {
+                console.warn('⚠️ No words in list!');
+            }
             this.selectedList = list;
 
             const modal = document.getElementById('wordListModal');
