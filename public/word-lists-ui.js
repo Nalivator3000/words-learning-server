@@ -78,6 +78,7 @@ class WordListsUI {
 
             if (this.currentFilter.category) params.append('category', this.currentFilter.category);
             if (this.currentFilter.difficulty) params.append('difficulty', this.currentFilter.difficulty);
+            if (this.currentFilter.level) params.append('difficulty', this.currentFilter.level);  // CEFR level filter
             if (this.currentFilter.topic) params.append('topic', this.currentFilter.topic);
 
             if (params.toString()) {
