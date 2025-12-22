@@ -446,7 +446,13 @@ class WordListsUI {
 
     async viewWordList(listId) {
         try {
-            const response = await fetch(`/api/word-lists/${listId}`);
+            // Build URL with native language parameter if available
+            let url = `/api/word-lists/${listId}`;
+            if (this.languagePair && this.languagePair.from_lang) {
+                url += `?native_lang=${this.languagePair.from_lang}`;
+            }
+
+            const response = await fetch(url);
             if (!response.ok) throw new Error('Failed to load word list details');
 
             const list = await response.json();
