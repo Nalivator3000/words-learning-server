@@ -1,0 +1,15 @@
+# Railway Database Connection
+# German Words Learning Server - PostgreSQL Database
+
+DATABASE_URL=postgresql://postgres:uPGJKLcZLFGTZeRbnzPOVTlzWRObbnKO@mainline.proxy.rlwy.net:54625/railway
+
+# Connection Details (parsed from URL above)
+DB_USER=postgres
+DB_PASSWORD=uPGJKLcZLFGTZeRbnzPOVTlzWRObbnKO
+DB_HOST=mainline.proxy.rlwy.net
+DB_PORT=54625
+DB_NAME=railway
+
+# Last Updated: 2025-12-21
+# Purpose: Railway-hosted PostgreSQL database for vocabulary storage
+# Used by: Import scripts, server API

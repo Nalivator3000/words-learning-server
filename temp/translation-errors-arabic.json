@@ -1,0 +1,3444 @@
+{
+  "timestamp": "2025-12-22T10:16:10.219Z",
+  "totalErrors": 573,
+  "errors": [
+    {
+      "id": 9173,
+      "word": "die Delegation",
+      "level": "C2",
+      "error": "duplicate key value violates unique constraint \"target_translations_arabic_source_lang_source_word_id_key\""
+    },
+    {
+      "id": 9175,
+      "word": "die Führungsspanne",
+      "level": "C2",
+      "error": "duplicate key value violates unique constraint \"target_translations_arabic_source_lang_source_word_id_key\""
+    },
+    {
+      "id": 9178,
+      "word": "die Organisationsentwicklung",
+      "level": "C2",
+      "error": "duplicate key value violates unique constraint \"target_translations_arabic_source_lang_source_word_id_key\""
+    },
+    {
+      "id": 9180,
+      "word": "die Stakeholder",
+      "level": "C2",
+      "error": "duplicate key value violates unique constraint \"target_translations_arabic_source_lang_source_word_id_key\""
+    },
+    {
+      "id": 9181,
+      "word": "die Shareholder Value",
+      "level": "C2",
+      "error": "duplicate key value violates unique constraint \"target_translations_arabic_source_lang_source_word_id_key\""
+    },
+    {
+      "id": 9183,
+      "word": "die Corporate Social Responsibility",
+      "level": "C2",
+      "error": "duplicate key value violates unique constraint \"target_translations_arabic_source_lang_source_word_id_key\""
+    },
+    {
+      "id": 9184,
+      "word": "die Nachhaltigkeitsberichterstattung",
+      "level": "C2",
+      "error": "duplicate key value violates unique constraint \"target_translations_arabic_source_lang_source_word_id_key\""
+    },
+    {
+      "id": 9185,
+      "word": "das ESG-Kriterien",
+      "level": "C2",
+      "error": "duplicate key value violates unique constraint \"target_translations_arabic_source_lang_source_word_id_key\""
+    },
+    {
+      "id": 9189,
+      "word": "die Wirtschaftsprüfung",
+      "level": "C2",
+      "error": "duplicate key value violates unique constraint \"target_translations_arabic_source_lang_source_word_id_key\""
+    },
+    {
+      "id": 9190,
+      "word": "die Bilanzpolitik",
+      "level": "C2",
+      "error": "duplicate key value violates unique constraint \"target_translations_arabic_source_lang_source_word_id_key\""
+    },
+    {
+      "id": 9191,
+      "word": "die Gewinnglättung",
+      "level": "C2",
+      "error": "duplicate key value violates unique constraint \"target_translations_arabic_source_lang_source_word_id_key\""
+    },
+    {
+      "id": 9193,
+      "word": "die Rückstellungen",
+      "level": "C2",
+      "error": "duplicate key value violates unique constraint \"target_translations_arabic_source_lang_source_word_id_key\""
+    },
+    {
+      "id": 9194,
+      "word": "die latente Steuern",
+      "level": "C2",
+      "error": "duplicate key value violates unique constraint \"target_translations_arabic_source_lang_source_word_id_key\""
+    },
+    {
+      "id": 9198,
+      "word": "die Data Analytics",
+      "level": "C2",
+      "error": "duplicate key value violates unique constraint \"target_translations_arabic_source_lang_source_word_id_key\""
+    },
+    {
+      "id": 9204,
+      "word": "die neuronale Netze",
+      "level": "C2",
+      "error": "duplicate key value violates unique constraint \"target_translations_arabic_source_lang_source_word_id_key\""
+    },
+    {
+      "id": 9211,
+      "word": "die Prozessoptimierung",
+      "level": "C2",
+      "error": "duplicate key value violates unique constraint \"target_translations_arabic_source_lang_source_word_id_key\""
+    },
+    {
+      "id": 9215,
+      "word": "die kontinuierliche Verbesserung",
+      "level": "C2",
+      "error": "duplicate key value violates unique constraint \"target_translations_arabic_source_lang_source_word_id_key\""
+    },
+    {
+      "id": 9217,
+      "word": "die Deckungsbeitragsrechnung",
+      "level": "C2",
+      "error": "duplicate key value violates unique constraint \"target_translations_arabic_source_lang_source_word_id_key\""
+    },
+    {
+      "id": 9220,
+      "word": "die Szenarioanalyse",
+      "level": "C2",
+      "error": "duplicate key value violates unique constraint \"target_translations_arabic_source_lang_source_word_id_key\""
+    },
+    {
+      "id": 9221,
+      "word": "die Monte-Carlo-Simulation",
+      "level": "C2",
+      "error": "duplicate key value violates unique constraint \"target_translations_arabic_source_lang_source_word_id_key\""
+    },
+    {
+      "id": 9222,
+      "word": "die Cashflow-Analyse",
+      "level": "C2",
+      "error": "duplicate key value violates unique constraint \"target_translations_arabic_source_lang_source_word_id_key\""
+    },
+    {
+      "id": 9225,
+      "word": "die Amortisationszeit",
+      "level": "C2",
+      "error": "duplicate key value violates unique constraint \"target_translations_arabic_source_lang_source_word_id_key\""
+    },
+    {
+      "id": 9229,
+      "word": "das unüberwachte Lernen",
+      "level": "C2",
+      "error": "duplicate key value violates unique constraint \"target_translations_arabic_source_lang_source_word_id_key\""
+    },
+    {
+      "id": 9233,
+      "word": "die Kreuzvalidierung",
+      "level": "C2",
+      "error": "duplicate key value violates unique constraint \"target_translations_arabic_source_lang_source_word_id_key\""
+    },
+    {
+      "id": 9234,
+      "word": "die Hyperparameter",
+      "level": "C2",
+      "error": "duplicate key value violates unique constraint \"target_translations_arabic_source_lang_source_word_id_key\""
+    },
+    {
+      "id": 9237,
+      "word": "die Aktivierungsfunktion",
+      "level": "C2",
+      "error": "duplicate key value violates unique constraint \"target_translations_arabic_source_lang_source_word_id_key\""
+    },
+    {
+      "id": 9240,
+      "word": "die Transformer-Architektur",
+      "level": "C2",
+      "error": "duplicate key value violates unique constraint \"target_translations_arabic_source_lang_source_word_id_key\""
+    },
+    {
+      "id": 9242,
+      "word": "die generative Modelle",
+      "level": "C2",
+      "error": "duplicate key value violates unique constraint \"target_translations_arabic_source_lang_source_word_id_key\""
+    },
+    {
+      "id": 9244,
+      "word": "die Diffusionsmodelle",
+      "level": "C2",
+      "error": "duplicate key value violates unique constraint \"target_translations_arabic_source_lang_source_word_id_key\""
+    },
+    {
+      "id": 9248,
+      "word": "die Transfer Learning",
+      "level": "C2",
+      "error": "duplicate key value violates unique constraint \"target_translations_arabic_source_lang_source_word_id_key\""
+    },
+    {
+      "id": 9250,
+      "word": "die Bias-Mitigation",
+      "level": "C2",
+      "error": "duplicate key value violates unique constraint \"target_translations_arabic_source_lang_source_word_id_key\""
+    },
+    {
+      "id": 9251,
+      "word": "die Blockchain",
+      "level": "C2",
+      "error": "duplicate key value violates unique constraint \"target_translations_arabic_source_lang_source_word_id_key\""
+    },
+    {
+      "id": 9252,
+      "word": "die Kryptographie",
+      "level": "C2",
+      "error": "duplicate key value violates unique constraint \"target_translations_arabic_source_lang_source_word_id_key\""
+    },
+    {
+      "id": 9253,
+      "word": "der Hash-Funktion",
+      "level": "C2",
+      "error": "duplicate key value violates unique constraint \"target_translations_arabic_source_lang_source_word_id_key\""
+    },
+    {
+      "id": 9256,
+      "word": "der Proof of Stake",
+      "level": "C2",
+      "error": "duplicate key value violates unique constraint \"target_translations_arabic_source_lang_source_word_id_key\""
+    },
+    {
+      "id": 9257,
+      "word": "die Smart Contracts",
+      "level": "C2",
+      "error": "duplicate key value violates unique constraint \"target_translations_arabic_source_lang_source_word_id_key\""
+    },
+    {
+      "id": 9258,
+      "word": "die dezentrale Anwendungen",
+      "level": "C2",
+      "error": "duplicate key value violates unique constraint \"target_translations_arabic_source_lang_source_word_id_key\""
+    },
+    {
+      "id": 9259,
+      "word": "die Kryptowährung",
+      "level": "C2",
+      "error": "duplicate key value violates unique constraint \"target_translations_arabic_source_lang_source_word_id_key\""
+    },
+    {
+      "id": 9261,
+      "word": "die Non-Fungible Token",
+      "level": "C2",
+      "error": "duplicate key value violates unique constraint \"target_translations_arabic_source_lang_source_word_id_key\""
+    },
+    {
+      "id": 9263,
+      "word": "die verteilte Ledger",
+      "level": "C2",
+      "error": "duplicate key value violates unique constraint \"target_translations_arabic_source_lang_source_word_id_key\""
+    },
+    {
+      "id": 9265,
+      "word": "die Pseudonymität",
+      "level": "C2",
+      "error": "duplicate key value violates unique constraint \"target_translations_arabic_source_lang_source_word_id_key\""
+    },
+    {
+      "id": 9266,
+      "word": "die Sharding",
+      "level": "C2",
+      "error": "duplicate key value violates unique constraint \"target_translations_arabic_source_lang_source_word_id_key\""
+    },
+    {
+      "id": 9267,
+      "word": "die Layer-2-Lösungen",
+      "level": "C2",
+      "error": "duplicate key value violates unique constraint \"target_translations_arabic_source_lang_source_word_id_key\""
+    },
+    {
+      "id": 9268,
+      "word": "das Quantencomputing",
+      "level": "C2",
+      "error": "duplicate key value violates unique constraint \"target_translations_arabic_source_lang_source_word_id_key\""
+    },
+    {
+      "id": 9273,
+      "word": "die Quantenüberlegenheit",
+      "level": "C2",
+      "error": "duplicate key value violates unique constraint \"target_translations_arabic_source_lang_source_word_id_key\""
+    },
+    {
+      "id": 9274,
+      "word": "die Quantenkryptographie",
+      "level": "C2",
+      "error": "duplicate key value violates unique constraint \"target_translations_arabic_source_lang_source_word_id_key\""
+    },
+    {
+      "id": 9275,
+      "word": "das Quanteninternet",
+      "level": "C2",
+      "error": "duplicate key value violates unique constraint \"target_translations_arabic_source_lang_source_word_id_key\""
+    },
+    {
+      "id": 9276,
+      "word": "die Quantensimulation",
+      "level": "C2",
+      "error": "duplicate key value violates unique constraint \"target_translations_arabic_source_lang_source_word_id_key\""
+    },
+    {
+      "id": 9277,
+      "word": "das Quantenannealing",
+      "level": "C2",
+      "error": "duplicate key value violates unique constraint \"target_translations_arabic_source_lang_source_word_id_key\""
+    },
+    {
+      "id": 9279,
+      "word": "die Ionenfallen",
+      "level": "C2",
+      "error": "duplicate key value violates unique constraint \"target_translations_arabic_source_lang_source_word_id_key\""
+    },
+    {
+      "id": 9281,
+      "word": "die Quantenalgorithmen",
+      "level": "C2",
+      "error": "duplicate key value violates unique constraint \"target_translations_arabic_source_lang_source_word_id_key\""
+    },
+    {
+      "id": 9282,
+      "word": "die Hybrid-Algorithmen",
+      "level": "C2",
+      "error": "duplicate key value violates unique constraint \"target_translations_arabic_source_lang_source_word_id_key\""
+    },
+    {
+      "id": 9283,
+      "word": "die NISQ-Ära",
+      "level": "C2",
+      "error": "duplicate key value violates unique constraint \"target_translations_arabic_source_lang_source_word_id_key\""
+    },
+    {
+      "id": 9285,
+      "word": "die CRISPR-Technologie",
+      "level": "C2",
+      "error": "duplicate key value violates unique constraint \"target_translations_arabic_source_lang_source_word_id_key\""
+    },
+    {
+      "id": 9286,
+      "word": "die Genom-Editierung",
+      "level": "C2",
+      "error": "duplicate key value violates unique constraint \"target_translations_arabic_source_lang_source_word_id_key\""
+    },
+    {
+      "id": 9289,
+      "word": "die Epigenom-Modifikation",
+      "level": "C2",
+      "error": "duplicate key value violates unique constraint \"target_translations_arabic_source_lang_source_word_id_key\""
+    },
+    {
+      "id": 9291,
+      "word": "die induzierte pluripotente Stammzellen",
+      "level": "C2",
+      "error": "duplicate key value violates unique constraint \"target_translations_arabic_source_lang_source_word_id_key\""
+    },
+    {
+      "id": 9293,
+      "word": "die Gentherapie",
+      "level": "C2",
+      "error": "duplicate key value violates unique constraint \"target_translations_arabic_source_lang_source_word_id_key\""
+    },
+    {
+      "id": 9294,
+      "word": "die mRNA-Technologie",
+      "level": "C2",
+      "error": "duplicate key value violates unique constraint \"target_translations_arabic_source_lang_source_word_id_key\""
+    },
+    {
+      "id": 9295,
+      "word": "die Proteindesign",
+      "level": "C2",
+      "error": "duplicate key value violates unique constraint \"target_translations_arabic_source_lang_source_word_id_key\""
+    },
+    {
+      "id": 9296,
+      "word": "die synthetische Genomik",
+      "level": "C2",
+      "error": "duplicate key value violates unique constraint \"target_translations_arabic_source_lang_source_word_id_key\""
+    },
+    {
+      "id": 9297,
+      "word": "die Metabolic Engineering",
+      "level": "C2",
+      "error": "duplicate key value violates unique constraint \"target_translations_arabic_source_lang_source_word_id_key\""
+    },
+    {
+      "id": 9298,
+      "word": "die Bioproduktion",
+      "level": "C2",
+      "error": "duplicate key value violates unique constraint \"target_translations_arabic_source_lang_source_word_id_key\""
+    },
+    {
+      "id": 9300,
+      "word": "die Zelluläre Landwirtschaft",
+      "level": "C2",
+      "error": "duplicate key value violates unique constraint \"target_translations_arabic_source_lang_source_word_id_key\""
+    },
+    {
+      "id": 9303,
+      "word": "die Personalisierte Medizin",
+      "level": "C2",
+      "error": "duplicate key value violates unique constraint \"target_translations_arabic_source_lang_source_word_id_key\""
+    },
+    {
+      "id": 9304,
+      "word": "die Pharmakogenomik",
+      "level": "C2",
+      "error": "duplicate key value violates unique constraint \"target_translations_arabic_source_lang_source_word_id_key\""
+    },
+    {
+      "id": 9306,
+      "word": "die Antikörpertherapie",
+      "level": "C2",
+      "error": "duplicate key value violates unique constraint \"target_translations_arabic_source_lang_source_word_id_key\""
+    },
+    {
+      "id": 9309,
+      "word": "die Nanotechnologie",
+      "level": "C2",
+      "error": "duplicate key value violates unique constraint \"target_translations_arabic_source_lang_source_word_id_key\""
+    },
+    {
+      "id": 9310,
+      "word": "die Nanomaterialien",
+      "level": "C2",
+      "error": "duplicate key value violates unique constraint \"target_translations_arabic_source_lang_source_word_id_key\""
+    },
+    {
+      "id": 9311,
+      "word": "die Kohlenstoff-Nanoröhren",
+      "level": "C2",
+      "error": "duplicate key value violates unique constraint \"target_translations_arabic_source_lang_source_word_id_key\""
+    },
+    {
+      "id": 9313,
+      "word": "die Quantenpunkte",
+      "level": "C2",
+      "error": "duplicate key value violates unique constraint \"target_translations_arabic_source_lang_source_word_id_key\""
+    },
+    {
+      "id": 9315,
+      "word": "die Bottom-up-Synthese",
+      "level": "C2",
+      "error": "duplicate key value violates unique constraint \"target_translations_arabic_source_lang_source_word_id_key\""
+    },
+    {
+      "id": 9316,
+      "word": "die Top-down-Fabrikation",
+      "level": "C2",
+      "error": "duplicate key value violates unique constraint \"target_translations_arabic_source_lang_source_word_id_key\""
+    },
+    {
+      "id": 9317,
+      "word": "die Nanolithographie",
+      "level": "C2",
+      "error": "duplicate key value violates unique constraint \"target_translations_arabic_source_lang_source_word_id_key\""
+    },
+    {
+      "id": 9320,
+      "word": "die Funktionale Beschichtungen",
+      "level": "C2",
+      "error": "duplicate key value violates unique constraint \"target_translations_arabic_source_lang_source_word_id_key\""
+    },
+    {
+      "id": 9323,
+      "word": "die Nanomedizin",
+      "level": "C2",
+      "error": "duplicate key value violates unique constraint \"target_translations_arabic_source_lang_source_word_id_key\""
+    },
+    {
+      "id": 9324,
+      "word": "die Theranostik",
+      "level": "C2",
+      "error": "duplicate key value violates unique constraint \"target_translations_arabic_source_lang_source_word_id_key\""
+    },
+    {
+      "id": 9326,
+      "word": "die Molekulare Maschinen",
+      "level": "C2",
+      "error": "duplicate key value violates unique constraint \"target_translations_arabic_source_lang_source_word_id_key\""
+    },
+    {
+      "id": 9327,
+      "word": "die DNA-Origami",
+      "level": "C2",
+      "error": "duplicate key value violates unique constraint \"target_translations_arabic_source_lang_source_word_id_key\""
+    },
+    {
+      "id": 9329,
+      "word": "die Neuroplastizität",
+      "level": "C2",
+      "error": "duplicate key value violates unique constraint \"target_translations_arabic_source_lang_source_word_id_key\""
+    },
+    {
+      "id": 9331,
+      "word": "die Langzeitpotenzierung",
+      "level": "C2",
+      "error": "duplicate key value violates unique constraint \"target_translations_arabic_source_lang_source_word_id_key\""
+    },
+    {
+      "id": 9332,
+      "word": "die Neurotransmitter",
+      "level": "C2",
+      "error": "duplicate key value violates unique constraint \"target_translations_arabic_source_lang_source_word_id_key\""
+    },
+    {
+      "id": 9334,
+      "word": "die Serotonin-System",
+      "level": "C2",
+      "error": "duplicate key value violates unique constraint \"target_translations_arabic_source_lang_source_word_id_key\""
+    },
+    {
+      "id": 9336,
+      "word": "die Hemisphären-Lateralisierung",
+      "level": "C2",
+      "error": "duplicate key value violates unique constraint \"target_translations_arabic_source_lang_source_word_id_key\""
+    },
+    {
+      "id": 9337,
+      "word": "die exekutiven Funktionen",
+      "level": "C2",
+      "error": "duplicate key value violates unique constraint \"target_translations_arabic_source_lang_source_word_id_key\""
+    },
+    {
+      "id": 9339,
+      "word": "die Langzeitgedächtnis",
+      "level": "C2",
+      "error": "duplicate key value violates unique constraint \"target_translations_arabic_source_lang_source_word_id_key\""
+    },
+    {
+      "id": 9341,
+      "word": "die semantische Gedächtnis",
+      "level": "C2",
+      "error": "duplicate key value violates unique constraint \"target_translations_arabic_source_lang_source_word_id_key\""
+    },
+    {
+      "id": 9342,
+      "word": "die prozedurale Gedächtnis",
+      "level": "C2",
+      "error": "duplicate key value violates unique constraint \"target_translations_arabic_source_lang_source_word_id_key\""
+    },
+    {
+      "id": 9344,
+      "word": "die Rekonsolidierung",
+      "level": "C2",
+      "error": "duplicate key value violates unique constraint \"target_translations_arabic_source_lang_source_word_id_key\""
+    },
+    {
+      "id": 9346,
+      "word": "die selektive Aufmerksamkeit",
+      "level": "C2",
+      "error": "duplicate key value violates unique constraint \"target_translations_arabic_source_lang_source_word_id_key\""
+    },
+    {
+      "id": 9347,
+      "word": "die geteilte Aufmerksamkeit",
+      "level": "C2",
+      "error": "duplicate key value violates unique constraint \"target_translations_arabic_source_lang_source_word_id_key\""
+    },
+    {
+      "id": 9349,
+      "word": "die Wahrnehmungsorganisation",
+      "level": "C2",
+      "error": "duplicate key value violates unique constraint \"target_translations_arabic_source_lang_source_word_id_key\""
+    },
+    {
+      "id": 9350,
+      "word": "die Top-down-Verarbeitung",
+      "level": "C2",
+      "error": "duplicate key value violates unique constraint \"target_translations_arabic_source_lang_source_word_id_key\""
+    },
+    {
+      "id": 9353,
+      "word": "die begrenzte Rationalität",
+      "level": "C2",
+      "error": "duplicate key value violates unique constraint \"target_translations_arabic_source_lang_source_word_id_key\""
+    },
+    {
+      "id": 9355,
+      "word": "die Repräsentativitätsheuristik",
+      "level": "C2",
+      "error": "duplicate key value violates unique constraint \"target_translations_arabic_source_lang_source_word_id_key\""
+    },
+    {
+      "id": 9356,
+      "word": "die Ankerheuristik",
+      "level": "C2",
+      "error": "duplicate key value violates unique constraint \"target_translations_arabic_source_lang_source_word_id_key\""
+    },
+    {
+      "id": 9359,
+      "word": "der Rückschaufehler",
+      "level": "C2",
+      "error": "duplicate key value violates unique constraint \"target_translations_arabic_source_lang_source_word_id_key\""
+    },
+    {
+      "id": 9360,
+      "word": "der Endowment-Effekt",
+      "level": "C2",
+      "error": "duplicate key value violates unique constraint \"target_translations_arabic_source_lang_source_word_id_key\""
+    },
+    {
+      "id": 9361,
+      "word": "die Framingeffekte",
+      "level": "C2",
+      "error": "duplicate key value violates unique constraint \"target_translations_arabic_source_lang_source_word_id_key\""
+    },
+    {
+      "id": 9363,
+      "word": "die Selbstkontrolle",
+      "level": "C2",
+      "error": "duplicate key value violates unique constraint \"target_translations_arabic_source_lang_source_word_id_key\""
+    },
+    {
+      "id": 9364,
+      "word": "das Nudging",
+      "level": "C2",
+      "error": "duplicate key value violates unique constraint \"target_translations_arabic_source_lang_source_word_id_key\""
+    },
+    {
+      "id": 9365,
+      "word": "die Choice Architecture",
+      "level": "C2",
+      "error": "duplicate key value violates unique constraint \"target_translations_arabic_source_lang_source_word_id_key\""
+    },
+    {
+      "id": 9366,
+      "word": "die Default-Optionen",
+      "level": "C2",
+      "error": "duplicate key value violates unique constraint \"target_translations_arabic_source_lang_source_word_id_key\""
+    },
+    {
+      "id": 9367,
+      "word": "die soziale Normen",
+      "level": "C2",
+      "error": "duplicate key value violates unique constraint \"target_translations_arabic_source_lang_source_word_id_key\""
+    },
+    {
+      "id": 9369,
+      "word": "die Gruppenpolarisierung",
+      "level": "C2",
+      "error": "duplicate key value violates unique constraint \"target_translations_arabic_source_lang_source_word_id_key\""
+    },
+    {
+      "id": 9373,
+      "word": "der fundamentale Attributionsfehler",
+      "level": "C2",
+      "error": "duplicate key value violates unique constraint \"target_translations_arabic_source_lang_source_word_id_key\""
+    },
+    {
+      "id": 9374,
+      "word": "die Self-Serving Bias",
+      "level": "C2",
+      "error": "duplicate key value violates unique constraint \"target_translations_arabic_source_lang_source_word_id_key\""
+    },
+    {
+      "id": 9378,
+      "word": "die Selbstwahrnehmungstheorie",
+      "level": "C2",
+      "error": "duplicate key value violates unique constraint \"target_translations_arabic_source_lang_source_word_id_key\""
+    },
+    {
+      "id": 9382,
+      "word": "die Foot-in-the-Door-Technik",
+      "level": "C2",
+      "error": "duplicate key value violates unique constraint \"target_translations_arabic_source_lang_source_word_id_key\""
+    },
+    {
+      "id": 9385,
+      "word": "die normative Einfluss",
+      "level": "C2",
+      "error": "duplicate key value violates unique constraint \"target_translations_arabic_source_lang_source_word_id_key\""
+    },
+    {
+      "id": 9388,
+      "word": "die Autoritätsgehorsam",
+      "level": "C2",
+      "error": "duplicate key value violates unique constraint \"target_translations_arabic_source_lang_source_word_id_key\""
+    },
+    {
+      "id": 9389,
+      "word": "die Stereotype",
+      "level": "C2",
+      "error": "duplicate key value violates unique constraint \"target_translations_arabic_source_lang_source_word_id_key\""
+    },
+    {
+      "id": 9401,
+      "word": "die Dysthymie",
+      "level": "C2",
+      "error": "duplicate key value violates unique constraint \"target_translations_arabic_source_lang_source_word_id_key\""
+    },
+    {
+      "id": 9403,
+      "word": "die Manie",
+      "level": "C2",
+      "error": "duplicate key value violates unique constraint \"target_translations_arabic_source_lang_source_word_id_key\""
+    },
+    {
+      "id": 9406,
+      "word": "die Panikstörung",
+      "level": "C2",
+      "error": "duplicate key value violates unique constraint \"target_translations_arabic_source_lang_source_word_id_key\""
+    },
+    {
+      "id": 9407,
+      "word": "die soziale Phobie",
+      "level": "C2",
+      "error": "duplicate key value violates unique constraint \"target_translations_arabic_source_lang_source_word_id_key\""
+    },
+    {
+      "id": 9410,
+      "word": "die posttraumatische Belastungsstörung",
+      "level": "C2",
+      "error": "duplicate key value violates unique constraint \"target_translations_arabic_source_lang_source_word_id_key\""
+    },
+    {
+      "id": 9412,
+      "word": "die Halluzinationen",
+      "level": "C2",
+      "error": "duplicate key value violates unique constraint \"target_translations_arabic_source_lang_source_word_id_key\""
+    },
+    {
+      "id": 9414,
+      "word": "die Persönlichkeitsstörungen",
+      "level": "C2",
+      "error": "duplicate key value violates unique constraint \"target_translations_arabic_source_lang_source_word_id_key\""
+    },
+    {
+      "id": 9416,
+      "word": "die narzisstische Störung",
+      "level": "C2",
+      "error": "duplicate key value violates unique constraint \"target_translations_arabic_source_lang_source_word_id_key\""
+    },
+    {
+      "id": 9417,
+      "word": "die antisoziale Persönlichkeitsstörung",
+      "level": "C2",
+      "error": "duplicate key value violates unique constraint \"target_translations_arabic_source_lang_source_word_id_key\""
+    },
+    {
+      "id": 9419,
+      "word": "die Sprechakttheorie",
+      "level": "C2",
+      "error": "duplicate key value violates unique constraint \"target_translations_arabic_source_lang_source_word_id_key\""
+    },
+    {
+      "id": 9420,
+      "word": "der illokutionäre Akt",
+      "level": "C2",
+      "error": "duplicate key value violates unique constraint \"target_translations_arabic_source_lang_source_word_id_key\""
+    },
+    {
+      "id": 9421,
+      "word": "der perlokutionäre Effekt",
+      "level": "C2",
+      "error": "duplicate key value violates unique constraint \"target_translations_arabic_source_lang_source_word_id_key\""
+    },
+    {
+      "id": 9425,
+      "word": "die Referenz",
+      "level": "C2",
+      "error": "duplicate key value violates unique constraint \"target_translations_arabic_source_lang_source_word_id_key\""
+    },
+    {
+      "id": 9429,
+      "word": "das positive Gesicht",
+      "level": "C2",
+      "error": "duplicate key value violates unique constraint \"target_translations_arabic_source_lang_source_word_id_key\""
+    },
+    {
+      "id": 9430,
+      "word": "das negative Gesicht",
+      "level": "C2",
+      "error": "duplicate key value violates unique constraint \"target_translations_arabic_source_lang_source_word_id_key\""
+    },
+    {
+      "id": 9433,
+      "word": "die Soziolinguistik",
+      "level": "C2",
+      "error": "duplicate key value violates unique constraint \"target_translations_arabic_source_lang_source_word_id_key\""
+    },
+    {
+      "id": 9435,
+      "word": "die Dialekte",
+      "level": "C2",
+      "error": "duplicate key value violates unique constraint \"target_translations_arabic_source_lang_source_word_id_key\""
+    },
+    {
+      "id": 9438,
+      "word": "die Stilebene",
+      "level": "C2",
+      "error": "duplicate key value violates unique constraint \"target_translations_arabic_source_lang_source_word_id_key\""
+    },
+    {
+      "id": 9442,
+      "word": "die Sprachpolitik",
+      "level": "C2",
+      "error": "duplicate key value violates unique constraint \"target_translations_arabic_source_lang_source_word_id_key\""
+    },
+    {
+      "id": 9444,
+      "word": "die Sprachkontakt",
+      "level": "C2",
+      "error": "duplicate key value violates unique constraint \"target_translations_arabic_source_lang_source_word_id_key\""
+    },
+    {
+      "id": 9448,
+      "word": "die Revitalisierung",
+      "level": "C2",
+      "error": "duplicate key value violates unique constraint \"target_translations_arabic_source_lang_source_word_id_key\""
+    },
+    {
+      "id": 9449,
+      "word": "die Sprachensterben",
+      "level": "C2",
+      "error": "duplicate key value violates unique constraint \"target_translations_arabic_source_lang_source_word_id_key\""
+    },
+    {
+      "id": 9450,
+      "word": "die linguistische Diversität",
+      "level": "C2",
+      "error": "duplicate key value violates unique constraint \"target_translations_arabic_source_lang_source_word_id_key\""
+    },
+    {
+      "id": 9455,
+      "word": "die Informationsstruktur",
+      "level": "C2",
+      "error": "duplicate key value violates unique constraint \"target_translations_arabic_source_lang_source_word_id_key\""
+    },
+    {
+      "id": 9457,
+      "word": "die Fokussierung",
+      "level": "C2",
+      "error": "duplicate key value violates unique constraint \"target_translations_arabic_source_lang_source_word_id_key\""
+    },
+    {
+      "id": 9458,
+      "word": "die Textsorte",
+      "level": "C2",
+      "error": "duplicate key value violates unique constraint \"target_translations_arabic_source_lang_source_word_id_key\""
+    },
+    {
+      "id": 9459,
+      "word": "die Gattungsanalyse",
+      "level": "C2",
+      "error": "duplicate key value violates unique constraint \"target_translations_arabic_source_lang_source_word_id_key\""
+    },
+    {
+      "id": 9461,
+      "word": "die Argumentationsanalyse",
+      "level": "C2",
+      "error": "duplicate key value violates unique constraint \"target_translations_arabic_source_lang_source_word_id_key\""
+    },
+    {
+      "id": 9463,
+      "word": "die rhetorische Figuren",
+      "level": "C2",
+      "error": "duplicate key value violates unique constraint \"target_translations_arabic_source_lang_source_word_id_key\""
+    },
+    {
+      "id": 9467,
+      "word": "die Medienlinguistik",
+      "level": "C2",
+      "error": "duplicate key value violates unique constraint \"target_translations_arabic_source_lang_source_word_id_key\""
+    },
+    {
+      "id": 9468,
+      "word": "das Zeichen",
+      "level": "C2",
+      "error": "duplicate key value violates unique constraint \"target_translations_arabic_source_lang_source_word_id_key\""
+    },
+    {
+      "id": 9471,
+      "word": "der Referent",
+      "level": "C2",
+      "error": "duplicate key value violates unique constraint \"target_translations_arabic_source_lang_source_word_id_key\""
+    },
+    {
+      "id": 9473,
+      "word": "die Indexikalität",
+      "level": "C2",
+      "error": "duplicate key value violates unique constraint \"target_translations_arabic_source_lang_source_word_id_key\""
+    },
+    {
+      "id": 9475,
+      "word": "die Syntagmatische Relationen",
+      "level": "C2",
+      "error": "duplicate key value violates unique constraint \"target_translations_arabic_source_lang_source_word_id_key\""
+    },
+    {
+      "id": 9476,
+      "word": "die Paradigmatische Relationen",
+      "level": "C2",
+      "error": "duplicate key value violates unique constraint \"target_translations_arabic_source_lang_source_word_id_key\""
+    },
+    {
+      "id": 9477,
+      "word": "die semantische Felder",
+      "level": "C2",
+      "error": "duplicate key value violates unique constraint \"target_translations_arabic_source_lang_source_word_id_key\""
+    },
+    {
+      "id": 9479,
+      "word": "die Frame-Semantik",
+      "level": "C2",
+      "error": "duplicate key value violates unique constraint \"target_translations_arabic_source_lang_source_word_id_key\""
+    },
+    {
+      "id": 9480,
+      "word": "die Konstruktionsgrammatik",
+      "level": "C2",
+      "error": "duplicate key value violates unique constraint \"target_translations_arabic_source_lang_source_word_id_key\""
+    },
+    {
+      "id": 9481,
+      "word": "die kognitive Linguistik",
+      "level": "C2",
+      "error": "duplicate key value violates unique constraint \"target_translations_arabic_source_lang_source_word_id_key\""
+    },
+    {
+      "id": 9482,
+      "word": "die verkörperte Kognition",
+      "level": "C2",
+      "error": "duplicate key value violates unique constraint \"target_translations_arabic_source_lang_source_word_id_key\""
+    },
+    {
+      "id": 9483,
+      "word": "die Kommunikationstheorie",
+      "level": "C2",
+      "error": "duplicate key value violates unique constraint \"target_translations_arabic_source_lang_source_word_id_key\""
+    },
+    {
+      "id": 9485,
+      "word": "die Kodierung",
+      "level": "C2",
+      "error": "duplicate key value violates unique constraint \"target_translations_arabic_source_lang_source_word_id_key\""
+    },
+    {
+      "id": 9488,
+      "word": "die Medienökologie",
+      "level": "C2",
+      "error": "duplicate key value violates unique constraint \"target_translations_arabic_source_lang_source_word_id_key\""
+    },
+    {
+      "id": 9489,
+      "word": "der Mediengebrauch",
+      "level": "C2",
+      "error": "duplicate key value violates unique constraint \"target_translations_arabic_source_lang_source_word_id_key\""
+    },
+    {
+      "id": 9492,
+      "word": "die Schweigespirale",
+      "level": "C2",
+      "error": "duplicate key value violates unique constraint \"target_translations_arabic_source_lang_source_word_id_key\""
+    },
+    {
+      "id": 9494,
+      "word": "die Filterblasen",
+      "level": "C2",
+      "error": "duplicate key value violates unique constraint \"target_translations_arabic_source_lang_source_word_id_key\""
+    },
+    {
+      "id": 9495,
+      "word": "die Fehlinformation",
+      "level": "C2",
+      "error": "duplicate key value violates unique constraint \"target_translations_arabic_source_lang_source_word_id_key\""
+    },
+    {
+      "id": 9498,
+      "word": "die Metaethik",
+      "level": "C2",
+      "error": "duplicate key value violates unique constraint \"target_translations_arabic_source_lang_source_word_id_key\""
+    },
+    {
+      "id": 9499,
+      "word": "der moralische Realismus",
+      "level": "C2",
+      "error": "duplicate key value violates unique constraint \"target_translations_arabic_source_lang_source_word_id_key\""
+    },
+    {
+      "id": 9501,
+      "word": "der Kognitivismus",
+      "level": "C2",
+      "error": "duplicate key value violates unique constraint \"target_translations_arabic_source_lang_source_word_id_key\""
+    },
+    {
+      "id": 9502,
+      "word": "der Nonkognitivismus",
+      "level": "C2",
+      "error": "duplicate key value violates unique constraint \"target_translations_arabic_source_lang_source_word_id_key\""
+    },
+    {
+      "id": 9503,
+      "word": "der Emotivismus",
+      "level": "C2",
+      "error": "duplicate key value violates unique constraint \"target_translations_arabic_source_lang_source_word_id_key\""
+    },
+    {
+      "id": 9504,
+      "word": "der Präskriptivismus",
+      "level": "C2",
+      "error": "duplicate key value violates unique constraint \"target_translations_arabic_source_lang_source_word_id_key\""
+    },
+    {
+      "id": 9506,
+      "word": "der moralische Relativismus",
+      "level": "C2",
+      "error": "duplicate key value violates unique constraint \"target_translations_arabic_source_lang_source_word_id_key\""
+    },
+    {
+      "id": 9508,
+      "word": "der moralische Skeptizismus",
+      "level": "C2",
+      "error": "duplicate key value violates unique constraint \"target_translations_arabic_source_lang_source_word_id_key\""
+    },
+    {
+      "id": 9509,
+      "word": "die Werttheorie",
+      "level": "C2",
+      "error": "duplicate key value violates unique constraint \"target_translations_arabic_source_lang_source_word_id_key\""
+    },
+    {
+      "id": 9511,
+      "word": "die Supererogation",
+      "level": "C2",
+      "error": "duplicate key value violates unique constraint \"target_translations_arabic_source_lang_source_word_id_key\""
+    },
+    {
+      "id": 9512,
+      "word": "die moralische Verantwortung",
+      "level": "C2",
+      "error": "duplicate key value violates unique constraint \"target_translations_arabic_source_lang_source_word_id_key\""
+    },
+    {
+      "id": 9515,
+      "word": "die normative Ethik",
+      "level": "C2",
+      "error": "duplicate key value violates unique constraint \"target_translations_arabic_source_lang_source_word_id_key\""
+    },
+    {
+      "id": 9516,
+      "word": "die Deontologie",
+      "level": "C2",
+      "error": "duplicate key value violates unique constraint \"target_translations_arabic_source_lang_source_word_id_key\""
+    },
+    {
+      "id": 9517,
+      "word": "der kategorische Imperativ",
+      "level": "C2",
+      "error": "duplicate key value violates unique constraint \"target_translations_arabic_source_lang_source_word_id_key\""
+    },
+    {
+      "id": 9519,
+      "word": "der Konsequentialismus",
+      "level": "C2",
+      "error": "duplicate key value violates unique constraint \"target_translations_arabic_source_lang_source_word_id_key\""
+    },
+    {
+      "id": 9521,
+      "word": "das Nutzenprinzip",
+      "level": "C2",
+      "error": "duplicate key value violates unique constraint \"target_translations_arabic_source_lang_source_word_id_key\""
+    },
+    {
+      "id": 9523,
+      "word": "die praktische Weisheit",
+      "level": "C2",
+      "error": "duplicate key value violates unique constraint \"target_translations_arabic_source_lang_source_word_id_key\""
+    },
+    {
+      "id": 9524,
+      "word": "die Eudaimonia",
+      "level": "C2",
+      "error": "duplicate key value violates unique constraint \"target_translations_arabic_source_lang_source_word_id_key\""
+    },
+    {
+      "id": 9526,
+      "word": "die Fürsorgethik",
+      "level": "C2",
+      "error": "duplicate key value violates unique constraint \"target_translations_arabic_source_lang_source_word_id_key\""
+    },
+    {
+      "id": 9528,
+      "word": "die Gesinnungsethik",
+      "level": "C2",
+      "error": "duplicate key value violates unique constraint \"target_translations_arabic_source_lang_source_word_id_key\""
+    },
+    {
+      "id": 9530,
+      "word": "die Güterabwägung",
+      "level": "C2",
+      "error": "duplicate key value violates unique constraint \"target_translations_arabic_source_lang_source_word_id_key\""
+    },
+    {
+      "id": 9532,
+      "word": "die Doppeleffekt-Doktrin",
+      "level": "C2",
+      "error": "duplicate key value violates unique constraint \"target_translations_arabic_source_lang_source_word_id_key\""
+    },
+    {
+      "id": 9534,
+      "word": "die Zweck-Mittel-Unterscheidung",
+      "level": "C2",
+      "error": "duplicate key value violates unique constraint \"target_translations_arabic_source_lang_source_word_id_key\""
+    },
+    {
+      "id": 9535,
+      "word": "die Menschenwürde",
+      "level": "C2",
+      "error": "duplicate key value violates unique constraint \"target_translations_arabic_source_lang_source_word_id_key\""
+    },
+    {
+      "id": 9536,
+      "word": "die Gerechtigkeit",
+      "level": "C2",
+      "error": "duplicate key value violates unique constraint \"target_translations_arabic_source_lang_source_word_id_key\""
+    },
+    {
+      "id": 9537,
+      "word": "die Fairness",
+      "level": "C2",
+      "error": "duplicate key value violates unique constraint \"target_translations_arabic_source_lang_source_word_id_key\""
+    },
+    {
+      "id": 9539,
+      "word": "die angewandte Ethik",
+      "level": "C2",
+      "error": "duplicate key value violates unique constraint \"target_translations_arabic_source_lang_source_word_id_key\""
+    },
+    {
+      "id": 9540,
+      "word": "die Bioethik",
+      "level": "C2",
+      "error": "duplicate key value violates unique constraint \"target_translations_arabic_source_lang_source_word_id_key\""
+    },
+    {
+      "id": 9545,
+      "word": "das Nichtschadensprinzip",
+      "level": "C2",
+      "error": "duplicate key value violates unique constraint \"target_translations_arabic_source_lang_source_word_id_key\""
+    },
+    {
+      "id": 9547,
+      "word": "die Sterbehilfe",
+      "level": "C2",
+      "error": "duplicate key value violates unique constraint \"target_translations_arabic_source_lang_source_word_id_key\""
+    },
+    {
+      "id": 9548,
+      "word": "die passive Sterbehilfe",
+      "level": "C2",
+      "error": "duplicate key value violates unique constraint \"target_translations_arabic_source_lang_source_word_id_key\""
+    },
+    {
+      "id": 9550,
+      "word": "die Triage",
+      "level": "C2",
+      "error": "duplicate key value violates unique constraint \"target_translations_arabic_source_lang_source_word_id_key\""
+    },
+    {
+      "id": 9551,
+      "word": "die Forschungsethik",
+      "level": "C2",
+      "error": "duplicate key value violates unique constraint \"target_translations_arabic_source_lang_source_word_id_key\""
+    },
+    {
+      "id": 9553,
+      "word": "der Speziesismus",
+      "level": "C2",
+      "error": "duplicate key value violates unique constraint \"target_translations_arabic_source_lang_source_word_id_key\""
+    },
+    {
+      "id": 9556,
+      "word": "der Anthropozentrismus",
+      "level": "C2",
+      "error": "duplicate key value violates unique constraint \"target_translations_arabic_source_lang_source_word_id_key\""
+    },
+    {
+      "id": 9559,
+      "word": "die Generationengerechtigkeit",
+      "level": "C2",
+      "error": "duplicate key value violates unique constraint \"target_translations_arabic_source_lang_source_word_id_key\""
+    },
+    {
+      "id": 9560,
+      "word": "die Klimaethik",
+      "level": "C2",
+      "error": "duplicate key value violates unique constraint \"target_translations_arabic_source_lang_source_word_id_key\""
+    },
+    {
+      "id": 9563,
+      "word": "die politische Philosophie",
+      "level": "C2",
+      "error": "duplicate key value violates unique constraint \"target_translations_arabic_source_lang_source_word_id_key\""
+    },
+    {
+      "id": 9564,
+      "word": "der Gesellschaftsvertrag",
+      "level": "C2",
+      "error": "duplicate key value violates unique constraint \"target_translations_arabic_source_lang_source_word_id_key\""
+    },
+    {
+      "id": 9566,
+      "word": "die negative Freiheit",
+      "level": "C2",
+      "error": "duplicate key value violates unique constraint \"target_translations_arabic_source_lang_source_word_id_key\""
+    },
+    {
+      "id": 9567,
+      "word": "die positive Freiheit",
+      "level": "C2",
+      "error": "duplicate key value violates unique constraint \"target_translations_arabic_source_lang_source_word_id_key\""
+    },
+    {
+      "id": 9569,
+      "word": "der Schleier des Nichtwissens",
+      "level": "C2",
+      "error": "duplicate key value violates unique constraint \"target_translations_arabic_source_lang_source_word_id_key\""
+    },
+    {
+      "id": 9570,
+      "word": "das Differenzprinzip",
+      "level": "C2",
+      "error": "duplicate key value violates unique constraint \"target_translations_arabic_source_lang_source_word_id_key\""
+    },
+    {
+      "id": 9571,
+      "word": "die Chancengleichheit",
+      "level": "C2",
+      "error": "duplicate key value violates unique constraint \"target_translations_arabic_source_lang_source_word_id_key\""
+    },
+    {
+      "id": 9572,
+      "word": "der Libertarismus",
+      "level": "C2",
+      "error": "duplicate key value violates unique constraint \"target_translations_arabic_source_lang_source_word_id_key\""
+    },
+    {
+      "id": 9575,
+      "word": "der zivile Ungehorsam",
+      "level": "C2",
+      "error": "duplicate key value violates unique constraint \"target_translations_arabic_source_lang_source_word_id_key\""
+    },
+    {
+      "id": 9577,
+      "word": "der gerechte Krieg",
+      "level": "C2",
+      "error": "duplicate key value violates unique constraint \"target_translations_arabic_source_lang_source_word_id_key\""
+    },
+    {
+      "id": 9578,
+      "word": "die humanitäre Intervention",
+      "level": "C2",
+      "error": "duplicate key value violates unique constraint \"target_translations_arabic_source_lang_source_word_id_key\""
+    },
+    {
+      "id": 9581,
+      "word": "die Armutslindernde Pflicht",
+      "level": "C2",
+      "error": "duplicate key value violates unique constraint \"target_translations_arabic_source_lang_source_word_id_key\""
+    },
+    {
+      "id": 9583,
+      "word": "die Radiokarbondatierung",
+      "level": "C2",
+      "error": "duplicate key value violates unique constraint \"target_translations_arabic_source_lang_source_word_id_key\""
+    },
+    {
+      "id": 9584,
+      "word": "die Dendrochronologie",
+      "level": "C2",
+      "error": "duplicate key value violates unique constraint \"target_translations_arabic_source_lang_source_word_id_key\""
+    },
+    {
+      "id": 9588,
+      "word": "das Artefakt",
+      "level": "C2",
+      "error": "duplicate key value violates unique constraint \"target_translations_arabic_source_lang_source_word_id_key\""
+    },
+    {
+      "id": 9591,
+      "word": "die Lithik",
+      "level": "C2",
+      "error": "duplicate key value violates unique constraint \"target_translations_arabic_source_lang_source_word_id_key\""
+    },
+    {
+      "id": 9592,
+      "word": "die Schlagsteintechnik",
+      "level": "C2",
+      "error": "duplicate key value violates unique constraint \"target_translations_arabic_source_lang_source_word_id_key\""
+    },
+    {
+      "id": 9594,
+      "word": "die Siedlungsarchäologie",
+      "level": "C2",
+      "error": "duplicate key value violates unique constraint \"target_translations_arabic_source_lang_source_word_id_key\""
+    },
+    {
+      "id": 9599,
+      "word": "die Archäobotanik",
+      "level": "C2",
+      "error": "duplicate key value violates unique constraint \"target_translations_arabic_source_lang_source_word_id_key\""
+    },
+    {
+      "id": 9602,
+      "word": "die Prospektion",
+      "level": "C2",
+      "error": "duplicate key value violates unique constraint \"target_translations_arabic_source_lang_source_word_id_key\""
+    },
+    {
+      "id": 9603,
+      "word": "die Luftbildarchäologie",
+      "level": "C2",
+      "error": "duplicate key value violates unique constraint \"target_translations_arabic_source_lang_source_word_id_key\""
+    },
+    {
+      "id": 9610,
+      "word": "die Paläographie",
+      "level": "C2",
+      "error": "duplicate key value violates unique constraint \"target_translations_arabic_source_lang_source_word_id_key\""
+    },
+    {
+      "id": 9613,
+      "word": "die Sphragistik",
+      "level": "C2",
+      "error": "duplicate key value violates unique constraint \"target_translations_arabic_source_lang_source_word_id_key\""
+    },
+    {
+      "id": 9617,
+      "word": "die Mentalitätsgeschichte",
+      "level": "C2",
+      "error": "duplicate key value violates unique constraint \"target_translations_arabic_source_lang_source_word_id_key\""
+    },
+    {
+      "id": 9618,
+      "word": "die Mikrogeschichte",
+      "level": "C2",
+      "error": "duplicate key value violates unique constraint \"target_translations_arabic_source_lang_source_word_id_key\""
+    },
+    {
+      "id": 9621,
+      "word": "die Globalgeschichte",
+      "level": "C2",
+      "error": "duplicate key value violates unique constraint \"target_translations_arabic_source_lang_source_word_id_key\""
+    },
+    {
+      "id": 9624,
+      "word": "die Memoria",
+      "level": "C2",
+      "error": "duplicate key value violates unique constraint \"target_translations_arabic_source_lang_source_word_id_key\""
+    },
+    {
+      "id": 9626,
+      "word": "die Epochenschwelle",
+      "level": "C2",
+      "error": "duplicate key value violates unique constraint \"target_translations_arabic_source_lang_source_word_id_key\""
+    },
+    {
+      "id": 9629,
+      "word": "die Longue durée",
+      "level": "C2",
+      "error": "duplicate key value violates unique constraint \"target_translations_arabic_source_lang_source_word_id_key\""
+    },
+    {
+      "id": 9631,
+      "word": "das Ereignis",
+      "level": "C2",
+      "error": "duplicate key value violates unique constraint \"target_translations_arabic_source_lang_source_word_id_key\""
+    },
+    {
+      "id": 9633,
+      "word": "der Anachronismus",
+      "level": "C2",
+      "error": "duplicate key value violates unique constraint \"target_translations_arabic_source_lang_source_word_id_key\""
+    },
+    {
+      "id": 9634,
+      "word": "die Narration",
+      "level": "C2",
+      "error": "duplicate key value violates unique constraint \"target_translations_arabic_source_lang_source_word_id_key\""
+    },
+    {
+      "id": 9635,
+      "word": "die Metaerzählung",
+      "level": "C2",
+      "error": "duplicate key value violates unique constraint \"target_translations_arabic_source_lang_source_word_id_key\""
+    },
+    {
+      "id": 9637,
+      "word": "die Dekadenz",
+      "level": "C2",
+      "error": "duplicate key value violates unique constraint \"target_translations_arabic_source_lang_source_word_id_key\""
+    },
+    {
+      "id": 9639,
+      "word": "die Reformation",
+      "level": "C2",
+      "error": "duplicate key value violates unique constraint \"target_translations_arabic_source_lang_source_word_id_key\""
+    },
+    {
+      "id": 9643,
+      "word": "die Globalisierung",
+      "level": "C2",
+      "error": "duplicate key value violates unique constraint \"target_translations_arabic_source_lang_source_word_id_key\""
+    },
+    {
+      "id": 9646,
+      "word": "die Geomorphologie",
+      "level": "C2",
+      "error": "duplicate key value violates unique constraint \"target_translations_arabic_source_lang_source_word_id_key\""
+    },
+    {
+      "id": 9648,
+      "word": "die Orogenese",
+      "level": "C2",
+      "error": "duplicate key value violates unique constraint \"target_translations_arabic_source_lang_source_word_id_key\""
+    },
+    {
+      "id": 9649,
+      "word": "die Verwitterung",
+      "level": "C2",
+      "error": "duplicate key value violates unique constraint \"target_translations_arabic_source_lang_source_word_id_key\""
+    },
+    {
+      "id": 9651,
+      "word": "die Morphodynamik",
+      "level": "C2",
+      "error": "duplicate key value violates unique constraint \"target_translations_arabic_source_lang_source_word_id_key\""
+    },
+    {
+      "id": 9652,
+      "word": "das Relief",
+      "level": "C2",
+      "error": "duplicate key value violates unique constraint \"target_translations_arabic_source_lang_source_word_id_key\""
+    },
+    {
+      "id": 9653,
+      "word": "die Topographie",
+      "level": "C2",
+      "error": "duplicate key value violates unique constraint \"target_translations_arabic_source_lang_source_word_id_key\""
+    },
+    {
+      "id": 9656,
+      "word": "die Mineralogie",
+      "level": "C2",
+      "error": "duplicate key value violates unique constraint \"target_translations_arabic_source_lang_source_word_id_key\""
+    },
+    {
+      "id": 9661,
+      "word": "die Limnologie",
+      "level": "C2",
+      "error": "duplicate key value violates unique constraint \"target_translations_arabic_source_lang_source_word_id_key\""
+    },
+    {
+      "id": 9662,
+      "word": "die Ozeanographie",
+      "level": "C2",
+      "error": "duplicate key value violates unique constraint \"target_translations_arabic_source_lang_source_word_id_key\""
+    },
+    {
+      "id": 9665,
+      "word": "die Meteorologie",
+      "level": "C2",
+      "error": "duplicate key value violates unique constraint \"target_translations_arabic_source_lang_source_word_id_key\""
+    },
+    {
+      "id": 9667,
+      "word": "die Passat",
+      "level": "C2",
+      "error": "duplicate key value violates unique constraint \"target_translations_arabic_source_lang_source_word_id_key\""
+    },
+    {
+      "id": 9668,
+      "word": "der Monsun",
+      "level": "C2",
+      "error": "duplicate key value violates unique constraint \"target_translations_arabic_source_lang_source_word_id_key\""
+    },
+    {
+      "id": 9669,
+      "word": "die Advektion",
+      "level": "C2",
+      "error": "duplicate key value violates unique constraint \"target_translations_arabic_source_lang_source_word_id_key\""
+    },
+    {
+      "id": 9671,
+      "word": "die Kontinentalität",
+      "level": "C2",
+      "error": "duplicate key value violates unique constraint \"target_translations_arabic_source_lang_source_word_id_key\""
+    },
+    {
+      "id": 9672,
+      "word": "die Maritimität",
+      "level": "C2",
+      "error": "duplicate key value violates unique constraint \"target_translations_arabic_source_lang_source_word_id_key\""
+    },
+    {
+      "id": 9673,
+      "word": "die Ariditåt",
+      "level": "C2",
+      "error": "duplicate key value violates unique constraint \"target_translations_arabic_source_lang_source_word_id_key\""
+    },
+    {
+      "id": 9678,
+      "word": "das Biom",
+      "level": "C2",
+      "error": "duplicate key value violates unique constraint \"target_translations_arabic_source_lang_source_word_id_key\""
+    },
+    {
+      "id": 9680,
+      "word": "die Sukzession",
+      "level": "C2",
+      "error": "duplicate key value violates unique constraint \"target_translations_arabic_source_lang_source_word_id_key\""
+    },
+    {
+      "id": 9682,
+      "word": "die Metropolregion",
+      "level": "C2",
+      "error": "duplicate key value violates unique constraint \"target_translations_arabic_source_lang_source_word_id_key\""
+    },
+    {
+      "id": 9686,
+      "word": "die Zersiedelung",
+      "level": "C2",
+      "error": "duplicate key value violates unique constraint \"target_translations_arabic_source_lang_source_word_id_key\""
+    },
+    {
+      "id": 9688,
+      "word": "die Raumordnung",
+      "level": "C2",
+      "error": "duplicate key value violates unique constraint \"target_translations_arabic_source_lang_source_word_id_key\""
+    },
+    {
+      "id": 9689,
+      "word": "die Regionalplanung",
+      "level": "C2",
+      "error": "duplicate key value violates unique constraint \"target_translations_arabic_source_lang_source_word_id_key\""
+    },
+    {
+      "id": 9691,
+      "word": "der Flächennutzungsplan",
+      "level": "C2",
+      "error": "duplicate key value violates unique constraint \"target_translations_arabic_source_lang_source_word_id_key\""
+    },
+    {
+      "id": 9692,
+      "word": "der Bebauungsplan",
+      "level": "C2",
+      "error": "duplicate key value violates unique constraint \"target_translations_arabic_source_lang_source_word_id_key\""
+    },
+    {
+      "id": 9694,
+      "word": "die Zentralität",
+      "level": "C2",
+      "error": "duplicate key value violates unique constraint \"target_translations_arabic_source_lang_source_word_id_key\""
+    },
+    {
+      "id": 9695,
+      "word": "das Zentrale-Orte-System",
+      "level": "C2",
+      "error": "duplicate key value violates unique constraint \"target_translations_arabic_source_lang_source_word_id_key\""
+    },
+    {
+      "id": 9698,
+      "word": "die Tragfähigkeitsanalyse",
+      "level": "C2",
+      "error": "duplicate key value violates unique constraint \"target_translations_arabic_source_lang_source_word_id_key\""
+    },
+    {
+      "id": 9699,
+      "word": "die Landschaftsökologie",
+      "level": "C2",
+      "error": "duplicate key value violates unique constraint \"target_translations_arabic_source_lang_source_word_id_key\""
+    },
+    {
+      "id": 9702,
+      "word": "die Geosphäre",
+      "level": "C2",
+      "error": "duplicate key value violates unique constraint \"target_translations_arabic_source_lang_source_word_id_key\""
+    },
+    {
+      "id": 9704,
+      "word": "die Hydrosphäre",
+      "level": "C2",
+      "error": "duplicate key value violates unique constraint \"target_translations_arabic_source_lang_source_word_id_key\""
+    },
+    {
+      "id": 9706,
+      "word": "die Biosphäre",
+      "level": "C2",
+      "error": "duplicate key value violates unique constraint \"target_translations_arabic_source_lang_source_word_id_key\""
+    },
+    {
+      "id": 9709,
+      "word": "der Stickstoffkreislauf",
+      "level": "C2",
+      "error": "duplicate key value violates unique constraint \"target_translations_arabic_source_lang_source_word_id_key\""
+    },
+    {
+      "id": 9710,
+      "word": "der Wasserkreislauf",
+      "level": "C2",
+      "error": "duplicate key value violates unique constraint \"target_translations_arabic_source_lang_source_word_id_key\""
+    },
+    {
+      "id": 9711,
+      "word": "die Evapotranspiration",
+      "level": "C2",
+      "error": "duplicate key value violates unique constraint \"target_translations_arabic_source_lang_source_word_id_key\""
+    },
+    {
+      "id": 9712,
+      "word": "die Infiltration",
+      "level": "C2",
+      "error": "duplicate key value violates unique constraint \"target_translations_arabic_source_lang_source_word_id_key\""
+    },
+    {
+      "id": 9713,
+      "word": "die Perkolation",
+      "level": "C2",
+      "error": "duplicate key value violates unique constraint \"target_translations_arabic_source_lang_source_word_id_key\""
+    },
+    {
+      "id": 9716,
+      "word": "die Wasserscheide",
+      "level": "C2",
+      "error": "duplicate key value violates unique constraint \"target_translations_arabic_source_lang_source_word_id_key\""
+    },
+    {
+      "id": 9718,
+      "word": "die Kosmologie",
+      "level": "C2",
+      "error": "duplicate key value violates unique constraint \"target_translations_arabic_source_lang_source_word_id_key\""
+    },
+    {
+      "id": 9719,
+      "word": "die Astrophysik",
+      "level": "C2",
+      "error": "duplicate key value violates unique constraint \"target_translations_arabic_source_lang_source_word_id_key\""
+    },
+    {
+      "id": 9721,
+      "word": "die Keplersche Gesetze",
+      "level": "C2",
+      "error": "duplicate key value violates unique constraint \"target_translations_arabic_source_lang_source_word_id_key\""
+    },
+    {
+      "id": 9723,
+      "word": "die Präzession",
+      "level": "C2",
+      "error": "duplicate key value violates unique constraint \"target_translations_arabic_source_lang_source_word_id_key\""
+    },
+    {
+      "id": 9726,
+      "word": "die Rektaszension",
+      "level": "C2",
+      "error": "duplicate key value violates unique constraint \"target_translations_arabic_source_lang_source_word_id_key\""
+    },
+    {
+      "id": 9727,
+      "word": "die Deklination",
+      "level": "C2",
+      "error": "duplicate key value violates unique constraint \"target_translations_arabic_source_lang_source_word_id_key\""
+    },
+    {
+      "id": 9729,
+      "word": "die Aberration",
+      "level": "C2",
+      "error": "duplicate key value violates unique constraint \"target_translations_arabic_source_lang_source_word_id_key\""
+    },
+    {
+      "id": 9730,
+      "word": "die Photometrie",
+      "level": "C2",
+      "error": "duplicate key value violates unique constraint \"target_translations_arabic_source_lang_source_word_id_key\""
+    },
+    {
+      "id": 9732,
+      "word": "die absolute Helligkeit",
+      "level": "C2",
+      "error": "duplicate key value violates unique constraint \"target_translations_arabic_source_lang_source_word_id_key\""
+    },
+    {
+      "id": 9735,
+      "word": "die Hauptreihe",
+      "level": "C2",
+      "error": "duplicate key value violates unique constraint \"target_translations_arabic_source_lang_source_word_id_key\""
+    },
+    {
+      "id": 9736,
+      "word": "der Roter Riese",
+      "level": "C2",
+      "error": "duplicate key value violates unique constraint \"target_translations_arabic_source_lang_source_word_id_key\""
+    },
+    {
+      "id": 9737,
+      "word": "der Weißer Zwerg",
+      "level": "C2",
+      "error": "duplicate key value violates unique constraint \"target_translations_arabic_source_lang_source_word_id_key\""
+    },
+    {
+      "id": 9738,
+      "word": "der Neutronenstern",
+      "level": "C2",
+      "error": "duplicate key value violates unique constraint \"target_translations_arabic_source_lang_source_word_id_key\""
+    },
+    {
+      "id": 9740,
+      "word": "der Ereignishorizont",
+      "level": "C2",
+      "error": "duplicate key value violates unique constraint \"target_translations_arabic_source_lang_source_word_id_key\""
+    },
+    {
+      "id": 9743,
+      "word": "der Pulsar",
+      "level": "C2",
+      "error": "duplicate key value violates unique constraint \"target_translations_arabic_source_lang_source_word_id_key\""
+    },
+    {
+      "id": 9745,
+      "word": "die Akkretionsscheibe",
+      "level": "C2",
+      "error": "duplicate key value violates unique constraint \"target_translations_arabic_source_lang_source_word_id_key\""
+    },
+    {
+      "id": 9747,
+      "word": "die Galaxie",
+      "level": "C2",
+      "error": "duplicate key value violates unique constraint \"target_translations_arabic_source_lang_source_word_id_key\""
+    },
+    {
+      "id": 9748,
+      "word": "die Spiralgalaxie",
+      "level": "C2",
+      "error": "duplicate key value violates unique constraint \"target_translations_arabic_source_lang_source_word_id_key\""
+    },
+    {
+      "id": 9751,
+      "word": "der Galaxienhaufen",
+      "level": "C2",
+      "error": "duplicate key value violates unique constraint \"target_translations_arabic_source_lang_source_word_id_key\""
+    },
+    {
+      "id": 9752,
+      "word": "der Superhaufen",
+      "level": "C2",
+      "error": "duplicate key value violates unique constraint \"target_translations_arabic_source_lang_source_word_id_key\""
+    },
+    {
+      "id": 9753,
+      "word": "die Filament",
+      "level": "C2",
+      "error": "duplicate key value violates unique constraint \"target_translations_arabic_source_lang_source_word_id_key\""
+    },
+    {
+      "id": 9754,
+      "word": "die Void",
+      "level": "C2",
+      "error": "duplicate key value violates unique constraint \"target_translations_arabic_source_lang_source_word_id_key\""
+    },
+    {
+      "id": 9756,
+      "word": "die Dunkle Energie",
+      "level": "C2",
+      "error": "duplicate key value violates unique constraint \"target_translations_arabic_source_lang_source_word_id_key\""
+    },
+    {
+      "id": 9757,
+      "word": "die Rotverschiebung",
+      "level": "C2",
+      "error": "duplicate key value violates unique constraint \"target_translations_arabic_source_lang_source_word_id_key\""
+    },
+    {
+      "id": 9758,
+      "word": "das Hubble-Gesetz",
+      "level": "C2",
+      "error": "duplicate key value violates unique constraint \"target_translations_arabic_source_lang_source_word_id_key\""
+    },
+    {
+      "id": 9762,
+      "word": "die Rekombination",
+      "level": "C2",
+      "error": "duplicate key value violates unique constraint \"target_translations_arabic_source_lang_source_word_id_key\""
+    },
+    {
+      "id": 9769,
+      "word": "die Zeitdilatation",
+      "level": "C2",
+      "error": "duplicate key value violates unique constraint \"target_translations_arabic_source_lang_source_word_id_key\""
+    },
+    {
+      "id": 9770,
+      "word": "die Längenkontraktion",
+      "level": "C2",
+      "error": "duplicate key value violates unique constraint \"target_translations_arabic_source_lang_source_word_id_key\""
+    },
+    {
+      "id": 9771,
+      "word": "die Lichtgeschwindigkeit",
+      "level": "C2",
+      "error": "duplicate key value violates unique constraint \"target_translations_arabic_source_lang_source_word_id_key\""
+    },
+    {
+      "id": 9772,
+      "word": "die spezielle Relativitätstheorie",
+      "level": "C2",
+      "error": "duplicate key value violates unique constraint \"target_translations_arabic_source_lang_source_word_id_key\""
+    },
+    {
+      "id": 9774,
+      "word": "die Gravitationswelle",
+      "level": "C2",
+      "error": "duplicate key value violates unique constraint \"target_translations_arabic_source_lang_source_word_id_key\""
+    },
+    {
+      "id": 9777,
+      "word": "die Absorptionslinie",
+      "level": "C2",
+      "error": "duplicate key value violates unique constraint \"target_translations_arabic_source_lang_source_word_id_key\""
+    },
+    {
+      "id": 9778,
+      "word": "die Emissionslinie",
+      "level": "C2",
+      "error": "duplicate key value violates unique constraint \"target_translations_arabic_source_lang_source_word_id_key\""
+    },
+    {
+      "id": 9779,
+      "word": "der Dopplereffekt",
+      "level": "C2",
+      "error": "duplicate key value violates unique constraint \"target_translations_arabic_source_lang_source_word_id_key\""
+    },
+    {
+      "id": 9783,
+      "word": "die Radialgeschwindigkeitsmethode",
+      "level": "C2",
+      "error": "duplicate key value violates unique constraint \"target_translations_arabic_source_lang_source_word_id_key\""
+    },
+    {
+      "id": 9784,
+      "word": "der Exoplanet",
+      "level": "C2",
+      "error": "duplicate key value violates unique constraint \"target_translations_arabic_source_lang_source_word_id_key\""
+    },
+    {
+      "id": 9787,
+      "word": "die Wellenfunktion",
+      "level": "C2",
+      "error": "duplicate key value violates unique constraint \"target_translations_arabic_source_lang_source_word_id_key\""
+    },
+    {
+      "id": 9790,
+      "word": "die Quantenzahl",
+      "level": "C2",
+      "error": "duplicate key value violates unique constraint \"target_translations_arabic_source_lang_source_word_id_key\""
+    },
+    {
+      "id": 9791,
+      "word": "das Orbital",
+      "level": "C2",
+      "error": "duplicate key value violates unique constraint \"target_translations_arabic_source_lang_source_word_id_key\""
+    },
+    {
+      "id": 9793,
+      "word": "die Bindungsordnung",
+      "level": "C2",
+      "error": "duplicate key value violates unique constraint \"target_translations_arabic_source_lang_source_word_id_key\""
+    },
+    {
+      "id": 9796,
+      "word": "die Konjugation",
+      "level": "C2",
+      "error": "duplicate key value violates unique constraint \"target_translations_arabic_source_lang_source_word_id_key\""
+    },
+    {
+      "id": 9798,
+      "word": "die Tautomerie",
+      "level": "C2",
+      "error": "duplicate key value violates unique constraint \"target_translations_arabic_source_lang_source_word_id_key\""
+    },
+    {
+      "id": 9804,
+      "word": "die Addition",
+      "level": "C2",
+      "error": "duplicate key value violates unique constraint \"target_translations_arabic_source_lang_source_word_id_key\""
+    },
+    {
+      "id": 9807,
+      "word": "die Aktivierungsenergie",
+      "level": "C2",
+      "error": "duplicate key value violates unique constraint \"target_translations_arabic_source_lang_source_word_id_key\""
+    },
+    {
+      "id": 9809,
+      "word": "die Reaktionskinetik",
+      "level": "C2",
+      "error": "duplicate key value violates unique constraint \"target_translations_arabic_source_lang_source_word_id_key\""
+    },
+    {
+      "id": 9813,
+      "word": "das Massenwirkungsgesetz",
+      "level": "C2",
+      "error": "duplicate key value violates unique constraint \"target_translations_arabic_source_lang_source_word_id_key\""
+    },
+    {
+      "id": 9815,
+      "word": "die freie Enthalpie",
+      "level": "C2",
+      "error": "duplicate key value violates unique constraint \"target_translations_arabic_source_lang_source_word_id_key\""
+    },
+    {
+      "id": 9816,
+      "word": "die Exergie",
+      "level": "C2",
+      "error": "duplicate key value violates unique constraint \"target_translations_arabic_source_lang_source_word_id_key\""
+    },
+    {
+      "id": 9818,
+      "word": "die Reversibilität",
+      "level": "C2",
+      "error": "duplicate key value violates unique constraint \"target_translations_arabic_source_lang_source_word_id_key\""
+    },
+    {
+      "id": 9821,
+      "word": "die Tripelpunkt",
+      "level": "C2",
+      "error": "duplicate key value violates unique constraint \"target_translations_arabic_source_lang_source_word_id_key\""
+    },
+    {
+      "id": 9829,
+      "word": "die Beugung",
+      "level": "C2",
+      "error": "duplicate key value violates unique constraint \"target_translations_arabic_source_lang_source_word_id_key\""
+    },
+    {
+      "id": 9831,
+      "word": "die Gitterschwingung",
+      "level": "C2",
+      "error": "duplicate key value violates unique constraint \"target_translations_arabic_source_lang_source_word_id_key\""
+    },
+    {
+      "id": 9834,
+      "word": "das Exziton",
+      "level": "C2",
+      "error": "duplicate key value violates unique constraint \"target_translations_arabic_source_lang_source_word_id_key\""
+    },
+    {
+      "id": 9837,
+      "word": "das Leitungsband",
+      "level": "C2",
+      "error": "duplicate key value violates unique constraint \"target_translations_arabic_source_lang_source_word_id_key\""
+    },
+    {
+      "id": 9843,
+      "word": "die Sperrschicht",
+      "level": "C2",
+      "error": "duplicate key value violates unique constraint \"target_translations_arabic_source_lang_source_word_id_key\""
+    },
+    {
+      "id": 9846,
+      "word": "die Supraleitung",
+      "level": "C2",
+      "error": "duplicate key value violates unique constraint \"target_translations_arabic_source_lang_source_word_id_key\""
+    },
+    {
+      "id": 9853,
+      "word": "die Homophonie",
+      "level": "C2",
+      "error": "duplicate key value violates unique constraint \"target_translations_arabic_source_lang_source_word_id_key\""
+    },
+    {
+      "id": 9855,
+      "word": "die Tonalität",
+      "level": "C2",
+      "error": "duplicate key value violates unique constraint \"target_translations_arabic_source_lang_source_word_id_key\""
+    },
+    {
+      "id": 9856,
+      "word": "die Atonalität",
+      "level": "C2",
+      "error": "duplicate key value violates unique constraint \"target_translations_arabic_source_lang_source_word_id_key\""
+    },
+    {
+      "id": 9857,
+      "word": "die Chromatik",
+      "level": "C2",
+      "error": "duplicate key value violates unique constraint \"target_translations_arabic_source_lang_source_word_id_key\""
+    },
+    {
+      "id": 9858,
+      "word": "die Diatonik",
+      "level": "C2",
+      "error": "duplicate key value violates unique constraint \"target_translations_arabic_source_lang_source_word_id_key\""
+    },
+    {
+      "id": 9859,
+      "word": "die Pentatonik",
+      "level": "C2",
+      "error": "duplicate key value violates unique constraint \"target_translations_arabic_source_lang_source_word_id_key\""
+    },
+    {
+      "id": 9860,
+      "word": "die Dodecaphonie",
+      "level": "C2",
+      "error": "duplicate key value violates unique constraint \"target_translations_arabic_source_lang_source_word_id_key\""
+    },
+    {
+      "id": 9861,
+      "word": "die Reihentechnik",
+      "level": "C2",
+      "error": "duplicate key value violates unique constraint \"target_translations_arabic_source_lang_source_word_id_key\""
+    },
+    {
+      "id": 9864,
+      "word": "die Akkord",
+      "level": "C2",
+      "error": "duplicate key value violates unique constraint \"target_translations_arabic_source_lang_source_word_id_key\""
+    },
+    {
+      "id": 9867,
+      "word": "die Umkehrung",
+      "level": "C2",
+      "error": "duplicate key value violates unique constraint \"target_translations_arabic_source_lang_source_word_id_key\""
+    },
+    {
+      "id": 9869,
+      "word": "die Konsonanz",
+      "level": "C2",
+      "error": "duplicate key value violates unique constraint \"target_translations_arabic_source_lang_source_word_id_key\""
+    },
+    {
+      "id": 9870,
+      "word": "die Auflösung",
+      "level": "C2",
+      "error": "duplicate key value violates unique constraint \"target_translations_arabic_source_lang_source_word_id_key\""
+    },
+    {
+      "id": 9872,
+      "word": "die Modulation",
+      "level": "C2",
+      "error": "duplicate key value violates unique constraint \"target_translations_arabic_source_lang_source_word_id_key\""
+    },
+    {
+      "id": 9874,
+      "word": "die Dominante",
+      "level": "C2",
+      "error": "duplicate key value violates unique constraint \"target_translations_arabic_source_lang_source_word_id_key\""
+    },
+    {
+      "id": 9875,
+      "word": "die Subdominante",
+      "level": "C2",
+      "error": "duplicate key value violates unique constraint \"target_translations_arabic_source_lang_source_word_id_key\""
+    },
+    {
+      "id": 9878,
+      "word": "der Generalbass",
+      "level": "C2",
+      "error": "duplicate key value violates unique constraint \"target_translations_arabic_source_lang_source_word_id_key\""
+    },
+    {
+      "id": 9880,
+      "word": "die Durchgang",
+      "level": "C2",
+      "error": "duplicate key value violates unique constraint \"target_translations_arabic_source_lang_source_word_id_key\""
+    },
+    {
+      "id": 9881,
+      "word": "die Wechselnote",
+      "level": "C2",
+      "error": "duplicate key value violates unique constraint \"target_translations_arabic_source_lang_source_word_id_key\""
+    },
+    {
+      "id": 9887,
+      "word": "die Polymeter",
+      "level": "C2",
+      "error": "duplicate key value violates unique constraint \"target_translations_arabic_source_lang_source_word_id_key\""
+    },
+    {
+      "id": 9892,
+      "word": "das Portato",
+      "level": "C2",
+      "error": "duplicate key value violates unique constraint \"target_translations_arabic_source_lang_source_word_id_key\""
+    },
+    {
+      "id": 9895,
+      "word": "die Motivik",
+      "level": "C2",
+      "error": "duplicate key value violates unique constraint \"target_translations_arabic_source_lang_source_word_id_key\""
+    },
+    {
+      "id": 9898,
+      "word": "die Variation",
+      "level": "C2",
+      "error": "duplicate key value violates unique constraint \"target_translations_arabic_source_lang_source_word_id_key\""
+    },
+    {
+      "id": 9901,
+      "word": "die Umkehrungskrebs",
+      "level": "C2",
+      "error": "duplicate key value violates unique constraint \"target_translations_arabic_source_lang_source_word_id_key\""
+    },
+    {
+      "id": 9902,
+      "word": "die Kanon",
+      "level": "C2",
+      "error": "duplicate key value violates unique constraint \"target_translations_arabic_source_lang_source_word_id_key\""
+    },
+    {
+      "id": 9903,
+      "word": "die Fuge",
+      "level": "C2",
+      "error": "duplicate key value violates unique constraint \"target_translations_arabic_source_lang_source_word_id_key\""
+    },
+    {
+      "id": 9904,
+      "word": "die Reprise",
+      "level": "C2",
+      "error": "duplicate key value violates unique constraint \"target_translations_arabic_source_lang_source_word_id_key\""
+    },
+    {
+      "id": 9906,
+      "word": "die Sonatenhauptsatzform",
+      "level": "C2",
+      "error": "duplicate key value violates unique constraint \"target_translations_arabic_source_lang_source_word_id_key\""
+    },
+    {
+      "id": 9908,
+      "word": "die Suite",
+      "level": "C2",
+      "error": "duplicate key value violates unique constraint \"target_translations_arabic_source_lang_source_word_id_key\""
+    },
+    {
+      "id": 9909,
+      "word": "die Sinfonie",
+      "level": "C2",
+      "error": "duplicate key value violates unique constraint \"target_translations_arabic_source_lang_source_word_id_key\""
+    },
+    {
+      "id": 9910,
+      "word": "die Konzert",
+      "level": "C2",
+      "error": "duplicate key value violates unique constraint \"target_translations_arabic_source_lang_source_word_id_key\""
+    },
+    {
+      "id": 9912,
+      "word": "die Lied",
+      "level": "C2",
+      "error": "duplicate key value violates unique constraint \"target_translations_arabic_source_lang_source_word_id_key\""
+    },
+    {
+      "id": 9914,
+      "word": "die Arie",
+      "level": "C2",
+      "error": "duplicate key value violates unique constraint \"target_translations_arabic_source_lang_source_word_id_key\""
+    },
+    {
+      "id": 9915,
+      "word": "das Rezitativ",
+      "level": "C2",
+      "error": "duplicate key value violates unique constraint \"target_translations_arabic_source_lang_source_word_id_key\""
+    },
+    {
+      "id": 9916,
+      "word": "die Ouvertüre",
+      "level": "C2",
+      "error": "duplicate key value violates unique constraint \"target_translations_arabic_source_lang_source_word_id_key\""
+    },
+    {
+      "id": 9921,
+      "word": "die Kantate",
+      "level": "C2",
+      "error": "duplicate key value violates unique constraint \"target_translations_arabic_source_lang_source_word_id_key\""
+    },
+    {
+      "id": 9922,
+      "word": "die Choralbearbeitung",
+      "level": "C2",
+      "error": "duplicate key value violates unique constraint \"target_translations_arabic_source_lang_source_word_id_key\""
+    },
+    {
+      "id": 9925,
+      "word": "die Formant",
+      "level": "C2",
+      "error": "duplicate key value violates unique constraint \"target_translations_arabic_source_lang_source_word_id_key\""
+    },
+    {
+      "id": 9927,
+      "word": "die Klangfarbe",
+      "level": "C2",
+      "error": "duplicate key value violates unique constraint \"target_translations_arabic_source_lang_source_word_id_key\""
+    },
+    {
+      "id": 9929,
+      "word": "die Filmtheorie",
+      "level": "C2",
+      "error": "duplicate key value violates unique constraint \"target_translations_arabic_source_lang_source_word_id_key\""
+    },
+    {
+      "id": 9931,
+      "word": "die Mise-en-scène",
+      "level": "C2",
+      "error": "duplicate key value violates unique constraint \"target_translations_arabic_source_lang_source_word_id_key\""
+    },
+    {
+      "id": 9934,
+      "word": "die Sequenz",
+      "level": "C2",
+      "error": "duplicate key value violates unique constraint \"target_translations_arabic_source_lang_source_word_id_key\""
+    },
+    {
+      "id": 9937,
+      "word": "die Nahaufnahme",
+      "level": "C2",
+      "error": "duplicate key value violates unique constraint \"target_translations_arabic_source_lang_source_word_id_key\""
+    },
+    {
+      "id": 9938,
+      "word": "die Detailaufnahme",
+      "level": "C2",
+      "error": "duplicate key value violates unique constraint \"target_translations_arabic_source_lang_source_word_id_key\""
+    },
+    {
+      "id": 9940,
+      "word": "die Kameraführung",
+      "level": "C2",
+      "error": "duplicate key value violates unique constraint \"target_translations_arabic_source_lang_source_word_id_key\""
+    },
+    {
+      "id": 9942,
+      "word": "die Kamerafahrt",
+      "level": "C2",
+      "error": "duplicate key value violates unique constraint \"target_translations_arabic_source_lang_source_word_id_key\""
+    },
+    {
+      "id": 9944,
+      "word": "die Schärfentiefe",
+      "level": "C2",
+      "error": "duplicate key value violates unique constraint \"target_translations_arabic_source_lang_source_word_id_key\""
+    },
+    {
+      "id": 9947,
+      "word": "die Perspektive",
+      "level": "C2",
+      "error": "duplicate key value violates unique constraint \"target_translations_arabic_source_lang_source_word_id_key\""
+    },
+    {
+      "id": 9948,
+      "word": "die Aufsicht",
+      "level": "C2",
+      "error": "duplicate key value violates unique constraint \"target_translations_arabic_source_lang_source_word_id_key\""
+    },
+    {
+      "id": 9950,
+      "word": "die Zentralperspektive",
+      "level": "C2",
+      "error": "duplicate key value violates unique constraint \"target_translations_arabic_source_lang_source_word_id_key\""
+    },
+    {
+      "id": 9951,
+      "word": "die Beleuchtung",
+      "level": "C2",
+      "error": "duplicate key value violates unique constraint \"target_translations_arabic_source_lang_source_word_id_key\""
+    },
+    {
+      "id": 9954,
+      "word": "der Chiaroscuro",
+      "level": "C2",
+      "error": "duplicate key value violates unique constraint \"target_translations_arabic_source_lang_source_word_id_key\""
+    },
+    {
+      "id": 9956,
+      "word": "die Farbkorrektur",
+      "level": "C2",
+      "error": "duplicate key value violates unique constraint \"target_translations_arabic_source_lang_source_word_id_key\""
+    },
+    {
+      "id": 9957,
+      "word": "das Color Grading",
+      "level": "C2",
+      "error": "duplicate key value violates unique constraint \"target_translations_arabic_source_lang_source_word_id_key\""
+    },
+    {
+      "id": 9959,
+      "word": "der Jump Cut",
+      "level": "C2",
+      "error": "duplicate key value violates unique constraint \"target_translations_arabic_source_lang_source_word_id_key\""
+    },
+    {
+      "id": 9960,
+      "word": "der Match Cut",
+      "level": "C2",
+      "error": "duplicate key value violates unique constraint \"target_translations_arabic_source_lang_source_word_id_key\""
+    },
+    {
+      "id": 9963,
+      "word": "die Schnittfrequenz",
+      "level": "C2",
+      "error": "duplicate key value violates unique constraint \"target_translations_arabic_source_lang_source_word_id_key\""
+    },
+    {
+      "id": 9965,
+      "word": "der Schuss-Gegenschuss",
+      "level": "C2",
+      "error": "duplicate key value violates unique constraint \"target_translations_arabic_source_lang_source_word_id_key\""
+    },
+    {
+      "id": 9966,
+      "word": "der Point-of-View-Shot",
+      "level": "C2",
+      "error": "duplicate key value violates unique constraint \"target_translations_arabic_source_lang_source_word_id_key\""
+    },
+    {
+      "id": 9968,
+      "word": "die Halbsubjektive",
+      "level": "C2",
+      "error": "duplicate key value violates unique constraint \"target_translations_arabic_source_lang_source_word_id_key\""
+    },
+    {
+      "id": 9969,
+      "word": "die Nullfokalisierung",
+      "level": "C2",
+      "error": "duplicate key value violates unique constraint \"target_translations_arabic_source_lang_source_word_id_key\""
+    },
+    {
+      "id": 9970,
+      "word": "die interne Fokalisierung",
+      "level": "C2",
+      "error": "duplicate key value violates unique constraint \"target_translations_arabic_source_lang_source_word_id_key\""
+    },
+    {
+      "id": 9971,
+      "word": "die externe Fokalisierung",
+      "level": "C2",
+      "error": "duplicate key value violates unique constraint \"target_translations_arabic_source_lang_source_word_id_key\""
+    },
+    {
+      "id": 9972,
+      "word": "die Diegese",
+      "level": "C2",
+      "error": "duplicate key value violates unique constraint \"target_translations_arabic_source_lang_source_word_id_key\""
+    },
+    {
+      "id": 9973,
+      "word": "die Extradiegese",
+      "level": "C2",
+      "error": "duplicate key value violates unique constraint \"target_translations_arabic_source_lang_source_word_id_key\""
+    },
+    {
+      "id": 9978,
+      "word": "die Erzählzeit",
+      "level": "C2",
+      "error": "duplicate key value violates unique constraint \"target_translations_arabic_source_lang_source_word_id_key\""
+    },
+    {
+      "id": 9981,
+      "word": "die Zeitdehnung",
+      "level": "C2",
+      "error": "duplicate key value violates unique constraint \"target_translations_arabic_source_lang_source_word_id_key\""
+    },
+    {
+      "id": 9982,
+      "word": "die Genrekonvention",
+      "level": "C2",
+      "error": "duplicate key value violates unique constraint \"target_translations_arabic_source_lang_source_word_id_key\""
+    },
+    {
+      "id": 9983,
+      "word": "die Ikonographie",
+      "level": "C2",
+      "error": "duplicate key value violates unique constraint \"target_translations_arabic_source_lang_source_word_id_key\""
+    },
+    {
+      "id": 9986,
+      "word": "das Ikon",
+      "level": "C2",
+      "error": "duplicate key value violates unique constraint \"target_translations_arabic_source_lang_source_word_id_key\""
+    },
+    {
+      "id": 9988,
+      "word": "die Gaze",
+      "level": "C2",
+      "error": "duplicate key value violates unique constraint \"target_translations_arabic_source_lang_source_word_id_key\""
+    },
+    {
+      "id": 9990,
+      "word": "die Suture",
+      "level": "C2",
+      "error": "duplicate key value violates unique constraint \"target_translations_arabic_source_lang_source_word_id_key\""
+    },
+    {
+      "id": 9992,
+      "word": "die Distanzierung",
+      "level": "C2",
+      "error": "duplicate key value violates unique constraint \"target_translations_arabic_source_lang_source_word_id_key\""
+    },
+    {
+      "id": 9995,
+      "word": "die Autorentheorie",
+      "level": "C2",
+      "error": "duplicate key value violates unique constraint \"target_translations_arabic_source_lang_source_word_id_key\""
+    },
+    {
+      "id": 10001,
+      "word": "die Christologie",
+      "level": "C2",
+      "error": "duplicate key value violates unique constraint \"target_translations_arabic_source_lang_source_word_id_key\""
+    },
+    {
+      "id": 10002,
+      "word": "die Pneumatologie",
+      "level": "C2",
+      "error": "duplicate key value violates unique constraint \"target_translations_arabic_source_lang_source_word_id_key\""
+    },
+    {
+      "id": 10003,
+      "word": "die Ekklesiologie",
+      "level": "C2",
+      "error": "duplicate key value violates unique constraint \"target_translations_arabic_source_lang_source_word_id_key\""
+    },
+    {
+      "id": 10004,
+      "word": "die Sakramentenlehre",
+      "level": "C2",
+      "error": "duplicate key value violates unique constraint \"target_translations_arabic_source_lang_source_word_id_key\""
+    },
+    {
+      "id": 10005,
+      "word": "die Gnadenlehre",
+      "level": "C2",
+      "error": "duplicate key value violates unique constraint \"target_translations_arabic_source_lang_source_word_id_key\""
+    },
+    {
+      "id": 10007,
+      "word": "die Prädestination",
+      "level": "C2",
+      "error": "duplicate key value violates unique constraint \"target_translations_arabic_source_lang_source_word_id_key\""
+    },
+    {
+      "id": 10008,
+      "word": "die Theodizee",
+      "level": "C2",
+      "error": "duplicate key value violates unique constraint \"target_translations_arabic_source_lang_source_word_id_key\""
+    },
+    {
+      "id": 10009,
+      "word": "die Offenbarung",
+      "level": "C2",
+      "error": "duplicate key value violates unique constraint \"target_translations_arabic_source_lang_source_word_id_key\""
+    },
+    {
+      "id": 10011,
+      "word": "die Kanonizität",
+      "level": "C2",
+      "error": "duplicate key value violates unique constraint \"target_translations_arabic_source_lang_source_word_id_key\""
+    },
+    {
+      "id": 10012,
+      "word": "die Apokryphen",
+      "level": "C2",
+      "error": "duplicate key value violates unique constraint \"target_translations_arabic_source_lang_source_word_id_key\""
+    },
+    {
+      "id": 10013,
+      "word": "die Allegorese",
+      "level": "C2",
+      "error": "duplicate key value violates unique constraint \"target_translations_arabic_source_lang_source_word_id_key\""
+    },
+    {
+      "id": 10016,
+      "word": "die Inkarnation",
+      "level": "C2",
+      "error": "duplicate key value violates unique constraint \"target_translations_arabic_source_lang_source_word_id_key\""
+    },
+    {
+      "id": 10019,
+      "word": "die Transsubstantiation",
+      "level": "C2",
+      "error": "duplicate key value violates unique constraint \"target_translations_arabic_source_lang_source_word_id_key\""
+    },
+    {
+      "id": 10021,
+      "word": "die Realpräsenz",
+      "level": "C2",
+      "error": "duplicate key value violates unique constraint \"target_translations_arabic_source_lang_source_word_id_key\""
+    },
+    {
+      "id": 10024,
+      "word": "die Stellvertretung",
+      "level": "C2",
+      "error": "duplicate key value violates unique constraint \"target_translations_arabic_source_lang_source_word_id_key\""
+    },
+    {
+      "id": 10025,
+      "word": "die Auferstehung",
+      "level": "C2",
+      "error": "duplicate key value violates unique constraint \"target_translations_arabic_source_lang_source_word_id_key\""
+    },
+    {
+      "id": 10027,
+      "word": "die Parusie",
+      "level": "C2",
+      "error": "duplicate key value violates unique constraint \"target_translations_arabic_source_lang_source_word_id_key\""
+    },
+    {
+      "id": 10028,
+      "word": "das Jüngste Gericht",
+      "level": "C2",
+      "error": "duplicate key value violates unique constraint \"target_translations_arabic_source_lang_source_word_id_key\""
+    },
+    {
+      "id": 10030,
+      "word": "das Fegefeuer",
+      "level": "C2",
+      "error": "duplicate key value violates unique constraint \"target_translations_arabic_source_lang_source_word_id_key\""
+    },
+    {
+      "id": 10031,
+      "word": "die Heiligung",
+      "level": "C2",
+      "error": "duplicate key value violates unique constraint \"target_translations_arabic_source_lang_source_word_id_key\""
+    },
+    {
+      "id": 10035,
+      "word": "die Werkgerechtigkeit",
+      "level": "C2",
+      "error": "duplicate key value violates unique constraint \"target_translations_arabic_source_lang_source_word_id_key\""
+    },
+    {
+      "id": 10036,
+      "word": "der Synergismus",
+      "level": "C2",
+      "error": "duplicate key value violates unique constraint \"target_translations_arabic_source_lang_source_word_id_key\""
+    },
+    {
+      "id": 10038,
+      "word": "die Transzendenzerfahrung",
+      "level": "C2",
+      "error": "duplicate key value violates unique constraint \"target_translations_arabic_source_lang_source_word_id_key\""
+    },
+    {
+      "id": 10039,
+      "word": "die Mystik",
+      "level": "C2",
+      "error": "duplicate key value violates unique constraint \"target_translations_arabic_source_lang_source_word_id_key\""
+    },
+    {
+      "id": 10041,
+      "word": "die Askese",
+      "level": "C2",
+      "error": "duplicate key value violates unique constraint \"target_translations_arabic_source_lang_source_word_id_key\""
+    },
+    {
+      "id": 10042,
+      "word": "die Spiritualität",
+      "level": "C2",
+      "error": "duplicate key value violates unique constraint \"target_translations_arabic_source_lang_source_word_id_key\""
+    },
+    {
+      "id": 10043,
+      "word": "die Liturgie",
+      "level": "C2",
+      "error": "duplicate key value violates unique constraint \"target_translations_arabic_source_lang_source_word_id_key\""
+    },
+    {
+      "id": 10045,
+      "word": "die Taufe",
+      "level": "C2",
+      "error": "duplicate key value violates unique constraint \"target_translations_arabic_source_lang_source_word_id_key\""
+    },
+    {
+      "id": 10046,
+      "word": "die Firmung",
+      "level": "C2",
+      "error": "duplicate key value violates unique constraint \"target_translations_arabic_source_lang_source_word_id_key\""
+    },
+    {
+      "id": 10054,
+      "word": "die Reliquie",
+      "level": "C2",
+      "error": "duplicate key value violates unique constraint \"target_translations_arabic_source_lang_source_word_id_key\""
+    },
+    {
+      "id": 10058,
+      "word": "die Orthodoxie",
+      "level": "C2",
+      "error": "duplicate key value violates unique constraint \"target_translations_arabic_source_lang_source_word_id_key\""
+    },
+    {
+      "id": 10061,
+      "word": "die Konfession",
+      "level": "C2",
+      "error": "duplicate key value violates unique constraint \"target_translations_arabic_source_lang_source_word_id_key\""
+    },
+    {
+      "id": 10063,
+      "word": "die Gegenreformation",
+      "level": "C2",
+      "error": "duplicate key value violates unique constraint \"target_translations_arabic_source_lang_source_word_id_key\""
+    },
+    {
+      "id": 10065,
+      "word": "die Entmythologisierung",
+      "level": "C2",
+      "error": "duplicate key value violates unique constraint \"target_translations_arabic_source_lang_source_word_id_key\""
+    },
+    {
+      "id": 10066,
+      "word": "die Religionskritik",
+      "level": "C2",
+      "error": "duplicate key value violates unique constraint \"target_translations_arabic_source_lang_source_word_id_key\""
+    },
+    {
+      "id": 10077,
+      "word": "die Religionspsychologie",
+      "level": "C2",
+      "error": "duplicate key value violates unique constraint \"target_translations_arabic_source_lang_source_word_id_key\""
+    },
+    {
+      "id": 10079,
+      "word": "Wetter",
+      "level": "A1",
+      "error": "duplicate key value violates unique constraint \"target_translations_arabic_source_lang_source_word_id_key\""
+    },
+    {
+      "id": 10081,
+      "word": "Regen",
+      "level": "A1",
+      "error": "duplicate key value violates unique constraint \"target_translations_arabic_source_lang_source_word_id_key\""
+    },
+    {
+      "id": 10083,
+      "word": "Schnee",
+      "level": "A1",
+      "error": "duplicate key value violates unique constraint \"target_translations_arabic_source_lang_source_word_id_key\""
+    },
+    {
+      "id": 10084,
+      "word": "Wolke",
+      "level": "A1",
+      "error": "duplicate key value violates unique constraint \"target_translations_arabic_source_lang_source_word_id_key\""
+    },
+    {
+      "id": 10086,
+      "word": "Sommer",
+      "level": "A1",
+      "error": "duplicate key value violates unique constraint \"target_translations_arabic_source_lang_source_word_id_key\""
+    },
+    {
+      "id": 10088,
+      "word": "Winter",
+      "level": "A1",
+      "error": "duplicate key value violates unique constraint \"target_translations_arabic_source_lang_source_word_id_key\""
+    },
+    {
+      "id": 10090,
+      "word": "Donner",
+      "level": "A1",
+      "error": "duplicate key value violates unique constraint \"target_translations_arabic_source_lang_source_word_id_key\""
+    },
+    {
+      "id": 10094,
+      "word": "Haus",
+      "level": "A1",
+      "error": "duplicate key value violates unique constraint \"target_translations_arabic_source_lang_source_word_id_key\""
+    },
+    {
+      "id": 10102,
+      "word": "Fenster",
+      "level": "A1",
+      "error": "duplicate key value violates unique constraint \"target_translations_arabic_source_lang_source_word_id_key\""
+    },
+    {
+      "id": 10106,
+      "word": "Sofa",
+      "level": "A1",
+      "error": "duplicate key value violates unique constraint \"target_translations_arabic_source_lang_source_word_id_key\""
+    },
+    {
+      "id": 10112,
+      "word": "Dienstag",
+      "level": "A1",
+      "error": "duplicate key value violates unique constraint \"target_translations_arabic_source_lang_source_word_id_key\""
+    },
+    {
+      "id": 10118,
+      "word": "Januar",
+      "level": "A1",
+      "error": "duplicate key value violates unique constraint \"target_translations_arabic_source_lang_source_word_id_key\""
+    },
+    {
+      "id": 10122,
+      "word": "Mai",
+      "level": "A1",
+      "error": "duplicate key value violates unique constraint \"target_translations_arabic_source_lang_source_word_id_key\""
+    },
+    {
+      "id": 10128,
+      "word": "November",
+      "level": "A1",
+      "error": "duplicate key value violates unique constraint \"target_translations_arabic_source_lang_source_word_id_key\""
+    },
+    {
+      "id": 10130,
+      "word": "Wer",
+      "level": "A1",
+      "error": "duplicate key value violates unique constraint \"target_translations_arabic_source_lang_source_word_id_key\""
+    },
+    {
+      "id": 10132,
+      "word": "Wo",
+      "level": "A1",
+      "error": "duplicate key value violates unique constraint \"target_translations_arabic_source_lang_source_word_id_key\""
+    },
+    {
+      "id": 10134,
+      "word": "Woher",
+      "level": "A1",
+      "error": "duplicate key value violates unique constraint \"target_translations_arabic_source_lang_source_word_id_key\""
+    },
+    {
+      "id": 10140,
+      "word": "Welches",
+      "level": "A1",
+      "error": "duplicate key value violates unique constraint \"target_translations_arabic_source_lang_source_word_id_key\""
+    },
+    {
+      "id": 10150,
+      "word": "weil",
+      "level": "A1",
+      "error": "duplicate key value violates unique constraint \"target_translations_arabic_source_lang_source_word_id_key\""
+    },
+    {
+      "id": 10152,
+      "word": "dann",
+      "level": "A1",
+      "error": "duplicate key value violates unique constraint \"target_translations_arabic_source_lang_source_word_id_key\""
+    },
+    {
+      "id": 10160,
+      "word": "Uhr",
+      "level": "A1",
+      "error": "duplicate key value violates unique constraint \"target_translations_arabic_source_lang_source_word_id_key\""
+    },
+    {
+      "id": 10162,
+      "word": "Schlüssel",
+      "level": "A1",
+      "error": "duplicate key value violates unique constraint \"target_translations_arabic_source_lang_source_word_id_key\""
+    },
+    {
+      "id": 10170,
+      "word": "Brot",
+      "level": "A1",
+      "error": "duplicate key value violates unique constraint \"target_translations_arabic_source_lang_source_word_id_key\""
+    },
+    {
+      "id": 10173,
+      "word": "Fleisch",
+      "level": "A1",
+      "error": "duplicate key value violates unique constraint \"target_translations_arabic_source_lang_source_word_id_key\""
+    },
+    {
+      "id": 10177,
+      "word": "Banane",
+      "level": "A1",
+      "error": "duplicate key value violates unique constraint \"target_translations_arabic_source_lang_source_word_id_key\""
+    },
+    {
+      "id": 10183,
+      "word": "Salz",
+      "level": "A1",
+      "error": "duplicate key value violates unique constraint \"target_translations_arabic_source_lang_source_word_id_key\""
+    },
+    {
+      "id": 10185,
+      "word": "Öl",
+      "level": "A1",
+      "error": "duplicate key value violates unique constraint \"target_translations_arabic_source_lang_source_word_id_key\""
+    },
+    {
+      "id": 10195,
+      "word": "der Apfel",
+      "level": "A2",
+      "error": "duplicate key value violates unique constraint \"target_translations_arabic_source_lang_source_word_id_key\""
+    },
+    {
+      "id": 10197,
+      "word": "die Orange",
+      "level": "A2",
+      "error": "duplicate key value violates unique constraint \"target_translations_arabic_source_lang_source_word_id_key\""
+    },
+    {
+      "id": 10199,
+      "word": "der Käse",
+      "level": "A2",
+      "error": "duplicate key value violates unique constraint \"target_translations_arabic_source_lang_source_word_id_key\""
+    },
+    {
+      "id": 10201,
+      "word": "das Ei",
+      "level": "A2",
+      "error": "duplicate key value violates unique constraint \"target_translations_arabic_source_lang_source_word_id_key\""
+    },
+    {
+      "id": 10214,
+      "word": "die Medizin",
+      "level": "A2",
+      "error": "duplicate key value violates unique constraint \"target_translations_arabic_source_lang_source_word_id_key\""
+    },
+    {
+      "id": 10215,
+      "word": "die Tablette",
+      "level": "A2",
+      "error": "duplicate key value violates unique constraint \"target_translations_arabic_source_lang_source_word_id_key\""
+    },
+    {
+      "id": 10221,
+      "word": "der Fuß",
+      "level": "A2",
+      "error": "duplicate key value violates unique constraint \"target_translations_arabic_source_lang_source_word_id_key\""
+    },
+    {
+      "id": 10223,
+      "word": "der Rücken",
+      "level": "A2",
+      "error": "duplicate key value violates unique constraint \"target_translations_arabic_source_lang_source_word_id_key\""
+    },
+    {
+      "id": 10225,
+      "word": "das Auto",
+      "level": "A2",
+      "error": "duplicate key value violates unique constraint \"target_translations_arabic_source_lang_source_word_id_key\""
+    },
+    {
+      "id": 10227,
+      "word": "der Bus",
+      "level": "A2",
+      "error": "duplicate key value violates unique constraint \"target_translations_arabic_source_lang_source_word_id_key\""
+    },
+    {
+      "id": 10238,
+      "word": "der Großvater",
+      "level": "A2",
+      "error": "duplicate key value violates unique constraint \"target_translations_arabic_source_lang_source_word_id_key\""
+    },
+    {
+      "id": 10244,
+      "word": "die Ehefrau",
+      "level": "A2",
+      "error": "duplicate key value violates unique constraint \"target_translations_arabic_source_lang_source_word_id_key\""
+    },
+    {
+      "id": 10246,
+      "word": "der Freund",
+      "level": "A2",
+      "error": "duplicate key value violates unique constraint \"target_translations_arabic_source_lang_source_word_id_key\""
+    },
+    {
+      "id": 10248,
+      "word": "die Hochzeit",
+      "level": "A2",
+      "error": "duplicate key value violates unique constraint \"target_translations_arabic_source_lang_source_word_id_key\""
+    },
+    {
+      "id": 10250,
+      "word": "die Ehe",
+      "level": "A2",
+      "error": "duplicate key value violates unique constraint \"target_translations_arabic_source_lang_source_word_id_key\""
+    },
+    {
+      "id": 10252,
+      "word": "das Fenster",
+      "level": "A2",
+      "error": "duplicate key value violates unique constraint \"target_translations_arabic_source_lang_source_word_id_key\""
+    },
+    {
+      "id": 10254,
+      "word": "das Dach",
+      "level": "A2",
+      "error": "duplicate key value violates unique constraint \"target_translations_arabic_source_lang_source_word_id_key\""
+    },
+    {
+      "id": 10255,
+      "word": "die Wand",
+      "level": "A2",
+      "error": "duplicate key value violates unique constraint \"target_translations_arabic_source_lang_source_word_id_key\""
+    },
+    {
+      "id": 10265,
+      "word": "das Portemonnaie",
+      "level": "B1",
+      "error": "duplicate key value violates unique constraint \"target_translations_arabic_source_lang_source_word_id_key\""
+    },
+    {
+      "id": 10267,
+      "word": "das Angebot",
+      "level": "B1",
+      "error": "duplicate key value violates unique constraint \"target_translations_arabic_source_lang_source_word_id_key\""
+    },
+    {
+      "id": 10271,
+      "word": "die Aussage",
+      "level": "B2",
+      "error": "duplicate key value violates unique constraint \"target_translations_arabic_source_lang_source_word_id_key\""
+    },
+    {
+      "id": 10272,
+      "word": "die Schlussfolgerung",
+      "level": "B2",
+      "error": "duplicate key value violates unique constraint \"target_translations_arabic_source_lang_source_word_id_key\""
+    },
+    {
+      "id": 10273,
+      "word": "die Überzeugungskraft",
+      "level": "B2",
+      "error": "duplicate key value violates unique constraint \"target_translations_arabic_source_lang_source_word_id_key\""
+    },
+    {
+      "id": 10280,
+      "word": "die Aussersage",
+      "level": "B2",
+      "error": "duplicate key value violates unique constraint \"target_translations_arabic_source_lang_source_word_id_key\""
+    },
+    {
+      "id": 10283,
+      "word": "die Klarstellung",
+      "level": "B2",
+      "error": "duplicate key value violates unique constraint \"target_translations_arabic_source_lang_source_word_id_key\""
+    },
+    {
+      "id": 10285,
+      "word": "die Zweideutigkeit",
+      "level": "B2",
+      "error": "duplicate key value violates unique constraint \"target_translations_arabic_source_lang_source_word_id_key\""
+    },
+    {
+      "id": 10286,
+      "word": "die Deutung",
+      "level": "B2",
+      "error": "duplicate key value violates unique constraint \"target_translations_arabic_source_lang_source_word_id_key\""
+    },
+    {
+      "id": 10289,
+      "word": "die Expertise",
+      "level": "B2",
+      "error": "duplicate key value violates unique constraint \"target_translations_arabic_source_lang_source_word_id_key\""
+    },
+    {
+      "id": 10293,
+      "word": "das Lehrbuch",
+      "level": "B2",
+      "error": "duplicate key value violates unique constraint \"target_translations_arabic_source_lang_source_word_id_key\""
+    },
+    {
+      "id": 10299,
+      "word": "der Titel",
+      "level": "B2",
+      "error": "duplicate key value violates unique constraint \"target_translations_arabic_source_lang_source_word_id_key\""
+    },
+    {
+      "id": 10300,
+      "word": "die Auszeichnung",
+      "level": "B2",
+      "error": "duplicate key value violates unique constraint \"target_translations_arabic_source_lang_source_word_id_key\""
+    },
+    {
+      "id": 10304,
+      "word": "der Status",
+      "level": "B2",
+      "error": "duplicate key value violates unique constraint \"target_translations_arabic_source_lang_source_word_id_key\""
+    },
+    {
+      "id": 10305,
+      "word": "das Prestige",
+      "level": "B2",
+      "error": "duplicate key value violates unique constraint \"target_translations_arabic_source_lang_source_word_id_key\""
+    },
+    {
+      "id": 10311,
+      "word": "die Zuverlässigkeit",
+      "level": "B2",
+      "error": "duplicate key value violates unique constraint \"target_translations_arabic_source_lang_source_word_id_key\""
+    },
+    {
+      "id": 10315,
+      "word": "die Phantasie",
+      "level": "B2",
+      "error": "duplicate key value violates unique constraint \"target_translations_arabic_source_lang_source_word_id_key\""
+    },
+    {
+      "id": 10317,
+      "word": "die Zivilisation",
+      "level": "B2",
+      "error": "duplicate key value violates unique constraint \"target_translations_arabic_source_lang_source_word_id_key\""
+    },
+    {
+      "id": 10319,
+      "word": "der Feiertag",
+      "level": "B2",
+      "error": "duplicate key value violates unique constraint \"target_translations_arabic_source_lang_source_word_id_key\""
+    },
+    {
+      "id": 10322,
+      "word": "die Bindung",
+      "level": "B2",
+      "error": "duplicate key value violates unique constraint \"target_translations_arabic_source_lang_source_word_id_key\""
+    },
+    {
+      "id": 10324,
+      "word": "die Liebe",
+      "level": "B2",
+      "error": "duplicate key value violates unique constraint \"target_translations_arabic_source_lang_source_word_id_key\""
+    },
+    {
+      "id": 10326,
+      "word": "die Sympathie",
+      "level": "B2",
+      "error": "duplicate key value violates unique constraint \"target_translations_arabic_source_lang_source_word_id_key\""
+    },
+    {
+      "id": 10328,
+      "word": "die Solidarität",
+      "level": "B2",
+      "error": "duplicate key value violates unique constraint \"target_translations_arabic_source_lang_source_word_id_key\""
+    },
+    {
+      "id": 10332,
+      "word": "die Eintracht",
+      "level": "B2",
+      "error": "duplicate key value violates unique constraint \"target_translations_arabic_source_lang_source_word_id_key\""
+    },
+    {
+      "id": 10333,
+      "word": "das Vertrauen",
+      "level": "B2",
+      "error": "duplicate key value violates unique constraint \"target_translations_arabic_source_lang_source_word_id_key\""
+    },
+    {
+      "id": 10335,
+      "word": "die Loyalität",
+      "level": "B2",
+      "error": "duplicate key value violates unique constraint \"target_translations_arabic_source_lang_source_word_id_key\""
+    },
+    {
+      "id": 10338,
+      "word": "der Mut",
+      "level": "B2",
+      "error": "duplicate key value violates unique constraint \"target_translations_arabic_source_lang_source_word_id_key\""
+    },
+    {
+      "id": 10339,
+      "word": "die Tapferkeit",
+      "level": "B2",
+      "error": "duplicate key value violates unique constraint \"target_translations_arabic_source_lang_source_word_id_key\""
+    },
+    {
+      "id": 10346,
+      "word": "die Unhöflichkeit",
+      "level": "B2",
+      "error": "duplicate key value violates unique constraint \"target_translations_arabic_source_lang_source_word_id_key\""
+    },
+    {
+      "id": 10348,
+      "word": "die Zartheit",
+      "level": "B2",
+      "error": "duplicate key value violates unique constraint \"target_translations_arabic_source_lang_source_word_id_key\""
+    },
+    {
+      "id": 10352,
+      "word": "die Beistand",
+      "level": "B2",
+      "error": "duplicate key value violates unique constraint \"target_translations_arabic_source_lang_source_word_id_key\""
+    },
+    {
+      "id": 10354,
+      "word": "das Sein",
+      "level": "B2",
+      "error": "duplicate key value violates unique constraint \"target_translations_arabic_source_lang_source_word_id_key\""
+    },
+    {
+      "id": 10359,
+      "word": "die Wirklichkeit",
+      "level": "B2",
+      "error": "duplicate key value violates unique constraint \"target_translations_arabic_source_lang_source_word_id_key\""
+    },
+    {
+      "id": 10361,
+      "word": "die Schein",
+      "level": "B2",
+      "error": "duplicate key value violates unique constraint \"target_translations_arabic_source_lang_source_word_id_key\""
+    },
+    {
+      "id": 10362,
+      "word": "die Unwahrheit",
+      "level": "B2",
+      "error": "duplicate key value violates unique constraint \"target_translations_arabic_source_lang_source_word_id_key\""
+    },
+    {
+      "id": 10364,
+      "word": "das Trugbild",
+      "level": "B2",
+      "error": "duplicate key value violates unique constraint \"target_translations_arabic_source_lang_source_word_id_key\""
+    },
+    {
+      "id": 10366,
+      "word": "der Traum",
+      "level": "B2",
+      "error": "duplicate key value violates unique constraint \"target_translations_arabic_source_lang_source_word_id_key\""
+    },
+    {
+      "id": 10368,
+      "word": "der Nihilismus",
+      "level": "B2",
+      "error": "duplicate key value violates unique constraint \"target_translations_arabic_source_lang_source_word_id_key\""
+    },
+    {
+      "id": 10370,
+      "word": "der Absurdität",
+      "level": "B2",
+      "error": "duplicate key value violates unique constraint \"target_translations_arabic_source_lang_source_word_id_key\""
+    },
+    {
+      "id": 10374,
+      "word": "der Sarkasmus",
+      "level": "B2",
+      "error": "duplicate key value violates unique constraint \"target_translations_arabic_source_lang_source_word_id_key\""
+    },
+    {
+      "id": 10376,
+      "word": "die Sehnsucht",
+      "level": "B2",
+      "error": "duplicate key value violates unique constraint \"target_translations_arabic_source_lang_source_word_id_key\""
+    },
+    {
+      "id": 10378,
+      "word": "der Geist",
+      "level": "B2",
+      "error": "duplicate key value violates unique constraint \"target_translations_arabic_source_lang_source_word_id_key\""
+    },
+    {
+      "id": 10380,
+      "word": "das Gewissen",
+      "level": "B2",
+      "error": "duplicate key value violates unique constraint \"target_translations_arabic_source_lang_source_word_id_key\""
+    },
+    {
+      "id": 10384,
+      "word": "die Ekstase",
+      "level": "B2",
+      "error": "duplicate key value violates unique constraint \"target_translations_arabic_source_lang_source_word_id_key\""
+    },
+    {
+      "id": 10386,
+      "word": "der Rausch",
+      "level": "B2",
+      "error": "duplicate key value violates unique constraint \"target_translations_arabic_source_lang_source_word_id_key\""
+    },
+    {
+      "id": 10388,
+      "word": "die Ekstese",
+      "level": "B2",
+      "error": "duplicate key value violates unique constraint \"target_translations_arabic_source_lang_source_word_id_key\""
+    },
+    {
+      "id": 10392,
+      "word": "das Opfer",
+      "level": "B2",
+      "error": "duplicate key value violates unique constraint \"target_translations_arabic_source_lang_source_word_id_key\""
+    },
+    {
+      "id": 10399,
+      "word": "die Kraftlosigkeit",
+      "level": "B2",
+      "error": "duplicate key value violates unique constraint \"target_translations_arabic_source_lang_source_word_id_key\""
+    },
+    {
+      "id": 10401,
+      "word": "die Ratlosigkeit",
+      "level": "B2",
+      "error": "duplicate key value violates unique constraint \"target_translations_arabic_source_lang_source_word_id_key\""
+    },
+    {
+      "id": 10405,
+      "word": "die Schockierung",
+      "level": "B2",
+      "error": "duplicate key value violates unique constraint \"target_translations_arabic_source_lang_source_word_id_key\""
+    },
+    {
+      "id": 10407,
+      "word": "die Betäubung",
+      "level": "B2",
+      "error": "duplicate key value violates unique constraint \"target_translations_arabic_source_lang_source_word_id_key\""
+    },
+    {
+      "id": 10409,
+      "word": "die Erleichterung",
+      "level": "B2",
+      "error": "duplicate key value violates unique constraint \"target_translations_arabic_source_lang_source_word_id_key\""
+    },
+    {
+      "id": 10411,
+      "word": "die Befriedigung",
+      "level": "B2",
+      "error": "duplicate key value violates unique constraint \"target_translations_arabic_source_lang_source_word_id_key\""
+    },
+    {
+      "id": 10413,
+      "word": "die Lust",
+      "level": "B2",
+      "error": "duplicate key value violates unique constraint \"target_translations_arabic_source_lang_source_word_id_key\""
+    },
+    {
+      "id": 10424,
+      "word": "die Kühnheit",
+      "level": "B2",
+      "error": "duplicate key value violates unique constraint \"target_translations_arabic_source_lang_source_word_id_key\""
+    },
+    {
+      "id": 10431,
+      "word": "die Anbetung",
+      "level": "B2",
+      "error": "duplicate key value violates unique constraint \"target_translations_arabic_source_lang_source_word_id_key\""
+    },
+    {
+      "id": 10433,
+      "word": "die Ästhetik",
+      "level": "B2",
+      "error": "duplicate key value violates unique constraint \"target_translations_arabic_source_lang_source_word_id_key\""
+    },
+    {
+      "id": 10436,
+      "word": "die Virtuosität",
+      "level": "B2",
+      "error": "duplicate key value violates unique constraint \"target_translations_arabic_source_lang_source_word_id_key\""
+    },
+    {
+      "id": 10438,
+      "word": "die Eleganz",
+      "level": "B2",
+      "error": "duplicate key value violates unique constraint \"target_translations_arabic_source_lang_source_word_id_key\""
+    },
+    {
+      "id": 10439,
+      "word": "die Grazie",
+      "level": "B2",
+      "error": "duplicate key value violates unique constraint \"target_translations_arabic_source_lang_source_word_id_key\""
+    },
+    {
+      "id": 10441,
+      "word": "die Schönheit",
+      "level": "B2",
+      "error": "duplicate key value violates unique constraint \"target_translations_arabic_source_lang_source_word_id_key\""
+    },
+    {
+      "id": 10442,
+      "word": "die Hässlichkeit",
+      "level": "B2",
+      "error": "duplicate key value violates unique constraint \"target_translations_arabic_source_lang_source_word_id_key\""
+    },
+    {
+      "id": 10447,
+      "word": "die Prunk",
+      "level": "B2",
+      "error": "duplicate key value violates unique constraint \"target_translations_arabic_source_lang_source_word_id_key\""
+    },
+    {
+      "id": 10451,
+      "word": "die Ausschmückung",
+      "level": "B2",
+      "error": "duplicate key value violates unique constraint \"target_translations_arabic_source_lang_source_word_id_key\""
+    },
+    {
+      "id": 10452,
+      "word": "die Stilisierung",
+      "level": "B2",
+      "error": "duplicate key value violates unique constraint \"target_translations_arabic_source_lang_source_word_id_key\""
+    },
+    {
+      "id": 10454,
+      "word": "die Gestalt",
+      "level": "B2",
+      "error": "duplicate key value violates unique constraint \"target_translations_arabic_source_lang_source_word_id_key\""
+    },
+    {
+      "id": 10457,
+      "word": "das Ebenmaß",
+      "level": "B2",
+      "error": "duplicate key value violates unique constraint \"target_translations_arabic_source_lang_source_word_id_key\""
+    },
+    {
+      "id": 10460,
+      "word": "die Intensität",
+      "level": "B2",
+      "error": "duplicate key value violates unique constraint \"target_translations_arabic_source_lang_source_word_id_key\""
+    },
+    {
+      "id": 10471,
+      "word": "die Auslegungsmethode",
+      "level": "C2",
+      "error": "duplicate key value violates unique constraint \"target_translations_arabic_source_lang_source_word_id_key\""
+    },
+    {
+      "id": 10472,
+      "word": "die Normenkollision",
+      "level": "C2",
+      "error": "duplicate key value violates unique constraint \"target_translations_arabic_source_lang_source_word_id_key\""
+    },
+    {
+      "id": 10474,
+      "word": "die Rechtsicherheit",
+      "level": "C2",
+      "error": "duplicate key value violates unique constraint \"target_translations_arabic_source_lang_source_word_id_key\""
+    },
+    {
+      "id": 10478,
+      "word": "die Restitution",
+      "level": "C2",
+      "error": "duplicate key value violates unique constraint \"target_translations_arabic_source_lang_source_word_id_key\""
+    },
+    {
+      "id": 10479,
+      "word": "die Präventivfunktion",
+      "level": "C2",
+      "error": "duplicate key value violates unique constraint \"target_translations_arabic_source_lang_source_word_id_key\""
+    },
+    {
+      "id": 10480,
+      "word": "die Spezialprävention",
+      "level": "C2",
+      "error": "duplicate key value violates unique constraint \"target_translations_arabic_source_lang_source_word_id_key\""
+    },
+    {
+      "id": 10484,
+      "word": "die Deliktsfähigkeit",
+      "level": "C2",
+      "error": "duplicate key value violates unique constraint \"target_translations_arabic_source_lang_source_word_id_key\""
+    },
+    {
+      "id": 10489,
+      "word": "die Überzeugungstat",
+      "level": "C2",
+      "error": "duplicate key value violates unique constraint \"target_translations_arabic_source_lang_source_word_id_key\""
+    },
+    {
+      "id": 10491,
+      "word": "das Anklageprinzip",
+      "level": "C2",
+      "error": "duplicate key value violates unique constraint \"target_translations_arabic_source_lang_source_word_id_key\""
+    },
+    {
+      "id": 10493,
+      "word": "der Beweiswert",
+      "level": "C2",
+      "error": "duplicate key value violates unique constraint \"target_translations_arabic_source_lang_source_word_id_key\""
+    },
+    {
+      "id": 10499,
+      "word": "die Habitatzerstörung",
+      "level": "C2",
+      "error": "duplicate key value violates unique constraint \"target_translations_arabic_source_lang_source_word_id_key\""
+    },
+    {
+      "id": 10500,
+      "word": "die Degradation",
+      "level": "C2",
+      "error": "duplicate key value violates unique constraint \"target_translations_arabic_source_lang_source_word_id_key\""
+    },
+    {
+      "id": 10501,
+      "word": "die Versauerung",
+      "level": "C2",
+      "error": "duplicate key value violates unique constraint \"target_translations_arabic_source_lang_source_word_id_key\""
+    },
+    {
+      "id": 10505,
+      "word": "die Persistenz",
+      "level": "C2",
+      "error": "duplicate key value violates unique constraint \"target_translations_arabic_source_lang_source_word_id_key\""
+    },
+    {
+      "id": 10507,
+      "word": "die Langzeitdepression",
+      "level": "C2",
+      "error": "duplicate key value violates unique constraint \"target_translations_arabic_source_lang_source_word_id_key\""
+    },
+    {
+      "id": 10510,
+      "word": "der Myelin",
+      "level": "C2",
+      "error": "duplicate key value violates unique constraint \"target_translations_arabic_source_lang_source_word_id_key\""
+    },
+    {
+      "id": 10511,
+      "word": "die Rezeptoren",
+      "level": "C2",
+      "error": "duplicate key value violates unique constraint \"target_translations_arabic_source_lang_source_word_id_key\""
+    },
+    {
+      "id": 10518,
+      "word": "das Arbeitsgedächtnis",
+      "level": "C2",
+      "error": "duplicate key value violates unique constraint \"target_translations_arabic_source_lang_source_word_id_key\""
+    },
+    {
+      "id": 10519,
+      "word": "die Abrufbarkeit",
+      "level": "C2",
+      "error": "duplicate key value violates unique constraint \"target_translations_arabic_source_lang_source_word_id_key\""
+    },
+    {
+      "id": 10521,
+      "word": "die Amygdala",
+      "level": "C2",
+      "error": "duplicate key value violates unique constraint \"target_translations_arabic_source_lang_source_word_id_key\""
+    },
+    {
+      "id": 10523,
+      "word": "die Exekutiven Funktionen",
+      "level": "C2",
+      "error": "duplicate key value violates unique constraint \"target_translations_arabic_source_lang_source_word_id_key\""
+    },
+    {
+      "id": 10525,
+      "word": "die Kognitive Flexibilität",
+      "level": "C2",
+      "error": "duplicate key value violates unique constraint \"target_translations_arabic_source_lang_source_word_id_key\""
+    },
+    {
+      "id": 10534,
+      "word": "die Institutionalisierung",
+      "level": "C2",
+      "error": "duplicate key value violates unique constraint \"target_translations_arabic_source_lang_source_word_id_key\""
+    },
+    {
+      "id": 10536,
+      "word": "die Narrative Identität",
+      "level": "C2",
+      "error": "duplicate key value violates unique constraint \"target_translations_arabic_source_lang_source_word_id_key\""
+    },
+    {
+      "id": 10538,
+      "word": "die Deviance",
+      "level": "C2",
+      "error": "duplicate key value violates unique constraint \"target_translations_arabic_source_lang_source_word_id_key\""
+    },
+    {
+      "id": 10540,
+      "word": "die Multikulturalismus",
+      "level": "C2",
+      "error": "duplicate key value violates unique constraint \"target_translations_arabic_source_lang_source_word_id_key\""
+    }
+  ]
+}

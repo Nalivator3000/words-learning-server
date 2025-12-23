@@ -19,7 +19,7 @@ This document tracks the progress of vocabulary development across all language 
    - Created master README with all 6 priority language pairs
    - Designed metadata system for flexible vocabulary filtering
 
-2. **German → Russian (de-ru)** - CURRENT PROJECT
+2. **ru→de (Russian → German)** - CURRENT PROJECT
    - ✅ A1: Complete (800 words)
    - ✅ B2: **1,075 new words generated** (scripts created, ready for import)
    - 📋 C1: Planned (2,500 words)
@@ -27,9 +27,21 @@ This document tracks the progress of vocabulary development across all language 
 
 ---
 
+## Language Pair Notation Convention
+
+**Important:** We use the notation `native_lang → learning_lang` where the arrow points FROM the user's native language TO the language they are learning.
+
+- **ru→de** = Russian native speaker learning German
+- **ru→en** = Russian native speaker learning English
+- **en→es** = English native speaker learning Spanish
+
+See [LANGUAGE-PAIR-CONVENTION.md](./LANGUAGE-PAIR-CONVENTION.md) for full details.
+
+---
+
 ## Detailed Progress by Language Pair
 
-### 1. German → Russian (de-ru)
+### 1. ru→de (Russian → German)
 **Priority:** 🔥🔥🔥 CURRENT
 **Status:** In Progress (Phase 1 - Completing all levels)
 
@@ -76,7 +88,7 @@ This document tracks the progress of vocabulary development across all language 
 
 ---
 
-### 2. English → Russian (en-ru)
+### 2. ru→en (Russian → English)
 **Priority:** 🔥🔥🔥 HIGHEST
 **Status:** Planned (Detailed A1-B1 plan complete)
 
@@ -94,7 +106,7 @@ This document tracks the progress of vocabulary development across all language 
 
 ---
 
-### 3. Spanish → English (es-en)
+### 3. ru→es (Russian → Spanish)
 **Priority:** 🔥🔥🔥 HIGHEST
 **Status:** Planned (Detailed A1-B1 plan complete)
 
@@ -112,7 +124,7 @@ This document tracks the progress of vocabulary development across all language 
 
 ---
 
-### 4. French → English (fr-en)
+### 4. en→fr (English → French)
 **Priority:** 🔥🔥 HIGH
 **Status:** Planned (Detailed A1-B1 plan complete)
 
@@ -128,7 +140,7 @@ This document tracks the progress of vocabulary development across all language 
 
 ---
 
-### 5. Russian → English (ru-en)
+### 5. en→ru (English → Russian)
 **Priority:** 🔥🔥 HIGH
 **Status:** Planned (Detailed A1-B1 plan complete)
 
@@ -150,7 +162,7 @@ This document tracks the progress of vocabulary development across all language 
 
 ---
 
-### 6. Italian → English (it-en)
+### 6. en→it (English → Italian)
 **Priority:** 🔥 MEDIUM
 **Status:** Planned (Detailed A1-B1 plan complete)
 
@@ -184,6 +196,8 @@ This document tracks the progress of vocabulary development across all language 
 1. ✅ `docs/vocabulary-plans/README.md` - Index of all language pairs with priorities
 2. ✅ `docs/language-pairs-master-plan.md` - Business value analysis & development phases
 3. ✅ `docs/vocabulary-metadata-system.md` - Metadata & tagging system for custom collections
+4. ✅ `docs/LANGUAGE-PAIR-CONVENTION.md` - Language pair notation standard (native→learning)
+5. ✅ `docs/VOCABULARY-DATABASE-STATUS.md` - Complete status of database collection across all languages
 
 ### Complete Language Plans (A1-B1 Detailed, B2-C2 Outlined)
 1. ✅ `docs/vocabulary-plans/COMPLETE-en-ru-plan.md`
@@ -203,33 +217,33 @@ This document tracks the progress of vocabulary development across all language 
 
 ## Next Steps (Recommended Order)
 
-### Phase 1: Complete German (de-ru) - CURRENT
+### Phase 1: Complete ru→de (Russian → German) - CURRENT
 - [x] B2: Generate remaining vocabulary (1,075 words) ✅ DONE
 - [ ] B2: Import to Railway database (820 words ready)
 - [ ] C1: Generate vocabulary (2,500 words)
 - [ ] C2: Generate vocabulary (3,500 words)
 - [ ] C1-C2: Import to database
-- **Goal:** Complete de-ru to 100% (10,800 words)
+- **Goal:** Complete ru→de to 100% (10,800 words)
 
-### Phase 2: High-Impact English Learning
-**en-ru (English → Russian)**
+### Phase 2: High-Impact Language Pairs
+**ru→en (Russian → English)**
 - [ ] A1: Generate 20 collections (800 words)
 - [ ] A2: Generate 18 collections (1,000 words)
 - [ ] B1: Generate 14 collections (1,200 words)
 - [ ] Import A1-B1 to database (3,000 words)
-- **Goal:** Launch en-ru with A1-B1 foundation
+- **Goal:** Launch ru→en with A1-B1 foundation
 
-**es-en (Spanish → English)**
+**ru→es (Russian → Spanish)**
 - [ ] A1: Generate 20 collections (800 words)
 - [ ] A2: Generate 18 collections (1,000 words)
 - [ ] B1: Generate 14 collections (1,200 words)
 - [ ] Import A1-B1 to database (3,000 words)
-- **Goal:** Launch es-en with A1-B1 foundation
+- **Goal:** Launch ru→es with A1-B1 foundation
 
 ### Phase 3: Expand to Other Languages
-- French → English (fr-en) A1-B1
-- Russian → English (ru-en) A1-B1
-- Italian → English (it-en) A1-B1
+- en→fr (English → French) A1-B1
+- en→ru (English → Russian) A1-B1
+- en→it (English → Italian) A1-B1
 
 ### Phase 4: Complete Advanced Levels
 - Generate B2-C2 for all launched language pairs

@@ -1,415 +1,241 @@
-# Project Structure - Active Files
-**Version:** 5.4.6
-**Last Updated:** 2025-12-13
+# LexyBooster Project Structure
 
-## Core Application Files
+Last Updated: 2025-12-22
 
-### Server
-```
-server-postgresql.js          # Main Express server (PostgreSQL + Google TTS)
-package.json                  # Dependencies & scripts
-railway.json                  # Railway deployment config
-```
+---
 
-### Public Directory (Frontend)
+## Directory Structure
 
-#### Main HTML
 ```
-public/
-├── index.html               # Main app page (PWA)
-├── privacy.html             # Privacy policy
-├── terms.html               # Terms of service
-└── srs-explanation.html     # SRS algorithm explanation
-```
+words-learning-server/
+├── 📁 public/              # Frontend static files (HTML, CSS, JS)
+├── 📁 scripts/             # Database and utility scripts (organized by category)
+│   ├── checks/            # Database status and verification scripts
+│   ├── collections/       # CEFR collection generation scripts
+│   ├── imports/           # Vocabulary import scripts
+│   ├── translations/      # Translation automation scripts
+│   └── utils/             # General utility scripts
+├── 📁 migrations/          # Database migration scripts
+├── 📁 docs/                # Project documentation
+├── 📁 config/              # Configuration files
+├── 📁 utils/               # General utility scripts (icons, screenshots, etc.)
+├── 📁 temp/                # Temporary files and deprecated docs
+├── 📁 translations/        # Translation JSON files for UI
+├── 📁 test-data/           # Test data files
+├── 📁 tests/               # Automated tests
+├── 📁 releases/            # Release builds
+├── 📁 uploads/             # User uploaded files
+├── 📁 cache/               # Application cache
+├── 📁 audio-cache/         # TTS audio cache
+├── 📁 archive/             # Archived files
+├── 📄 server-postgresql.js # Main server file
+├── 📄 package.json         # NPM dependencies
+├── 📄 .env                 # Environment variables (not in git)
+└── 📄 README.md            # Main project README
 
-#### Core JavaScript Modules
-```
-public/
-├── app.js                   # Main application controller (v5.4.6)
-├── audio-manager.js         # TTS & audio playback (v5.4.6, Google TTS API)
-├── api-database.js          # API client for backend
-├── quiz.js                  # Quiz logic & UI
-├── i18n.js                  # Internationalization system
-├── language-manager.js      # Language pair management
-├── user-manager.js          # User authentication & state
-├── theme.js                 # Dark/light theme switching
-├── toast.js                 # Toast notifications
-└── onboarding.js           # First-time user onboarding
-```
-
-#### UI Components
-```
-public/
-├── add-word-ui.js          # Add/import words interface
-├── gamification.js         # XP, achievements, levels
-├── achievements-ui.js      # Achievements display
-├── leagues-ui.js           # League system UI
-├── weekly-challenges-ui.js # Weekly challenges UI
-├── personal-rating-ui.js   # Personal rating display
-├── personal-insights-ui.js # Learning insights
-├── friends-ui.js           # Social features
-├── duels-ui.js            # Duel system UI
-├── duel-gameplay.js       # Duel gameplay logic
-├── profile-ui.js          # User profile
-├── word-lists-ui.js       # Pre-made word lists
-├── features-ui.js         # Feature showcase
-├── survival-mode.js       # Survival quiz mode
-└── auth-validation.js     # Form validation
-```
-
-#### Styling
-```
-public/
-├── style.css              # Main stylesheet (Tailwind + custom)
-├── gamification.css       # Gamification-specific styles
-├── achievements-ui.css
-├── leagues-ui.css
-├── weekly-challenges-ui.css
-├── personal-rating-ui.css
-├── personal-insights-ui.css
-├── friends-ui.css
-├── duels-ui.css
-├── duel-gameplay.css
-├── profile-ui.css
-├── word-lists-ui.css
-├── features-ui.css
-└── css/
-    └── tailwind-input.css  # Tailwind source
-```
-
-#### PWA Configuration
-```
-public/
-├── service-worker.js      # Service Worker (v5.4.6, network-first caching)
-├── manifest.json          # PWA manifest
-└── .well-known/
-    └── assetlinks.json    # Android app verification
-```
-
-#### Translations
-```
-public/translations/
-└── source-texts.json      # Unified translation system (en/ru/de)
-```
-
-#### Debug Tools (Keep)
-```
-public/
-├── debug-test.html        # Debug utility
-└── test.html             # Test page
 ```
 
 ---
 
-## Database Schema
+## Scripts Organization
 
-### PostgreSQL Tables
-```sql
--- Core
-users                      # User accounts (email, provider, preferences)
-words                      # User's vocabulary
-language_pairs             # Available language combinations
-word_lists                 # Pre-made word lists
-word_list_words            # Word list contents
+### `/scripts/checks/`
+Database status and verification scripts
 
--- Gamification
-daily_goals                # Daily XP goals
-user_points_transactions   # XP transaction log
-user_achievements          # Unlocked achievements
-user_leagues               # League memberships
-weekly_challenges          # Weekly challenge instances
-user_weekly_challenges     # User challenge progress
+- `check-collections-*.js` - Verify collection data
+- `check-vocab-status.js` - Check vocabulary database status
+- `check-ru-de-collections.js` - Verify ru→de collections
+- `check-language-pairs.js` - Check language pair configuration
+- `delete-*.js` - Cleanup scripts
 
--- Social
-friendships                # Friend connections
-duels                      # Duel matches
-duel_rounds                # Individual duel rounds
+### `/scripts/collections/`
+CEFR vocabulary collection generation
 
--- Word Sets
-cefr_word_sets            # CEFR level word sets
-thematic_word_sets        # Thematic word sets
-```
+- `create-german-a1-thematic-collections.js` - A1 German collections
+- `create-b2-collections.js` - B2 level collections
+- `generate-vocab-templates.js` - Template generation
 
----
+### `/scripts/imports/`
+Vocabulary import from external sources
 
-## Configuration Files
+- `import-frequency-words.js` - Import 10K most common words (EN/ES)
+- `import-oxford-5000.js` - Import Oxford 5000 words
+- `import-german-*.js` - German vocabulary imports
+- `import-c1-universal.js` - C1 level imports
+- `import-c2-universal.js` - C2 level imports
+- `collect-english-vocabulary.js` - Manual English collection
 
-```
-.gitignore                # Git ignore rules
-tailwind.config.js        # Tailwind CSS configuration
-playwright.config.js      # E2E test configuration
-package.json              # NPM dependencies
-package-lock.json         # Locked dependency versions
-railway.json              # Railway deployment settings
-```
+### `/scripts/translations/`
+Auto-translation scripts using Google Translate API
+
+- `translate-all-to-english.js` - DE→EN translations
+- `translate-all-to-spanish.js` - DE→ES translations
+- `translate-all-to-russian.js` - DE/EN/ES→RU translations
+- `translate-all-to-[lang].js` - Other language pairs
+- `auto-translate.js` - Generic translation utility
+
+### `/scripts/utils/`
+Miscellaneous utility scripts
 
 ---
 
-## Documentation (Essential)
+## Utils Organization
 
-### User Guides
-```
-README.md                 # Main project README
-GOOGLE_TTS_SETUP.md      # Google Cloud TTS setup guide
-I18N_README.md           # Translation system guide
-TESTING_GUIDE.md         # Testing instructions
-```
+### `/utils/`
+General application utilities
 
-### Development
-```
-CHANGELOG.md             # Version history
-VERSION.md               # Current version info
-DEVELOPMENT_WORKFLOW.md  # Dev workflow guide
-TROUBLESHOOTING.md       # Common issues & solutions
-QUICK_REFERENCE.md       # Quick start guide
-```
-
-### Deployment
-```
-RAILWAY_DEPLOYMENT_GUIDE.md
-ANDROID_RELEASE_README.md
-GOOGLE_PLAY_SETUP_GUIDE.md
-KEYSTORE_SETUP.md
-```
+- `generate-icons.js` - Icon generation
+- `generate-screenshots.js` - Screenshot automation
+- `generate-feature-graphic.js` - App store graphics
+- `check-site.js` - Site health check
+- `fix-quiz-audio.js` - Audio fixes
 
 ---
 
-## Utility Scripts (Active)
+## Temp Directory
 
-### Testing & Validation
-```
-check-site.js            # Health check script
-test-api-endpoints.js    # API testing
-test-production.js       # Production verification
-test-validation.js       # Data validation
-```
+### `/temp/`
+Temporary and deprecated files (safe to clean up)
 
-### Database Management
-```
-list-users.js           # List all database users
-```
-
-### Icon Generation
-```
-generate-icons.js       # Generate PWA icons
-generate-screenshots.js # Generate app screenshots
-generate-feature-graphic.js
-```
-
-### Translation Tools
-```
-generate-translation-lists.js
-check-i18n-coverage.js
-```
-
-### Build Tools
-```
-update-version.js       # Version bumping utility
-```
+- Deprecated documentation (`.md` files)
+- Temporary SQL scripts
+- Debug files (`translation-errors-*.json`)
+- Old configuration backups
 
 ---
 
-## Scripts Directory (Active)
+## Key Configuration Files
 
-### Screenshot Generation
-```
-scripts/
-├── generate-screenshots.js
-├── generate-screenshots-simple.js
-└── build-aab.js       # Android AAB build
-```
+### Root Level
+- `.env` - Environment variables (DATABASE_URL, API keys)
+- `.env.example` - Example environment configuration
+- `package.json` - NPM dependencies and scripts
+- `.gitignore` - Git ignore patterns
+- `server-postgresql.js` - Main Express server (12,000+ lines)
 
-### Translation Management
-```
-scripts/
-├── check-active-keys.js
-├── check-ui-keys.js
-├── auto-translate.js
-└── mass-translate.js
-```
+### Documentation
+- `README.md` - Main project overview
+- `docs/VOCABULARY-DATABASE-STATUS.md` - Vocabulary collection status
+- `docs/PROGRESS.md` - Development progress tracker
+- `docs/LANGUAGE-PAIR-CONVENTION.md` - Language pair notation guide
 
 ---
 
-## Test Suite
+## Database Structure
 
-```
-tests/e2e/
-├── mobile-layout.spec.js     # Mobile UI tests
-├── new-features.spec.js      # Feature tests
-└── onboarding.spec.js        # Onboarding flow tests
-```
+### Source Words Tables
+- `source_words_german` - German vocabulary (10,540 words)
+- `source_words_english` - English vocabulary (TBD)
+- `source_words_spanish` - Spanish vocabulary (TBD)
+- `source_words_[language]` - Other languages
 
----
+### Translation Tables
+- `target_translations_russian` - Translations to Russian
+- `target_translations_english` - Translations to English
+- `target_translations_[language]` - Other target languages
 
-## Third-Party Integrations
+### Collections
+- `universal_collections` - Public CEFR word collections
+- `universal_collection_words` - Words in each collection
 
-### Google Cloud
-- **Google Cloud TTS API** - High-quality text-to-speech
-  - Service Account authentication
-  - Neural2 voices
-  - MP3 audio caching in `audio-cache/`
-
-### Railway
-- **Deployment Platform**
-  - PostgreSQL database hosting
-  - Environment variables
-  - Custom domain (lexybooster.com)
-
-### Google Play
-- **Android App Distribution**
-  - TWA (Trusted Web Activity)
-  - APK/AAB builds
+### User Data
+- `users` - User accounts
+- `language_pairs` - User language pair selections
+- `words` - User's personal vocabulary
+- `quiz_sessions` - Quiz history
 
 ---
 
-## Environment Variables (Required)
+## Development Workflow
 
+### 1. Check Database Status
 ```bash
-# Database
-DATABASE_URL=postgresql://...
+node scripts/checks/check-vocab-status.js
+node scripts/checks/check-language-pairs.js
+```
 
-# Google Cloud
-GOOGLE_APPLICATION_CREDENTIALS_JSON="{...}"  # Service Account JSON
+### 2. Import Vocabulary
+```bash
+# English + Spanish (10K words each)
+node scripts/imports/import-frequency-words.js
 
-# Session
-SESSION_SECRET=...
+# Oxford 5000 (higher quality, smaller corpus)
+node scripts/imports/import-oxford-5000.js
+```
 
-# Server
-PORT=3001  # Default port
+### 3. Generate Translations
+```bash
+# German → English (if needed)
+node scripts/translations/translate-all-to-english.js
+
+# German → Spanish
+node scripts/translations/translate-all-to-spanish.js
+
+# English/Spanish → Russian (for ru→en, ru→es pairs)
+node scripts/translations/translate-english-to-russian.js
+```
+
+### 4. Create CEFR Collections
+```bash
+node scripts/collections/create-german-a1-thematic-collections.js
+node scripts/collections/create-b2-collections.js
 ```
 
 ---
 
-## Key Features
-
-### Audio System (v5.4.6)
-- **Mobile:** Always uses Google Cloud TTS API (Neural2 voices)
-- **Desktop:** Uses browser Web Speech API (filtered quality voices)
-- **Caching:** MP3 files cached in `audio-cache/` directory
-- **Fallback:** Graceful degradation if API unavailable
-
-### Service Worker (v5.4.6)
-- **Strategy:** Network-first for JS/CSS/HTML
-- **Query Params:** Strips `?v=X.X.X` from cache keys
-- **Offline:** Falls back to cached versions when offline
-- **Auto-update:** Checks for updates every 10 seconds
-
-### PWA Features
-- Offline support
-- Add to home screen
-- Push notifications (planned)
-- Fast loading with caching
-
----
-
-## File Naming Conventions
-
-### Version Queries
-All JS/CSS files use version query params for cache busting:
-```html
-<script src="app.js?v=5.4.6"></script>
-<script src="audio-manager.js?v=5.4.6"></script>
-```
-
-### Service Worker Versioning
-```javascript
-const CACHE_VERSION = 'v5.4.6';
-const CACHE_NAME = `words-learning-${CACHE_VERSION}`;
-```
-
----
-
-## Dependencies (Key Packages)
-
-### Backend
-```json
-"express": "^4.18.2"
-"pg": "^8.11.3"              // PostgreSQL client
-"@google-cloud/text-to-speech": "^5.0.3"
-"express-session": "^1.17.3"
-"passport": "^0.6.0"
-"dotenv": "^16.3.1"
-```
-
-### Frontend (Via CDN)
-- Tailwind CSS
-- Google Fonts
-- PWA utilities
-
-### Development
-```json
-"playwright": "^1.40.0"       // E2E testing
-"tailwindcss": "^3.3.5"       // CSS framework
-```
-
----
-
-## Build Process
+## Running the Server
 
 ### Development
 ```bash
-npm start                    # Start dev server (port 3001)
+npm start
 ```
 
-### Production
-```bash
-# Railway auto-deploys from develop branch
-git push origin develop      # Triggers deployment
-```
-
-### Android Build
-```bash
-npm run build:aab           # Generate AAB for Play Store
-```
-
-### Testing
-```bash
-npm test                    # Run Playwright tests
-npm run test:e2e:mobile     # Mobile-specific tests
-```
+### Production (Railway)
+Automatic deployment on push to `main` or `develop` branch.
 
 ---
 
-## Deployment Flow
+## Common Tasks
 
-```
-Local Development
-    ↓ (git push origin develop)
-Railway CI/CD
-    ↓ (auto-deploy)
-Production Server
-    └─ lexybooster.com
-```
+### Add New Language Pair
+1. Create `source_words_[language]` table
+2. Create import script in `scripts/imports/`
+3. Create translation script in `scripts/translations/`
+4. Update language pair mappings in `server-postgresql.js`
 
-### Railway Services
-- **Web Service:** Express server
-- **PostgreSQL:** Database (shared)
-- **Environment:** Production variables
+### Generate New CEFR Level
+1. Create collection script in `scripts/collections/`
+2. Define word lists by theme
+3. Run import script to populate database
+
+### Check System Status
+```bash
+node scripts/checks/check-vocab-status.js
+node scripts/checks/check-collections-visibility.js
+```
 
 ---
 
 ## Important Notes
 
-### Audio Cache
-- Directory: `audio-cache/`
-- Format: `{MD5_hash}.mp3`
-- Never expires (persistent cache)
-- Not in git (ignored)
+### Language Pair Convention
+`native_lang → learning_lang`
 
-### Service Worker Updates
-- Auto-checks every 10 seconds
-- Shows update banner with countdown
-- Forces reload after 3 seconds
-- Clears old caches on activation
+Example: **ru→de** = Russian native speaker learning German
 
-### Mobile Detection
-```javascript
-const isMobile = /Android|iPhone|iPad|iPod|Mobile/i.test(navigator.userAgent);
-```
+See [docs/LANGUAGE-PAIR-CONVENTION.md](docs/LANGUAGE-PAIR-CONVENTION.md) for details.
+
+### Translation Quality
+- **de→ru**: ⭐⭐⭐⭐⭐ (Manual, high quality)
+- **de→en**: ⭐⭐⭐⭐ (Auto-translate, good quality)
+- **en/es→ru**: ⭐⭐⭐ (Auto-translate, needs review)
 
 ---
 
-**See also:**
-- [PROJECT_CLEANUP_PLAN.md](./PROJECT_CLEANUP_PLAN.md) - Cleanup strategy for old files
-- [CHANGELOG.md](./CHANGELOG.md) - Version history
-- [GOOGLE_TTS_SETUP.md](./GOOGLE_TTS_SETUP.md) - TTS setup guide
+## Next Steps
+
+See [docs/VOCABULARY-DATABASE-STATUS.md](docs/VOCABULARY-DATABASE-STATUS.md) for:
+- Current vocabulary status
+- Ready-to-run scripts
+- Missing translations
+- Action plan for new language pairs

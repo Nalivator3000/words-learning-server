@@ -131,7 +131,20 @@
       "Bash(docker ps:*)",
       "Bash(npx:*)",
       "Bash(sqlite3:*)",
-      "Bash(git rebase:*)"
+      "Bash(git rebase:*)",
+      "Bash(node scripts/create-german-a1-thematic-collections.js:*)",
+      "Bash(railway login:*)",
+      "Bash(timeout 90 bash:*)",
+      "Bash(node scripts/import-german-level.js:*)",
+      "Bash(node scripts/delete-a2-collections.js:*)",
+      "Bash(node scripts/generate-vocab-templates.js:*)",
+      "Bash(for i in 3 4)",
+      "Bash(do echo \"=== Part $i ===\")",
+      "Bash(if [ -f scripts/create-c2-part6.js ])",
+      "Bash(then node scripts/create-c2-part6.js)",
+      "Bash(else echo \"Part 6 ещё не создан\")",
+      "Bash(wmic process where ProcessId=28528 delete)",
+      "Bash(wmic process:*)"
     ],
     "deny": [],
     "ask": []
