@@ -785,6 +785,7 @@ textarea {
 
 .auth-tabs {
     display: flex;
+    gap: 8px;
     margin-bottom: var(--space-8);
     background: rgba(255, 255, 255, 0.1);
     border-radius: var(--radius-2xl);
@@ -1046,6 +1047,9 @@ textarea {
     color: rgba(255, 255, 255, 0.7);
     position: relative;
     font-weight: 600;
+    background: transparent;
+    padding: 0 var(--space-4);
+    display: inline-block;
 }
 
 .auth-divider::before {
@@ -1057,11 +1061,6 @@ textarea {
     height: 1px;
     background: rgba(255, 255, 255, 0.2);
     z-index: -1;
-}
-
-.auth-divider {
-    background: transparent;
-    padding: 0 var(--space-4);
 }
 
 .auth-error {
