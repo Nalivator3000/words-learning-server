@@ -78,13 +78,25 @@ class WordListsUI {
 
             if (this.currentFilter.category) params.append('category', this.currentFilter.category);
             if (this.currentFilter.difficulty) params.append('difficulty', this.currentFilter.difficulty);
+            if (this.currentFilter.level) params.append('difficulty', this.currentFilter.level);  // CEFR level filter
             if (this.currentFilter.topic) params.append('topic', this.currentFilter.topic);
 
             if (params.toString()) {
                 url += '?' + params.toString();
             }
 
-            const response = await fetch(url);
+            // Add cache-busting parameter
+            const separator = url.includes('?') ? '&' : '?';
+            url += `${separator}_t=${Date.now()}`;
+
+            console.log('📋 Fetching word lists from:', url);
+            const response = await fetch(url, {
+                cache: 'no-cache',
+                headers: {
+                    'Cache-Control': 'no-cache',
+                    'Pragma': 'no-cache'
+                }
+            });
             if (!response.ok) {
                 console.warn('Traditional word lists not available');
                 this.wordLists = [];
@@ -92,7 +104,8 @@ class WordListsUI {
             }
 
             this.wordLists = await response.json();
-            console.log('Traditional word lists loaded:', this.wordLists);
+            console.log('✅ Traditional word lists loaded:', this.wordLists.length, 'lists');
+            console.log('Lists:', this.wordLists.map(l => l.name));
         } catch (error) {
             console.warn('Error loading traditional word lists:', error);
             this.wordLists = [];
@@ -201,22 +214,13 @@ class WordListsUI {
                 </div>
             </div>
 
-            <!-- Word List Detail Modal -->
-            <div id="wordListModal" class="modal" style="display: none;">
-                <div class="modal-content word-list-modal">
-                    <div class="modal-header">
-                        <h3 id="modalListTitle"></h3>
-                        <button class="close-btn" id="closeModalBtn">&times;</button>
-                    </div>
-                    <div id="modalListContent" class="modal-body">
-                        <!-- Dynamic content -->
-                    </div>
-                </div>
-            </div>
         `;
 
         // Add event listeners
         this.attachEventListeners();
+
+        // Create modal outside of main container for proper z-index stacking
+        this.createModal();
 
         // Update i18n
         if (window.i18n) {
@@ -373,6 +377,50 @@ class WordListsUI {
         `;
     }
 
+    createModal() {
+        // Remove existing modal if it exists
+        const existingModal = document.getElementById('wordListModal');
+        if (existingModal) {
+            existingModal.remove();
+        }
+
+        // Create modal at body level (not inside wordListsContent)
+        const modalHTML = `
+            <div id="wordListModal" class="modal" style="display: none;">
+                <div class="modal-content word-list-modal">
+                    <div class="modal-header">
+                        <h3 id="modalListTitle"></h3>
+                        <button class="close-btn" id="closeModalBtn">&times;</button>
+                    </div>
+                    <div id="modalListContent" class="modal-body">
+                        <!-- Dynamic content -->
+                    </div>
+                </div>
+            </div>
+        `;
+
+        // Append to body
+        document.body.insertAdjacentHTML('beforeend', modalHTML);
+
+        // Attach modal event listeners
+        const closeModalBtn = document.getElementById('closeModalBtn');
+        if (closeModalBtn) {
+            closeModalBtn.addEventListener('click', () => {
+                this.closeModal();
+            });
+        }
+
+        // Close modal when clicking on backdrop
+        const modal = document.getElementById('wordListModal');
+        if (modal) {
+            modal.addEventListener('click', (e) => {
+                if (e.target === modal) {
+                    this.closeModal();
+                }
+            });
+        }
+    }
+
     attachEventListeners() {
         // Filter listeners
         const cefrLevelFilter = document.getElementById('cefrLevelFilter');
@@ -432,29 +480,58 @@ class WordListsUI {
                 }
             });
         });
-
-        // Modal close button
-        const closeModalBtn = document.getElementById('closeModalBtn');
-        if (closeModalBtn) {
-            closeModalBtn.addEventListener('click', () => {
-                this.closeModal();
-            });
-        }
     }
 
     async viewWordList(listId) {
         try {
-            const response = await fetch(`/api/word-lists/${listId}`);
-            if (!response.ok) throw new Error('Failed to load word list details');
+            // Build URL with native language parameter if available
+            let url = `/api/word-lists/${listId}`;
+            if (this.languagePair && this.languagePair.to_lang) {
+                url += `?native_lang=${this.languagePair.to_lang}`;
+            }
+
+            const response = await fetch(url, {
+                cache: 'no-cache',
+                headers: {
+                    'Cache-Control': 'no-cache',
+                    'Pragma': 'no-cache'
+                }
+            });
+            if (!response.ok) {
+                const errorText = await response.text();
+                console.error('API Error:', response.status, errorText);
+                throw new Error('Failed to load word list details');
+            }
 
             const list = await response.json();
+            console.log('📋 Word list loaded:', list);
+            console.log('📋 Words array length:', list.words ? list.words.length : 'NO WORDS ARRAY');
+            console.log('📋 Words data:', list.words);
+            if (list.words && list.words.length > 0) {
+                console.log('📋 First word:', list.words[0]);
+                console.log('📋 First word keys:', Object.keys(list.words[0]));
+            } else {
+                console.warn('⚠️ No words in list!');
+            }
             this.selectedList = list;
 
             const modal = document.getElementById('wordListModal');
             const modalTitle = document.getElementById('modalListTitle');
             const modalContent = document.getElementById('modalListContent');
 
+            if (!modal) {
+                console.error('❌ Modal element not found: wordListModal');
+                throw new Error('Modal element not found');
+            }
+            if (!modalTitle) {
+                console.error('❌ Modal title element not found: modalListTitle');
+            }
+            if (!modalContent) {
+                console.error('❌ Modal content element not found: modalListContent');
+            }
+
             if (modal && modalTitle && modalContent) {
+                console.log('✅ All modal elements found, displaying modal...');
                 modalTitle.textContent = list.name;
 
                 modalContent.innerHTML = `
@@ -462,26 +539,26 @@ class WordListsUI {
                         <div class="list-detail-info">
                             <p class="list-detail-description">${list.description || 'No description'}</p>
                             <div class="list-detail-meta">
-                                <span><strong>${list.word_count}</strong> <span data-i18n="words">words</span></span>
-                                <span><strong>${list.from_lang.toUpperCase()}</strong> → <strong>${list.to_lang.toUpperCase()}</strong></span>
-                                <span><strong>${list.difficulty_level}</strong></span>
+                                <span><strong>${list.word_count || 0}</strong> <span data-i18n="words">words</span></span>
+                                ${list.from_lang && list.to_lang ? `<span><strong>${list.from_lang.toUpperCase()}</strong> → <strong>${list.to_lang.toUpperCase()}</strong></span>` : ''}
+                                ${list.difficulty_level ? `<span><strong>${list.difficulty_level}</strong></span>` : ''}
                                 ${list.topic ? `<span><strong>${list.topic}</strong></span>` : ''}
                             </div>
                         </div>
 
                         <div class="words-list">
-                            ${list.words.map((word, index) => `
+                            ${(list.words || []).map((word, index) => `
                                 <div class="word-item">
                                     <div class="word-number">${index + 1}</div>
                                     <div class="word-content">
                                         <div class="word-main">
-                                            <strong>${word.word}</strong>
-                                            <span class="word-translation">${word.translation}</span>
+                                            <strong>${word.word || 'N/A'}</strong>
+                                            <span class="word-translation">${word.translation || 'N/A'}</span>
                                         </div>
                                         ${word.example ? `
                                             <div class="word-example">
                                                 <div class="example-text">${word.example}</div>
-                                                ${word.exampletranslation ? `<div class="example-translation">${word.exampletranslation}</div>` : ''}
+                                                ${word.exampletranslation || word.exampleTranslation ? `<div class="example-translation">${word.exampletranslation || word.exampleTranslation}</div>` : ''}
                                             </div>
                                         ` : ''}
                                     </div>
@@ -497,7 +574,10 @@ class WordListsUI {
                     </div>
                 `;
 
+                console.log('📺 Setting modal display to flex...');
                 modal.style.display = 'flex';
+                console.log('📺 Modal display set:', modal.style.display);
+                console.log('📺 Modal computed style:', window.getComputedStyle(modal).display);
 
                 // Add import button listener
                 const importBtn = document.getElementById('importFromModalBtn');

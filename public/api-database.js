@@ -166,6 +166,18 @@ class APIDatabase {
         return await this.apiRequest(`/api/words/random/review/${count}?${params.toString()}`);
     }
 
+    async getProportionalWords(count = 10) {
+        // Get proportionally distributed words from all statuses
+        const { userId, languagePairId } = this.getUserContext();
+
+        if (!userId || !languagePairId) {
+            throw new Error('Missing userId or languagePairId');
+        }
+
+        const params = new URLSearchParams({ userId, languagePairId });
+        return await this.apiRequest(`/api/words/random-proportional/${count}?${params.toString()}`);
+    }
+
     async getWordById(wordId) {
         return await this.apiRequest(`/api/words/${wordId}`);
     }

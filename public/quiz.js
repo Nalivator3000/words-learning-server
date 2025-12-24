@@ -17,34 +17,10 @@ class QuizManager {
         this.questions = [];
         this.wordCount = 0;
 
-        // Get words - ALWAYS mix new words and reviews for better learning
-        let words = [];
-
-        if (mode === 'study') {
-            // In study mode: 70% new words, 30% reviews (if available)
-            const newWordsCount = Math.ceil(questionCount * 0.7);
-            const reviewCount = questionCount - newWordsCount;
-
-            const newWords = await database.getRandomWords('studying', newWordsCount);
-            const reviewWords = await database.getReviewWords(reviewCount);
-
-            words = [...newWords, ...reviewWords];
-
-            // Shuffle to mix new and review words
-            words.sort(() => 0.5 - Math.random());
-        } else if (mode === 'review') {
-            // In review mode: 70% reviews, 30% new words (if available)
-            const reviewCount = Math.ceil(questionCount * 0.7);
-            const newWordsCount = questionCount - reviewCount;
-
-            const reviewWords = await database.getReviewWords(reviewCount);
-            const newWords = await database.getRandomWords('studying', newWordsCount);
-
-            words = [...reviewWords, ...newWords];
-
-            // Shuffle to mix review and new words
-            words.sort(() => 0.5 - Math.random());
-        }
+        // Get words proportionally from all statuses (studying, review_1, review_3, etc.)
+        // This ensures variety and prevents seeing the same words repeatedly
+        // Words are distributed based on the proportion of each status in the user's vocabulary
+        let words = await database.getProportionalWords(questionCount);
 
         if (words.length === 0) {
             throw new Error(i18n.t('no_words_to_study'));

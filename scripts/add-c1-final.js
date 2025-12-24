@@ -1,0 +1,133 @@
+// German C1 Level - Final Collection
+// Advanced vocabulary: sophisticated academic and professional terms
+// Total: exactly 106 words
+
+const collections = [
+  {
+    name: "C1: Advanced Academic & Professional Vocabulary",
+    description: "Sophisticated terminology for academic discourse, professional communication, and specialized knowledge",
+    level: "C1",
+    words: [
+      // Sophisticated Academic Discourse (53 words)
+      { word: "die Dissertation", translation: "диссертация", example: "Die Dissertation wurde mit summa cum laude bewertet." },
+      { word: "promovieren", translation: "защищать диссертацию", example: "Sie promoviert in Literaturwissenschaft an der Humboldt-Universität." },
+      { word: "die Promotion", translation: "защита диссертации", example: "Die Promotion erfolgte vor einem renommierten Gremium." },
+      { word: "die Habilitation", translation: "габилитация", example: "Die Habilitation ist Voraussetzung für eine Professur." },
+      { word: "habilitieren", translation: "габилитироваться", example: "Er habilitiert sich im Bereich der Philosophie." },
+      { word: "die Abhandlung", translation: "трактат", example: "Die Abhandlung behandelt ein philosophisches Kernproblem." },
+      { word: "die Monografie", translation: "монография", example: "Seine Monografie ist zum Standardwerk geworden." },
+      { word: "veröffentlichen", translation: "публиковать", example: "Die Ergebnisse wurden in renommierten Journalen veröffentlicht." },
+      { word: "die Publikation", translation: "публикация", example: "Die Publikation erfolgte peer-reviewed in Nature." },
+      { word: "die Literaturanalyse", translation: "анализ литературы", example: "Eine gründliche Literaturanalyse ist unerlässlich." },
+      { word: "das Literaturverzeichnis", translation: "список литературы", example: "Das Literaturverzeichnis umfasst über 200 Quellen." },
+      { word: "zitieren", translation: "цитировать", example: "Man sollte alle Quellen korrekt zitieren." },
+      { word: "das Zitat", translation: "цитата", example: "Das Zitat stammt aus der Originalarbeit von Smith." },
+      { word: "die Quellenangabe", translation: "указание источника", example: "Die Quellenangaben müssen nach APA-Standard erfolgen." },
+      { word: "die Gliederung", translation: "структура", example: "Die logische Gliederung der Arbeit ist entscheidend." },
+      { word: "das Kapitel", translation: "глава", example: "Das dritte Kapitel behandelt die Methodik." },
+      { word: "die Einleitung", translation: "введение", example: "Die Einleitung muss die Forschungsfrage deutlich machen." },
+      { word: "die These", translation: "тезис", example: "Die zentrale These wird systematisch begründet." },
+      { word: "der Schluss", translation: "заключение", example: "Der Schluss fasst die Hauptergebnisse zusammen." },
+      { word: "die Schlussfolgerung", translation: "вывод", example: "Die Schlussfolgerung ist überzeugend und nachvollziehbar." },
+      { word: "argumentieren", translation: "аргументировать", example: "Der Autor argumentiert klar und stringent." },
+      { word: "die Argumentation", translation: "аргументация", example: "Die Argumentation folgt einer logischen Struktur." },
+      { word: "das Argument", translation: "аргумент", example: "Sein stärkstes Argument basiert auf empirischen Daten." },
+      { word: "die Begründung", translation: "обоснование", example: "Eine wissenschaftliche Begründung ist erforderlich." },
+      { word: "belegen", translation: "подтверждать", example: "Die These wird durch empirische Studien belegt." },
+      { word: "der Beweis", translation: "доказательство", example: "Der Beweis wurde durch Experimente erbracht." },
+      { word: "nachweisen", translation: "доказать", example: "Es lässt sich nachweisen, dass die Hypothese falsch ist." },
+      { word: "die Hypothese", translation: "гипотеза", example: "Die Hypothese wird in dieser Studie überprüft." },
+      { word: "die Theorie", translation: "теория", example: "Die Theorie erklärte die empirischen Phänomene." },
+      { word: "theoretisch", translation: "теоретический", example: "Theoretisch ist dieser Ansatz vielversprechend." },
+      { word: "empirisch", translation: "эмпирический", example: "Empirische Daten unterstützen die Theorie." },
+      { word: "methodisch", translation: "методичный", example: "Die methodische Vorgehensweise war beispielhaft." },
+      { word: "die Methodik", translation: "методика", example: "Die Methodik wird im zweiten Kapitel dargelegt." },
+      { word: "die Stichprobe", translation: "выборка", example: "Die Stichprobe war repräsentativ für die Gesamtpopulation." },
+      { word: "die Untersuchung", translation: "исследование", example: "Die Untersuchung erstreckte sich über zwei Jahre." },
+      { word: "die Analyse", translation: "анализ", example: "Die detaillierte Analyse zeigte überraschende Muster." },
+      { word: "analysieren", translation: "анализировать", example: "Wir analysieren die Daten mit statistischen Methoden." },
+      { word: "die Synthese", translation: "синтез", example: "Die Synthese verschiedener Ansätze eröffnet neue Perspektiven." },
+      { word: "synthetisieren", translation: "синтезировать", example: "Die Forschungsgruppe synthetisiert ihre Erkenntnisse." },
+      { word: "die Interpretation", translation: "интерпретация", example: "Die Interpretation der Ergebnisse ist kontroversvoll." },
+      { word: "interpretieren", translation: "интерпретировать", example: "Man kann die Daten unterschiedlich interpretieren." },
+      { word: "die Kritik", translation: "критика", example: "Die berechtigte Kritik führte zur Überarbeitung." },
+      { word: "kritisieren", translation: "критиковать", example: "Mehrere Autoren kritisierten die Methodik." },
+      { word: "kritisch", translation: "критический", example: "Eine kritische Haltung ist in der Wissenschaft unverzichtbar." },
+      { word: "hinterfragen", translation: "подвергать сомнению", example: "Grundannahmen sollten kontinuierlich hinterfagt werden." },
+      { word: "zweifeln", translation: "сомневаться", example: "Es gibt Grund zu zweifeln an diesen Schlussfolgerungen." },
+      { word: "fragwürdig", translation: "сомнительный", example: "Der methodische Ansatz ist fragwürdig." },
+      { word: "die Limitation", translation: "ограничение", example: "Die Limitation der Studie ist in der Diskussion erwähnt." },
+      { word: "limitiert", translation: "ограниченный", example: "Die Aussagekraft ist durch die Stichprobengröße limitiert." },
+      { word: "die Einschränkung", translation: "ограничение", example: "Mit gewissen Einschränkungen ist die Hypothese haltbar." },
+      { word: "differentieren", translation: "дифференцировать", example: "Man muss zwischen verschiedenen Fällen differenzieren." },
+      { word: "differenziert", translation: "дифференцированный", example: "Eine differenzierte Betrachtung ist notwendig." },
+      { word: "nuancieren", translation: "вносить нюансы", example: "Der Autor nuanciert seine ursprüngliche Position." },
+
+      // Professional Communication & Organization (53 words)
+      { word: "die Verhandlung", translation: "переговоры", example: "Die Verhandlungen verliefen konstruktiv und zielführend." },
+      { word: "verhandeln", translation: "вести переговоры", example: "Wir verhandeln über die neuen Arbeitsbedingungen." },
+      { word: "die Konditionen", translation: "условия (контракта)", example: "Die Konditionen des Vertrags sind zu unseren Gunsten." },
+      { word: "vereinbaren", translation: "договориться", example: "Wir haben einen neuen Termin für nächste Woche vereinbart." },
+      { word: "die Vereinbarung", translation: "соглашение", example: "Die Vereinbarung wurde von allen Beteiligten unterzeichnet." },
+      { word: "das Einvernehmen", translation: "согласие", example: "Wir haben im gegenseitigen Einvernehmen entschieden." },
+      { word: "einvernehmlich", translation: "по обоюдному согласию", example: "Die Trennung erfolgte einvernehmlich und friedlich." },
+      { word: "die Klausel", translation: "пункт (договора)", example: "Diese wichtige Klausel schützt unsere Interessen." },
+      { word: "vertraglich", translation: "договорный", example: "Die vertraglich vereinbarten Leistungen müssen erfüllt werden." },
+      { word: "unterzeichnen", translation: "подписывать", example: "Beide Seiten haben den Vertrag unterzeichnet." },
+      { word: "der Vorbehalt", translation: "оговорка", example: "Das Angebot gilt unter Vorbehalt der Genehmigung." },
+      { word: "die Ratifizierung", translation: "ратификация", example: "Die Ratifizierung durch das Parlament steht noch aus." },
+      { word: "gültig", translation: "действительный", example: "Der Vertrag ist ab sofort gültig und bindend." },
+      { word: "die Laufzeit", translation: "срок действия", example: "Die Laufzeit des Vertrags beträgt drei Jahre." },
+      { word: "die Kündigungsfrist", translation: "срок уведомления", example: "Die Kündigungsfrist beträgt drei Monate zum Monatsende." },
+      { word: "kündigen", translation: "расторгать", example: "Wir haben den Vertrag fristgerecht gekündigt." },
+      { word: "fristgerecht", translation: "в срок", example: "Die Unterlagen wurden fristgerecht eingereicht." },
+      { word: "verlängern", translation: "продлить", example: "Der Vertrag wurde um zwei weitere Jahre verlängert." },
+      { word: "die Führungskraft", translation: "руководитель", example: "Führungskräfte müssen Vorbilder sein und vorangehen." },
+      { word: "delegieren", translation: "делегировать", example: "Gute Manager delegieren Aufgaben effektiv." },
+      { word: "die Verantwortung", translation: "ответственность", example: "Mit der Position kommt große Verantwortung." },
+      { word: "verantwortlich", translation: "ответственный", example: "Sie ist verantwortlich für das gesamte Projekt." },
+      { word: "die Kompetenz", translation: "компетентность", example: "Seine fachliche Kompetenz ist unbestritten." },
+      { word: "kompetent", translation: "компетентный", example: "Ein kompetentes Team ist Voraussetzung für Erfolg." },
+      { word: "befugt", translation: "уполномоченный", example: "Sie ist befugt, Verträge zu unterzeichnen." },
+      { word: "ermächtigen", translation: "уполномочивать", example: "Der Vorstand ermächtigte ihn zum Verhandeln." },
+      { word: "die Vollmacht", translation: "доверенность", example: "Er handelt mit vollständiger Vollmacht des Chefs." },
+      { word: "anweisen", translation: "указывать", example: "Der Manager wies das Team an, das Projekt zu beginnen." },
+      { word: "die Anweisung", translation: "указание", example: "Alle Mitarbeiter müssen die Anweisungen befolgen." },
+      { word: "motivieren", translation: "мотивировать", example: "Gute Führung motiviert die Mitarbeiter." },
+      { word: "das Engagement", translation: "вовлеченность", example: "Das hohe Engagement des Teams ist beeindruckend." },
+      { word: "engagiert", translation: "вовлеченный", example: "Sie ist eine sehr engagierte und zuverlässige Mitarbeiterin." },
+      { word: "die Teamarbeit", translation: "командная работа", example: "Erfolgreiche Projekte erfordern gute Teamarbeit." },
+      { word: "zusammenarbeiten", translation: "сотрудничать", example: "Wir arbeiten eng mit der IT-Abteilung zusammen." },
+      { word: "koordinieren", translation: "координировать", example: "Sie koordiniert die Arbeit aller beteiligten Teams." },
+      { word: "die Kommunikation", translation: "коммуникация", example: "Klare Kommunikation verhindert Missverständnisse." },
+      { word: "kommunizieren", translation: "коммуницировать", example: "Manager sollten regelmäßig und transparent kommunizieren." },
+      { word: "das Feedback", translation: "фидбэк", example: "Konstruktives Feedback hilft der beruflichen Entwicklung." },
+      { word: "die Rückmeldung", translation: "обратная связь", example: "Regelmäßige Rückmeldung ist für Verbesserung notwendig." },
+      { word: "die Weiterbildung", translation: "повышение квалификации", example: "Kontinuierliche Weiterbildung ist in unserem Unternehmen Standard." },
+      { word: "qualifiziert", translation: "квалифицированный", example: "Wir suchen hochqualifizierte Fachkräfte." },
+      { word: "die Qualifikation", translation: "квалификация", example: "Ihre umfassenden Qualifikationen sind beeindruckend." },
+      { word: "der Aufstieg", translation: "восхождение", example: "Sein schneller Aufstieg basierte auf hervorragenden Leistungen." },
+      { word: "aufsteigen", translation: "продвигаться", example: "Sie ist schnell zur Abteilungsleiterin aufgestiegen." },
+      { word: "die Beförderung", translation: "повышение", example: "Die Beförderung erfolgte aufgrund überragender Leistungen." },
+      { word: "das Potenzial", translation: "потенциал", example: "Das Potenzial dieser jungen Mitarbeiterin ist erkennbar." },
+      { word: "das Mentoring", translation: "менторство", example: "Das Mentoring-Programm ist sehr erfolgreich." },
+      { word: "der Coach", translation: "коуч", example: "Ein externer Coach unterstützt unsere Führungskräfte." },
+      { word: "die Zielvereinbarung", translation: "согласование целей", example: "Zielvereinbarungen werden regelmäßig überprüft und angepasst." },
+      { word: "die Personalentwicklung", translation: "развитие персонала", example: "Personalentwicklung hat bei uns strategische Bedeutung." },
+      { word: "wertschätzen", translation: "ценить", example: "Wir wertschätzen die Leistung und das Engagement." },
+      { word: "die Wertschätzung", translation: "признание", example: "Wertschätzung und Anerkennung sind Motivationsfaktoren." },
+      { word: "die Anerkennung", translation: "признание", example: "Die Anerkennung seiner Leistungen erfolgte durch den Vorstand." }
+    ]
+  }
+];
+
+console.log('C1 Final Collection:');
+console.log(`Total collections: ${collections.length}`);
+collections.forEach((col, i) => {
+  console.log(`${i + 1}. ${col.name}: ${col.words.length} words`);
+});
+
+const totalWords = collections.reduce((sum, col) => sum + col.words.length, 0);
+console.log(`\nTotal new C1 words (final): ${totalWords}`);
+
+module.exports = { collections };

@@ -17,7 +17,7 @@ class I18nManager {
         const savedLang = localStorage.getItem('uiLanguage');
         if (savedLang) {
             this.currentLanguage = savedLang;
-        } else if (['ru', 'en', 'de', 'es', 'fr', 'it'].includes(langCode)) {
+        } else if (['ru', 'en', 'de', 'es', 'fr', 'it', 'pl', 'ar', 'tr', 'ro', 'sr', 'uk', 'pt', 'sw'].includes(langCode)) {
             this.currentLanguage = langCode;
         }
     }
@@ -102,10 +102,10 @@ class I18nManager {
 
     /**
      * Set current language and update UI
-     * @param {string} lang - Language code (en, ru, de, es, fr, it)
+     * @param {string} lang - Language code (en, ru, de, es, fr, it, pl, ar, tr, ro, sr, uk, pt, sw)
      */
     async setLanguage(lang) {
-        if (!['ru', 'en', 'de', 'es', 'fr', 'it'].includes(lang)) {
+        if (!['ru', 'en', 'de', 'es', 'fr', 'it', 'pl', 'ar', 'tr', 'ro', 'sr', 'uk', 'pt', 'sw'].includes(lang)) {
             console.error(`❌ Unsupported language: ${lang}`);
             return false;
         }

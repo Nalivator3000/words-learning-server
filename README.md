@@ -1,6 +1,15 @@
-# Words Learning Server
+# LexyBooster - Multi-Language Learning Platform
 
-Серверная версия приложения для изучения немецких слов.
+Серверная версия приложения для изучения языков с системой интервальных повторений (SRS) и геймификацией.
+
+## Language Pair Convention
+
+**Important:** We use the notation `native_lang → learning_lang`:
+- **ru→de** = Russian native speaker learning German
+- **ru→en** = Russian native speaker learning English
+- **en→es** = English native speaker learning Spanish
+
+See [docs/LANGUAGE-PAIR-CONVENTION.md](docs/LANGUAGE-PAIR-CONVENTION.md) for details.
 
 ## Установка и запуск
 

@@ -1,0 +1,113 @@
+/**
+ * B2 vocabulary - Batch 3
+ * Additional collections continuing toward 1,800 target
+ */
+
+const b2Batch3Collections = {
+    "B2: Sports & Leisure": [
+        { german: "der Sport", translation: "спорт", example: "Sport ist gesund.", notes: "m." },
+        { german: "Sport treiben", translation: "заниматься спортом", example: "Ich treibe regelmäßig Sport.", notes: "verb phrase" },
+        { german: "der Sportler", translation: "спортсмен", example: "Er ist ein professioneller Sportler.", notes: "m." },
+        { german: "sportlich", translation: "спортивный", example: "Sie ist sehr sportlich.", notes: "adj." },
+        { german: "trainieren", translation: "тренироваться", example: "Ich trainiere jeden Tag.", notes: "verb" },
+        { german: "das Training", translation: "тренировка", example: "Das Training war hart.", notes: "n." },
+        { german: "der Trainer", translation: "тренер", example: "Der Trainer ist streng.", notes: "m." },
+        { german: "das Spiel", translation: "игра", example: "Das Spiel war spannend.", notes: "n." },
+        { german: "spielen", translation: "играть", example: "Wir spielen Fußball.", notes: "verb" },
+        { german: "der Spieler", translation: "игрок", example: "Er ist ein guter Spieler.", notes: "m." },
+        { german: "der Wettkampf", translation: "соревнование", example: "Der Wettkampf findet morgen statt.", notes: "m." },
+        { german: "wetteifern", translation: "соревноваться", example: "Sie wetteifern um den ersten Platz.", notes: "verb" },
+        { german: "der Wettbewerb", translation: "конкурс", example: "Er hat den Wettbewerb gewonnen.", notes: "m." },
+        { german: "gewinnen", translation: "выигрывать", example: "Unsere Mannschaft hat gewonnen.", notes: "verb" },
+        { german: "der Gewinner", translation: "победитель", example: "Er ist der Gewinner.", notes: "m." },
+        { german: "verlieren", translation: "проигрывать", example: "Sie haben 2:0 verloren.", notes: "verb" },
+        { german: "der Verlierer", translation: "проигравший", example: "Der Verlierer war enttäuscht.", notes: "m." },
+        { german: "die Mannschaft", translation: "команда", example: "Die Mannschaft spielt gut.", notes: "f." },
+        { german: "das Team", translation: "команда", example: "Unser Team ist stark.", notes: "n." },
+        { german: "der Gegner", translation: "противник", example: "Der Gegner war überlegen.", notes: "m." },
+        { german: "das Tor", translation: "гол, ворота", example: "Er hat ein Tor geschossen.", notes: "n." },
+        { german: "schießen", translation: "стрелять, бить", example: "Er schießt den Ball ins Tor.", notes: "verb" },
+        { german: "der Ball", translation: "мяч", example: "Pass mir den Ball!", notes: "m." },
+        { german: "werfen", translation: "бросать", example: "Er wirft den Ball.", notes: "verb" },
+        { german: "fangen", translation: "ловить", example: "Er fängt den Ball.", notes: "verb" },
+        { german: "laufen", translation: "бегать", example: "Ich laufe jeden Morgen.", notes: "verb" },
+        { german: "der Läufer", translation: "бегун", example: "Er ist ein schneller Läufer.", notes: "m." },
+        { german: "rennen", translation: "бежать", example: "Er rennt sehr schnell.", notes: "verb" },
+        { german: "springen", translation: "прыгать", example: "Sie kann hoch springen.", notes: "verb" },
+        { german: "der Sprung", translation: "прыжок", example: "Das war ein weiter Sprung.", notes: "m." },
+        { german: "schwimmen", translation: "плавать", example: "Ich schwimme gern.", notes: "verb" },
+        { german: "der Schwimmer", translation: "пловец", example: "Er ist ein guter Schwimmer.", notes: "m." },
+        { german: "tauchen", translation: "нырять", example: "Wir tauchen im Meer.", notes: "verb" },
+        { german: "klettern", translation: "лазить", example: "Wir klettern auf den Berg.", notes: "verb" },
+        { german: "wandern", translation: "ходить в походы", example: "Am Wochenende wandern wir.", notes: "verb" },
+        { german: "die Wanderung", translation: "поход", example: "Die Wanderung war anstrengend.", notes: "f." },
+        { german: "Ski fahren", translation: "кататься на лыжах", example: "Im Winter fahre ich Ski.", notes: "verb phrase" },
+        { german: "Schlittschuh laufen", translation: "кататься на коньках", example: "Die Kinder laufen Schlittschuh.", notes: "verb phrase" },
+        { german: "reiten", translation: "ездить верхом", example: "Sie kann gut reiten.", notes: "verb" },
+        { german: "das Hobby", translation: "хобби", example: "Lesen ist mein Hobby.", notes: "n." },
+        { german: "die Freizeit", translation: "свободное время", example: "Was machst du in deiner Freizeit?", notes: "f." },
+        { german: "sich entspannen", translation: "расслабляться", example: "Am Wochenende entspanne ich mich.", notes: "verb" },
+        { german: "die Entspannung", translation: "расслабление", example: "Ich brauche Entspannung.", notes: "f." },
+        { german: "sich erholen", translation: "отдыхать", example: "Ich erhole mich am Strand.", notes: "verb" },
+        { german: "die Erholung", translation: "отдых", example: "Nach der Arbeit brauche ich Erholung.", notes: "f." },
+        { german: "genießen", translation: "наслаждаться", example: "Ich genieße die Ruhe.", notes: "verb" },
+        { german: "der Genuss", translation: "наслаждение", example: "Das ist ein wahrer Genuss.", notes: "m." },
+        { german: "unterhalten", translation: "развлекать", example: "Der Film unterhält mich.", notes: "verb" },
+        { german: "die Unterhaltung", translation: "развлечение", example: "Wir suchen Unterhaltung.", notes: "f." },
+        { german: "das Vergnügen", translation: "удовольствие", example: "Es war mir ein Vergnügen.", notes: "n." },
+    ],
+
+    "B2: Time Expressions": [
+        { german: "die Zeit", translation: "время", example: "Die Zeit vergeht schnell.", notes: "f." },
+        { german: "zeitlich", translation: "временный", example: "Das ist zeitlich nicht möglich.", notes: "adj." },
+        { german: "der Zeitpunkt", translation: "момент времени", example: "Das ist der richtige Zeitpunkt.", notes: "m." },
+        { german: "der Zeitraum", translation: "период времени", example: "In diesem Zeitraum war ich krank.", notes: "m." },
+        { german: "dauern", translation: "длиться", example: "Wie lange dauert das?", notes: "verb" },
+        { german: "die Dauer", translation: "продолжительность", example: "Die Dauer beträgt zwei Stunden.", notes: "f." },
+        { german: "vergehen", translation: "проходить (о времени)", example: "Die Zeit vergeht wie im Flug.", notes: "verb" },
+        { german: "verbringen", translation: "проводить (время)", example: "Ich verbringe viel Zeit dort.", notes: "verb" },
+        { german: "die Vergangenheit", translation: "прошлое", example: "Das liegt in der Vergangenheit.", notes: "f." },
+        { german: "die Gegenwart", translation: "настоящее", example: "Wir leben in der Gegenwart.", notes: "f." },
+        { german: "die Zukunft", translation: "будущее", example: "Die Zukunft ist ungewiss.", notes: "f." },
+        { german: "früher", translation: "раньше", example: "Früher war alles anders.", notes: "adv." },
+        { german: "später", translation: "позже", example: "Ich komme später.", notes: "adv." },
+        { german: "danach", translation: "после этого", example: "Danach gingen wir nach Hause.", notes: "adv." },
+        { german: "davor", translation: "до этого", example: "Davor waren wir im Kino.", notes: "adv." },
+        { german: "gleichzeitig", translation: "одновременно", example: "Das passierte gleichzeitig.", notes: "adv." },
+        { german: "währenddessen", translation: "между тем", example: "Währenddessen wartete ich.", notes: "adv." },
+        { german: "inzwischen", translation: "между тем, тем временем", example: "Inzwischen ist viel passiert.", notes: "adv." },
+        { german: "mittlerweile", translation: "тем временем", example: "Mittlerweile hat sich alles geändert.", notes: "adv." },
+        { german: "sofort", translation: "немедленно", example: "Ich komme sofort.", notes: "adv." },
+        { german: "plötzlich", translation: "вдруг", example: "Plötzlich begann es zu regnen.", notes: "adv." },
+        { german: "allmählich", translation: "постепенно", example: "Allmählich wird es besser.", notes: "adv." },
+        { german: "langsam", translation: "медленно", example: "Geh langsam!", notes: "adv." },
+        { german: "schnell", translation: "быстро", example: "Er läuft schnell.", notes: "adv." },
+        { german: "häufig", translation: "часто", example: "Das passiert häufig.", notes: "adv." },
+        { german: "selten", translation: "редко", example: "Das kommt selten vor.", notes: "adv." },
+        { german: "manchmal", translation: "иногда", example: "Manchmal gehe ich schwimmen.", notes: "adv." },
+        { german: "gelegentlich", translation: "время от времени", example: "Gelegentlich treffen wir uns.", notes: "adv." },
+        { german: "regelmäßig", translation: "регулярно", example: "Ich trainiere regelmäßig.", notes: "adv." },
+        { german: "ständig", translation: "постоянно", example: "Er kommt ständig zu spät.", notes: "adv." },
+        { german: "immer", translation: "всегда", example: "Ich bin immer für dich da.", notes: "adv." },
+        { german: "nie", translation: "никогда", example: "Das habe ich nie gesagt.", notes: "adv." },
+        { german: "niemals", translation: "никогда", example: "Das werde ich niemals vergessen.", notes: "adv." },
+        { german: "das Datum", translation: "дата", example: "Welches Datum haben wir heute?", notes: "n." },
+        { german: "der Termin", translation: "срок, встреча", example: "Ich habe einen wichtigen Termin.", notes: "m." },
+        { german: "der Zeitplan", translation: "расписание", example: "Der Zeitplan ist eng.", notes: "m." },
+        { german: "pünktlich", translation: "пунктуально", example: "Sei bitte pünktlich!", notes: "adv." },
+        { german: "rechtzeitig", translation: "вовремя", example: "Wir sind rechtzeitig angekommen.", notes: "adv." },
+        { german: "verspätet", translation: "опоздавший", example: "Der Zug ist verspätet.", notes: "adj." },
+        { german: "vorzeitig", translation: "досрочный", example: "Er kam vorzeitig zurück.", notes: "adj." },
+    ],
+};
+
+module.exports = { b2Batch3Collections };
+
+console.log('B2 Batch 3 vocabulary collections created!');
+console.log('Total collections:', Object.keys(b2Batch3Collections).length);
+let totalWords = 0;
+for (const [name, words] of Object.entries(b2Batch3Collections)) {
+    console.log(`  - ${name}: ${words.length} words`);
+    totalWords += words.length;
+}
+console.log('Total words:', totalWords);

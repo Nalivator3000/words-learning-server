@@ -244,9 +244,6 @@
     </script>
 </head>
 <body>
-    <!-- Menu Toggle Button (shown during quiz on mobile) -->
-    <button id="menuToggleBtn" class="menu-toggle-btn" aria-label="Toggle Menu">☰</button>
-
     <!-- Authentication Modal -->
     <div id="authModal" class="auth-modal">
         <div class="auth-content">
@@ -484,8 +481,8 @@
                 </div>
             </nav>
             <div class="header-right">
-                <button id="userMenuBtn" class="settings-btn">⚙️</button>
-                <div id="userMenu" class="user-menu hidden">
+                <button id="userMenuBtn" class="settings-btn" title="Settings">⚙️</button>
+                <div id="userMenu" class="user-menu hidden" style="display: none;">
                     <button id="settingsBtn" data-i18n="settings">Настройки</button>
                     <button id="logoutBtn" data-i18n="logout">Выйти</button>
                 </div>

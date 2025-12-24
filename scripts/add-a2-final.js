@@ -1,0 +1,86 @@
+const collections = [
+  {
+    name: "A2: Everyday Intermediate Topics",
+    description: "A2 level vocabulary gaps - everyday intermediate topics covering food, health, transportation, relationships, and household items",
+    level: "A2",
+    words: [
+      { word: "das Gemüse", translation: "овощи", example: "Ich kaufe frisches Gemüse auf dem Markt." },
+      { word: "das Obst", translation: "фрукты", example: "Äpfel und Bananen sind mein liebstes Obst." },
+      { word: "der Apfel", translation: "яблоко", example: "Der Apfel ist rot und süß." },
+      { word: "die Banane", translation: "банан", example: "Eine Banane hat viel Kalium." },
+      { word: "die Orange", translation: "апельсин", example: "Ich trinke gern Orangensaft." },
+      { word: "das Brot", translation: "хлеб", example: "Das frische Brot schmeckt sehr gut." },
+      { word: "der Käse", translation: "сыр", example: "Ich esse Käse zum Frühstück." },
+      { word: "die Milch", translation: "молоко", example: "Kinder trinken jeden Tag Milch." },
+      { word: "das Ei", translation: "яйцо", example: "Zum Frühstück esse ich zwei Eier." },
+      { word: "der Fisch", translation: "рыба", example: "Fisch ist sehr gesund." },
+      { word: "das Fleisch", translation: "мясо", example: "Ich esse nicht viel Fleisch." },
+      { word: "das Huhn", translation: "курица", example: "Hähnchen ist eine gute Proteinquelle." },
+      { word: "die Wurst", translation: "колбаса", example: "Deutsche Wurst ist weltberühmt." },
+      { word: "der Tee", translation: "чай", example: "Ich trinke jeden Morgen Tee." },
+      { word: "der Kaffee", translation: "кофе", example: "Ein Tasse Kaffee weckt mich auf." },
+      { word: "das Wasser", translation: "вода", example: "Wasser ist lebenswichtig." },
+      { word: "der Saft", translation: "сок", example: "Orangensaft ist lecker." },
+      { word: "das Bier", translation: "пиво", example: "Deutsches Bier ist weltberühmt." },
+      { word: "der Wein", translation: "вино", example: "Rotwein passt zu Fleisch." },
+      { word: "die Suppe", translation: "суп", example: "Ich mag Tomatensuppe." },
+      { word: "der Salat", translation: "салат", example: "Ein grüner Salat ist sehr gesund." },
+      { word: "die Medizin", translation: "медицина, лекарство", example: "Der Arzt verschreibt mir eine Medizin." },
+      { word: "die Tablette", translation: "таблетка", example: "Ich nehme morgens eine Tablette." },
+      { word: "das Fieber", translation: "лихорадка", example: "Ich habe Fieber und bleibe zu Hause." },
+      { word: "der Husten", translation: "кашель", example: "Ich habe einen starken Husten." },
+      { word: "husten", translation: "кашлять", example: "Mein Freund hustet die ganze Nacht." },
+      { word: "der Schnupfen", translation: "насморк", example: "Ich habe einen Schnupfen und Kopfweh." },
+      { word: "die Kopfschmerzen", translation: "головная боль", example: "Ich habe schreckliche Kopfschmerzen." },
+      { word: "der Arm", translation: "рука (плечо-кисть)", example: "Ich verletzte meinen linken Arm." },
+      { word: "das Bein", translation: "нога", example: "Ich habe Schmerzen in meinem rechten Bein." },
+      { word: "der Fuß", translation: "стопа, нога", example: "Mein Fuß tut weh." },
+      { word: "die Hand", translation: "рука (кисть)", example: "Ich wasche mir die Hände." },
+      { word: "der Rücken", translation: "спина", example: "Mein Rücken schmerzt nach langer Arbeit." },
+      { word: "der Bauch", translation: "живот", example: "Mir tut der Bauch weh." },
+      { word: "das Auto", translation: "автомобиль", example: "Ich fahre mit dem Auto zur Arbeit." },
+      { word: "das Fahrrad", translation: "велосипед", example: "Im Sommer fahre ich mit dem Fahrrad." },
+      { word: "der Zug", translation: "поезд", example: "Der Zug ist pünktlich angekommen." },
+      { word: "der Bus", translation: "автобус", example: "Ich fahre mit dem Bus in die Stadt." },
+      { word: "die Straßenbahn", translation: "трамвай", example: "Die Straßenbahn ist umweltfreundlich." },
+      { word: "das Taxi", translation: "такси", example: "Ich nehme ein Taxi zum Flughafen." },
+      { word: "das Flugzeug", translation: "самолет", example: "Das Flugzeug fliegt nach Berlin." },
+      { word: "der Bahnhof", translation: "вокзал", example: "Der Bahnhof liegt in der Stadtzentrum." },
+      { word: "die Haltestelle", translation: "остановка", example: "Die Bushaltestelle ist sehr nah." },
+      { word: "das Ticket", translation: "билет", example: "Ich brauche ein Ticket für die Bahn." },
+      { word: "die Fahrkarte", translation: "билет", example: "Eine Fahrkarte kostet fünf Euro." },
+      { word: "die Mutter", translation: "мать", example: "Meine Mutter ist Ärztin." },
+      { word: "der Vater", translation: "отец", example: "Mein Vater ist Ingenieur." },
+      { word: "der Bruder", translation: "брат", example: "Mein Bruder spielt Fußball." },
+      { word: "die Großmutter", translation: "бабушка", example: "Meine Großmutter ist sehr nett." },
+      { word: "der Großvater", translation: "дедушка", example: "Mein Großvater ist 80 Jahre alt." },
+      { word: "die Cousine", translation: "кузина", example: "Meine Cousine ist meine beste Freundin." },
+      { word: "der Cousin", translation: "кузин", example: "Mein Cousin studiert Mathematik." },
+      { word: "die Großeltern", translation: "бабушка и дедушка", example: "Ich liebe meine Großeltern." },
+      { word: "die Familie", translation: "семья", example: "Meine Familie wohnt zusammen." },
+      { word: "der Ehemann", translation: "муж", example: "Mein Ehemann arbeitet in einer Bank." },
+      { word: "die Ehefrau", translation: "жена", example: "Die Ehefrau ist eine Krankenschwester." },
+      { word: "die Freundin", translation: "подруга", example: "Meine beste Freundin heißt Lisa." },
+      { word: "der Freund", translation: "друг", example: "Mein guter Freund lebt in Berlin." },
+      { word: "heiraten", translation: "выходить замуж, жениться", example: "Sie heiraten nächsten Sommer." },
+      { word: "die Hochzeit", translation: "свадьба", example: "Die Hochzeit war wunderschön." },
+      { word: "die Liebe", translation: "любовь", example: "Liebe ist das wichtigste im Leben." },
+      { word: "lieben", translation: "любить", example: "Ich liebe meine Familie." },
+      { word: "die Ehe", translation: "брак", example: "Die Ehe ist eine wichtige Institution." },
+      { word: "der Ehering", translation: "обручальное кольцо", example: "Sie trägt einen schönen Ehering." },
+      { word: "das Fenster", translation: "окно", example: "Das Fenster ist aus Glas." },
+      { word: "die Tür", translation: "дверь", example: "Die Tür ist blau." },
+      { word: "das Dach", translation: "крыша", example: "Das Dach ist rot." },
+      { word: "die Wand", translation: "стена", example: "Die Wand ist weiß gestrichen." }
+    ]
+  }
+];
+
+console.log('A2 Final Collections:');
+collections.forEach((col, i) => {
+  console.log(`${i + 1}. ${col.name}: ${col.words.length} words`);
+});
+const totalWords = collections.reduce((sum, col) => sum + col.words.length, 0);
+console.log(`\nTotal A2 final words: ${totalWords}`);
+
+module.exports = { collections };

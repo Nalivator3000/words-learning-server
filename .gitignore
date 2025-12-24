@@ -25,3 +25,5 @@ android/
 .bubblewrap/
 test-results/
 playwright-report/
+logs/
+cache/

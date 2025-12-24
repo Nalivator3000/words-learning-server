@@ -3713,6 +3713,252 @@ app.post('/api/global-collections/:collectionId/import', async (req, res) => {
     }
 });
 
+// =============================================================================
+// UNIVERSAL COLLECTIONS API (New Multi-Language Architecture)
+// =============================================================================
+
+// Get all universal collections with filtering by native language and source language
+// Example: GET /api/universal-collections?native_lang=ru&source_lang=de
+// Returns German collections for Russian speakers (ru→de)
+app.get('/api/universal-collections', async (req, res) => {
+    try {
+        const { native_lang, source_lang, level, topic } = req.query;
+
+        let query = 'SELECT * FROM universal_collections WHERE is_public = true';
+        let params = [];
+        let paramIndex = 1;
+
+        if (source_lang) {
+            query += ` AND source_lang = $${paramIndex}`;
+            params.push(source_lang);
+            paramIndex++;
+        }
+
+        if (level) {
+            query += ` AND level = $${paramIndex}`;
+            params.push(level);
+            paramIndex++;
+        }
+
+        if (topic) {
+            query += ` AND topic = $${paramIndex}`;
+            params.push(topic);
+            paramIndex++;
+        }
+
+        query += ' ORDER BY level, created_at DESC';
+
+        const result = await db.query(query, params);
+        res.json(result.rows);
+    } catch (err) {
+        logger.error('Error getting universal collections:', err);
+        res.status(500).json({ error: err.message });
+    }
+});
+
+// Get single universal collection with words translated to target language
+// Example: GET /api/universal-collections/123?native_lang=ru
+// Returns collection with Russian translations
+app.get('/api/universal-collections/:collectionId', async (req, res) => {
+    try {
+        const { collectionId } = req.params;
+        const { native_lang } = req.query;
+
+        // Get collection metadata
+        const collection = await db.query(
+            'SELECT * FROM universal_collections WHERE id = $1 AND is_public = true',
+            [parseInt(collectionId)]
+        );
+
+        if (collection.rows.length === 0) {
+            return res.status(404).json({ error: 'Collection not found' });
+        }
+
+        const collectionData = collection.rows[0];
+        const source_lang = collectionData.source_lang;
+
+        // Get collection word IDs
+        const collectionWords = await db.query(
+            'SELECT source_word_id, order_index FROM universal_collection_words WHERE collection_id = $1 ORDER BY order_index',
+            [parseInt(collectionId)]
+        );
+
+        if (!native_lang) {
+            // If no native_lang specified, return without translations
+            return res.json({
+                ...collectionData,
+                words: collectionWords.rows.map(w => ({ source_word_id: w.source_word_id }))
+            });
+        }
+
+        // Build table name for translations based on native language
+        const langMap = {
+            'ru': 'russian',
+            'pl': 'polish',
+            'ar': 'arabic',
+            'tr': 'turkish',
+            'ro': 'romanian',
+            'sr': 'serbian',
+            'uk': 'ukrainian',
+            'en': 'english',
+            'it': 'italian',
+            'es': 'spanish',
+            'pt': 'portuguese',
+            'sw': 'swahili'
+        };
+
+        const targetLangTable = langMap[native_lang];
+        if (!targetLangTable) {
+            return res.status(400).json({ error: `Unsupported native language: ${native_lang}` });
+        }
+
+        // Get source words and translations
+        const words = await db.query(`
+            SELECT
+                sw.id,
+                sw.word as source_word,
+                sw.level,
+                sw.example_de,
+                tt.translation as native_translation,
+                tt.example_native,
+                cw.order_index
+            FROM universal_collection_words cw
+            JOIN source_words_${source_lang === 'de' ? 'german' : source_lang} sw ON cw.source_word_id = sw.id
+            LEFT JOIN target_translations_${targetLangTable} tt ON tt.source_word_id = sw.id AND tt.source_lang = $1
+            WHERE cw.collection_id = $2
+            ORDER BY cw.order_index
+        `, [source_lang, parseInt(collectionId)]);
+
+        res.json({
+            ...collectionData,
+            words: words.rows
+        });
+    } catch (err) {
+        logger.error('Error getting universal collection:', err);
+        res.status(500).json({ error: err.message });
+    }
+});
+
+// Import universal collection to user's personal words
+// Example: POST /api/universal-collections/123/import
+// Body: { userId, languagePairId, native_lang: 'ru' }
+app.post('/api/universal-collections/:collectionId/import', async (req, res) => {
+    try {
+        const { collectionId } = req.params;
+        const { userId, languagePairId, native_lang } = req.body;
+
+        if (!userId || !languagePairId || !native_lang) {
+            return res.status(400).json({ error: 'userId, languagePairId, and native_lang are required' });
+        }
+
+        // Get collection data with translations
+        const collection = await db.query(
+            'SELECT * FROM universal_collections WHERE id = $1',
+            [parseInt(collectionId)]
+        );
+
+        if (collection.rows.length === 0) {
+            return res.status(404).json({ error: 'Collection not found' });
+        }
+
+        const source_lang = collection.rows[0].source_lang;
+
+        // Build table name for translations
+        const langMap = {
+            'ru': 'russian',
+            'pl': 'polish',
+            'ar': 'arabic',
+            'tr': 'turkish',
+            'ro': 'romanian',
+            'sr': 'serbian',
+            'uk': 'ukrainian',
+            'en': 'english',
+            'it': 'italian',
+            'es': 'spanish',
+            'pt': 'portuguese',
+            'sw': 'swahili'
+        };
+
+        const targetLangTable = langMap[native_lang];
+        if (!targetLangTable) {
+            return res.status(400).json({ error: `Unsupported native language: ${native_lang}` });
+        }
+
+        // Get words with translations
+        const words = await db.query(`
+            SELECT
+                sw.word as source_word,
+                tt.translation as native_translation,
+                sw.example_de,
+                tt.example_native
+            FROM universal_collection_words cw
+            JOIN source_words_${source_lang === 'de' ? 'german' : source_lang} sw ON cw.source_word_id = sw.id
+            LEFT JOIN target_translations_${targetLangTable} tt ON tt.source_word_id = sw.id AND tt.source_lang = $1
+            WHERE cw.collection_id = $2
+        `, [source_lang, parseInt(collectionId)]);
+
+        if (words.rows.length === 0) {
+            return res.status(404).json({ error: 'No words found in collection' });
+        }
+
+        // Begin transaction
+        await db.query('BEGIN');
+
+        try {
+            let importedCount = 0;
+
+            for (const word of words.rows) {
+                // Check if word already exists
+                const existing = await db.query(
+                    'SELECT id FROM words WHERE user_id = $1 AND language_pair_id = $2 AND word = $3',
+                    [userId, languagePairId, word.source_word]
+                );
+
+                if (existing.rows.length === 0 && word.native_translation) {
+                    await db.query(
+                        `INSERT INTO words (user_id, language_pair_id, word, translation, example, exampleTranslation, next_review_date)
+                         VALUES ($1, $2, $3, $4, $5, $6, NOW())`,
+                        [
+                            userId,
+                            languagePairId,
+                            word.source_word,
+                            word.native_translation,
+                            word.example_de || '',
+                            word.example_native || ''
+                        ]
+                    );
+                    importedCount++;
+                }
+            }
+
+            // Update collection usage count
+            await db.query(
+                'UPDATE universal_collections SET usage_count = usage_count + 1 WHERE id = $1',
+                [parseInt(collectionId)]
+            );
+
+            await db.query('COMMIT');
+
+            res.json({
+                message: `${importedCount} words imported successfully`,
+                importedCount,
+                totalWords: words.rows.length,
+                skippedCount: words.rows.length - importedCount
+            });
+        } catch (err) {
+            await db.query('ROLLBACK');
+            throw err;
+        }
+    } catch (err) {
+        logger.error('Error importing universal collection:', err);
+        res.status(500).json({ error: err.message });
+    }
+});
+
+// =============================================================================
+// OLD GLOBAL COLLECTIONS API (Legacy - for backwards compatibility)
+// =============================================================================
+
 // Admin: Create new global collection
 app.post('/api/admin/global-collections', async (req, res) => {
     try {
@@ -7896,6 +8142,13 @@ app.get('/api/word-lists', async (req, res) => {
             'French': 'fr',
             'Italian': 'it',
             'Portuguese': 'pt',
+            'Polish': 'pl',
+            'Arabic': 'ar',
+            'Turkish': 'tr',
+            'Romanian': 'ro',
+            'Serbian': 'sr',
+            'Ukrainian': 'uk',
+            'Swahili': 'sw',
             'Chinese': 'zh',
             'Japanese': 'ja',
             'Korean': 'ko'
@@ -7909,34 +8162,25 @@ app.get('/api/word-lists', async (req, res) => {
             return languageMap[lang] || lang.toLowerCase();
         };
 
-        let query = 'SELECT * FROM global_word_collections WHERE is_public = true';
-        const params = [];
-        let paramIndex = 1;
+        // Universal collections architecture mapping:
+        // OLD: from_lang=de, to_lang=ru means "German words for Russian speakers"
+        // NEW: source_lang=de in universal_collections + target_translations_russian
+        // So: from_lang maps to source_lang, to_lang maps to native language for translations
 
-        // Support legacy 'language' parameter (maps to from_lang)
-        if (language || from_lang) {
-            const normalizedLang = normalizeLanguage(language || from_lang);
-            query += ` AND from_lang = $${paramIndex}`;
-            params.push(normalizedLang);
-            paramIndex++;
+        const source_lang = normalizeLanguage(from_lang || language);  // Language being learned (de)
+        const native_lang = normalizeLanguage(to_lang);  // Native language for translations (ru)
+
+        if (!source_lang) {
+            // If no from_lang specified, return empty result
+            return res.json([]);
         }
 
-        // Filter by target language
-        if (to_lang) {
-            const normalizedLang = normalizeLanguage(to_lang);
-            query += ` AND to_lang = $${paramIndex}`;
-            params.push(normalizedLang);
-            paramIndex++;
-        }
-
-        if (category) {
-            query += ` AND category = $${paramIndex}`;
-            params.push(category);
-            paramIndex++;
-        }
+        let query = 'SELECT * FROM universal_collections WHERE is_public = true AND source_lang = $1';
+        const params = [source_lang];
+        let paramIndex = 2;
 
         if (difficulty) {
-            query += ` AND difficulty_level = $${paramIndex}`;
+            query += ` AND level = $${paramIndex}`;
             params.push(difficulty);
             paramIndex++;
         }
@@ -7947,10 +8191,30 @@ app.get('/api/word-lists', async (req, res) => {
             paramIndex++;
         }
 
-        query += ' ORDER BY createdAt DESC';
+        query += ' ORDER BY level, created_at DESC';
 
         const result = await db.query(query, params);
-        res.json(result.rows);
+
+        // Transform universal_collections to match old format expected by frontend
+        const transformedResults = result.rows.map(collection => ({
+            id: collection.id,
+            name: collection.name,
+            description: collection.description,
+            from_lang: source_lang,  // Language being learned
+            to_lang: native_lang || 'en',  // Native language
+            category: collection.topic || 'General',
+            difficulty_level: collection.level,
+            topic: collection.topic,
+            word_count: collection.word_count,
+            usage_count: collection.usage_count,
+            is_public: collection.is_public,
+            createdAt: collection.created_at,
+            // Add metadata to help frontend identify this is from new architecture
+            _universal: true,
+            _source_lang: collection.source_lang
+        }));
+
+        res.json(transformedResults);
     } catch (err) {
         logger.error('Error getting word lists:', err);
         res.status(500).json({ error: err.message });
@@ -7961,9 +8225,11 @@ app.get('/api/word-lists', async (req, res) => {
 app.get('/api/word-lists/:id', async (req, res) => {
     try {
         const { id } = req.params;
+        const { native_lang } = req.query;  // Optional: native language for translations
 
+        // Try new universal_collections first
         const collection = await db.query(
-            'SELECT * FROM global_word_collections WHERE id = $1',
+            'SELECT * FROM universal_collections WHERE id = $1 AND is_public = true',
             [parseInt(id)]
         );
 
@@ -7971,13 +8237,66 @@ app.get('/api/word-lists/:id', async (req, res) => {
             return res.status(404).json({ error: 'Word list not found' });
         }
 
-        const words = await db.query(
-            'SELECT * FROM global_collection_words WHERE collection_id = $1 ORDER BY order_index ASC',
-            [parseInt(id)]
-        );
+        const collectionData = collection.rows[0];
+        const source_lang = collectionData.source_lang;
 
+        // Build language table mapping
+        const langTableMap = {
+            'ru': 'russian',
+            'pl': 'polish',
+            'ar': 'arabic',
+            'tr': 'turkish',
+            'ro': 'romanian',
+            'sr': 'serbian',
+            'uk': 'ukrainian',
+            'en': 'english',
+            'it': 'italian',
+            'es': 'spanish',
+            'pt': 'portuguese',
+            'sw': 'swahili'
+        };
+
+        const targetLangTable = native_lang ? langTableMap[native_lang] : null;
+
+        if (!targetLangTable) {
+            // No native language specified or not supported, return without translations
+            const words = await db.query(
+                'SELECT source_word_id, order_index FROM universal_collection_words WHERE collection_id = $1 ORDER BY order_index',
+                [parseInt(id)]
+            );
+
+            return res.json({
+                ...collectionData,
+                from_lang: source_lang,
+                to_lang: native_lang || 'en',
+                topic: collectionData.theme,
+                difficulty_level: collectionData.level,
+                words: words.rows.map(w => ({ word_id: w.source_word_id }))
+            });
+        }
+
+        // Get words with translations
+        const words = await db.query(`
+            SELECT
+                sw.id,
+                sw.word,
+                tt.translation,
+                sw.example_de as example,
+                cw.order_index
+            FROM universal_collection_words cw
+            JOIN source_words_${source_lang === 'de' ? 'german' : source_lang} sw ON cw.source_word_id = sw.id
+            LEFT JOIN target_translations_${targetLangTable} tt ON tt.source_word_id = sw.id AND tt.source_lang = $1
+            WHERE cw.collection_id = $2
+            ORDER BY cw.order_index
+        `, [source_lang, parseInt(id)]);
+
+        // Transform to match old API format for frontend compatibility
         res.json({
-            ...collection.rows[0],
+            ...collectionData,
+            from_lang: source_lang,  // Source language being learned
+            to_lang: native_lang || 'en',  // Native language
+            topic: collectionData.theme,  // Map theme to topic
+            difficulty_level: collectionData.level,  // CEFR level
             words: words.rows
         });
     } catch (err) {
@@ -8049,16 +8368,72 @@ app.post('/api/word-lists/:id/import', async (req, res) => {
             return res.status(400).json({ error: 'Missing required fields: userId, languagePairId' });
         }
 
-        // Get collection words
-        const words = await db.query(
-            'SELECT * FROM global_collection_words WHERE collection_id = $1 ORDER BY order_index ASC',
+        // Get language pair info to determine native language
+        const langPair = await db.query(
+            'SELECT from_lang, to_lang FROM language_pairs WHERE id = $1',
+            [parseInt(languagePairId)]
+        );
+
+        if (langPair.rows.length === 0) {
+            return res.status(404).json({ error: 'Language pair not found' });
+        }
+
+        const native_lang = langPair.rows[0].to_lang;  // to_lang is native language
+
+        // Get collection info
+        const collection = await db.query(
+            'SELECT source_lang FROM universal_collections WHERE id = $1',
             [parseInt(id)]
         );
 
+        if (collection.rows.length === 0) {
+            return res.status(404).json({ error: 'Collection not found' });
+        }
+
+        const source_lang = collection.rows[0].source_lang;
+
+        // Build table names
+        const langTableMap = {
+            'ru': 'russian',
+            'pl': 'polish',
+            'ar': 'arabic',
+            'tr': 'turkish',
+            'ro': 'romanian',
+            'sr': 'serbian',
+            'uk': 'ukrainian',
+            'en': 'english',
+            'it': 'italian',
+            'es': 'spanish',
+            'pt': 'portuguese',
+            'sw': 'swahili'
+        };
+
+        const targetLangTable = langTableMap[native_lang];
+        if (!targetLangTable) {
+            return res.status(400).json({ error: `Unsupported native language: ${native_lang}` });
+        }
+
+        // Get collection words with translations
+        const words = await db.query(`
+            SELECT
+                sw.word,
+                tt.translation,
+                sw.example_de as example
+            FROM universal_collection_words cw
+            JOIN source_words_${source_lang === 'de' ? 'german' : source_lang} sw ON cw.source_word_id = sw.id
+            LEFT JOIN target_translations_${targetLangTable} tt ON tt.source_word_id = sw.id AND tt.source_lang = $1
+            WHERE cw.collection_id = $2
+            ORDER BY cw.order_index
+        `, [source_lang, parseInt(id)]);
+
         await db.query('BEGIN');
+
+        let importedCount = 0;
 
         // Add each word to user's collection
         for (const word of words.rows) {
+            if (!word.translation) continue;  // Skip words without translations
+
             // Check if word already exists for this user
             const existing = await db.query(
                 'SELECT id FROM words WHERE user_id = $1 AND language_pair_id = $2 AND word = $3',
@@ -8067,15 +8442,23 @@ app.post('/api/word-lists/:id/import', async (req, res) => {
 
             if (existing.rows.length === 0) {
                 await db.query(`
-                    INSERT INTO words (user_id, language_pair_id, word, translation)
-                    VALUES ($1, $2, $3, $4)
-                `, [parseInt(userId), parseInt(languagePairId), word.word, word.translation]);
+                    INSERT INTO words (user_id, language_pair_id, word, translation, example, exampleTranslation, next_review_date)
+                    VALUES ($1, $2, $3, $4, $5, $6, NOW())
+                `, [
+                    parseInt(userId),
+                    parseInt(languagePairId),
+                    word.word,
+                    word.translation,
+                    word.example || '',
+                    word.exampleTranslation || ''
+                ]);
+                importedCount++;
             }
         }
 
         // Update usage count
         await db.query(
-            'UPDATE global_word_collections SET usage_count = usage_count + 1 WHERE id = $1',
+            'UPDATE universal_collections SET usage_count = usage_count + 1 WHERE id = $1',
             [parseInt(id)]
         );
 
@@ -8083,7 +8466,9 @@ app.post('/api/word-lists/:id/import', async (req, res) => {
 
         res.json({
             success: true,
-            imported_count: words.rows.length
+            imported_count: importedCount,
+            total_words: words.rows.length,
+            skipped: words.rows.length - importedCount
         });
     } catch (err) {
         await db.query('ROLLBACK');
@@ -11491,6 +11876,93 @@ app.get('/api/words/random/:status/:count', async (req, res) => {
         const result = await db.query(query, params);
         res.json(result.rows);
     } catch (err) {
+        res.status(500).json({ error: err.message });
+    }
+});
+
+// Get proportionally distributed random words for quiz
+app.get('/api/words/random-proportional/:count', async (req, res) => {
+    try {
+        const { count } = req.params;
+        const { userId, languagePairId } = req.query;
+        const totalWords = parseInt(count);
+
+        // Get counts for each status
+        const countsQuery = `
+            SELECT status, COUNT(*) as count
+            FROM words
+            WHERE user_id = $1 AND language_pair_id = $2
+            AND status IN ('studying', 'review_1', 'review_3', 'review_7', 'review_14', 'review_30', 'review_60', 'review_120')
+            GROUP BY status
+        `;
+        const countsResult = await db.query(countsQuery, [parseInt(userId), parseInt(languagePairId)]);
+
+        // Calculate total available words and proportions
+        const statusCounts = {};
+        let totalAvailable = 0;
+
+        countsResult.rows.forEach(row => {
+            statusCounts[row.status] = parseInt(row.count);
+            totalAvailable += parseInt(row.count);
+        });
+
+        if (totalAvailable === 0) {
+            return res.json([]);
+        }
+
+        // Calculate how many words to take from each status proportionally
+        const statusAllocations = {};
+        let allocatedSoFar = 0;
+
+        for (const [status, count] of Object.entries(statusCounts)) {
+            const proportion = count / totalAvailable;
+            const allocation = Math.round(proportion * totalWords);
+            statusAllocations[status] = Math.min(allocation, count); // Don't allocate more than available
+            allocatedSoFar += statusAllocations[status];
+        }
+
+        // Adjust if we allocated too few or too many words due to rounding
+        const diff = totalWords - allocatedSoFar;
+        if (diff !== 0) {
+            // Find the status with the most words and adjust it
+            const sortedStatuses = Object.entries(statusCounts).sort((a, b) => b[1] - a[1]);
+            for (const [status, count] of sortedStatuses) {
+                if (diff > 0 && statusAllocations[status] < count) {
+                    // Need to add more
+                    const canAdd = Math.min(diff, count - statusAllocations[status]);
+                    statusAllocations[status] += canAdd;
+                    break;
+                } else if (diff < 0 && statusAllocations[status] > 0) {
+                    // Need to remove some
+                    const canRemove = Math.min(Math.abs(diff), statusAllocations[status]);
+                    statusAllocations[status] -= canRemove;
+                    break;
+                }
+            }
+        }
+
+        // Fetch words from each status
+        const allWords = [];
+        for (const [status, allocation] of Object.entries(statusAllocations)) {
+            if (allocation > 0) {
+                const wordsQuery = `
+                    SELECT * FROM words
+                    WHERE status = $1 AND user_id = $2 AND language_pair_id = $3
+                    AND (nextReviewDate IS NULL OR nextReviewDate <= CURRENT_TIMESTAMP)
+                    ORDER BY RANDOM()
+                    LIMIT $4
+                `;
+                const wordsResult = await db.query(wordsQuery, [status, parseInt(userId), parseInt(languagePairId), allocation]);
+                allWords.push(...wordsResult.rows);
+            }
+        }
+
+        // Final shuffle to mix all statuses
+        allWords.sort(() => Math.random() - 0.5);
+
+        res.json(allWords);
+    } catch (err) {
+        console.error('Proportional random words error:', err);
         res.status(500).json({ error: err.message });
     }
 });
@@ -15465,6 +15937,18 @@ app.get('/api/debug/word-stats/:userId/:languagePairId', async (req, res) => {
     } catch (err) {
         logger.error('Error getting word stats:', err);
         res.status(500).json({ error: err.message });
+    }
+});
+
+// Temporary endpoint to run thematic collections import
+app.post('/api/admin/import-thematic-collections', async (req, res) => {
+    try {
+        const { createThematicCollections } = require('./scripts/create-german-a1-thematic-collections.js');
+        await createThematicCollections();
+        res.json({ success: true, message: 'Thematic collections imported successfully' });
+    } catch (error) {
+        logger.error('Failed to import thematic collections:', error);
+        res.status(500).json({ error: error.message });
     }
 });
 

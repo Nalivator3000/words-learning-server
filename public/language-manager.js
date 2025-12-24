@@ -7,16 +7,32 @@ class LanguageManager {
             'de': 'German',
             'es': 'Spanish',
             'fr': 'French',
-            'it': 'Italian'
+            'it': 'Italian',
+            'pl': 'Polish',
+            'ar': 'Arabic',
+            'tr': 'Turkish',
+            'ro': 'Romanian',
+            'sr': 'Serbian',
+            'uk': 'Ukrainian',
+            'pt': 'Portuguese',
+            'sw': 'Swahili'
         };
-        
+
         this.languageCodes = {
             'Russian': 'ru',
             'English': 'en',
             'German': 'de',
             'Spanish': 'es',
             'French': 'fr',
-            'Italian': 'it'
+            'Italian': 'it',
+            'Polish': 'pl',
+            'Arabic': 'ar',
+            'Turkish': 'tr',
+            'Romanian': 'ro',
+            'Serbian': 'sr',
+            'Ukrainian': 'uk',
+            'Portuguese': 'pt',
+            'Swahili': 'sw'
         };
         
         this.translations = {
@@ -719,7 +735,13 @@ class LanguageManager {
             'Chinese': /[\u4e00-\u9fff]/,
             'Japanese': /[\u3040-\u309f\u30a0-\u30ff]/,
             'Korean': /[\uac00-\ud7af]/,
-            'Arabic': /[\u0600-\u06ff]/
+            'Arabic': /[\u0600-\u06ff]/,
+            'Polish': /[ąćęłńóśźżĄĆĘŁŃÓŚŹŻ]/,
+            'Turkish': /[çğıİöşüÇĞÖŞÜ]/,
+            'Romanian': /[ăâîșțĂÂÎȘȚ]/,
+            'Serbian': /[а-яёђјљњћџА-ЯЁЂЈЉЊЋЏ]/,
+            'Ukrainian': /[а-яґєіїА-ЯҐЄІЇ]/,
+            'Swahili': /^[a-zA-Z\s\-'.,"!?0-9]+$/ // Uses Latin alphabet like English
         };
 
         // Common words dictionary for better detection
@@ -767,7 +789,13 @@ class LanguageManager {
             'Chinese': 'zh-CN',
             'Japanese': 'ja-JP',
             'Korean': 'ko-KR',
-            'Arabic': 'ar-SA'
+            'Arabic': 'ar-SA',
+            'Polish': 'pl-PL',
+            'Turkish': 'tr-TR',
+            'Romanian': 'ro-RO',
+            'Serbian': 'sr-RS',
+            'Ukrainian': 'uk-UA',
+            'Swahili': 'sw-KE'
         };
 
         return audioCodes[language] || 'en-US';
