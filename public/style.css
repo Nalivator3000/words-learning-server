@@ -6306,32 +6306,37 @@ body.quiz-active.menu-visible .survival-area {
 }
 
 /* Unified Word Lists Grid - Responsive */
+.word-lists-container .word-lists-unified-grid,
 .word-lists-unified-grid {
-    display: grid;
-    grid-template-columns: repeat(4, 1fr);
+    display: grid !important;
+    grid-template-columns: repeat(4, 1fr) !important;
     gap: 1.5rem;
     padding: 0;
+    width: 100%;
 }
 
 /* 3 columns for medium-large screens */
 @media (max-width: 1400px) {
+    .word-lists-container .word-lists-unified-grid,
     .word-lists-unified-grid {
-        grid-template-columns: repeat(3, 1fr);
+        grid-template-columns: repeat(3, 1fr) !important;
     }
 }
 
 /* 2 columns for tablets */
 @media (max-width: 1024px) {
+    .word-lists-container .word-lists-unified-grid,
     .word-lists-unified-grid {
-        grid-template-columns: repeat(2, 1fr);
+        grid-template-columns: repeat(2, 1fr) !important;
         gap: 1.25rem;
     }
 }
 
 /* 1 column for mobile */
 @media (max-width: 768px) {
+    .word-lists-container .word-lists-unified-grid,
     .word-lists-unified-grid {
-        grid-template-columns: 1fr;
+        grid-template-columns: 1fr !important;
         gap: 1rem;
     }
 }
