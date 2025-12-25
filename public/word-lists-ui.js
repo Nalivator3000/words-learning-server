@@ -315,9 +315,14 @@ class WordListsUI {
                     ` : ''}
                 </div>
 
-                <button class="import-btn" onclick="window.wordListsUI.importWordSet(${set.id}); event.stopPropagation();">
-                    ⬇️ Import
-                </button>
+                <div class="list-card-footer">
+                    <button class="action-btn secondary-btn view-set-btn" data-set-id="${set.id}" onclick="window.wordListsUI.viewWordSet(${set.id}); event.stopPropagation();">
+                        <span data-i18n="view_words">View Words</span>
+                    </button>
+                    <button class="action-btn primary-btn import-set-btn" data-set-id="${set.id}" onclick="window.wordListsUI.importWordSet(${set.id}); event.stopPropagation();">
+                        <span data-i18n="import_list">Import</span>
+                    </button>
+                </div>
             </div>
         `;
     }
@@ -639,6 +644,88 @@ class WordListsUI {
             console.error('Error importing word list:', error);
             if (window.showToast) {
                 showToast('Failed to import word list', 'error');
+            }
+        }
+    }
+
+    async viewWordSet(setId) {
+        try {
+            // Build URL with native language parameter if available
+            let url = `/api/word-sets/${setId}`;
+            if (this.languagePair && this.languagePair.to_lang) {
+                url += `?native_lang=${this.languagePair.to_lang}`;
+            }
+
+            const response = await fetch(url, {
+                cache: 'no-cache',
+                headers: {
+                    'Cache-Control': 'no-cache',
+                    'Pragma': 'no-cache'
+                }
+            });
+            if (!response.ok) {
+                const errorText = await response.text();
+                console.error('API Error:', response.status, errorText);
+                throw new Error('Failed to load word set details');
+            }
+
+            const wordSet = await response.json();
+            console.log('📖 Word set loaded:', wordSet);
+            this.selectedList = wordSet;
+
+            const modal = document.getElementById('wordListModal');
+            const modalTitle = document.getElementById('modalListTitle');
+            const modalContent = document.getElementById('modalListContent');
+
+            if (!modal || !modalTitle || !modalContent) {
+                throw new Error('Modal elements not found');
+            }
+
+            modalTitle.textContent = wordSet.name;
+
+            modalContent.innerHTML = `
+                <div class="word-list-detail">
+                    <div class="list-detail-info">
+                        <p class="list-detail-description">${wordSet.description || 'No description'}</p>
+                        <div class="list-detail-meta">
+                            <span><strong>${wordSet.word_count || 0}</strong> <span data-i18n="words">words</span></span>
+                            <span><strong>Level:</strong> ${wordSet.level}</span>
+                            ${wordSet.theme ? `<span><strong>Theme:</strong> ${wordSet.theme}</span>` : ''}
+                        </div>
+                    </div>
+
+                    <div class="words-list">
+                        ${(wordSet.words || []).map((word, index) => `
+                            <div class="word-item">
+                                <div class="word-number">${index + 1}</div>
+                                <div class="word-content">
+                                    <div class="word-main">
+                                        <strong>${word.word || 'N/A'}</strong>
+                                        <span class="word-translation">${word.translation || 'N/A'}</span>
+                                    </div>
+                                    ${word.example ? `
+                                        <div class="word-example">
+                                            <div class="example-text">${word.example}</div>
+                                            ${word.exampletranslation || word.exampleTranslation ? `<div class="example-translation">${word.exampletranslation || word.exampleTranslation}</div>` : ''}
+                                        </div>
+                                    ` : ''}
+                                </div>
+                            </div>
+                        `).join('')}
+                    </div>
+                </div>
+            `;
+
+            modal.style.display = 'flex';
+
+            // Update i18n in modal
+            if (window.i18n) {
+                i18n.updatePageTranslations();
+            }
+        } catch (error) {
+            console.error('Error viewing word set:', error);
+            if (window.showToast) {
+                showToast(error.message || 'Failed to load word set', 'error');
             }
         }
     }
