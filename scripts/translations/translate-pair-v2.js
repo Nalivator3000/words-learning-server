@@ -15,10 +15,12 @@ require('dotenv').config({ path: path.join(__dirname, '..', '..', '.env') });
 const db = new Pool({
     connectionString: process.env.DATABASE_URL,
     ssl: { rejectUnauthorized: false },
-    max: 3,
-    connectionTimeoutMillis: 10000,
+    max: 10, // Increased to handle parallel processes
+    min: 2,
+    connectionTimeoutMillis: 15000,
     idleTimeoutMillis: 30000,
-    query_timeout: 60000
+    query_timeout: 120000, // Increased to 2 minutes for slow queries
+    application_name: `translate_${process.pid}` // Unique name per process
 });
 
 // Retry logic for database queries
@@ -30,14 +32,16 @@ async function queryWithRetry(query, params, maxRetries = 5) {
             const isRetryableError = error.code === 'ECONNRESET' ||
                                     error.code === 'ECONNREFUSED' ||
                                     error.code === 'ETIMEDOUT' ||
+                                    error.code === '08P01' || // Protocol violation (bind error)
                                     error.message?.includes('Connection terminated') ||
-                                    error.message?.includes('read ECONNRESET');
+                                    error.message?.includes('read ECONNRESET') ||
+                                    error.message?.includes('bind message supplies');
 
             if (attempt === maxRetries || !isRetryableError) {
                 throw error;
             }
             const delay = Math.min(1000 * Math.pow(2, attempt), 30000); // Exponential backoff, max 30s
-            console.log(`⚠️  Connection error (attempt ${attempt}/${maxRetries}), retrying in ${delay/1000}s...`);
+            console.log(`⚠️  Database error (attempt ${attempt}/${maxRetries}), retrying in ${delay/1000}s...`);
             await new Promise(resolve => setTimeout(resolve, delay));
         }
     }
@@ -162,20 +166,29 @@ async function translateLanguagePair(sourceLangName, targetLangName) {
         if (!tableExists.rows[0].exists) {
             console.log(`📝 Creating table ${translationTable}...`);
 
-            const exampleColumn = `example_${targetCode}`;
-            await queryWithRetry(`
-                CREATE TABLE ${translationTable} (
-                    id SERIAL PRIMARY KEY,
-                    source_lang VARCHAR(2) DEFAULT $1,
-                    source_word_id INTEGER NOT NULL,
-                    translation VARCHAR(255) NOT NULL,
-                    ${exampleColumn} TEXT,
-                    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
-                    updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
-                    UNIQUE(source_word_id)
-                )
-            `, [sourceCode]);
-            console.log(`✅ Table created\n`);
+            try {
+                const exampleColumn = `example_${targetCode}`;
+                await queryWithRetry(`
+                    CREATE TABLE IF NOT EXISTS ${translationTable} (
+                        id SERIAL PRIMARY KEY,
+                        source_lang VARCHAR(2) DEFAULT $1,
+                        source_word_id INTEGER NOT NULL,
+                        translation VARCHAR(255) NOT NULL,
+                        ${exampleColumn} TEXT,
+                        created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+                        updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+                        UNIQUE(source_word_id)
+                    )
+                `, [sourceCode]);
+                console.log(`✅ Table created\n`);
+            } catch (createError) {
+                // Ignore error if another process already created the table
+                if (createError.code === '42P07') {
+                    console.log(`✅ Table already exists (created by parallel process)\n`);
+                } else {
+                    throw createError;
+                }
+            }
         }
 
         // Get all source words that need translation
