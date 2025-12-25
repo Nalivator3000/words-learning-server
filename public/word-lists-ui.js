@@ -209,9 +209,7 @@ class WordListsUI {
                 </div>
 
                 <!-- Lists Grid -->
-                <div class="word-lists-grid">
-                    ${this.renderWordLists()}
-                </div>
+                ${this.renderWordLists()}
             </div>
 
         `;
