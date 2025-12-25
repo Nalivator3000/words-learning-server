@@ -40,6 +40,7 @@
     "test:production": "node tests/api/test-lexybooster-production.js",
     "test:endpoints": "node tests/api/test-all-endpoints.js",
     "translate:matrix": "node scripts/translations/translate-matrix-parallel.js",
+    "translate:once": "node start-translations-once.js",
     "translate:auto": "node scripts/translations/auto-translate-cron.js 6",
     "translate:check": "node scripts/utils/check-all-translations.js",
     "worker": "node worker-translation.js"
