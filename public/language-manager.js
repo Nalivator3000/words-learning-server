@@ -679,8 +679,11 @@ class LanguageManager {
             return 'en-US'; // Default fallback
         }
 
-        const studyingLang = languagePair.fromLanguage;
-        const nativeLang = languagePair.toLanguage;
+        // Convert language codes to full names
+        // Database stores: from_lang = 'de', to_lang = 'ru'
+        // detectLanguage expects: 'German', 'Russian'
+        const studyingLang = this.getLanguageNameFromCode(languagePair.from_lang || languagePair.fromLanguage);
+        const nativeLang = this.getLanguageNameFromCode(languagePair.to_lang || languagePair.toLanguage);
 
         console.log(`🔍 Language detection for "${text}"`);
         console.log(`   Language pair: ${studyingLang} (studying) ↔ ${nativeLang} (native)`);
@@ -776,7 +779,37 @@ class LanguageManager {
     detectNativeLanguage(text, nativeLanguage) {
         return this.detectLanguage(text, nativeLanguage);
     }
-    
+
+    // Convert language code to full language name
+    // Input: 'de', 'ru', 'en', etc.
+    // Output: 'German', 'Russian', 'English', etc.
+    getLanguageNameFromCode(code) {
+        if (!code) return null;
+
+        const codeToName = {
+            'de': 'German',
+            'ru': 'Russian',
+            'en': 'English',
+            'es': 'Spanish',
+            'fr': 'French',
+            'it': 'Italian',
+            'pl': 'Polish',
+            'pt': 'Portuguese',
+            'zh': 'Chinese',
+            'ja': 'Japanese',
+            'ko': 'Korean',
+            'ar': 'Arabic',
+            'tr': 'Turkish',
+            'ro': 'Romanian',
+            'sr': 'Serbian',
+            'uk': 'Ukrainian',
+            'sw': 'Swahili',
+            'hi': 'Hindi'
+        };
+
+        return codeToName[code.toLowerCase()] || null;
+    }
+
     getAudioCode(language) {
         const audioCodes = {
             'Russian': 'ru-RU',

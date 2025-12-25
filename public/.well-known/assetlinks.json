@@ -1,14 +1,11 @@
 [
   {
-    "relation": [
-      "delegate_permission/common.handle_all_urls",
-      "delegate_permission/common.get_login_creds"
-    ],
+    "relation": ["delegate_permission/common.handle_all_urls"],
     "target": {
       "namespace": "android_app",
-      "package_name": "com.lexybooster.app",
+      "package_name": "com.lexibooster.app",
       "sha256_cert_fingerprints": [
-        "0F0F2CAD65E9BC5F32D6EDA5EF6BE58A7FE2B07245B4777502BB4A11CE43EE3F"
+        "0F:0F:2C:AD:65:E9:BC:5F:32:D6:ED:A5:EF:6B:E5:8A:7F:E2:B0:72:45:B4:77:75:02:BB:4A:11:CE:43:EE:3F"
       ]
     }
   }

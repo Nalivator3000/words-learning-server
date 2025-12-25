@@ -209,9 +209,7 @@ class WordListsUI {
                 </div>
 
                 <!-- Lists Grid -->
-                <div class="word-lists-grid">
-                    ${this.renderWordLists()}
-                </div>
+                ${this.renderWordLists()}
             </div>
 
         `;
@@ -244,37 +242,28 @@ class WordListsUI {
             `;
         }
 
-        let html = '';
+        // Combine all cards into a single grid
+        const allCards = [];
 
-        // Render CEFR Word Sets first
+        // Add CEFR word sets
         if (hasWordSets) {
-            html += `
-                <div class="word-sets-section">
-                    <h3 style="margin: 1rem 0; color: rgba(255,255,255,0.9); font-size: 1.1rem;">
-                        📖 CEFR Word Sets
-                    </h3>
-                    <div class="word-sets-grid">
-                        ${this.wordSets.map(set => this.renderWordSetCard(set)).join('')}
-                    </div>
-                </div>
-            `;
+            this.wordSets.forEach(set => {
+                allCards.push(this.renderWordSetCard(set));
+            });
         }
 
-        // Render Traditional Word Lists
+        // Add traditional word lists
         if (hasWordLists) {
-            html += `
-                <div class="traditional-lists-section" style="margin-top: 2rem;">
-                    <h3 style="margin: 1rem 0; color: rgba(255,255,255,0.9); font-size: 1.1rem;">
-                        📚 Traditional Word Lists
-                    </h3>
-                    <div class="traditional-lists-grid">
-                        ${this.wordLists.map(list => this.renderWordListCard(list)).join('')}
-                    </div>
-                </div>
-            `;
+            this.wordLists.forEach(list => {
+                allCards.push(this.renderWordListCard(list));
+            });
         }
 
-        return html;
+        return `
+            <div class="word-lists-unified-grid">
+                ${allCards.join('')}
+            </div>
+        `;
     }
 
     renderWordSetCard(set) {
@@ -290,34 +279,37 @@ class WordListsUI {
         const levelColor = levelColors[set.level] || '#6366f1';
 
         return `
-            <div class="word-set-card" data-set-id="${set.id}" style="cursor: pointer;">
+            <div class="word-list-card" data-set-id="${set.id}">
                 <div class="list-card-header">
-                    <div class="list-title-row">
-                        <h4 class="list-title">${set.name}</h4>
-                        <span class="list-level-badge" style="background: ${levelColor};">
+                    <div class="list-icon">📖</div>
+                    <div class="list-badges">
+                        <span class="list-badge difficulty" style="background: ${levelColor}20; color: ${levelColor};">
                             ${set.level}
                         </span>
+                        ${set.theme ? `<span class="list-badge topic">${set.theme}</span>` : ''}
                     </div>
-                    <p class="list-description">${set.description || 'No description available'}</p>
                 </div>
 
-                <div class="list-card-stats">
-                    <div class="stat-item">
-                        <span class="stat-icon">📝</span>
-                        <span class="stat-value">${set.word_count || 0}</span>
-                        <span class="stat-label">words</span>
-                    </div>
-                    ${set.theme ? `
-                        <div class="stat-item">
-                            <span class="stat-icon">🏷️</span>
-                            <span class="stat-value">${set.theme}</span>
+                <div class="list-card-body">
+                    <h4 class="list-title">${set.name}</h4>
+                    <p class="list-description">${set.description || 'No description'}</p>
+
+                    <div class="list-meta">
+                        <div class="meta-item">
+                            <span class="meta-icon">📝</span>
+                            <span class="meta-text">${set.word_count || 0} <span data-i18n="words">words</span></span>
                         </div>
-                    ` : ''}
+                    </div>
                 </div>
 
-                <button class="import-btn" onclick="window.wordListsUI.importWordSet(${set.id}); event.stopPropagation();">
-                    ⬇️ Import
-                </button>
+                <div class="list-card-footer">
+                    <button class="action-btn secondary-btn view-set-btn" data-set-id="${set.id}">
+                        <span data-i18n="view_list">View List</span>
+                    </button>
+                    <button class="action-btn primary-btn import-set-btn" data-set-id="${set.id}">
+                        <span data-i18n="import_list">Import</span>
+                    </button>
+                </div>
             </div>
         `;
     }
@@ -480,6 +472,26 @@ class WordListsUI {
                 }
             });
         });
+
+        // View set buttons (for CEFR word sets)
+        document.querySelectorAll('.view-set-btn').forEach(btn => {
+            btn.addEventListener('click', async (e) => {
+                const setId = e.currentTarget.getAttribute('data-set-id');
+                if (setId) {
+                    await this.viewWordSet(parseInt(setId));
+                }
+            });
+        });
+
+        // Import set buttons (for CEFR word sets)
+        document.querySelectorAll('.import-set-btn').forEach(btn => {
+            btn.addEventListener('click', async (e) => {
+                const setId = e.currentTarget.getAttribute('data-set-id');
+                if (setId) {
+                    await this.importWordSet(parseInt(setId));
+                }
+            });
+        });
     }
 
     async viewWordList(listId) {
@@ -639,6 +651,88 @@ class WordListsUI {
             console.error('Error importing word list:', error);
             if (window.showToast) {
                 showToast('Failed to import word list', 'error');
+            }
+        }
+    }
+
+    async viewWordSet(setId) {
+        try {
+            // Build URL with native language parameter if available
+            let url = `/api/word-sets/${setId}`;
+            if (this.languagePair && this.languagePair.to_lang) {
+                url += `?native_lang=${this.languagePair.to_lang}`;
+            }
+
+            const response = await fetch(url, {
+                cache: 'no-cache',
+                headers: {
+                    'Cache-Control': 'no-cache',
+                    'Pragma': 'no-cache'
+                }
+            });
+            if (!response.ok) {
+                const errorText = await response.text();
+                console.error('API Error:', response.status, errorText);
+                throw new Error('Failed to load word set details');
+            }
+
+            const wordSet = await response.json();
+            console.log('📖 Word set loaded:', wordSet);
+            this.selectedList = wordSet;
+
+            const modal = document.getElementById('wordListModal');
+            const modalTitle = document.getElementById('modalListTitle');
+            const modalContent = document.getElementById('modalListContent');
+
+            if (!modal || !modalTitle || !modalContent) {
+                throw new Error('Modal elements not found');
+            }
+
+            modalTitle.textContent = wordSet.name;
+
+            modalContent.innerHTML = `
+                <div class="word-list-detail">
+                    <div class="list-detail-info">
+                        <p class="list-detail-description">${wordSet.description || 'No description'}</p>
+                        <div class="list-detail-meta">
+                            <span><strong>${wordSet.word_count || 0}</strong> <span data-i18n="words">words</span></span>
+                            <span><strong>Level:</strong> ${wordSet.level}</span>
+                            ${wordSet.theme ? `<span><strong>Theme:</strong> ${wordSet.theme}</span>` : ''}
+                        </div>
+                    </div>
+
+                    <div class="words-list">
+                        ${(wordSet.words || []).map((word, index) => `
+                            <div class="word-item">
+                                <div class="word-number">${index + 1}</div>
+                                <div class="word-content">
+                                    <div class="word-main">
+                                        <strong>${word.word || 'N/A'}</strong>
+                                        <span class="word-translation">${word.translation || 'N/A'}</span>
+                                    </div>
+                                    ${word.example ? `
+                                        <div class="word-example">
+                                            <div class="example-text">${word.example}</div>
+                                            ${word.exampletranslation || word.exampleTranslation ? `<div class="example-translation">${word.exampletranslation || word.exampleTranslation}</div>` : ''}
+                                        </div>
+                                    ` : ''}
+                                </div>
+                            </div>
+                        `).join('')}
+                    </div>
+                </div>
+            `;
+
+            modal.style.display = 'flex';
+
+            // Update i18n in modal
+            if (window.i18n) {
+                i18n.updatePageTranslations();
+            }
+        } catch (error) {
+            console.error('Error viewing word set:', error);
+            if (window.showToast) {
+                showToast(error.message || 'Failed to load word set', 'error');
             }
         }
     }

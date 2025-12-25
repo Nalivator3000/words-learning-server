@@ -22,6 +22,41 @@
     --accent-amber: #FBBF24;
     --accent-cyan: #67E8F9;
 
+    /* Primary Extended */
+    --primary-200: #DDD6FE;
+    --primary-300: #C4B5FD;
+    --primary-400: #A78BFA;
+
+    /* Secondary Extended */
+    --secondary-200: #A5F3FC;
+    --secondary-300: #67E8F9;
+    --secondary-400: #22D3EE;
+    --secondary-800: #155E75;
+
+    /* Status Colors */
+    --success-500: #10B981;
+    --success-600: #059669;
+    --warning-500: #F59E0B;
+    --warning-600: #D97706;
+    --danger-500: #EF4444;
+    --danger-600: #DC2626;
+    --info-500: #3B82F6;
+    --info-600: #2563EB;
+
+    /* Semantic Colors (aliases for backward compatibility) */
+    --primary-color: var(--primary-500);
+    --secondary-color: var(--secondary-500);
+    --text-color: var(--neutral-900);
+    --text-secondary: var(--neutral-600);
+    --text-primary: var(--neutral-900);
+    --card-bg: rgba(255, 255, 255, 0.95);
+    --bg-color: var(--neutral-50);
+
+    /* Special Colors */
+    --gold: #FFD700;
+    --silver: #C0C0C0;
+    --bronze: #CD7F32;
+
     /* Enhanced Neutrals */
     --neutral-25: #FEFEFE;
     --neutral-50: #F9FAFB;
@@ -111,6 +146,10 @@
     /* Gradient Variables */
     --gradient-primary: linear-gradient(135deg, var(--primary-500) 0%, var(--primary-700) 50%, var(--accent-purple) 100%);
     --gradient-secondary: linear-gradient(135deg, var(--secondary-500) 0%, var(--secondary-700) 50%, var(--accent-cyan) 100%);
+    --gradient-success: linear-gradient(135deg, var(--success-500), var(--success-600));
+    --gradient-warning: linear-gradient(135deg, var(--warning-500), var(--warning-600));
+    --gradient-danger: linear-gradient(135deg, var(--danger-500), var(--danger-600));
+    --gradient-gold: linear-gradient(135deg, #FFD700, #FFED4E);
     --gradient-rainbow: radial-gradient(ellipse at top left,
         rgba(139, 92, 246, 0.15) 0%,
         transparent 50%),
@@ -3460,6 +3499,13 @@ input:focus, textarea:focus, select:focus {
     #themeToggleNav { --label: "Theme"; }
 
     /* Add padding to body to account for fixed bottom nav */
+    html, body {
+        overflow-x: hidden;
+        overflow-y: auto;
+        height: 100dvh;
+        max-height: 100dvh;
+    }
+
     body {
         padding-bottom: calc(55px + env(safe-area-inset-bottom));
     }
@@ -3531,10 +3577,11 @@ input:focus, textarea:focus, select:focus {
     }
     /* Quiz/Exercise mobile optimization - ELIMINATE SCROLL */
     .quiz-area {
-        padding: var(--space-3) var(--space-3) var(--space-2) var(--space-3);
+        padding: var(--space-3) var(--space-3) calc(var(--space-2) + env(safe-area-inset-bottom, 20px)) var(--space-3);
         min-height: auto;
-        max-height: calc(100dvh - 140px);
-        overflow-y: auto;
+        max-height: calc(100dvh - 140px - env(safe-area-inset-bottom, 0px));
+        height: calc(100dvh - 140px - env(safe-area-inset-bottom, 0px));
+        overflow-y: visible;
         overflow-x: hidden;
         display: grid;
         /* Optimized grid: progress | counter | question | answers | feedback | button */
@@ -6260,4 +6307,35 @@ body.quiz-active.menu-visible .survival-area {
 @keyframes pulse {
     0%, 100% { transform: scale(1); box-shadow: 0 4px 12px rgba(245, 158, 11, 0.3); }
     50% { transform: scale(1.02); box-shadow: 0 6px 16px rgba(245, 158, 11, 0.4); }
+}
+
+/* Unified Word Lists Grid - Responsive */
+.word-lists-unified-grid {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 1.5rem;
+    padding: 0;
+}
+
+/* 3 columns for medium-large screens */
+@media (max-width: 1400px) {
+    .word-lists-unified-grid {
+        grid-template-columns: repeat(3, 1fr);
+    }
+}
+
+/* 2 columns for tablets */
+@media (max-width: 1024px) {
+    .word-lists-unified-grid {
+        grid-template-columns: repeat(2, 1fr);
+        gap: 1.25rem;
+    }
+}
+
+/* 1 column for mobile */
+@media (max-width: 768px) {
+    .word-lists-unified-grid {
+        grid-template-columns: 1fr;
+        gap: 1rem;
+    }
 }
