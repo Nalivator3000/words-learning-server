@@ -1,2 +1,11 @@
+[phases.setup]
+nixPkgs = ["nodejs_14"]
+
 [phases.install]
-cmds = ["npm install --legacy-peer-deps"]
+cmds = ["rm -rf node_modules package-lock.json", "npm install --legacy-peer-deps"]
+
+[phases.build]
+cmds = ["echo 'Build phase complete'"]
+
+[start]
+cmd = "npm run start"
