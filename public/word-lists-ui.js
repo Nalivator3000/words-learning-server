@@ -244,37 +244,28 @@ class WordListsUI {
             `;
         }
 
-        let html = '';
+        // Combine all cards into a single grid
+        const allCards = [];
 
-        // Render CEFR Word Sets first
+        // Add CEFR word sets
         if (hasWordSets) {
-            html += `
-                <div class="word-sets-section">
-                    <h3 style="margin: 1rem 0; color: rgba(255,255,255,0.9); font-size: 1.1rem;">
-                        📖 CEFR Word Sets
-                    </h3>
-                    <div class="word-sets-grid">
-                        ${this.wordSets.map(set => this.renderWordSetCard(set)).join('')}
-                    </div>
-                </div>
-            `;
+            this.wordSets.forEach(set => {
+                allCards.push(this.renderWordSetCard(set));
+            });
         }
 
-        // Render Traditional Word Lists
+        // Add traditional word lists
         if (hasWordLists) {
-            html += `
-                <div class="traditional-lists-section" style="margin-top: 2rem;">
-                    <h3 style="margin: 1rem 0; color: rgba(255,255,255,0.9); font-size: 1.1rem;">
-                        📚 Traditional Word Lists
-                    </h3>
-                    <div class="traditional-lists-grid">
-                        ${this.wordLists.map(list => this.renderWordListCard(list)).join('')}
-                    </div>
-                </div>
-            `;
+            this.wordLists.forEach(list => {
+                allCards.push(this.renderWordListCard(list));
+            });
         }
 
-        return html;
+        return `
+            <div class="word-lists-unified-grid">
+                ${allCards.join('')}
+            </div>
+        `;
     }
 
     renderWordSetCard(set) {

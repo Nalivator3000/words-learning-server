@@ -6308,3 +6308,18 @@ body.quiz-active.menu-visible .survival-area {
     0%, 100% { transform: scale(1); box-shadow: 0 4px 12px rgba(245, 158, 11, 0.3); }
     50% { transform: scale(1.02); box-shadow: 0 6px 16px rgba(245, 158, 11, 0.4); }
 }
+
+/* Unified Word Lists Grid */
+.word-lists-unified-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
+    gap: 1.5rem;
+    padding: 0;
+}
+
+@media (max-width: 768px) {
+    .word-lists-unified-grid {
+        grid-template-columns: 1fr;
+        gap: 1rem;
+    }
+}
