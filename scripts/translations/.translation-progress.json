@@ -1,0 +1,1721 @@
+{
+  "completed": [],
+  "failed": [
+    {
+      "phase": 1,
+      "source": "de",
+      "target": "ja",
+      "priority": 1,
+      "error": {
+        "source": "de",
+        "target": "ja",
+        "duration": "0.0",
+        "code": 1,
+        "success": false
+      }
+    },
+    {
+      "phase": 1,
+      "source": "de",
+      "target": "ko",
+      "priority": 1,
+      "error": {
+        "source": "de",
+        "target": "ko",
+        "duration": "0.0",
+        "code": 1,
+        "success": false
+      }
+    },
+    {
+      "phase": 1,
+      "source": "de",
+      "target": "hi",
+      "priority": 1,
+      "error": {
+        "source": "de",
+        "target": "hi",
+        "duration": "0.0",
+        "code": 1,
+        "success": false
+      }
+    },
+    {
+      "phase": 1,
+      "source": "en",
+      "target": "ja",
+      "priority": 1,
+      "error": {
+        "source": "en",
+        "target": "ja",
+        "duration": "0.0",
+        "code": 1,
+        "success": false
+      }
+    },
+    {
+      "phase": 1,
+      "source": "en",
+      "target": "ko",
+      "priority": 1,
+      "error": {
+        "source": "en",
+        "target": "ko",
+        "duration": "0.0",
+        "code": 1,
+        "success": false
+      }
+    },
+    {
+      "phase": 1,
+      "source": "en",
+      "target": "hi",
+      "priority": 1,
+      "error": {
+        "source": "en",
+        "target": "hi",
+        "duration": "0.0",
+        "code": 1,
+        "success": false
+      }
+    },
+    {
+      "phase": 1,
+      "source": "es",
+      "target": "ja",
+      "priority": 1,
+      "error": {
+        "source": "es",
+        "target": "ja",
+        "duration": "0.0",
+        "code": 1,
+        "success": false
+      }
+    },
+    {
+      "phase": 1,
+      "source": "es",
+      "target": "ko",
+      "priority": 1,
+      "error": {
+        "source": "es",
+        "target": "ko",
+        "duration": "0.0",
+        "code": 1,
+        "success": false
+      }
+    },
+    {
+      "phase": 1,
+      "source": "es",
+      "target": "hi",
+      "priority": 1,
+      "error": {
+        "source": "es",
+        "target": "hi",
+        "duration": "0.0",
+        "code": 1,
+        "success": false
+      }
+    },
+    {
+      "phase": 2,
+      "source": "fr",
+      "target": "ar",
+      "priority": 2,
+      "error": {
+        "source": "fr",
+        "target": "ar",
+        "duration": "0.0",
+        "code": 1,
+        "success": false
+      }
+    },
+    {
+      "phase": 2,
+      "source": "fr",
+      "target": "it",
+      "priority": 2,
+      "error": {
+        "source": "fr",
+        "target": "it",
+        "duration": "0.0",
+        "code": 1,
+        "success": false
+      }
+    },
+    {
+      "phase": 2,
+      "source": "fr",
+      "target": "pt",
+      "priority": 2,
+      "error": {
+        "source": "fr",
+        "target": "pt",
+        "duration": "0.0",
+        "code": 1,
+        "success": false
+      }
+    },
+    {
+      "phase": 2,
+      "source": "fr",
+      "target": "pl",
+      "priority": 2,
+      "error": {
+        "source": "fr",
+        "target": "pl",
+        "duration": "0.0",
+        "code": 1,
+        "success": false
+      }
+    },
+    {
+      "phase": 2,
+      "source": "fr",
+      "target": "ro",
+      "priority": 2,
+      "error": {
+        "source": "fr",
+        "target": "ro",
+        "duration": "0.0",
+        "code": 1,
+        "success": false
+      }
+    },
+    {
+      "phase": 2,
+      "source": "fr",
+      "target": "sr",
+      "priority": 2,
+      "error": {
+        "source": "fr",
+        "target": "sr",
+        "duration": "0.0",
+        "code": 1,
+        "success": false
+      }
+    },
+    {
+      "phase": 2,
+      "source": "fr",
+      "target": "uk",
+      "priority": 2,
+      "error": {
+        "source": "fr",
+        "target": "uk",
+        "duration": "0.0",
+        "code": 1,
+        "success": false
+      }
+    },
+    {
+      "phase": 2,
+      "source": "fr",
+      "target": "tr",
+      "priority": 2,
+      "error": {
+        "source": "fr",
+        "target": "tr",
+        "duration": "0.0",
+        "code": 1,
+        "success": false
+      }
+    },
+    {
+      "phase": 2,
+      "source": "fr",
+      "target": "sw",
+      "priority": 2,
+      "error": {
+        "source": "fr",
+        "target": "sw",
+        "duration": "0.0",
+        "code": 1,
+        "success": false
+      }
+    },
+    {
+      "phase": 2,
+      "source": "fr",
+      "target": "zh",
+      "priority": 2,
+      "error": {
+        "source": "fr",
+        "target": "zh",
+        "duration": "0.0",
+        "code": 1,
+        "success": false
+      }
+    },
+    {
+      "phase": 2,
+      "source": "fr",
+      "target": "ja",
+      "priority": 2,
+      "error": {
+        "source": "fr",
+        "target": "ja",
+        "duration": "0.0",
+        "code": 1,
+        "success": false
+      }
+    },
+    {
+      "phase": 2,
+      "source": "fr",
+      "target": "ko",
+      "priority": 2,
+      "error": {
+        "source": "fr",
+        "target": "ko",
+        "duration": "0.0",
+        "code": 1,
+        "success": false
+      }
+    },
+    {
+      "phase": 2,
+      "source": "fr",
+      "target": "hi",
+      "priority": 2,
+      "error": {
+        "source": "fr",
+        "target": "hi",
+        "duration": "0.0",
+        "code": 1,
+        "success": false
+      }
+    },
+    {
+      "phase": 2,
+      "source": "it",
+      "target": "ar",
+      "priority": 2,
+      "error": {
+        "source": "it",
+        "target": "ar",
+        "duration": "0.0",
+        "code": 1,
+        "success": false
+      }
+    },
+    {
+      "phase": 2,
+      "source": "it",
+      "target": "fr",
+      "priority": 2,
+      "error": {
+        "source": "it",
+        "target": "fr",
+        "duration": "0.0",
+        "code": 1,
+        "success": false
+      }
+    },
+    {
+      "phase": 2,
+      "source": "it",
+      "target": "pt",
+      "priority": 2,
+      "error": {
+        "source": "it",
+        "target": "pt",
+        "duration": "0.0",
+        "code": 1,
+        "success": false
+      }
+    },
+    {
+      "phase": 2,
+      "source": "it",
+      "target": "pl",
+      "priority": 2,
+      "error": {
+        "source": "it",
+        "target": "pl",
+        "duration": "0.0",
+        "code": 1,
+        "success": false
+      }
+    },
+    {
+      "phase": 2,
+      "source": "it",
+      "target": "ro",
+      "priority": 2,
+      "error": {
+        "source": "it",
+        "target": "ro",
+        "duration": "0.0",
+        "code": 1,
+        "success": false
+      }
+    },
+    {
+      "phase": 2,
+      "source": "it",
+      "target": "sr",
+      "priority": 2,
+      "error": {
+        "source": "it",
+        "target": "sr",
+        "duration": "0.0",
+        "code": 1,
+        "success": false
+      }
+    },
+    {
+      "phase": 2,
+      "source": "it",
+      "target": "uk",
+      "priority": 2,
+      "error": {
+        "source": "it",
+        "target": "uk",
+        "duration": "0.0",
+        "code": 1,
+        "success": false
+      }
+    },
+    {
+      "phase": 2,
+      "source": "it",
+      "target": "tr",
+      "priority": 2,
+      "error": {
+        "source": "it",
+        "target": "tr",
+        "duration": "0.0",
+        "code": 1,
+        "success": false
+      }
+    },
+    {
+      "phase": 2,
+      "source": "it",
+      "target": "sw",
+      "priority": 2,
+      "error": {
+        "source": "it",
+        "target": "sw",
+        "duration": "0.0",
+        "code": 1,
+        "success": false
+      }
+    },
+    {
+      "phase": 2,
+      "source": "it",
+      "target": "zh",
+      "priority": 2,
+      "error": {
+        "source": "it",
+        "target": "zh",
+        "duration": "0.0",
+        "code": 1,
+        "success": false
+      }
+    },
+    {
+      "phase": 2,
+      "source": "it",
+      "target": "ja",
+      "priority": 2,
+      "error": {
+        "source": "it",
+        "target": "ja",
+        "duration": "0.0",
+        "code": 1,
+        "success": false
+      }
+    },
+    {
+      "phase": 2,
+      "source": "it",
+      "target": "ko",
+      "priority": 2,
+      "error": {
+        "source": "it",
+        "target": "ko",
+        "duration": "0.0",
+        "code": 1,
+        "success": false
+      }
+    },
+    {
+      "phase": 2,
+      "source": "it",
+      "target": "hi",
+      "priority": 2,
+      "error": {
+        "source": "it",
+        "target": "hi",
+        "duration": "0.0",
+        "code": 1,
+        "success": false
+      }
+    },
+    {
+      "phase": 2,
+      "source": "pt",
+      "target": "ar",
+      "priority": 2,
+      "error": {
+        "source": "pt",
+        "target": "ar",
+        "duration": "0.0",
+        "code": 1,
+        "success": false
+      }
+    },
+    {
+      "phase": 2,
+      "source": "pt",
+      "target": "fr",
+      "priority": 2,
+      "error": {
+        "source": "pt",
+        "target": "fr",
+        "duration": "0.0",
+        "code": 1,
+        "success": false
+      }
+    },
+    {
+      "phase": 2,
+      "source": "pt",
+      "target": "it",
+      "priority": 2,
+      "error": {
+        "source": "pt",
+        "target": "it",
+        "duration": "0.0",
+        "code": 1,
+        "success": false
+      }
+    },
+    {
+      "phase": 2,
+      "source": "pt",
+      "target": "pl",
+      "priority": 2,
+      "error": {
+        "source": "pt",
+        "target": "pl",
+        "duration": "0.0",
+        "code": 1,
+        "success": false
+      }
+    },
+    {
+      "phase": 2,
+      "source": "pt",
+      "target": "ro",
+      "priority": 2,
+      "error": {
+        "source": "pt",
+        "target": "ro",
+        "duration": "0.0",
+        "code": 1,
+        "success": false
+      }
+    },
+    {
+      "phase": 2,
+      "source": "pt",
+      "target": "sr",
+      "priority": 2,
+      "error": {
+        "source": "pt",
+        "target": "sr",
+        "duration": "0.0",
+        "code": 1,
+        "success": false
+      }
+    },
+    {
+      "phase": 2,
+      "source": "pt",
+      "target": "uk",
+      "priority": 2,
+      "error": {
+        "source": "pt",
+        "target": "uk",
+        "duration": "0.0",
+        "code": 1,
+        "success": false
+      }
+    },
+    {
+      "phase": 2,
+      "source": "pt",
+      "target": "tr",
+      "priority": 2,
+      "error": {
+        "source": "pt",
+        "target": "tr",
+        "duration": "0.0",
+        "code": 1,
+        "success": false
+      }
+    },
+    {
+      "phase": 2,
+      "source": "pt",
+      "target": "sw",
+      "priority": 2,
+      "error": {
+        "source": "pt",
+        "target": "sw",
+        "duration": "0.0",
+        "code": 1,
+        "success": false
+      }
+    },
+    {
+      "phase": 2,
+      "source": "pt",
+      "target": "zh",
+      "priority": 2,
+      "error": {
+        "source": "pt",
+        "target": "zh",
+        "duration": "0.0",
+        "code": 1,
+        "success": false
+      }
+    },
+    {
+      "phase": 2,
+      "source": "pt",
+      "target": "ja",
+      "priority": 2,
+      "error": {
+        "source": "pt",
+        "target": "ja",
+        "duration": "0.0",
+        "code": 1,
+        "success": false
+      }
+    },
+    {
+      "phase": 2,
+      "source": "pt",
+      "target": "ko",
+      "priority": 2,
+      "error": {
+        "source": "pt",
+        "target": "ko",
+        "duration": "0.0",
+        "code": 1,
+        "success": false
+      }
+    },
+    {
+      "phase": 2,
+      "source": "pt",
+      "target": "hi",
+      "priority": 2,
+      "error": {
+        "source": "pt",
+        "target": "hi",
+        "duration": "0.0",
+        "code": 1,
+        "success": false
+      }
+    },
+    {
+      "phase": 3,
+      "source": "ar",
+      "target": "en",
+      "priority": 3,
+      "error": {
+        "source": "ar",
+        "target": "en",
+        "duration": "0.0",
+        "code": 1,
+        "success": false
+      }
+    },
+    {
+      "phase": 3,
+      "source": "ar",
+      "target": "es",
+      "priority": 3,
+      "error": {
+        "source": "ar",
+        "target": "es",
+        "duration": "0.0",
+        "code": 1,
+        "success": false
+      }
+    },
+    {
+      "phase": 3,
+      "source": "ar",
+      "target": "fr",
+      "priority": 3,
+      "error": {
+        "source": "ar",
+        "target": "fr",
+        "duration": "0.0",
+        "code": 1,
+        "success": false
+      }
+    },
+    {
+      "phase": 3,
+      "source": "ar",
+      "target": "it",
+      "priority": 3,
+      "error": {
+        "source": "ar",
+        "target": "it",
+        "duration": "0.0",
+        "code": 1,
+        "success": false
+      }
+    },
+    {
+      "phase": 3,
+      "source": "ar",
+      "target": "pt",
+      "priority": 3,
+      "error": {
+        "source": "ar",
+        "target": "pt",
+        "duration": "0.0",
+        "code": 1,
+        "success": false
+      }
+    },
+    {
+      "phase": 3,
+      "source": "ar",
+      "target": "pl",
+      "priority": 3,
+      "error": {
+        "source": "ar",
+        "target": "pl",
+        "duration": "0.0",
+        "code": 1,
+        "success": false
+      }
+    },
+    {
+      "phase": 3,
+      "source": "ar",
+      "target": "ro",
+      "priority": 3,
+      "error": {
+        "source": "ar",
+        "target": "ro",
+        "duration": "0.0",
+        "code": 1,
+        "success": false
+      }
+    },
+    {
+      "phase": 3,
+      "source": "ar",
+      "target": "sr",
+      "priority": 3,
+      "error": {
+        "source": "ar",
+        "target": "sr",
+        "duration": "0.0",
+        "code": 1,
+        "success": false
+      }
+    },
+    {
+      "phase": 3,
+      "source": "ar",
+      "target": "uk",
+      "priority": 3,
+      "error": {
+        "source": "ar",
+        "target": "uk",
+        "duration": "0.0",
+        "code": 1,
+        "success": false
+      }
+    },
+    {
+      "phase": 3,
+      "source": "ar",
+      "target": "tr",
+      "priority": 3,
+      "error": {
+        "source": "ar",
+        "target": "tr",
+        "duration": "0.0",
+        "code": 1,
+        "success": false
+      }
+    },
+    {
+      "phase": 3,
+      "source": "ar",
+      "target": "sw",
+      "priority": 3,
+      "error": {
+        "source": "ar",
+        "target": "sw",
+        "duration": "0.0",
+        "code": 1,
+        "success": false
+      }
+    },
+    {
+      "phase": 3,
+      "source": "ar",
+      "target": "zh",
+      "priority": 3,
+      "error": {
+        "source": "ar",
+        "target": "zh",
+        "duration": "0.0",
+        "code": 1,
+        "success": false
+      }
+    },
+    {
+      "phase": 3,
+      "source": "ar",
+      "target": "ja",
+      "priority": 3,
+      "error": {
+        "source": "ar",
+        "target": "ja",
+        "duration": "0.0",
+        "code": 1,
+        "success": false
+      }
+    },
+    {
+      "phase": 3,
+      "source": "ar",
+      "target": "ko",
+      "priority": 3,
+      "error": {
+        "source": "ar",
+        "target": "ko",
+        "duration": "0.0",
+        "code": 1,
+        "success": false
+      }
+    },
+    {
+      "phase": 3,
+      "source": "ar",
+      "target": "hi",
+      "priority": 3,
+      "error": {
+        "source": "ar",
+        "target": "hi",
+        "duration": "0.0",
+        "code": 1,
+        "success": false
+      }
+    },
+    {
+      "phase": 3,
+      "source": "zh",
+      "target": "ar",
+      "priority": 3,
+      "error": {
+        "source": "zh",
+        "target": "ar",
+        "duration": "0.0",
+        "code": 1,
+        "success": false
+      }
+    },
+    {
+      "phase": 3,
+      "source": "zh",
+      "target": "fr",
+      "priority": 3,
+      "error": {
+        "source": "zh",
+        "target": "fr",
+        "duration": "0.0",
+        "code": 1,
+        "success": false
+      }
+    },
+    {
+      "phase": 3,
+      "source": "zh",
+      "target": "it",
+      "priority": 3,
+      "error": {
+        "source": "zh",
+        "target": "it",
+        "duration": "0.0",
+        "code": 1,
+        "success": false
+      }
+    },
+    {
+      "phase": 3,
+      "source": "zh",
+      "target": "pt",
+      "priority": 3,
+      "error": {
+        "source": "zh",
+        "target": "pt",
+        "duration": "0.0",
+        "code": 1,
+        "success": false
+      }
+    },
+    {
+      "phase": 3,
+      "source": "zh",
+      "target": "pl",
+      "priority": 3,
+      "error": {
+        "source": "zh",
+        "target": "pl",
+        "duration": "0.0",
+        "code": 1,
+        "success": false
+      }
+    },
+    {
+      "phase": 3,
+      "source": "zh",
+      "target": "ro",
+      "priority": 3,
+      "error": {
+        "source": "zh",
+        "target": "ro",
+        "duration": "0.0",
+        "code": 1,
+        "success": false
+      }
+    },
+    {
+      "phase": 3,
+      "source": "zh",
+      "target": "sr",
+      "priority": 3,
+      "error": {
+        "source": "zh",
+        "target": "sr",
+        "duration": "0.0",
+        "code": 1,
+        "success": false
+      }
+    },
+    {
+      "phase": 3,
+      "source": "zh",
+      "target": "uk",
+      "priority": 3,
+      "error": {
+        "source": "zh",
+        "target": "uk",
+        "duration": "0.0",
+        "code": 1,
+        "success": false
+      }
+    },
+    {
+      "phase": 3,
+      "source": "zh",
+      "target": "tr",
+      "priority": 3,
+      "error": {
+        "source": "zh",
+        "target": "tr",
+        "duration": "0.0",
+        "code": 1,
+        "success": false
+      }
+    },
+    {
+      "phase": 3,
+      "source": "zh",
+      "target": "sw",
+      "priority": 3,
+      "error": {
+        "source": "zh",
+        "target": "sw",
+        "duration": "0.0",
+        "code": 1,
+        "success": false
+      }
+    },
+    {
+      "phase": 3,
+      "source": "zh",
+      "target": "ja",
+      "priority": 3,
+      "error": {
+        "source": "zh",
+        "target": "ja",
+        "duration": "0.0",
+        "code": 1,
+        "success": false
+      }
+    },
+    {
+      "phase": 3,
+      "source": "zh",
+      "target": "ko",
+      "priority": 3,
+      "error": {
+        "source": "zh",
+        "target": "ko",
+        "duration": "0.0",
+        "code": 1,
+        "success": false
+      }
+    },
+    {
+      "phase": 3,
+      "source": "zh",
+      "target": "hi",
+      "priority": 3,
+      "error": {
+        "source": "zh",
+        "target": "hi",
+        "duration": "0.0",
+        "code": 1,
+        "success": false
+      }
+    },
+    {
+      "phase": 4,
+      "source": "ru",
+      "target": "de",
+      "priority": 4,
+      "error": {
+        "source": "ru",
+        "target": "de",
+        "duration": "0.0",
+        "code": 1,
+        "success": false
+      }
+    },
+    {
+      "phase": 4,
+      "source": "ru",
+      "target": "en",
+      "priority": 4,
+      "error": {
+        "source": "ru",
+        "target": "en",
+        "duration": "0.0",
+        "code": 1,
+        "success": false
+      }
+    },
+    {
+      "phase": 4,
+      "source": "ru",
+      "target": "es",
+      "priority": 4,
+      "error": {
+        "source": "ru",
+        "target": "es",
+        "duration": "0.0",
+        "code": 1,
+        "success": false
+      }
+    },
+    {
+      "phase": 4,
+      "source": "ru",
+      "target": "fr",
+      "priority": 4,
+      "error": {
+        "source": "ru",
+        "target": "fr",
+        "duration": "0.0",
+        "code": 1,
+        "success": false
+      }
+    },
+    {
+      "phase": 4,
+      "source": "ru",
+      "target": "it",
+      "priority": 4,
+      "error": {
+        "source": "ru",
+        "target": "it",
+        "duration": "0.0",
+        "code": 1,
+        "success": false
+      }
+    },
+    {
+      "phase": 4,
+      "source": "ru",
+      "target": "pt",
+      "priority": 4,
+      "error": {
+        "source": "ru",
+        "target": "pt",
+        "duration": "0.0",
+        "code": 1,
+        "success": false
+      }
+    },
+    {
+      "phase": 4,
+      "source": "ru",
+      "target": "ar",
+      "priority": 4,
+      "error": {
+        "source": "ru",
+        "target": "ar",
+        "duration": "0.0",
+        "code": 1,
+        "success": false
+      }
+    },
+    {
+      "phase": 4,
+      "source": "ru",
+      "target": "zh",
+      "priority": 4,
+      "error": {
+        "source": "ru",
+        "target": "zh",
+        "duration": "0.0",
+        "code": 1,
+        "success": false
+      }
+    },
+    {
+      "phase": 4,
+      "source": "ru",
+      "target": "ja",
+      "priority": 4,
+      "error": {
+        "source": "ru",
+        "target": "ja",
+        "duration": "0.0",
+        "code": 1,
+        "success": false
+      }
+    },
+    {
+      "phase": 4,
+      "source": "ru",
+      "target": "ko",
+      "priority": 4,
+      "error": {
+        "source": "ru",
+        "target": "ko",
+        "duration": "0.0",
+        "code": 1,
+        "success": false
+      }
+    },
+    {
+      "phase": 4,
+      "source": "ru",
+      "target": "pl",
+      "priority": 4,
+      "error": {
+        "source": "ru",
+        "target": "pl",
+        "duration": "0.0",
+        "code": 1,
+        "success": false
+      }
+    },
+    {
+      "phase": 4,
+      "source": "ru",
+      "target": "ro",
+      "priority": 4,
+      "error": {
+        "source": "ru",
+        "target": "ro",
+        "duration": "0.0",
+        "code": 1,
+        "success": false
+      }
+    },
+    {
+      "phase": 4,
+      "source": "ru",
+      "target": "sr",
+      "priority": 4,
+      "error": {
+        "source": "ru",
+        "target": "sr",
+        "duration": "0.0",
+        "code": 1,
+        "success": false
+      }
+    },
+    {
+      "phase": 4,
+      "source": "ru",
+      "target": "uk",
+      "priority": 4,
+      "error": {
+        "source": "ru",
+        "target": "uk",
+        "duration": "0.0",
+        "code": 1,
+        "success": false
+      }
+    },
+    {
+      "phase": 4,
+      "source": "ru",
+      "target": "tr",
+      "priority": 4,
+      "error": {
+        "source": "ru",
+        "target": "tr",
+        "duration": "0.0",
+        "code": 1,
+        "success": false
+      }
+    },
+    {
+      "phase": 4,
+      "source": "ru",
+      "target": "sw",
+      "priority": 4,
+      "error": {
+        "source": "ru",
+        "target": "sw",
+        "duration": "0.0",
+        "code": 1,
+        "success": false
+      }
+    },
+    {
+      "phase": 4,
+      "source": "ru",
+      "target": "hi",
+      "priority": 4,
+      "error": {
+        "source": "ru",
+        "target": "hi",
+        "duration": "0.0",
+        "code": 1,
+        "success": false
+      }
+    },
+    {
+      "phase": 5,
+      "source": "pl",
+      "target": "de",
+      "priority": 5,
+      "error": {
+        "source": "pl",
+        "target": "de",
+        "duration": "0.0",
+        "code": 1,
+        "success": false
+      }
+    },
+    {
+      "phase": 5,
+      "source": "pl",
+      "target": "en",
+      "priority": 5,
+      "error": {
+        "source": "pl",
+        "target": "en",
+        "duration": "0.0",
+        "code": 1,
+        "success": false
+      }
+    },
+    {
+      "phase": 5,
+      "source": "pl",
+      "target": "es",
+      "priority": 5,
+      "error": {
+        "source": "pl",
+        "target": "es",
+        "duration": "0.0",
+        "code": 1,
+        "success": false
+      }
+    },
+    {
+      "phase": 5,
+      "source": "pl",
+      "target": "fr",
+      "priority": 5,
+      "error": {
+        "source": "pl",
+        "target": "fr",
+        "duration": "0.0",
+        "code": 1,
+        "success": false
+      }
+    },
+    {
+      "phase": 5,
+      "source": "pl",
+      "target": "it",
+      "priority": 5,
+      "error": {
+        "source": "pl",
+        "target": "it",
+        "duration": "0.0",
+        "code": 1,
+        "success": false
+      }
+    },
+    {
+      "phase": 5,
+      "source": "pl",
+      "target": "pt",
+      "priority": 5,
+      "error": {
+        "source": "pl",
+        "target": "pt",
+        "duration": "0.0",
+        "code": 1,
+        "success": false
+      }
+    },
+    {
+      "phase": 5,
+      "source": "pl",
+      "target": "ar",
+      "priority": 5,
+      "error": {
+        "source": "pl",
+        "target": "ar",
+        "duration": "0.0",
+        "code": 1,
+        "success": false
+      }
+    },
+    {
+      "phase": 5,
+      "source": "pl",
+      "target": "zh",
+      "priority": 5,
+      "error": {
+        "source": "pl",
+        "target": "zh",
+        "duration": "0.0",
+        "code": 1,
+        "success": false
+      }
+    },
+    {
+      "phase": 5,
+      "source": "pl",
+      "target": "ja",
+      "priority": 5,
+      "error": {
+        "source": "pl",
+        "target": "ja",
+        "duration": "0.0",
+        "code": 1,
+        "success": false
+      }
+    },
+    {
+      "phase": 5,
+      "source": "pl",
+      "target": "ko",
+      "priority": 5,
+      "error": {
+        "source": "pl",
+        "target": "ko",
+        "duration": "0.0",
+        "code": 1,
+        "success": false
+      }
+    },
+    {
+      "phase": 5,
+      "source": "pl",
+      "target": "ru",
+      "priority": 5,
+      "error": {
+        "source": "pl",
+        "target": "ru",
+        "duration": "0.0",
+        "code": 1,
+        "success": false
+      }
+    },
+    {
+      "phase": 5,
+      "source": "pl",
+      "target": "ro",
+      "priority": 5,
+      "error": {
+        "source": "pl",
+        "target": "ro",
+        "duration": "0.0",
+        "code": 1,
+        "success": false
+      }
+    },
+    {
+      "phase": 5,
+      "source": "pl",
+      "target": "sr",
+      "priority": 5,
+      "error": {
+        "source": "pl",
+        "target": "sr",
+        "duration": "0.0",
+        "code": 1,
+        "success": false
+      }
+    },
+    {
+      "phase": 5,
+      "source": "pl",
+      "target": "uk",
+      "priority": 5,
+      "error": {
+        "source": "pl",
+        "target": "uk",
+        "duration": "0.0",
+        "code": 1,
+        "success": false
+      }
+    },
+    {
+      "phase": 5,
+      "source": "pl",
+      "target": "tr",
+      "priority": 5,
+      "error": {
+        "source": "pl",
+        "target": "tr",
+        "duration": "0.0",
+        "code": 1,
+        "success": false
+      }
+    },
+    {
+      "phase": 5,
+      "source": "pl",
+      "target": "sw",
+      "priority": 5,
+      "error": {
+        "source": "pl",
+        "target": "sw",
+        "duration": "0.0",
+        "code": 1,
+        "success": false
+      }
+    },
+    {
+      "phase": 5,
+      "source": "pl",
+      "target": "hi",
+      "priority": 5,
+      "error": {
+        "source": "pl",
+        "target": "hi",
+        "duration": "0.0",
+        "code": 1,
+        "success": false
+      }
+    },
+    {
+      "phase": 5,
+      "source": "ro",
+      "target": "de",
+      "priority": 5,
+      "error": {
+        "source": "ro",
+        "target": "de",
+        "duration": "0.0",
+        "code": 1,
+        "success": false
+      }
+    },
+    {
+      "phase": 5,
+      "source": "ro",
+      "target": "en",
+      "priority": 5,
+      "error": {
+        "source": "ro",
+        "target": "en",
+        "duration": "0.0",
+        "code": 1,
+        "success": false
+      }
+    },
+    {
+      "phase": 5,
+      "source": "ro",
+      "target": "es",
+      "priority": 5,
+      "error": {
+        "source": "ro",
+        "target": "es",
+        "duration": "0.0",
+        "code": 1,
+        "success": false
+      }
+    },
+    {
+      "phase": 5,
+      "source": "ro",
+      "target": "fr",
+      "priority": 5,
+      "error": {
+        "source": "ro",
+        "target": "fr",
+        "duration": "0.0",
+        "code": 1,
+        "success": false
+      }
+    },
+    {
+      "phase": 5,
+      "source": "ro",
+      "target": "it",
+      "priority": 5,
+      "error": {
+        "source": "ro",
+        "target": "it",
+        "duration": "0.0",
+        "code": 1,
+        "success": false
+      }
+    },
+    {
+      "phase": 5,
+      "source": "ro",
+      "target": "pt",
+      "priority": 5,
+      "error": {
+        "source": "ro",
+        "target": "pt",
+        "duration": "0.0",
+        "code": 1,
+        "success": false
+      }
+    },
+    {
+      "phase": 5,
+      "source": "ro",
+      "target": "ar",
+      "priority": 5,
+      "error": {
+        "source": "ro",
+        "target": "ar",
+        "duration": "0.0",
+        "code": 1,
+        "success": false
+      }
+    },
+    {
+      "phase": 5,
+      "source": "ro",
+      "target": "zh",
+      "priority": 5,
+      "error": {
+        "source": "ro",
+        "target": "zh",
+        "duration": "0.0",
+        "code": 1,
+        "success": false
+      }
+    },
+    {
+      "phase": 5,
+      "source": "ro",
+      "target": "ja",
+      "priority": 5,
+      "error": {
+        "source": "ro",
+        "target": "ja",
+        "duration": "0.0",
+        "code": 1,
+        "success": false
+      }
+    },
+    {
+      "phase": 5,
+      "source": "ro",
+      "target": "ko",
+      "priority": 5,
+      "error": {
+        "source": "ro",
+        "target": "ko",
+        "duration": "0.0",
+        "code": 1,
+        "success": false
+      }
+    },
+    {
+      "phase": 5,
+      "source": "ro",
+      "target": "ru",
+      "priority": 5,
+      "error": {
+        "source": "ro",
+        "target": "ru",
+        "duration": "0.0",
+        "code": 1,
+        "success": false
+      }
+    },
+    {
+      "phase": 5,
+      "source": "ro",
+      "target": "pl",
+      "priority": 5,
+      "error": {
+        "source": "ro",
+        "target": "pl",
+        "duration": "0.0",
+        "code": 1,
+        "success": false
+      }
+    },
+    {
+      "phase": 5,
+      "source": "ro",
+      "target": "sr",
+      "priority": 5,
+      "error": {
+        "source": "ro",
+        "target": "sr",
+        "duration": "0.0",
+        "code": 1,
+        "success": false
+      }
+    },
+    {
+      "phase": 5,
+      "source": "ro",
+      "target": "uk",
+      "priority": 5,
+      "error": {
+        "source": "ro",
+        "target": "uk",
+        "duration": "0.0",
+        "code": 1,
+        "success": false
+      }
+    },
+    {
+      "phase": 5,
+      "source": "ro",
+      "target": "tr",
+      "priority": 5,
+      "error": {
+        "source": "ro",
+        "target": "tr",
+        "duration": "0.0",
+        "code": 1,
+        "success": false
+      }
+    },
+    {
+      "phase": 5,
+      "source": "ro",
+      "target": "sw",
+      "priority": 5,
+      "error": {
+        "source": "ro",
+        "target": "sw",
+        "duration": "0.0",
+        "code": 1,
+        "success": false
+      }
+    },
+    {
+      "phase": 5,
+      "source": "ro",
+      "target": "hi",
+      "priority": 5,
+      "error": {
+        "source": "ro",
+        "target": "hi",
+        "duration": "0.0",
+        "code": 1,
+        "success": false
+      }
+    },
+    {
+      "phase": 5,
+      "source": "uk",
+      "target": "de",
+      "priority": 5,
+      "error": {
+        "source": "uk",
+        "target": "de",
+        "duration": "0.0",
+        "code": 1,
+        "success": false
+      }
+    },
+    {
+      "phase": 5,
+      "source": "uk",
+      "target": "en",
+      "priority": 5,
+      "error": {
+        "source": "uk",
+        "target": "en",
+        "duration": "0.0",
+        "code": 1,
+        "success": false
+      }
+    },
+    {
+      "phase": 5,
+      "source": "uk",
+      "target": "es",
+      "priority": 5,
+      "error": {
+        "source": "uk",
+        "target": "es",
+        "duration": "0.0",
+        "code": 1,
+        "success": false
+      }
+    },
+    {
+      "phase": 5,
+      "source": "uk",
+      "target": "fr",
+      "priority": 5,
+      "error": {
+        "source": "uk",
+        "target": "fr",
+        "duration": "0.0",
+        "code": 1,
+        "success": false
+      }
+    },
+    {
+      "phase": 5,
+      "source": "uk",
+      "target": "it",
+      "priority": 5,
+      "error": {
+        "source": "uk",
+        "target": "it",
+        "duration": "0.0",
+        "code": 1,
+        "success": false
+      }
+    }
+  ]
+}
