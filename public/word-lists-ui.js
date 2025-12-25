@@ -290,36 +290,34 @@ class WordListsUI {
         const levelColor = levelColors[set.level] || '#6366f1';
 
         return `
-            <div class="word-set-card" data-set-id="${set.id}" style="cursor: pointer;">
+            <div class="word-list-card" data-set-id="${set.id}">
                 <div class="list-card-header">
-                    <div class="list-title-row">
-                        <h4 class="list-title">${set.name}</h4>
-                        <span class="list-level-badge" style="background: ${levelColor};">
+                    <div class="list-icon">📖</div>
+                    <div class="list-badges">
+                        <span class="list-badge difficulty" style="background: ${levelColor}20; color: ${levelColor};">
                             ${set.level}
                         </span>
+                        ${set.theme ? `<span class="list-badge topic">${set.theme}</span>` : ''}
                     </div>
-                    <p class="list-description">${set.description || 'No description available'}</p>
                 </div>
 
-                <div class="list-card-stats">
-                    <div class="stat-item">
-                        <span class="stat-icon">📝</span>
-                        <span class="stat-value">${set.word_count || 0}</span>
-                        <span class="stat-label">words</span>
-                    </div>
-                    ${set.theme ? `
-                        <div class="stat-item">
-                            <span class="stat-icon">🏷️</span>
-                            <span class="stat-value">${set.theme}</span>
+                <div class="list-card-body">
+                    <h4 class="list-title">${set.name}</h4>
+                    <p class="list-description">${set.description || 'No description'}</p>
+
+                    <div class="list-meta">
+                        <div class="meta-item">
+                            <span class="meta-icon">📝</span>
+                            <span class="meta-text">${set.word_count || 0} <span data-i18n="words">words</span></span>
                         </div>
-                    ` : ''}
+                    </div>
                 </div>
 
                 <div class="list-card-footer">
-                    <button class="action-btn secondary-btn view-set-btn" data-set-id="${set.id}" onclick="window.wordListsUI.viewWordSet(${set.id}); event.stopPropagation();">
-                        <span data-i18n="view_words">View Words</span>
+                    <button class="action-btn secondary-btn view-set-btn" data-set-id="${set.id}">
+                        <span data-i18n="view_list">View List</span>
                     </button>
-                    <button class="action-btn primary-btn import-set-btn" data-set-id="${set.id}" onclick="window.wordListsUI.importWordSet(${set.id}); event.stopPropagation();">
+                    <button class="action-btn primary-btn import-set-btn" data-set-id="${set.id}">
                         <span data-i18n="import_list">Import</span>
                     </button>
                 </div>
@@ -482,6 +480,26 @@ class WordListsUI {
                 const listId = e.currentTarget.getAttribute('data-list-id');
                 if (listId) {
                     await this.importWordList(parseInt(listId));
+                }
+            });
+        });
+
+        // View set buttons (for CEFR word sets)
+        document.querySelectorAll('.view-set-btn').forEach(btn => {
+            btn.addEventListener('click', async (e) => {
+                const setId = e.currentTarget.getAttribute('data-set-id');
+                if (setId) {
+                    await this.viewWordSet(parseInt(setId));
+                }
+            });
+        });
+
+        // Import set buttons (for CEFR word sets)
+        document.querySelectorAll('.import-set-btn').forEach(btn => {
+            btn.addEventListener('click', async (e) => {
+                const setId = e.currentTarget.getAttribute('data-set-id');
+                if (setId) {
+                    await this.importWordSet(parseInt(setId));
                 }
             });
         });
