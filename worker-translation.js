@@ -10,7 +10,7 @@ const fs = require('fs');
 const path = require('path');
 
 const SCRIPT_PATH = path.join(__dirname, 'scripts', 'translations', 'translate-matrix-parallel.js');
-const INTERVAL_HOURS = 6;
+const INTERVAL_HOURS = 3; // Changed from 6 to 3 hours for faster completion
 const INTERVAL_MS = INTERVAL_HOURS * 60 * 60 * 1000;
 const MAX_RETRIES = 5;
 const RETRY_DELAY_MS = 5 * 60 * 1000; // 5 minutes
