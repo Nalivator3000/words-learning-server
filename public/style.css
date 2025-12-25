@@ -6309,14 +6309,30 @@ body.quiz-active.menu-visible .survival-area {
     50% { transform: scale(1.02); box-shadow: 0 6px 16px rgba(245, 158, 11, 0.4); }
 }
 
-/* Unified Word Lists Grid */
+/* Unified Word Lists Grid - Responsive */
 .word-lists-unified-grid {
     display: grid;
-    grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
+    grid-template-columns: repeat(4, 1fr);
     gap: 1.5rem;
     padding: 0;
 }
 
+/* 3 columns for medium-large screens */
+@media (max-width: 1400px) {
+    .word-lists-unified-grid {
+        grid-template-columns: repeat(3, 1fr);
+    }
+}
+
+/* 2 columns for tablets */
+@media (max-width: 1024px) {
+    .word-lists-unified-grid {
+        grid-template-columns: repeat(2, 1fr);
+        gap: 1.25rem;
+    }
+}
+
+/* 1 column for mobile */
 @media (max-width: 768px) {
     .word-lists-unified-grid {
         grid-template-columns: 1fr;
