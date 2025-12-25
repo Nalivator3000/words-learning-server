@@ -41,7 +41,8 @@
     "test:endpoints": "node tests/api/test-all-endpoints.js",
     "translate:matrix": "node scripts/translations/translate-matrix-parallel.js",
     "translate:auto": "node scripts/translations/auto-translate-cron.js 6",
-    "translate:check": "node scripts/utils/check-all-translations.js"
+    "translate:check": "node scripts/utils/check-all-translations.js",
+    "worker": "node worker-translation.js"
   },
   "dependencies": {
     "@google-cloud/text-to-speech": "^6.4.0",
