@@ -45,7 +45,6 @@
     "worker": "node worker-translation.js"
   },
   "dependencies": {
-    "@google-cloud/text-to-speech": "^6.4.0",
     "compression": "^1.8.1",
     "connect-pg-simple": "^10.0.0",
     "cors": "^2.8.5",
