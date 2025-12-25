@@ -5645,11 +5645,7 @@ input:focus, textarea:focus, select:focus {
         align-self: flex-end;
     }
 
-    /* Word list cards - also improve mobile layout */
-    .word-lists-grid {
-        grid-template-columns: 1fr;
-        gap: 16px;
-    }
+    /* Word list cards - mobile layout handled by .word-lists-unified-grid below */
 
     .list-meta {
         flex-direction: column;
