@@ -167,11 +167,15 @@ async function translateLanguagePair(sourceLangName, targetLangName) {
             console.log(`📝 Creating table ${translationTable}...`);
 
             try {
+                // Add random delay to prevent concurrent table creation conflicts
+                await sleep(Math.random() * 2000);
+
                 const exampleColumn = `example_${targetCode}`;
+                // Use direct string substitution for DEFAULT value (not a parameter)
                 await queryWithRetry(`
                     CREATE TABLE IF NOT EXISTS ${translationTable} (
                         id SERIAL PRIMARY KEY,
-                        source_lang VARCHAR(2) DEFAULT $1,
+                        source_lang VARCHAR(2) DEFAULT '${sourceCode}',
                         source_word_id INTEGER NOT NULL,
                         translation VARCHAR(255) NOT NULL,
                         ${exampleColumn} TEXT,
@@ -179,7 +183,7 @@ async function translateLanguagePair(sourceLangName, targetLangName) {
                         updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
                         UNIQUE(source_word_id)
                     )
-                `, [sourceCode]);
+                `);
                 console.log(`✅ Table created\n`);
             } catch (createError) {
                 // Ignore error if another process already created the table
