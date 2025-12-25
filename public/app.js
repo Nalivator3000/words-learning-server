@@ -2304,28 +2304,30 @@ schreiben,Sie schreibt einen Brief.,Писать,Она пишет письmо.`
     }
 
     scrollToButton(buttonElement) {
-        // Scroll to make button visible on mobile devices
-        if (!buttonElement) return;
+        // DISABLED: Grid layout on mobile makes everything visible without scrolling
+        // Scrolling causes issues with Safari bottom navigation bar
+        return;
 
-        // Small delay to ensure DOM is updated
+        // Old code kept for reference (disabled)
+        /*
+        if (!buttonElement) return;
         setTimeout(() => {
-            // Scroll button into view with some padding at the bottom
             buttonElement.scrollIntoView({
                 behavior: 'smooth',
-                block: 'end',  // Align to bottom of visible area
+                block: 'end',
                 inline: 'nearest'
             });
 
-            // Add extra scroll padding on mobile for better visibility
             if (window.innerWidth <= 768) {
                 setTimeout(() => {
                     window.scrollBy({
-                        top: -20,  // Add 20px padding from bottom
+                        top: -20,
                         behavior: 'smooth'
                     });
                 }, 150);
             }
         }, 150);
+        */
     }
 
     shouldShowAudioButton(text) {
