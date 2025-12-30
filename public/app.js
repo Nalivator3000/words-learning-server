@@ -85,10 +85,7 @@ class LanguageLearningApp {
             }
 
             if (isLoggedIn) {
-                // Check if user has a language pair - if not, redirect to onboarding
-                // BUT only if we're not already on the onboarding page AND onboarding wasn't just completed
-                const isOnOnboardingPage = window.location.pathname === '/onboarding.html';
-
+                // Check if user has a language pair - if not, show onboarding modal
                 // If onboarding was just completed, reload user data to ensure we have the language pair
                 if (onboardingComplete) {
                     console.log('🔄 Reloading user data after onboarding completion');
@@ -100,10 +97,12 @@ class LanguageLearningApp {
                 // Check language pair AFTER potential reload
                 const currentLanguagePair = userManager.getCurrentLanguagePair();
 
-                if (!currentLanguagePair && !isOnOnboardingPage && !onboardingComplete) {
-                    console.log('🎯 User has no language pair - redirecting to onboarding');
-                    window.location.href = '/onboarding.html';
-                    return;
+                if (!currentLanguagePair && !onboardingComplete) {
+                    console.log('🎯 User has no language pair - showing onboarding modal');
+                    if (window.onboardingManager) {
+                        window.onboardingManager.show();
+                    }
+                    // Don't return - let the page load normally with modal shown
                 }
 
                 this.showSection('home');

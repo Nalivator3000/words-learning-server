@@ -115,8 +115,12 @@ class UserManager {
 
             // Check if user needs onboarding
             if (data.needsOnboarding) {
-                console.log('🎯 User needs onboarding - redirecting to onboarding page');
-                window.location.href = '/onboarding.html';
+                console.log('🎯 User needs onboarding - showing onboarding modal');
+                this.hideAuthModal();
+                // Show onboarding modal instead of redirecting to old page
+                if (window.onboardingManager) {
+                    window.onboardingManager.show();
+                }
                 return true;
             }
 
