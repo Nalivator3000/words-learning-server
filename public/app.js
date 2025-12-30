@@ -73,6 +73,16 @@ class LanguageLearningApp {
             this.setupLanguageListeners();
             this.survivalMode.setupEventListeners();
 
+            // Check if we need to show login modal
+            const urlParams = new URLSearchParams(window.location.search);
+            const showLogin = urlParams.get('showLogin') === 'true';
+
+            if (showLogin && !isLoggedIn) {
+                // Show login modal and clean up URL
+                userManager.showAuthModal();
+                window.history.replaceState({}, document.title, '/');
+            }
+
             if (isLoggedIn) {
                 // Check if user has a language pair - if not, redirect to onboarding
                 // BUT only if we're not already on the onboarding page

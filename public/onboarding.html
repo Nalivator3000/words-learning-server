@@ -116,9 +116,9 @@
             const currentUser = localStorage.getItem('currentUser');
 
             if (!currentUser) {
-                // Not logged in, redirect to home
-                console.log('User not logged in, redirecting to home');
-                window.location.href = '/';
+                // Not logged in, redirect to home with login prompt
+                console.log('User not logged in, redirecting to login');
+                window.location.href = '/?showLogin=true';
                 return;
             }
 
