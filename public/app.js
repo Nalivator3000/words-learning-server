@@ -75,8 +75,11 @@ class LanguageLearningApp {
 
             if (isLoggedIn) {
                 // Check if user has a language pair - if not, redirect to onboarding
+                // BUT only if we're not already on the onboarding page
                 const currentLanguagePair = userManager.getCurrentLanguagePair();
-                if (!currentLanguagePair) {
+                const isOnOnboardingPage = window.location.pathname === '/onboarding.html';
+
+                if (!currentLanguagePair && !isOnOnboardingPage) {
                     console.log('🎯 User has no language pair - redirecting to onboarding');
                     window.location.href = '/onboarding.html';
                     return;
