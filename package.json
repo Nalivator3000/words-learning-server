@@ -44,9 +44,11 @@
     "translate:auto": "node scripts/translations/auto-translate-cron.js 6",
     "translate:check": "node scripts/utils/check-all-translations.js",
     "translate:status": "node scripts/utils/check-translation-status.js",
+    "monitor": "node monitor-with-history.js",
     "db:check": "node quick-db-check.js",
     "db:check-users": "node check-user-words.js",
     "db:migrate:progress": "node migrations/run-progress-migration.js",
+    "db:migrate:users": "node migrations/migrate-existing-users.js",
     "db:create-word-sets": "node scripts/create-word-sets-from-source.js",
     "worker": "node worker-translation.js"
   },
