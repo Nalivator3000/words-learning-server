@@ -71,6 +71,8 @@ class Database {
 
     async updateWordProgress(wordId, isCorrect, quizType) {
         try {
+            const { userId, languagePairId } = this.getUserContext();
+
             const response = await fetch(`${this.apiUrl}/api/words/${wordId}/progress`, {
                 method: 'PUT',
                 headers: {
@@ -78,7 +80,9 @@ class Database {
                 },
                 body: JSON.stringify({
                     correct: isCorrect,
-                    questionType: quizType
+                    questionType: quizType,
+                    userId: userId,
+                    languagePairId: languagePairId
                 })
             });
 

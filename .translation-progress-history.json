@@ -1,0 +1,151 @@
+{
+  "snapshots": [
+    {
+      "timestamp": "2025-12-30T11:49:44.385Z",
+      "pairs": [
+        {
+          "pair": "ar→tr",
+          "translated": 5213,
+          "total": 10000,
+          "percent": 52.1
+        },
+        {
+          "pair": "ar→sw",
+          "translated": 4823,
+          "total": 10000,
+          "percent": 48.2
+        },
+        {
+          "pair": "ar→zh",
+          "translated": 5164,
+          "total": 10000,
+          "percent": 51.6
+        },
+        {
+          "pair": "ar→ja",
+          "translated": 0,
+          "total": 10000,
+          "percent": 0
+        },
+        {
+          "pair": "ar→ko",
+          "translated": 0,
+          "total": 10000,
+          "percent": 0
+        },
+        {
+          "pair": "ar→hi",
+          "translated": 0,
+          "total": 10000,
+          "percent": 0
+        },
+        {
+          "pair": "ar→en",
+          "translated": 0,
+          "total": 10000,
+          "percent": 0
+        },
+        {
+          "pair": "zh→ar",
+          "translated": 0,
+          "total": 10000,
+          "percent": 0
+        },
+        {
+          "pair": "zh→fr",
+          "translated": 0,
+          "total": 10000,
+          "percent": 0
+        },
+        {
+          "pair": "zh→it",
+          "translated": 0,
+          "total": 10000,
+          "percent": 0
+        },
+        {
+          "pair": "zh→pt",
+          "translated": 0,
+          "total": 10000,
+          "percent": 0
+        }
+      ]
+    },
+    {
+      "timestamp": "2025-12-30T11:56:20.360Z",
+      "pairs": [
+        {
+          "pair": "ar→tr",
+          "translated": 5470,
+          "total": 10000,
+          "percent": 54.7
+        },
+        {
+          "pair": "ar→sw",
+          "translated": 5060,
+          "total": 10000,
+          "percent": 50.6
+        },
+        {
+          "pair": "ar→zh",
+          "translated": 5423,
+          "total": 10000,
+          "percent": 54.2
+        },
+        {
+          "pair": "ar→ja",
+          "translated": 0,
+          "total": 10000,
+          "percent": 0
+        },
+        {
+          "pair": "ar→ko",
+          "translated": 0,
+          "total": 10000,
+          "percent": 0
+        },
+        {
+          "pair": "ar→hi",
+          "translated": 0,
+          "total": 10000,
+          "percent": 0
+        },
+        {
+          "pair": "ar→en",
+          "translated": 0,
+          "total": 10000,
+          "percent": 0
+        },
+        {
+          "pair": "zh→ar",
+          "translated": 0,
+          "total": 10000,
+          "percent": 0
+        },
+        {
+          "pair": "zh→fr",
+          "translated": 0,
+          "total": 10000,
+          "percent": 0
+        },
+        {
+          "pair": "zh→it",
+          "translated": 0,
+          "total": 10000,
+          "percent": 0
+        },
+        {
+          "pair": "zh→pt",
+          "translated": 0,
+          "total": 10000,
+          "percent": 0
+        }
+      ]
+    }
+  ],
+  "metadata": {
+    "firstRun": "2025-12-30T11:56:21.332Z",
+    "totalRuns": 1,
+    "lastRun": "2025-12-30T11:56:21.332Z"
+  }
+}

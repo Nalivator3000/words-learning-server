@@ -1,0 +1,392 @@
+[
+  {
+    "username": "test_de_en",
+    "email": "test.de.en@lexibooster.test",
+    "from_lang": "de",
+    "to_lang": "en",
+    "from_lang_name": "German",
+    "to_lang_name": "English",
+    "priority": "high",
+    "user_id": 50
+  },
+  {
+    "username": "test_de_ru",
+    "email": "test.de.ru@lexibooster.test",
+    "from_lang": "de",
+    "to_lang": "ru",
+    "from_lang_name": "German",
+    "to_lang_name": "Russian",
+    "priority": "high",
+    "user_id": 51
+  },
+  {
+    "username": "test_de_es",
+    "email": "test.de.es@lexibooster.test",
+    "from_lang": "de",
+    "to_lang": "es",
+    "from_lang_name": "German",
+    "to_lang_name": "Spanish",
+    "priority": "medium",
+    "user_id": 52
+  },
+  {
+    "username": "test_de_fr",
+    "email": "test.de.fr@lexibooster.test",
+    "from_lang": "de",
+    "to_lang": "fr",
+    "from_lang_name": "German",
+    "to_lang_name": "French",
+    "priority": "medium",
+    "user_id": 53
+  },
+  {
+    "username": "test_de_it",
+    "email": "test.de.it@lexibooster.test",
+    "from_lang": "de",
+    "to_lang": "it",
+    "from_lang_name": "German",
+    "to_lang_name": "Italian",
+    "priority": "medium",
+    "user_id": 54
+  },
+  {
+    "username": "test_de_pt",
+    "email": "test.de.pt@lexibooster.test",
+    "from_lang": "de",
+    "to_lang": "pt",
+    "from_lang_name": "German",
+    "to_lang_name": "Portuguese",
+    "priority": "medium",
+    "user_id": 55
+  },
+  {
+    "username": "test_de_ar",
+    "email": "test.de.ar@lexibooster.test",
+    "from_lang": "de",
+    "to_lang": "ar",
+    "from_lang_name": "German",
+    "to_lang_name": "Arabic",
+    "priority": "low",
+    "user_id": 56
+  },
+  {
+    "username": "test_de_zh",
+    "email": "test.de.zh@lexibooster.test",
+    "from_lang": "de",
+    "to_lang": "zh",
+    "from_lang_name": "German",
+    "to_lang_name": "Chinese",
+    "priority": "low",
+    "user_id": 57
+  },
+  {
+    "username": "test_de_ja",
+    "email": "test.de.ja@lexibooster.test",
+    "from_lang": "de",
+    "to_lang": "ja",
+    "from_lang_name": "German",
+    "to_lang_name": "Japanese",
+    "priority": "low",
+    "user_id": 58
+  },
+  {
+    "username": "test_de_tr",
+    "email": "test.de.tr@lexibooster.test",
+    "from_lang": "de",
+    "to_lang": "tr",
+    "from_lang_name": "German",
+    "to_lang_name": "Turkish",
+    "priority": "low",
+    "user_id": 59
+  },
+  {
+    "username": "test_en_ru",
+    "email": "test.en.ru@lexibooster.test",
+    "from_lang": "en",
+    "to_lang": "ru",
+    "from_lang_name": "English",
+    "to_lang_name": "Russian",
+    "priority": "high",
+    "user_id": 60
+  },
+  {
+    "username": "test_en_de",
+    "email": "test.en.de@lexibooster.test",
+    "from_lang": "en",
+    "to_lang": "de",
+    "from_lang_name": "English",
+    "to_lang_name": "German",
+    "priority": "high",
+    "user_id": 61
+  },
+  {
+    "username": "test_en_es",
+    "email": "test.en.es@lexibooster.test",
+    "from_lang": "en",
+    "to_lang": "es",
+    "from_lang_name": "English",
+    "to_lang_name": "Spanish",
+    "priority": "medium",
+    "user_id": 62
+  },
+  {
+    "username": "test_en_fr",
+    "email": "test.en.fr@lexibooster.test",
+    "from_lang": "en",
+    "to_lang": "fr",
+    "from_lang_name": "English",
+    "to_lang_name": "French",
+    "priority": "medium",
+    "user_id": 63
+  },
+  {
+    "username": "test_en_it",
+    "email": "test.en.it@lexibooster.test",
+    "from_lang": "en",
+    "to_lang": "it",
+    "from_lang_name": "English",
+    "to_lang_name": "Italian",
+    "priority": "medium",
+    "user_id": 64
+  },
+  {
+    "username": "test_en_pt",
+    "email": "test.en.pt@lexibooster.test",
+    "from_lang": "en",
+    "to_lang": "pt",
+    "from_lang_name": "English",
+    "to_lang_name": "Portuguese",
+    "priority": "medium",
+    "user_id": 65
+  },
+  {
+    "username": "test_en_ar",
+    "email": "test.en.ar@lexibooster.test",
+    "from_lang": "en",
+    "to_lang": "ar",
+    "from_lang_name": "English",
+    "to_lang_name": "Arabic",
+    "priority": "low",
+    "user_id": 66
+  },
+  {
+    "username": "test_en_zh",
+    "email": "test.en.zh@lexibooster.test",
+    "from_lang": "en",
+    "to_lang": "zh",
+    "from_lang_name": "English",
+    "to_lang_name": "Chinese",
+    "priority": "low",
+    "user_id": 67
+  },
+  {
+    "username": "test_en_ja",
+    "email": "test.en.ja@lexibooster.test",
+    "from_lang": "en",
+    "to_lang": "ja",
+    "from_lang_name": "English",
+    "to_lang_name": "Japanese",
+    "priority": "low",
+    "user_id": 68
+  },
+  {
+    "username": "test_en_tr",
+    "email": "test.en.tr@lexibooster.test",
+    "from_lang": "en",
+    "to_lang": "tr",
+    "from_lang_name": "English",
+    "to_lang_name": "Turkish",
+    "priority": "low",
+    "user_id": 69
+  },
+  {
+    "username": "test_es_en",
+    "email": "test.es.en@lexibooster.test",
+    "from_lang": "es",
+    "to_lang": "en",
+    "from_lang_name": "Spanish",
+    "to_lang_name": "English",
+    "priority": "medium",
+    "user_id": 70
+  },
+  {
+    "username": "test_es_de",
+    "email": "test.es.de@lexibooster.test",
+    "from_lang": "es",
+    "to_lang": "de",
+    "from_lang_name": "Spanish",
+    "to_lang_name": "German",
+    "priority": "medium",
+    "user_id": 71
+  },
+  {
+    "username": "test_es_fr",
+    "email": "test.es.fr@lexibooster.test",
+    "from_lang": "es",
+    "to_lang": "fr",
+    "from_lang_name": "Spanish",
+    "to_lang_name": "French",
+    "priority": "low",
+    "user_id": 72
+  },
+  {
+    "username": "test_es_pt",
+    "email": "test.es.pt@lexibooster.test",
+    "from_lang": "es",
+    "to_lang": "pt",
+    "from_lang_name": "Spanish",
+    "to_lang_name": "Portuguese",
+    "priority": "low",
+    "user_id": 73
+  },
+  {
+    "username": "test_fr_en",
+    "email": "test.fr.en@lexibooster.test",
+    "from_lang": "fr",
+    "to_lang": "en",
+    "from_lang_name": "French",
+    "to_lang_name": "English",
+    "priority": "medium",
+    "user_id": 74
+  },
+  {
+    "username": "test_fr_de",
+    "email": "test.fr.de@lexibooster.test",
+    "from_lang": "fr",
+    "to_lang": "de",
+    "from_lang_name": "French",
+    "to_lang_name": "German",
+    "priority": "medium",
+    "user_id": 75
+  },
+  {
+    "username": "test_fr_es",
+    "email": "test.fr.es@lexibooster.test",
+    "from_lang": "fr",
+    "to_lang": "es",
+    "from_lang_name": "French",
+    "to_lang_name": "Spanish",
+    "priority": "low",
+    "user_id": 76
+  },
+  {
+    "username": "test_it_en",
+    "email": "test.it.en@lexibooster.test",
+    "from_lang": "it",
+    "to_lang": "en",
+    "from_lang_name": "Italian",
+    "to_lang_name": "English",
+    "priority": "medium",
+    "user_id": 77
+  },
+  {
+    "username": "test_it_de",
+    "email": "test.it.de@lexibooster.test",
+    "from_lang": "it",
+    "to_lang": "de",
+    "from_lang_name": "Italian",
+    "to_lang_name": "German",
+    "priority": "medium",
+    "user_id": 78
+  },
+  {
+    "username": "test_pt_en",
+    "email": "test.pt.en@lexibooster.test",
+    "from_lang": "pt",
+    "to_lang": "en",
+    "from_lang_name": "Portuguese",
+    "to_lang_name": "English",
+    "priority": "medium",
+    "user_id": 79
+  },
+  {
+    "username": "test_pt_de",
+    "email": "test.pt.de@lexibooster.test",
+    "from_lang": "pt",
+    "to_lang": "de",
+    "from_lang_name": "Portuguese",
+    "to_lang_name": "German",
+    "priority": "medium",
+    "user_id": 80
+  },
+  {
+    "username": "test_ar_en",
+    "email": "test.ar.en@lexibooster.test",
+    "from_lang": "ar",
+    "to_lang": "en",
+    "from_lang_name": "Arabic",
+    "to_lang_name": "English",
+    "priority": "low",
+    "user_id": 81
+  },
+  {
+    "username": "test_ar_de",
+    "email": "test.ar.de@lexibooster.test",
+    "from_lang": "ar",
+    "to_lang": "de",
+    "from_lang_name": "Arabic",
+    "to_lang_name": "German",
+    "priority": "low",
+    "user_id": 82
+  },
+  {
+    "username": "test_zh_en",
+    "email": "test.zh.en@lexibooster.test",
+    "from_lang": "zh",
+    "to_lang": "en",
+    "from_lang_name": "Chinese",
+    "to_lang_name": "English",
+    "priority": "low",
+    "user_id": 83
+  },
+  {
+    "username": "test_zh_de",
+    "email": "test.zh.de@lexibooster.test",
+    "from_lang": "zh",
+    "to_lang": "de",
+    "from_lang_name": "Chinese",
+    "to_lang_name": "German",
+    "priority": "low",
+    "user_id": 84
+  },
+  {
+    "username": "test_ru_en",
+    "email": "test.ru.en@lexibooster.test",
+    "from_lang": "ru",
+    "to_lang": "en",
+    "from_lang_name": "Russian",
+    "to_lang_name": "English",
+    "priority": "medium",
+    "user_id": 85
+  },
+  {
+    "username": "test_ru_de",
+    "email": "test.ru.de@lexibooster.test",
+    "from_lang": "ru",
+    "to_lang": "de",
+    "from_lang_name": "Russian",
+    "to_lang_name": "German",
+    "priority": "medium",
+    "user_id": 86
+  },
+  {
+    "username": "test_hi_en",
+    "email": "test.hi.en@lexibooster.test",
+    "from_lang": "hi",
+    "to_lang": "en",
+    "from_lang_name": "Hindi",
+    "to_lang_name": "English",
+    "priority": "medium",
+    "user_id": 87
+  },
+  {
+    "username": "test_hi_de",
+    "email": "test.hi.de@lexibooster.test",
+    "from_lang": "hi",
+    "to_lang": "de",
+    "from_lang_name": "Hindi",
+    "to_lang_name": "German",
+    "priority": "low",
+    "user_id": 88
+  }
+]

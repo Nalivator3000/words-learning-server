@@ -144,7 +144,15 @@
       "Bash(then node scripts/create-c2-part6.js)",
       "Bash(else echo \"Part 6 ещё не создан\")",
       "Bash(wmic process where ProcessId=28528 delete)",
-      "Bash(wmic process:*)"
+      "Bash(wmic process:*)",
+      "Bash(statement requires 0\" error in parallel translation processes.\n\n🤖 Generated with [Claude Code]\\(https://claude.com/claude-code\\)\n\nCo-Authored-By: Claude Sonnet 4.5 <noreply@anthropic.com>\nEOF\n\\)\")",
+      "Bash(npm run translate:status:*)",
+      "Bash(DATABASE_URL=\"postgresql://postgres:uPGJKLcZLFGTZeRbnzPOVTlzWRObbnKO@mainline.proxy.rlwy.net:54625/railway\" node:*)",
+      "Bash(DATABASE_URL=\"postgresql://postgres:uPGJKLcZLFGTZeRbnzPOVTlzWRObbnKO@mainline.proxy.rlwy.net:54625/railway\" npm run db:migrate:progress:*)",
+      "Bash(DATABASE_URL=\"postgresql://postgres:uPGJKLcZLFGTZeRbnzPOVTlzWRObbnKO@mainline.proxy.rlwy.net:54625/railway\" psql:*)",
+      "Bash(DATABASE_URL=\"postgresql://postgres:uPGJKLcZLFGTZeRbnzPOVTlzWRObbnKO@mainline.proxy.rlwy.net:54625/railway\" npm run db:create-word-sets:*)",
+      "Bash(DATABASE_URL=\"postgresql://postgres:uPGJKLcZLFGTZeRbnzPOVTlzWRObbnKO@mainline.proxy.rlwy.net:54625/railway\" node -e:*)",
+      "Bash(start /b cmd /c \"npm start > server-test.log 2>&1\")"
     ],
     "deny": [],
     "ask": []

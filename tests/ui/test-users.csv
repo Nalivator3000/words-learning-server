@@ -1,0 +1,36 @@
+email,password,native_lang,target_lang,scenario
+test-en-de@lexybooster.test,Test123!@#,en,de,Language Pair: en → de
+test-en-es@lexybooster.test,Test123!@#,en,es,Language Pair: en → es
+test-ru-de@lexybooster.test,Test123!@#,ru,de,Language Pair: ru → de
+test-ru-en@lexybooster.test,Test123!@#,ru,en,Language Pair: ru → en
+test-de-en@lexybooster.test,Test123!@#,de,en,Language Pair: de → en
+test-de-es@lexybooster.test,Test123!@#,de,es,Language Pair: de → es
+test-es-de@lexybooster.test,Test123!@#,es,de,Language Pair: es → de
+test-es-en@lexybooster.test,Test123!@#,es,en,Language Pair: es → en
+test-fr-de@lexybooster.test,Test123!@#,fr,de,Language Pair: fr → de
+test-fr-en@lexybooster.test,Test123!@#,fr,en,Language Pair: fr → en
+test-zh-de@lexybooster.test,Test123!@#,zh,de,Language Pair: zh → de
+test-zh-en@lexybooster.test,Test123!@#,zh,en,Language Pair: zh → en
+test-pt-de@lexybooster.test,Test123!@#,pt,de,Language Pair: pt → de
+test-pt-en@lexybooster.test,Test123!@#,pt,en,Language Pair: pt → en
+test-it-de@lexybooster.test,Test123!@#,it,de,Language Pair: it → de
+test-it-en@lexybooster.test,Test123!@#,it,en,Language Pair: it → en
+test-ar-de@lexybooster.test,Test123!@#,ar,de,Language Pair: ar → de
+test-ar-en@lexybooster.test,Test123!@#,ar,en,Language Pair: ar → en
+test-tr-de@lexybooster.test,Test123!@#,tr,de,Language Pair: tr → de
+test-tr-en@lexybooster.test,Test123!@#,tr,en,Language Pair: tr → en
+test-ui-en@lexybooster.test,Test123!@#,en,de,UI Language: en
+test-ui-ru@lexybooster.test,Test123!@#,en,de,UI Language: ru
+test-ui-de@lexybooster.test,Test123!@#,en,de,UI Language: de
+test-ui-es@lexybooster.test,Test123!@#,en,de,UI Language: es
+test-ui-fr@lexybooster.test,Test123!@#,en,de,UI Language: fr
+test-ui-zh@lexybooster.test,Test123!@#,en,de,UI Language: zh
+test-ui-pt@lexybooster.test,Test123!@#,en,de,UI Language: pt
+test-ui-it@lexybooster.test,Test123!@#,en,de,UI Language: it
+test-ui-ar@lexybooster.test,Test123!@#,en,de,UI Language: ar
+test-ui-tr@lexybooster.test,Test123!@#,en,de,UI Language: tr
+test-beginner@lexybooster.test,Test123!@#,en,de,Beginner level (A1-A2 only)
+test-advanced@lexybooster.test,Test123!@#,ru,en,Advanced level (B2-C2)
+test-polyglot@lexybooster.test,Test123!@#,en,de,Multiple language pairs
+test-mobile@lexybooster.test,Test123!@#,en,es,Mobile-specific testing
+test-rtl@lexybooster.test,Test123!@#,ar,en,Right-to-left language testing

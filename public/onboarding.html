@@ -1,0 +1,114 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Welcome - LexyBooster</title>
+    <link rel="stylesheet" href="onboarding.css">
+</head>
+<body>
+    <div class="onboarding-container">
+        <!-- Step 1: Welcome -->
+        <div class="step" id="step-welcome" data-step="1">
+            <div class="step-content">
+                <h1>Welcome to LexyBooster! 🎉</h1>
+                <p>Learn languages with spaced repetition and gamification</p>
+                <button class="btn-primary" onclick="nextStep()">Get Started</button>
+            </div>
+        </div>
+
+        <!-- Step 2: Interface Language -->
+        <div class="step hidden" id="step-ui-language" data-step="2">
+            <div class="step-content">
+                <h2>Choose your interface language</h2>
+                <p class="step-description">Select the language for menus and instructions</p>
+                <div class="language-grid" id="ui-language-grid">
+                    <!-- Languages will be populated by JS -->
+                </div>
+                <div class="step-navigation">
+                    <button class="btn-secondary" onclick="prevStep()">Back</button>
+                    <button class="btn-primary" onclick="nextStep()" id="btn-continue-ui-lang" disabled>Continue</button>
+                </div>
+            </div>
+        </div>
+
+        <!-- Step 3: Native Language -->
+        <div class="step hidden" id="step-native-language" data-step="3">
+            <div class="step-content">
+                <h2 id="native-lang-title">What's your native language?</h2>
+                <p class="step-description" id="native-lang-desc">The language you already speak</p>
+                <div class="language-grid" id="native-language-grid">
+                    <!-- Languages will be populated by JS -->
+                </div>
+                <div class="step-navigation">
+                    <button class="btn-secondary" onclick="prevStep()">Back</button>
+                    <button class="btn-primary" onclick="nextStep()" id="btn-continue-native" disabled>Continue</button>
+                </div>
+            </div>
+        </div>
+
+        <!-- Step 4: Learning Language -->
+        <div class="step hidden" id="step-learning-language" data-step="4">
+            <div class="step-content">
+                <h2 id="learning-lang-title">Which language do you want to learn?</h2>
+                <p class="step-description" id="learning-lang-desc">Choose your target language</p>
+                <div class="language-grid" id="learning-language-grid">
+                    <!-- Languages will be populated by JS -->
+                </div>
+                <div class="step-navigation">
+                    <button class="btn-secondary" onclick="prevStep()">Back</button>
+                    <button class="btn-primary" onclick="nextStep()" id="btn-continue-learning" disabled>Continue</button>
+                </div>
+            </div>
+        </div>
+
+        <!-- Step 5: Word Sets Selection -->
+        <div class="step hidden" id="step-word-sets" data-step="5">
+            <div class="step-content">
+                <h2 id="word-sets-title">Choose your starting vocabulary</h2>
+                <p class="step-description" id="word-sets-desc">Select word sets to begin learning</p>
+
+                <div class="word-sets-container" id="word-sets-container">
+                    <div class="loading">Loading word sets...</div>
+                </div>
+
+                <div class="word-sets-summary">
+                    <span id="selected-count">0 sets selected</span>
+                    <span id="total-words">0 words</span>
+                </div>
+
+                <div class="step-navigation">
+                    <button class="btn-secondary" onclick="prevStep()">Back</button>
+                    <button class="btn-primary" onclick="importWordSets()" id="btn-import" disabled>Start Learning</button>
+                </div>
+            </div>
+        </div>
+
+        <!-- Step 6: Success -->
+        <div class="step hidden" id="step-success" data-step="6">
+            <div class="step-content">
+                <h1>You're all set! 🚀</h1>
+                <div class="success-summary" id="success-summary">
+                    <!-- Will be populated by JS -->
+                </div>
+                <button class="btn-primary" onclick="goToDashboard()">Go to Dashboard</button>
+            </div>
+        </div>
+
+        <!-- Progress indicator -->
+        <div class="progress-indicator">
+            <div class="progress-step" data-step="1">1</div>
+            <div class="progress-line"></div>
+            <div class="progress-step" data-step="2">2</div>
+            <div class="progress-line"></div>
+            <div class="progress-step" data-step="3">3</div>
+            <div class="progress-line"></div>
+            <div class="progress-step" data-step="4">4</div>
+            <div class="progress-line"></div>
+            <div class="progress-step" data-step="5">5</div>
+        </div>
+    </div>
+
+    <script src="onboarding-wizard.js"></script>
+</body>
+</html>

@@ -183,11 +183,15 @@ class APIDatabase {
     }
 
     async updateWordProgress(wordId, isCorrect, quizType) {
+        const { userId, languagePairId } = this.getUserContext();
+
         return await this.apiRequest(`/api/words/${wordId}/progress`, {
             method: 'PUT',
             body: JSON.stringify({
                 correct: isCorrect,
-                questionType: quizType
+                questionType: quizType,
+                userId: userId,
+                languagePairId: languagePairId
             })
         });
     }

@@ -137,13 +137,22 @@ async function createWordSetsForLanguage(language) {
         const title = `${displayName} ${level}`;
         const description = LEVEL_DESCRIPTIONS[level] || `${displayName} vocabulary at ${level} level`;
 
-        await db.query(`
-            INSERT INTO word_sets (source_language, title, description, level, word_count, is_public)
-            VALUES ($1, $2, $3, $4, $5, true)
-            ON CONFLICT (source_language, level, theme)
-            WHERE theme IS NULL
-            DO UPDATE SET word_count = EXCLUDED.word_count, description = EXCLUDED.description
-        `, [language, title, description, level, count]);
+        const existing = await db.query(`
+            SELECT id FROM word_sets
+            WHERE source_language = $1 AND level = $2 AND theme IS NULL
+        `, [language, level]);
+
+        if (existing.rows.length > 0) {
+            await db.query(`
+                UPDATE word_sets SET word_count = $1, description = $2, updated_at = CURRENT_TIMESTAMP
+                WHERE id = $3
+            `, [count, description, existing.rows[0].id]);
+        } else {
+            await db.query(`
+                INSERT INTO word_sets (source_language, title, description, level, word_count, is_public)
+                VALUES ($1, $2, $3, $4, $5, true)
+            `, [language, title, description, level, count]);
+        }
 
         console.log(`  ✅ ${level}: ${count} words`);
     }
@@ -176,13 +185,22 @@ async function createWordSetsForLanguage(language) {
                 const title = `${displayName} - ${theme.charAt(0).toUpperCase() + theme.slice(1)}`;
                 const description = `${displayName} vocabulary related to ${theme}`;
 
-                await db.query(`
-                    INSERT INTO word_sets (source_language, title, description, theme, word_count, is_public)
-                    VALUES ($1, $2, $3, $4, $5, true)
-                    ON CONFLICT (source_language, level, theme)
-                    WHERE level IS NULL
-                    DO UPDATE SET word_count = EXCLUDED.word_count
-                `, [language, title, description, theme, count]);
+                const existing = await db.query(`
+                    SELECT id FROM word_sets
+                    WHERE source_language = $1 AND theme = $2 AND level IS NULL
+                `, [language, theme]);
+
+                if (existing.rows.length > 0) {
+                    await db.query(`
+                        UPDATE word_sets SET word_count = $1, updated_at = CURRENT_TIMESTAMP
+                        WHERE id = $2
+                    `, [count, existing.rows[0].id]);
+                } else {
+                    await db.query(`
+                        INSERT INTO word_sets (source_language, title, description, theme, word_count, is_public)
+                        VALUES ($1, $2, $3, $4, $5, true)
+                    `, [language, title, description, theme, count]);
+                }
 
                 console.log(`    - ${theme}: ${count} words`);
             }

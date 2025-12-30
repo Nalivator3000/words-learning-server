@@ -1,0 +1,2027 @@
+{
+  "generated": "2025-12-30T11:45:16.344Z",
+  "summary": {
+    "total": 219,
+    "completed": 63,
+    "inProgress": 3,
+    "pending": 153,
+    "percentComplete": "28.8"
+  },
+  "byPhase": [
+    {
+      "phase": 1,
+      "total": 12,
+      "completed": 12,
+      "percentComplete": "100.0"
+    },
+    {
+      "phase": 2,
+      "total": 39,
+      "completed": 39,
+      "percentComplete": "100.0"
+    },
+    {
+      "phase": 3,
+      "total": 32,
+      "completed": 12,
+      "percentComplete": "37.5"
+    },
+    {
+      "phase": 4,
+      "total": 17,
+      "completed": 0,
+      "percentComplete": "0.0"
+    },
+    {
+      "phase": 5,
+      "total": 51,
+      "completed": 0,
+      "percentComplete": "0.0"
+    },
+    {
+      "phase": 6,
+      "total": 51,
+      "completed": 0,
+      "percentComplete": "0.0"
+    },
+    {
+      "phase": 7,
+      "total": 17,
+      "completed": 0,
+      "percentComplete": "0.0"
+    }
+  ],
+  "pairs": [
+    {
+      "phase": 1,
+      "pair": "de→ja",
+      "table": "target_translations_japanese",
+      "translated": 8076,
+      "total": 8076,
+      "percent": 100,
+      "status": "✅"
+    },
+    {
+      "phase": 1,
+      "pair": "de→ko",
+      "table": "target_translations_korean",
+      "translated": 8076,
+      "total": 8076,
+      "percent": 100,
+      "status": "✅"
+    },
+    {
+      "phase": 1,
+      "pair": "de→hi",
+      "table": "target_translations_hindi",
+      "translated": 8076,
+      "total": 8076,
+      "percent": 100,
+      "status": "✅"
+    },
+    {
+      "phase": 1,
+      "pair": "de→tr",
+      "table": "target_translations_turkish",
+      "translated": 8076,
+      "total": 8076,
+      "percent": 100,
+      "status": "✅"
+    },
+    {
+      "phase": 1,
+      "pair": "en→ja",
+      "table": "target_translations_japanese_from_en",
+      "translated": 9974,
+      "total": 9974,
+      "percent": 100,
+      "status": "✅"
+    },
+    {
+      "phase": 1,
+      "pair": "en→ko",
+      "table": "target_translations_korean_from_en",
+      "translated": 9974,
+      "total": 9974,
+      "percent": 100,
+      "status": "✅"
+    },
+    {
+      "phase": 1,
+      "pair": "en→hi",
+      "table": "target_translations_hindi_from_en",
+      "translated": 9973,
+      "total": 9974,
+      "percent": 100,
+      "status": "✅"
+    },
+    {
+      "phase": 1,
+      "pair": "en→tr",
+      "table": "target_translations_turkish_from_en",
+      "translated": 9974,
+      "total": 9974,
+      "percent": 100,
+      "status": "✅"
+    },
+    {
+      "phase": 1,
+      "pair": "es→ja",
+      "table": "target_translations_japanese_from_es",
+      "translated": 9972,
+      "total": 9972,
+      "percent": 100,
+      "status": "✅"
+    },
+    {
+      "phase": 1,
+      "pair": "es→ko",
+      "table": "target_translations_korean_from_es",
+      "translated": 9972,
+      "total": 9972,
+      "percent": 100,
+      "status": "✅"
+    },
+    {
+      "phase": 1,
+      "pair": "es→hi",
+      "table": "target_translations_hindi_from_es",
+      "translated": 9968,
+      "total": 9972,
+      "percent": 100,
+      "status": "✅"
+    },
+    {
+      "phase": 1,
+      "pair": "es→tr",
+      "table": "target_translations_turkish_from_es",
+      "translated": 9972,
+      "total": 9972,
+      "percent": 100,
+      "status": "✅"
+    },
+    {
+      "phase": 2,
+      "pair": "fr→ar",
+      "table": "target_translations_arabic_from_fr",
+      "translated": 9332,
+      "total": 9332,
+      "percent": 100,
+      "status": "✅"
+    },
+    {
+      "phase": 2,
+      "pair": "fr→it",
+      "table": "target_translations_italian_from_fr",
+      "translated": 9332,
+      "total": 9332,
+      "percent": 100,
+      "status": "✅"
+    },
+    {
+      "phase": 2,
+      "pair": "fr→pt",
+      "table": "target_translations_portuguese_from_fr",
+      "translated": 9332,
+      "total": 9332,
+      "percent": 100,
+      "status": "✅"
+    },
+    {
+      "phase": 2,
+      "pair": "fr→pl",
+      "table": "target_translations_polish_from_fr",
+      "translated": 9332,
+      "total": 9332,
+      "percent": 100,
+      "status": "✅"
+    },
+    {
+      "phase": 2,
+      "pair": "fr→ro",
+      "table": "target_translations_romanian_from_fr",
+      "translated": 9332,
+      "total": 9332,
+      "percent": 100,
+      "status": "✅"
+    },
+    {
+      "phase": 2,
+      "pair": "fr→sr",
+      "table": "target_translations_serbian_from_fr",
+      "translated": 9332,
+      "total": 9332,
+      "percent": 100,
+      "status": "✅"
+    },
+    {
+      "phase": 2,
+      "pair": "fr→uk",
+      "table": "target_translations_ukrainian_from_fr",
+      "translated": 9332,
+      "total": 9332,
+      "percent": 100,
+      "status": "✅"
+    },
+    {
+      "phase": 2,
+      "pair": "fr→tr",
+      "table": "target_translations_turkish_from_fr",
+      "translated": 9332,
+      "total": 9332,
+      "percent": 100,
+      "status": "✅"
+    },
+    {
+      "phase": 2,
+      "pair": "fr→sw",
+      "table": "target_translations_swahili_from_fr",
+      "translated": 9332,
+      "total": 9332,
+      "percent": 100,
+      "status": "✅"
+    },
+    {
+      "phase": 2,
+      "pair": "fr→zh",
+      "table": "target_translations_chinese_from_fr",
+      "translated": 9332,
+      "total": 9332,
+      "percent": 100,
+      "status": "✅"
+    },
+    {
+      "phase": 2,
+      "pair": "fr→ja",
+      "table": "target_translations_japanese_from_fr",
+      "translated": 9332,
+      "total": 9332,
+      "percent": 100,
+      "status": "✅"
+    },
+    {
+      "phase": 2,
+      "pair": "fr→ko",
+      "table": "target_translations_korean_from_fr",
+      "translated": 9332,
+      "total": 9332,
+      "percent": 100,
+      "status": "✅"
+    },
+    {
+      "phase": 2,
+      "pair": "fr→hi",
+      "table": "target_translations_hindi_from_fr",
+      "translated": 9330,
+      "total": 9332,
+      "percent": 100,
+      "status": "✅"
+    },
+    {
+      "phase": 2,
+      "pair": "it→ar",
+      "table": "target_translations_arabic_from_it",
+      "translated": 10000,
+      "total": 10000,
+      "percent": 100,
+      "status": "✅"
+    },
+    {
+      "phase": 2,
+      "pair": "it→fr",
+      "table": "target_translations_french_from_it",
+      "translated": 10000,
+      "total": 10000,
+      "percent": 100,
+      "status": "✅"
+    },
+    {
+      "phase": 2,
+      "pair": "it→pt",
+      "table": "target_translations_portuguese_from_it",
+      "translated": 10000,
+      "total": 10000,
+      "percent": 100,
+      "status": "✅"
+    },
+    {
+      "phase": 2,
+      "pair": "it→pl",
+      "table": "target_translations_polish_from_it",
+      "translated": 10000,
+      "total": 10000,
+      "percent": 100,
+      "status": "✅"
+    },
+    {
+      "phase": 2,
+      "pair": "it→ro",
+      "table": "target_translations_romanian_from_it",
+      "translated": 10000,
+      "total": 10000,
+      "percent": 100,
+      "status": "✅"
+    },
+    {
+      "phase": 2,
+      "pair": "it→sr",
+      "table": "target_translations_serbian_from_it",
+      "translated": 10000,
+      "total": 10000,
+      "percent": 100,
+      "status": "✅"
+    },
+    {
+      "phase": 2,
+      "pair": "it→uk",
+      "table": "target_translations_ukrainian_from_it",
+      "translated": 10000,
+      "total": 10000,
+      "percent": 100,
+      "status": "✅"
+    },
+    {
+      "phase": 2,
+      "pair": "it→tr",
+      "table": "target_translations_turkish_from_it",
+      "translated": 10000,
+      "total": 10000,
+      "percent": 100,
+      "status": "✅"
+    },
+    {
+      "phase": 2,
+      "pair": "it→sw",
+      "table": "target_translations_swahili_from_it",
+      "translated": 10000,
+      "total": 10000,
+      "percent": 100,
+      "status": "✅"
+    },
+    {
+      "phase": 2,
+      "pair": "it→zh",
+      "table": "target_translations_chinese_from_it",
+      "translated": 10000,
+      "total": 10000,
+      "percent": 100,
+      "status": "✅"
+    },
+    {
+      "phase": 2,
+      "pair": "it→ja",
+      "table": "target_translations_japanese_from_it",
+      "translated": 10000,
+      "total": 10000,
+      "percent": 100,
+      "status": "✅"
+    },
+    {
+      "phase": 2,
+      "pair": "it→ko",
+      "table": "target_translations_korean_from_it",
+      "translated": 10000,
+      "total": 10000,
+      "percent": 100,
+      "status": "✅"
+    },
+    {
+      "phase": 2,
+      "pair": "it→hi",
+      "table": "target_translations_hindi_from_it",
+      "translated": 10000,
+      "total": 10000,
+      "percent": 100,
+      "status": "✅"
+    },
+    {
+      "phase": 2,
+      "pair": "pt→ar",
+      "table": "target_translations_arabic_from_pt",
+      "translated": 10000,
+      "total": 10000,
+      "percent": 100,
+      "status": "✅"
+    },
+    {
+      "phase": 2,
+      "pair": "pt→fr",
+      "table": "target_translations_french_from_pt",
+      "translated": 10000,
+      "total": 10000,
+      "percent": 100,
+      "status": "✅"
+    },
+    {
+      "phase": 2,
+      "pair": "pt→it",
+      "table": "target_translations_italian_from_pt",
+      "translated": 10000,
+      "total": 10000,
+      "percent": 100,
+      "status": "✅"
+    },
+    {
+      "phase": 2,
+      "pair": "pt→pl",
+      "table": "target_translations_polish_from_pt",
+      "translated": 10000,
+      "total": 10000,
+      "percent": 100,
+      "status": "✅"
+    },
+    {
+      "phase": 2,
+      "pair": "pt→ro",
+      "table": "target_translations_romanian_from_pt",
+      "translated": 10000,
+      "total": 10000,
+      "percent": 100,
+      "status": "✅"
+    },
+    {
+      "phase": 2,
+      "pair": "pt→sr",
+      "table": "target_translations_serbian_from_pt",
+      "translated": 10000,
+      "total": 10000,
+      "percent": 100,
+      "status": "✅"
+    },
+    {
+      "phase": 2,
+      "pair": "pt→uk",
+      "table": "target_translations_ukrainian_from_pt",
+      "translated": 10000,
+      "total": 10000,
+      "percent": 100,
+      "status": "✅"
+    },
+    {
+      "phase": 2,
+      "pair": "pt→tr",
+      "table": "target_translations_turkish_from_pt",
+      "translated": 10000,
+      "total": 10000,
+      "percent": 100,
+      "status": "✅"
+    },
+    {
+      "phase": 2,
+      "pair": "pt→sw",
+      "table": "target_translations_swahili_from_pt",
+      "translated": 10000,
+      "total": 10000,
+      "percent": 100,
+      "status": "✅"
+    },
+    {
+      "phase": 2,
+      "pair": "pt→zh",
+      "table": "target_translations_chinese_from_pt",
+      "translated": 10000,
+      "total": 10000,
+      "percent": 100,
+      "status": "✅"
+    },
+    {
+      "phase": 2,
+      "pair": "pt→ja",
+      "table": "target_translations_japanese_from_pt",
+      "translated": 10000,
+      "total": 10000,
+      "percent": 100,
+      "status": "✅"
+    },
+    {
+      "phase": 2,
+      "pair": "pt→ko",
+      "table": "target_translations_korean_from_pt",
+      "translated": 10000,
+      "total": 10000,
+      "percent": 100,
+      "status": "✅"
+    },
+    {
+      "phase": 2,
+      "pair": "pt→hi",
+      "table": "target_translations_hindi_from_pt",
+      "translated": 10000,
+      "total": 10000,
+      "percent": 100,
+      "status": "✅"
+    },
+    {
+      "phase": 3,
+      "pair": "ar→de",
+      "table": "target_translations_german_from_ar",
+      "translated": 10000,
+      "total": 10000,
+      "percent": 100,
+      "status": "✅"
+    },
+    {
+      "phase": 3,
+      "pair": "ar→en",
+      "table": "target_translations_english_from_ar",
+      "translated": 0,
+      "total": 10000,
+      "percent": 0,
+      "status": "⬜"
+    },
+    {
+      "phase": 3,
+      "pair": "ar→es",
+      "table": "target_translations_spanish_from_ar",
+      "translated": 10000,
+      "total": 10000,
+      "percent": 100,
+      "status": "✅"
+    },
+    {
+      "phase": 3,
+      "pair": "ar→fr",
+      "table": "target_translations_french_from_ar",
+      "translated": 10000,
+      "total": 10000,
+      "percent": 100,
+      "status": "✅"
+    },
+    {
+      "phase": 3,
+      "pair": "ar→it",
+      "table": "target_translations_italian_from_ar",
+      "translated": 10000,
+      "total": 10000,
+      "percent": 100,
+      "status": "✅"
+    },
+    {
+      "phase": 3,
+      "pair": "ar→pt",
+      "table": "target_translations_portuguese_from_ar",
+      "translated": 10000,
+      "total": 10000,
+      "percent": 100,
+      "status": "✅"
+    },
+    {
+      "phase": 3,
+      "pair": "ar→pl",
+      "table": "target_translations_polish_from_ar",
+      "translated": 10000,
+      "total": 10000,
+      "percent": 100,
+      "status": "✅"
+    },
+    {
+      "phase": 3,
+      "pair": "ar→ro",
+      "table": "target_translations_romanian_from_ar",
+      "translated": 10000,
+      "total": 10000,
+      "percent": 100,
+      "status": "✅"
+    },
+    {
+      "phase": 3,
+      "pair": "ar→sr",
+      "table": "target_translations_serbian_from_ar",
+      "translated": 10000,
+      "total": 10000,
+      "percent": 100,
+      "status": "✅"
+    },
+    {
+      "phase": 3,
+      "pair": "ar→uk",
+      "table": "target_translations_ukrainian_from_ar",
+      "translated": 10000,
+      "total": 10000,
+      "percent": 100,
+      "status": "✅"
+    },
+    {
+      "phase": 3,
+      "pair": "ar→tr",
+      "table": "target_translations_turkish_from_ar",
+      "translated": 4957,
+      "total": 10000,
+      "percent": 49.6,
+      "status": "⏳"
+    },
+    {
+      "phase": 3,
+      "pair": "ar→sw",
+      "table": "target_translations_swahili_from_ar",
+      "translated": 4590,
+      "total": 10000,
+      "percent": 45.9,
+      "status": "⏳"
+    },
+    {
+      "phase": 3,
+      "pair": "ar→zh",
+      "table": "target_translations_chinese_from_ar",
+      "translated": 4896,
+      "total": 10000,
+      "percent": 49,
+      "status": "⏳"
+    },
+    {
+      "phase": 3,
+      "pair": "ar→ja",
+      "table": "target_translations_japanese_from_ar",
+      "translated": 0,
+      "total": 10000,
+      "percent": 0,
+      "status": "⬜"
+    },
+    {
+      "phase": 3,
+      "pair": "ar→ko",
+      "table": "target_translations_korean_from_ar",
+      "translated": 0,
+      "total": 10000,
+      "percent": 0,
+      "status": "⬜"
+    },
+    {
+      "phase": 3,
+      "pair": "ar→hi",
+      "table": "target_translations_hindi_from_ar",
+      "translated": 0,
+      "total": 10000,
+      "percent": 0,
+      "status": "⬜"
+    },
+    {
+      "phase": 3,
+      "pair": "zh→ar",
+      "table": "target_translations_arabic_from_zh",
+      "translated": 0,
+      "total": 10000,
+      "percent": 0,
+      "status": "⬜"
+    },
+    {
+      "phase": 3,
+      "pair": "zh→de",
+      "table": "target_translations_german_from_zh",
+      "translated": 10000,
+      "total": 10000,
+      "percent": 100,
+      "status": "✅"
+    },
+    {
+      "phase": 3,
+      "pair": "zh→en",
+      "table": "target_translations_english_from_zh",
+      "translated": 10000,
+      "total": 10000,
+      "percent": 100,
+      "status": "✅"
+    },
+    {
+      "phase": 3,
+      "pair": "zh→es",
+      "table": "target_translations_spanish_from_zh",
+      "translated": 10000,
+      "total": 10000,
+      "percent": 100,
+      "status": "✅"
+    },
+    {
+      "phase": 3,
+      "pair": "zh→fr",
+      "table": "target_translations_french_from_zh",
+      "translated": 0,
+      "total": 10000,
+      "percent": 0,
+      "status": "⬜"
+    },
+    {
+      "phase": 3,
+      "pair": "zh→it",
+      "table": "target_translations_italian_from_zh",
+      "translated": 0,
+      "total": 10000,
+      "percent": 0,
+      "status": "⬜"
+    },
+    {
+      "phase": 3,
+      "pair": "zh→pt",
+      "table": "target_translations_portuguese_from_zh",
+      "translated": 0,
+      "total": 10000,
+      "percent": 0,
+      "status": "⬜"
+    },
+    {
+      "phase": 3,
+      "pair": "zh→pl",
+      "table": "target_translations_polish_from_zh",
+      "translated": 0,
+      "total": 10000,
+      "percent": 0,
+      "status": "⬜"
+    },
+    {
+      "phase": 3,
+      "pair": "zh→ro",
+      "table": "target_translations_romanian_from_zh",
+      "translated": 0,
+      "total": 10000,
+      "percent": 0,
+      "status": "⬜"
+    },
+    {
+      "phase": 3,
+      "pair": "zh→sr",
+      "table": "target_translations_serbian_from_zh",
+      "translated": 0,
+      "total": 10000,
+      "percent": 0,
+      "status": "⬜"
+    },
+    {
+      "phase": 3,
+      "pair": "zh→uk",
+      "table": "target_translations_ukrainian_from_zh",
+      "translated": 0,
+      "total": 10000,
+      "percent": 0,
+      "status": "⬜"
+    },
+    {
+      "phase": 3,
+      "pair": "zh→tr",
+      "table": "target_translations_turkish_from_zh",
+      "translated": 0,
+      "total": 10000,
+      "percent": 0,
+      "status": "⬜"
+    },
+    {
+      "phase": 3,
+      "pair": "zh→sw",
+      "table": "target_translations_swahili_from_zh",
+      "translated": 0,
+      "total": 10000,
+      "percent": 0,
+      "status": "⬜"
+    },
+    {
+      "phase": 3,
+      "pair": "zh→ja",
+      "table": "target_translations_japanese_from_zh",
+      "translated": 0,
+      "total": 10000,
+      "percent": 0,
+      "status": "⬜"
+    },
+    {
+      "phase": 3,
+      "pair": "zh→ko",
+      "table": "target_translations_korean_from_zh",
+      "translated": 0,
+      "total": 10000,
+      "percent": 0,
+      "status": "⬜"
+    },
+    {
+      "phase": 3,
+      "pair": "zh→hi",
+      "table": "target_translations_hindi_from_zh",
+      "translated": 0,
+      "total": 10000,
+      "percent": 0,
+      "status": "⬜"
+    },
+    {
+      "phase": 4,
+      "pair": "ru→de",
+      "table": "target_translations_german_from_ru",
+      "translated": 0,
+      "total": 10000,
+      "percent": 0,
+      "status": "⬜"
+    },
+    {
+      "phase": 4,
+      "pair": "ru→en",
+      "table": "target_translations_english_from_ru",
+      "translated": 0,
+      "total": 10000,
+      "percent": 0,
+      "status": "⬜"
+    },
+    {
+      "phase": 4,
+      "pair": "ru→es",
+      "table": "target_translations_spanish_from_ru",
+      "translated": 0,
+      "total": 10000,
+      "percent": 0,
+      "status": "⬜"
+    },
+    {
+      "phase": 4,
+      "pair": "ru→fr",
+      "table": "target_translations_french_from_ru",
+      "translated": 0,
+      "total": 10000,
+      "percent": 0,
+      "status": "⬜"
+    },
+    {
+      "phase": 4,
+      "pair": "ru→it",
+      "table": "target_translations_italian_from_ru",
+      "translated": 0,
+      "total": 10000,
+      "percent": 0,
+      "status": "⬜"
+    },
+    {
+      "phase": 4,
+      "pair": "ru→pt",
+      "table": "target_translations_portuguese_from_ru",
+      "translated": 0,
+      "total": 10000,
+      "percent": 0,
+      "status": "⬜"
+    },
+    {
+      "phase": 4,
+      "pair": "ru→ar",
+      "table": "target_translations_arabic_from_ru",
+      "translated": 0,
+      "total": 10000,
+      "percent": 0,
+      "status": "⬜"
+    },
+    {
+      "phase": 4,
+      "pair": "ru→zh",
+      "table": "target_translations_chinese_from_ru",
+      "translated": 0,
+      "total": 10000,
+      "percent": 0,
+      "status": "⬜"
+    },
+    {
+      "phase": 4,
+      "pair": "ru→ja",
+      "table": "target_translations_japanese_from_ru",
+      "translated": 0,
+      "total": 10000,
+      "percent": 0,
+      "status": "⬜"
+    },
+    {
+      "phase": 4,
+      "pair": "ru→ko",
+      "table": "target_translations_korean_from_ru",
+      "translated": 0,
+      "total": 10000,
+      "percent": 0,
+      "status": "⬜"
+    },
+    {
+      "phase": 4,
+      "pair": "ru→pl",
+      "table": "target_translations_polish_from_ru",
+      "translated": 0,
+      "total": 10000,
+      "percent": 0,
+      "status": "⬜"
+    },
+    {
+      "phase": 4,
+      "pair": "ru→ro",
+      "table": "target_translations_romanian_from_ru",
+      "translated": 0,
+      "total": 10000,
+      "percent": 0,
+      "status": "⬜"
+    },
+    {
+      "phase": 4,
+      "pair": "ru→sr",
+      "table": "target_translations_serbian_from_ru",
+      "translated": 0,
+      "total": 10000,
+      "percent": 0,
+      "status": "⬜"
+    },
+    {
+      "phase": 4,
+      "pair": "ru→uk",
+      "table": "target_translations_ukrainian_from_ru",
+      "translated": 0,
+      "total": 10000,
+      "percent": 0,
+      "status": "⬜"
+    },
+    {
+      "phase": 4,
+      "pair": "ru→tr",
+      "table": "target_translations_turkish_from_ru",
+      "translated": 0,
+      "total": 10000,
+      "percent": 0,
+      "status": "⬜"
+    },
+    {
+      "phase": 4,
+      "pair": "ru→sw",
+      "table": "target_translations_swahili_from_ru",
+      "translated": 0,
+      "total": 10000,
+      "percent": 0,
+      "status": "⬜"
+    },
+    {
+      "phase": 4,
+      "pair": "ru→hi",
+      "table": "target_translations_hindi_from_ru",
+      "translated": 0,
+      "total": 10000,
+      "percent": 0,
+      "status": "⬜"
+    },
+    {
+      "phase": 5,
+      "pair": "pl→de",
+      "table": "target_translations_german_from_pl",
+      "translated": 0,
+      "total": 9980,
+      "percent": 0,
+      "status": "⬜"
+    },
+    {
+      "phase": 5,
+      "pair": "pl→en",
+      "table": "target_translations_english_from_pl",
+      "translated": 0,
+      "total": 9980,
+      "percent": 0,
+      "status": "⬜"
+    },
+    {
+      "phase": 5,
+      "pair": "pl→es",
+      "table": "target_translations_spanish_from_pl",
+      "translated": 0,
+      "total": 9980,
+      "percent": 0,
+      "status": "⬜"
+    },
+    {
+      "phase": 5,
+      "pair": "pl→fr",
+      "table": "target_translations_french_from_pl",
+      "translated": 0,
+      "total": 9980,
+      "percent": 0,
+      "status": "⬜"
+    },
+    {
+      "phase": 5,
+      "pair": "pl→it",
+      "table": "target_translations_italian_from_pl",
+      "translated": 0,
+      "total": 9980,
+      "percent": 0,
+      "status": "⬜"
+    },
+    {
+      "phase": 5,
+      "pair": "pl→pt",
+      "table": "target_translations_portuguese_from_pl",
+      "translated": 0,
+      "total": 9980,
+      "percent": 0,
+      "status": "⬜"
+    },
+    {
+      "phase": 5,
+      "pair": "pl→ar",
+      "table": "target_translations_arabic_from_pl",
+      "translated": 0,
+      "total": 9980,
+      "percent": 0,
+      "status": "⬜"
+    },
+    {
+      "phase": 5,
+      "pair": "pl→zh",
+      "table": "target_translations_chinese_from_pl",
+      "translated": 0,
+      "total": 9980,
+      "percent": 0,
+      "status": "⬜"
+    },
+    {
+      "phase": 5,
+      "pair": "pl→ja",
+      "table": "target_translations_japanese_from_pl",
+      "translated": 0,
+      "total": 9980,
+      "percent": 0,
+      "status": "⬜"
+    },
+    {
+      "phase": 5,
+      "pair": "pl→ko",
+      "table": "target_translations_korean_from_pl",
+      "translated": 0,
+      "total": 9980,
+      "percent": 0,
+      "status": "⬜"
+    },
+    {
+      "phase": 5,
+      "pair": "pl→ru",
+      "table": "target_translations_russian_from_pl",
+      "translated": 0,
+      "total": 9980,
+      "percent": 0,
+      "status": "⬜"
+    },
+    {
+      "phase": 5,
+      "pair": "pl→ro",
+      "table": "target_translations_romanian_from_pl",
+      "translated": 0,
+      "total": 9980,
+      "percent": 0,
+      "status": "⬜"
+    },
+    {
+      "phase": 5,
+      "pair": "pl→sr",
+      "table": "target_translations_serbian_from_pl",
+      "translated": 0,
+      "total": 9980,
+      "percent": 0,
+      "status": "⬜"
+    },
+    {
+      "phase": 5,
+      "pair": "pl→uk",
+      "table": "target_translations_ukrainian_from_pl",
+      "translated": 0,
+      "total": 9980,
+      "percent": 0,
+      "status": "⬜"
+    },
+    {
+      "phase": 5,
+      "pair": "pl→tr",
+      "table": "target_translations_turkish_from_pl",
+      "translated": 0,
+      "total": 9980,
+      "percent": 0,
+      "status": "⬜"
+    },
+    {
+      "phase": 5,
+      "pair": "pl→sw",
+      "table": "target_translations_swahili_from_pl",
+      "translated": 0,
+      "total": 9980,
+      "percent": 0,
+      "status": "⬜"
+    },
+    {
+      "phase": 5,
+      "pair": "pl→hi",
+      "table": "target_translations_hindi_from_pl",
+      "translated": 0,
+      "total": 9980,
+      "percent": 0,
+      "status": "⬜"
+    },
+    {
+      "phase": 5,
+      "pair": "ro→de",
+      "table": "target_translations_german_from_ro",
+      "translated": 0,
+      "total": 9989,
+      "percent": 0,
+      "status": "⬜"
+    },
+    {
+      "phase": 5,
+      "pair": "ro→en",
+      "table": "target_translations_english_from_ro",
+      "translated": 0,
+      "total": 9989,
+      "percent": 0,
+      "status": "⬜"
+    },
+    {
+      "phase": 5,
+      "pair": "ro→es",
+      "table": "target_translations_spanish_from_ro",
+      "translated": 0,
+      "total": 9989,
+      "percent": 0,
+      "status": "⬜"
+    },
+    {
+      "phase": 5,
+      "pair": "ro→fr",
+      "table": "target_translations_french_from_ro",
+      "translated": 0,
+      "total": 9989,
+      "percent": 0,
+      "status": "⬜"
+    },
+    {
+      "phase": 5,
+      "pair": "ro→it",
+      "table": "target_translations_italian_from_ro",
+      "translated": 0,
+      "total": 9989,
+      "percent": 0,
+      "status": "⬜"
+    },
+    {
+      "phase": 5,
+      "pair": "ro→pt",
+      "table": "target_translations_portuguese_from_ro",
+      "translated": 0,
+      "total": 9989,
+      "percent": 0,
+      "status": "⬜"
+    },
+    {
+      "phase": 5,
+      "pair": "ro→ar",
+      "table": "target_translations_arabic_from_ro",
+      "translated": 0,
+      "total": 9989,
+      "percent": 0,
+      "status": "⬜"
+    },
+    {
+      "phase": 5,
+      "pair": "ro→zh",
+      "table": "target_translations_chinese_from_ro",
+      "translated": 0,
+      "total": 9989,
+      "percent": 0,
+      "status": "⬜"
+    },
+    {
+      "phase": 5,
+      "pair": "ro→ja",
+      "table": "target_translations_japanese_from_ro",
+      "translated": 0,
+      "total": 9989,
+      "percent": 0,
+      "status": "⬜"
+    },
+    {
+      "phase": 5,
+      "pair": "ro→ko",
+      "table": "target_translations_korean_from_ro",
+      "translated": 0,
+      "total": 9989,
+      "percent": 0,
+      "status": "⬜"
+    },
+    {
+      "phase": 5,
+      "pair": "ro→ru",
+      "table": "target_translations_russian_from_ro",
+      "translated": 0,
+      "total": 9989,
+      "percent": 0,
+      "status": "⬜"
+    },
+    {
+      "phase": 5,
+      "pair": "ro→pl",
+      "table": "target_translations_polish_from_ro",
+      "translated": 0,
+      "total": 9989,
+      "percent": 0,
+      "status": "⬜"
+    },
+    {
+      "phase": 5,
+      "pair": "ro→sr",
+      "table": "target_translations_serbian_from_ro",
+      "translated": 0,
+      "total": 9989,
+      "percent": 0,
+      "status": "⬜"
+    },
+    {
+      "phase": 5,
+      "pair": "ro→uk",
+      "table": "target_translations_ukrainian_from_ro",
+      "translated": 0,
+      "total": 9989,
+      "percent": 0,
+      "status": "⬜"
+    },
+    {
+      "phase": 5,
+      "pair": "ro→tr",
+      "table": "target_translations_turkish_from_ro",
+      "translated": 0,
+      "total": 9989,
+      "percent": 0,
+      "status": "⬜"
+    },
+    {
+      "phase": 5,
+      "pair": "ro→sw",
+      "table": "target_translations_swahili_from_ro",
+      "translated": 0,
+      "total": 9989,
+      "percent": 0,
+      "status": "⬜"
+    },
+    {
+      "phase": 5,
+      "pair": "ro→hi",
+      "table": "target_translations_hindi_from_ro",
+      "translated": 0,
+      "total": 9989,
+      "percent": 0,
+      "status": "⬜"
+    },
+    {
+      "phase": 5,
+      "pair": "uk→de",
+      "table": "target_translations_german_from_uk",
+      "translated": 0,
+      "total": 10000,
+      "percent": 0,
+      "status": "⬜"
+    },
+    {
+      "phase": 5,
+      "pair": "uk→en",
+      "table": "target_translations_english_from_uk",
+      "translated": 0,
+      "total": 10000,
+      "percent": 0,
+      "status": "⬜"
+    },
+    {
+      "phase": 5,
+      "pair": "uk→es",
+      "table": "target_translations_spanish_from_uk",
+      "translated": 0,
+      "total": 10000,
+      "percent": 0,
+      "status": "⬜"
+    },
+    {
+      "phase": 5,
+      "pair": "uk→fr",
+      "table": "target_translations_french_from_uk",
+      "translated": 0,
+      "total": 10000,
+      "percent": 0,
+      "status": "⬜"
+    },
+    {
+      "phase": 5,
+      "pair": "uk→it",
+      "table": "target_translations_italian_from_uk",
+      "translated": 0,
+      "total": 10000,
+      "percent": 0,
+      "status": "⬜"
+    },
+    {
+      "phase": 5,
+      "pair": "uk→pt",
+      "table": "target_translations_portuguese_from_uk",
+      "translated": 0,
+      "total": 10000,
+      "percent": 0,
+      "status": "⬜"
+    },
+    {
+      "phase": 5,
+      "pair": "uk→ar",
+      "table": "target_translations_arabic_from_uk",
+      "translated": 0,
+      "total": 10000,
+      "percent": 0,
+      "status": "⬜"
+    },
+    {
+      "phase": 5,
+      "pair": "uk→zh",
+      "table": "target_translations_chinese_from_uk",
+      "translated": 0,
+      "total": 10000,
+      "percent": 0,
+      "status": "⬜"
+    },
+    {
+      "phase": 5,
+      "pair": "uk→ja",
+      "table": "target_translations_japanese_from_uk",
+      "translated": 0,
+      "total": 10000,
+      "percent": 0,
+      "status": "⬜"
+    },
+    {
+      "phase": 5,
+      "pair": "uk→ko",
+      "table": "target_translations_korean_from_uk",
+      "translated": 0,
+      "total": 10000,
+      "percent": 0,
+      "status": "⬜"
+    },
+    {
+      "phase": 5,
+      "pair": "uk→ru",
+      "table": "target_translations_russian_from_uk",
+      "translated": 0,
+      "total": 10000,
+      "percent": 0,
+      "status": "⬜"
+    },
+    {
+      "phase": 5,
+      "pair": "uk→pl",
+      "table": "target_translations_polish_from_uk",
+      "translated": 0,
+      "total": 10000,
+      "percent": 0,
+      "status": "⬜"
+    },
+    {
+      "phase": 5,
+      "pair": "uk→ro",
+      "table": "target_translations_romanian_from_uk",
+      "translated": 0,
+      "total": 10000,
+      "percent": 0,
+      "status": "⬜"
+    },
+    {
+      "phase": 5,
+      "pair": "uk→sr",
+      "table": "target_translations_serbian_from_uk",
+      "translated": 0,
+      "total": 10000,
+      "percent": 0,
+      "status": "⬜"
+    },
+    {
+      "phase": 5,
+      "pair": "uk→tr",
+      "table": "target_translations_turkish_from_uk",
+      "translated": 0,
+      "total": 10000,
+      "percent": 0,
+      "status": "⬜"
+    },
+    {
+      "phase": 5,
+      "pair": "uk→sw",
+      "table": "target_translations_swahili_from_uk",
+      "translated": 0,
+      "total": 10000,
+      "percent": 0,
+      "status": "⬜"
+    },
+    {
+      "phase": 5,
+      "pair": "uk→hi",
+      "table": "target_translations_hindi_from_uk",
+      "translated": 0,
+      "total": 10000,
+      "percent": 0,
+      "status": "⬜"
+    },
+    {
+      "phase": 6,
+      "pair": "ja→de",
+      "table": "target_translations_german_from_ja",
+      "translated": 0,
+      "total": 10000,
+      "percent": 0,
+      "status": "⬜"
+    },
+    {
+      "phase": 6,
+      "pair": "ja→en",
+      "table": "target_translations_english_from_ja",
+      "translated": 0,
+      "total": 10000,
+      "percent": 0,
+      "status": "⬜"
+    },
+    {
+      "phase": 6,
+      "pair": "ja→es",
+      "table": "target_translations_spanish_from_ja",
+      "translated": 0,
+      "total": 10000,
+      "percent": 0,
+      "status": "⬜"
+    },
+    {
+      "phase": 6,
+      "pair": "ja→fr",
+      "table": "target_translations_french_from_ja",
+      "translated": 0,
+      "total": 10000,
+      "percent": 0,
+      "status": "⬜"
+    },
+    {
+      "phase": 6,
+      "pair": "ja→it",
+      "table": "target_translations_italian_from_ja",
+      "translated": 0,
+      "total": 10000,
+      "percent": 0,
+      "status": "⬜"
+    },
+    {
+      "phase": 6,
+      "pair": "ja→pt",
+      "table": "target_translations_portuguese_from_ja",
+      "translated": 0,
+      "total": 10000,
+      "percent": 0,
+      "status": "⬜"
+    },
+    {
+      "phase": 6,
+      "pair": "ja→ar",
+      "table": "target_translations_arabic_from_ja",
+      "translated": 0,
+      "total": 10000,
+      "percent": 0,
+      "status": "⬜"
+    },
+    {
+      "phase": 6,
+      "pair": "ja→zh",
+      "table": "target_translations_chinese_from_ja",
+      "translated": 0,
+      "total": 10000,
+      "percent": 0,
+      "status": "⬜"
+    },
+    {
+      "phase": 6,
+      "pair": "ja→ko",
+      "table": "target_translations_korean_from_ja",
+      "translated": 0,
+      "total": 10000,
+      "percent": 0,
+      "status": "⬜"
+    },
+    {
+      "phase": 6,
+      "pair": "ja→ru",
+      "table": "target_translations_russian_from_ja",
+      "translated": 0,
+      "total": 10000,
+      "percent": 0,
+      "status": "⬜"
+    },
+    {
+      "phase": 6,
+      "pair": "ja→pl",
+      "table": "target_translations_polish_from_ja",
+      "translated": 0,
+      "total": 10000,
+      "percent": 0,
+      "status": "⬜"
+    },
+    {
+      "phase": 6,
+      "pair": "ja→ro",
+      "table": "target_translations_romanian_from_ja",
+      "translated": 0,
+      "total": 10000,
+      "percent": 0,
+      "status": "⬜"
+    },
+    {
+      "phase": 6,
+      "pair": "ja→sr",
+      "table": "target_translations_serbian_from_ja",
+      "translated": 0,
+      "total": 10000,
+      "percent": 0,
+      "status": "⬜"
+    },
+    {
+      "phase": 6,
+      "pair": "ja→uk",
+      "table": "target_translations_ukrainian_from_ja",
+      "translated": 0,
+      "total": 10000,
+      "percent": 0,
+      "status": "⬜"
+    },
+    {
+      "phase": 6,
+      "pair": "ja→tr",
+      "table": "target_translations_turkish_from_ja",
+      "translated": 0,
+      "total": 10000,
+      "percent": 0,
+      "status": "⬜"
+    },
+    {
+      "phase": 6,
+      "pair": "ja→sw",
+      "table": "target_translations_swahili_from_ja",
+      "translated": 0,
+      "total": 10000,
+      "percent": 0,
+      "status": "⬜"
+    },
+    {
+      "phase": 6,
+      "pair": "ja→hi",
+      "table": "target_translations_hindi_from_ja",
+      "translated": 0,
+      "total": 10000,
+      "percent": 0,
+      "status": "⬜"
+    },
+    {
+      "phase": 6,
+      "pair": "ko→de",
+      "table": "target_translations_german_from_ko",
+      "translated": 0,
+      "total": 10000,
+      "percent": 0,
+      "status": "⬜"
+    },
+    {
+      "phase": 6,
+      "pair": "ko→en",
+      "table": "target_translations_english_from_ko",
+      "translated": 0,
+      "total": 10000,
+      "percent": 0,
+      "status": "⬜"
+    },
+    {
+      "phase": 6,
+      "pair": "ko→es",
+      "table": "target_translations_spanish_from_ko",
+      "translated": 0,
+      "total": 10000,
+      "percent": 0,
+      "status": "⬜"
+    },
+    {
+      "phase": 6,
+      "pair": "ko→fr",
+      "table": "target_translations_french_from_ko",
+      "translated": 0,
+      "total": 10000,
+      "percent": 0,
+      "status": "⬜"
+    },
+    {
+      "phase": 6,
+      "pair": "ko→it",
+      "table": "target_translations_italian_from_ko",
+      "translated": 0,
+      "total": 10000,
+      "percent": 0,
+      "status": "⬜"
+    },
+    {
+      "phase": 6,
+      "pair": "ko→pt",
+      "table": "target_translations_portuguese_from_ko",
+      "translated": 0,
+      "total": 10000,
+      "percent": 0,
+      "status": "⬜"
+    },
+    {
+      "phase": 6,
+      "pair": "ko→ar",
+      "table": "target_translations_arabic_from_ko",
+      "translated": 0,
+      "total": 10000,
+      "percent": 0,
+      "status": "⬜"
+    },
+    {
+      "phase": 6,
+      "pair": "ko→zh",
+      "table": "target_translations_chinese_from_ko",
+      "translated": 0,
+      "total": 10000,
+      "percent": 0,
+      "status": "⬜"
+    },
+    {
+      "phase": 6,
+      "pair": "ko→ja",
+      "table": "target_translations_japanese_from_ko",
+      "translated": 0,
+      "total": 10000,
+      "percent": 0,
+      "status": "⬜"
+    },
+    {
+      "phase": 6,
+      "pair": "ko→ru",
+      "table": "target_translations_russian_from_ko",
+      "translated": 0,
+      "total": 10000,
+      "percent": 0,
+      "status": "⬜"
+    },
+    {
+      "phase": 6,
+      "pair": "ko→pl",
+      "table": "target_translations_polish_from_ko",
+      "translated": 0,
+      "total": 10000,
+      "percent": 0,
+      "status": "⬜"
+    },
+    {
+      "phase": 6,
+      "pair": "ko→ro",
+      "table": "target_translations_romanian_from_ko",
+      "translated": 0,
+      "total": 10000,
+      "percent": 0,
+      "status": "⬜"
+    },
+    {
+      "phase": 6,
+      "pair": "ko→sr",
+      "table": "target_translations_serbian_from_ko",
+      "translated": 0,
+      "total": 10000,
+      "percent": 0,
+      "status": "⬜"
+    },
+    {
+      "phase": 6,
+      "pair": "ko→uk",
+      "table": "target_translations_ukrainian_from_ko",
+      "translated": 0,
+      "total": 10000,
+      "percent": 0,
+      "status": "⬜"
+    },
+    {
+      "phase": 6,
+      "pair": "ko→tr",
+      "table": "target_translations_turkish_from_ko",
+      "translated": 0,
+      "total": 10000,
+      "percent": 0,
+      "status": "⬜"
+    },
+    {
+      "phase": 6,
+      "pair": "ko→sw",
+      "table": "target_translations_swahili_from_ko",
+      "translated": 0,
+      "total": 10000,
+      "percent": 0,
+      "status": "⬜"
+    },
+    {
+      "phase": 6,
+      "pair": "ko→hi",
+      "table": "target_translations_hindi_from_ko",
+      "translated": 0,
+      "total": 10000,
+      "percent": 0,
+      "status": "⬜"
+    },
+    {
+      "phase": 6,
+      "pair": "hi→de",
+      "table": "target_translations_german_from_hi",
+      "translated": 0,
+      "total": 9999,
+      "percent": 0,
+      "status": "⬜"
+    },
+    {
+      "phase": 6,
+      "pair": "hi→en",
+      "table": "target_translations_english_from_hi",
+      "translated": 0,
+      "total": 9999,
+      "percent": 0,
+      "status": "⬜"
+    },
+    {
+      "phase": 6,
+      "pair": "hi→es",
+      "table": "target_translations_spanish_from_hi",
+      "translated": 0,
+      "total": 9999,
+      "percent": 0,
+      "status": "⬜"
+    },
+    {
+      "phase": 6,
+      "pair": "hi→fr",
+      "table": "target_translations_french_from_hi",
+      "translated": 0,
+      "total": 9999,
+      "percent": 0,
+      "status": "⬜"
+    },
+    {
+      "phase": 6,
+      "pair": "hi→it",
+      "table": "target_translations_italian_from_hi",
+      "translated": 0,
+      "total": 9999,
+      "percent": 0,
+      "status": "⬜"
+    },
+    {
+      "phase": 6,
+      "pair": "hi→pt",
+      "table": "target_translations_portuguese_from_hi",
+      "translated": 0,
+      "total": 9999,
+      "percent": 0,
+      "status": "⬜"
+    },
+    {
+      "phase": 6,
+      "pair": "hi→ar",
+      "table": "target_translations_arabic_from_hi",
+      "translated": 0,
+      "total": 9999,
+      "percent": 0,
+      "status": "⬜"
+    },
+    {
+      "phase": 6,
+      "pair": "hi→zh",
+      "table": "target_translations_chinese_from_hi",
+      "translated": 0,
+      "total": 9999,
+      "percent": 0,
+      "status": "⬜"
+    },
+    {
+      "phase": 6,
+      "pair": "hi→ja",
+      "table": "target_translations_japanese_from_hi",
+      "translated": 0,
+      "total": 9999,
+      "percent": 0,
+      "status": "⬜"
+    },
+    {
+      "phase": 6,
+      "pair": "hi→ko",
+      "table": "target_translations_korean_from_hi",
+      "translated": 0,
+      "total": 9999,
+      "percent": 0,
+      "status": "⬜"
+    },
+    {
+      "phase": 6,
+      "pair": "hi→ru",
+      "table": "target_translations_russian_from_hi",
+      "translated": 0,
+      "total": 9999,
+      "percent": 0,
+      "status": "⬜"
+    },
+    {
+      "phase": 6,
+      "pair": "hi→pl",
+      "table": "target_translations_polish_from_hi",
+      "translated": 0,
+      "total": 9999,
+      "percent": 0,
+      "status": "⬜"
+    },
+    {
+      "phase": 6,
+      "pair": "hi→ro",
+      "table": "target_translations_romanian_from_hi",
+      "translated": 0,
+      "total": 9999,
+      "percent": 0,
+      "status": "⬜"
+    },
+    {
+      "phase": 6,
+      "pair": "hi→sr",
+      "table": "target_translations_serbian_from_hi",
+      "translated": 0,
+      "total": 9999,
+      "percent": 0,
+      "status": "⬜"
+    },
+    {
+      "phase": 6,
+      "pair": "hi→uk",
+      "table": "target_translations_ukrainian_from_hi",
+      "translated": 0,
+      "total": 9999,
+      "percent": 0,
+      "status": "⬜"
+    },
+    {
+      "phase": 6,
+      "pair": "hi→tr",
+      "table": "target_translations_turkish_from_hi",
+      "translated": 0,
+      "total": 9999,
+      "percent": 0,
+      "status": "⬜"
+    },
+    {
+      "phase": 6,
+      "pair": "hi→sw",
+      "table": "target_translations_swahili_from_hi",
+      "translated": 0,
+      "total": 9999,
+      "percent": 0,
+      "status": "⬜"
+    },
+    {
+      "phase": 7,
+      "pair": "tr→de",
+      "table": "target_translations_german_from_tr",
+      "translated": 0,
+      "total": 10000,
+      "percent": 0,
+      "status": "⬜"
+    },
+    {
+      "phase": 7,
+      "pair": "tr→en",
+      "table": "target_translations_english_from_tr",
+      "translated": 0,
+      "total": 10000,
+      "percent": 0,
+      "status": "⬜"
+    },
+    {
+      "phase": 7,
+      "pair": "tr→es",
+      "table": "target_translations_spanish_from_tr",
+      "translated": 0,
+      "total": 10000,
+      "percent": 0,
+      "status": "⬜"
+    },
+    {
+      "phase": 7,
+      "pair": "tr→fr",
+      "table": "target_translations_french_from_tr",
+      "translated": 0,
+      "total": 10000,
+      "percent": 0,
+      "status": "⬜"
+    },
+    {
+      "phase": 7,
+      "pair": "tr→it",
+      "table": "target_translations_italian_from_tr",
+      "translated": 0,
+      "total": 10000,
+      "percent": 0,
+      "status": "⬜"
+    },
+    {
+      "phase": 7,
+      "pair": "tr→pt",
+      "table": "target_translations_portuguese_from_tr",
+      "translated": 0,
+      "total": 10000,
+      "percent": 0,
+      "status": "⬜"
+    },
+    {
+      "phase": 7,
+      "pair": "tr→ar",
+      "table": "target_translations_arabic_from_tr",
+      "translated": 0,
+      "total": 10000,
+      "percent": 0,
+      "status": "⬜"
+    },
+    {
+      "phase": 7,
+      "pair": "tr→zh",
+      "table": "target_translations_chinese_from_tr",
+      "translated": 0,
+      "total": 10000,
+      "percent": 0,
+      "status": "⬜"
+    },
+    {
+      "phase": 7,
+      "pair": "tr→ja",
+      "table": "target_translations_japanese_from_tr",
+      "translated": 0,
+      "total": 10000,
+      "percent": 0,
+      "status": "⬜"
+    },
+    {
+      "phase": 7,
+      "pair": "tr→ko",
+      "table": "target_translations_korean_from_tr",
+      "translated": 0,
+      "total": 10000,
+      "percent": 0,
+      "status": "⬜"
+    },
+    {
+      "phase": 7,
+      "pair": "tr→ru",
+      "table": "target_translations_russian_from_tr",
+      "translated": 0,
+      "total": 10000,
+      "percent": 0,
+      "status": "⬜"
+    },
+    {
+      "phase": 7,
+      "pair": "tr→pl",
+      "table": "target_translations_polish_from_tr",
+      "translated": 0,
+      "total": 10000,
+      "percent": 0,
+      "status": "⬜"
+    },
+    {
+      "phase": 7,
+      "pair": "tr→ro",
+      "table": "target_translations_romanian_from_tr",
+      "translated": 0,
+      "total": 10000,
+      "percent": 0,
+      "status": "⬜"
+    },
+    {
+      "phase": 7,
+      "pair": "tr→sr",
+      "table": "target_translations_serbian_from_tr",
+      "translated": 0,
+      "total": 10000,
+      "percent": 0,
+      "status": "⬜"
+    },
+    {
+      "phase": 7,
+      "pair": "tr→uk",
+      "table": "target_translations_ukrainian_from_tr",
+      "translated": 0,
+      "total": 10000,
+      "percent": 0,
+      "status": "⬜"
+    },
+    {
+      "phase": 7,
+      "pair": "tr→sw",
+      "table": "target_translations_swahili_from_tr",
+      "translated": 0,
+      "total": 10000,
+      "percent": 0,
+      "status": "⬜"
+    },
+    {
+      "phase": 7,
+      "pair": "tr→hi",
+      "table": "target_translations_hindi_from_tr",
+      "translated": 0,
+      "total": 10000,
+      "percent": 0,
+      "status": "⬜"
+    }
+  ]
+}

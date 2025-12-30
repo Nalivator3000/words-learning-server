@@ -2732,15 +2732,15 @@ app.delete('/api/users/:userId/language-pairs/:pairId', async (req, res) => {
 // Get all word sets (with optional filtering)
 app.get('/api/word-sets', async (req, res) => {
     try {
-        const { languagePair, level, theme, isOfficial } = req.query;
+        const { sourceLang, targetLang, level, theme, isPublic } = req.query;
 
         let query = 'SELECT * FROM word_sets WHERE 1=1';
         const params = [];
         let paramIndex = 1;
 
-        if (languagePair) {
-            query += ` AND language_pair = $${paramIndex}`;
-            params.push(languagePair);
+        if (sourceLang) {
+            query += ` AND source_language = $${paramIndex}`;
+            params.push(sourceLang);
             paramIndex++;
         }
 
@@ -2756,13 +2756,13 @@ app.get('/api/word-sets', async (req, res) => {
             paramIndex++;
         }
 
-        if (isOfficial !== undefined) {
-            query += ` AND is_official = $${paramIndex}`;
-            params.push(isOfficial === 'true');
+        if (isPublic !== undefined) {
+            query += ` AND is_public = $${paramIndex}`;
+            params.push(isPublic === 'true');
             paramIndex++;
         }
 
-        query += ' ORDER BY level ASC, theme ASC, name ASC';
+        query += ' ORDER BY level ASC, word_count DESC, title ASC';
 
         const result = await db.query(query, params);
         res.json(result.rows);
@@ -2959,6 +2959,104 @@ app.delete('/api/word-sets/:setId', async (req, res) => {
 
 // ============================================
 // END WORD SETS API
+// ============================================
+
+// ============================================
+// ONBOARDING API
+// ============================================
+
+// Import word sets for new users (creates initial progress records)
+app.post('/api/onboarding/import-word-sets', async (req, res) => {
+    try {
+        const { userId, languagePairId, wordSetIds } = req.body;
+
+        if (!userId || !languagePairId || !wordSetIds || wordSetIds.length === 0) {
+            return res.status(400).json({ error: 'userId, languagePairId, and wordSetIds are required' });
+        }
+
+        // Get language pair to determine source language
+        const langPairResult = await db.query(
+            'SELECT from_lang FROM language_pairs WHERE id = $1 AND user_id = $2',
+            [languagePairId, userId]
+        );
+
+        if (langPairResult.rows.length === 0) {
+            return res.status(404).json({ error: 'Language pair not found' });
+        }
+
+        const sourceLanguage = langPairResult.rows[0].from_lang;
+        const tableName = `source_words_${sourceLanguage}`;
+
+        let totalWordsAdded = 0;
+
+        // For each word set, create progress records for all words with that level/theme
+        for (const setId of wordSetIds) {
+            // Get word set info
+            const setResult = await db.query(
+                'SELECT level, theme FROM word_sets WHERE id = $1',
+                [setId]
+            );
+
+            if (setResult.rows.length === 0) {
+                logger.warn(`Word set ${setId} not found, skipping`);
+                continue;
+            }
+
+            const { level, theme } = setResult.rows[0];
+
+            // Build query to get matching words from source table
+            let wordQuery = `SELECT id FROM ${tableName} WHERE 1=1`;
+            const wordParams = [];
+            let paramIndex = 1;
+
+            if (level) {
+                wordQuery += ` AND level = $${paramIndex}`;
+                wordParams.push(level);
+                paramIndex++;
+            }
+
+            if (theme) {
+                wordQuery += ` AND theme = $${paramIndex}`;
+                wordParams.push(theme);
+                paramIndex++;
+            }
+
+            const wordsResult = await db.query(wordQuery, wordParams);
+
+            // Create progress records for these words
+            for (const wordRow of wordsResult.rows) {
+                try {
+                    await db.query(`
+                        INSERT INTO user_word_progress (
+                            user_id, language_pair_id, source_language, source_word_id,
+                            status, correct_count, incorrect_count, total_reviews,
+                            review_cycle, ease_factor
+                        ) VALUES ($1, $2, $3, $4, 'new', 0, 0, 0, 0, 2.50)
+                        ON CONFLICT (user_id, language_pair_id, source_language, source_word_id)
+                        DO NOTHING
+                    `, [userId, languagePairId, sourceLanguage, wordRow.id]);
+
+                    totalWordsAdded++;
+                } catch (error) {
+                    logger.warn(`Failed to add word ${wordRow.id} to progress:`, error.message);
+                }
+            }
+        }
+
+        res.json({
+            success: true,
+            words_added: totalWordsAdded,
+            message: `Successfully imported ${totalWordsAdded} words`
+        });
+
+    } catch (err) {
+        logger.error('Error importing word sets for onboarding:', err);
+        res.status(500).json({ error: err.message });
+    }
+});
+
+// ============================================
+// END ONBOARDING API
 // ============================================
 
 app.put('/api/users/:userId/lesson-size', async (req, res) => {
@@ -11472,6 +11570,267 @@ app.get('/api/words/popular/:userId', async (req, res) => {
 });
 
 // =========================
+// HELPER FUNCTIONS FOR NEW WORD ARCHITECTURE
+// =========================
+
+/**
+ * Get words with progress tracking from source_words_* tables
+ * @param {number} userId - User ID
+ * @param {number} languagePairId - Language pair ID
+ * @param {string} sourceLanguage - Source language (e.g., 'german', 'french')
+ * @param {string} status - Word status filter ('new', 'studying', 'review', 'review_1', etc.)
+ * @param {number} limit - Number of words to return
+ * @param {boolean} onlyDue - For review words, only return words due for review
+ * @returns {Promise<Array>} Array of word objects with progress data
+ */
+async function getWordsWithProgress(userId, languagePairId, sourceLanguage, status, limit, onlyDue = true) {
+    const tableName = `source_words_${sourceLanguage}`;
+
+    let query;
+    let params;
+
+    if (status === 'new') {
+        // Get words that user hasn't started learning yet
+        query = `
+            SELECT
+                sw.id as source_word_id,
+                sw.id as id,
+                sw.word,
+                sw.level,
+                sw.theme,
+                NULL as translation,
+                NULL as example,
+                NULL as example_translation,
+                'new' as status,
+                0 as correct_count,
+                0 as incorrect_count,
+                0 as total_reviews,
+                1 as review_cycle,
+                NULL as last_review_date,
+                NULL as next_review_date,
+                2.50 as ease_factor,
+                $1 as source_language
+            FROM ${tableName} sw
+            WHERE NOT EXISTS (
+                SELECT 1 FROM user_word_progress uwp
+                WHERE uwp.user_id = $2
+                AND uwp.language_pair_id = $3
+                AND uwp.source_language = $1
+                AND uwp.source_word_id = sw.id
+            )
+            ORDER BY RANDOM()
+            LIMIT $4
+        `;
+        params = [sourceLanguage, userId, languagePairId, limit];
+
+    } else if (status === 'review') {
+        // Get all review words (review_1, review_3, review_7, etc.) that are due
+        query = `
+            SELECT
+                sw.id as source_word_id,
+                sw.id as id,
+                sw.word,
+                sw.level,
+                sw.theme,
+                uwp.translation,
+                uwp.example,
+                uwp.example_translation,
+                uwp.status,
+                uwp.correct_count,
+                uwp.incorrect_count,
+                uwp.total_reviews,
+                uwp.review_cycle,
+                uwp.last_review_date,
+                uwp.next_review_date,
+                uwp.ease_factor,
+                uwp.source_language,
+                uwp.id as progress_id
+            FROM ${tableName} sw
+            INNER JOIN user_word_progress uwp ON (
+                uwp.source_word_id = sw.id
+                AND uwp.source_language = $1
+                AND uwp.user_id = $2
+                AND uwp.language_pair_id = $3
+            )
+            WHERE uwp.status LIKE 'review_%'
+            ${onlyDue ? 'AND (uwp.next_review_date IS NULL OR uwp.next_review_date <= CURRENT_TIMESTAMP)' : ''}
+            ORDER BY RANDOM()
+            LIMIT $4
+        `;
+        params = [sourceLanguage, userId, languagePairId, limit];
+
+    } else {
+        // Get words with specific status (studying, mastered, etc.)
+        query = `
+            SELECT
+                sw.id as source_word_id,
+                sw.id as id,
+                sw.word,
+                sw.level,
+                sw.theme,
+                uwp.translation,
+                uwp.example,
+                uwp.example_translation,
+                uwp.status,
+                uwp.correct_count,
+                uwp.incorrect_count,
+                uwp.total_reviews,
+                uwp.review_cycle,
+                uwp.last_review_date,
+                uwp.next_review_date,
+                uwp.ease_factor,
+                uwp.source_language,
+                uwp.id as progress_id
+            FROM ${tableName} sw
+            INNER JOIN user_word_progress uwp ON (
+                uwp.source_word_id = sw.id
+                AND uwp.source_language = $1
+                AND uwp.user_id = $2
+                AND uwp.language_pair_id = $3
+            )
+            WHERE uwp.status = $4
+            ORDER BY RANDOM()
+            LIMIT $5
+        `;
+        params = [sourceLanguage, userId, languagePairId, status, limit];
+    }
+
+    const result = await db.query(query, params);
+    return result.rows;
+}
+
+/**
+ * Get word counts by status for dashboard
+ */
+async function getWordCountsByStatus(userId, languagePairId, sourceLanguage) {
+    const query = `
+        SELECT
+            status,
+            COUNT(*) as count
+        FROM user_word_progress
+        WHERE user_id = $1
+        AND language_pair_id = $2
+        AND source_language = $3
+        GROUP BY status
+    `;
+
+    const result = await db.query(query, [userId, languagePairId, sourceLanguage]);
+
+    const counts = {
+        studying: 0,
+        review: 0,
+        review7: 0,
+        review30: 0,
+        learned: 0,
+        mastered: 0,
+        // Detailed review stages
+        review_1: 0,
+        review_3: 0,
+        review_7: 0,
+        review_14: 0,
+        review_30: 0,
+        review_60: 0,
+        review_120: 0
+    };
+
+    result.rows.forEach(row => {
+        if (row.status === 'studying') {
+            counts.studying = parseInt(row.count);
+        } else if (row.status.startsWith('review_')) {
+            counts.review += parseInt(row.count);
+            const stage = row.status;
+            if (counts.hasOwnProperty(stage)) {
+                counts[stage] = parseInt(row.count);
+            }
+            // Backward compatibility
+            if (row.status === 'review_7') {
+                counts.review7 = parseInt(row.count);
+            } else if (row.status === 'review_30') {
+                counts.review30 = parseInt(row.count);
+            }
+        } else if (row.status === 'learned' || row.status === 'mastered') {
+            counts.learned += parseInt(row.count);
+            if (row.status === 'mastered') {
+                counts.mastered = parseInt(row.count);
+            }
+        }
+    });
+
+    return counts;
+}
+
+/**
+ * Update or create word progress
+ */
+async function updateWordProgress(userId, languagePairId, sourceLanguage, sourceWordId, progressData) {
+    const {
+        translation,
+        example,
+        exampleTranslation,
+        status,
+        correctCount,
+        incorrectCount,
+        totalReviews,
+        reviewCycle,
+        nextReviewDate,
+        easeFactor
+    } = progressData;
+
+    // Check if progress exists
+    const existing = await db.query(`
+        SELECT id FROM user_word_progress
+        WHERE user_id = $1 AND language_pair_id = $2
+        AND source_language = $3 AND source_word_id = $4
+    `, [userId, languagePairId, sourceLanguage, sourceWordId]);
+
+    if (existing.rows.length > 0) {
+        // Update existing progress
+        await db.query(`
+            UPDATE user_word_progress
+            SET
+                translation = COALESCE($1, translation),
+                example = COALESCE($2, example),
+                example_translation = COALESCE($3, example_translation),
+                status = $4,
+                correct_count = $5,
+                incorrect_count = $6,
+                total_reviews = $7,
+                review_cycle = $8,
+                last_review_date = CURRENT_TIMESTAMP,
+                next_review_date = $9,
+                ease_factor = $10,
+                updated_at = CURRENT_TIMESTAMP
+            WHERE id = $11
+        `, [
+            translation, example, exampleTranslation,
+            status, correctCount, incorrectCount, totalReviews,
+            reviewCycle, nextReviewDate, easeFactor,
+            existing.rows[0].id
+        ]);
+
+        return existing.rows[0].id;
+    } else {
+        // Create new progress
+        const result = await db.query(`
+            INSERT INTO user_word_progress (
+                user_id, language_pair_id, source_language, source_word_id,
+                translation, example, example_translation,
+                status, correct_count, incorrect_count, total_reviews,
+                review_cycle, last_review_date, next_review_date, ease_factor
+            ) VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9, $10, $11, $12, CURRENT_TIMESTAMP, $13, $14)
+            RETURNING id
+        `, [
+            userId, languagePairId, sourceLanguage, sourceWordId,
+            translation, example, exampleTranslation,
+            status, correctCount, incorrectCount, totalReviews,
+            reviewCycle, nextReviewDate, easeFactor
+        ]);
+
+        return result.rows[0].id;
+    }
+}
+
+// =========================
 // PERSONAL INSIGHTS SYSTEM
 // =========================
 
@@ -11779,103 +12138,75 @@ app.get('/api/words', async (req, res) => {
     }
 });
 
-// Get word counts by status (filtered by user and language pair)
+// Get word counts by status (NEW ARCHITECTURE: uses user_word_progress)
 app.get('/api/words/counts', async (req, res) => {
     try {
         const { userId, languagePairId } = req.query;
 
-        let query = `
-            SELECT
-                status,
-                COUNT(*) as count
-            FROM words
-            WHERE 1=1
-        `;
-        let params = [];
-
-        if (userId && languagePairId) {
-            query += ` AND user_id = $1 AND language_pair_id = $2`;
-            params.push(parseInt(userId), parseInt(languagePairId));
+        if (!userId || !languagePairId) {
+            return res.status(400).json({ error: 'userId and languagePairId are required' });
         }
 
-        query += ` GROUP BY status`;
+        // Get language pair info to determine source language
+        const langPairResult = await db.query(
+            'SELECT from_lang FROM language_pairs WHERE id = $1 AND user_id = $2',
+            [parseInt(languagePairId), parseInt(userId)]
+        );
 
-        const result = await db.query(query, params);
+        if (langPairResult.rows.length === 0) {
+            return res.status(404).json({ error: 'Language pair not found' });
+        }
 
-        const counts = {
-            studying: 0,
-            review: 0,
-            review7: 0,
-            review30: 0,
-            learned: 0,
-            // Detailed review stages
-            review_1: 0,
-            review_3: 0,
-            review_7: 0,
-            review_14: 0,
-            review_30: 0,
-            review_60: 0,
-            review_120: 0
-        };
+        const sourceLanguage = langPairResult.rows[0].from_lang;
 
-        result.rows.forEach(row => {
-            if (row.status === 'studying') {
-                counts.studying = parseInt(row.count);
-            } else if (row.status.startsWith('review_')) {
-                // All review statuses (review_1, review_3, review_7, review_14, review_30, review_60, review_120)
-                counts.review += parseInt(row.count);
-                // Detailed stage counts
-                const stage = row.status; // e.g., 'review_7'
-                if (counts.hasOwnProperty(stage)) {
-                    counts[stage] = parseInt(row.count);
-                }
-                // Keep backward compatibility with old review7/review30 fields
-                if (row.status === 'review_7') {
-                    counts.review7 = parseInt(row.count);
-                } else if (row.status === 'review_30') {
-                    counts.review30 = parseInt(row.count);
-                }
-            } else if (row.status === 'learned' || row.status === 'mastered') {
-                counts.learned += parseInt(row.count);
-            }
-        });
+        // Get counts using new helper function
+        const counts = await getWordCountsByStatus(
+            parseInt(userId),
+            parseInt(languagePairId),
+            sourceLanguage
+        );
 
         res.json(counts);
     } catch (err) {
+        logger.error('Error fetching word counts:', err);
         res.status(500).json({ error: err.message });
     }
 });
 
-// Get random words for quiz (filtered by user and language pair)
+// Get random words for quiz (NEW ARCHITECTURE: uses source_words_* + user_word_progress)
 app.get('/api/words/random/:status/:count', async (req, res) => {
     try {
         const { status, count } = req.params;
         const { userId, languagePairId } = req.query;
 
-        let query;
-        let params;
-
-        if (status === 'studying') {
-            query = 'SELECT * FROM words WHERE status = $1 AND user_id = $2 AND language_pair_id = $3 ORDER BY RANDOM() LIMIT $4';
-            params = ['studying', parseInt(userId), parseInt(languagePairId), parseInt(count)];
-        } else if (status === 'review') {
-            // Include ALL review stages from SRS intervals: 1, 3, 7, 14, 30, 60, 120 days
-            // Also check nextReviewDate to only return words that are due for review
-            query = `SELECT * FROM words
-                     WHERE status LIKE 'review_%'
-                     AND user_id = $1
-                     AND language_pair_id = $2
-                     AND (nextReviewDate IS NULL OR nextReviewDate <= CURRENT_TIMESTAMP)
-                     ORDER BY RANDOM() LIMIT $3`;
-            params = [parseInt(userId), parseInt(languagePairId), parseInt(count)];
-        } else {
-            query = 'SELECT * FROM words WHERE status = $1 AND user_id = $2 AND language_pair_id = $3 ORDER BY RANDOM() LIMIT $4';
-            params = [status, parseInt(userId), parseInt(languagePairId), parseInt(count)];
+        if (!userId || !languagePairId) {
+            return res.status(400).json({ error: 'userId and languagePairId are required' });
         }
 
-        const result = await db.query(query, params);
-        res.json(result.rows);
+        // Get language pair info to determine source language
+        const langPairResult = await db.query(
+            'SELECT from_lang, to_lang FROM language_pairs WHERE id = $1 AND user_id = $2',
+            [parseInt(languagePairId), parseInt(userId)]
+        );
+
+        if (langPairResult.rows.length === 0) {
+            return res.status(404).json({ error: 'Language pair not found' });
+        }
+
+        const sourceLanguage = langPairResult.rows[0].from_lang;
+
+        // Get words using new architecture
+        const words = await getWordsWithProgress(
+            parseInt(userId),
+            parseInt(languagePairId),
+            sourceLanguage,
+            status,
+            parseInt(count)
+        );
+
+        res.json(words);
     } catch (err) {
+        logger.error('Error fetching random words:', err);
         res.status(500).json({ error: err.message });
     }
 });
@@ -12126,20 +12457,54 @@ app.post('/api/words/bulk', async (req, res) => {
     }
 });
 
-// Update word progress with point-based system
+// Update word progress with point-based system (NEW ARCHITECTURE)
 app.put('/api/words/:id/progress', async (req, res) => {
     try {
-        const { id } = req.params;
-        const { correct, questionType } = req.body;
+        const sourceWordId = parseInt(req.params.id); // Now represents source_word_id
+        const { correct, questionType, userId, languagePairId } = req.body;
 
-        const wordResult = await db.query('SELECT * FROM words WHERE id = $1', [id]);
-
-        if (wordResult.rows.length === 0) {
-            res.status(404).json({ error: 'Word not found' });
-            return;
+        if (!userId || !languagePairId) {
+            return res.status(400).json({ error: 'userId and languagePairId are required' });
         }
 
-        const word = wordResult.rows[0];
+        // Get language pair to determine source language
+        const langPairResult = await db.query(
+            'SELECT from_lang, to_lang FROM language_pairs WHERE id = $1 AND user_id = $2',
+            [parseInt(languagePairId), parseInt(userId)]
+        );
+
+        if (langPairResult.rows.length === 0) {
+            return res.status(404).json({ error: 'Language pair not found' });
+        }
+
+        const sourceLanguage = langPairResult.rows[0].from_lang;
+        const tableName = `source_words_${sourceLanguage}`;
+
+        // Get the source word
+        const sourceWordResult = await db.query(`SELECT * FROM ${tableName} WHERE id = $1`, [sourceWordId]);
+
+        if (sourceWordResult.rows.length === 0) {
+            return res.status(404).json({ error: 'Source word not found' });
+        }
+
+        const sourceWord = sourceWordResult.rows[0];
+
+        // Get existing progress (if any)
+        const progressResult = await db.query(`
+            SELECT * FROM user_word_progress
+            WHERE user_id = $1 AND language_pair_id = $2
+            AND source_language = $3 AND source_word_id = $4
+        `, [parseInt(userId), parseInt(languagePairId), sourceLanguage, sourceWordId]);
+
+        // Initialize or get current progress
+        let currentProgress = progressResult.rows.length > 0 ? progressResult.rows[0] : {
+            status: 'studying',
+            correct_count: 0,
+            incorrect_count: 0,
+            total_reviews: 0,
+            review_cycle: 0,
+            ease_factor: 2.50
+        };
 
         // Point system based on question type (XP = points)
         // Multiple choice: 2 points, Word building: 4 points, Typing: 7 points
@@ -12160,7 +12525,9 @@ app.put('/api/words/:id/progress', async (req, res) => {
         // Point system: correctCount accumulates earned points (max 100)
         // totalPoints is always 100 (fixed maximum)
         const newTotalPoints = 100; // Fixed maximum
-        let newCorrectCount = (word.correctcount || 0);
+        let newCorrectCount = currentProgress.correct_count || 0;
+        let newIncorrectCount = currentProgress.incorrect_count || 0;
+        let newTotalReviews = (currentProgress.total_reviews || 0) + 1;
 
         if (correct) {
             // Add points for correct answer (cap at 100)
@@ -12168,6 +12535,7 @@ app.put('/api/words/:id/progress', async (req, res) => {
         } else {
             // Deduct 1 point for incorrect answer (but not below 0)
             newCorrectCount = Math.max(0, newCorrectCount - 1);
+            newIncorrectCount++;
         }
 
         // Calculate percentage: (correctCount / 100) * 100 = correctCount
@@ -12177,8 +12545,8 @@ app.put('/api/words/:id/progress', async (req, res) => {
         // Each stage requires reaching a threshold to advance (total 100 points across all stages)
         // Thresholds: 20 → 35 → 50 → 65 → 80 → 90 → 100
         // User only needs to reach the next threshold, not start from 0 each time
-        let newStatus = word.status;
-        let newReviewCycle = word.reviewcycle || 0;
+        let newStatus = currentProgress.status || 'studying';
+        let newReviewCycle = currentProgress.review_cycle || 0;
         let nextReviewDate = null;
 
         // SRS interval schedule (in days)
@@ -12200,7 +12568,8 @@ app.put('/api/words/:id/progress', async (req, res) => {
         }
 
         // Check if we should promote the word to a higher stage
-        const shouldPromote = (word.status === "studying" && targetReviewCycle >= 0) || (word.status !== "studying" && targetReviewCycle > newReviewCycle);
+        const oldStatus = currentProgress.status || 'studying';
+        const shouldPromote = (oldStatus === "studying" && targetReviewCycle >= 0) || (oldStatus !== "studying" && targetReviewCycle > newReviewCycle);
         if (shouldPromote) {
             // Auto-promote to higher review cycle
             newReviewCycle = targetReviewCycle;
@@ -12209,38 +12578,38 @@ app.put('/api/words/:id/progress', async (req, res) => {
                 // Reached 100 points - mastered!
                 newStatus = 'mastered';
                 nextReviewDate = null;
-                logger.info(`🎉 AUTO-PROMOTION: Word ${id} reached 100 points (from ${word.status})! Promoted to mastered!`);
+                logger.info(`🎉 AUTO-PROMOTION: Word ${sourceWord.word} reached 100 points (from ${oldStatus})! Promoted to mastered!`);
             } else if (newReviewCycle < srsIntervals.length) {
                 // Promote to appropriate review stage
                 const intervalDays = srsIntervals[newReviewCycle];
                 newStatus = `review_${intervalDays}`;
                 nextReviewDate = new Date();
                 nextReviewDate.setDate(nextReviewDate.getDate() + intervalDays);
-                logger.info(`🚀 AUTO-PROMOTION: Word ${id} at ${newCorrectCount} points (threshold: ${stageThresholds[newReviewCycle]})! Promoted from ${word.status} to review_${intervalDays} (cycle ${newReviewCycle})`);
+                logger.info(`🚀 AUTO-PROMOTION: Word ${sourceWord.word} at ${newCorrectCount} points (threshold: ${stageThresholds[newReviewCycle]})! Promoted from ${oldStatus} to review_${intervalDays} (cycle ${newReviewCycle})`);
             }
         } else {
             // No auto-promotion needed, apply regular logic
             const currentThreshold = stageThresholds[newReviewCycle] || 100;
 
-            if (word.status === 'studying' && newCorrectCount >= currentThreshold) {
+            if (oldStatus === 'studying' && newCorrectCount >= currentThreshold) {
                 // Reached threshold - move to review phase
                 if (newReviewCycle < srsIntervals.length - 1) {
                     const intervalDays = srsIntervals[newReviewCycle];
                     newStatus = `review_${intervalDays}`;
                     nextReviewDate = new Date();
                     nextReviewDate.setDate(nextReviewDate.getDate() + intervalDays);
-                    logger.info(`📅 Word ${id} reached ${newCorrectCount} points (threshold: ${currentThreshold})! Review in ${intervalDays} days`);
+                    logger.info(`📅 Word ${sourceWord.word} reached ${newCorrectCount} points (threshold: ${currentThreshold})! Review in ${intervalDays} days`);
                 } else if (newReviewCycle === srsIntervals.length - 1 && newCorrectCount >= 100) {
                     // Last stage completed with 100 points
                     newStatus = 'mastered';
-                    logger.info(`🎉 Word ${id} fully mastered with 100 points after ${newReviewCycle + 1} cycles!`);
+                    logger.info(`🎉 Word ${sourceWord.word} fully mastered with 100 points after ${newReviewCycle + 1} cycles!`);
                 }
-            } else if (!correct && word.status.startsWith('review_')) {
+            } else if (!correct && oldStatus.startsWith('review_')) {
                 // Failed review during waiting period - back to studying mode, keep points
                 newStatus = 'studying';
                 nextReviewDate = null;
-                logger.info(`❌ Word ${id} failed review (cycle ${newReviewCycle + 1}, ${newCorrectCount} points), back to studying`);
-            } else if (word.status.startsWith('review_') && correct && newCorrectCount >= currentThreshold) {
+                logger.info(`❌ Word ${sourceWord.word} failed review (cycle ${newReviewCycle + 1}, ${newCorrectCount} points), back to studying`);
+            } else if (oldStatus.startsWith('review_') && correct && newCorrectCount >= currentThreshold) {
                 // Successfully reviewed - advance to next cycle
                 newReviewCycle++;
 
@@ -12253,33 +12622,43 @@ app.put('/api/words/:id/progress', async (req, res) => {
                     newStatus = `review_${intervalDays}`;
                     nextReviewDate = new Date();
                     nextReviewDate.setDate(nextReviewDate.getDate() + intervalDays);
-                    logger.info(`✅ Word ${id} review completed! Already at ${newCorrectCount} points (threshold: ${nextThreshold}), moving to review_${intervalDays}`);
+                    logger.info(`✅ Word ${sourceWord.word} review completed! Already at ${newCorrectCount} points (threshold: ${nextThreshold}), moving to review_${intervalDays}`);
                 } else if (newReviewCycle >= srsIntervals.length - 1 && newCorrectCount >= 100) {
                     // Reached final stage with 100 points
                     newStatus = 'mastered';
-                    logger.info(`🎉 Word ${id} fully mastered with 100 points!`);
+                    logger.info(`🎉 Word ${sourceWord.word} fully mastered with 100 points!`);
                 } else {
                     // Below next threshold - back to studying
                     newStatus = 'studying';
                     nextReviewDate = null;
-                    logger.info(`✅ Word ${id} review completed! Advancing to cycle ${newReviewCycle + 1}, back to studying`);
+                    logger.info(`✅ Word ${sourceWord.word} review completed! Advancing to cycle ${newReviewCycle + 1}, back to studying`);
                 }
             }
         }
 
-        const updateQuery = `UPDATE words
-                            SET correctCount = $1, totalPoints = $2, status = $3, reviewCycle = $4,
-                                lastReviewDate = CURRENT_TIMESTAMP,
-                                nextReviewDate = $5,
-                                updatedAt = CURRENT_TIMESTAMP
-                            WHERE id = $6`;
+        // Update or create progress using helper function
+        await updateWordProgress(
+            parseInt(userId),
+            parseInt(languagePairId),
+            sourceLanguage,
+            sourceWordId,
+            {
+                translation: null, // Translation can be added later if needed
+                example: null,
+                exampleTranslation: null,
+                status: newStatus,
+                correctCount: newCorrectCount,
+                incorrectCount: newIncorrectCount,
+                totalReviews: newTotalReviews,
+                reviewCycle: newReviewCycle,
+                nextReviewDate: nextReviewDate,
+                easeFactor: currentProgress.ease_factor || 2.50
+            }
+        );
 
-        await db.query(updateQuery, [newCorrectCount, newTotalPoints, newStatus, newReviewCycle, nextReviewDate, id]);
-
-        logger.info(`📊 Word ${id} progress: ${newCorrectCount}/${newTotalPoints} points (${percentage}%) - Status: ${newStatus}, Cycle: ${newReviewCycle}`);
+        logger.info(`📊 Word ${sourceWord.word} progress: ${newCorrectCount}/${newTotalPoints} points (${percentage}%) - Status: ${newStatus}, Cycle: ${newReviewCycle}`);
 
         // Gamification: Award XP for quiz answers (XP = points earned)
-        const userId = word.user_id;
         let xpEarned = 0;
         let xpResult = null;
 
@@ -12299,42 +12678,42 @@ app.put('/api/words/:id/progress', async (req, res) => {
             xpEarned = xpMap[questionType] || 2;
 
             // Bonus XP for mastering a word (reaching mastered status)
-            if (newStatus === 'mastered' && word.status !== 'mastered') {
+            if (newStatus === 'mastered' && oldStatus !== 'mastered') {
                 xpEarned += 50; // Bonus XP for fully mastering a word (100 points)
-                xpResult = await awardXP(userId, 'word_learned', xpEarned, `Learned: ${word.word}`);
+                xpResult = await awardXP(parseInt(userId), 'word_learned', xpEarned, `Learned: ${sourceWord.word}`);
             } else {
-                xpResult = await awardXP(userId, 'quiz_answer', xpEarned, `${questionType}: ${word.word}`);
+                xpResult = await awardXP(parseInt(userId), 'quiz_answer', xpEarned, `${questionType}: ${sourceWord.word}`);
             }
 
             // Check if word advanced to next stage (for daily goal tracking)
             let wordsAdvanced = 0;
-            const oldReviewCycle = word.reviewCycle || 0;
+            const oldReviewCycle = currentProgress.review_cycle || 0;
 
             // Count as "word learned" for daily goal if:
             // 1. Word moved from studying to review stage
             // 2. Word advanced to a higher review cycle
             // 3. Word became mastered
-            if (newStatus === 'mastered' && word.status !== 'mastered') {
+            if (newStatus === 'mastered' && oldStatus !== 'mastered') {
                 wordsAdvanced = 1;
-            } else if (word.status === 'studying' && newStatus.startsWith('review_')) {
+            } else if (oldStatus === 'studying' && newStatus.startsWith('review_')) {
                 wordsAdvanced = 1;
-            } else if (word.status.startsWith('review_') && newReviewCycle > oldReviewCycle) {
+            } else if (oldStatus.startsWith('review_') && newReviewCycle > oldReviewCycle) {
                 wordsAdvanced = 1;
             }
 
             // Update daily activity
-            await updateDailyActivity(userId, wordsAdvanced, 1, xpEarned);
+            await updateDailyActivity(parseInt(userId), wordsAdvanced, 1, xpEarned);
 
             // Update total_words_learned if word just became learned
-            if (newStatus === 'learned' && word.status !== 'learned') {
+            if (newStatus === 'learned' && oldStatus !== 'learned') {
                 await db.query(
                     'UPDATE user_stats SET total_words_learned = total_words_learned + 1 WHERE user_id = $1',
-                    [userId]
+                    [parseInt(userId)]
                 );
             }
 
             // Check for new achievements
-            const newAchievements = await checkAchievements(userId);
+            const newAchievements = await checkAchievements(parseInt(userId));
 
             res.json({
                 message: 'Progress updated successfully',

@@ -1088,7 +1088,7 @@ textarea {
     font-weight: 600;
     background: transparent;
     padding: 0 var(--space-4);
-    display: inline-block;
+    display: block;
 }
 
 .auth-divider::before {
@@ -3402,7 +3402,7 @@ input:focus, textarea:focus, select:focus {
     /* Show only 5 main navigation buttons on mobile */
     #homeBtn,
     #studyBtn,
-    #leaderboardBtn,
+    #wordListsBtn,
     #statsBtn,
     #settingsNavBtn,
     #themeToggleNav {
@@ -3468,7 +3468,8 @@ input:focus, textarea:focus, select:focus {
     /* Add icons to navigation buttons */
     #homeBtn::before { content: '🏠'; }
     #importBtn::before { content: '📥'; }
-    #studyBtn::before { content: '📚'; }
+    #wordListsBtn::before { content: '📚'; }
+    #studyBtn::before { content: '✏️'; }
     #reviewBtn::before { content: '🔄'; }
     #leaderboardBtn::before { content: '🏆'; }
     #statsBtn::before { content: '📊'; }
