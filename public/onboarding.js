@@ -117,6 +117,12 @@ class OnboardingManager {
         console.log('🎯 Completing onboarding with selections:', this.selections);
 
         try {
+            // Get user ID from userManager
+            const userId = window.userManager?.currentUser?.id;
+            if (!userId) {
+                throw new Error('User not authenticated');
+            }
+
             // Send onboarding data to server
             const response = await fetch('/api/auth/complete-onboarding', {
                 method: 'POST',
@@ -124,6 +130,7 @@ class OnboardingManager {
                     'Content-Type': 'application/json'
                 },
                 body: JSON.stringify({
+                    userId: userId,
                     nativeLang: this.selections.nativeLang,
                     targetLang: this.selections.targetLang,
                     dailyGoalMinutes: this.selections.dailyGoalMinutes,
