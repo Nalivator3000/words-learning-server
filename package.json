@@ -47,6 +47,7 @@
     "db:check": "node quick-db-check.js",
     "db:check-users": "node check-user-words.js",
     "db:migrate:progress": "node migrations/run-progress-migration.js",
+    "db:create-word-sets": "node scripts/create-word-sets-from-source.js",
     "worker": "node worker-translation.js"
   },
   "dependencies": {
