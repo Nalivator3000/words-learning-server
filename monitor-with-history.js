@@ -61,11 +61,28 @@ function loadHistory() {
     } catch (error) {
         console.log('⚠️  Could not load history:', error.message);
     }
-    return { snapshots: [] };
+    return {
+        snapshots: [],
+        metadata: {
+            firstRun: new Date().toISOString(),
+            lastRun: null,
+            totalRuns: 0
+        }
+    };
 }
 
 function saveHistory(history) {
     try {
+        // Update metadata
+        if (!history.metadata) {
+            history.metadata = {
+                firstRun: new Date().toISOString(),
+                totalRuns: 0
+            };
+        }
+        history.metadata.lastRun = new Date().toISOString();
+        history.metadata.totalRuns = (history.metadata.totalRuns || 0) + 1;
+
         fs.writeFileSync(HISTORY_FILE, JSON.stringify(history, null, 2));
     } catch (error) {
         console.error('⚠️  Could not save history:', error.message);
@@ -237,6 +254,10 @@ async function checkProgress() {
         console.log('\n' + '='.repeat(80));
         console.log(`💾 Progress saved to: ${HISTORY_FILE}`);
         console.log(`📝 Snapshots in history: ${history.snapshots.length}`);
+        if (history.metadata) {
+            console.log(`🕐 Monitoring since: ${new Date(history.metadata.firstRun).toLocaleString()}`);
+            console.log(`📊 Total monitoring runs: ${history.metadata.totalRuns}`);
+        }
         console.log('='.repeat(80) + '\n');
 
         await db.end();
