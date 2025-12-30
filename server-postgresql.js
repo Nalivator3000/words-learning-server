@@ -12143,8 +12143,19 @@ app.get('/api/words/counts', async (req, res) => {
     try {
         const { userId, languagePairId } = req.query;
 
-        if (!userId || !languagePairId) {
-            return res.status(400).json({ error: 'userId and languagePairId are required' });
+        if (!userId) {
+            return res.status(400).json({ error: 'userId is required' });
+        }
+
+        // If no language pair, return zero counts (user hasn't completed onboarding)
+        if (!languagePairId) {
+            return res.json({
+                studying: 0,
+                review: 0,
+                learned: 0,
+                review7: 0,
+                review30: 0
+            });
         }
 
         // Get language pair info to determine source language
@@ -12154,7 +12165,13 @@ app.get('/api/words/counts', async (req, res) => {
         );
 
         if (langPairResult.rows.length === 0) {
-            return res.status(404).json({ error: 'Language pair not found' });
+            return res.json({
+                studying: 0,
+                review: 0,
+                learned: 0,
+                review7: 0,
+                review30: 0
+            });
         }
 
         const sourceLanguage = langPairResult.rows[0].from_lang;
@@ -16329,6 +16346,11 @@ app.post('/api/admin/import-thematic-collections', async (req, res) => {
         logger.error('Failed to import thematic collections:', error);
         res.status(500).json({ error: error.message });
     }
+});
+
+// Health check endpoint for Railway
+app.get('/health', (req, res) => {
+    res.status(200).json({ status: 'ok', timestamp: new Date().toISOString() });
 });
 
 app.get('/', (req, res) => {
