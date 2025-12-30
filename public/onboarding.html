@@ -8,6 +8,11 @@
 </head>
 <body style="opacity: 0; transition: opacity 0.3s ease-in-out;">
     <div class="onboarding-container">
+        <!-- Back to Login button -->
+        <button class="back-to-login-btn" onclick="backToLogin()" style="position: fixed; top: 20px; left: 20px; z-index: 1000; background: rgba(255,255,255,0.9); border: 1px solid #ddd; padding: 10px 20px; border-radius: 8px; cursor: pointer; font-size: 14px;">
+            ← Back to Login
+        </button>
+
         <!-- Step 1: Welcome -->
         <div class="step" id="step-welcome" data-step="1">
             <div class="step-content">
@@ -110,6 +115,14 @@
     </div>
 
     <script>
+        // Back to Login function
+        function backToLogin() {
+            // Clear user session
+            localStorage.removeItem('currentUser');
+            // Redirect to login page
+            window.location.href = '/?showLogin=true';
+        }
+
         // Initialize onboarding when page loads
         window.addEventListener('DOMContentLoaded', () => {
             // Check if user is logged in via localStorage (used by user-manager.js)
