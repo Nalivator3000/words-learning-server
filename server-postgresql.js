@@ -2794,10 +2794,14 @@ app.get('/api/word-sets', async (req, res) => {
             paramIndex++;
         }
 
+        // Default to public collections only (unless explicitly set to false)
         if (isPublic !== undefined) {
             query += ` AND is_public = $${paramIndex}`;
             params.push(isPublic === 'true');
             paramIndex++;
+        } else {
+            // By default, show only public collections
+            query += ` AND is_public = true`;
         }
 
         query += ' ORDER BY level ASC, word_count DESC, title ASC';
