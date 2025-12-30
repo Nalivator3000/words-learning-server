@@ -143,13 +143,16 @@ class OnboardingManager {
             if (window.userManager && data.languagePair) {
                 window.userManager.currentUser.languagePairs = [data.languagePair];
                 window.userManager.currentLanguagePair = data.languagePair;
+
+                // Update localStorage with new language pair
+                localStorage.setItem('currentUser', JSON.stringify(window.userManager.currentUser));
             }
 
             // Close onboarding modal
             this.hide();
 
-            // Reload page to apply all settings
-            window.location.reload();
+            // Redirect to home page with flag to skip onboarding check
+            window.location.href = '/?onboardingComplete=true';
 
         } catch (error) {
             console.error('❌ Failed to complete onboarding:', error);

@@ -76,6 +76,7 @@ class LanguageLearningApp {
             // Check if we need to show login modal
             const urlParams = new URLSearchParams(window.location.search);
             const showLogin = urlParams.get('showLogin') === 'true';
+            const onboardingComplete = urlParams.get('onboardingComplete') === 'true';
 
             if (showLogin && !isLoggedIn) {
                 // Show login modal and clean up URL
@@ -85,14 +86,25 @@ class LanguageLearningApp {
 
             if (isLoggedIn) {
                 // Check if user has a language pair - if not, redirect to onboarding
-                // BUT only if we're not already on the onboarding page
+                // BUT only if we're not already on the onboarding page AND onboarding wasn't just completed
                 const currentLanguagePair = userManager.getCurrentLanguagePair();
                 const isOnOnboardingPage = window.location.pathname === '/onboarding.html';
 
-                if (!currentLanguagePair && !isOnOnboardingPage) {
+                // If onboarding was just completed, reload user data to ensure we have the language pair
+                if (onboardingComplete && !currentLanguagePair) {
+                    console.log('🔄 Reloading user data after onboarding completion');
+                    await userManager.loadUserLanguagePairs();
+                }
+
+                if (!currentLanguagePair && !isOnOnboardingPage && !onboardingComplete) {
                     console.log('🎯 User has no language pair - redirecting to onboarding');
                     window.location.href = '/onboarding.html';
                     return;
+                }
+
+                // Clean up onboardingComplete parameter from URL
+                if (onboardingComplete) {
+                    window.history.replaceState({}, document.title, '/');
                 }
 
                 this.showSection('home');
