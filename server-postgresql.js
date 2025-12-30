@@ -2828,6 +2828,33 @@ app.get('/api/word-sets/:setId', async (req, res) => {
             return res.status(404).json({ error: 'Word set not found' });
         }
 
+        const wordSet = setResult.rows[0];
+
+        // Check if this is a new thematic collection (has level and theme)
+        // Load words from source_words_german instead of word_set_items
+        if (wordSet.level && wordSet.source_language === 'german') {
+            const wordsResult = await db.query(`
+                SELECT
+                    id,
+                    word,
+                    translation_en as translation,
+                    word_type,
+                    level,
+                    theme,
+                    example_de,
+                    example_translation_en
+                FROM source_words_german
+                WHERE level = $1 AND (theme = $2 OR (theme IS NULL AND $2 IS NULL))
+                ORDER BY word
+            `, [wordSet.level, wordSet.theme]);
+
+            return res.json({
+                ...wordSet,
+                words: wordsResult.rows
+            });
+        }
+
+        // Fallback: Try to load from word_set_items (for old collections)
         const wordsResult = await db.query(`
             SELECT w.*, wsi.order_index
             FROM words w
@@ -2837,7 +2864,7 @@ app.get('/api/word-sets/:setId', async (req, res) => {
         `, [setId]);
 
         res.json({
-            ...setResult.rows[0],
+            ...wordSet,
             words: wordsResult.rows
         });
     } catch (err) {
