@@ -82,17 +82,18 @@ class LanguageLearningApp {
                 this.showSection('home');
                 await this.updateStats();
 
-                // Show onboarding if needed
-                if (needsOnboarding) {
-                    console.log('🎯 New user needs onboarding');
-                    if (window.onboardingManager) {
-                        // Small delay to ensure everything is loaded
-                        setTimeout(() => {
-                            window.onboardingManager.show();
-                        }, 300);
-                    }
-                    // Clean up URL
-                    window.history.replaceState({}, document.title, '/');
+                // Check if user has a language pair
+                const currentLanguagePair = userManager.getCurrentLanguagePair();
+                const shouldShowOnboarding = needsOnboarding || !currentLanguagePair;
+
+                // Show onboarding if needed (either from URL param or missing language pair)
+                if (shouldShowOnboarding) {
+                    console.log('🎯 User needs onboarding - redirecting to onboarding page:', {
+                        fromURL: needsOnboarding,
+                        noLanguagePair: !currentLanguagePair
+                    });
+                    window.location.href = '/onboarding.html';
+                    return;
                 }
             } else if (needsOnboarding) {
                 // User needs onboarding but is not logged in yet
@@ -309,6 +310,7 @@ class LanguageLearningApp {
 
         try {
             await userManager.login(email, password);
+            // Note: userManager.login will redirect to onboarding if needed
 
             // Close auth modal
             document.getElementById('authModal').style.display = 'none';

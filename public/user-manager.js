@@ -113,6 +113,13 @@ class UserManager {
 
             localStorage.setItem('currentUser', JSON.stringify(this.currentUser));
 
+            // Check if user needs onboarding
+            if (data.needsOnboarding) {
+                console.log('🎯 User needs onboarding - redirecting to onboarding page');
+                window.location.href = '/onboarding.html';
+                return true;
+            }
+
             this.hideAuthModal();
             this.showUserInterface();
 

@@ -109,6 +109,28 @@
         </div>
     </div>
 
+    <script>
+        // Initialize onboarding when page loads
+        window.addEventListener('DOMContentLoaded', () => {
+            // Check if user is logged in via cookie/session
+            fetch('/api/user/me', {
+                credentials: 'include'
+            })
+            .then(response => {
+                if (!response.ok) {
+                    // Not logged in, redirect to login
+                    window.location.href = '/?needsOnboarding=true';
+                    return;
+                }
+                // User is logged in, start onboarding
+                init();
+            })
+            .catch(error => {
+                console.error('Error checking auth:', error);
+                window.location.href = '/?needsOnboarding=true';
+            });
+        });
+    </script>
     <script src="onboarding-wizard.js"></script>
 </body>
 </html>

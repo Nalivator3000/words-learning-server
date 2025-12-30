@@ -2473,6 +2473,9 @@ app.post('/api/auth/login', authLimiter, async (req, res) => {
             [user.id]
         );
 
+        // Check if user needs onboarding (no language pairs)
+        const needsOnboarding = langPairsResult.rows.length === 0;
+
         res.json({
             user: {
                 id: user.id,
@@ -2482,7 +2485,8 @@ app.post('/api/auth/login', authLimiter, async (req, res) => {
                 picture: user.picture,
                 createdAt: user.createdat
             },
-            languagePairs: langPairsResult.rows
+            languagePairs: langPairsResult.rows,
+            needsOnboarding: needsOnboarding
         });
     } catch (err) {
         logger.error('Login error:', err);
