@@ -74,11 +74,16 @@ class LanguageLearningApp {
             this.survivalMode.setupEventListeners();
 
             if (isLoggedIn) {
+                // Check if user has a language pair - if not, redirect to onboarding
+                const currentLanguagePair = userManager.getCurrentLanguagePair();
+                if (!currentLanguagePair) {
+                    console.log('🎯 User has no language pair - redirecting to onboarding');
+                    window.location.href = '/onboarding.html';
+                    return;
+                }
+
                 this.showSection('home');
                 await this.updateStats();
-
-                // Note: Onboarding redirect is now handled in user-manager.js during login
-                // This ensures users without language pairs are redirected to onboarding
             }
 
             // Show page after initialization complete
