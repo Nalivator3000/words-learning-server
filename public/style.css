@@ -5878,7 +5878,7 @@ input:focus, textarea:focus, select:focus {
 /* Back to Login Button */
 .back-to-login-btn {
     position: absolute;
-    top: var(--space-4);
+    top: calc(var(--space-4) - 40px);
     left: var(--space-4);
     background: transparent;
     border: none;
@@ -5891,6 +5891,7 @@ input:focus, textarea:focus, select:focus {
     display: flex;
     align-items: center;
     gap: var(--space-1);
+    z-index: 10;
 }
 
 .back-to-login-btn:hover {
@@ -5962,6 +5963,7 @@ input:focus, textarea:focus, select:focus {
 .onboarding-step {
     display: none;
     animation: fadeIn 0.3s ease;
+    padding-top: var(--space-4);
 }
 
 .onboarding-step.active {
