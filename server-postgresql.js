@@ -2512,9 +2512,9 @@ app.get('/auth/google/callback',
                 [user.id]
             );
 
-            // If no language pairs, user needs onboarding
+            // Redirect to onboarding if no language pairs, otherwise to home
             if (langPairsResult.rows.length === 0) {
-                res.redirect('/?login=success&provider=google&needsOnboarding=true');
+                res.redirect('/onboarding.html');
             } else {
                 res.redirect('/?login=success&provider=google');
             }

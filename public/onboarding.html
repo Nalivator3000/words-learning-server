@@ -6,7 +6,7 @@
     <title>Welcome - LexyBooster</title>
     <link rel="stylesheet" href="onboarding.css">
 </head>
-<body>
+<body style="opacity: 0; transition: opacity 0.3s ease-in-out;">
     <div class="onboarding-container">
         <!-- Step 1: Welcome -->
         <div class="step" id="step-welcome" data-step="1">
@@ -118,16 +118,20 @@
             })
             .then(response => {
                 if (!response.ok) {
-                    // Not logged in, redirect to login
-                    window.location.href = '/?needsOnboarding=true';
+                    // Not logged in, redirect to home WITHOUT needsOnboarding param to avoid loop
+                    console.log('User not logged in, redirecting to home');
+                    window.location.href = '/';
                     return;
                 }
                 // User is logged in, start onboarding
                 init();
+                // Show page after auth check
+                document.body.style.opacity = '1';
             })
             .catch(error => {
                 console.error('Error checking auth:', error);
-                window.location.href = '/?needsOnboarding=true';
+                // Redirect to home without params to avoid loop
+                window.location.href = '/';
             });
         });
     </script>

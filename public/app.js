@@ -65,11 +65,6 @@ class LanguageLearningApp {
             // Initialize language management
             languageManager.init();
 
-            // Check if user needs onboarding BEFORE user init
-            // This allows showing onboarding for new users who just logged in via OAuth
-            const urlParams = new URLSearchParams(window.location.search);
-            const needsOnboarding = urlParams.get('needsOnboarding') === 'true';
-
             // Initialize user management
             const isLoggedIn = await userManager.init();
 
@@ -82,27 +77,17 @@ class LanguageLearningApp {
                 this.showSection('home');
                 await this.updateStats();
 
-                // Check if user has a language pair
-                const currentLanguagePair = userManager.getCurrentLanguagePair();
-                const shouldShowOnboarding = needsOnboarding || !currentLanguagePair;
-
-                // Show onboarding if needed (either from URL param or missing language pair)
-                if (shouldShowOnboarding) {
-                    console.log('🎯 User needs onboarding - redirecting to onboarding page:', {
-                        fromURL: needsOnboarding,
-                        noLanguagePair: !currentLanguagePair
-                    });
-                    window.location.href = '/onboarding.html';
-                    return;
-                }
-            } else if (needsOnboarding) {
-                // User needs onboarding but is not logged in yet
-                // This can happen if they just registered/logged in
-                console.log('🎯 User needs onboarding (will show after login)');
+                // Note: Onboarding redirect is now handled in user-manager.js during login
+                // This ensures users without language pairs are redirected to onboarding
             }
+
+            // Show page after initialization complete
+            document.body.style.opacity = '1';
         } catch (error) {
             console.error('Failed to initialize app:', error);
             this.showError(i18n.t('app_init_error'));
+            // Show page even on error
+            document.body.style.opacity = '1';
         }
     }
 
