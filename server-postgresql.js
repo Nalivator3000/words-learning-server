@@ -2981,6 +2981,47 @@ app.post('/api/word-sets/:setId/import', async (req, res) => {
 });
 
 // Delete a word set
+// Get preview words from a word set (from source_words_german)
+app.get('/api/word-sets/:setId/preview', async (req, res) => {
+    try {
+        const { setId } = req.params;
+        const limit = parseInt(req.query.limit) || 5;
+
+        // Get the word set info
+        const setResult = await db.query(
+            'SELECT * FROM word_sets WHERE id = $1',
+            [setId]
+        );
+
+        if (setResult.rows.length === 0) {
+            return res.status(404).json({ error: 'Word set not found' });
+        }
+
+        const wordSet = setResult.rows[0];
+
+        // Get preview words from source_words_german based on level and theme
+        const wordsResult = await db.query(`
+            SELECT word, example_de
+            FROM source_words_german
+            WHERE level = $1 AND (theme = $2 OR (theme IS NULL AND $2 IS NULL))
+            ORDER BY word
+            LIMIT $3
+        `, [wordSet.level, wordSet.theme, limit]);
+
+        res.json({
+            setId: wordSet.id,
+            title: wordSet.title,
+            level: wordSet.level,
+            theme: wordSet.theme,
+            wordCount: wordSet.word_count,
+            preview: wordsResult.rows
+        });
+    } catch (err) {
+        logger.error('Error fetching word set preview:', err);
+        res.status(500).json({ error: err.message });
+    }
+});
+
 app.delete('/api/word-sets/:setId', async (req, res) => {
     try {
         const { setId } = req.params;

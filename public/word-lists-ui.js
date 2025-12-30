@@ -220,9 +220,46 @@ class WordListsUI {
         // Create modal outside of main container for proper z-index stacking
         this.createModal();
 
+        // Load word previews for all sets
+        this.loadWordPreviews();
+
         // Update i18n
         if (window.i18n) {
             i18n.updatePageTranslations();
+        }
+    }
+
+    async loadWordPreviews() {
+        const previewContainers = document.querySelectorAll('.word-preview');
+
+        for (const container of previewContainers) {
+            const setId = container.dataset.setId;
+            if (!setId) continue;
+
+            try {
+                const response = await fetch(`/api/word-sets/${setId}/preview?limit=3`);
+                if (!response.ok) throw new Error('Failed to load preview');
+
+                const data = await response.json();
+
+                if (data.preview && data.preview.length > 0) {
+                    const previewHTML = data.preview.map(word =>
+                        `<span class="preview-word">${word.word}</span>`
+                    ).join('');
+
+                    container.innerHTML = `
+                        <div class="preview-words">
+                            ${previewHTML}
+                            ${data.preview.length < data.wordCount ? '<span class="preview-more">...</span>' : ''}
+                        </div>
+                    `;
+                } else {
+                    container.innerHTML = '';
+                }
+            } catch (error) {
+                console.error(`Error loading preview for set ${setId}:`, error);
+                container.innerHTML = '';
+            }
         }
     }
 
@@ -291,8 +328,12 @@ class WordListsUI {
                 </div>
 
                 <div class="list-card-body">
-                    <h4 class="list-title">${set.name}</h4>
+                    <h4 class="list-title">${set.title || set.name}</h4>
                     <p class="list-description">${set.description || 'No description'}</p>
+
+                    <div class="word-preview" data-set-id="${set.id}">
+                        <div class="preview-loading">Loading preview...</div>
+                    </div>
 
                     <div class="list-meta">
                         <div class="meta-item">

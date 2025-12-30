@@ -675,3 +675,52 @@ body.dark-theme .modal-content.word-list-modal {
         transform: rotate(360deg);
     }
 }
+
+/* Word Preview in Cards */
+.word-preview {
+    margin-top: 12px;
+    padding: 12px;
+    background: rgba(255, 255, 255, 0.03);
+    border: 1px solid rgba(255, 255, 255, 0.08);
+    border-radius: 10px;
+    min-height: 42px;
+    display: flex;
+    align-items: center;
+}
+
+.preview-loading {
+    font-size: 0.85rem;
+    color: rgba(255, 255, 255, 0.4);
+    font-style: italic;
+}
+
+.preview-words {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px;
+    align-items: center;
+    font-size: 0.85rem;
+    color: rgba(255, 255, 255, 0.7);
+}
+
+.preview-word {
+    padding: 4px 10px;
+    background: rgba(99, 102, 241, 0.15);
+    border: 1px solid rgba(99, 102, 241, 0.25);
+    border-radius: 6px;
+    font-size: 0.8rem;
+    font-weight: 500;
+    color: rgba(255, 255, 255, 0.9);
+    transition: all 0.2s ease;
+}
+
+.preview-word:hover {
+    background: rgba(99, 102, 241, 0.25);
+    border-color: rgba(99, 102, 241, 0.4);
+}
+
+.preview-more {
+    color: rgba(255, 255, 255, 0.5);
+    font-style: italic;
+    margin-left: 4px;
+}
