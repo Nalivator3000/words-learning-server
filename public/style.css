@@ -5872,6 +5872,30 @@ input:focus, textarea:focus, select:focus {
     width: 100%;
     box-shadow: 0 24px 64px rgba(0, 0, 0, 0.3);
     animation: slideUp 0.4s cubic-bezier(0.34, 1.56, 0.64, 1);
+    position: relative;
+}
+
+/* Back to Login Button */
+.back-to-login-btn {
+    position: absolute;
+    top: var(--space-4);
+    left: var(--space-4);
+    background: transparent;
+    border: none;
+    color: var(--text-secondary);
+    font-size: var(--text-sm);
+    cursor: pointer;
+    padding: var(--space-2) var(--space-3);
+    border-radius: var(--radius-md);
+    transition: all 0.2s ease;
+    display: flex;
+    align-items: center;
+    gap: var(--space-1);
+}
+
+.back-to-login-btn:hover {
+    background: var(--bg-hover);
+    color: var(--text-primary);
 }
 
 @keyframes slideUp {

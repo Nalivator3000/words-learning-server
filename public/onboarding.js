@@ -195,6 +195,21 @@ class OnboardingManager {
 // Create global instance
 window.onboardingManager = new OnboardingManager();
 
+// Back to Login function
+window.backToLogin = function() {
+    // Clear user session
+    localStorage.removeItem('currentUser');
+
+    // Hide onboarding modal
+    const modal = document.getElementById('onboardingModal');
+    if (modal) {
+        modal.style.display = 'none';
+    }
+
+    // Redirect to login page
+    window.location.href = '/?showLogin=true';
+};
+
 // Initialize when DOM is ready
 if (document.readyState === 'loading') {
     document.addEventListener('DOMContentLoaded', () => {

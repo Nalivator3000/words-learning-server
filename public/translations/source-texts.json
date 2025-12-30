@@ -2009,6 +2009,21 @@
     "pt": "Voltar",
     "sw": "Nyuma"
   },
+  "back_to_login": {
+    "en": "Back to Login",
+    "ru": "Назад к входу",
+    "de": "Zurück zur Anmeldung",
+    "pl": "Powrót do logowania",
+    "ar": "العودة إلى تسجيل الدخول",
+    "tr": "Girişe Dön",
+    "ro": "Înapoi la Autentificare",
+    "sr": "Назад на пријаву",
+    "uk": "Назад до входу",
+    "it": "Torna al Login",
+    "es": "Volver al Login",
+    "pt": "Voltar ao Login",
+    "sw": "Rudi kwa Kuingia"
+  },
   "beginner": {
     "en": "Beginner",
     "ru": "Начинающий",
