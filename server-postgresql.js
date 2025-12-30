@@ -70,6 +70,19 @@ const RATE_LIMIT_WHITELIST = [
     '176.199.209.166', // Testing IP - whitelisted for E2E tests
 ];
 
+// Helper function to get real IP (handles Railway proxy)
+function getRealIP(req) {
+    // Check X-Forwarded-For header (Railway uses this)
+    const forwardedFor = req.headers['x-forwarded-for'];
+    if (forwardedFor) {
+        // X-Forwarded-For can be a comma-separated list, first is the real client IP
+        const ips = forwardedFor.split(',').map(ip => ip.trim());
+        return ips[0];
+    }
+    // Fallback to req.ip or connection.remoteAddress
+    return req.ip || req.connection.remoteAddress;
+}
+
 const generalLimiter = rateLimit({
     windowMs: 15 * 60 * 1000, // 15 minutes
     max: 1000, // Limit each IP to 1000 requests per 15 minutes (increased for active learning)
@@ -78,8 +91,13 @@ const generalLimiter = rateLimit({
     legacyHeaders: false, // Disable the `X-RateLimit-*` headers
     skip: (req) => {
         // Skip rate limiting for localhost and whitelisted IPs
-        const ip = req.ip || req.connection.remoteAddress;
-        return RATE_LIMIT_WHITELIST.includes(ip);
+        const ip = getRealIP(req);
+        const isWhitelisted = RATE_LIMIT_WHITELIST.includes(ip);
+        // Log for debugging E2E tests
+        if (!isWhitelisted && req.path && req.path.includes('login')) {
+            console.log(`[RATE-LIMIT] IP: ${ip}, Whitelisted: ${isWhitelisted}, Path: ${req.path}`);
+        }
+        return isWhitelisted;
     }
 });
 
@@ -90,8 +108,11 @@ const authLimiter = rateLimit({
     skipSuccessfulRequests: true, // Don't count successful requests
     skip: (req) => {
         // Skip rate limiting for localhost and whitelisted IPs
-        const ip = req.ip || req.connection.remoteAddress;
-        return RATE_LIMIT_WHITELIST.includes(ip);
+        const ip = getRealIP(req);
+        const isWhitelisted = RATE_LIMIT_WHITELIST.includes(ip);
+        // Log auth attempts for debugging
+        console.log(`[AUTH-LIMIT] IP: ${ip}, Whitelisted: ${isWhitelisted}, Path: ${req.path}`);
+        return isWhitelisted;
     }
 });
 
