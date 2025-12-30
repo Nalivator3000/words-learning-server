@@ -42,6 +42,7 @@
     "translate:matrix": "node scripts/translations/translate-matrix-parallel.js",
     "translate:once": "node start-translations-once.js",
     "translate:auto": "node scripts/translations/auto-translate-cron.js 6",
+    "translate:start": "node start-worker.js",
     "translate:check": "node scripts/utils/check-all-translations.js",
     "translate:status": "node scripts/utils/check-translation-status.js",
     "monitor": "node monitor-with-history.js",
