@@ -112,27 +112,26 @@
     <script>
         // Initialize onboarding when page loads
         window.addEventListener('DOMContentLoaded', () => {
-            // Check if user is logged in via cookie/session
-            fetch('/api/user/me', {
-                credentials: 'include'
-            })
-            .then(response => {
-                if (!response.ok) {
-                    // Not logged in, redirect to home WITHOUT needsOnboarding param to avoid loop
-                    console.log('User not logged in, redirecting to home');
-                    window.location.href = '/';
-                    return;
-                }
-                // User is logged in, start onboarding
-                init();
-                // Show page after auth check
-                document.body.style.opacity = '1';
-            })
-            .catch(error => {
-                console.error('Error checking auth:', error);
-                // Redirect to home without params to avoid loop
+            // Check if user is logged in via localStorage (used by user-manager.js)
+            const currentUser = localStorage.getItem('currentUser');
+
+            if (!currentUser) {
+                // Not logged in, redirect to home
+                console.log('User not logged in, redirecting to home');
                 window.location.href = '/';
-            });
+                return;
+            }
+
+            // User is logged in, start onboarding
+            try {
+                init();
+                // Show page after initialization
+                document.body.style.opacity = '1';
+            } catch (error) {
+                console.error('Error initializing onboarding:', error);
+                // Show page even on error
+                document.body.style.opacity = '1';
+            }
         });
     </script>
     <script src="onboarding-wizard.js"></script>
