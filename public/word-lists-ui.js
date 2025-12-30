@@ -231,18 +231,36 @@ class WordListsUI {
 
     async loadWordPreviews() {
         const previewContainers = document.querySelectorAll('.word-preview');
+        const setIds = Array.from(previewContainers)
+            .map(c => c.dataset.setId)
+            .filter(id => id);
 
-        for (const container of previewContainers) {
-            const setId = container.dataset.setId;
-            if (!setId) continue;
+        if (setIds.length === 0) return;
 
-            try {
-                const response = await fetch(`/api/word-sets/${setId}/preview?limit=3`);
-                if (!response.ok) throw new Error('Failed to load preview');
+        // Batch request - get all previews at once
+        try {
+            const response = await fetch('/api/word-sets/previews/batch', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify({ setIds, limit: 3 })
+            });
 
-                const data = await response.json();
+            if (!response.ok) {
+                console.warn('Batch preview API not available, falling back to individual requests');
+                await this.loadWordPreviewsIndividually();
+                return;
+            }
 
-                if (data.preview && data.preview.length > 0) {
+            const previews = await response.json();
+
+            // Update all containers with their previews
+            previewContainers.forEach(container => {
+                const setId = container.dataset.setId;
+                const data = previews[setId];
+
+                if (data && data.preview && data.preview.length > 0) {
                     const previewHTML = data.preview.map(word =>
                         `<span class="preview-word">${word.word}</span>`
                     ).join('');
@@ -256,9 +274,57 @@ class WordListsUI {
                 } else {
                     container.innerHTML = '';
                 }
-            } catch (error) {
-                console.error(`Error loading preview for set ${setId}:`, error);
-                container.innerHTML = '';
+            });
+        } catch (error) {
+            console.error('Error loading batch previews:', error);
+            await this.loadWordPreviewsIndividually();
+        }
+    }
+
+    async loadWordPreviewsIndividually() {
+        const previewContainers = document.querySelectorAll('.word-preview');
+        const BATCH_SIZE = 5; // Process 5 at a time
+        const DELAY_MS = 100; // 100ms delay between batches
+
+        const containers = Array.from(previewContainers);
+
+        for (let i = 0; i < containers.length; i += BATCH_SIZE) {
+            const batch = containers.slice(i, i + BATCH_SIZE);
+
+            // Process batch in parallel
+            await Promise.all(batch.map(async (container) => {
+                const setId = container.dataset.setId;
+                if (!setId) return;
+
+                try {
+                    const response = await fetch(`/api/word-sets/${setId}/preview?limit=3`);
+                    if (!response.ok) throw new Error('Failed to load preview');
+
+                    const data = await response.json();
+
+                    if (data.preview && data.preview.length > 0) {
+                        const previewHTML = data.preview.map(word =>
+                            `<span class="preview-word">${word.word}</span>`
+                        ).join('');
+
+                        container.innerHTML = `
+                            <div class="preview-words">
+                                ${previewHTML}
+                                ${data.preview.length < data.wordCount ? '<span class="preview-more">...</span>' : ''}
+                            </div>
+                        `;
+                    } else {
+                        container.innerHTML = '';
+                    }
+                } catch (error) {
+                    console.error(`Error loading preview for set ${setId}:`, error);
+                    container.innerHTML = '';
+                }
+            }));
+
+            // Delay between batches to avoid rate limiting
+            if (i + BATCH_SIZE < containers.length) {
+                await new Promise(resolve => setTimeout(resolve, DELAY_MS));
             }
         }
     }

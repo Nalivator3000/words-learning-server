@@ -2984,7 +2984,53 @@ app.post('/api/word-sets/:setId/import', async (req, res) => {
     }
 });
 
-// Delete a word set
+// Batch endpoint - Get preview words from multiple word sets
+app.post('/api/word-sets/previews/batch', async (req, res) => {
+    try {
+        const { setIds, limit = 5 } = req.body;
+
+        if (!setIds || !Array.isArray(setIds) || setIds.length === 0) {
+            return res.status(400).json({ error: 'setIds array is required' });
+        }
+
+        // Limit to 50 sets per request to prevent abuse
+        const limitedSetIds = setIds.slice(0, 50);
+
+        // Get all word sets
+        const setsResult = await db.query(
+            'SELECT * FROM word_sets WHERE id = ANY($1)',
+            [limitedSetIds]
+        );
+
+        const previews = {};
+
+        // Fetch previews for each set
+        for (const wordSet of setsResult.rows) {
+            const wordsResult = await db.query(`
+                SELECT word, example_de
+                FROM source_words_german
+                WHERE level = $1 AND (theme = $2 OR (theme IS NULL AND $2 IS NULL))
+                ORDER BY word
+                LIMIT $3
+            `, [wordSet.level, wordSet.theme, limit]);
+
+            previews[wordSet.id] = {
+                setId: wordSet.id,
+                title: wordSet.title,
+                level: wordSet.level,
+                theme: wordSet.theme,
+                wordCount: wordSet.word_count,
+                preview: wordsResult.rows
+            };
+        }
+
+        res.json(previews);
+    } catch (err) {
+        logger.error('Error fetching batch word set previews:', err);
+        res.status(500).json({ error: err.message });
+    }
+});
+
 // Get preview words from a word set (from source_words_german)
 app.get('/api/word-sets/:setId/preview', async (req, res) => {
     try {
@@ -3025,6 +3071,8 @@ app.get('/api/word-sets/:setId/preview', async (req, res) => {
         res.status(500).json({ error: err.message });
     }
 });
+
+// Delete a word set
 
 app.delete('/api/word-sets/:setId', async (req, res) => {
     try {
