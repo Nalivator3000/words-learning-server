@@ -62,6 +62,14 @@ app.use(compression({
 }));
 
 // Rate limiting - DDoS protection
+// IP Whitelist for automated testing (E2E tests on Railway)
+const RATE_LIMIT_WHITELIST = [
+    '127.0.0.1',
+    '::1',
+    '::ffff:127.0.0.1',
+    '176.199.209.166', // Testing IP - whitelisted for E2E tests
+];
+
 const generalLimiter = rateLimit({
     windowMs: 15 * 60 * 1000, // 15 minutes
     max: 1000, // Limit each IP to 1000 requests per 15 minutes (increased for active learning)
@@ -69,9 +77,9 @@ const generalLimiter = rateLimit({
     standardHeaders: true, // Return rate limit info in the `RateLimit-*` headers
     legacyHeaders: false, // Disable the `X-RateLimit-*` headers
     skip: (req) => {
-        // Skip rate limiting for localhost and automated tests
+        // Skip rate limiting for localhost and whitelisted IPs
         const ip = req.ip || req.connection.remoteAddress;
-        return ip === '127.0.0.1' || ip === '::1' || ip === '::ffff:127.0.0.1';
+        return RATE_LIMIT_WHITELIST.includes(ip);
     }
 });
 
@@ -80,6 +88,11 @@ const authLimiter = rateLimit({
     max: 5, // Limit each IP to 5 login attempts per windowMs
     message: 'Too many login attempts from this IP, please try again after 15 minutes.',
     skipSuccessfulRequests: true, // Don't count successful requests
+    skip: (req) => {
+        // Skip rate limiting for localhost and whitelisted IPs
+        const ip = req.ip || req.connection.remoteAddress;
+        return RATE_LIMIT_WHITELIST.includes(ip);
+    }
 });
 
 const apiLimiter = rateLimit({
