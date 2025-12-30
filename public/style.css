@@ -957,6 +957,7 @@ textarea {
     color: var(--neutral-700);
     border: 2px solid rgba(255, 255, 255, 0.3);
     box-shadow: var(--shadow-3d-md);
+    margin-bottom: 0;
 }
 
 .google-btn:hover {
