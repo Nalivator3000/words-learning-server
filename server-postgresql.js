@@ -2835,17 +2835,18 @@ app.get('/api/word-sets/:setId', async (req, res) => {
         if (wordSet.level && wordSet.source_language === 'german') {
             const wordsResult = await db.query(`
                 SELECT
-                    id,
-                    word,
-                    translation_en as translation,
-                    word_type,
-                    level,
-                    theme,
-                    example_de,
-                    example_translation_en
-                FROM source_words_german
-                WHERE level = $1 AND (theme = $2 OR (theme IS NULL AND $2 IS NULL))
-                ORDER BY word
+                    sw.id,
+                    sw.word,
+                    tt.translation,
+                    sw.pos as word_type,
+                    sw.level,
+                    sw.theme,
+                    sw.example_de,
+                    tt.example_en as example_translation
+                FROM source_words_german sw
+                LEFT JOIN target_translations_english tt ON sw.id = tt.source_word_id AND tt.source_lang = 'de'
+                WHERE sw.level = $1 AND (sw.theme = $2 OR (sw.theme IS NULL AND $2 IS NULL))
+                ORDER BY sw.word
             `, [wordSet.level, wordSet.theme]);
 
             return res.json({
