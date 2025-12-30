@@ -44,6 +44,7 @@
     "translate:auto": "node scripts/translations/auto-translate-cron.js 6",
     "translate:check": "node scripts/utils/check-all-translations.js",
     "translate:status": "node scripts/utils/check-translation-status.js",
+    "db:check": "node quick-db-check.js",
     "worker": "node worker-translation.js"
   },
   "dependencies": {
