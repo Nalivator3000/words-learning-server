@@ -46,6 +46,7 @@
     "translate:status": "node scripts/utils/check-translation-status.js",
     "db:check": "node quick-db-check.js",
     "db:check-users": "node check-user-words.js",
+    "db:migrate:progress": "node migrations/run-progress-migration.js",
     "worker": "node worker-translation.js"
   },
   "dependencies": {
