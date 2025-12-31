@@ -1115,6 +1115,10 @@ textarea {
     border: 1px solid rgba(244, 63, 94, 0.3);
 }
 
+.auth-error:empty {
+    display: none; /* Hide error container when there's no error message */
+}
+
 /* Manual Word Addition Modal */
 .add-word-modal {
     max-width: 600px;

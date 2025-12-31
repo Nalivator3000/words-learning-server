@@ -4802,5 +4802,101 @@
     "uk": "Виконуйте щотижневі завдання та отримуйте нагороди",
     "pt": "Complete desafios semanais e ganhe recompensas",
     "sw": "Kamilisha changamoto za kila wiki na upate zawadi"
+  },
+  "password_weak": {
+    "en": "Weak password",
+    "ru": "Слабый пароль",
+    "de": "Schwaches Passwort",
+    "es": "Contraseña débil",
+    "fr": "Mot de passe faible",
+    "it": "Password debole"
+  },
+  "password_medium": {
+    "en": "Medium password",
+    "ru": "Средний пароль",
+    "de": "Mittleres Passwort",
+    "es": "Contraseña media",
+    "fr": "Mot de passe moyen",
+    "it": "Password media"
+  },
+  "password_strong": {
+    "en": "Strong password",
+    "ru": "Надёжный пароль",
+    "de": "Starkes Passwort",
+    "es": "Contraseña fuerte",
+    "fr": "Mot de passe fort",
+    "it": "Password forte"
+  },
+  "password_min_chars": {
+    "en": "minimum 6 characters",
+    "ru": "минимум 6 символов",
+    "de": "mindestens 6 Zeichen",
+    "es": "mínimo 6 caracteres",
+    "fr": "minimum 6 caractères",
+    "it": "minimo 6 caratteri"
+  },
+  "uppercase_letters": {
+    "en": "uppercase letters",
+    "ru": "заглавные буквы",
+    "de": "Großbuchstaben",
+    "es": "letras mayúsculas",
+    "fr": "lettres majuscules",
+    "it": "lettere maiuscole"
+  },
+  "numbers": {
+    "en": "numbers",
+    "ru": "цифры",
+    "de": "Zahlen",
+    "es": "números",
+    "fr": "chiffres",
+    "it": "numeri"
+  },
+  "special_chars": {
+    "en": "special characters",
+    "ru": "спецсимволы",
+    "de": "Sonderzeichen",
+    "es": "caracteres especiales",
+    "fr": "caractères spéciaux",
+    "it": "caratteri speciali"
+  },
+  "add_suggestion": {
+    "en": "add",
+    "ru": "добавьте",
+    "de": "fügen Sie hinzu",
+    "es": "añadir",
+    "fr": "ajoutez",
+    "it": "aggiungi"
+  },
+  "email_valid": {
+    "en": "Email looks correct",
+    "ru": "Email выглядит корректно",
+    "de": "E-Mail sieht korrekt aus",
+    "es": "El correo parece correcto",
+    "fr": "L'e-mail semble correct",
+    "it": "L'email sembra corretta"
+  },
+  "email_invalid": {
+    "en": "Invalid email format",
+    "ru": "Некорректный формат email",
+    "de": "Ungültiges E-Mail-Format",
+    "es": "Formato de correo inválido",
+    "fr": "Format d'e-mail invalide",
+    "it": "Formato email non valido"
+  },
+  "terms_of_service_text": {
+    "en": "Terms of Service:\n\n1. You agree to use the application for language learning.\n2. You will not use the application for illegal purposes.\n3. We may change the terms with user notification.\n\nFull version of terms will be available in future updates.",
+    "ru": "Условия использования:\n\n1. Вы соглашаетесь использовать приложение для изучения языков.\n2. Вы не будете использовать приложение в незаконных целях.\n3. Мы можем изменять условия с уведомлением пользователей.\n\nПолная версия условий будет доступна в будущих обновлениях.",
+    "de": "Nutzungsbedingungen:\n\n1. Sie stimmen zu, die Anwendung zum Sprachenlernen zu verwenden.\n2. Sie werden die Anwendung nicht für illegale Zwecke verwenden.\n3. Wir können die Bedingungen mit Benutzerbenachrichtigung ändern.\n\nDie vollständige Version der Bedingungen wird in zukünftigen Updates verfügbar sein.",
+    "es": "Términos de servicio:\n\n1. Acepta usar la aplicación para aprender idiomas.\n2. No usará la aplicación con fines ilegales.\n3. Podemos cambiar los términos con notificación al usuario.\n\nLa versión completa de los términos estará disponible en futuras actualizaciones.",
+    "fr": "Conditions d'utilisation:\n\n1. Vous acceptez d'utiliser l'application pour l'apprentissage des langues.\n2. Vous n'utiliserez pas l'application à des fins illégales.\n3. Nous pouvons modifier les conditions avec notification à l'utilisateur.\n\nLa version complète des conditions sera disponible dans les prochaines mises à jour.",
+    "it": "Termini di servizio:\n\n1. Accetti di utilizzare l'applicazione per l'apprendimento delle lingue.\n2. Non utilizzerai l'applicazione per scopi illegali.\n3. Potremmo modificare i termini con notifica all'utente.\n\nLa versione completa dei termini sarà disponibile nei prossimi aggiornamenti."
+  },
+  "privacy_policy_text": {
+    "en": "Privacy Policy:\n\n1. We only collect necessary data (name, email, learning progress).\n2. Your data is stored on secure servers.\n3. We do not sell your data to third parties.\n4. You can delete your account at any time.\n\nFull version of the policy will be available in future updates.",
+    "ru": "Политика конфиденциальности:\n\n1. Мы собираем только необходимые данные (имя, email, прогресс обучения).\n2. Ваши данные хранятся на защищённых серверах.\n3. Мы не продаём ваши данные третьим лицам.\n4. Вы можете удалить свой аккаунт в любой момент.\n\nПолная версия политики будет доступна в будущих обновлениях.",
+    "de": "Datenschutzrichtlinie:\n\n1. Wir sammeln nur notwendige Daten (Name, E-Mail, Lernfortschritt).\n2. Ihre Daten werden auf sicheren Servern gespeichert.\n3. Wir verkaufen Ihre Daten nicht an Dritte.\n4. Sie können Ihr Konto jederzeit löschen.\n\nDie vollständige Version der Richtlinie wird in zukünftigen Updates verfügbar sein.",
+    "es": "Política de privacidad:\n\n1. Solo recopilamos datos necesarios (nombre, correo, progreso de aprendizaje).\n2. Tus datos se almacenan en servidores seguros.\n3. No vendemos tus datos a terceros.\n4. Puedes eliminar tu cuenta en cualquier momento.\n\nLa versión completa de la política estará disponible en futuras actualizaciones.",
+    "fr": "Politique de confidentialité:\n\n1. Nous ne collectons que les données nécessaires (nom, e-mail, progression d'apprentissage).\n2. Vos données sont stockées sur des serveurs sécurisés.\n3. Nous ne vendons pas vos données à des tiers.\n4. Vous pouvez supprimer votre compte à tout moment.\n\nLa version complète de la politique sera disponible dans les prochaines mises à jour.",
+    "it": "Politica sulla privacy:\n\n1. Raccogliamo solo i dati necessari (nome, email, progressi di apprendimento).\n2. I tuoi dati sono archiviati su server sicuri.\n3. Non vendiamo i tuoi dati a terze parti.\n4. Puoi eliminare il tuo account in qualsiasi momento.\n\nLa versione completa della politica sarà disponibile nei prossimi aggiornamenti."
   }
 }

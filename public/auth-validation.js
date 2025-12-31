@@ -65,7 +65,7 @@ class AuthValidation {
         if (password.length >= 8) strength += 1;
         if (password.length >= 12) strength += 1;
         else if (password.length < 6) {
-            feedback.push('минимум 6 символов');
+            feedback.push(window.i18n ? window.i18n.t('password_min_chars') : 'minimum 6 characters');
         }
 
         // Complexity checks
@@ -76,25 +76,26 @@ class AuthValidation {
 
         // Determine strength level
         let level = 'weak';
-        let text = 'Слабый пароль';
+        let text = window.i18n ? window.i18n.t('password_weak') : 'Weak password';
 
         if (strength >= 5) {
             level = 'strong';
-            text = 'Надёжный пароль';
+            text = window.i18n ? window.i18n.t('password_strong') : 'Strong password';
         } else if (strength >= 3) {
             level = 'medium';
-            text = 'Средний пароль';
+            text = window.i18n ? window.i18n.t('password_medium') : 'Medium password';
         }
 
         // Add feedback
         if (level === 'weak' || level === 'medium') {
             const suggestions = [];
-            if (!/[A-Z]/.test(password)) suggestions.push('заглавные буквы');
-            if (!/[0-9]/.test(password)) suggestions.push('цифры');
-            if (!/[^a-zA-Z0-9]/.test(password)) suggestions.push('спецсимволы');
+            if (!/[A-Z]/.test(password)) suggestions.push(window.i18n ? window.i18n.t('uppercase_letters') : 'uppercase letters');
+            if (!/[0-9]/.test(password)) suggestions.push(window.i18n ? window.i18n.t('numbers') : 'numbers');
+            if (!/[^a-zA-Z0-9]/.test(password)) suggestions.push(window.i18n ? window.i18n.t('special_chars') : 'special characters');
 
             if (suggestions.length > 0) {
-                text += ' (добавьте ' + suggestions.join(', ') + ')';
+                const addText = window.i18n ? window.i18n.t('add_suggestion') : 'add';
+                text += ' (' + addText + ' ' + suggestions.join(', ') + ')';
             }
         }
 
@@ -122,10 +123,10 @@ class AuthValidation {
         const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
 
         if (emailRegex.test(email)) {
-            validationEl.textContent = '✓ Email выглядит корректно';
+            validationEl.textContent = '✓ ' + (window.i18n ? window.i18n.t('email_valid') : 'Email looks correct');
             validationEl.className = 'validation-message valid';
         } else {
-            validationEl.textContent = '✗ Некорректный формат email';
+            validationEl.textContent = '✗ ' + (window.i18n ? window.i18n.t('email_invalid') : 'Invalid email format');
             validationEl.className = 'validation-message invalid';
         }
     }
@@ -134,23 +135,27 @@ class AuthValidation {
      * Show Terms of Service
      */
     showTerms() {
-        alert('Условия использования:\n\n' +
-            '1. Вы соглашаетесь использовать приложение для изучения языков.\n' +
-            '2. Вы не будете использовать приложение в незаконных целях.\n' +
-            '3. Мы можем изменять условия с уведомлением пользователей.\n\n' +
-            'Полная версия условий будет доступна в будущих обновлениях.');
+        const termsText = window.i18n ? window.i18n.t('terms_of_service_text') :
+            'Terms of Service:\n\n' +
+            '1. You agree to use the application for language learning.\n' +
+            '2. You will not use the application for illegal purposes.\n' +
+            '3. We may change the terms with user notification.\n\n' +
+            'Full version of terms will be available in future updates.';
+        alert(termsText);
     }
 
     /**
      * Show Privacy Policy
      */
     showPrivacy() {
-        alert('Политика конфиденциальности:\n\n' +
-            '1. Мы собираем только необходимые данные (имя, email, прогресс обучения).\n' +
-            '2. Ваши данные хранятся на защищённых серверах.\n' +
-            '3. Мы не продаём ваши данные третьим лицам.\n' +
-            '4. Вы можете удалить свой аккаунт в любой момент.\n\n' +
-            'Полная версия политики будет доступна в будущих обновлениях.');
+        const privacyText = window.i18n ? window.i18n.t('privacy_policy_text') :
+            'Privacy Policy:\n\n' +
+            '1. We only collect necessary data (name, email, learning progress).\n' +
+            '2. Your data is stored on secure servers.\n' +
+            '3. We do not sell your data to third parties.\n' +
+            '4. You can delete your account at any time.\n\n' +
+            'Full version of the policy will be available in future updates.';
+        alert(privacyText);
     }
 }
 
