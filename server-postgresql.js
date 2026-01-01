@@ -2770,15 +2770,44 @@ app.delete('/api/users/:userId/language-pairs/:pairId', async (req, res) => {
 // Get all word sets (with optional filtering)
 app.get('/api/word-sets', async (req, res) => {
     try {
-        const { sourceLang, targetLang, level, theme, isPublic } = req.query;
+        const { sourceLang, targetLang, languagePair, level, theme, isPublic } = req.query;
 
         let query = 'SELECT * FROM word_sets WHERE 1=1';
         const params = [];
         let paramIndex = 1;
 
-        if (sourceLang) {
+        // Support languagePair parameter (e.g., "de-en" format)
+        if (languagePair) {
+            // Parse languagePair format: "de-en" -> source language is "de" (German)
+            const parts = languagePair.split('-');
+            if (parts.length >= 1) {
+                const sourceLanguage = parts[0]; // First part is source language
+                // Map short codes to full language names
+                const langMap = {
+                    'de': 'german',
+                    'en': 'english',
+                    'hi': 'hindi',
+                    'es': 'spanish',
+                    'fr': 'french',
+                    'it': 'italian',
+                    'pt': 'portuguese',
+                    'ru': 'russian',
+                    'uk': 'ukrainian'
+                };
+                const fullLanguageName = langMap[sourceLanguage] || sourceLanguage;
+                query += ` AND source_language = $${paramIndex}`;
+                params.push(fullLanguageName);
+                paramIndex++;
+            }
+        } else if (sourceLang) {
             query += ` AND source_language = $${paramIndex}`;
             params.push(sourceLang);
+            paramIndex++;
+        }
+
+        if (targetLang) {
+            query += ` AND target_language = $${paramIndex}`;
+            params.push(targetLang);
             paramIndex++;
         }
 
@@ -2957,14 +2986,49 @@ app.post('/api/word-sets/:setId/import', async (req, res) => {
             return res.status(400).json({ error: 'userId and languagePairId are required' });
         }
 
-        // Get all words from the set
+        // Get word set info to determine source language
+        const wordSetResult = await db.query(
+            'SELECT source_language, level, theme FROM word_sets WHERE id = $1',
+            [setId]
+        );
+
+        if (wordSetResult.rows.length === 0) {
+            return res.status(404).json({ error: 'Word set not found' });
+        }
+
+        const { source_language, level, theme } = wordSetResult.rows[0];
+        const sourceTableName = `source_words_${source_language}`;
+
+        // Build query to get words from source table based on level and theme
+        let whereConditions = [];
+        let queryParams = [];
+        let paramIndex = 1;
+
+        if (level) {
+            whereConditions.push(`level = $${paramIndex}`);
+            queryParams.push(level);
+            paramIndex++;
+        }
+
+        // If theme is 'general', don't filter by theme (take all words of that level)
+        // Otherwise, filter by specific theme
+        if (theme && theme !== 'general') {
+            whereConditions.push(`theme = $${paramIndex}`);
+            queryParams.push(theme);
+            paramIndex++;
+        }
+
+        const whereClause = whereConditions.length > 0
+            ? `WHERE ${whereConditions.join(' AND ')}`
+            : '';
+
+        // Get all words from the source table
         const wordsResult = await db.query(`
-            SELECT w.*
-            FROM words w
-            JOIN word_set_items wsi ON w.id = wsi.word_id
-            WHERE wsi.word_set_id = $1
-            ORDER BY wsi.order_index ASC
-        `, [setId]);
+            SELECT id, word, translation, example, example_translation, level, theme
+            FROM ${sourceTableName}
+            ${whereClause}
+            ORDER BY id ASC
+        `, queryParams);
 
         if (wordsResult.rows.length === 0) {
             return res.status(404).json({ error: 'Word set is empty or not found' });
@@ -2973,25 +3037,35 @@ app.post('/api/word-sets/:setId/import', async (req, res) => {
         let importedCount = 0;
         let skippedCount = 0;
 
-        for (const word of wordsResult.rows) {
-            // Check if word already exists for this user
-            const existingWord = await db.query(
-                'SELECT id FROM words WHERE LOWER(word) = LOWER($1) AND user_id = $2 AND language_pair_id = $3',
-                [word.word, userId, languagePairId]
-            );
+        for (const sourceWord of wordsResult.rows) {
+            // Check if word already exists in user_word_progress
+            const existingProgress = await db.query(`
+                SELECT id FROM user_word_progress
+                WHERE user_id = $1
+                AND language_pair_id = $2
+                AND source_language = $3
+                AND source_word_id = $4
+            `, [userId, languagePairId, source_language, sourceWord.id]);
 
-            if (existingWord.rows.length === 0) {
-                // Import the word
+            if (existingProgress.rows.length === 0) {
+                // Import the word to user_word_progress
                 await db.query(`
-                    INSERT INTO words (word, translation, example, exampleTranslation, user_id, language_pair_id, source)
-                    VALUES ($1, $2, $3, $4, $5, $6, $7)
+                    INSERT INTO user_word_progress (
+                        user_id, language_pair_id, source_language, source_word_id,
+                        translation, example, example_translation,
+                        status, correct_count, incorrect_count, total_reviews,
+                        easiness_factor, interval_days, next_review_date,
+                        source
+                    )
+                    VALUES ($1, $2, $3, $4, $5, $6, $7, 'new', 0, 0, 0, 2.5, 0, CURRENT_DATE, $8)
                 `, [
-                    word.word,
-                    word.translation,
-                    word.example || '',
-                    word.exampletranslation || '',
                     userId,
                     languagePairId,
+                    source_language,
+                    sourceWord.id,
+                    sourceWord.translation || '',
+                    sourceWord.example || '',
+                    sourceWord.example_translation || '',
                     `word_set_${setId}`
                 ]);
                 importedCount++;
@@ -3034,13 +3108,38 @@ app.post('/api/word-sets/previews/batch', async (req, res) => {
 
         // Fetch previews for each set
         for (const wordSet of setsResult.rows) {
+            const sourceTableName = `source_words_${wordSet.source_language}`;
+
+            // Build where conditions
+            let whereConditions = [];
+            let queryParams = [];
+            let paramIndex = 1;
+
+            if (wordSet.level) {
+                whereConditions.push(`level = $${paramIndex}`);
+                queryParams.push(wordSet.level);
+                paramIndex++;
+            }
+
+            if (wordSet.theme) {
+                whereConditions.push(`theme = $${paramIndex}`);
+                queryParams.push(wordSet.theme);
+                paramIndex++;
+            }
+
+            const whereClause = whereConditions.length > 0
+                ? `WHERE ${whereConditions.join(' AND ')}`
+                : '';
+
+            queryParams.push(limit);
+
             const wordsResult = await db.query(`
-                SELECT word, example_de
-                FROM source_words_german
-                WHERE level = $1 AND (theme = $2 OR (theme IS NULL AND $2 IS NULL))
+                SELECT word, example
+                FROM ${sourceTableName}
+                ${whereClause}
                 ORDER BY word
-                LIMIT $3
-            `, [wordSet.level, wordSet.theme, limit]);
+                LIMIT $${paramIndex}
+            `, queryParams);
 
             previews[wordSet.id] = {
                 setId: wordSet.id,
@@ -3059,7 +3158,7 @@ app.post('/api/word-sets/previews/batch', async (req, res) => {
     }
 });
 
-// Get preview words from a word set (from source_words_german)
+// Get preview words from a word set
 app.get('/api/word-sets/:setId/preview', async (req, res) => {
     try {
         const { setId } = req.params;
@@ -3076,15 +3175,39 @@ app.get('/api/word-sets/:setId/preview', async (req, res) => {
         }
 
         const wordSet = setResult.rows[0];
+        const sourceTableName = `source_words_${wordSet.source_language}`;
 
-        // Get preview words from source_words_german based on level and theme
+        // Build where conditions
+        let whereConditions = [];
+        let queryParams = [];
+        let paramIndex = 1;
+
+        if (wordSet.level) {
+            whereConditions.push(`level = $${paramIndex}`);
+            queryParams.push(wordSet.level);
+            paramIndex++;
+        }
+
+        if (wordSet.theme) {
+            whereConditions.push(`theme = $${paramIndex}`);
+            queryParams.push(wordSet.theme);
+            paramIndex++;
+        }
+
+        const whereClause = whereConditions.length > 0
+            ? `WHERE ${whereConditions.join(' AND ')}`
+            : '';
+
+        queryParams.push(limit);
+
+        // Get preview words from source table based on level and theme
         const wordsResult = await db.query(`
-            SELECT word, example_de
-            FROM source_words_german
-            WHERE level = $1 AND (theme = $2 OR (theme IS NULL AND $2 IS NULL))
+            SELECT word, example
+            FROM ${sourceTableName}
+            ${whereClause}
             ORDER BY word
-            LIMIT $3
-        `, [wordSet.level, wordSet.theme, limit]);
+            LIMIT $${paramIndex}
+        `, queryParams);
 
         res.json({
             setId: wordSet.id,
