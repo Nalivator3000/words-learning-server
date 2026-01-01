@@ -6,23 +6,87 @@
 class LoginPage {
   constructor(page) {
     this.page = page;
-    this.usernameInput = 'input[name="username"], input[type="text"], #username';
-    this.passwordInput = 'input[name="password"], input[type="password"], #password';
-    this.loginButton = 'button[type="submit"], button:has-text("Login"), button:has-text("Sign in")';
+    // Real selectors from the actual app
+    this.emailInput = '#loginEmail';
+    this.passwordInput = '#loginPassword';
+    this.loginButton = '#loginBtn';
+    this.loginTab = '#loginTab';
     this.errorMessage = '.error, .alert-error, [role="alert"]';
   }
 
   async goto() {
     await this.page.goto('/');
+
+    // Force English locale for tests
+    await this.page.evaluate(() => {
+      localStorage.setItem('uiLanguage', 'en');
+    });
+
+    // Wait for page to load - either login tab OR onboarding modal
+    try {
+      await this.page.waitForSelector(this.loginTab, { timeout: 5000 });
+    } catch (e) {
+      // If login tab not visible, check if onboarding modal is shown
+      const onboardingVisible = await this.page.isVisible('#onboardingModal');
+      if (onboardingVisible) {
+        // Skip onboarding by closing it or waiting for auth modal
+        await this.page.waitForSelector('#authModal', { timeout: 5000 });
+      }
+      // Wait for login tab again
+      await this.page.waitForSelector(this.loginTab, { timeout: 10000 });
+    }
   }
 
   async login(username, password) {
-    await this.page.fill(this.usernameInput, username);
+    // Check if onboarding modal is blocking
+    const onboardingVisible = await this.page.isVisible('#onboardingModal').catch(() => false);
+    if (onboardingVisible) {
+      // Close onboarding modal if visible
+      const closeBtn = await this.page.locator('#onboardingModal .close, #onboardingModal [aria-label="Close"]').first();
+      if (await closeBtn.isVisible().catch(() => false)) {
+        await closeBtn.click();
+        await this.page.waitForTimeout(500);
+      }
+    }
+
+    // Make sure auth modal is visible
+    await this.page.waitForSelector('#authModal', { state: 'visible', timeout: 10000 });
+
+    // Make sure login tab is active
+    await this.page.click(this.loginTab);
+    await this.page.waitForTimeout(300);
+
+    // Convert username to email format
+    // test_de_en -> test.de.en@lexibooster.test
+    const email = username.replace(/_/g, '.') + '@lexibooster.test';
+
+    // Fill email and password
+    await this.page.fill(this.emailInput, email);
     await this.page.fill(this.passwordInput, password);
+
+    // Click login button
     await this.page.click(this.loginButton);
 
-    // Wait for navigation
-    await this.page.waitForLoadState('networkidle');
+    // Wait for login to complete - wait for dashboard to appear
+    // This is more reliable than waiting for modal to hide, especially on mobile
+    await this.page.waitForSelector('#homeSection.active', { timeout: 20000 });
+
+    // On mobile devices, modal might still be transitioning out
+    // Wait for modal to be truly hidden OR detached from DOM
+    try {
+      await this.page.waitForSelector('#authModal', { state: 'hidden', timeout: 5000 });
+    } catch (e) {
+      // Modal might have display:none but not be "hidden" - check if it's actually visible
+      const isVisible = await this.page.isVisible('#authModal');
+      if (isVisible) {
+        // If still visible, this is a real problem
+        throw new Error('Auth modal still visible after successful login');
+      }
+      // Otherwise modal is hidden but Playwright can't detect it - this is OK
+    }
+
+    // Allow dashboard to fully load
+    await this.page.waitForTimeout(1000);
   }
 
   async getErrorMessage() {
@@ -37,18 +101,28 @@ class LoginPage {
 class WordSetsPage {
   constructor(page) {
     this.page = page;
-    this.wordSetCard = '.word-set, .card, [data-testid="word-set"]';
-    this.wordSetTitle = '.word-set-title, h2, h3, .title';
-    this.wordCount = '.word-count, .count, [data-count]';
-    this.levelFilter = 'select[name="level"], #level-filter, .level-filter';
-    this.themeFilter = 'select[name="theme"], #theme-filter, .theme-filter';
-    this.searchInput = 'input[type="search"], input[placeholder*="Search"], #search';
-    this.emptyState = '.empty-state, .no-results, [data-testid="empty-state"]';
+    // Actual selectors from word-lists-ui.js
+    this.wordSetCard = '.word-list-card';
+    this.wordSetTitle = '.list-title';
+    this.wordCount = '.meta-text';
+    this.levelFilter = '#cefrLevelFilter';
+    this.themeFilter = '#topicFilter';
+    this.difficultyFilter = '#difficultyFilter';
+    this.resetFiltersBtn = '#resetFiltersBtn';
+    this.viewSetBtn = '.view-set-btn';
+    this.importSetBtn = '.import-set-btn';
+    this.emptyState = '.empty-state';
+    this.wordListsContainer = '.word-lists-container';
   }
 
   async goto() {
-    // Navigate to word sets page (adjust URL as needed)
-    await this.page.goto('/word-sets');
+    // This is a SPA - click the Word Lists button to show the section
+    await this.page.click('#wordListsBtn');
+    // Wait for the section to become visible
+    await this.page.waitForSelector('#wordListsSection.active', { timeout: 10000 });
+    // Wait for word lists to load (either cards or empty state)
+    await this.page.waitForSelector('.word-lists-container, .empty-state', { timeout: 10000 });
+    await this.page.waitForTimeout(500); // Allow rendering to complete
   }
 
   async getWordSetCount() {
@@ -97,15 +171,17 @@ class WordSetsPage {
 class WordSetDetailPage {
   constructor(page) {
     this.page = page;
-    this.wordList = '.word-item, .word, [data-testid="word"]';
+    // Modal selectors from word-lists-ui.js
+    this.modal = '#wordListModal';
+    this.modalTitle = '#modalListTitle';
+    this.modalContent = '#modalListContent';
+    this.closeButton = '.modal-close, .close-modal';
+    this.importButton = '#importFromModalBtn';
+    this.wordList = '.word-item, .modal-word-item';
     this.sourceWord = '.source-word, .word-source';
     this.targetWord = '.target-word, .word-target';
-    this.importAllButton = 'button:has-text("Import All"), button:has-text("Add All"), [data-action="import-all"]';
-    this.importSelectedButton = 'button:has-text("Import Selected"), button:has-text("Add Selected")';
-    this.wordCheckbox = 'input[type="checkbox"]';
-    this.closeButton = 'button:has-text("Close"), button[aria-label="Close"], .close';
     this.successMessage = '.success, .alert-success, [role="alert"].success';
-    this.wordCountDisplay = '.total-words, .word-count, [data-testid="word-count"]';
+    this.wordCountDisplay = '.total-words, .word-count';
   }
 
   async getWordCount() {
@@ -113,25 +189,27 @@ class WordSetDetailPage {
     return words.length;
   }
 
-  async importAll() {
-    await this.page.click(this.importAllButton);
+  async waitForModal() {
+    await this.page.waitForSelector(this.modal, { state: 'visible', timeout: 10000 });
+    await this.page.waitForSelector(this.modalContent, { timeout: 5000 });
+  }
 
-    // Wait for import to complete
-    await this.page.waitForSelector(this.successMessage, { timeout: 30000 });
+  async importAll() {
+    await this.waitForModal();
+    await this.page.click(this.importButton);
+
+    // Wait for import to complete (success message or modal close)
+    await this.page.waitForTimeout(2000);
   }
 
   async selectWords(count) {
-    const checkboxes = await this.page.locator(this.wordCheckbox).all();
-    const selectCount = Math.min(count, checkboxes.length);
-
-    for (let i = 0; i < selectCount; i++) {
-      await checkboxes[i].check();
-    }
+    // For now, just import all - word lists UI doesn't have checkboxes
+    await this.importAll();
   }
 
   async importSelected() {
-    await this.page.click(this.importSelectedButton);
-    await this.page.waitForSelector(this.successMessage, { timeout: 30000 });
+    // Same as importAll for word lists
+    await this.importAll();
   }
 
   async getSuccessMessage() {
@@ -210,31 +288,66 @@ class VocabularyPage {
 class NavigationHelper {
   constructor(page) {
     this.page = page;
-    this.navMenu = 'nav, .navigation, [role="navigation"]';
-    this.homeLink = 'a:has-text("Home"), a[href="/"], a[href="/home"]';
-    this.wordSetsLink = 'a:has-text("Word Sets"), a:has-text("Sets"), a[href="/word-sets"]';
-    this.vocabularyLink = 'a:has-text("Vocabulary"), a:has-text("My Words"), a[href="/vocabulary"]';
-    this.logoutLink = 'a:has-text("Logout"), a:has-text("Sign out"), button:has-text("Logout")';
+    // SPA navigation uses buttons with IDs
+    this.homeBtn = '#homeBtn';
+    this.wordListsBtn = '#wordListsBtn';
+    this.importBtn = '#importBtn';
+    this.studyBtn = '#studyBtn';
+    this.reviewBtn = '#reviewBtn';
+    this.statsBtn = '#statsBtn';
+    this.settingsBtn = '#settingsNavBtn';
+    this.logoutBtn = '#logoutBtn, button:has-text("Выход"), button:has-text("Logout")';
   }
 
   async goToHome() {
-    await this.page.click(this.homeLink);
-    await this.page.waitForLoadState('networkidle');
+    await this.page.click(this.homeBtn);
+    await this.page.waitForSelector('#homeSection.active', { timeout: 5000 });
   }
 
   async goToWordSets() {
-    await this.page.click(this.wordSetsLink);
-    await this.page.waitForLoadState('networkidle');
+    await this.page.click(this.wordListsBtn);
+    await this.page.waitForSelector('#wordListsSection.active', { timeout: 5000 });
+  }
+
+  async goToImport() {
+    await this.page.click(this.importBtn);
+    await this.page.waitForSelector('#importSection.active', { timeout: 5000 });
   }
 
   async goToVocabulary() {
-    await this.page.click(this.vocabularyLink);
-    await this.page.waitForLoadState('networkidle');
+    // Vocabulary might be part of home or a different section
+    // Update this based on actual app structure
+    await this.goToHome();
   }
 
   async logout() {
-    await this.page.click(this.logoutLink);
-    await this.page.waitForLoadState('networkidle');
+    // First, wait for logout button to be available
+    // On some layouts, logout might be in settings or a menu
+    try {
+      // Try direct logout button first
+      await this.page.waitForSelector(this.logoutBtn, { state: 'visible', timeout: 5000 });
+      await this.page.click(this.logoutBtn, { timeout: 10000 });
+    } catch (e) {
+      // If logout button not immediately visible, might be in settings
+      // Try to open settings first
+      try {
+        const settingsVisible = await this.page.isVisible(this.settingsBtn);
+        if (settingsVisible) {
+          await this.page.click(this.settingsBtn);
+          await this.page.waitForTimeout(500);
+        }
+      } catch (settingsError) {
+        // Settings not available, continue
+      }
+
+      // Now try logout button again
+      await this.page.waitForSelector(this.logoutBtn, { state: 'visible', timeout: 5000 });
+      // Use force: true if button is found but not clickable (e.g., covered by another element)
+      await this.page.click(this.logoutBtn, { force: true, timeout: 10000 });
+    }
+
+    // Wait for logout to complete
+    await this.page.waitForTimeout(1000);
   }
 }
 

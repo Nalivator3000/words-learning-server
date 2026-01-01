@@ -13,23 +13,20 @@ module.exports = defineConfig({
 
   // Test configuration
   expect: {
-    timeout: 10000, // 10 seconds for assertions
+    timeout: 15000, // 15 seconds for assertions (increased for production)
   },
 
   // Run tests in files in parallel
   fullyParallel: false, // Sequential for production to avoid rate limits
 
   // Retry failed tests on production
-  retries: 2,
+  retries: 0,
 
   // Single worker for production to avoid overwhelming server
   workers: 1,
 
-  // Global timeout for entire test run
-  globalTimeout: 0,
-
-  // Delay between tests to respect rate limits
-  globalSetup: null,
+  // Global timeout for each test
+  globalTimeout: 0, // No global timeout
 
   // Reporter to use
   reporter: [
@@ -40,8 +37,8 @@ module.exports = defineConfig({
 
   // Shared settings for all projects
   use: {
-    // Production URL - SET THIS TO YOUR RAILWAY URL
-    baseURL: process.env.PRODUCTION_URL || 'https://your-app.up.railway.app',
+    // Production URL - LexyBooster production site
+    baseURL: process.env.PRODUCTION_URL || 'https://lexybooster.com',
 
     // Collect trace on failure for debugging
     trace: 'retain-on-failure',
@@ -53,24 +50,32 @@ module.exports = defineConfig({
     video: 'retain-on-failure',
 
     // Longer navigation timeout for production
-    navigationTimeout: 30000,
+    navigationTimeout: 45000,
 
     // Longer action timeout - gentler on production
-    actionTimeout: 15000,
+    actionTimeout: 20000,
+
+    // Force English locale for all tests
+    locale: 'en-US',
   },
 
-  // Configure projects - fewer devices for production testing
+  // Configure projects - multiple devices for production testing
   projects: [
-    // Desktop only for production smoke tests
+    // Desktop
     {
       name: 'Desktop Chrome',
       use: { ...devices['Desktop Chrome'] },
     },
 
-    // One mobile device for mobile testing
+    // Mobile devices
     {
       name: 'iPhone 12 Pro',
       use: { ...devices['iPhone 12 Pro'] },
+    },
+
+    {
+      name: 'Pixel 5',
+      use: { ...devices['Pixel 5'] },
     },
   ],
 });

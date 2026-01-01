@@ -31,7 +31,7 @@ module.exports = defineConfig({
   // Reporter to use
   reporter: [
     ['html'],
-    ['list'],
+    ['../config/progress-reporter.js'], // Custom progress bar reporter
     ['json', { outputFile: 'test-results/results.json' }],
   ],
 
@@ -48,6 +48,9 @@ module.exports = defineConfig({
 
     // Video on failure
     video: 'retain-on-failure',
+
+    // Force English locale for all tests
+    locale: 'en-US',
   },
 
   // Configure projects for major browsers and devices
