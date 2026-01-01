@@ -2491,14 +2491,14 @@ app.post('/api/auth/login', authLimiter, async (req, res) => {
         const result = await db.query('SELECT * FROM users WHERE email = $1', [email]);
 
         if (result.rows.length === 0) {
-            return res.status(401).json({ error: 'Пользователь не найден' });
+            return res.status(401).json({ error: 'User not found' });
         }
 
         const user = result.rows[0];
         const hashedPassword = hashPassword(password);
 
         if (user.password !== hashedPassword) {
-            return res.status(401).json({ error: 'Неверный пароль' });
+            return res.status(401).json({ error: 'Invalid password' });
         }
 
         // Get user's language pairs
@@ -3121,7 +3121,9 @@ app.post('/api/word-sets/previews/batch', async (req, res) => {
                 paramIndex++;
             }
 
-            if (wordSet.theme) {
+            // If theme is 'general', don't filter by theme (take all words of that level)
+            // Otherwise, filter by specific theme
+            if (wordSet.theme && wordSet.theme !== 'general') {
                 whereConditions.push(`theme = $${paramIndex}`);
                 queryParams.push(wordSet.theme);
                 paramIndex++;
@@ -3188,7 +3190,9 @@ app.get('/api/word-sets/:setId/preview', async (req, res) => {
             paramIndex++;
         }
 
-        if (wordSet.theme) {
+        // If theme is 'general', don't filter by theme (take all words of that level)
+        // Otherwise, filter by specific theme
+        if (wordSet.theme && wordSet.theme !== 'general') {
             whereConditions.push(`theme = $${paramIndex}`);
             queryParams.push(wordSet.theme);
             paramIndex++;
