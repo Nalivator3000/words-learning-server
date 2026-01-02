@@ -7,6 +7,10 @@ const { test, expect } = require('@playwright/test');
 
 test.describe('Translation System', () => {
   test.beforeEach(async ({ page }) => {
+    // Force English locale for consistent testing
+    await page.addInitScript(() => {
+      localStorage.setItem('language', 'en');
+    });
     await page.goto('/');
     await page.waitForLoadState('networkidle');
     // Wait for i18n to initialize
@@ -169,6 +173,10 @@ test.describe('Translation System', () => {
 
 test.describe('Translation System - Language Switching', () => {
   test.beforeEach(async ({ page }) => {
+    // Force English locale for consistent testing
+    await page.addInitScript(() => {
+      localStorage.setItem('language', 'en');
+    });
     await page.goto('/');
     await page.waitForLoadState('networkidle');
     // Wait for i18n to initialize

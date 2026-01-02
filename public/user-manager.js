@@ -38,18 +38,42 @@ class UserManager {
 
     showAuthModal() {
         const modal = document.getElementById('authModal');
+        if (!modal) return;
+
+        // Clear all hiding styles and show modal
+        modal.style.removeProperty('display');
+        modal.style.removeProperty('visibility');
+        modal.style.removeProperty('opacity');
+        modal.style.removeProperty('pointer-events');
         modal.style.display = 'flex';
-        modal.setAttribute('aria-hidden', 'false');
         modal.style.visibility = 'visible';
-        document.querySelector('.container').style.display = 'none';
+        modal.setAttribute('aria-hidden', 'false');
+        modal.classList.remove('hidden');
+        modal.classList.add('active');
+
+        const container = document.querySelector('.container');
+        if (container) {
+            container.style.display = 'none';
+        }
     }
 
     hideAuthModal() {
         const modal = document.getElementById('authModal');
-        modal.style.display = 'none';
+        if (!modal) return;
+
+        // Force hide with !important styles and multiple methods for mobile reliability
+        modal.style.setProperty('display', 'none', 'important');
+        modal.style.setProperty('visibility', 'hidden', 'important');
+        modal.style.setProperty('opacity', '0', 'important');
+        modal.style.setProperty('pointer-events', 'none', 'important');
         modal.setAttribute('aria-hidden', 'true');
-        modal.style.visibility = 'hidden';
-        document.querySelector('.container').style.display = 'block';
+        modal.classList.remove('active');
+        modal.classList.add('hidden');
+
+        const container = document.querySelector('.container');
+        if (container) {
+            container.style.display = 'block';
+        }
     }
 
     showUserInterface() {
