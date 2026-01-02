@@ -12497,15 +12497,31 @@ app.get('/api/words/random-proportional/:count', async (req, res) => {
         const { userId, languagePairId } = req.query;
         const totalWords = parseInt(count);
 
-        // Get counts for each status
+        // Get language pair to determine source language
+        const langPairResult = await db.query(
+            'SELECT from_lang, to_lang FROM language_pairs WHERE id = $1 AND user_id = $2',
+            [parseInt(languagePairId), parseInt(userId)]
+        );
+
+        if (langPairResult.rows.length === 0) {
+            return res.status(404).json({ error: 'Language pair not found' });
+        }
+
+        const sourceLanguageCode = langPairResult.rows[0].from_lang;
+        const targetLanguageCode = langPairResult.rows[0].to_lang;
+        const sourceLanguage = LANG_CODE_TO_FULL_NAME[sourceLanguageCode] || sourceLanguageCode;
+        const targetLanguage = LANG_CODE_TO_FULL_NAME[targetLanguageCode] || targetLanguageCode;
+        const sourceTableName = `source_words_${sourceLanguage}`;
+
+        // Get counts for each status from user_word_progress
         const countsQuery = `
             SELECT status, COUNT(*) as count
-            FROM words
-            WHERE user_id = $1 AND language_pair_id = $2
+            FROM user_word_progress
+            WHERE user_id = $1 AND language_pair_id = $2 AND source_language = $3
             AND status IN ('studying', 'review_1', 'review_3', 'review_7', 'review_14', 'review_30', 'review_60', 'review_120')
             GROUP BY status
         `;
-        const countsResult = await db.query(countsQuery, [parseInt(userId), parseInt(languagePairId)]);
+        const countsResult = await db.query(countsQuery, [parseInt(userId), parseInt(languagePairId), sourceLanguage]);
 
         // Calculate total available words and proportions
         const statusCounts = {};
@@ -12551,18 +12567,64 @@ app.get('/api/words/random-proportional/:count', async (req, res) => {
             }
         }
 
-        // Fetch words from each status
+        // Fetch words from each status by joining user_word_progress with source_words
         const allWords = [];
+        const translationColumnName = `translation_${targetLanguageCode}`;
+        const exampleTranslationColumnName = `example_translation_${sourceLanguageCode}_${targetLanguageCode}`;
+
+        // Check if example translation column exists
+        const exampleTransColumnExists = await db.query(
+            `SELECT column_name FROM information_schema.columns
+             WHERE table_name = $1 AND column_name = $2`,
+            [sourceTableName, exampleTranslationColumnName]
+        );
+        const hasExampleTranslation = exampleTransColumnExists.rows.length > 0;
+
         for (const [status, allocation] of Object.entries(statusAllocations)) {
             if (allocation > 0) {
+                // Join user_word_progress with source_words table to get full word data
+                // Include translation in the same query to avoid N+1 problem
+                const exampleTransField = hasExampleTranslation
+                    ? `, sw.${exampleTranslationColumnName} as exampleTranslation`
+                    : '';
+
                 const wordsQuery = `
-                    SELECT * FROM words
-                    WHERE status = $1 AND user_id = $2 AND language_pair_id = $3
-                    AND (nextReviewDate IS NULL OR nextReviewDate <= CURRENT_TIMESTAMP)
+                    SELECT
+                        sw.id,
+                        sw.word,
+                        sw.example_${sourceLanguageCode} as example,
+                        sw.${translationColumnName} as translation
+                        ${exampleTransField},
+                        uwp.source_word_id,
+                        uwp.status,
+                        uwp.correct_count,
+                        uwp.total_reviews,
+                        uwp.next_review_date
+                    FROM user_word_progress uwp
+                    JOIN ${sourceTableName} sw ON sw.id = uwp.source_word_id
+                    WHERE uwp.status = $1
+                        AND uwp.user_id = $2
+                        AND uwp.language_pair_id = $3
+                        AND uwp.source_language = $4
+                        AND (uwp.next_review_date IS NULL OR uwp.next_review_date <= CURRENT_TIMESTAMP)
                     ORDER BY RANDOM()
-                    LIMIT $4
+                    LIMIT $5
                 `;
-                const wordsResult = await db.query(wordsQuery, [status, parseInt(userId), parseInt(languagePairId), allocation]);
+                const wordsResult = await db.query(wordsQuery, [
+                    status,
+                    parseInt(userId),
+                    parseInt(languagePairId),
+                    sourceLanguage,
+                    allocation
+                ]);
+
+                // Set default exampleTranslation if column doesn't exist
+                if (!hasExampleTranslation) {
+                    wordsResult.rows.forEach(word => {
+                        word.exampleTranslation = '';
+                    });
+                }
+
                 allWords.push(...wordsResult.rows);
             }
         }
