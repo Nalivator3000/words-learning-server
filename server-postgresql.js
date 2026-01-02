@@ -12569,32 +12569,19 @@ app.get('/api/words/random-proportional/:count', async (req, res) => {
 
         // Fetch words from each status by joining user_word_progress with source_words
         const allWords = [];
-        const translationColumnName = `translation_${targetLanguageCode}`;
-        const exampleTranslationColumnName = `example_translation_${sourceLanguageCode}_${targetLanguageCode}`;
-
-        // Check if example translation column exists
-        const exampleTransColumnExists = await db.query(
-            `SELECT column_name FROM information_schema.columns
-             WHERE table_name = $1 AND column_name = $2`,
-            [sourceTableName, exampleTranslationColumnName]
-        );
-        const hasExampleTranslation = exampleTransColumnExists.rows.length > 0;
+        const translationTableName = `target_translations_${targetLanguage}`;
 
         for (const [status, allocation] of Object.entries(statusAllocations)) {
             if (allocation > 0) {
-                // Join user_word_progress with source_words table to get full word data
-                // Include translation in the same query to avoid N+1 problem
-                const exampleTransField = hasExampleTranslation
-                    ? `, sw.${exampleTranslationColumnName} as exampleTranslation`
-                    : '';
-
+                // Join user_word_progress with source_words table AND translation table
+                // to get full word data including translations
                 const wordsQuery = `
                     SELECT
                         sw.id,
                         sw.word,
                         sw.example_${sourceLanguageCode} as example,
-                        sw.${translationColumnName} as translation
-                        ${exampleTransField},
+                        tt.translation,
+                        tt.example_${targetLanguageCode} as exampleTranslation,
                         uwp.source_word_id,
                         uwp.status,
                         uwp.correct_count,
@@ -12602,6 +12589,8 @@ app.get('/api/words/random-proportional/:count', async (req, res) => {
                         uwp.next_review_date
                     FROM user_word_progress uwp
                     JOIN ${sourceTableName} sw ON sw.id = uwp.source_word_id
+                    LEFT JOIN ${translationTableName} tt ON tt.source_word_id = sw.id
+                        AND tt.source_lang = $6
                     WHERE uwp.status = $1
                         AND uwp.user_id = $2
                         AND uwp.language_pair_id = $3
@@ -12615,15 +12604,15 @@ app.get('/api/words/random-proportional/:count', async (req, res) => {
                     parseInt(userId),
                     parseInt(languagePairId),
                     sourceLanguage,
-                    allocation
+                    allocation,
+                    sourceLanguageCode
                 ]);
 
-                // Set default exampleTranslation if column doesn't exist
-                if (!hasExampleTranslation) {
-                    wordsResult.rows.forEach(word => {
-                        word.exampleTranslation = '';
-                    });
-                }
+                // Set defaults for missing translations
+                wordsResult.rows.forEach(word => {
+                    if (!word.translation) word.translation = '';
+                    if (!word.exampletranslation) word.exampletranslation = '';
+                });
 
                 allWords.push(...wordsResult.rows);
             }
