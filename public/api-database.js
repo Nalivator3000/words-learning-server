@@ -10,11 +10,17 @@ class APIDatabase {
 
     async init() {
         try {
-            // Test API connection by getting word counts
-            await this.getWordCounts();
+            // Test API connection by getting word counts ONLY if user is logged in
+            const { userId } = this.getUserContext();
+
+            if (userId) {
+                await this.getWordCounts();
+                console.log('✅ API Database connection established');
+            } else {
+                console.log('⏭️ API Database initialized (user not logged in yet)');
+            }
 
             this.initialized = true;
-            console.log('✅ API Database connection established');
             return true;
         } catch (error) {
             console.error('❌ API Database initialization failed:', error);
