@@ -286,19 +286,36 @@ class LanguageLearningApp {
         document.getElementById('loginTab').addEventListener('click', () => this.switchAuthTab('login'));
         document.getElementById('registerTab').addEventListener('click', () => this.switchAuthTab('register'));
         
-        // Auth form submissions - add both click and touchend for mobile reliability
+        // Auth form submissions - iOS Safari requires touchstart priority
         const loginBtn = document.getElementById('loginBtn');
         const registerBtn = document.getElementById('registerBtn');
         const googleLoginBtn = document.getElementById('googleLoginBtn');
 
-        loginBtn.addEventListener('click', () => this.handleLogin());
-        loginBtn.addEventListener('touchend', (e) => { e.preventDefault(); this.handleLogin(); });
+        // Detect if touch device
+        const isTouchDevice = ('ontouchstart' in window) || (navigator.maxTouchPoints > 0);
 
-        registerBtn.addEventListener('click', () => this.handleRegister());
-        registerBtn.addEventListener('touchend', (e) => { e.preventDefault(); this.handleRegister(); });
+        // Helper to create robust event handlers for iOS Safari
+        const addButtonHandler = (button, handler) => {
+            if (isTouchDevice) {
+                // iOS Safari: touchstart fires first and most reliably
+                button.addEventListener('touchstart', (e) => {
+                    e.preventDefault(); // Prevent ghost clicks
+                    e.stopPropagation();
+                    handler();
+                }, { passive: false });
+            }
+            // Always add click as fallback (for desktop and non-touch devices)
+            button.addEventListener('click', (e) => {
+                // Only fire if not a touch event (prevents double-firing)
+                if (!isTouchDevice || !e.isTrusted) {
+                    handler();
+                }
+            });
+        };
 
-        googleLoginBtn.addEventListener('click', () => this.handleGoogleLogin());
-        googleLoginBtn.addEventListener('touchend', (e) => { e.preventDefault(); this.handleGoogleLogin(); });
+        addButtonHandler(loginBtn, () => this.handleLogin());
+        addButtonHandler(registerBtn, () => this.handleRegister());
+        addButtonHandler(googleLoginBtn, () => this.handleGoogleLogin());
         
         // Enter key support for auth forms
         document.getElementById('loginPassword').addEventListener('keypress', (e) => {

@@ -751,15 +751,47 @@ textarea {
     left: 0;
     width: 100%;
     height: 100%;
+    min-height: 100vh;
+    min-height: -webkit-fill-available; /* iOS Safari fix for viewport height */
     background: rgba(0, 0, 0, 0.5);
     backdrop-filter: blur(32px) saturate(120%);
     -webkit-backdrop-filter: blur(32px) saturate(120%);
     display: flex;
     justify-content: center;
     align-items: center;
-    z-index: 1000;
+    z-index: 9999; /* Increased from 1000 to ensure above everything */
     padding: var(--space-4);
     animation: fadeIn 0.3s ease-out;
+    /* iOS Safari stacking context fixes */
+    -webkit-transform: translateZ(0);
+    transform: translateZ(0);
+    -webkit-backface-visibility: hidden;
+    backface-visibility: hidden;
+    will-change: transform, opacity;
+}
+
+/* Critical: Force modal to hide completely on iOS Safari */
+.auth-modal.hidden,
+.auth-modal:not(.active) {
+    display: none !important;
+    visibility: hidden !important;
+    opacity: 0 !important;
+    pointer-events: none !important;
+    z-index: -1 !important;
+    /* Force GPU to remove from rendering stack */
+    -webkit-transform: translateZ(-9999px) !important;
+    transform: translateZ(-9999px) !important;
+}
+
+/* Ensure modal is visible when active */
+.auth-modal.active {
+    display: flex !important;
+    visibility: visible !important;
+    opacity: 1 !important;
+    pointer-events: auto !important;
+    z-index: 9999 !important;
+    -webkit-transform: translateZ(0) !important;
+    transform: translateZ(0) !important;
 }
 
 @keyframes fadeIn {
@@ -1309,6 +1341,9 @@ textarea {
     max-width: 1400px;
     margin: 0 auto;
     padding: var(--space-6);
+    /* Ensure dashboard appears below modal but above other content */
+    position: relative;
+    z-index: 1;
 }
 
 /* Enhanced Header */

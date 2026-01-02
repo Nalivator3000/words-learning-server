@@ -61,19 +61,44 @@ class UserManager {
         const modal = document.getElementById('authModal');
         if (!modal) return;
 
-        // Force hide with !important styles and multiple methods for mobile reliability
+        // CRITICAL: Remove 'active' class FIRST (triggers CSS hiding)
+        modal.classList.remove('active');
+        modal.classList.add('hidden');
+
+        // Force hide with !important styles and multiple methods for iOS Safari
         modal.style.setProperty('display', 'none', 'important');
         modal.style.setProperty('visibility', 'hidden', 'important');
         modal.style.setProperty('opacity', '0', 'important');
         modal.style.setProperty('pointer-events', 'none', 'important');
-        modal.setAttribute('aria-hidden', 'true');
-        modal.classList.remove('active');
-        modal.classList.add('hidden');
+        modal.style.setProperty('z-index', '-1', 'important');
 
+        // iOS Safari GPU acceleration fix - force behind everything
+        modal.style.setProperty('transform', 'translateZ(-9999px)', 'important');
+        modal.style.setProperty('-webkit-transform', 'translateZ(-9999px)', 'important');
+
+        modal.setAttribute('aria-hidden', 'true');
+
+        // Show dashboard container with proper z-index
         const container = document.querySelector('.container');
         if (container) {
             container.style.display = 'block';
+            container.style.visibility = 'visible';
+            container.style.opacity = '1';
+            container.style.zIndex = '1';
         }
+
+        // NUCLEAR OPTION for iOS Safari: Schedule complete removal after animations
+        setTimeout(() => {
+            if (modal && modal.classList.contains('hidden')) {
+                // Remove from DOM entirely as last resort
+                const modalParent = modal.parentNode;
+                if (modalParent) {
+                    modalParent.removeChild(modal);
+                    // Re-append to body but keep it hidden
+                    document.body.appendChild(modal);
+                }
+            }
+        }, 500);
     }
 
     showUserInterface() {
