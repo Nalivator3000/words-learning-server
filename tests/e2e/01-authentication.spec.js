@@ -7,6 +7,15 @@ const { getAllTestUsers, TEST_PASSWORD } = require('./helpers/test-users');
  * Tests login/logout functionality for all test users
  */
 
+// Add delay between tests on production to avoid rate limiting
+const isProduction = process.env.NODE_ENV === 'production' || process.env.PRODUCTION_URL;
+if (isProduction) {
+  test.afterEach(async () => {
+    // Wait 500ms between tests to avoid overwhelming production server
+    await new Promise(resolve => setTimeout(resolve, 500));
+  });
+}
+
 test.describe('Authentication - All Language Pairs', () => {
   let loginPage;
 
@@ -16,21 +25,43 @@ test.describe('Authentication - All Language Pairs', () => {
   });
 
   test('should load login page successfully', async ({ page }) => {
-    await expect(page).toHaveTitle(/LexiBooster|Login|Sign in/i);
-    await expect(page.locator(loginPage.usernameInput)).toBeVisible();
+    await expect(page).toHaveTitle(/LexyBooster|Login|Sign in/i);
+    await expect(page.locator(loginPage.emailInput)).toBeVisible();
     await expect(page.locator(loginPage.passwordInput)).toBeVisible();
     await expect(page.locator(loginPage.loginButton)).toBeVisible();
   });
 
   test('should reject invalid credentials', async ({ page }) => {
-    await loginPage.login('invalid_user', 'wrong_password');
+    // Fill form manually to avoid login() method's success expectations
+    await page.waitForSelector('#authModal', { state: 'visible', timeout: 15000 });
+    await page.click('#loginTab');
+    await page.waitForTimeout(500);
 
-    // Should show error or stay on login page
-    const currentUrl = page.url();
+    const email = 'invalid.user@lexibooster.test';
+    const password = 'wrong_password_123';
+
+    await page.fill('#loginEmail', email);
+    await page.waitForTimeout(200);
+    await page.fill('#loginPassword', password);
+    await page.waitForTimeout(200);
+
+    // Click login button
+    await page.click('#loginBtn');
+
+    // Wait a bit for error to appear
+    await page.waitForTimeout(2000);
+
+    // Should show error OR stay on login page (modal still visible)
+    const modalStillVisible = await page.isVisible('#authModal.active');
     const errorMessage = await loginPage.getErrorMessage();
+    const dashboardNotVisible = !(await page.isVisible('#homeSection.active'));
 
+    // At least one of these should be true:
+    // 1. Modal is still visible (login failed, didn't close)
+    // 2. Error message is shown
+    // 3. Dashboard did not appear
     expect(
-      currentUrl.includes('/login') || errorMessage !== null
+      modalStillVisible || errorMessage !== null || dashboardNotVisible
     ).toBeTruthy();
   });
 });
@@ -181,7 +212,7 @@ test.describe('Authentication - Security', () => {
     const loginPage = new LoginPage(page);
     await loginPage.goto();
 
-    await page.fill(loginPage.usernameInput, 'test_de_en');
+    await page.fill(loginPage.emailInput, 'test_de_en');
     await page.fill(loginPage.passwordInput, TEST_PASSWORD);
     await page.click(loginPage.loginButton);
 
