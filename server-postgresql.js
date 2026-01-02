@@ -47,6 +47,15 @@ const db = new Pool({
     ssl: process.env.NODE_ENV === 'production' ? { rejectUnauthorized: false } : false
 });
 
+// Language code to full name mapping (used for table names like source_words_german)
+const LANG_CODE_TO_FULL_NAME = {
+    'de': 'german', 'en': 'english', 'es': 'spanish', 'fr': 'french',
+    'ru': 'russian', 'uk': 'ukrainian', 'pt': 'portuguese', 'it': 'italian',
+    'zh': 'chinese', 'ja': 'japanese', 'ko': 'korean', 'hi': 'hindi',
+    'ar': 'arabic', 'tr': 'turkish', 'pl': 'polish', 'ro': 'romanian',
+    'sr': 'serbian', 'sw': 'swahili'
+};
+
 // Middleware
 // Response compression (gzip/brotli) - reduces bandwidth by ~70-90%
 app.use(compression({
@@ -3270,7 +3279,9 @@ app.post('/api/onboarding/import-word-sets', async (req, res) => {
             return res.status(404).json({ error: 'Language pair not found' });
         }
 
-        const sourceLanguage = langPairResult.rows[0].from_lang;
+        // Map short language codes to full table names
+        const sourceLanguageCode = langPairResult.rows[0].from_lang;
+        const sourceLanguage = LANG_CODE_TO_FULL_NAME[sourceLanguageCode] || sourceLanguageCode;
         const tableName = `source_words_${sourceLanguage}`;
 
         let totalWordsAdded = 0;
@@ -8625,22 +8636,7 @@ app.get('/api/word-lists/:id', async (req, res) => {
         const source_lang = collectionData.source_lang;
 
         // Build language table mapping
-        const langTableMap = {
-            'ru': 'russian',
-            'pl': 'polish',
-            'ar': 'arabic',
-            'tr': 'turkish',
-            'ro': 'romanian',
-            'sr': 'serbian',
-            'uk': 'ukrainian',
-            'en': 'english',
-            'it': 'italian',
-            'es': 'spanish',
-            'pt': 'portuguese',
-            'sw': 'swahili'
-        };
-
-        const targetLangTable = native_lang ? langTableMap[native_lang] : null;
+        const targetLangTable = native_lang ? LANG_CODE_TO_FULL_NAME[native_lang] : null;
 
         if (!targetLangTable) {
             // No native language specified or not supported, return without translations
@@ -8777,22 +8773,7 @@ app.post('/api/word-lists/:id/import', async (req, res) => {
         const source_lang = collection.rows[0].source_lang;
 
         // Build table names
-        const langTableMap = {
-            'ru': 'russian',
-            'pl': 'polish',
-            'ar': 'arabic',
-            'tr': 'turkish',
-            'ro': 'romanian',
-            'sr': 'serbian',
-            'uk': 'ukrainian',
-            'en': 'english',
-            'it': 'italian',
-            'es': 'spanish',
-            'pt': 'portuguese',
-            'sw': 'swahili'
-        };
-
-        const targetLangTable = langTableMap[native_lang];
+        const targetLangTable = LANG_CODE_TO_FULL_NAME[native_lang];
         if (!targetLangTable) {
             return res.status(400).json({ error: `Unsupported native language: ${native_lang}` });
         }
@@ -12460,7 +12441,9 @@ app.get('/api/words/counts', async (req, res) => {
             });
         }
 
-        const sourceLanguage = langPairResult.rows[0].from_lang;
+        // Map short language codes to full table names
+        const sourceLanguageCode = langPairResult.rows[0].from_lang;
+        const sourceLanguage = LANG_CODE_TO_FULL_NAME[sourceLanguageCode] || sourceLanguageCode;
 
         // Get counts using new helper function
         const counts = await getWordCountsByStatus(
@@ -12496,7 +12479,9 @@ app.get('/api/words/random/:status/:count', async (req, res) => {
             return res.status(404).json({ error: 'Language pair not found' });
         }
 
-        const sourceLanguage = langPairResult.rows[0].from_lang;
+        // Map short language codes to full table names
+        const sourceLanguageCode = langPairResult.rows[0].from_lang;
+        const sourceLanguage = LANG_CODE_TO_FULL_NAME[sourceLanguageCode] || sourceLanguageCode;
 
         // Get words using new architecture
         const words = await getWordsWithProgress(
@@ -12780,7 +12765,9 @@ app.put('/api/words/:id/progress', async (req, res) => {
             return res.status(404).json({ error: 'Language pair not found' });
         }
 
-        const sourceLanguage = langPairResult.rows[0].from_lang;
+        // Map short language codes to full table names
+        const sourceLanguageCode = langPairResult.rows[0].from_lang;
+        const sourceLanguage = LANG_CODE_TO_FULL_NAME[sourceLanguageCode] || sourceLanguageCode;
         const tableName = `source_words_${sourceLanguage}`;
 
         // Get the source word
