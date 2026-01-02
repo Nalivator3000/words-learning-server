@@ -12614,6 +12614,8 @@ app.get('/api/words/random-proportional/:count', async (req, res) => {
                         AND uwp.language_pair_id = $3
                         AND uwp.source_language = $4
                         AND (uwp.next_review_date IS NULL OR uwp.next_review_date <= CURRENT_TIMESTAMP)
+                        AND tt.translation IS NOT NULL
+                        AND tt.translation != ''
                     ORDER BY RANDOM()
                     LIMIT $5
                 `;
