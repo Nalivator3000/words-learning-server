@@ -11850,8 +11850,9 @@ app.get('/api/words/popular/:userId', async (req, res) => {
  * @param {boolean} onlyDue - For review words, only return words due for review
  * @returns {Promise<Array>} Array of word objects with progress data
  */
-async function getWordsWithProgress(userId, languagePairId, sourceLanguage, status, limit, onlyDue = true) {
-    const tableName = `source_words_${sourceLanguage}`;
+async function getWordsWithProgress(userId, languagePairId, sourceLanguage, sourceLanguageCode, targetLanguage, targetLanguageCode, status, limit, onlyDue = true) {
+    const sourceTableName = `source_words_${sourceLanguage}`;
+    const translationTableName = `target_translations_${targetLanguage}`;
 
     let query;
     let params;
@@ -11877,7 +11878,7 @@ async function getWordsWithProgress(userId, languagePairId, sourceLanguage, stat
                 NULL as next_review_date,
                 2.50 as ease_factor,
                 $1 as source_language
-            FROM ${tableName} sw
+            FROM ${sourceTableName} sw
             WHERE NOT EXISTS (
                 SELECT 1 FROM user_word_progress uwp
                 WHERE uwp.user_id = $2
@@ -11899,9 +11900,9 @@ async function getWordsWithProgress(userId, languagePairId, sourceLanguage, stat
                 sw.word,
                 sw.level,
                 sw.theme,
-                uwp.translation,
-                uwp.example,
-                uwp.example_translation,
+                tt.translation,
+                sw.example_${sourceLanguageCode} as example,
+                tt.example_${targetLanguageCode} as example_translation,
                 uwp.status,
                 uwp.correct_count,
                 uwp.incorrect_count,
@@ -11912,19 +11913,21 @@ async function getWordsWithProgress(userId, languagePairId, sourceLanguage, stat
                 uwp.ease_factor,
                 uwp.source_language,
                 uwp.id as progress_id
-            FROM ${tableName} sw
+            FROM ${sourceTableName} sw
             INNER JOIN user_word_progress uwp ON (
                 uwp.source_word_id = sw.id
                 AND uwp.source_language = $1
                 AND uwp.user_id = $2
                 AND uwp.language_pair_id = $3
             )
+            LEFT JOIN ${translationTableName} tt ON tt.source_word_id = sw.id
+                AND tt.source_lang = $5
             WHERE uwp.status LIKE 'review_%'
             ${onlyDue ? 'AND (uwp.next_review_date IS NULL OR uwp.next_review_date <= CURRENT_TIMESTAMP)' : ''}
             ORDER BY RANDOM()
             LIMIT $4
         `;
-        params = [sourceLanguage, userId, languagePairId, limit];
+        params = [sourceLanguage, userId, languagePairId, limit, sourceLanguageCode];
 
     } else {
         // Get words with specific status (studying, mastered, etc.)
@@ -11935,9 +11938,9 @@ async function getWordsWithProgress(userId, languagePairId, sourceLanguage, stat
                 sw.word,
                 sw.level,
                 sw.theme,
-                uwp.translation,
-                uwp.example,
-                uwp.example_translation,
+                tt.translation,
+                sw.example_${sourceLanguageCode} as example,
+                tt.example_${targetLanguageCode} as example_translation,
                 uwp.status,
                 uwp.correct_count,
                 uwp.incorrect_count,
@@ -11948,21 +11951,31 @@ async function getWordsWithProgress(userId, languagePairId, sourceLanguage, stat
                 uwp.ease_factor,
                 uwp.source_language,
                 uwp.id as progress_id
-            FROM ${tableName} sw
+            FROM ${sourceTableName} sw
             INNER JOIN user_word_progress uwp ON (
                 uwp.source_word_id = sw.id
                 AND uwp.source_language = $1
                 AND uwp.user_id = $2
                 AND uwp.language_pair_id = $3
             )
+            LEFT JOIN ${translationTableName} tt ON tt.source_word_id = sw.id
+                AND tt.source_lang = $5
             WHERE uwp.status = $4
             ORDER BY RANDOM()
-            LIMIT $5
+            LIMIT $6
         `;
-        params = [sourceLanguage, userId, languagePairId, status, limit];
+        params = [sourceLanguage, userId, languagePairId, status, sourceLanguageCode, limit];
     }
 
     const result = await db.query(query, params);
+
+    // Set defaults for missing translations
+    result.rows.forEach(word => {
+        if (!word.translation) word.translation = '';
+        if (!word.example) word.example = '';
+        if (!word.example_translation) word.example_translation = '';
+    });
+
     return result.rows;
 }
 
@@ -12472,13 +12485,18 @@ app.get('/api/words/random/:status/:count', async (req, res) => {
 
         // Map short language codes to full table names
         const sourceLanguageCode = langPairResult.rows[0].from_lang;
+        const targetLanguageCode = langPairResult.rows[0].to_lang;
         const sourceLanguage = LANG_CODE_TO_FULL_NAME[sourceLanguageCode] || sourceLanguageCode;
+        const targetLanguage = LANG_CODE_TO_FULL_NAME[targetLanguageCode] || targetLanguageCode;
 
         // Get words using new architecture
         const words = await getWordsWithProgress(
             parseInt(userId),
             parseInt(languagePairId),
             sourceLanguage,
+            sourceLanguageCode,
+            targetLanguage,
+            targetLanguageCode,
             status,
             parseInt(count)
         );
