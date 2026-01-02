@@ -205,17 +205,22 @@ class I18nManager {
 
 // Create global instance
 const i18n = new I18nManager();
+window.i18n = i18n; // Expose globally
 
 // Auto-initialize when DOM is ready
 if (document.readyState === 'loading') {
     document.addEventListener('DOMContentLoaded', async () => {
         await i18n.loadTranslations();
         i18n.updateDOM();
+        // Dispatch event when translations are ready
+        window.dispatchEvent(new CustomEvent('translationsLoaded'));
     });
 } else {
     // DOM already loaded
     i18n.loadTranslations().then(() => {
         i18n.updateDOM();
+        // Dispatch event when translations are ready
+        window.dispatchEvent(new CustomEvent('translationsLoaded'));
     });
 }
 

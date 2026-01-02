@@ -159,7 +159,24 @@ class AuthValidation {
     }
 }
 
-// Initialize on page load
-document.addEventListener('DOMContentLoaded', () => {
+// Initialize on page load, after translations are loaded
+function initAuthValidation() {
     window.authValidation = new AuthValidation();
-});
+}
+
+// Wait for translations to load before initializing
+if (window.i18n && window.i18n.translations && Object.keys(window.i18n.translations).length > 0) {
+    // Translations already loaded
+    initAuthValidation();
+} else {
+    // Wait for translations to load
+    window.addEventListener('translationsLoaded', initAuthValidation);
+
+    // Fallback: if translations don't load within 2 seconds, initialize anyway
+    setTimeout(() => {
+        if (!window.authValidation) {
+            console.warn('⚠️  Auth validation initialized without translations');
+            initAuthValidation();
+        }
+    }, 2000);
+}
