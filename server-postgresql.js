@@ -12031,9 +12031,6 @@ async function getWordCountsByStatus(userId, languagePairId, sourceLanguage) {
  */
 async function updateWordProgress(userId, languagePairId, sourceLanguage, sourceWordId, progressData) {
     const {
-        translation,
-        example,
-        exampleTranslation,
         status,
         correctCount,
         incorrectCount,
@@ -12055,21 +12052,17 @@ async function updateWordProgress(userId, languagePairId, sourceLanguage, source
         await db.query(`
             UPDATE user_word_progress
             SET
-                translation = COALESCE($1, translation),
-                example = COALESCE($2, example),
-                example_translation = COALESCE($3, example_translation),
-                status = $4,
-                correct_count = $5,
-                incorrect_count = $6,
-                total_reviews = $7,
-                review_cycle = $8,
+                status = $1,
+                correct_count = $2,
+                incorrect_count = $3,
+                total_reviews = $4,
+                review_cycle = $5,
                 last_review_date = CURRENT_TIMESTAMP,
-                next_review_date = $9,
-                ease_factor = $10,
+                next_review_date = $6,
+                ease_factor = $7,
                 updated_at = CURRENT_TIMESTAMP
-            WHERE id = $11
+            WHERE id = $8
         `, [
-            translation, example, exampleTranslation,
             status, correctCount, incorrectCount, totalReviews,
             reviewCycle, nextReviewDate, easeFactor,
             existing.rows[0].id
@@ -12081,14 +12074,12 @@ async function updateWordProgress(userId, languagePairId, sourceLanguage, source
         const result = await db.query(`
             INSERT INTO user_word_progress (
                 user_id, language_pair_id, source_language, source_word_id,
-                translation, example, example_translation,
                 status, correct_count, incorrect_count, total_reviews,
                 review_cycle, last_review_date, next_review_date, ease_factor
-            ) VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9, $10, $11, $12, CURRENT_TIMESTAMP, $13, $14)
+            ) VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9, CURRENT_TIMESTAMP, $10, $11)
             RETURNING id
         `, [
             userId, languagePairId, sourceLanguage, sourceWordId,
-            translation, example, exampleTranslation,
             status, correctCount, incorrectCount, totalReviews,
             reviewCycle, nextReviewDate, easeFactor
         ]);
@@ -12933,9 +12924,6 @@ app.put('/api/words/:id/progress', async (req, res) => {
             sourceLanguage,
             sourceWordId,
             {
-                translation: null, // Translation can be added later if needed
-                example: null,
-                exampleTranslation: null,
                 status: newStatus,
                 correctCount: newCorrectCount,
                 incorrectCount: newIncorrectCount,
