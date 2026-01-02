@@ -225,7 +225,7 @@ class WordListsUI {
 
         // Update i18n
         if (window.i18n) {
-            i18n.updatePageTranslations();
+            i18n.updateDOM();
         }
     }
 
@@ -708,7 +708,7 @@ class WordListsUI {
 
                 // Update i18n
                 if (window.i18n) {
-                    i18n.updatePageTranslations();
+                    i18n.updateDOM();
                 }
             }
         } catch (error) {
@@ -834,7 +834,7 @@ class WordListsUI {
 
             // Update i18n in modal
             if (window.i18n) {
-                i18n.updatePageTranslations();
+                i18n.updateDOM();
             }
         } catch (error) {
             console.error('Error viewing word set:', error);
