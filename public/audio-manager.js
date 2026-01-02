@@ -91,16 +91,23 @@ class AudioManager {
     }
 
     initVoices() {
+        let isFirstLoad = true;
+
         const loadVoices = () => {
             this.allVoices = this.synth.getVoices();
 
-            console.log(`🔊 AudioManager: Found ${this.allVoices.length} total voices`);
+            // Only log detailed info after voices are loaded (not on initial empty load)
+            if (this.allVoices.length > 0) {
+                console.log(`🔊 AudioManager: Found ${this.allVoices.length} total voices`);
+                this.selectVoicesForLanguages(this.allVoices);
 
-            this.selectVoicesForLanguages(this.allVoices);
-
-            // Populate UI if it exists
-            if (window.app && window.app.populateVoiceSelectors) {
-                window.app.populateVoiceSelectors(this.allVoices);
+                // Populate UI if it exists
+                if (window.app && window.app.populateVoiceSelectors) {
+                    window.app.populateVoiceSelectors(this.allVoices);
+                }
+            } else if (isFirstLoad) {
+                console.log(`🔊 AudioManager: Waiting for voices to load asynchronously...`);
+                isFirstLoad = false;
             }
         };
 

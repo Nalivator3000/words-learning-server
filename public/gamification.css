@@ -913,9 +913,6 @@
 .goal-info {
     flex: 1;
     min-width: 120px;
-    display: flex;
-    flex-direction: column;
-    justify-content: center;
 }
 
 .goal-label {
@@ -938,6 +935,7 @@
     overflow: hidden;
     position: relative;
     align-self: center;
+    margin: auto 0; /* Force vertical centering */
 }
 
 .goal-progress-fill {

@@ -663,9 +663,12 @@ class LanguageManager {
             this.currentUILanguage = savedLanguage;
         }
 
-        // Sync with new i18n system if available
+        // Sync with new i18n system if available - wait for translations to load
         if (typeof i18n !== 'undefined' && i18n.setLanguage) {
-            i18n.setLanguage(this.currentUILanguage);
+            // Wait for translations to load before setting language
+            window.addEventListener('translationsLoaded', () => {
+                i18n.setLanguage(this.currentUILanguage);
+            }, { once: true });
         }
 
         // Update UI on load
