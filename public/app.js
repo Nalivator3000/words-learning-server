@@ -286,10 +286,19 @@ class LanguageLearningApp {
         document.getElementById('loginTab').addEventListener('click', () => this.switchAuthTab('login'));
         document.getElementById('registerTab').addEventListener('click', () => this.switchAuthTab('register'));
         
-        // Auth form submissions
-        document.getElementById('loginBtn').addEventListener('click', () => this.handleLogin());
-        document.getElementById('registerBtn').addEventListener('click', () => this.handleRegister());
-        document.getElementById('googleLoginBtn').addEventListener('click', () => this.handleGoogleLogin());
+        // Auth form submissions - add both click and touchend for mobile reliability
+        const loginBtn = document.getElementById('loginBtn');
+        const registerBtn = document.getElementById('registerBtn');
+        const googleLoginBtn = document.getElementById('googleLoginBtn');
+
+        loginBtn.addEventListener('click', () => this.handleLogin());
+        loginBtn.addEventListener('touchend', (e) => { e.preventDefault(); this.handleLogin(); });
+
+        registerBtn.addEventListener('click', () => this.handleRegister());
+        registerBtn.addEventListener('touchend', (e) => { e.preventDefault(); this.handleRegister(); });
+
+        googleLoginBtn.addEventListener('click', () => this.handleGoogleLogin());
+        googleLoginBtn.addEventListener('touchend', (e) => { e.preventDefault(); this.handleGoogleLogin(); });
         
         // Enter key support for auth forms
         document.getElementById('loginPassword').addEventListener('keypress', (e) => {

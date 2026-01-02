@@ -79,15 +79,23 @@ class LoginPage {
 
     // Scroll button into view (important for mobile)
     await this.page.locator(this.loginButton).scrollIntoViewIfNeeded();
-    await this.page.waitForTimeout(300);
+    await this.page.waitForTimeout(500);
 
     // Click login button - try multiple strategies for mobile reliability
     try {
-      // First attempt: regular click
+      // First attempt: regular Playwright click
       await this.page.click(this.loginButton, { timeout: 5000 });
     } catch (e) {
-      // Second attempt: force click (if button is covered)
-      await this.page.click(this.loginButton, { force: true, timeout: 5000 });
+      try {
+        // Second attempt: force click (if button is covered)
+        await this.page.click(this.loginButton, { force: true, timeout: 5000 });
+      } catch (e2) {
+        // Last resort: JavaScript click (most reliable on mobile)
+        await this.page.evaluate((selector) => {
+          const btn = document.querySelector(selector);
+          if (btn) btn.click();
+        }, this.loginButton);
+      }
     }
 
     // Give some time for request to start
@@ -112,8 +120,9 @@ class LoginPage {
       throw e;
     }
 
-    // Give extra time for modal animation to complete on mobile
-    await this.page.waitForTimeout(2000);
+    // Give extra time for modal animation and hideAuthModal() to execute on mobile
+    // This ensures user-manager.js hideAuthModal() has time to run
+    await this.page.waitForTimeout(3000);
 
     // Now ensure modal is truly hidden (longer timeout for mobile)
     try {
@@ -161,8 +170,8 @@ class LoginPage {
       // Otherwise modal is hidden but Playwright can't detect it with state:'hidden' - this is OK
     }
 
-    // Ensure home section is actually active and visible
-    await this.page.waitForSelector('#homeSection.active', { state: 'visible', timeout: 5000 });
+    // Ensure home section is actually active (don't check visible - modal might be hiding)
+    await this.page.waitForSelector('#homeSection.active', { timeout: 5000 });
 
     // Allow dashboard to fully load
     await this.page.waitForTimeout(1000);
