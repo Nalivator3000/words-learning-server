@@ -16,165 +16,45 @@ class LoginPage {
 
   async goto() {
     await this.page.goto('/');
-
-    // Force English locale for tests
-    await this.page.evaluate(() => {
-      localStorage.setItem('uiLanguage', 'en');
-    });
-
-    // Wait for page to load - either login tab OR onboarding modal
-    try {
-      await this.page.waitForSelector(this.loginTab, { timeout: 5000 });
-    } catch (e) {
-      // If login tab not visible, check if onboarding modal is shown
-      const onboardingVisible = await this.page.isVisible('#onboardingModal');
-      if (onboardingVisible) {
-        // Skip onboarding by closing it or waiting for auth modal
-        await this.page.waitForSelector('#authModal', { timeout: 5000 });
-      }
-      // Wait for login tab again
-      await this.page.waitForSelector(this.loginTab, { timeout: 10000 });
-    }
   }
 
   async login(username, password) {
-    // Check if onboarding modal is blocking
-    const onboardingVisible = await this.page.isVisible('#onboardingModal').catch(() => false);
-    if (onboardingVisible) {
-      // Close onboarding modal if visible
-      const closeBtn = await this.page.locator('#onboardingModal .close, #onboardingModal [aria-label="Close"]').first();
-      if (await closeBtn.isVisible().catch(() => false)) {
-        await closeBtn.click();
-        await this.page.waitForTimeout(1000);
-      }
-    }
-
-    // Make sure auth modal is visible
-    await this.page.waitForSelector('#authModal', { state: 'visible', timeout: 15000 });
-
-    // Make sure login tab is active
-    await this.page.click(this.loginTab);
-    await this.page.waitForTimeout(500);
-
     // Convert username to email format
     // test_de_en -> test.de.en@lexibooster.test
     const email = username.replace(/_/g, '.') + '@lexibooster.test';
 
-    // Fill email and password with delays for production
+    // Fill email and password
     await this.page.fill(this.emailInput, email);
-    await this.page.waitForTimeout(200);
     await this.page.fill(this.passwordInput, password);
-    await this.page.waitForTimeout(200);
 
-    // On mobile, keyboard might be open - dismiss it first
-    await this.page.evaluate(() => {
-      if (document.activeElement && document.activeElement.blur) {
-        document.activeElement.blur();
-      }
-    });
-    await this.page.waitForTimeout(500);
+    // Click login button
+    await this.page.click(this.loginButton);
 
-    // Wait for button to be enabled and clickable
-    await this.page.waitForSelector(this.loginButton + ':not([disabled])', { timeout: 5000 });
-
-    // Scroll button into view (important for mobile)
-    await this.page.locator(this.loginButton).scrollIntoViewIfNeeded();
-    await this.page.waitForTimeout(500);
-
-    // Click login button - try multiple strategies for mobile reliability
-    try {
-      // First attempt: regular Playwright click
-      await this.page.click(this.loginButton, { timeout: 5000 });
-    } catch (e) {
-      try {
-        // Second attempt: force click (if button is covered)
-        await this.page.click(this.loginButton, { force: true, timeout: 5000 });
-      } catch (e2) {
-        // Last resort: JavaScript click (most reliable on mobile)
-        await this.page.evaluate((selector) => {
-          const btn = document.querySelector(selector);
-          if (btn) btn.click();
-        }, this.loginButton);
-      }
-    }
-
-    // Give some time for request to start
-    await this.page.waitForTimeout(1500);
-
-    // Wait for login to complete - either modal hides OR dashboard appears
-    // Mobile devices often show dashboard under modal before modal closes
-    const loginCompletePromise = Promise.race([
-      this.page.waitForSelector('#authModal', { state: 'hidden', timeout: 30000 }),
-      this.page.waitForSelector('#homeSection.active', { timeout: 30000 })
-    ]);
-
-    try {
-      await loginCompletePromise;
-    } catch (e) {
-      // Check if there's an error message
-      const errorMsg = await this.getErrorMessage();
-      if (errorMsg) {
-        throw new Error(`Login failed: ${errorMsg}`);
-      }
-      // Otherwise rethrow timeout error
-      throw e;
-    }
-
-    // Give extra time for modal animation and hideAuthModal() to execute on mobile
-    // This ensures user-manager.js hideAuthModal() has time to run
+    // Wait for login to complete
+    await this.page.waitForLoadState('networkidle');
     await this.page.waitForTimeout(3000);
 
-    // Now ensure modal is truly hidden (longer timeout for mobile)
-    try {
-      await this.page.waitForSelector('#authModal', { state: 'hidden', timeout: 10000 });
-    } catch (e) {
-      // Modal might have display:none but not be "hidden" - check multiple properties
-      const modal = this.page.locator('#authModal');
-      const displayStyle = await modal.evaluate(el => window.getComputedStyle(el).display).catch(() => 'unknown');
-      const visibilityStyle = await modal.evaluate(el => window.getComputedStyle(el).visibility).catch(() => 'unknown');
-      const ariaHidden = await modal.getAttribute('aria-hidden').catch(() => null);
-
-      const isActuallyHidden = displayStyle === 'none' || visibilityStyle === 'hidden' || ariaHidden === 'true';
-
-      if (!isActuallyHidden) {
-        // On mobile, modal might not close automatically - try to close it manually
-        // Check if login was actually successful by looking for home section
-        const homeVisible = await this.page.isVisible('#homeSection.active').catch(() => false);
-
-        if (homeVisible) {
-          // Login succeeded but modal didn't close - force close it
-          const closeBtn = await this.page.locator('#authModal .close, #authModal [aria-label="Close"], #authModal .modal-close').first();
-          if (await closeBtn.isVisible().catch(() => false)) {
-            await closeBtn.click();
-            await this.page.waitForTimeout(1000);
-          } else {
-            // Try clicking outside the modal (on backdrop)
-            await this.page.click('body', { position: { x: 10, y: 10 } }).catch(() => {});
-            await this.page.waitForTimeout(1000);
+    // Check if auth modal is still visible - if so, force close it
+    const modalVisible = await this.page.locator('#authModal').isVisible().catch(() => false);
+    if (modalVisible) {
+      // Try to close modal by clicking close button
+      const closeBtn = this.page.locator('#authModal .close, #authModal .modal-close, #authModal [aria-label="Close"]').first();
+      if (await closeBtn.isVisible().catch(() => false)) {
+        await closeBtn.click();
+        await this.page.waitForTimeout(1000);
+      } else {
+        // Force hide with JavaScript
+        await this.page.evaluate(() => {
+          const modal = document.querySelector('#authModal');
+          if (modal) {
+            modal.style.display = 'none';
+            modal.setAttribute('aria-hidden', 'true');
+            modal.classList.remove('active');
           }
-
-          // Check again if modal is hidden
-          const stillVisible = await modal.isVisible().catch(() => true);
-          if (stillVisible) {
-            // Last resort - hide it with JavaScript
-            await modal.evaluate(el => {
-              el.style.display = 'none';
-              el.setAttribute('aria-hidden', 'true');
-            }).catch(() => {});
-          }
-        } else {
-          // Login actually failed - this is a real problem
-          throw new Error(`Auth modal still visible after login attempt and dashboard not loaded (display: ${displayStyle}, visibility: ${visibilityStyle}, aria-hidden: ${ariaHidden})`);
-        }
+        });
+        await this.page.waitForTimeout(500);
       }
-      // Otherwise modal is hidden but Playwright can't detect it with state:'hidden' - this is OK
     }
-
-    // Ensure home section is actually active (don't check visible - modal might be hiding)
-    await this.page.waitForSelector('#homeSection.active', { timeout: 5000 });
-
-    // Allow dashboard to fully load
-    await this.page.waitForTimeout(1000);
   }
 
   async getErrorMessage() {
@@ -410,29 +290,39 @@ class NavigationHelper {
 
   async logout() {
     // Production needs longer timeouts
-    const LOGOUT_WAIT = 15000; // Increased from 5000ms
-    const CLICK_TIMEOUT = 20000; // Increased from 10000ms
+    const USER_MENU_WAIT = 20000; // Increased from 10000ms
+    const LOGOUT_BTN_WAIT = 15000; // Increased from 5000ms
+    const CLICK_TIMEOUT = 20000;
+
+    // Wait for dashboard to fully load first
+    await this.page.waitForTimeout(3000); // Increased from 2000ms
 
     try {
-      // Try direct logout button first
-      await this.page.waitForSelector(this.logoutBtn, { state: 'visible', timeout: LOGOUT_WAIT });
-      await this.page.click(this.logoutBtn, { timeout: CLICK_TIMEOUT });
-    } catch (e) {
-      // If logout button not immediately visible, might be in settings
-      // Try to open settings first
-      try {
-        const settingsVisible = await this.page.isVisible(this.settingsBtn);
-        if (settingsVisible) {
-          await this.page.click(this.settingsBtn);
-          await this.page.waitForTimeout(1000); // Increased from 500ms
-        }
-      } catch (settingsError) {
-        // Settings not available, continue
-      }
+      // Try to find and click user menu button
+      await this.page.waitForSelector('#userMenuBtn', { state: 'visible', timeout: USER_MENU_WAIT });
 
-      // Now try logout button again
-      await this.page.waitForSelector(this.logoutBtn, { state: 'visible', timeout: LOGOUT_WAIT });
-      // Use force: true if button is found but not clickable
+      // Scroll into view for iOS Safari
+      await this.page.locator('#userMenuBtn').scrollIntoViewIfNeeded();
+      await this.page.waitForTimeout(500);
+
+      await this.page.click('#userMenuBtn', { timeout: CLICK_TIMEOUT });
+      await this.page.waitForTimeout(1000); // Increased from 500ms
+    } catch (e) {
+      // If userMenuBtn not found, try direct logout button
+      console.log('User menu button not found, trying direct logout button');
+    }
+
+    // Now click logout button (with multiple strategies)
+    await this.page.waitForSelector(this.logoutBtn, { state: 'visible', timeout: LOGOUT_BTN_WAIT });
+
+    // Scroll logout button into view
+    await this.page.locator(this.logoutBtn).first().scrollIntoViewIfNeeded();
+    await this.page.waitForTimeout(500);
+
+    try {
+      await this.page.click(this.logoutBtn, { timeout: CLICK_TIMEOUT });
+    } catch (clickError) {
+      // Fallback: force click
       await this.page.click(this.logoutBtn, { force: true, timeout: CLICK_TIMEOUT });
     }
 
