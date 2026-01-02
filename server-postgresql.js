@@ -146,7 +146,7 @@ app.use(helmet({
             imgSrc: ["'self'", "data:", "https:", "blob:"],
             mediaSrc: ["'self'", "blob:", "https://ssl.gstatic.com", "https://*.gstatic.com"],
             connectSrc: ["'self'", "http://localhost:3000", "http://localhost:*", "ws://localhost:*", "wss://localhost:*", "https://cdn.jsdelivr.net", "https://accounts.google.com", "chrome-extension:", "moz-extension:", "chrome-extension://*", "moz-extension://*"],
-            frameSrc: ["'none'", "https://accounts.google.com"],
+            frameSrc: ["https://accounts.google.com"],
             objectSrc: ["'none'"],
             baseUri: ["'self'"],
             formAction: ["'self'"],
