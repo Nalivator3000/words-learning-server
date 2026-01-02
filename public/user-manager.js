@@ -37,12 +37,18 @@ class UserManager {
     }
 
     showAuthModal() {
-        document.getElementById('authModal').style.display = 'flex';
+        const modal = document.getElementById('authModal');
+        modal.style.display = 'flex';
+        modal.setAttribute('aria-hidden', 'false');
+        modal.style.visibility = 'visible';
         document.querySelector('.container').style.display = 'none';
     }
 
     hideAuthModal() {
-        document.getElementById('authModal').style.display = 'none';
+        const modal = document.getElementById('authModal');
+        modal.style.display = 'none';
+        modal.setAttribute('aria-hidden', 'true');
+        modal.style.visibility = 'hidden';
         document.querySelector('.container').style.display = 'block';
     }
 

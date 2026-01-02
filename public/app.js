@@ -323,10 +323,8 @@ class LanguageLearningApp {
 
         try {
             await userManager.login(email, password);
-            // Note: userManager.login will redirect to onboarding if needed
-
-            // Close auth modal
-            document.getElementById('authModal').style.display = 'none';
+            // Note: userManager.login already closes the auth modal
+            // and will redirect to onboarding if needed
 
             this.showSection('home');
             await this.updateStats();

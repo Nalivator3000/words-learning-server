@@ -72,17 +72,23 @@ class LoginPage {
     await this.page.waitForSelector('#homeSection.active', { timeout: 20000 });
 
     // On mobile devices, modal might still be transitioning out
-    // Wait for modal to be truly hidden OR detached from DOM
+    // Wait for modal to be truly hidden
     try {
       await this.page.waitForSelector('#authModal', { state: 'hidden', timeout: 5000 });
     } catch (e) {
-      // Modal might have display:none but not be "hidden" - check if it's actually visible
-      const isVisible = await this.page.isVisible('#authModal');
-      if (isVisible) {
-        // If still visible, this is a real problem
-        throw new Error('Auth modal still visible after successful login');
+      // Modal might have display:none but not be "hidden" - check multiple properties
+      const modal = this.page.locator('#authModal');
+      const displayStyle = await modal.evaluate(el => window.getComputedStyle(el).display);
+      const visibilityStyle = await modal.evaluate(el => window.getComputedStyle(el).visibility);
+      const ariaHidden = await modal.getAttribute('aria-hidden');
+
+      const isActuallyHidden = displayStyle === 'none' || visibilityStyle === 'hidden' || ariaHidden === 'true';
+
+      if (!isActuallyHidden) {
+        // If still visible by all metrics, this is a real problem
+        throw new Error(`Auth modal still visible after successful login (display: ${displayStyle}, visibility: ${visibilityStyle}, aria-hidden: ${ariaHidden})`);
       }
-      // Otherwise modal is hidden but Playwright can't detect it - this is OK
+      // Otherwise modal is hidden but Playwright can't detect it with state:'hidden' - this is OK
     }
 
     // Allow dashboard to fully load
