@@ -929,11 +929,12 @@
 
 .goal-progress-bar {
     flex: 2;
-    height: 10px;
+    height: 12px;
     background: #dee2e6;
     border-radius: 10px;
     overflow: hidden;
     position: relative;
+    align-self: center;
 }
 
 .goal-progress-fill {
