@@ -178,7 +178,7 @@ class Gamification {
                     <span class="xp-text">${totalXP} XP</span>
                 </div>
                 <div class="streak-display" title="Current Streak">
-                    🔥 ${currentStreak} ${this.getStreakDaysText(currentStreak)}
+                    🔥 ${currentStreak} ${i18n.t(currentStreak === 1 ? 'day' : 'days')}
                 </div>
             </div>
         `;
@@ -489,14 +489,14 @@ class Gamification {
         containerElement.innerHTML = `
             <div class="daily-goals-card ${allCompleted ? 'completed' : ''}">
                 <div class="daily-goals-header">
-                    <h3>🎯 Daily Goals</h3>
-                    ${allCompleted ? '<span class="goals-completed-badge">✅ Completed!</span>' : ''}
+                    <h3>🎯 ${i18n.t('daily_goals_title')}</h3>
+                    ${allCompleted ? `<span class="goals-completed-badge">✅ ${i18n.t('goals_completed')}</span>` : ''}
                 </div>
                 <div class="daily-goals-list">
                     <div class="goal-item ${goals.xp_progress >= goals.xp_goal ? 'completed' : ''}">
                         <div class="goal-icon">⭐</div>
                         <div class="goal-info">
-                            <div class="goal-label">Daily XP</div>
+                            <div class="goal-label">${i18n.t('daily_xp')}</div>
                             <div class="goal-progress-text">${goals.xp_progress} / ${goals.xp_goal}</div>
                         </div>
                         <div class="goal-progress-bar">
@@ -506,7 +506,7 @@ class Gamification {
                     <div class="goal-item ${goals.words_progress >= goals.words_goal ? 'completed' : ''}">
                         <div class="goal-icon">📚</div>
                         <div class="goal-info">
-                            <div class="goal-label">Words Learned</div>
+                            <div class="goal-label">${i18n.t('words_learned')}</div>
                             <div class="goal-progress-text">${goals.words_progress} / ${goals.words_goal}</div>
                         </div>
                         <div class="goal-progress-bar">
@@ -516,7 +516,7 @@ class Gamification {
                     <div class="goal-item ${goals.quizzes_progress >= goals.quizzes_goal ? 'completed' : ''}">
                         <div class="goal-icon">✏️</div>
                         <div class="goal-info">
-                            <div class="goal-label">Exercises Completed</div>
+                            <div class="goal-label">${i18n.t('exercises_completed')}</div>
                             <div class="goal-progress-text">${goals.quizzes_progress} / ${goals.quizzes_goal}</div>
                         </div>
                         <div class="goal-progress-bar">
@@ -524,7 +524,7 @@ class Gamification {
                         </div>
                     </div>
                 </div>
-                ${allCompleted ? '<div class="goals-reward">🎁 +25 XP bonus for completing all goals!</div>' : ''}
+                ${allCompleted ? `<div class="goals-reward">🎁 ${i18n.t('goals_bonus')}</div>` : ''}
             </div>
         `;
     }
