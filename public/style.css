@@ -1,4 +1,4 @@
-/* LexyBooster v5.3.2 - Ultra Modern 3D Design System with Add-Word Modal Dark Theme Fix */
+/* LexyBooster v5.3.3 - Ultra Modern 3D Design System with Add-Word Modal Dark Theme Fix */
 @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&display=swap');
 
 :root {
@@ -1459,11 +1459,52 @@ textarea {
     justify-content: flex-end;
 }
 
-.form-actions .btn-secondary,
-.form-actions .btn-primary,
-.form-actions .btn-success {
+/* Add-word modal buttons */
+#addWordModal .btn-primary,
+#addWordModal .btn-secondary,
+#addWordModal .btn-success {
+    padding: var(--space-3) var(--space-6);
+    border-radius: var(--radius-lg);
+    font-size: var(--text-base);
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.2s ease;
+    border: 2px solid transparent;
     flex: 1;
     max-width: 200px;
+}
+
+#addWordModal .btn-primary {
+    background: linear-gradient(135deg, var(--accent-purple), var(--accent-cyan));
+    color: white;
+    border: none;
+}
+
+#addWordModal .btn-primary:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 8px 20px rgba(139, 92, 246, 0.4);
+}
+
+#addWordModal .btn-secondary {
+    background: rgba(255, 255, 255, 0.1);
+    color: white;
+    border: 2px solid rgba(255, 255, 255, 0.3);
+}
+
+#addWordModal .btn-secondary:hover {
+    background: rgba(255, 255, 255, 0.2);
+    border-color: rgba(255, 255, 255, 0.5);
+}
+
+#addWordModal .btn-success {
+    background: linear-gradient(135deg, #10B981, #059669);
+    color: white;
+    border: none;
+}
+
+#addWordModal .btn-success:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 8px 20px rgba(16, 185, 129, 0.4);
 }
 
 /* Enhanced Container */
