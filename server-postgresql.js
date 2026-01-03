@@ -3014,7 +3014,7 @@ app.post('/api/word-sets/:setId/import', async (req, res) => {
         let paramIndex = 1;
 
         if (level) {
-            whereConditions.push(`s.level = $${paramIndex}`);
+            whereConditions.push(`level = $${paramIndex}`);
             queryParams.push(level);
             paramIndex++;
         }
@@ -3022,7 +3022,7 @@ app.post('/api/word-sets/:setId/import', async (req, res) => {
         // If theme is 'general', don't filter by theme (take all words of that level)
         // Otherwise, filter by specific theme
         if (theme && theme !== 'general') {
-            whereConditions.push(`s.theme = $${paramIndex}`);
+            whereConditions.push(`theme = $${paramIndex}`);
             queryParams.push(theme);
             paramIndex++;
         }
@@ -3031,34 +3031,12 @@ app.post('/api/word-sets/:setId/import', async (req, res) => {
             ? `WHERE ${whereConditions.join(' AND ')}`
             : '';
 
-        // Get language pair info to determine target language
-        const pairResult = await db.query(
-            'SELECT source_language, target_language FROM language_pairs WHERE id = $1',
-            [languagePairId]
-        );
-
-        if (pairResult.rows.length === 0) {
-            return res.status(404).json({ error: 'Language pair not found' });
-        }
-
-        const { target_language } = pairResult.rows[0];
-        const translationTableName = `translations_${source_language}_to_${target_language}`;
-        const exampleColumn = `example_${source_language.substring(0, 2)}`;
-
-        // Get all words from the source table with their translations
+        // Get all words from the source table
         const wordsResult = await db.query(`
-            SELECT
-                s.id,
-                s.word,
-                s.level,
-                s.theme,
-                s.${exampleColumn} as example,
-                t.translation,
-                t.example_translation
-            FROM ${sourceTableName} s
-            LEFT JOIN ${translationTableName} t ON s.id = t.source_word_id
+            SELECT id, word, translation, example, example_translation, level, theme
+            FROM ${sourceTableName}
             ${whereClause}
-            ORDER BY s.id ASC
+            ORDER BY id ASC
         `, queryParams);
 
         if (wordsResult.rows.length === 0) {
@@ -3257,36 +3235,13 @@ app.get('/api/word-sets/:setId/preview', async (req, res) => {
         queryParams.push(limit);
 
         // Get preview words from source table based on level and theme
-        // Note: We only select 'word' column as 'example' column doesn't exist in all source tables
-        // and the client-side code only uses the word field anyway
-        let wordsResult;
-        try {
-            wordsResult = await db.query(`
-                SELECT word
-                FROM ${sourceTableName}
-                ${whereClause}
-                ORDER BY word
-                LIMIT $${paramIndex}
-            `, queryParams);
-        } catch (queryErr) {
-            // If query fails (e.g., missing columns, table issues), log and return empty preview
-            logger.error(`Error querying source table ${sourceTableName} for preview:`, {
-                error: queryErr.message,
-                code: queryErr.code,
-                detail: queryErr.detail,
-                setId,
-                level: wordSet.level,
-                theme: wordSet.theme
-            });
-            return res.json({
-                setId: wordSet.id,
-                title: wordSet.title,
-                level: wordSet.level,
-                theme: wordSet.theme,
-                wordCount: wordSet.word_count,
-                preview: []
-            });
-        }
+        const wordsResult = await db.query(`
+            SELECT word, example
+            FROM ${sourceTableName}
+            ${whereClause}
+            ORDER BY word
+            LIMIT $${paramIndex}
+        `, queryParams);
 
         res.json({
             setId: wordSet.id,
@@ -3297,17 +3252,8 @@ app.get('/api/word-sets/:setId/preview', async (req, res) => {
             preview: wordsResult.rows
         });
     } catch (err) {
-        // Outer catch for any other errors (e.g., database connection issues)
         logger.error('Error fetching word set preview:', err);
-        // Return valid JSON response instead of 500 error
-        res.json({
-            setId: req.params.setId,
-            title: 'Unknown',
-            level: null,
-            theme: null,
-            wordCount: 0,
-            preview: []
-        });
+        res.status(500).json({ error: err.message });
     }
 });
 
