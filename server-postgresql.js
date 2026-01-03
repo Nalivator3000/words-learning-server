@@ -3033,7 +3033,7 @@ app.post('/api/word-sets/:setId/import', async (req, res) => {
 
         // Get language pair info to determine target language
         const pairResult = await db.query(
-            'SELECT source_language, target_language FROM language_pairs WHERE id = $1',
+            'SELECT from_lang, to_lang FROM language_pairs WHERE id = $1',
             [languagePairId]
         );
 
@@ -3041,7 +3041,7 @@ app.post('/api/word-sets/:setId/import', async (req, res) => {
             return res.status(404).json({ error: 'Language pair not found' });
         }
 
-        const { target_language } = pairResult.rows[0];
+        const { to_lang: target_language } = pairResult.rows[0];
         const translationTableName = `translations_${source_language}_to_${target_language}`;
         const exampleColumn = `example_${source_language.substring(0, 2)}`;
 
