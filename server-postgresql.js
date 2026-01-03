@@ -3053,7 +3053,7 @@ app.post('/api/word-sets/:setId/import', async (req, res) => {
         const { from_lang, to_lang } = pairResult.rows[0];
         const target_language = langCodeToName[to_lang] || to_lang;
         const translationTableName = `target_translations_${target_language}`;
-        const exampleColumn = `example_${source_language.substring(0, 2)}`;
+        const exampleColumn = `example_${from_lang}`;
 
         // Get all words from the source table with their translations
         const wordsResult = await db.query(`
