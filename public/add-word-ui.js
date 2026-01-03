@@ -17,8 +17,8 @@ class AddWordUI {
             addWordBtn.addEventListener('click', () => this.showAddWordModal());
         }
 
-        // Initialize modal if it doesn't exist
-        this.createModalIfNeeded();
+        // Don't create modal immediately - wait until it's needed
+        // This ensures i18n is loaded before creating the modal
     }
 
     createModalIfNeeded() {
