@@ -18,6 +18,44 @@ class WordListsUI {
         this.initialized = false;
     }
 
+    // Translate word set title dynamically
+    translateSetTitle(set) {
+        const title = set.title || set.name || '';
+
+        // Parse pattern: "German A1: family" or "Spanish B2: travel"
+        const match = title.match(/^(\w+)\s+([ABC][12]):\s*(.+)$/);
+
+        if (!match) return title; // Return as-is if doesn't match pattern
+
+        const [, sourceLang, level, theme] = match;
+
+        // Map language names to translation keys
+        const langKey = `lang_${sourceLang.toLowerCase()}`;
+        const themeKey = `topic_${theme.toLowerCase().replace(/\s+/g, '_')}`;
+
+        // Build translated title
+        const translatedLang = i18n.t(langKey) || sourceLang;
+        const translatedTheme = i18n.t(themeKey) || theme;
+
+        return `${translatedLang} ${level}: ${translatedTheme}`;
+    }
+
+    // Translate word set description
+    translateSetDescription(set) {
+        const description = set.description || '';
+
+        // Pattern: "A1 level vocabulary: family"
+        const match = description.match(/^([ABC][12])\s+level vocabulary:\s*(.+)$/i);
+
+        if (!match) return description;
+
+        const [, level, theme] = match;
+        const themeKey = `topic_${theme.toLowerCase().replace(/\s+/g, '_')}`;
+        const translatedTheme = i18n.t(themeKey) || theme;
+
+        return `${level} ${i18n.t('level')} ${i18n.t('vocabulary')}: ${translatedTheme}`;
+    }
+
     async init(userId, languagePairId) {
         this.userId = userId;
         this.languagePairId = languagePairId;
@@ -394,8 +432,8 @@ class WordListsUI {
                 </div>
 
                 <div class="list-card-body">
-                    <h4 class="list-title">${set.title || set.name}</h4>
-                    <p class="list-description">${set.description || 'No description'}</p>
+                    <h4 class="list-title">${this.translateSetTitle(set)}</h4>
+                    <p class="list-description">${this.translateSetDescription(set) || i18n.t('no_description') || 'No description'}</p>
 
                     <div class="word-preview" data-set-id="${set.id}">
                         <div class="preview-loading">Loading preview...</div>
