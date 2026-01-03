@@ -265,6 +265,14 @@ class WordListsUI {
         if (window.i18n) {
             i18n.updateDOM();
         }
+
+        // Debug: Check how many import buttons exist
+        const importButtons = document.querySelectorAll('.import-set-btn');
+        console.log(`🔘 Found ${importButtons.length} import buttons on page`);
+        if (importButtons.length > 0) {
+            console.log('📋 First button:', importButtons[0]);
+            console.log('📋 First button data-set-id:', importButtons[0].getAttribute('data-set-id'));
+        }
     }
 
     async loadWordPreviews() {
@@ -632,8 +640,15 @@ class WordListsUI {
         document.querySelectorAll('.import-set-btn').forEach(btn => {
             btn.addEventListener('click', async (e) => {
                 const setId = e.currentTarget.getAttribute('data-set-id');
+                console.log('🔘 Import button clicked! Set ID:', setId);
+                console.log('📋 Button element:', e.currentTarget);
+                console.log('👤 User ID:', this.userId);
+                console.log('🌍 Language Pair ID:', this.languagePairId);
                 if (setId) {
+                    console.log('✅ Starting import for set:', setId);
                     await this.importWordSet(parseInt(setId));
+                } else {
+                    console.error('❌ No setId found on button!');
                 }
             });
         });
@@ -883,7 +898,12 @@ class WordListsUI {
     }
 
     async importWordSet(setId) {
+        console.log('📦 importWordSet called with setId:', setId);
+        console.log('👤 this.userId:', this.userId);
+        console.log('🌍 this.languagePairId:', this.languagePairId);
+
         if (!this.userId || !this.languagePairId) {
+            console.error('❌ Missing userId or languagePairId!');
             if (window.showToast) {
                 showToast('Please select a language pair first', 'error');
             }
@@ -891,36 +911,51 @@ class WordListsUI {
         }
 
         try {
+            console.log('📤 Showing import toast...');
             if (window.showToast) {
                 showToast('Importing word set...', 'info');
             }
 
-            const response = await fetch(`/api/word-sets/${setId}/import`, {
+            const url = `/api/word-sets/${setId}/import`;
+            const body = {
+                userId: this.userId,
+                languagePairId: this.languagePairId
+            };
+
+            console.log('🌐 Fetching:', url);
+            console.log('📝 Request body:', body);
+
+            const response = await fetch(url, {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json'
                 },
-                body: JSON.stringify({
-                    userId: this.userId,
-                    languagePairId: this.languagePairId
-                })
+                body: JSON.stringify(body)
             });
 
+            console.log('📥 Response status:', response.status);
+            console.log('📥 Response ok:', response.ok);
+
             if (!response.ok) {
+                console.error('❌ Response not OK:', response.status);
                 let errorMessage = 'Failed to import word set';
 
                 // Special handling for rate limiting (429)
                 if (response.status === 429) {
                     errorMessage = 'Too many requests. Please wait a moment before importing more word sets.';
+                    console.error('⏱️ Rate limited!');
                     throw new Error(errorMessage);
                 }
 
                 try {
                     const error = await response.json();
+                    console.error('📄 Error response JSON:', error);
                     errorMessage = error.error || errorMessage;
                 } catch (e) {
                     // Handle non-JSON responses
+                    console.error('⚠️ Could not parse error as JSON:', e);
                     const text = await response.text();
+                    console.error('📄 Error response text:', text);
                     if (text.includes('Too many')) {
                         errorMessage = 'Too many requests. Please wait a moment and try again.';
                     }
@@ -928,7 +963,9 @@ class WordListsUI {
                 throw new Error(errorMessage);
             }
 
+            console.log('✅ Response OK, parsing JSON...');
             const result = await response.json();
+            console.log('📊 Import result:', result);
 
             // Show appropriate message based on import results
             let message;
@@ -942,21 +979,35 @@ class WordListsUI {
                 message = 'No words to import from this set';
             }
 
+            console.log('💬 Success message:', message);
+
             if (window.showToast) {
                 showToast(message, 'success');
             }
 
+            console.log('🔄 Refreshing word manager and stats...');
+
             // Refresh word manager and stats if available
             if (window.wordManager) {
+                console.log('🔄 Loading words...');
                 await window.wordManager.loadWords();
+                console.log('🎨 Rendering words...');
                 window.wordManager.renderWords();
+            } else {
+                console.warn('⚠️ window.wordManager not available');
             }
 
             if (window.app && window.app.updateStats) {
+                console.log('📊 Updating stats...');
                 await window.app.updateStats();
+            } else {
+                console.warn('⚠️ window.app.updateStats not available');
             }
+
+            console.log('✅ Import complete!');
         } catch (error) {
-            console.error('Error importing word set:', error);
+            console.error('❌ Error importing word set:', error);
+            console.error('📚 Error stack:', error.stack);
             if (window.showToast) {
                 showToast(error.message || 'Failed to import word set', 'error');
             }
