@@ -240,6 +240,39 @@
             wordListsLink.rel = 'stylesheet';
             wordListsLink.href = 'word-lists-ui.css?v=' + version;
             document.head.appendChild(wordListsLink);
+
+            // Display and log build versions
+            window.addEventListener('load', () => {
+                const appVersion = version;
+
+                // Get service worker version
+                navigator.serviceWorker.getRegistration().then(reg => {
+                    const swVersion = reg && reg.active ? 'v5.4.7' : 'none';
+                    document.getElementById('swVersion').textContent = swVersion;
+                });
+
+                // Get CSS version by checking the first line
+                fetch('style.css?v=' + version)
+                    .then(r => r.text())
+                    .then(css => {
+                        const match = css.match(/\/\* FluentFlow (v[\d.]+)[^*]*\*\//);
+                        const cssVersion = match ? match[1] : 'unknown';
+                        document.getElementById('cssVersion').textContent = cssVersion;
+
+                        // Log all versions
+                        console.log('%c════════════════════════════════════════', 'color: #8B5CF6; font-weight: bold;');
+                        console.log('%c🚀 BUILD INFORMATION', 'color: #06B6D4; font-size: 16px; font-weight: bold;');
+                        console.log('%c════════════════════════════════════════', 'color: #8B5CF6; font-weight: bold;');
+                        console.log('%c📱 App Version:', 'color: #10B981; font-weight: bold;', appVersion);
+                        console.log('%c⚙️  Service Worker:', 'color: #F59E0B; font-weight: bold;', swVersion);
+                        console.log('%c🎨 CSS Version:', 'color: #EF4444; font-weight: bold;', cssVersion);
+                        console.log('%c🌐 URL:', 'color: #8B5CF6; font-weight: bold;', window.location.href);
+                        console.log('%c🕐 Loaded at:', 'color: #06B6D4; font-weight: bold;', new Date().toLocaleString());
+                        console.log('%c════════════════════════════════════════', 'color: #8B5CF6; font-weight: bold;');
+                    });
+
+                document.getElementById('appVersion').textContent = appVersion;
+            });
         })();
     </script>
 </head>
@@ -1327,9 +1360,11 @@
         </main>
 
         <!-- Version Info -->
-<!--         <footer style="position: fixed; bottom: 10px; right: 10px; background: rgba(0,0,0,0.7); color: white; padding: 5px 10px; border-radius: 5px; font-size: 12px; z-index: 10000;">
-            v5.2.9-DEPLOY-efbabeb
-        </footer> -->
+        <div id="versionInfo" style="position: fixed; bottom: 10px; right: 10px; background: rgba(0,0,0,0.8); color: white; padding: 8px 12px; border-radius: 8px; font-size: 11px; z-index: 10000; font-family: 'Courier New', monospace; border: 1px solid rgba(255,255,255,0.2);">
+            <div style="margin-bottom: 3px;"><strong>App:</strong> <span id="appVersion">loading...</span></div>
+            <div style="margin-bottom: 3px;"><strong>SW:</strong> <span id="swVersion">loading...</span></div>
+            <div><strong>CSS:</strong> <span id="cssVersion">loading...</span></div>
+        </div>
 
         <!-- New Version Indicator -->
         <div id="newVersionIndicator" style="position: fixed; top: 10px; left: 50%; transform: translateX(-50%); background: linear-gradient(135deg, #8B5CF6, #06B6D4); color: white; padding: 10px 20px; border-radius: 25px; font-weight: bold; z-index: 10001; box-shadow: 0 4px 12px rgba(0,0,0,0.3); animation: pulse 2s infinite; pointer-events: none;">
