@@ -1,4 +1,4 @@
-/* LexyBooster v5.3.6 - Ultra Modern 3D Design System with Add-Word Modal Dark Theme Fix */
+/* LexyBooster v5.3.7 - Ultra Modern 3D Design System with Add-Word Modal Dark Theme Fix */
 @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&display=swap');
 
 :root {
@@ -1526,6 +1526,24 @@ textarea {
 #addWordModal .form-actions button {
     flex: 1 !important;
     max-width: 200px !important;
+}
+
+/* Add Word Button (main trigger button) */
+#addWordBtn {
+    background: linear-gradient(135deg, #8B5CF6 0%, #6D28D9 50%, var(--accent-purple) 100%) !important;
+    color: white !important;
+    border: none !important;
+    border-radius: var(--radius-lg) !important;
+    font-weight: 600 !important;
+    cursor: pointer !important;
+    transition: all 0.2s ease !important;
+    box-shadow: 0 4px 12px rgba(139, 92, 246, 0.3) !important;
+}
+
+#addWordBtn:hover {
+    transform: translateY(-2px) !important;
+    box-shadow: 0 8px 20px rgba(139, 92, 246, 0.5) !important;
+    filter: brightness(1.1) !important;
 }
 
 /* Enhanced Container */

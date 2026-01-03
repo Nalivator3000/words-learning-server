@@ -105,21 +105,30 @@ class AddWordUI {
 
         document.body.insertAdjacentHTML('beforeend', modalHTML);
 
-        // Add event listener for close button
-        const closeBtn = document.querySelector('#addWordModal .close-modal');
-        if (closeBtn) {
-            closeBtn.addEventListener('click', () => this.closeModal());
-        }
-
-        // Also close on clicking outside the modal
-        const modal = document.getElementById('addWordModal');
-        if (modal) {
-            modal.addEventListener('click', (e) => {
-                if (e.target === modal) {
+        // Add event listener for close button with setTimeout to ensure DOM is ready
+        setTimeout(() => {
+            const closeBtn = document.querySelector('#addWordModal .close-modal');
+            console.log('Close button found:', closeBtn);
+            if (closeBtn) {
+                closeBtn.addEventListener('click', (e) => {
+                    console.log('Close button clicked!');
+                    e.preventDefault();
+                    e.stopPropagation();
                     this.closeModal();
-                }
-            });
-        }
+                });
+            }
+
+            // Also close on clicking outside the modal
+            const modal = document.getElementById('addWordModal');
+            if (modal) {
+                modal.addEventListener('click', (e) => {
+                    if (e.target === modal) {
+                        console.log('Clicked outside modal');
+                        this.closeModal();
+                    }
+                });
+            }
+        }, 0);
     }
 
     showAddWordModal() {
