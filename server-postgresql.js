@@ -12639,7 +12639,7 @@ app.get('/api/words/random-proportional/:count', async (req, res) => {
             SELECT status, COUNT(*) as count
             FROM user_word_progress
             WHERE user_id = $1 AND language_pair_id = $2 AND source_language = $3
-            AND status IN ('studying', 'review_1', 'review_3', 'review_7', 'review_14', 'review_30', 'review_60', 'review_120')
+            AND status IN ('new', 'studying', 'review_1', 'review_3', 'review_7', 'review_14', 'review_30', 'review_60', 'review_120')
             GROUP BY status
         `;
         const countsResult = await db.query(countsQuery, [parseInt(userId), parseInt(languagePairId), sourceLanguage]);
