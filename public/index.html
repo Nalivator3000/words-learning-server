@@ -255,7 +255,7 @@
                 fetch('style.css?v=' + version, { cache: 'reload' })
                     .then(r => r.text())
                     .then(css => {
-                        const match = css.match(/\/\* FluentFlow (v[\d.]+)[^*]*\*\//);
+                        const match = css.match(/\/\* LexyBooster (v[\d.]+)[^*]*\*\//);
                         const cssVersion = match ? match[1] : 'unknown';
                         document.getElementById('cssVersion').textContent = cssVersion;
 

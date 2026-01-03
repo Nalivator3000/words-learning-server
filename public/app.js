@@ -604,7 +604,7 @@ class LanguageLearningApp {
             const reviewNotification = document.getElementById('reviewNotification');
             const reviewNotificationText = document.getElementById('reviewNotificationText');
 
-            if (user && user.email === 'demo@fluentflow.app' && reviewNotification && reviewNotificationText) {
+            if (user && user.email === 'demo@lexybooster.app' && reviewNotification && reviewNotificationText) {
                 const readyToReview = counts.review || 0;
                 if (readyToReview > 0) {
                     reviewNotificationText.textContent = `${readyToReview} word${readyToReview > 1 ? 's' : ''} ready to review today!`;
