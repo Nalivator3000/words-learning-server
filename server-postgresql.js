@@ -3041,7 +3041,17 @@ app.post('/api/word-sets/:setId/import', async (req, res) => {
             return res.status(404).json({ error: 'Language pair not found' });
         }
 
-        const { to_lang: target_language } = pairResult.rows[0];
+        // Map language codes to full names for table names
+        const langCodeToName = {
+            'de': 'german', 'en': 'english', 'es': 'spanish', 'fr': 'french',
+            'ru': 'russian', 'it': 'italian', 'pt': 'portuguese', 'zh': 'chinese',
+            'ja': 'japanese', 'ko': 'korean', 'hi': 'hindi', 'ar': 'arabic',
+            'tr': 'turkish', 'uk': 'ukrainian', 'pl': 'polish', 'ro': 'romanian',
+            'sr': 'serbian', 'sw': 'swahili'
+        };
+
+        const { to_lang } = pairResult.rows[0];
+        const target_language = langCodeToName[to_lang] || to_lang;
         const translationTableName = `translations_${source_language}_to_${target_language}`;
         const exampleColumn = `example_${source_language.substring(0, 2)}`;
 
