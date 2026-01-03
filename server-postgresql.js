@@ -3191,7 +3191,7 @@ app.post('/api/word-sets/previews/batch', async (req, res) => {
             queryParams.push(limit);
 
             const wordsResult = await db.query(`
-                SELECT word, example
+                SELECT word
                 FROM ${sourceTableName}
                 ${whereClause}
                 ORDER BY word
