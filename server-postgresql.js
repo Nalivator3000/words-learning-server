@@ -12808,7 +12808,7 @@ app.post('/api/words/translate', async (req, res) => {
 
         // Step 2: Use unofficial Google Translate as fallback (free, no API key needed)
         try {
-            const translate = require('@vitalets/google-translate-api');
+            const { translate } = require('@vitalets/google-translate-api');
 
             const result = await translate(word, {
                 from: sourceLang,
