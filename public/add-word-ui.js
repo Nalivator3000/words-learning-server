@@ -45,20 +45,11 @@ class AddWordUI {
 
                         <!-- Step 2: Select translation -->
                         <div id="step2" class="add-word-step" style="display: none;">
-                            <div class="word-display">
-                                <strong data-i18n="word_label">${t('word_label')}</strong> <span id="displayWord"></span>
-                            </div>
-
-                            <label data-i18n="select_translation">${t('select_translation')}</label>
-
                             <div id="translationSuggestions" class="translation-suggestions">
                                 <!-- Suggestions will be inserted here -->
                             </div>
 
-                            <div class="custom-translation">
-                                <label for="customTranslation" data-i18n="or_enter_translation">${t('or_enter_translation')}</label>
-                                <input type="text" id="customTranslation" placeholder="${t('enter_translation')}" data-i18n-placeholder="enter_translation">
-                            </div>
+                            <input type="text" id="customTranslation" placeholder="${t('enter_translation')}" data-i18n-placeholder="enter_translation" class="word-input">
 
                             <div class="form-actions">
                                 <button class="btn-secondary" onclick="window.addWordUI.backToStep1()" data-i18n="back">
@@ -72,18 +63,8 @@ class AddWordUI {
 
                         <!-- Step 3: Optional details -->
                         <div id="step3" class="add-word-step" style="display: none;">
-                            <div class="word-summary">
-                                <p><strong data-i18n="word_label">${t('word_label')}</strong> <span id="summaryWord"></span></p>
-                                <p><strong data-i18n="translation_label">${t('translation_label')}</strong> <span id="summaryTranslation"></span></p>
-                            </div>
-
-                            <label for="wordExample" data-i18n="example_usage">${t('example_usage')}</label>
                             <textarea id="wordExample" placeholder="${t('sentence_with_word')}" data-i18n-placeholder="sentence_with_word" rows="2"></textarea>
-
-                            <label for="wordExampleTranslation" data-i18n="example_translation">${t('example_translation')}</label>
                             <textarea id="wordExampleTranslation" placeholder="${t('sentence_translation')}" data-i18n-placeholder="sentence_translation" rows="2"></textarea>
-
-                            <label for="wordNotes" data-i18n="notes_optional">${t('notes_optional')}</label>
                             <textarea id="wordNotes" placeholder="${t('your_notes')}" data-i18n-placeholder="your_notes" rows="2"></textarea>
 
                             <div class="form-actions">
@@ -207,8 +188,13 @@ class AddWordUI {
         }
 
         try {
-            // Show loading
-            this.showError(t('getting_translations'));
+            // Show step 2 immediately with loading indicator
+            this.showStep(2);
+
+            const translationContainer = document.getElementById('translationSuggestions');
+            if (translationContainer) {
+                translationContainer.innerHTML = '<div class="loading-spinner">⏳ ' + t('getting_translations') + '...</div>';
+            }
 
             // User enters word in NATIVE language (to_lang)
             // We translate TO learning language (from_lang)
@@ -227,18 +213,16 @@ class AddWordUI {
             if (response.ok) {
                 this.currentTranslations = data.suggestions || [];
                 this.renderTranslationSuggestions();
-                document.getElementById('displayWord').textContent = word;
                 this.showError('');
-                this.showStep(2);
             } else {
-                this.showError(data.error || t('error_getting_translations'));
+                this.currentTranslations = [];
+                this.renderTranslationSuggestions();
             }
         } catch (error) {
             console.error('Translation error:', error);
-            this.showError(t('network_error_manual_translation'));
             // Still show step 2 so user can enter manual translation
-            document.getElementById('displayWord').textContent = word;
-            this.showStep(2);
+            this.currentTranslations = [];
+            this.renderTranslationSuggestions();
         }
     }
 
@@ -247,7 +231,8 @@ class AddWordUI {
         const container = document.getElementById('translationSuggestions');
 
         if (!this.currentTranslations || this.currentTranslations.length === 0) {
-            container.innerHTML = `<p class="no-suggestions" data-i18n="no_suggestions_enter_manually">${t('no_suggestions_enter_manually')}</p>`;
+            // Don't show anything - user will use custom translation field
+            container.innerHTML = '';
             return;
         }
 
@@ -287,10 +272,6 @@ class AddWordUI {
             this.showError(t('please_select_or_enter_translation'));
             return;
         }
-
-        const word = document.getElementById('newWord').value.trim();
-        document.getElementById('summaryWord').textContent = word;
-        document.getElementById('summaryTranslation').textContent = finalTranslation;
 
         this.showError('');
         this.showStep(3);
