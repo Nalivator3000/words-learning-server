@@ -113,6 +113,9 @@ class AddWordUI {
             return;
         }
 
+        // Create modal if it doesn't exist yet (lazy initialization)
+        this.createModalIfNeeded();
+
         this.resetForm();
         document.getElementById('addWordModal').style.display = 'flex';
         document.getElementById('newWord').focus();
