@@ -12806,26 +12806,23 @@ app.post('/api/words/translate', async (req, res) => {
             // Continue to external translation if DB lookup fails
         }
 
-        // Step 2: Use Google Translate as fallback
+        // Step 2: Use unofficial Google Translate as fallback (free, no API key needed)
         try {
-            const translate = require('@google-cloud/translate').v2.Translate;
-            const translateClient = new translate();
+            const translate = require('@vitalets/google-translate-api');
 
-            const [translations] = await translateClient.translate(word, {
+            const result = await translate(word, {
                 from: sourceLang,
                 to: targetLang
             });
 
-            const translationArray = Array.isArray(translations) ? translations : [translations];
+            logger.info(`Google Translate returned: ${result.text}`);
 
-            logger.info(`Google Translate returned: ${translationArray[0]}`);
-
-            const suggestions = translationArray.map(translation => ({
-                translation: translation,
+            const suggestions = [{
+                translation: result.text,
                 context: 'Google Translate',
                 commonality: 'common',
                 examples: []
-            }));
+            }];
 
             return res.json({
                 word,
