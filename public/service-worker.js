@@ -1,7 +1,7 @@
 // Service Worker for Words Learning App
-// Version 5.4.6 - Proper query param handling + delete old sw.js
+// Version 5.4.7 - Force CSS reload for add-word modal dark theme
 
-const CACHE_VERSION = 'v5.4.6';
+const CACHE_VERSION = 'v5.4.7';
 const CACHE_NAME = `words-learning-${CACHE_VERSION}`;
 
 // Files to cache for offline use
