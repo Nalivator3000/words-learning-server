@@ -1,7 +1,7 @@
 // Service Worker for Words Learning App
-// Version 5.4.8 - Fix close button using class-based modal state
+// Version 5.4.9 - Fix POST request caching error
 
-const CACHE_VERSION = 'v5.4.8';
+const CACHE_VERSION = 'v5.4.9';
 const CACHE_NAME = `words-learning-${CACHE_VERSION}`;
 
 // Files to cache for offline use
@@ -141,8 +141,8 @@ async function cacheFirstStrategy(request) {
         console.log('🌐 Service Worker: Fetching from network:', request.url);
         const networkResponse = await fetch(request);
 
-        // Cache the new response
-        if (networkResponse.ok) {
+        // Cache the new response (only GET requests can be cached)
+        if (networkResponse.ok && request.method === 'GET') {
             const cache = await caches.open(CACHE_NAME);
             cache.put(request, networkResponse.clone());
         }
