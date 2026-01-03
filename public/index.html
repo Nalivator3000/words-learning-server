@@ -251,13 +251,33 @@
                     document.getElementById('swVersion').textContent = swVersion;
                 });
 
-                // Get CSS version by checking the first line
-                fetch('style.css?v=' + version)
+                // Get CSS version by checking the first line (bypass cache)
+                fetch('style.css?v=' + version, { cache: 'reload' })
                     .then(r => r.text())
                     .then(css => {
                         const match = css.match(/\/\* FluentFlow (v[\d.]+)[^*]*\*\//);
                         const cssVersion = match ? match[1] : 'unknown';
                         document.getElementById('cssVersion').textContent = cssVersion;
+
+                        // If cached CSS is old, force reload
+                        if (cssVersion !== 'v5.3.0') {
+                            console.warn('⚠️ OLD CSS DETECTED:', cssVersion, '!== v5.3.0');
+                            console.warn('🔄 Clearing cache and reloading...');
+
+                            if ('serviceWorker' in navigator) {
+                                navigator.serviceWorker.getRegistration().then(reg => {
+                                    if (reg) {
+                                        // Tell SW to clear cache
+                                        reg.active.postMessage({ type: 'CLEAR_CACHE' });
+
+                                        // Force hard reload after 1 second
+                                        setTimeout(() => {
+                                            window.location.reload(true);
+                                        }, 1000);
+                                    }
+                                });
+                            }
+                        }
 
                         // Log all versions
                         console.log('%c════════════════════════════════════════', 'color: #8B5CF6; font-weight: bold;');
