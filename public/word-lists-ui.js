@@ -980,9 +980,15 @@ class WordListsUI {
             }
 
             console.log('💬 Success message:', message);
+            console.log('🔔 window.showToast exists?', typeof window.showToast);
 
             if (window.showToast) {
-                showToast(message, 'success');
+                console.log('🔔 Calling showToast with:', message);
+                const toastResult = showToast(message, 'success', 5000);
+                console.log('🔔 showToast returned:', toastResult);
+            } else {
+                console.error('❌ window.showToast is not available! Using alert fallback');
+                alert(`✅ ${message}`);
             }
 
             console.log('🔄 Refreshing word manager and stats...');
@@ -1008,8 +1014,15 @@ class WordListsUI {
         } catch (error) {
             console.error('❌ Error importing word set:', error);
             console.error('📚 Error stack:', error.stack);
+
+            const errorMessage = error.message || 'Failed to import word set';
+
             if (window.showToast) {
-                showToast(error.message || 'Failed to import word set', 'error');
+                console.log('🔔 Showing error toast:', errorMessage);
+                showToast(errorMessage, 'error', 5000);
+            } else {
+                console.error('❌ window.showToast not available! Using alert fallback');
+                alert(`❌ ${errorMessage}`);
             }
         }
     }
