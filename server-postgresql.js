@@ -3257,13 +3257,36 @@ app.get('/api/word-sets/:setId/preview', async (req, res) => {
         queryParams.push(limit);
 
         // Get preview words from source table based on level and theme
-        const wordsResult = await db.query(`
-            SELECT word, example
-            FROM ${sourceTableName}
-            ${whereClause}
-            ORDER BY word
-            LIMIT $${paramIndex}
-        `, queryParams);
+        // Note: We only select 'word' column as 'example' column doesn't exist in all source tables
+        // and the client-side code only uses the word field anyway
+        let wordsResult;
+        try {
+            wordsResult = await db.query(`
+                SELECT word
+                FROM ${sourceTableName}
+                ${whereClause}
+                ORDER BY word
+                LIMIT $${paramIndex}
+            `, queryParams);
+        } catch (queryErr) {
+            // If query fails (e.g., missing columns, table issues), log and return empty preview
+            logger.error(`Error querying source table ${sourceTableName} for preview:`, {
+                error: queryErr.message,
+                code: queryErr.code,
+                detail: queryErr.detail,
+                setId,
+                level: wordSet.level,
+                theme: wordSet.theme
+            });
+            return res.json({
+                setId: wordSet.id,
+                title: wordSet.title,
+                level: wordSet.level,
+                theme: wordSet.theme,
+                wordCount: wordSet.word_count,
+                preview: []
+            });
+        }
 
         res.json({
             setId: wordSet.id,
@@ -3274,8 +3297,17 @@ app.get('/api/word-sets/:setId/preview', async (req, res) => {
             preview: wordsResult.rows
         });
     } catch (err) {
+        // Outer catch for any other errors (e.g., database connection issues)
         logger.error('Error fetching word set preview:', err);
-        res.status(500).json({ error: err.message });
+        // Return valid JSON response instead of 500 error
+        res.json({
+            setId: req.params.setId,
+            title: 'Unknown',
+            level: null,
+            theme: null,
+            wordCount: 0,
+            preview: []
+        });
     }
 });
 
