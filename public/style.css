@@ -4101,6 +4101,16 @@ input:focus, textarea:focus, select:focus {
         margin-bottom: 10px;
     }
 
+    /* When tiles and controls are hidden after answer, remove bottom margin to prevent gap */
+    .word-building-input:disabled {
+        margin-bottom: 0;
+    }
+
+    /* Ensure answer area has enough bottom padding when word building is answered */
+    .answer-area:has(.word-building-input:disabled) {
+        padding-bottom: var(--space-6);
+    }
+
     /* Letter tiles - more compact */
     .letter-tiles {
         gap: 6px;
