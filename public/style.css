@@ -1,4 +1,4 @@
-/* LexyBooster v5.3.3 - Ultra Modern 3D Design System with Add-Word Modal Dark Theme Fix */
+/* LexyBooster v5.3.4 - Ultra Modern 3D Design System with Add-Word Modal Dark Theme Fix */
 @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&display=swap');
 
 :root {
@@ -1459,52 +1459,59 @@ textarea {
     justify-content: flex-end;
 }
 
-/* Add-word modal buttons */
-#addWordModal .btn-primary,
-#addWordModal .btn-secondary,
-#addWordModal .btn-success {
-    padding: var(--space-3) var(--space-6);
-    border-radius: var(--radius-lg);
-    font-size: var(--text-base);
-    font-weight: 600;
-    cursor: pointer;
-    transition: all 0.2s ease;
-    border: 2px solid transparent;
-    flex: 1;
-    max-width: 200px;
+/* Add-word modal buttons - base styles */
+#addWordModal button.btn-primary,
+#addWordModal button.btn-secondary,
+#addWordModal button.btn-success {
+    padding: var(--space-3) var(--space-6) !important;
+    border-radius: var(--radius-lg) !important;
+    font-size: var(--text-base) !important;
+    font-weight: 600 !important;
+    cursor: pointer !important;
+    transition: all 0.2s ease !important;
+    border: none !important;
+    width: 100% !important;
+    display: inline-block !important;
 }
 
-#addWordModal .btn-primary {
-    background: linear-gradient(135deg, var(--accent-purple), var(--accent-cyan));
-    color: white;
-    border: none;
+/* Primary button (gradient purple-cyan) */
+#addWordModal button.btn-primary {
+    background: linear-gradient(135deg, var(--accent-purple), var(--accent-cyan)) !important;
+    color: white !important;
 }
 
-#addWordModal .btn-primary:hover {
-    transform: translateY(-2px);
-    box-shadow: 0 8px 20px rgba(139, 92, 246, 0.4);
+#addWordModal button.btn-primary:hover {
+    transform: translateY(-2px) !important;
+    box-shadow: 0 8px 20px rgba(139, 92, 246, 0.4) !important;
 }
 
-#addWordModal .btn-secondary {
-    background: rgba(255, 255, 255, 0.1);
-    color: white;
-    border: 2px solid rgba(255, 255, 255, 0.3);
+/* Secondary button (transparent with border) */
+#addWordModal button.btn-secondary {
+    background: rgba(255, 255, 255, 0.1) !important;
+    color: white !important;
+    border: 2px solid rgba(255, 255, 255, 0.3) !important;
 }
 
-#addWordModal .btn-secondary:hover {
-    background: rgba(255, 255, 255, 0.2);
-    border-color: rgba(255, 255, 255, 0.5);
+#addWordModal button.btn-secondary:hover {
+    background: rgba(255, 255, 255, 0.2) !important;
+    border-color: rgba(255, 255, 255, 0.5) !important;
 }
 
-#addWordModal .btn-success {
-    background: linear-gradient(135deg, #10B981, #059669);
-    color: white;
-    border: none;
+/* Success button (green gradient) */
+#addWordModal button.btn-success {
+    background: linear-gradient(135deg, #10B981, #059669) !important;
+    color: white !important;
 }
 
-#addWordModal .btn-success:hover {
-    transform: translateY(-2px);
-    box-shadow: 0 8px 20px rgba(16, 185, 129, 0.4);
+#addWordModal button.btn-success:hover {
+    transform: translateY(-2px) !important;
+    box-shadow: 0 8px 20px rgba(16, 185, 129, 0.4) !important;
+}
+
+/* Buttons in form-actions (2 buttons side by side) */
+#addWordModal .form-actions button {
+    flex: 1 !important;
+    max-width: 200px !important;
 }
 
 /* Enhanced Container */
