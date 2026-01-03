@@ -3188,6 +3188,27 @@ app.get('/api/word-sets/:setId/preview', async (req, res) => {
         const wordSet = setResult.rows[0];
         const sourceTableName = `source_words_${wordSet.source_language}`;
 
+        // Check if source table exists
+        const tableCheck = await db.query(`
+            SELECT EXISTS (
+                SELECT FROM information_schema.tables
+                WHERE table_schema = 'public'
+                AND table_name = $1
+            )
+        `, [sourceTableName]);
+
+        if (!tableCheck.rows[0].exists) {
+            logger.warn(`Source table ${sourceTableName} does not exist for word set ${setId}`);
+            return res.json({
+                setId: wordSet.id,
+                title: wordSet.title,
+                level: wordSet.level,
+                theme: wordSet.theme,
+                wordCount: wordSet.word_count,
+                preview: []
+            });
+        }
+
         // Build where conditions
         let whereConditions = [];
         let queryParams = [];
