@@ -3050,9 +3050,9 @@ app.post('/api/word-sets/:setId/import', async (req, res) => {
             'sr': 'serbian', 'sw': 'swahili'
         };
 
-        const { to_lang } = pairResult.rows[0];
+        const { from_lang, to_lang } = pairResult.rows[0];
         const target_language = langCodeToName[to_lang] || to_lang;
-        const translationTableName = `translations_${source_language}_to_${target_language}`;
+        const translationTableName = `target_translations_${target_language}`;
         const exampleColumn = `example_${source_language.substring(0, 2)}`;
 
         // Get all words from the source table with their translations
@@ -3064,12 +3064,12 @@ app.post('/api/word-sets/:setId/import', async (req, res) => {
                 s.theme,
                 s.${exampleColumn} as example,
                 t.translation,
-                t.example_translation
+                t.example_en as example_translation
             FROM ${sourceTableName} s
-            LEFT JOIN ${translationTableName} t ON s.id = t.source_word_id
+            LEFT JOIN ${translationTableName} t ON s.id = t.source_word_id AND t.source_lang = $${paramIndex}
             ${whereClause}
             ORDER BY s.id ASC
-        `, queryParams);
+        `, [...queryParams, from_lang]);
 
         if (wordsResult.rows.length === 0) {
             return res.status(404).json({ error: 'Word set is empty or not found' });
