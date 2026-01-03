@@ -24,46 +24,48 @@ class AddWordUI {
     createModalIfNeeded() {
         if (document.getElementById('addWordModal')) return;
 
+        const t = (key) => window.i18n ? window.i18n.t(key) : key;
+
         const modalHTML = `
             <div id="addWordModal" class="modal" style="display: none;">
                 <div class="modal-content add-word-modal">
                     <span class="close-modal" onclick="window.addWordUI.closeModal()">&times;</span>
-                    <h2>Добавить новое слово</h2>
+                    <h2 data-i18n="add_new_word">${t('add_new_word')}</h2>
 
                     <div class="add-word-form">
                         <!-- Step 1: Enter word -->
                         <div id="step1" class="add-word-step active">
-                            <label for="newWord">Слово на изучаемом языке:</label>
-                            <input type="text" id="newWord" placeholder="Введите слово" class="word-input">
+                            <label for="newWord" data-i18n="word_in_learning_language">${t('word_in_learning_language')}</label>
+                            <input type="text" id="newWord" placeholder="${t('enter_word')}" data-i18n-placeholder="enter_word" class="word-input">
 
-                            <button class="btn-primary" onclick="window.addWordUI.getTranslations()">
-                                Получить переводы
+                            <button class="btn-primary" onclick="window.addWordUI.getTranslations()" data-i18n="get_translations">
+                                ${t('get_translations')}
                             </button>
                         </div>
 
                         <!-- Step 2: Select translation -->
                         <div id="step2" class="add-word-step" style="display: none;">
                             <div class="word-display">
-                                <strong>Слово:</strong> <span id="displayWord"></span>
+                                <strong data-i18n="word_label">${t('word_label')}</strong> <span id="displayWord"></span>
                             </div>
 
-                            <label>Выберите перевод(ы) или введите свой:</label>
+                            <label data-i18n="select_translation">${t('select_translation')}</label>
 
                             <div id="translationSuggestions" class="translation-suggestions">
                                 <!-- Suggestions will be inserted here -->
                             </div>
 
                             <div class="custom-translation">
-                                <label for="customTranslation">Или введите свой перевод:</label>
-                                <input type="text" id="customTranslation" placeholder="Введите перевод">
+                                <label for="customTranslation" data-i18n="or_enter_translation">${t('or_enter_translation')}</label>
+                                <input type="text" id="customTranslation" placeholder="${t('enter_translation')}" data-i18n-placeholder="enter_translation">
                             </div>
 
                             <div class="form-actions">
-                                <button class="btn-secondary" onclick="window.addWordUI.backToStep1()">
-                                    Назад
+                                <button class="btn-secondary" onclick="window.addWordUI.backToStep1()" data-i18n="back">
+                                    ${t('back')}
                                 </button>
-                                <button class="btn-primary" onclick="window.addWordUI.showStep3()">
-                                    Далее
+                                <button class="btn-primary" onclick="window.addWordUI.showStep3()" data-i18n="next">
+                                    ${t('next')}
                                 </button>
                             </div>
                         </div>
@@ -71,25 +73,25 @@ class AddWordUI {
                         <!-- Step 3: Optional details -->
                         <div id="step3" class="add-word-step" style="display: none;">
                             <div class="word-summary">
-                                <p><strong>Слово:</strong> <span id="summaryWord"></span></p>
-                                <p><strong>Перевод:</strong> <span id="summaryTranslation"></span></p>
+                                <p><strong data-i18n="word_label">${t('word_label')}</strong> <span id="summaryWord"></span></p>
+                                <p><strong data-i18n="translation_label">${t('translation_label')}</strong> <span id="summaryTranslation"></span></p>
                             </div>
 
-                            <label for="wordExample">Пример использования (необязательно):</label>
-                            <textarea id="wordExample" placeholder="Предложение с этим словом" rows="2"></textarea>
+                            <label for="wordExample" data-i18n="example_usage">${t('example_usage')}</label>
+                            <textarea id="wordExample" placeholder="${t('sentence_with_word')}" data-i18n-placeholder="sentence_with_word" rows="2"></textarea>
 
-                            <label for="wordExampleTranslation">Перевод примера (необязательно):</label>
-                            <textarea id="wordExampleTranslation" placeholder="Перевод предложения" rows="2"></textarea>
+                            <label for="wordExampleTranslation" data-i18n="example_translation">${t('example_translation')}</label>
+                            <textarea id="wordExampleTranslation" placeholder="${t('sentence_translation')}" data-i18n-placeholder="sentence_translation" rows="2"></textarea>
 
-                            <label for="wordNotes">Заметки (необязательно):</label>
-                            <textarea id="wordNotes" placeholder="Ваши заметки, мнемоники, ассоциации" rows="2"></textarea>
+                            <label for="wordNotes" data-i18n="notes_optional">${t('notes_optional')}</label>
+                            <textarea id="wordNotes" placeholder="${t('your_notes')}" data-i18n-placeholder="your_notes" rows="2"></textarea>
 
                             <div class="form-actions">
-                                <button class="btn-secondary" onclick="window.addWordUI.backToStep2()">
-                                    Назад
+                                <button class="btn-secondary" onclick="window.addWordUI.backToStep2()" data-i18n="back">
+                                    ${t('back')}
                                 </button>
-                                <button class="btn-success" onclick="window.addWordUI.saveWord()">
-                                    Сохранить слово
+                                <button class="btn-success" onclick="window.addWordUI.saveWord()" data-i18n="save_word">
+                                    ${t('save_word')}
                                 </button>
                             </div>
                         </div>
@@ -106,7 +108,8 @@ class AddWordUI {
 
     showAddWordModal() {
         if (!userManager.currentUser) {
-            alert('Пожалуйста, войдите в систему');
+            const t = (key) => window.i18n ? window.i18n.t(key) : key;
+            alert(t('please_login'));
             return;
         }
 
@@ -147,22 +150,23 @@ class AddWordUI {
     }
 
     async getTranslations() {
+        const t = (key) => window.i18n ? window.i18n.t(key) : key;
         const word = document.getElementById('newWord').value.trim();
 
         if (!word) {
-            this.showError('Пожалуйста, введите слово');
+            this.showError(t('please_enter_word'));
             return;
         }
 
         const languagePair = userManager.currentLanguagePair;
         if (!languagePair) {
-            this.showError('Выберите языковую пару');
+            this.showError(t('select_language_pair'));
             return;
         }
 
         try {
             // Show loading
-            this.showError('Получаем переводы...');
+            this.showError(t('getting_translations'));
 
             const response = await fetch('/api/words/translate', {
                 method: 'POST',
@@ -183,11 +187,11 @@ class AddWordUI {
                 this.showError('');
                 this.showStep(2);
             } else {
-                this.showError(data.error || 'Ошибка получения переводов');
+                this.showError(data.error || t('error_getting_translations'));
             }
         } catch (error) {
             console.error('Translation error:', error);
-            this.showError('Ошибка сети. Вы можете ввести перевод вручную.');
+            this.showError(t('network_error_manual_translation'));
             // Still show step 2 so user can enter manual translation
             document.getElementById('displayWord').textContent = word;
             this.showStep(2);
@@ -195,10 +199,11 @@ class AddWordUI {
     }
 
     renderTranslationSuggestions() {
+        const t = (key) => window.i18n ? window.i18n.t(key) : key;
         const container = document.getElementById('translationSuggestions');
 
         if (!this.currentTranslations || this.currentTranslations.length === 0) {
-            container.innerHTML = '<p class="no-suggestions">Нет автоматических предложений. Введите перевод вручную ниже.</p>';
+            container.innerHTML = `<p class="no-suggestions" data-i18n="no_suggestions_enter_manually">${t('no_suggestions_enter_manually')}</p>`;
             return;
         }
 
@@ -225,6 +230,7 @@ class AddWordUI {
     }
 
     showStep3() {
+        const t = (key) => window.i18n ? window.i18n.t(key) : key;
         // Get selected or custom translation
         let finalTranslation = this.selectedTranslations.join('; ');
 
@@ -234,7 +240,7 @@ class AddWordUI {
         }
 
         if (!finalTranslation) {
-            this.showError('Пожалуйста, выберите или введите перевод');
+            this.showError(t('please_select_or_enter_translation'));
             return;
         }
 
@@ -247,6 +253,7 @@ class AddWordUI {
     }
 
     async saveWord() {
+        const t = (key) => window.i18n ? window.i18n.t(key) : key;
         const word = document.getElementById('newWord').value.trim();
         let translation = this.selectedTranslations.join('; ');
 
@@ -260,13 +267,13 @@ class AddWordUI {
         const notes = document.getElementById('wordNotes').value.trim();
 
         if (!word || !translation) {
-            this.showError('Слово и перевод обязательны');
+            this.showError(t('word_and_translation_required'));
             return;
         }
 
         const languagePair = userManager.currentLanguagePair;
         if (!languagePair) {
-            this.showError('Выберите языковую пару');
+            this.showError(t('select_language_pair'));
             return;
         }
 
@@ -290,7 +297,7 @@ class AddWordUI {
             const data = await response.json();
 
             if (response.ok) {
-                this.showSuccess('✓ Слово успешно добавлено!');
+                this.showSuccess(t('word_added_successfully'));
                 setTimeout(() => {
                     this.closeModal();
                     // Reload words if we're on the words page
@@ -299,11 +306,11 @@ class AddWordUI {
                     }
                 }, 1500);
             } else {
-                this.showError(data.error || 'Ошибка добавления слова');
+                this.showError(data.error || t('error_adding_word'));
             }
         } catch (error) {
             console.error('Save word error:', error);
-            this.showError('Ошибка сети при сохранении слова');
+            this.showError(t('network_error_saving_word'));
         }
     }
 
