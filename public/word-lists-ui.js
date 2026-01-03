@@ -969,14 +969,28 @@ class WordListsUI {
 
             // Show appropriate message based on import results
             let message;
+            let messageKey;
+
             if (result.imported > 0 && result.skipped > 0) {
-                message = `Imported ${result.imported} new words (${result.skipped} already in your collection)`;
+                messageKey = 'import_success_partial';
+                message = window.i18n ?
+                    window.i18n.t('import_success_partial', { imported: result.imported, skipped: result.skipped }) :
+                    `Imported ${result.imported} new words (${result.skipped} already in your collection)`;
             } else if (result.imported > 0) {
-                message = `Successfully imported ${result.imported} words!`;
+                messageKey = 'import_success';
+                message = window.i18n ?
+                    window.i18n.t('import_success', { count: result.imported }) :
+                    `Successfully imported ${result.imported} words!`;
             } else if (result.skipped > 0) {
-                message = `All ${result.skipped} words from this set are already in your collection`;
+                messageKey = 'import_already_in_collection';
+                message = window.i18n ?
+                    window.i18n.t('import_already_in_collection', { count: result.skipped }) :
+                    `All ${result.skipped} words from this set are already in your collection`;
             } else {
-                message = 'No words to import from this set';
+                messageKey = 'import_no_words';
+                message = window.i18n ?
+                    window.i18n.t('import_no_words') :
+                    'No words to import from this set';
             }
 
             console.log('💬 Success message:', message);
@@ -1074,10 +1088,21 @@ class WordListsUI {
         `;
 
         const icon = type === 'success' ? '✓' : '✕';
-        const details = importResult ?
+
+        let detailsText = '';
+        if (importResult && importResult.imported > 0) {
+            detailsText = window.i18n ?
+                window.i18n.t('import_new_words', { count: importResult.imported }) :
+                `+${importResult.imported} new words`;
+        }
+        if (importResult && importResult.skipped > 0) {
+            const skippedText = `(${importResult.skipped} already in collection)`;
+            detailsText += detailsText ? ` ${skippedText}` : skippedText;
+        }
+
+        const details = detailsText ?
             `<div style="font-size: 14px; font-weight: 400; margin-top: 4px;">
-                ${importResult.imported > 0 ? `+${importResult.imported} new words` : ''}
-                ${importResult.skipped > 0 ? ` (${importResult.skipped} already in collection)` : ''}
+                ${detailsText}
             </div>` : '';
 
         banner.innerHTML = `
