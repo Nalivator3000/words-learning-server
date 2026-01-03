@@ -907,15 +907,33 @@ class WordListsUI {
             });
 
             if (!response.ok) {
-                const error = await response.json();
-                throw new Error(error.error || 'Failed to import word set');
+                let errorMessage = 'Failed to import word set';
+                try {
+                    const error = await response.json();
+                    errorMessage = error.error || errorMessage;
+                } catch (e) {
+                    // Handle non-JSON responses (e.g., rate limit HTML)
+                    const text = await response.text();
+                    if (text.includes('Too many')) {
+                        errorMessage = 'Too many requests. Please wait a moment and try again.';
+                    }
+                }
+                throw new Error(errorMessage);
             }
 
             const result = await response.json();
 
-            const message = result.skipped > 0
-                ? `Imported ${result.imported} new words (${result.skipped} already in your collection)`
-                : `Successfully imported ${result.imported} words!`;
+            // Show appropriate message based on import results
+            let message;
+            if (result.imported > 0 && result.skipped > 0) {
+                message = `Imported ${result.imported} new words (${result.skipped} already in your collection)`;
+            } else if (result.imported > 0) {
+                message = `Successfully imported ${result.imported} words!`;
+            } else if (result.skipped > 0) {
+                message = `All ${result.skipped} words from this set are already in your collection`;
+            } else {
+                message = 'No words to import from this set';
+            }
 
             if (window.showToast) {
                 showToast(message, 'success');
