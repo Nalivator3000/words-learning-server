@@ -1,4 +1,4 @@
-/* LexyBooster v5.3.4 - Ultra Modern 3D Design System with Add-Word Modal Dark Theme Fix */
+/* LexyBooster v5.3.5 - Ultra Modern 3D Design System with Add-Word Modal Dark Theme Fix */
 @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&display=swap');
 
 :root {
@@ -1240,21 +1240,31 @@ textarea {
     margin-bottom: var(--space-6) !important;
 }
 
-.close-modal {
-    position: absolute;
-    top: var(--space-6);
-    right: var(--space-6);
-    font-size: 32px;
-    font-weight: bold;
-    color: rgba(255, 255, 255, 0.8);
-    cursor: pointer;
-    transition: color 0.2s ease;
-    line-height: 1;
-    z-index: 1;
+#addWordModal .close-modal {
+    position: absolute !important;
+    top: var(--space-6) !important;
+    right: var(--space-6) !important;
+    font-size: 32px !important;
+    font-weight: bold !important;
+    color: rgba(255, 255, 255, 0.8) !important;
+    cursor: pointer !important;
+    transition: all 0.2s ease !important;
+    line-height: 1 !important;
+    z-index: 100 !important;
+    width: 40px !important;
+    height: 40px !important;
+    display: flex !important;
+    align-items: center !important;
+    justify-content: center !important;
+    border-radius: 50% !important;
+    background: rgba(255, 255, 255, 0.1) !important;
+    pointer-events: auto !important;
 }
 
-.close-modal:hover {
-    color: white;
+#addWordModal .close-modal:hover {
+    color: white !important;
+    background: rgba(255, 255, 255, 0.2) !important;
+    transform: scale(1.1) !important;
 }
 
 .add-word-modal {
