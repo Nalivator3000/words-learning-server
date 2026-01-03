@@ -12707,7 +12707,8 @@ app.get('/api/words/random-proportional/:count', async (req, res) => {
                         uwp.status,
                         uwp.correct_count,
                         uwp.total_reviews,
-                        uwp.next_review_date
+                        uwp.next_review_date,
+                        uwp.last_reviewed_at
                     FROM user_word_progress uwp
                     JOIN ${sourceTableName} sw ON sw.id = uwp.source_word_id
                     LEFT JOIN ${translationTableName} tt ON tt.source_word_id = sw.id
@@ -12723,6 +12724,7 @@ app.get('/api/words/random-proportional/:count', async (req, res) => {
                             WHEN uwp.next_review_date IS NULL OR uwp.next_review_date <= CURRENT_TIMESTAMP THEN 0
                             ELSE 1
                         END,
+                        uwp.last_reviewed_at ASC NULLS FIRST,
                         RANDOM()
                     LIMIT $5
                 `;
