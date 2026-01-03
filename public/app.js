@@ -1256,17 +1256,19 @@ schreiben,Sie schreibt einen Brief.,Писать,Она пишет письmо.`
         if (result.correct) {
             buttonEl.classList.add('correct');
             // Add audio button to correct answer if it's foreign language
-            if (this.shouldShowAudioButton(buttonEl.textContent)) {
-                this.addAudioToButton(buttonEl, buttonEl.textContent);
+            const cleanText = buttonEl.textContent.replace(/^\d+\s*/, '').trim();
+            if (this.shouldShowAudioButton(cleanText)) {
+                this.addAudioToButton(buttonEl, cleanText);
             }
         } else {
             buttonEl.classList.add('incorrect');
             // Highlight correct answer and add audio if foreign language
             document.querySelectorAll('.choice-btn').forEach(btn => {
-                if (btn.textContent === result.correctAnswer) {
+                const btnText = btn.textContent.replace(/^\d+\s*/, '').trim();
+                if (btnText === result.correctAnswer) {
                     btn.classList.add('correct');
-                    if (this.shouldShowAudioButton(btn.textContent)) {
-                        this.addAudioToButton(btn, btn.textContent);
+                    if (this.shouldShowAudioButton(btnText)) {
+                        this.addAudioToButton(btn, btnText);
                     }
                 }
             });
@@ -1371,16 +1373,18 @@ schreiben,Sie schreibt einen Brief.,Писать,Она пишет письmо.`
         if (result.correct) {
             buttonEl.classList.add('correct');
             // Add audio button to correct answer if it's foreign language
-            if (this.shouldShowAudioButton(buttonEl.textContent)) {
-                this.addAudioToButton(buttonEl, buttonEl.textContent);
+            const cleanText = buttonEl.textContent.replace(/^\d+\s*/, '').trim();
+            if (this.shouldShowAudioButton(cleanText)) {
+                this.addAudioToButton(buttonEl, cleanText);
             }
         } else {
             buttonEl.classList.add('incorrect');
             document.querySelectorAll('#reviewAnswerArea .choice-btn').forEach(btn => {
-                if (btn.textContent === result.correctAnswer) {
+                const btnText = btn.textContent.replace(/^\d+\s*/, '').trim();
+                if (btnText === result.correctAnswer) {
                     btn.classList.add('correct');
-                    if (this.shouldShowAudioButton(btn.textContent)) {
-                        this.addAudioToButton(btn, btn.textContent);
+                    if (this.shouldShowAudioButton(btnText)) {
+                        this.addAudioToButton(btn, btnText);
                     }
                 }
             });
