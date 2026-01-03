@@ -12096,6 +12096,7 @@ async function getWordCountsByStatus(userId, languagePairId, sourceLanguage) {
     const result = await db.query(query, [userId, languagePairId, sourceLanguage]);
 
     const counts = {
+        new: 0,
         studying: 0,
         review: 0,
         review7: 0,
@@ -12113,8 +12114,11 @@ async function getWordCountsByStatus(userId, languagePairId, sourceLanguage) {
     };
 
     result.rows.forEach(row => {
-        if (row.status === 'studying') {
-            counts.studying = parseInt(row.count);
+        if (row.status === 'new') {
+            counts.new = parseInt(row.count);
+            counts.studying += parseInt(row.count); // "new" words are available for studying
+        } else if (row.status === 'studying' || row.status === 'learning') {
+            counts.studying += parseInt(row.count);
         } else if (row.status.startsWith('review_')) {
             counts.review += parseInt(row.count);
             const stage = row.status;
