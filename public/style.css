@@ -1,4 +1,4 @@
-/* LexyBooster v5.3.5 - Ultra Modern 3D Design System with Add-Word Modal Dark Theme Fix */
+/* LexyBooster v5.3.6 - Ultra Modern 3D Design System with Add-Word Modal Dark Theme Fix */
 @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&display=swap');
 
 :root {
@@ -1240,31 +1240,34 @@ textarea {
     margin-bottom: var(--space-6) !important;
 }
 
-#addWordModal .close-modal {
+#addWordModal button.close-modal {
     position: absolute !important;
-    top: var(--space-6) !important;
-    right: var(--space-6) !important;
-    font-size: 32px !important;
+    top: var(--space-4) !important;
+    right: var(--space-4) !important;
+    font-size: 28px !important;
     font-weight: bold !important;
     color: rgba(255, 255, 255, 0.8) !important;
     cursor: pointer !important;
     transition: all 0.2s ease !important;
     line-height: 1 !important;
     z-index: 100 !important;
-    width: 40px !important;
-    height: 40px !important;
+    width: 36px !important;
+    height: 36px !important;
     display: flex !important;
     align-items: center !important;
     justify-content: center !important;
     border-radius: 50% !important;
     background: rgba(255, 255, 255, 0.1) !important;
+    border: 1px solid rgba(255, 255, 255, 0.2) !important;
+    padding: 0 !important;
     pointer-events: auto !important;
 }
 
-#addWordModal .close-modal:hover {
+#addWordModal button.close-modal:hover {
     color: white !important;
-    background: rgba(255, 255, 255, 0.2) !important;
-    transform: scale(1.1) !important;
+    background: rgba(255, 68, 68, 0.2) !important;
+    border-color: rgba(255, 68, 68, 0.5) !important;
+    transform: scale(1.1) rotate(90deg) !important;
 }
 
 .add-word-modal {
@@ -1484,15 +1487,16 @@ textarea {
     display: inline-block !important;
 }
 
-/* Primary button (gradient purple-cyan) */
+/* Primary button (same gradient as quiz buttons) */
 #addWordModal button.btn-primary {
-    background: linear-gradient(135deg, var(--accent-purple), var(--accent-cyan)) !important;
+    background: linear-gradient(135deg, #8B5CF6 0%, #6D28D9 50%, var(--accent-purple) 100%) !important;
     color: white !important;
 }
 
 #addWordModal button.btn-primary:hover {
     transform: translateY(-2px) !important;
     box-shadow: 0 8px 20px rgba(139, 92, 246, 0.4) !important;
+    filter: brightness(1.1) !important;
 }
 
 /* Secondary button (transparent with border) */

@@ -29,7 +29,7 @@ class AddWordUI {
         const modalHTML = `
             <div id="addWordModal" class="modal" style="display: none;">
                 <div class="modal-content add-word-modal">
-                    <span class="close-modal" onclick="window.addWordUI.closeModal()">&times;</span>
+                    <button class="close-modal" type="button" aria-label="Close">&times;</button>
                     <h2 data-i18n="add_new_word">${t('add_new_word')}</h2>
 
                     <div class="add-word-form">
@@ -104,6 +104,22 @@ class AddWordUI {
         `;
 
         document.body.insertAdjacentHTML('beforeend', modalHTML);
+
+        // Add event listener for close button
+        const closeBtn = document.querySelector('#addWordModal .close-modal');
+        if (closeBtn) {
+            closeBtn.addEventListener('click', () => this.closeModal());
+        }
+
+        // Also close on clicking outside the modal
+        const modal = document.getElementById('addWordModal');
+        if (modal) {
+            modal.addEventListener('click', (e) => {
+                if (e.target === modal) {
+                    this.closeModal();
+                }
+            });
+        }
     }
 
     showAddWordModal() {
