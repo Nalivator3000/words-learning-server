@@ -504,14 +504,13 @@ async function initDatabase() {
         await db.query(`
             CREATE TABLE IF NOT EXISTS word_sets (
                 id SERIAL PRIMARY KEY,
-                name VARCHAR(255) NOT NULL,
+                source_language VARCHAR(50) NOT NULL,
+                title VARCHAR(255),
                 description TEXT,
-                language_pair VARCHAR(10) NOT NULL,
                 level VARCHAR(5),
                 theme VARCHAR(100),
                 word_count INTEGER DEFAULT 0,
-                is_official BOOLEAN DEFAULT true,
-                created_by INTEGER REFERENCES users(id) ON DELETE SET NULL,
+                is_public BOOLEAN DEFAULT true,
                 created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
                 updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
             )
@@ -528,10 +527,10 @@ async function initDatabase() {
             )
         `);
 
-        // Create index for faster word set queries
+        // Create index for faster word set queries (using source_language)
         await db.query(`
-            CREATE INDEX IF NOT EXISTS idx_word_sets_language_pair
-            ON word_sets(language_pair)
+            CREATE INDEX IF NOT EXISTS idx_word_sets_source_language
+            ON word_sets(source_language)
         `);
 
         await db.query(`
@@ -2930,7 +2929,9 @@ app.get('/api/word-sets/:setId', async (req, res) => {
     }
 });
 
-// Create a new word set
+// Create a new word set (DEPRECATED - word_sets are created via migration scripts)
+// This endpoint uses old schema and should not be used
+/*
 app.post('/api/word-sets', async (req, res) => {
     try {
         const { name, description, languagePair, level, theme, isOfficial, createdBy } = req.body;
@@ -2951,6 +2952,7 @@ app.post('/api/word-sets', async (req, res) => {
         res.status(500).json({ error: err.message });
     }
 });
+*/
 
 // Add words to a word set
 app.post('/api/word-sets/:setId/words', async (req, res) => {
