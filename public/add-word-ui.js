@@ -33,10 +33,11 @@ class AddWordUI {
                     <h2 data-i18n="add_new_word">${t('add_new_word')}</h2>
 
                     <div class="add-word-form">
-                        <!-- Step 1: Enter word -->
+                        <!-- Step 1: Enter word(s) -->
                         <div id="step1" class="add-word-step active">
                             <label for="newWord" data-i18n="word_in_native_language">${t('word_in_native_language')}</label>
-                            <input type="text" id="newWord" placeholder="${t('enter_word_native')}" data-i18n-placeholder="enter_word_native" class="word-input">
+                            <textarea id="newWord" placeholder="${t('enter_words_bulk')}" data-i18n-placeholder="enter_words_bulk" class="word-input" rows="4"></textarea>
+                            <p class="help-text" data-i18n="bulk_import_hint">${t('bulk_import_hint')}</p>
 
                             <button class="btn-primary" onclick="window.addWordUI.getTranslations()" data-i18n="get_translations">
                                 ${t('get_translations')}
@@ -174,9 +175,9 @@ class AddWordUI {
 
     async getTranslations() {
         const t = (key) => window.i18n ? window.i18n.t(key) : key;
-        const word = document.getElementById('newWord').value.trim();
+        const input = document.getElementById('newWord').value.trim();
 
-        if (!word) {
+        if (!input) {
             this.showError(t('please_enter_word'));
             return;
         }
@@ -186,6 +187,21 @@ class AddWordUI {
             this.showError(t('select_language_pair'));
             return;
         }
+
+        // Parse input - support newlines, commas, and spaces
+        const words = input
+            .split(/[\n,\s]+/)
+            .map(w => w.trim())
+            .filter(w => w.length > 0);
+
+        // If multiple words, do bulk import
+        if (words.length > 1) {
+            await this.bulkImport(words, languagePair);
+            return;
+        }
+
+        // Single word - normal flow
+        const word = words[0];
 
         try {
             // Show step 2 immediately with loading indicator
@@ -224,6 +240,72 @@ class AddWordUI {
             this.currentTranslations = [];
             this.renderTranslationSuggestions();
         }
+    }
+
+    async bulkImport(words, languagePair) {
+        const t = (key) => window.i18n ? window.i18n.t(key) : key;
+
+        this.showError(`⏳ ${t('bulk_importing')} ${words.length} ${t('words')}...`);
+
+        let successCount = 0;
+        let failCount = 0;
+
+        for (const nativeWord of words) {
+            try {
+                // Translate each word
+                const response = await fetch('/api/words/translate', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({
+                        word: nativeWord,
+                        sourceLang: languagePair.to_lang,
+                        targetLang: languagePair.from_lang
+                    })
+                });
+
+                const data = await response.json();
+                const learningWord = data.suggestions?.[0]?.translation || nativeWord;
+
+                // Save word immediately
+                const saveResponse = await fetch('/api/words', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({
+                        word: learningWord,
+                        translation: nativeWord,
+                        example: '',
+                        exampleTranslation: '',
+                        userId: userManager.currentUser.id,
+                        languagePairId: languagePair.id,
+                        isCustom: true,
+                        source: 'bulk_import',
+                        notes: ''
+                    })
+                });
+
+                if (saveResponse.ok) {
+                    successCount++;
+                } else {
+                    failCount++;
+                }
+            } catch (error) {
+                console.error(`Failed to import word: ${nativeWord}`, error);
+                failCount++;
+            }
+
+            // Update progress
+            this.showError(`⏳ ${successCount + failCount}/${words.length} ${t('processed')}...`);
+        }
+
+        // Show final result
+        this.showSuccess(`✅ ${t('bulk_import_complete')}: ${successCount} ${t('added')}, ${failCount} ${t('failed')}`);
+
+        setTimeout(() => {
+            this.closeModal();
+            if (typeof window.app !== 'undefined' && window.app.updateStats) {
+                window.app.updateStats();
+            }
+        }, 2000);
     }
 
     renderTranslationSuggestions() {
