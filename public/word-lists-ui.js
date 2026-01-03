@@ -1084,6 +1084,7 @@ class WordListsUI {
             display: flex;
             align-items: center;
             gap: 12px;
+            transition: all 0.3s ease-out;
             animation: slideDown 0.3s ease-out;
         `;
 
@@ -1111,20 +1112,21 @@ class WordListsUI {
                 <div>${message}</div>
                 ${details}
             </div>
-            <button onclick="this.parentElement.remove()" style="
-                background: rgba(255,255,255,0.2);
-                border: none;
+            <button onclick="this.parentElement.style.opacity='0';this.parentElement.style.transform='translateX(-50%) translateY(-20px)';setTimeout(()=>this.parentElement.remove(),300)" style="
+                background: rgba(0,0,0,0.2);
+                border: 2px solid rgba(255,255,255,0.5);
                 color: white;
-                width: 28px;
-                height: 28px;
+                width: 32px;
+                height: 32px;
                 border-radius: 50%;
                 cursor: pointer;
-                font-size: 18px;
-                display: flex;
-                align-items: center;
-                justify-content: center;
-                margin-left: 12px;
-            ">×</button>
+                font-size: 22px;
+                font-weight: bold;
+                line-height: 1;
+                padding: 0;
+                flex-shrink: 0;
+                transition: all 0.2s ease;
+            " onmouseover="this.style.background='rgba(0,0,0,0.4)';this.style.borderColor='rgba(255,255,255,0.8)'" onmouseout="this.style.background='rgba(0,0,0,0.2)';this.style.borderColor='rgba(255,255,255,0.5)'">×</button>
         `;
 
         document.body.appendChild(banner);
