@@ -3083,21 +3083,15 @@ app.post('/api/word-sets/:setId/import', async (req, res) => {
                 await db.query(`
                     INSERT INTO user_word_progress (
                         user_id, language_pair_id, source_language, source_word_id,
-                        translation, example, example_translation,
                         status, correct_count, incorrect_count, total_reviews,
-                        easiness_factor, interval_days, next_review_date,
-                        source
+                        ease_factor, next_review_date, created_at, updated_at
                     )
-                    VALUES ($1, $2, $3, $4, $5, $6, $7, 'new', 0, 0, 0, 2.5, 0, CURRENT_DATE, $8)
+                    VALUES ($1, $2, $3, $4, 'new', 0, 0, 0, 2.5, CURRENT_DATE, CURRENT_TIMESTAMP, CURRENT_TIMESTAMP)
                 `, [
                     userId,
                     languagePairId,
                     source_language,
-                    sourceWord.id,
-                    sourceWord.translation || '',
-                    sourceWord.example || '',
-                    sourceWord.example_translation || '',
-                    `word_set_${setId}`
+                    sourceWord.id
                 ]);
                 importedCount++;
             } else {
