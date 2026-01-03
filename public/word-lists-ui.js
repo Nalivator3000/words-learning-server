@@ -908,11 +908,18 @@ class WordListsUI {
 
             if (!response.ok) {
                 let errorMessage = 'Failed to import word set';
+
+                // Special handling for rate limiting (429)
+                if (response.status === 429) {
+                    errorMessage = 'Too many requests. Please wait a moment before importing more word sets.';
+                    throw new Error(errorMessage);
+                }
+
                 try {
                     const error = await response.json();
                     errorMessage = error.error || errorMessage;
                 } catch (e) {
-                    // Handle non-JSON responses (e.g., rate limit HTML)
+                    // Handle non-JSON responses
                     const text = await response.text();
                     if (text.includes('Too many')) {
                         errorMessage = 'Too many requests. Please wait a moment and try again.';

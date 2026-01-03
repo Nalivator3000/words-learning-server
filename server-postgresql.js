@@ -131,6 +131,24 @@ const apiLimiter = rateLimit({
     message: 'Too many API requests, please slow down.',
 });
 
+// Special limiter for word set imports - more lenient to allow bulk operations
+const importLimiter = rateLimit({
+    windowMs: 1 * 60 * 1000, // 1 minute
+    max: 50, // Allow up to 50 imports per minute
+    message: JSON.stringify({ error: 'Too many import requests. Please wait a moment before importing more word sets.' }),
+    standardHeaders: true,
+    legacyHeaders: false,
+    skip: (req) => {
+        const ip = getRealIP(req);
+        return RATE_LIMIT_WHITELIST.includes(ip);
+    },
+    handler: (req, res) => {
+        res.status(429).json({
+            error: 'Too many import requests. Please wait a moment before importing more word sets.'
+        });
+    }
+});
+
 // Apply general rate limiter to all routes
 app.use(generalLimiter);
 
@@ -2986,7 +3004,7 @@ app.post('/api/word-sets/:setId/words', async (req, res) => {
 });
 
 // Import words from a word set to user's collection
-app.post('/api/word-sets/:setId/import', async (req, res) => {
+app.post('/api/word-sets/:setId/import', importLimiter, async (req, res) => {
     try {
         const { setId } = req.params;
         const { userId, languagePairId } = req.body;
