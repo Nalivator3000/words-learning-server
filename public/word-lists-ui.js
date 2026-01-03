@@ -982,13 +982,15 @@ class WordListsUI {
             console.log('💬 Success message:', message);
             console.log('🔔 window.showToast exists?', typeof window.showToast);
 
+            // Show notification banner at top of page
+            this.showNotificationBanner(message, 'success', result);
+
             if (window.showToast) {
                 console.log('🔔 Calling showToast with:', message);
                 const toastResult = showToast(message, 'success', 5000);
                 console.log('🔔 showToast returned:', toastResult);
             } else {
-                console.error('❌ window.showToast is not available! Using alert fallback');
-                alert(`✅ ${message}`);
+                console.error('❌ window.showToast is not available!');
             }
 
             console.log('🔄 Refreshing word manager and stats...');
@@ -1010,6 +1012,21 @@ class WordListsUI {
                 console.warn('⚠️ window.app.updateStats not available');
             }
 
+            // Visual feedback: change button to indicate imported
+            const importBtn = document.querySelector(`button[data-set-id="${setId}"]`);
+            if (importBtn && result.imported > 0) {
+                importBtn.textContent = '✓ Imported';
+                importBtn.classList.remove('primary-btn');
+                importBtn.classList.add('secondary-btn');
+                importBtn.disabled = true;
+                importBtn.style.opacity = '0.6';
+                console.log('✅ Updated button visual state');
+            } else if (importBtn && result.skipped > 0 && result.imported === 0) {
+                importBtn.textContent = '✓ Already imported';
+                importBtn.style.opacity = '0.5';
+                console.log('ℹ️ Marked button as already imported');
+            }
+
             console.log('✅ Import complete!');
         } catch (error) {
             console.error('❌ Error importing word set:', error);
@@ -1025,6 +1042,78 @@ class WordListsUI {
                 alert(`❌ ${errorMessage}`);
             }
         }
+    }
+
+    showNotificationBanner(message, type, importResult) {
+        // Remove existing banner if any
+        const existingBanner = document.querySelector('.import-notification-banner');
+        if (existingBanner) {
+            existingBanner.remove();
+        }
+
+        // Create banner
+        const banner = document.createElement('div');
+        banner.className = `import-notification-banner ${type}`;
+        banner.style.cssText = `
+            position: fixed;
+            top: 80px;
+            left: 50%;
+            transform: translateX(-50%);
+            z-index: 999999;
+            background: ${type === 'success' ? '#10b981' : '#ef4444'};
+            color: white;
+            padding: 16px 24px;
+            border-radius: 12px;
+            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.3);
+            font-size: 16px;
+            font-weight: 600;
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            animation: slideDown 0.3s ease-out;
+        `;
+
+        const icon = type === 'success' ? '✓' : '✕';
+        const details = importResult ?
+            `<div style="font-size: 14px; font-weight: 400; margin-top: 4px;">
+                ${importResult.imported > 0 ? `+${importResult.imported} new words` : ''}
+                ${importResult.skipped > 0 ? ` (${importResult.skipped} already in collection)` : ''}
+            </div>` : '';
+
+        banner.innerHTML = `
+            <span style="font-size: 24px;">${icon}</span>
+            <div>
+                <div>${message}</div>
+                ${details}
+            </div>
+            <button onclick="this.parentElement.remove()" style="
+                background: rgba(255,255,255,0.2);
+                border: none;
+                color: white;
+                width: 28px;
+                height: 28px;
+                border-radius: 50%;
+                cursor: pointer;
+                font-size: 18px;
+                display: flex;
+                align-items: center;
+                justify-content: center;
+                margin-left: 12px;
+            ">×</button>
+        `;
+
+        document.body.appendChild(banner);
+
+        // Auto-remove after 6 seconds
+        setTimeout(() => {
+            if (banner.parentElement) {
+                banner.style.opacity = '0';
+                banner.style.transform = 'translateX(-50%) translateY(-20px)';
+                setTimeout(() => banner.remove(), 300);
+            }
+        }, 6000);
+
+        console.log('📢 Notification banner shown');
     }
 
     closeModal() {
