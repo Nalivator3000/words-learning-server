@@ -35,8 +35,8 @@ class AddWordUI {
                     <div class="add-word-form">
                         <!-- Step 1: Enter word -->
                         <div id="step1" class="add-word-step active">
-                            <label for="newWord" data-i18n="word_in_learning_language">${t('word_in_learning_language')}</label>
-                            <input type="text" id="newWord" placeholder="${t('enter_word')}" data-i18n-placeholder="enter_word" class="word-input">
+                            <label for="newWord" data-i18n="word_in_native_language">${t('word_in_native_language')}</label>
+                            <input type="text" id="newWord" placeholder="${t('enter_word_native')}" data-i18n-placeholder="enter_word_native" class="word-input">
 
                             <button class="btn-primary" onclick="window.addWordUI.getTranslations()" data-i18n="get_translations">
                                 ${t('get_translations')}
@@ -210,13 +210,15 @@ class AddWordUI {
             // Show loading
             this.showError(t('getting_translations'));
 
+            // User enters word in NATIVE language (to_lang)
+            // We translate TO learning language (from_lang)
             const response = await fetch('/api/words/translate', {
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json' },
                 body: JSON.stringify({
                     word,
-                    sourceLang: languagePair.from_lang,
-                    targetLang: languagePair.to_lang
+                    sourceLang: languagePair.to_lang,  // Native language (what user types)
+                    targetLang: languagePair.from_lang // Learning language (what we translate to)
                 })
             });
 
@@ -296,19 +298,19 @@ class AddWordUI {
 
     async saveWord() {
         const t = (key) => window.i18n ? window.i18n.t(key) : key;
-        const word = document.getElementById('newWord').value.trim();
-        let translation = this.selectedTranslations.join('; ');
+        const nativeWord = document.getElementById('newWord').value.trim(); // User's native language
+        let learningWord = this.selectedTranslations.join('; '); // Learning language
 
         const customTranslation = document.getElementById('customTranslation').value.trim();
         if (customTranslation) {
-            translation = customTranslation;
+            learningWord = customTranslation;
         }
 
         const example = document.getElementById('wordExample').value.trim();
         const exampleTranslation = document.getElementById('wordExampleTranslation').value.trim();
         const notes = document.getElementById('wordNotes').value.trim();
 
-        if (!word || !translation) {
+        if (!nativeWord || !learningWord) {
             this.showError(t('word_and_translation_required'));
             return;
         }
@@ -320,12 +322,13 @@ class AddWordUI {
         }
 
         try {
+            // Swap: word should be in learning language, translation in native
             const response = await fetch('/api/words', {
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json' },
                 body: JSON.stringify({
-                    word,
-                    translation,
+                    word: learningWord,         // Learning language (from_lang)
+                    translation: nativeWord,    // Native language (to_lang)
                     example,
                     exampleTranslation,
                     userId: userManager.currentUser.id,

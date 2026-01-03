@@ -55,6 +55,7 @@
   },
   "dependencies": {
     "@google-cloud/text-to-speech": "^6.4.0",
+    "@google-cloud/translate": "^7.2.0",
     "compression": "^1.8.1",
     "connect-pg-simple": "^10.0.0",
     "cors": "^2.8.5",

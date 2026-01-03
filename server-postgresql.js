@@ -12760,30 +12760,93 @@ app.post('/api/words/translate', async (req, res) => {
             return res.status(400).json({ error: 'Word and language codes are required' });
         }
 
-        // For now, return a simple response indicating that external API integration is needed
-        // In production, this would call LibreTranslate, Google Translate API, or DeepL API
-        const suggestions = [
-            {
-                translation: `${word} (translation)`,
-                context: 'Auto-generated suggestion',
-                commonality: 'common',
-                examples: [
-                    {
-                        source: `Example sentence with ${word}`,
-                        target: `Пример предложения с ${word}`
-                    }
-                ]
-            }
-        ];
+        logger.info(`Translation request: "${word}" from ${sourceLang} to ${targetLang}`);
 
-        // Simulated response structure for future API integration
-        res.json({
-            word,
-            sourceLang,
-            targetLang,
-            suggestions,
-            note: 'Translation suggestions require external API configuration (LibreTranslate/DeepL/Google Translate)'
-        });
+        // Step 1: Try to find translation in existing vocabulary
+        const sourceTable = `source_words_${targetLang}`;
+        const translationTable = `target_translations_${sourceLang}_from_${targetLang}`;
+
+        try {
+            // Check if tables exist and search for the word
+            const result = await pool.query(`
+                SELECT
+                    sw.word as target_word,
+                    tt.translation as source_word,
+                    sw.definition,
+                    sw.example,
+                    sw.example_translation
+                FROM ${sourceTable} sw
+                INNER JOIN ${translationTable} tt ON sw.id = tt.source_word_id
+                WHERE LOWER(tt.translation) = LOWER($1)
+                LIMIT 5
+            `, [word]);
+
+            if (result.rows.length > 0) {
+                logger.info(`Found ${result.rows.length} existing translations`);
+                const suggestions = result.rows.map(row => ({
+                    translation: row.target_word,
+                    context: row.definition || 'From vocabulary database',
+                    commonality: 'common',
+                    examples: row.example ? [{
+                        source: row.example,
+                        target: row.example_translation
+                    }] : []
+                }));
+
+                return res.json({
+                    word,
+                    sourceLang,
+                    targetLang,
+                    suggestions,
+                    source: 'database'
+                });
+            }
+        } catch (dbErr) {
+            logger.warn(`Database lookup failed: ${dbErr.message}`);
+            // Continue to external translation if DB lookup fails
+        }
+
+        // Step 2: Use Google Translate as fallback
+        try {
+            const translate = require('@google-cloud/translate').v2.Translate;
+            const translateClient = new translate();
+
+            const [translations] = await translateClient.translate(word, {
+                from: sourceLang,
+                to: targetLang
+            });
+
+            const translationArray = Array.isArray(translations) ? translations : [translations];
+
+            logger.info(`Google Translate returned: ${translationArray[0]}`);
+
+            const suggestions = translationArray.map(translation => ({
+                translation: translation,
+                context: 'Google Translate',
+                commonality: 'common',
+                examples: []
+            }));
+
+            return res.json({
+                word,
+                sourceLang,
+                targetLang,
+                suggestions,
+                source: 'google_translate'
+            });
+        } catch (translateErr) {
+            logger.error('Google Translate error:', translateErr);
+
+            // Step 3: Return simple fallback if all else fails
+            return res.json({
+                word,
+                sourceLang,
+                targetLang,
+                suggestions: [],
+                source: 'none',
+                note: 'Translation service unavailable. Please enter translation manually.'
+            });
+        }
     } catch (err) {
         logger.error('Translation error:', err);
         res.status(500).json({ error: err.message });

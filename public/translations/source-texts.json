@@ -7139,6 +7139,26 @@
     "ko": "학습 언어의 단어:",
     "hi": "सीखने की भाषा में शब्द:"
   },
+  "word_in_native_language": {
+    "en": "Word in your native language:",
+    "ru": "Слово на вашем родном языке:",
+    "de": "Wort in Ihrer Muttersprache:",
+    "pl": "Słowo w Twoim ojczystym języku:",
+    "ar": "كلمة بلغتك الأم:",
+    "tr": "Ana dilinizde kelime:",
+    "ro": "Cuvânt în limba ta maternă:",
+    "sr": "Реч на вашем матерњем језику:",
+    "uk": "Слово вашою рідною мовою:",
+    "it": "Parola nella tua lingua madre:",
+    "es": "Palabra en tu idioma nativo:",
+    "pt": "Palavra no seu idioma nativo:",
+    "sw": "Neno katika lugha yako ya asili:",
+    "fr": "Mot dans votre langue maternelle:",
+    "zh": "您的母语单词：",
+    "ja": "あなたの母国語の単語：",
+    "ko": "당신의 모국어 단어:",
+    "hi": "अपनी मातृभाषा में शब्द:"
+  },
   "enter_word": {
     "en": "Enter word",
     "ru": "Введите слово",
@@ -7158,6 +7178,26 @@
     "ja": "単語を入力",
     "ko": "단어 입력",
     "hi": "शब्द दर्ज करें"
+  },
+  "enter_word_native": {
+    "en": "Enter word in your language",
+    "ru": "Введите слово на вашем языке",
+    "de": "Geben Sie ein Wort in Ihrer Sprache ein",
+    "pl": "Wprowadź słowo w swoim języku",
+    "ar": "أدخل كلمة بلغتك",
+    "tr": "Kendi dilinizde kelime girin",
+    "ro": "Introduceți cuvântul în limba ta",
+    "sr": "Унесите реч на свом језику",
+    "uk": "Введіть слово вашою мовою",
+    "it": "Inserisci una parola nella tua lingua",
+    "es": "Ingresa una palabra en tu idioma",
+    "pt": "Digite uma palavra no seu idioma",
+    "sw": "Ingiza neno kwa lugha yako",
+    "fr": "Entrez un mot dans votre langue",
+    "zh": "用你的语言输入单词",
+    "ja": "あなたの言語で単語を入力してください",
+    "ko": "귀하의 언어로 단어를 입력하세요",
+    "hi": "अपनी भाषा में शब्द दर्ज करें"
   },
   "get_translations": {
     "en": "Get Translations",
