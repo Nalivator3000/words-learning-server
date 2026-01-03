@@ -27,7 +27,7 @@ class AddWordUI {
         const t = (key) => window.i18n ? window.i18n.t(key) : key;
 
         const modalHTML = `
-            <div id="addWordModal" class="modal" style="display: none;">
+            <div id="addWordModal" class="modal modal-closed">
                 <div class="modal-content add-word-modal">
                     <button class="close-modal" type="button" aria-label="Close">&times;</button>
                     <h2 data-i18n="add_new_word">${t('add_new_word')}</h2>
@@ -142,13 +142,27 @@ class AddWordUI {
         this.createModalIfNeeded();
 
         this.resetForm();
-        document.getElementById('addWordModal').style.display = 'flex';
+        const modal = document.getElementById('addWordModal');
+        modal.classList.add('modal-open');
+        modal.classList.remove('modal-closed');
         document.getElementById('newWord').focus();
     }
 
     closeModal() {
-        document.getElementById('addWordModal').style.display = 'none';
-        this.resetForm();
+        console.log('closeModal called');
+        const modal = document.getElementById('addWordModal');
+        console.log('Modal element:', modal);
+        if (modal) {
+            modal.classList.add('modal-closed');
+            modal.classList.remove('modal-open');
+            console.log('Modal closed via class');
+        }
+        try {
+            this.resetForm();
+            console.log('Form reset successfully');
+        } catch (error) {
+            console.error('Error in resetForm:', error);
+        }
     }
 
     resetForm() {

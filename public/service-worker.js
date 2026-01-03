@@ -1,7 +1,7 @@
 // Service Worker for Words Learning App
-// Version 5.4.7 - Force CSS reload for add-word modal dark theme
+// Version 5.4.8 - Fix close button using class-based modal state
 
-const CACHE_VERSION = 'v5.4.7';
+const CACHE_VERSION = 'v5.4.8';
 const CACHE_NAME = `words-learning-${CACHE_VERSION}`;
 
 // Files to cache for offline use

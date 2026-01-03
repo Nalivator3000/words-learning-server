@@ -1,4 +1,4 @@
-/* LexyBooster v5.3.7 - Ultra Modern 3D Design System with Add-Word Modal Dark Theme Fix */
+/* LexyBooster v5.3.8 - Fix close button using class-based modal state */
 @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&display=swap');
 
 :root {
@@ -1212,6 +1212,17 @@ textarea {
     z-index: 9999 !important;
     padding: var(--space-4) !important;
     animation: fadeIn 0.3s ease-out !important;
+}
+
+/* Modal state classes */
+#addWordModal.modal-closed {
+    display: none !important;
+    pointer-events: none !important;
+}
+
+#addWordModal.modal-open {
+    display: flex !important;
+    pointer-events: auto !important;
 }
 
 #addWordModal .modal-content {
