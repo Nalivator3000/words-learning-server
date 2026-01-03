@@ -195,9 +195,6 @@ class LanguageLearningApp {
             document.getElementById('userMenu').classList.add('hidden');
         });
 
-        // Settings button in nav
-        document.getElementById('settingsNavBtn').addEventListener('click', () => this.showSection('settings'));
-
         // Logout button in settings
         document.getElementById('logoutBtnSettings').addEventListener('click', () => {
             if (confirm(i18n.t ? i18n.t('confirm_logout') || 'Are you sure you want to log out?' : 'Are you sure you want to log out?')) {
