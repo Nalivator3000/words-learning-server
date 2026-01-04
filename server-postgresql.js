@@ -327,6 +327,12 @@ app.get('/', (req, res) => {
         `<script src="$1?v=${APP_VERSION}"`
     );
 
+    // Add version query parameter to all CSS link tags
+    html = html.replace(
+        /<link rel="stylesheet" href="([^"]+\.css)"/g,
+        `<link rel="stylesheet" href="$1?v=${APP_VERSION}"`
+    );
+
     // Inject APP_VERSION as a global variable for client-side cache busting
     html = html.replace(
         /<script>/,
@@ -339,10 +345,29 @@ app.get('/', (req, res) => {
     res.send(html);
 });
 
-app.use(express.static(path.join(__dirname, 'public')));
+// Serve static files with proper cache control
+app.use(express.static(path.join(__dirname, 'public'), {
+    setHeaders: (res, filePath) => {
+        // Never cache HTML, JS, CSS files - always get fresh version
+        if (filePath.endsWith('.html') || filePath.endsWith('.js') || filePath.endsWith('.css')) {
+            res.setHeader('Cache-Control', 'no-cache, no-store, must-revalidate');
+            res.setHeader('Pragma', 'no-cache');
+            res.setHeader('Expires', '0');
+        } else {
+            // Cache images, fonts, etc. for 1 hour
+            res.setHeader('Cache-Control', 'public, max-age=3600');
+        }
+    }
+}));
 
-// Serve translations folder
-app.use('/translations', express.static(path.join(__dirname, 'translations')));
+// Serve translations folder with no caching (updated frequently)
+app.use('/translations', express.static(path.join(__dirname, 'translations'), {
+    setHeaders: (res) => {
+        res.setHeader('Cache-Control', 'no-cache, no-store, must-revalidate');
+        res.setHeader('Pragma', 'no-cache');
+        res.setHeader('Expires', '0');
+    }
+}));
 
 // File upload setup
 const upload = multer({ dest: 'uploads/' });

@@ -163,7 +163,7 @@ class UserManager {
 
             // Set active language pair
             if (this.currentUser.languagePairs.length > 0) {
-                this.currentLanguagePair = this.currentUser.languagePairs.find(lp => lp.is_active) || this.currentUser.languagePairs[0];
+                this.currentLanguagePair = this.currentUser.languagePairs.find(lp => lp.active || lp.is_active) || this.currentUser.languagePairs[0];
             }
 
             localStorage.setItem('currentUser', JSON.stringify(this.currentUser));
@@ -282,7 +282,7 @@ class UserManager {
 
             // Set active language pair
             if (this.currentUser.languagePairs.length > 0) {
-                this.currentLanguagePair = this.currentUser.languagePairs.find(lp => lp.is_active) || this.currentUser.languagePairs[0];
+                this.currentLanguagePair = this.currentUser.languagePairs.find(lp => lp.active || lp.is_active) || this.currentUser.languagePairs[0];
             }
 
             this.showUserInterface();
@@ -349,7 +349,8 @@ class UserManager {
 
             // Update local state
             this.currentUser.languagePairs.forEach(pair => {
-                pair.is_active = pair.id === parseInt(pairId);
+                pair.active = pair.id === parseInt(pairId);
+                pair.is_active = pair.active; // Keep backward compatibility
             });
 
             this.currentLanguagePair = activatedPair;
@@ -388,7 +389,7 @@ class UserManager {
             );
 
             // If deleted pair was active, activate first remaining pair
-            if (!this.currentUser.languagePairs.find(lp => lp.is_active)) {
+            if (!this.currentUser.languagePairs.find(lp => lp.active || lp.is_active)) {
                 if (this.currentUser.languagePairs.length > 0) {
                     await this.setActiveLanguagePair(this.currentUser.languagePairs[0].id);
                 }
@@ -438,7 +439,7 @@ class UserManager {
             this.currentLanguagePair.lesson_size = updatedPair.lesson_size;
 
             // Update in languagePairs array
-            const pairIndex = this.currentUser.languagePairs.findIndex(lp => lp.is_active);
+            const pairIndex = this.currentUser.languagePairs.findIndex(lp => lp.active || lp.is_active);
             if (pairIndex !== -1) {
                 this.currentUser.languagePairs[pairIndex].lesson_size = updatedPair.lesson_size;
             }

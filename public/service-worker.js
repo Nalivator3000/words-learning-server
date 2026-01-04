@@ -1,7 +1,7 @@
 // Service Worker for Words Learning App
-// Version 5.5.6 - Fix languagePair field names
+// Version 5.5.7 - Fix aggressive caching that requires Ctrl+Shift+R
 
-const CACHE_VERSION = 'v5.5.6';
+const CACHE_VERSION = 'v5.5.7';
 const CACHE_NAME = `words-learning-${CACHE_VERSION}`;
 
 // Files to cache for offline use
