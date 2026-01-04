@@ -734,6 +734,15 @@ class WordListsUI {
                                             </div>
                                         ` : ''}
                                     </div>
+                                    <button class="add-single-word-btn"
+                                            data-word="${this.escapeHtml(word.word || '')}"
+                                            data-translation="${this.escapeHtml(word.translation || '')}"
+                                            data-example="${this.escapeHtml(word.example || '')}"
+                                            data-example-translation="${this.escapeHtml(word.exampletranslation || word.exampleTranslation || '')}"
+                                            title="${i18n.t('add_to_dictionary') || 'Add to dictionary'}"
+                                            aria-label="${i18n.t('add_to_dictionary') || 'Add to dictionary'}">
+                                        +
+                                    </button>
                                 </div>
                             `).join('')}
                         </div>
@@ -758,6 +767,9 @@ class WordListsUI {
                         this.importWordList(listId);
                     });
                 }
+
+                // Attach event listeners to add-single-word buttons
+                this.attachSingleWordButtonListeners();
 
                 // Update i18n
                 if (window.i18n) {
@@ -877,6 +889,15 @@ class WordListsUI {
                                         </div>
                                     ` : ''}
                                 </div>
+                                <button class="add-single-word-btn"
+                                        data-word="${this.escapeHtml(word.word || '')}"
+                                        data-translation="${this.escapeHtml(word.translation || '')}"
+                                        data-example="${this.escapeHtml(word.example || '')}"
+                                        data-example-translation="${this.escapeHtml(word.exampletranslation || word.exampleTranslation || '')}"
+                                        title="${i18n.t('add_to_dictionary') || 'Add to dictionary'}"
+                                        aria-label="${i18n.t('add_to_dictionary') || 'Add to dictionary'}">
+                                    +
+                                </button>
                             </div>
                         `).join('')}
                     </div>
@@ -884,6 +905,9 @@ class WordListsUI {
             `;
 
             modal.style.display = 'flex';
+
+            // Attach event listeners to add-single-word buttons
+            this.attachSingleWordButtonListeners();
 
             // Update i18n in modal
             if (window.i18n) {
@@ -895,6 +919,47 @@ class WordListsUI {
                 showToast(error.message || 'Failed to load word set', 'error');
             }
         }
+    }
+
+    attachSingleWordButtonListeners() {
+        const addButtons = document.querySelectorAll('.add-single-word-btn');
+        addButtons.forEach(button => {
+            button.addEventListener('click', async (e) => {
+                e.preventDefault();
+                e.stopPropagation();
+
+                const btn = e.currentTarget;
+                const wordData = {
+                    word: btn.getAttribute('data-word'),
+                    translation: btn.getAttribute('data-translation'),
+                    example: btn.getAttribute('data-example'),
+                    exampleTranslation: btn.getAttribute('data-example-translation')
+                };
+
+                // Disable button while processing
+                btn.disabled = true;
+                btn.textContent = '...';
+
+                const success = await this.addSingleWordToUserDictionary(wordData);
+
+                if (success) {
+                    // Visual feedback: change to checkmark
+                    btn.textContent = '✓';
+                    btn.classList.add('added');
+                    btn.style.backgroundColor = '#10b981';
+                    btn.style.color = 'white';
+
+                    // Re-enable after 2 seconds
+                    setTimeout(() => {
+                        btn.disabled = false;
+                    }, 2000);
+                } else {
+                    // Restore button state on error
+                    btn.disabled = false;
+                    btn.textContent = '+';
+                }
+            });
+        });
     }
 
     async importWordSet(setId) {
@@ -1149,6 +1214,69 @@ class WordListsUI {
             modal.style.display = 'none';
         }
         this.selectedList = null;
+    }
+
+    escapeHtml(text) {
+        const div = document.createElement('div');
+        div.textContent = text;
+        return div.innerHTML;
+    }
+
+    async addSingleWordToUserDictionary(wordData) {
+        if (!this.userId || !this.languagePairId) {
+            if (window.showToast) {
+                showToast('Please select a language pair first', 'error');
+            }
+            return;
+        }
+
+        try {
+            const response = await fetch('/api/words', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({
+                    word: wordData.word,
+                    translation: wordData.translation,
+                    example: wordData.example,
+                    exampleTranslation: wordData.exampleTranslation,
+                    userId: this.userId,
+                    languagePairId: this.languagePairId,
+                    isCustom: true,
+                    source: 'word_set_import'
+                })
+            });
+
+            const data = await response.json();
+
+            if (response.ok) {
+                if (window.showToast) {
+                    showToast(i18n.t('word_added_successfully') || 'Word added successfully!', 'success');
+                }
+
+                // Refresh word manager if available
+                if (window.wordManager) {
+                    await window.wordManager.loadWords();
+                    window.wordManager.renderWords();
+                }
+
+                if (window.app && window.app.updateStats) {
+                    await window.app.updateStats();
+                }
+
+                return true;
+            } else {
+                if (window.showToast) {
+                    showToast(data.error || 'Failed to add word', 'error');
+                }
+                return false;
+            }
+        } catch (error) {
+            console.error('Error adding single word:', error);
+            if (window.showToast) {
+                showToast('Network error while adding word', 'error');
+            }
+            return false;
+        }
     }
 
     async refresh() {

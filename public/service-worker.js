@@ -1,7 +1,7 @@
 // Service Worker for Words Learning App
-// Version 5.5.2 - Force cache refresh for stats page fix
+// Version 5.5.3 - Add single word import from word sets
 
-const CACHE_VERSION = 'v5.5.2';
+const CACHE_VERSION = 'v5.5.3';
 const CACHE_NAME = `words-learning-${CACHE_VERSION}`;
 
 // Files to cache for offline use
