@@ -1,7 +1,7 @@
 // Service Worker for Words Learning App
-// Version 5.5.4 - Add logging to single word import buttons
+// Version 5.5.6 - Fix languagePair field names
 
-const CACHE_VERSION = 'v5.5.4';
+const CACHE_VERSION = 'v5.5.6';
 const CACHE_NAME = `words-learning-${CACHE_VERSION}`;
 
 // Files to cache for offline use
@@ -171,31 +171,40 @@ async function cacheFirstStrategy(request) {
 // Network-first strategy (for API requests and dynamic assets)
 async function networkFirstStrategy(request) {
     try {
-        // Try network first - always fetch fresh version
-        console.log('🌐 Service Worker: Fetching from network:', request.url);
-        const networkResponse = await fetch(request);
+        // ALWAYS try network first - bypass cache completely for fresh content
+        console.log('🌐 Service Worker: Fetching fresh from network (bypassing cache):', request.url);
 
-        // Cache successful responses (use URL without query params as cache key for JS/CSS)
+        // Add cache-busting headers to force fresh fetch
+        const fetchRequest = new Request(request, {
+            cache: 'no-store', // Don't use HTTP cache
+            headers: {
+                ...request.headers,
+                'Cache-Control': 'no-cache'
+            }
+        });
+
+        const networkResponse = await fetch(fetchRequest);
+
+        // DON'T cache JS/CSS/HTML to avoid stale files - always fetch fresh
+        // Only cache for offline fallback in extreme cases
         if (networkResponse.ok && request.method === 'GET') {
-            const cache = await caches.open(CACHE_NAME);
             const url = new URL(request.url);
 
-            // For JS/CSS files, strip version query param before caching
-            if (url.pathname.endsWith('.js') || url.pathname.endsWith('.css')) {
-                const cacheKey = new Request(url.pathname, {
-                    method: request.method,
-                    headers: request.headers
-                });
-                console.log(`💾 Caching ${url.pathname} (stripped query params)`);
-                cache.put(cacheKey, networkResponse.clone());
-            } else {
+            // Only cache non-critical resources (not JS/CSS/HTML)
+            if (!url.pathname.endsWith('.js') &&
+                !url.pathname.endsWith('.css') &&
+                !url.pathname.endsWith('.html')) {
+                const cache = await caches.open(CACHE_NAME);
                 cache.put(request, networkResponse.clone());
+                console.log(`💾 Cached non-critical asset: ${url.pathname}`);
+            } else {
+                console.log(`⏭️ Skipping cache for critical asset: ${url.pathname}`);
             }
         }
 
         return networkResponse;
     } catch (error) {
-        console.warn('⚠️ Service Worker: Network failed, trying cache:', error);
+        console.warn('⚠️ Service Worker: Network failed, trying cache as last resort:', error);
 
         // Fall back to cache if network fails
         // Try to match without query params for JS/CSS
