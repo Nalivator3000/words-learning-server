@@ -12511,35 +12511,97 @@ app.get('/api/language-pair/:id', async (req, res) => {
 // WORDS ENDPOINTS
 // ========================================
 
-// Get all words with pagination (filtered by user and language pair)
+// Get all words with pagination (NEW ARCHITECTURE: uses source_words_* + user_word_progress)
 app.get('/api/words', async (req, res) => {
     try {
         const { page = 1, limit = 50, status, userId, languagePairId } = req.query;
         const offset = (page - 1) * limit;
 
-        let query = 'SELECT * FROM words WHERE 1=1';
-        let params = [];
-        let paramIndex = 1;
-
-        // Filter by user and language pair
-        if (userId && languagePairId) {
-            query += ` AND user_id = $${paramIndex} AND language_pair_id = $${paramIndex + 1}`;
-            params.push(parseInt(userId), parseInt(languagePairId));
-            paramIndex += 2;
+        if (!userId || !languagePairId) {
+            return res.status(400).json({ error: 'userId and languagePairId are required' });
         }
+
+        // Get language pair info to determine source and target languages
+        const langPairResult = await db.query(
+            'SELECT from_lang, to_lang FROM language_pairs WHERE id = $1 AND user_id = $2',
+            [parseInt(languagePairId), parseInt(userId)]
+        );
+
+        if (langPairResult.rows.length === 0) {
+            return res.json([]);
+        }
+
+        // Map short language codes to full table names
+        const sourceLanguageCode = langPairResult.rows[0].from_lang;
+        const targetLanguageCode = langPairResult.rows[0].to_lang;
+        const sourceLanguage = LANG_CODE_TO_FULL_NAME[sourceLanguageCode] || sourceLanguageCode;
+        const targetLanguage = LANG_CODE_TO_FULL_NAME[targetLanguageCode] || targetLanguageCode;
+
+        const sourceTableName = `source_words_${sourceLanguage}`;
+        const translationTableName = `target_translations_${targetLanguage}`;
+
+        // Build query using new architecture
+        let query = `
+            SELECT
+                sw.id as source_word_id,
+                sw.id as id,
+                sw.word,
+                sw.level,
+                sw.theme,
+                tt.translation,
+                sw.example_${sourceLanguageCode} as example,
+                tt.example_${targetLanguageCode} as example_translation,
+                uwp.status,
+                uwp.correct_count,
+                uwp.incorrect_count,
+                uwp.total_reviews,
+                uwp.review_cycle,
+                uwp.last_review_date,
+                uwp.next_review_date,
+                uwp.ease_factor,
+                uwp.source_language,
+                uwp.id as progress_id,
+                uwp.created_at as createdAt
+            FROM ${sourceTableName} sw
+            INNER JOIN user_word_progress uwp ON (
+                uwp.source_word_id = sw.id
+                AND uwp.source_language = $1
+                AND uwp.user_id = $2
+                AND uwp.language_pair_id = $3
+            )
+            LEFT JOIN ${translationTableName} tt ON tt.source_word_id = sw.id
+                AND tt.source_lang = $4
+        `;
+
+        let params = [sourceLanguage, parseInt(userId), parseInt(languagePairId), sourceLanguageCode];
+        let paramIndex = 5;
 
         if (status) {
-            query += ` AND status = $${paramIndex}`;
-            params.push(status);
-            paramIndex++;
+            // Special handling for 'studying' - include both 'new' and 'studying' statuses
+            if (status === 'studying') {
+                query += ` WHERE (uwp.status = 'new' OR uwp.status = 'studying' OR uwp.status = 'learning')`;
+            } else {
+                query += ` WHERE uwp.status = $${paramIndex}`;
+                params.push(status);
+                paramIndex++;
+            }
         }
 
-        query += ` ORDER BY createdAt DESC LIMIT $${paramIndex} OFFSET $${paramIndex + 1}`;
+        query += ` ORDER BY uwp.created_at DESC LIMIT $${paramIndex} OFFSET $${paramIndex + 1}`;
         params.push(parseInt(limit), parseInt(offset));
 
         const result = await db.query(query, params);
+
+        // Set defaults for missing translations
+        result.rows.forEach(word => {
+            if (!word.translation) word.translation = '';
+            if (!word.example) word.example = '';
+            if (!word.example_translation) word.example_translation = '';
+        });
+
         res.json(result.rows);
     } catch (err) {
+        logger.error('Error fetching words:', err);
         res.status(500).json({ error: err.message });
     }
 });
