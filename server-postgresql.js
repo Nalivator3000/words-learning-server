@@ -2902,7 +2902,11 @@ app.get('/api/word-sets', async (req, res) => {
 
         query += ' ORDER BY level ASC, word_count DESC, title ASC';
 
+        logger.info(`Word sets query: ${query}`);
+        logger.info(`Query params: ${JSON.stringify(params)}`);
+
         const result = await db.query(query, params);
+        logger.info(`Word sets found: ${result.rows.length}`);
         res.json(result.rows);
     } catch (err) {
         logger.error('Error fetching word sets:', err);
