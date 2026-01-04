@@ -194,7 +194,7 @@ class WordListsUI {
         if (!container) return;
 
         const languageName = this.languagePair ? this.languagePair.name : 'Loading...';
-        const fromLang = this.languagePair ? this.languagePair.fromLanguage.toUpperCase() : '';
+        const fromLang = (this.languagePair && this.languagePair.fromLanguage) ? this.languagePair.fromLanguage.toUpperCase() : '';
 
         container.innerHTML = `
             <div class="word-lists-container">
