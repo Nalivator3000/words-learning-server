@@ -3744,11 +3744,6 @@ input:focus, textarea:focus, select:focus {
         display: flex !important;
     }
 
-    /* Hide header-right (old theme toggle and settings) on mobile */
-    .header-right {
-        display: none !important;
-    }
-
     /* Hide theme toggle on mobile, show only nav one */
     .theme-toggle {
         display: none !important;
