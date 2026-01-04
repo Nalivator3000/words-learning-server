@@ -452,8 +452,7 @@ class LanguageLearningApp {
         } else if (sectionName === 'review') {
             await this.updateReviewStats();
         } else if (sectionName === 'stats') {
-            await this.updateStats();
-            await this.updateReviewStats();
+            await this.updateStatsPage();
         } else if (sectionName === 'challenges') {
             await window.featuresUI.loadDailyChallenges();
         } else if (sectionName === 'streakFreeze') {
