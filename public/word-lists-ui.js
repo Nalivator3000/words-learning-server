@@ -152,12 +152,18 @@ class WordListsUI {
 
     async loadWordSets() {
         try {
+            console.log(`📋 [WORD-SETS] loadWordSets() called`);
+            console.log(`📋 [WORD-SETS] this.languagePair:`, this.languagePair);
+
             // Build language pair code (e.g., "de-en")
             const langPairCode = this.languagePair
                 ? `${this.languagePair.fromLanguage}-${this.languagePair.toLanguage}`
                 : null;
 
+            console.log(`📋 [WORD-SETS] Built langPairCode: ${langPairCode}`);
+
             if (!langPairCode) {
+                console.warn(`❌ [WORD-SETS] No language pair code, aborting`);
                 this.wordSets = [];
                 return;
             }
@@ -174,15 +180,24 @@ class WordListsUI {
                 url += `&theme=${this.currentFilter.theme}`;
             }
 
+            console.log(`📋 [WORD-SETS] Fetching from URL: ${url}`);
+            console.log(`📋 [WORD-SETS] Language pair code: ${langPairCode}`);
+
             const response = await fetch(url);
+            console.log(`📋 [WORD-SETS] Response status: ${response.status} ${response.statusText}`);
+            console.log(`📋 [WORD-SETS] Response ok: ${response.ok}`);
+
             if (!response.ok) {
-                console.warn('Word sets not available');
+                console.warn('❌ [WORD-SETS] Word sets not available, response not ok');
+                const errorText = await response.text();
+                console.warn('❌ [WORD-SETS] Error response:', errorText);
                 this.wordSets = [];
                 return;
             }
 
             this.wordSets = await response.json();
-            console.log('Word sets loaded:', this.wordSets);
+            console.log(`✅ [WORD-SETS] Word sets loaded:`, this.wordSets);
+            console.log(`✅ [WORD-SETS] Count: ${this.wordSets.length}`);
         } catch (error) {
             console.warn('Error loading word sets:', error);
             this.wordSets = [];
