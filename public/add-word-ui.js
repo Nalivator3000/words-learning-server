@@ -219,8 +219,8 @@ class AddWordUI {
                 headers: { 'Content-Type': 'application/json' },
                 body: JSON.stringify({
                     word,
-                    sourceLang: languagePair.to_lang,  // Native language (what user types)
-                    targetLang: languagePair.from_lang // Learning language (what we translate to)
+                    sourceLang: languagePair.toLanguage,  // Native language (what user types)
+                    targetLang: languagePair.fromLanguage // Learning language (what we translate to)
                 })
             });
 
@@ -258,8 +258,8 @@ class AddWordUI {
                     headers: { 'Content-Type': 'application/json' },
                     body: JSON.stringify({
                         word: nativeWord,
-                        sourceLang: languagePair.to_lang,
-                        targetLang: languagePair.from_lang
+                        sourceLang: languagePair.toLanguage,
+                        targetLang: languagePair.fromLanguage
                     })
                 });
 

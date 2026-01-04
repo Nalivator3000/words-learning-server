@@ -106,11 +106,11 @@ class WordListsUI {
 
             // Always filter by the user's selected language pair (both from_lang and to_lang)
             if (this.languagePair) {
-                if (this.languagePair.from_lang) {
-                    params.append('from_lang', this.languagePair.from_lang);
+                if (this.languagePair.fromLanguage) {
+                    params.append('from_lang', this.languagePair.fromLanguage);
                 }
-                if (this.languagePair.to_lang) {
-                    params.append('to_lang', this.languagePair.to_lang);
+                if (this.languagePair.toLanguage) {
+                    params.append('to_lang', this.languagePair.toLanguage);
                 }
             }
 
@@ -154,7 +154,7 @@ class WordListsUI {
         try {
             // Build language pair code (e.g., "de-en")
             const langPairCode = this.languagePair
-                ? `${this.languagePair.from_lang}-${this.languagePair.to_lang}`
+                ? `${this.languagePair.fromLanguage}-${this.languagePair.toLanguage}`
                 : null;
 
             if (!langPairCode) {
@@ -194,7 +194,7 @@ class WordListsUI {
         if (!container) return;
 
         const languageName = this.languagePair ? this.languagePair.name : 'Loading...';
-        const fromLang = this.languagePair ? this.languagePair.from_lang.toUpperCase() : '';
+        const fromLang = this.languagePair ? this.languagePair.fromLanguage.toUpperCase() : '';
 
         container.innerHTML = `
             <div class="word-lists-container">
@@ -658,8 +658,8 @@ class WordListsUI {
         try {
             // Build URL with native language parameter if available
             let url = `/api/word-lists/${listId}`;
-            if (this.languagePair && this.languagePair.to_lang) {
-                url += `?native_lang=${this.languagePair.to_lang}`;
+            if (this.languagePair && this.languagePair.toLanguage) {
+                url += `?native_lang=${this.languagePair.toLanguage}`;
             }
 
             const response = await fetch(url, {
@@ -831,8 +831,8 @@ class WordListsUI {
         try {
             // Build URL with native language parameter if available
             let url = `/api/word-sets/${setId}`;
-            if (this.languagePair && this.languagePair.to_lang) {
-                url += `?native_lang=${this.languagePair.to_lang}`;
+            if (this.languagePair && this.languagePair.toLanguage) {
+                url += `?native_lang=${this.languagePair.toLanguage}`;
             }
 
             const response = await fetch(url, {
@@ -923,8 +923,12 @@ class WordListsUI {
 
     attachSingleWordButtonListeners() {
         const addButtons = document.querySelectorAll('.add-single-word-btn');
-        addButtons.forEach(button => {
+        console.log(`🔘 Found ${addButtons.length} single word buttons`);
+
+        addButtons.forEach((button, index) => {
+            console.log(`🔘 Attaching listener to button ${index + 1}`);
             button.addEventListener('click', async (e) => {
+                console.log('🖱️ Single word button clicked!');
                 e.preventDefault();
                 e.stopPropagation();
 
@@ -935,6 +939,8 @@ class WordListsUI {
                     example: btn.getAttribute('data-example'),
                     exampleTranslation: btn.getAttribute('data-example-translation')
                 };
+
+                console.log('📝 Word data:', wordData);
 
                 // Disable button while processing
                 btn.disabled = true;
@@ -1223,14 +1229,20 @@ class WordListsUI {
     }
 
     async addSingleWordToUserDictionary(wordData) {
+        console.log('➕ Adding single word:', wordData);
+        console.log('👤 userId:', this.userId);
+        console.log('🌍 languagePairId:', this.languagePairId);
+
         if (!this.userId || !this.languagePairId) {
+            console.error('❌ Missing userId or languagePairId!');
             if (window.showToast) {
                 showToast('Please select a language pair first', 'error');
             }
-            return;
+            return false;
         }
 
         try {
+            console.log('📤 Sending request to /api/words...');
             const response = await fetch('/api/words', {
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json' },
@@ -1246,9 +1258,12 @@ class WordListsUI {
                 })
             });
 
+            console.log('📥 Response status:', response.status);
             const data = await response.json();
+            console.log('📊 Response data:', data);
 
             if (response.ok) {
+                console.log('✅ Word added successfully!');
                 if (window.showToast) {
                     showToast(i18n.t('word_added_successfully') || 'Word added successfully!', 'success');
                 }
@@ -1265,13 +1280,14 @@ class WordListsUI {
 
                 return true;
             } else {
+                console.error('❌ Failed to add word:', data.error);
                 if (window.showToast) {
                     showToast(data.error || 'Failed to add word', 'error');
                 }
                 return false;
             }
         } catch (error) {
-            console.error('Error adding single word:', error);
+            console.error('❌ Error adding single word:', error);
             if (window.showToast) {
                 showToast('Network error while adding word', 'error');
             }
