@@ -623,11 +623,18 @@ class LanguageLearningApp {
     async updateStatsPage() {
         try {
             const counts = await database.getWordCounts();
+            console.log('📊 Stats page counts received:', counts);
 
             // Update counts
             document.getElementById('studyingListCount').textContent = counts.studying;
             document.getElementById('reviewListCount').textContent = counts.review;
             document.getElementById('learnedListCount').textContent = counts.learned;
+
+            console.log('✅ Updated stats page counts:', {
+                studying: counts.studying,
+                review: counts.review,
+                learned: counts.learned
+            });
 
             // Update word lists
             await this.updateWordLists();
