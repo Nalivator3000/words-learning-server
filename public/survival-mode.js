@@ -153,23 +153,23 @@ class SurvivalMode {
 
         // Reset bars to full width and positions
         leftBar.style.width = '50%';
-        leftBar.style.left = '0%';
+        leftBar.style.marginLeft = '0%';
         rightBar.style.width = '50%';
-        rightBar.style.right = '0%';
+        rightBar.style.marginRight = '0%';
 
         this.timerAnimation = setInterval(() => {
             progress -= (100 / (this.timeLimit * 10)); // Decrease by small steps for smooth animation
-            
+
             // Calculate how much each bar should shrink (from 50% to 0%)
             const barWidth = Math.max(0, (progress / 2));
 
             // Left bar shrinks from left edge (moves right toward center)
             leftBar.style.width = `${barWidth}%`;
-            leftBar.style.left = `${50 - barWidth}%`; // Move right edge toward center
-            
-            // Right bar shrinks from right edge (moves left toward center) 
+            leftBar.style.marginLeft = `${50 - barWidth}%`; // Move right edge toward center
+
+            // Right bar shrinks from right edge (moves left toward center)
             rightBar.style.width = `${barWidth}%`;
-            rightBar.style.right = `${50 - barWidth}%`; // Move left edge toward center
+            rightBar.style.marginRight = `${50 - barWidth}%`; // Move left edge toward center
 
             if (progress <= 0) {
                 this.timeUp();
@@ -316,9 +316,9 @@ class SurvivalMode {
         const leftBar = document.getElementById('timerBarLeft');
         const rightBar = document.getElementById('timerBarRight');
         leftBar.style.width = '0%';
-        leftBar.style.left = '50%';
+        leftBar.style.marginLeft = '50%';
         rightBar.style.width = '0%';
-        rightBar.style.right = '50%';
+        rightBar.style.marginRight = '50%';
 
         // Show game over screen
         const survivalArea = document.getElementById('survivalArea');
