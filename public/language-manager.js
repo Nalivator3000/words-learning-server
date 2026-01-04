@@ -682,44 +682,15 @@ class LanguageManager {
             return 'en-US'; // Default fallback
         }
 
-        // Convert language codes to full names
-        // Database stores: from_lang = 'de', to_lang = 'ru'
-        // detectLanguage expects: 'German', 'Russian'
-        const studyingLang = this.getLanguageNameFromCode(languagePair.from_lang || languagePair.fromLanguage);
-        const nativeLang = this.getLanguageNameFromCode(languagePair.to_lang || languagePair.toLanguage);
+        // ALWAYS use the studying language (from_lang) from user's language pair
+        // User is learning this language, so we pronounce words in this language
+        const studyingLangCode = languagePair.from_lang || languagePair.fromLanguage;
+        const studyingLang = this.getLanguageNameFromCode(studyingLangCode);
+        const audioCode = this.getAudioCode(studyingLang);
 
-        console.log(`🔍 Language detection for "${text}"`);
-        console.log(`   Language pair: ${studyingLang} (studying) ↔ ${nativeLang} (native)`);
-
-        // Check if text is in studying language
-        const isStudyingLang = this.detectLanguage(text, studyingLang);
-
-        // Check if text is in native language
-        const isNativeLang = this.detectLanguage(text, nativeLang);
-
-        let audioCode;
-
-        if (isNativeLang && !isStudyingLang) {
-            // Text is clearly in native language - PRIORITY CHECK
-            audioCode = this.getAudioCode(nativeLang);
-            console.log(`   ✅ Detected NATIVE language → ${audioCode}`);
-        } else if (isStudyingLang && !isNativeLang) {
-            // Text is clearly in studying language
-            audioCode = this.getAudioCode(studyingLang);
-            console.log(`   ✅ Detected STUDYING language → ${audioCode}`);
-        } else if (studyingLang === nativeLang) {
-            // Same language pair (e.g., Spanish → Spanish)
-            audioCode = this.getAudioCode(studyingLang);
-            console.log(`   ✅ Same language pair → ${audioCode}`);
-        } else if (isNativeLang) {
-            // Both detected or ambiguous - prefer native language if detected
-            audioCode = this.getAudioCode(nativeLang);
-            console.log(`   ⚠️ Ambiguous, but native language detected → ${audioCode}`);
-        } else {
-            // Fallback to studying language
-            audioCode = this.getAudioCode(studyingLang);
-            console.log(`   ⚠️ Ambiguous, defaulting to STUDYING language → ${audioCode}`);
-        }
+        console.log(`🔊 TTS for "${text}"`);
+        console.log(`   User is studying: ${studyingLang} (${studyingLangCode})`);
+        console.log(`   Using voice: ${audioCode}`);
 
         return audioCode;
     }
@@ -729,10 +700,30 @@ class LanguageManager {
 
         const lowerText = text.toLowerCase().trim();
 
-        // Language-specific character patterns
+        // Common words dictionary - CHECK THIS FIRST for better accuracy
+        const commonWords = {
+            'German': ['der', 'die', 'das', 'ein', 'eine', 'und', 'ist', 'zu', 'mit', 'auf', 'für', 'von', 'dem', 'den', 'sich', 'nicht', 'auch', 'sein', 'werden', 'haben', 'des', 'eines', 'dieser', 'dieses', 'jener', 'welcher'],
+            'Spanish': ['el', 'la', 'de', 'que', 'y', 'a', 'en', 'un', 'ser', 'se', 'no', 'haber', 'por', 'con', 'su', 'para', 'como', 'estar', 'tener', 'hacer', 'los', 'las', 'del', 'una', 'al'],
+            'French': ['le', 'de', 'un', 'être', 'et', 'à', 'il', 'avoir', 'ne', 'je', 'son', 'que', 'se', 'qui', 'ce', 'dans', 'en', 'du', 'elle', 'au', 'pour', 'pas', 'par', 'sur', 'les', 'des', 'la'],
+            'Italian': ['il', 'di', 'e', 'la', 'un', 'a', 'per', 'è', 'che', 'in', 'da', 'non', 'con', 'si', 'dei', 'alla', 'delle', 'gli', 'una', 'sono', 'del', 'lo', 'al'],
+            'Russian': ['и', 'в', 'не', 'на', 'я', 'быть', 'он', 'с', 'что', 'а', 'это', 'весь', 'то', 'мочь', 'такой', 'для', 'как', 'но', 'так', 'она'],
+            'English': ['the', 'be', 'to', 'of', 'and', 'a', 'in', 'that', 'have', 'I', 'it', 'for', 'not', 'on', 'with', 'he', 'as', 'you', 'do', 'at', 'is', 'are', 'was', 'were', 'will', 'would'],
+            'Portuguese': ['o', 'a', 'de', 'que', 'e', 'do', 'da', 'em', 'um', 'para', 'é', 'com', 'não', 'uma', 'os', 'no', 'se', 'na', 'por', 'mais', 'dos', 'das', 'ao']
+        };
+
+        // Step 1: Check for common words FIRST (highest priority)
+        const words = commonWords[language];
+        if (words) {
+            const textWords = lowerText.split(/\s+/);
+            const hasCommonWord = textWords.some(word => words.includes(word));
+            if (hasCommonWord) {
+                return true;
+            }
+        }
+
+        // Language-specific character patterns (fallback)
         const patterns = {
             'Russian': /[а-яёА-ЯЁ]/,
-            'English': /^[a-zA-Z\s\-'.,"!?0-9]+$/, // Pure Latin without accents
             'German': /[äöüßÄÖÜ]/,
             'Spanish': /[ñáéíóúüÑÁÉÍÓÚÜ¿¡]/,
             'French': /[àâäéèêëïîôöùûüÿçÀÂÄÉÈÊËÏÎÔÖÙÛÜŸÇ]/,
@@ -747,32 +738,14 @@ class LanguageManager {
             'Romanian': /[ăâîșțĂÂÎȘȚ]/,
             'Serbian': /[а-яёђјљњћџА-ЯЁЂЈЉЊЋЏ]/,
             'Ukrainian': /[а-яґєіїА-ЯҐЄІЇ]/,
-            'Swahili': /^[a-zA-Z\s\-'.,"!?0-9]+$/ // Uses Latin alphabet like English
+            'Swahili': /^[a-zA-Z\s\-'.,"!?0-9]+$/, // Uses Latin alphabet like English
+            'English': /^[a-zA-Z\s\-'.,"!?0-9]+$/ // Pure Latin without accents (lowest priority)
         };
 
-        // Common words dictionary for better detection
-        const commonWords = {
-            'German': ['der', 'die', 'das', 'ein', 'eine', 'und', 'ist', 'zu', 'mit', 'auf', 'für', 'von', 'dem', 'den', 'sich', 'nicht', 'auch', 'sein', 'werden', 'haben'],
-            'Spanish': ['el', 'la', 'de', 'que', 'y', 'a', 'en', 'un', 'ser', 'se', 'no', 'haber', 'por', 'con', 'su', 'para', 'como', 'estar', 'tener', 'hacer'],
-            'French': ['le', 'de', 'un', 'être', 'et', 'à', 'il', 'avoir', 'ne', 'je', 'son', 'que', 'se', 'qui', 'ce', 'dans', 'en', 'du', 'elle', 'au', 'pour', 'pas', 'par', 'sur'],
-            'Italian': ['il', 'di', 'e', 'la', 'un', 'a', 'per', 'è', 'che', 'in', 'da', 'non', 'con', 'si', 'dei', 'alla', 'delle', 'gli', 'una', 'sono'],
-            'Russian': ['и', 'в', 'не', 'на', 'я', 'быть', 'он', 'с', 'что', 'а', 'это', 'весь', 'то', 'мочь', 'такой', 'для', 'как', 'но', 'так', 'она'],
-            'English': ['the', 'be', 'to', 'of', 'and', 'a', 'in', 'that', 'have', 'I', 'it', 'for', 'not', 'on', 'with', 'he', 'as', 'you', 'do', 'at'],
-            'Portuguese': ['o', 'a', 'de', 'que', 'e', 'do', 'da', 'em', 'um', 'para', 'é', 'com', 'não', 'uma', 'os', 'no', 'se', 'na', 'por', 'mais']
-        };
-
-        // Step 1: Check for language-specific characters
+        // Step 2: Check for language-specific characters (only if no common words found)
         const pattern = patterns[language];
         if (pattern && pattern.test(text)) {
             return true;
-        }
-
-        // Step 2: Check for common words in the language
-        const words = commonWords[language];
-        if (words) {
-            const textWords = lowerText.split(/\s+/);
-            // If any word in text matches common words, it's likely this language
-            return textWords.some(word => words.includes(word));
         }
 
         return false;
