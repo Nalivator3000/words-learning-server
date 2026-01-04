@@ -11827,16 +11827,28 @@ app.post('/api/tts/synthesize', async (req, res) => {
 // Get TTS cache stats
 app.get('/api/tts/cache/stats', async (req, res) => {
     try {
-        const files = fs.readdirSync(TTS_CACHE_DIR);
-        const totalSize = files.reduce((acc, file) => {
-            const stats = fs.statSync(path.join(TTS_CACHE_DIR, file));
-            return acc + stats.size;
-        }, 0);
+        // Local cache stats
+        let localFiles = [];
+        let localSize = 0;
+
+        if (fs.existsSync(AUDIO_CACHE_DIR)) {
+            localFiles = fs.readdirSync(AUDIO_CACHE_DIR);
+            localSize = localFiles.reduce((acc, file) => {
+                const stats = fs.statSync(path.join(AUDIO_CACHE_DIR, file));
+                return acc + stats.size;
+            }, 0);
+        }
+
+        // Google Drive stats
+        const driveStats = await googleDriveCache.getCacheStats();
 
         res.json({
-            cached_items: files.length,
-            total_size_bytes: totalSize,
-            total_size_mb: (totalSize / (1024 * 1024)).toFixed(2)
+            local: {
+                cached_items: localFiles.length,
+                total_size_bytes: localSize,
+                total_size_mb: (localSize / (1024 * 1024)).toFixed(2)
+            },
+            google_drive: driveStats
         });
     } catch (err) {
         logger.error('Error getting TTS cache stats:', err);
@@ -11847,12 +11859,32 @@ app.get('/api/tts/cache/stats', async (req, res) => {
 // Clear TTS cache
 app.delete('/api/tts/cache/clear', async (req, res) => {
     try {
-        const files = fs.readdirSync(TTS_CACHE_DIR);
-        files.forEach(file => {
-            fs.unlinkSync(path.join(TTS_CACHE_DIR, file));
-        });
+        const { location = 'all' } = req.query; // 'local', 'drive', or 'all'
 
-        res.json({ success: true, deleted_items: files.length });
+        let localDeleted = 0;
+        let driveResult = null;
+
+        // Clear local cache
+        if (location === 'local' || location === 'all') {
+            if (fs.existsSync(AUDIO_CACHE_DIR)) {
+                const files = fs.readdirSync(AUDIO_CACHE_DIR);
+                files.forEach(file => {
+                    fs.unlinkSync(path.join(AUDIO_CACHE_DIR, file));
+                });
+                localDeleted = files.length;
+            }
+        }
+
+        // Clear Google Drive cache
+        if (location === 'drive' || location === 'all') {
+            driveResult = await googleDriveCache.clearCache();
+        }
+
+        res.json({
+            success: true,
+            local_deleted: localDeleted,
+            google_drive: driveResult
+        });
     } catch (err) {
         logger.error('Error clearing TTS cache:', err);
         res.status(500).json({ error: err.message });
@@ -16733,6 +16765,12 @@ try {
     logger.error('❌ Failed to initialize Google TTS client:', err.message);
 }
 
+// Initialize Google Drive cache for TTS audio
+const googleDriveCache = require('./utils/google-drive-cache');
+(async () => {
+    await googleDriveCache.init();
+})();
+
 // Audio cache directory
 const AUDIO_CACHE_DIR = path.join(__dirname, 'audio-cache');
 if (!fs.existsSync(AUDIO_CACHE_DIR)) {
@@ -16756,15 +16794,29 @@ app.get('/api/tts', async (req, res) => {
         const cacheKey = crypto.createHash('md5').update(`${text}-${lang}`).digest('hex');
         const cacheFile = path.join(AUDIO_CACHE_DIR, `${cacheKey}.mp3`);
 
-        // Check if audio is already cached
+        // Step 1: Check local cache first (fastest)
         if (fs.existsSync(cacheFile)) {
-            logger.info(`📦 Serving cached audio for: "${text}"`);
+            logger.info(`📦 Serving from local cache: "${text}"`);
             res.set('Content-Type', 'audio/mpeg');
-            res.set('Cache-Control', 'public, max-age=31536000'); // Cache for 1 year
+            res.set('Cache-Control', 'public, max-age=31536000');
             return res.sendFile(cacheFile);
         }
 
-        // Generate audio using Google Cloud TTS
+        // Step 2: Check Google Drive cache (cheaper than generating)
+        logger.info(`🔍 Checking Google Drive cache for: "${text}"`);
+        const driveAudio = await googleDriveCache.getFile(cacheKey, lang);
+
+        if (driveAudio) {
+            logger.info(`☁️ Serving from Google Drive cache: "${text}"`);
+            // Save to local cache for faster future access
+            fs.writeFileSync(cacheFile, driveAudio, 'binary');
+
+            res.set('Content-Type', 'audio/mpeg');
+            res.set('Cache-Control', 'public, max-age=31536000');
+            return res.send(driveAudio);
+        }
+
+        // Step 3: Generate audio using Google Cloud TTS (most expensive)
         logger.info(`🔊 Generating TTS for: "${text}" (${lang})`);
 
         // Select best voice for each language (Neural2 preferred)
@@ -16803,15 +16855,21 @@ app.get('/api/tts', async (req, res) => {
         };
 
         const [response] = await ttsClient.synthesizeSpeech(request);
+        const audioBuffer = Buffer.from(response.audioContent, 'binary');
 
-        // Save to cache
-        fs.writeFileSync(cacheFile, response.audioContent, 'binary');
-        logger.info(`✅ Audio generated and cached: ${cacheKey}.mp3 (voice: ${voiceMap[lang] || 'default'})`);
+        // Save to local cache
+        fs.writeFileSync(cacheFile, audioBuffer);
+        logger.info(`✅ Audio generated and cached locally: ${cacheKey}.mp3 (voice: ${voiceMap[lang] || 'default'})`);
+
+        // Upload to Google Drive (async, don't wait)
+        googleDriveCache.uploadFile(cacheKey, lang, audioBuffer)
+            .then(() => logger.info(`   ☁️ Uploaded to Google Drive`))
+            .catch(err => logger.warn(`   ⚠️ Failed to upload to Drive: ${err.message}`));
 
         // Send audio
         res.set('Content-Type', 'audio/mpeg');
         res.set('Cache-Control', 'public, max-age=31536000');
-        res.send(Buffer.from(response.audioContent, 'binary'));
+        res.send(audioBuffer);
 
     } catch (err) {
         logger.error('❌ TTS generation failed:', err);
