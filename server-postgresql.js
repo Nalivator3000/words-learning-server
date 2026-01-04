@@ -16767,14 +16767,33 @@ app.get('/api/tts', async (req, res) => {
         // Generate audio using Google Cloud TTS
         logger.info(`🔊 Generating TTS for: "${text}" (${lang})`);
 
+        // Select best voice for each language (Neural2 preferred)
+        const voiceMap = {
+            'de-DE': 'de-DE-Neural2-C',     // German (Germany)
+            'en-US': 'en-US-Neural2-F',     // English (US)
+            'en-GB': 'en-GB-Neural2-F',     // English (UK)
+            'ru-RU': 'ru-RU-Wavenet-A',     // Russian
+            'es-ES': 'es-ES-Neural2-A',     // Spanish (Spain)
+            'fr-FR': 'fr-FR-Neural2-A',     // French
+            'it-IT': 'it-IT-Neural2-A',     // Italian
+            'pt-PT': 'pt-PT-Wavenet-A',     // Portuguese (Portugal)
+            'pt-BR': 'pt-BR-Neural2-A',     // Portuguese (Brazil)
+            'zh-CN': 'cmn-CN-Wavenet-A',    // Chinese (Mandarin)
+            'ja-JP': 'ja-JP-Neural2-B',     // Japanese
+            'ko-KR': 'ko-KR-Neural2-A',     // Korean
+            'ar-XA': 'ar-XA-Wavenet-A',     // Arabic
+            'pl-PL': 'pl-PL-Wavenet-A',     // Polish
+            'tr-TR': 'tr-TR-Wavenet-A',     // Turkish
+            'ro-RO': 'ro-RO-Wavenet-A',     // Romanian
+            'uk-UA': 'uk-UA-Wavenet-A',     // Ukrainian
+        };
+
         const request = {
             input: { text },
             voice: {
                 languageCode: lang,
-                // Use Neural2 voices for best quality (if available)
-                name: lang === 'de-DE' ? 'de-DE-Neural2-C' :
-                      lang === 'en-US' ? 'en-US-Neural2-F' :
-                      lang === 'ru-RU' ? 'ru-RU-Wavenet-A' : undefined
+                name: voiceMap[lang] || undefined,  // Use specific voice if available
+                ssmlGender: 'FEMALE'  // Prefer female voices (usually clearer)
             },
             audioConfig: {
                 audioEncoding: 'MP3',
@@ -16787,7 +16806,7 @@ app.get('/api/tts', async (req, res) => {
 
         // Save to cache
         fs.writeFileSync(cacheFile, response.audioContent, 'binary');
-        logger.info(`✅ Audio generated and cached: ${cacheKey}.mp3`);
+        logger.info(`✅ Audio generated and cached: ${cacheKey}.mp3 (voice: ${voiceMap[lang] || 'default'})`);
 
         // Send audio
         res.set('Content-Type', 'audio/mpeg');
