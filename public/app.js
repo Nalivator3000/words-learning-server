@@ -625,14 +625,24 @@ class LanguageLearningApp {
             console.log('📊 Stats page counts received:', counts);
 
             // Update counts
-            document.getElementById('studyingListCount').textContent = counts.studying;
-            document.getElementById('reviewListCount').textContent = counts.review;
-            document.getElementById('learnedListCount').textContent = counts.learned;
+            const studyingEl = document.getElementById('studyingListCount');
+            const reviewEl = document.getElementById('reviewListCount');
+            const learnedEl = document.getElementById('learnedListCount');
 
-            console.log('✅ Updated stats page counts:', {
-                studying: counts.studying,
-                review: counts.review,
-                learned: counts.learned
+            console.log('🔍 Before update - elements found:', {
+                studyingEl: !!studyingEl,
+                reviewEl: !!reviewEl,
+                learnedEl: !!learnedEl
+            });
+
+            if (studyingEl) studyingEl.textContent = counts.studying;
+            if (reviewEl) reviewEl.textContent = counts.review;
+            if (learnedEl) learnedEl.textContent = counts.learned;
+
+            console.log('✅ After update - textContent values:', {
+                studying: studyingEl?.textContent,
+                review: reviewEl?.textContent,
+                learned: learnedEl?.textContent
             });
 
             // Update word lists
