@@ -12546,7 +12546,9 @@ app.get('/api/language-pair/:id', async (req, res) => {
             return res.status(404).json({ error: 'Language pair not found' });
         }
 
-        res.json(result.rows[0]);
+        // Transform to camelCase format
+        const transformed = transformLanguagePairs([result.rows[0]])[0];
+        res.json(transformed);
     } catch (err) {
         logger.error('Error getting language pair:', err);
         res.status(500).json({ error: err.message });
