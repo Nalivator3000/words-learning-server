@@ -2837,6 +2837,7 @@ app.delete('/api/users/:userId/language-pairs/:pairId', async (req, res) => {
 // Get all word sets (with optional filtering)
 app.get('/api/word-sets', async (req, res) => {
     try {
+        logger.info(`[WORD-SETS] Incoming request query params: ${JSON.stringify(req.query)}`);
         const { sourceLang, targetLang, languagePair, level, theme, isPublic } = req.query;
 
         let query = 'SELECT * FROM word_sets WHERE 1=1';
