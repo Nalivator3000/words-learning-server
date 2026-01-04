@@ -1,0 +1,231 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Audio Preload Admin</title>
+    <style>
+        body {
+            font-family: system-ui, -apple-system, sans-serif;
+            max-width: 800px;
+            margin: 50px auto;
+            padding: 20px;
+            background: #f5f5f5;
+        }
+        .card {
+            background: white;
+            border-radius: 8px;
+            padding: 24px;
+            margin-bottom: 20px;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+        }
+        h1 {
+            color: #333;
+            margin-top: 0;
+        }
+        h2 {
+            color: #555;
+            font-size: 18px;
+            margin-top: 0;
+        }
+        button {
+            background: #007bff;
+            color: white;
+            border: none;
+            padding: 12px 24px;
+            border-radius: 6px;
+            cursor: pointer;
+            font-size: 16px;
+            margin-right: 10px;
+        }
+        button:hover {
+            background: #0056b3;
+        }
+        button.secondary {
+            background: #6c757d;
+        }
+        button.secondary:hover {
+            background: #545b62;
+        }
+        input[type="number"] {
+            width: 100px;
+            padding: 8px;
+            border: 1px solid #ddd;
+            border-radius: 4px;
+            font-size: 16px;
+        }
+        .result {
+            margin-top: 20px;
+            padding: 16px;
+            border-radius: 6px;
+            background: #e7f3ff;
+            border-left: 4px solid #007bff;
+        }
+        .error {
+            background: #ffe7e7;
+            border-left-color: #dc3545;
+        }
+        .stats {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 16px;
+            margin-top: 16px;
+        }
+        .stat {
+            background: #f8f9fa;
+            padding: 16px;
+            border-radius: 6px;
+        }
+        .stat-label {
+            color: #666;
+            font-size: 14px;
+            margin-bottom: 4px;
+        }
+        .stat-value {
+            font-size: 24px;
+            font-weight: bold;
+            color: #333;
+        }
+    </style>
+</head>
+<body>
+    <h1>🎵 Audio Preload Admin</h1>
+
+    <div class="card">
+        <h2>1. Estimate Cost</h2>
+        <p>Check how many words can be preloaded and estimated cost:</p>
+        <label>
+            Max words:
+            <input type="number" id="estimateMaxWords" value="500" min="1" max="10000">
+        </label>
+        <button onclick="estimateCost()">Get Estimate</button>
+        <div id="estimateResult"></div>
+    </div>
+
+    <div class="card">
+        <h2>2. Cache Statistics</h2>
+        <button onclick="getCacheStats()">Refresh Stats</button>
+        <div id="cacheStats"></div>
+    </div>
+
+    <div class="card">
+        <h2>3. Preload Popular Words</h2>
+        <p>Generate audio for popular words to utilize free quota:</p>
+        <label>
+            Max words:
+            <input type="number" id="preloadMaxWords" value="100" min="1" max="1000">
+        </label>
+        <button onclick="startPreload(true)" class="secondary">Dry Run (Preview)</button>
+        <button onclick="startPreload(false)">Start Preload</button>
+        <div id="preloadResult"></div>
+    </div>
+
+    <script>
+        async function estimateCost() {
+            const maxWords = document.getElementById('estimateMaxWords').value;
+            const resultDiv = document.getElementById('estimateResult');
+
+            resultDiv.innerHTML = '<p>Loading...</p>';
+
+            try {
+                const response = await fetch(`/api/tts/preload/estimate?maxWords=${maxWords}`);
+                const data = await response.json();
+
+                resultDiv.innerHTML = `
+                    <div class="result">
+                        <div class="stats">
+                            <div class="stat">
+                                <div class="stat-label">Uncached Words</div>
+                                <div class="stat-value">${data.words}</div>
+                            </div>
+                            <div class="stat">
+                                <div class="stat-label">Estimated Characters</div>
+                                <div class="stat-value">${data.estimatedChars.toLocaleString()}</div>
+                            </div>
+                            <div class="stat">
+                                <div class="stat-label">Estimated Cost</div>
+                                <div class="stat-value">$${data.estimatedCostUSD}</div>
+                            </div>
+                        </div>
+                        <p style="margin-top: 16px; color: #666;">${data.message}</p>
+                    </div>
+                `;
+            } catch (error) {
+                resultDiv.innerHTML = `<div class="result error">Error: ${error.message}</div>`;
+            }
+        }
+
+        async function getCacheStats() {
+            const resultDiv = document.getElementById('cacheStats');
+            resultDiv.innerHTML = '<p>Loading...</p>';
+
+            try {
+                const response = await fetch('/api/tts/cache/stats');
+                const data = await response.json();
+
+                const driveStatus = data.google_drive.enabled
+                    ? `${data.google_drive.cached_items} files (${data.google_drive.total_size_mb} MB)`
+                    : 'Not configured';
+
+                resultDiv.innerHTML = `
+                    <div class="result">
+                        <div class="stats">
+                            <div class="stat">
+                                <div class="stat-label">Local Cache</div>
+                                <div class="stat-value">${data.local.cached_items}</div>
+                                <div class="stat-label">${data.local.total_size_mb} MB</div>
+                            </div>
+                            <div class="stat">
+                                <div class="stat-label">Google Drive Cache</div>
+                                <div class="stat-value">${driveStatus}</div>
+                            </div>
+                        </div>
+                    </div>
+                `;
+            } catch (error) {
+                resultDiv.innerHTML = `<div class="result error">Error: ${error.message}</div>`;
+            }
+        }
+
+        async function startPreload(dryRun) {
+            const maxWords = document.getElementById('preloadMaxWords').value;
+            const resultDiv = document.getElementById('preloadResult');
+
+            resultDiv.innerHTML = '<p>Starting preload job...</p>';
+
+            try {
+                const response = await fetch('/api/tts/preload', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ maxWords: parseInt(maxWords), dryRun })
+                });
+
+                const data = await response.json();
+
+                if (data.success) {
+                    resultDiv.innerHTML = `
+                        <div class="result">
+                            <h3>✅ ${data.message}</h3>
+                            <p>Max words: ${data.maxWords}</p>
+                            <p>Dry run: ${data.dryRun ? 'Yes (no audio generated)' : 'No (generating audio)'}</p>
+                            ${dryRun
+                                ? '<p>💡 Check server logs to see which words would be cached.</p>'
+                                : '<p>📊 Check server logs for progress. This may take several minutes.</p>'
+                            }
+                        </div>
+                    `;
+                } else {
+                    resultDiv.innerHTML = `<div class="result error">Error: ${data.error}</div>`;
+                }
+            } catch (error) {
+                resultDiv.innerHTML = `<div class="result error">Error: ${error.message}</div>`;
+            }
+        }
+
+        // Load initial stats
+        window.addEventListener('load', () => {
+            getCacheStats();
+        });
+    </script>
+</body>
+</html>

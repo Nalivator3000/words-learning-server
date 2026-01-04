@@ -16877,6 +16877,58 @@ app.get('/api/tts', async (req, res) => {
     }
 });
 
+// Audio preload endpoint - preload popular words before quota expires
+app.post('/api/tts/preload', async (req, res) => {
+    try {
+        const { maxWords = 100, dryRun = false } = req.body;
+
+        if (!ttsClient) {
+            return res.status(503).json({ error: 'TTS not configured' });
+        }
+
+        const AudioPreloader = require('./utils/audio-preloader');
+        const preloader = new AudioPreloader(db, ttsClient, googleDriveCache, AUDIO_CACHE_DIR);
+
+        // Run in background and return immediately
+        res.json({
+            success: true,
+            message: 'Preload job started in background',
+            maxWords,
+            dryRun
+        });
+
+        // Execute preload asynchronously
+        preloader.preload({ maxWords, dryRun })
+            .then(result => {
+                logger.info('🎵 Audio preload completed:', result);
+            })
+            .catch(err => {
+                logger.error('❌ Audio preload failed:', err);
+            });
+
+    } catch (err) {
+        logger.error('Error starting audio preload:', err);
+        res.status(500).json({ error: err.message });
+    }
+});
+
+// Get preload cost estimate
+app.get('/api/tts/preload/estimate', async (req, res) => {
+    try {
+        const { maxWords = 500 } = req.query;
+
+        const AudioPreloader = require('./utils/audio-preloader');
+        const preloader = new AudioPreloader(db, ttsClient, googleDriveCache, AUDIO_CACHE_DIR);
+
+        const estimate = await preloader.estimateCost(parseInt(maxWords, 10));
+        res.json(estimate);
+
+    } catch (err) {
+        logger.error('Error estimating preload cost:', err);
+        res.status(500).json({ error: err.message });
+    }
+});
+
 // Diagnostic endpoint to check word distribution
 app.get('/api/debug/word-stats/:userId/:languagePairId', async (req, res) => {
     try {
