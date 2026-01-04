@@ -41,6 +41,22 @@ const logger = {
     }
 };
 
+// Helper function to transform language pairs from DB format to frontend format
+function transformLanguagePairs(pairs) {
+    if (!pairs || !Array.isArray(pairs)) return [];
+
+    return pairs.map(pair => ({
+        id: pair.id,
+        name: pair.name,
+        fromLanguage: pair.from_lang,
+        toLanguage: pair.to_lang,
+        active: pair.is_active,
+        lessonSize: pair.lesson_size,
+        createdAt: pair.createdat,
+        updatedAt: pair.updatedat
+    }));
+}
+
 // Database setup
 const db = new Pool({
     connectionString: process.env.DATABASE_URL || `postgres://${process.env.DB_USER}:${process.env.DB_PASSWORD}@${process.env.DB_HOST}:${process.env.DB_PORT}/${process.env.DB_NAME}`,
@@ -2545,7 +2561,7 @@ app.post('/api/auth/login', authLimiter, async (req, res) => {
                 picture: user.picture,
                 createdAt: user.createdat
             },
-            languagePairs: langPairsResult.rows,
+            languagePairs: transformLanguagePairs(langPairsResult.rows),
             needsOnboarding: needsOnboarding
         });
     } catch (err) {
@@ -2707,7 +2723,7 @@ app.get('/api/users/:userId/language-pairs', async (req, res) => {
             'SELECT * FROM language_pairs WHERE user_id = $1 ORDER BY is_active DESC, createdat ASC',
             [userId]
         );
-        res.json(result.rows);
+        res.json(transformLanguagePairs(result.rows));
     } catch (err) {
         res.status(500).json({ error: err.message });
     }
