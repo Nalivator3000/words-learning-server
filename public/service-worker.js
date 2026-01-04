@@ -1,7 +1,7 @@
 // Service Worker for Words Learning App
-// Version 5.4.9 - Fix POST request caching error
+// Version 5.5.2 - Force cache refresh for stats page fix
 
-const CACHE_VERSION = 'v5.4.9';
+const CACHE_VERSION = 'v5.5.2';
 const CACHE_NAME = `words-learning-${CACHE_VERSION}`;
 
 // Files to cache for offline use
