@@ -11839,8 +11839,8 @@ app.get('/api/tts/cache/stats', async (req, res) => {
             }, 0);
         }
 
-        // Google Drive stats
-        const driveStats = await googleDriveCache.getCacheStats();
+        // Cloudinary stats
+        const cloudinaryStats = await cloudinaryCache.getCacheStats();
 
         res.json({
             local: {
@@ -11848,7 +11848,7 @@ app.get('/api/tts/cache/stats', async (req, res) => {
                 total_size_bytes: localSize,
                 total_size_mb: (localSize / (1024 * 1024)).toFixed(2)
             },
-            google_drive: driveStats
+            cloudinary: cloudinaryStats
         });
     } catch (err) {
         logger.error('Error getting TTS cache stats:', err);
@@ -11859,10 +11859,10 @@ app.get('/api/tts/cache/stats', async (req, res) => {
 // Clear TTS cache
 app.delete('/api/tts/cache/clear', async (req, res) => {
     try {
-        const { location = 'all' } = req.query; // 'local', 'drive', or 'all'
+        const { location = 'all' } = req.query; // 'local', 'cloudinary', or 'all'
 
         let localDeleted = 0;
-        let driveResult = null;
+        let cloudinaryResult = null;
 
         // Clear local cache
         if (location === 'local' || location === 'all') {
@@ -11875,15 +11875,15 @@ app.delete('/api/tts/cache/clear', async (req, res) => {
             }
         }
 
-        // Clear Google Drive cache
-        if (location === 'drive' || location === 'all') {
-            driveResult = await googleDriveCache.clearCache();
+        // Clear Cloudinary cache
+        if (location === 'cloudinary' || location === 'all') {
+            cloudinaryResult = await cloudinaryCache.clearCache();
         }
 
         res.json({
             success: true,
             local_deleted: localDeleted,
-            google_drive: driveResult
+            cloudinary: cloudinaryResult
         });
     } catch (err) {
         logger.error('Error clearing TTS cache:', err);
@@ -16827,10 +16827,10 @@ try {
     logger.error('❌ Failed to initialize Google TTS client:', err.message);
 }
 
-// Initialize Google Drive cache for TTS audio
-const googleDriveCache = require('./utils/google-drive-cache');
+// Initialize Cloudinary cache for TTS audio
+const cloudinaryCache = require('./utils/cloudinary-cache');
 (async () => {
-    await googleDriveCache.init();
+    await cloudinaryCache.init();
 })();
 
 // Audio cache directory
@@ -16864,18 +16864,18 @@ app.get('/api/tts', async (req, res) => {
             return res.sendFile(cacheFile);
         }
 
-        // Step 2: Check Google Drive cache (cheaper than generating)
-        logger.info(`🔍 Checking Google Drive cache for: "${text}"`);
-        const driveAudio = await googleDriveCache.getFile(cacheKey, lang);
+        // Step 2: Check Cloudinary cache (cheaper than generating)
+        logger.info(`🔍 Checking Cloudinary cache for: "${text}"`);
+        const cloudinaryAudio = await cloudinaryCache.getFile(cacheKey, lang);
 
-        if (driveAudio) {
-            logger.info(`☁️ Serving from Google Drive cache: "${text}"`);
+        if (cloudinaryAudio) {
+            logger.info(`☁️ Serving from Cloudinary cache: "${text}"`);
             // Save to local cache for faster future access
-            fs.writeFileSync(cacheFile, driveAudio, 'binary');
+            fs.writeFileSync(cacheFile, cloudinaryAudio, 'binary');
 
             res.set('Content-Type', 'audio/mpeg');
             res.set('Cache-Control', 'public, max-age=31536000');
-            return res.send(driveAudio);
+            return res.send(cloudinaryAudio);
         }
 
         // Step 3: Generate audio using Google Cloud TTS (most expensive)
@@ -16923,10 +16923,10 @@ app.get('/api/tts', async (req, res) => {
         fs.writeFileSync(cacheFile, audioBuffer);
         logger.info(`✅ Audio generated and cached locally: ${cacheKey}.mp3 (voice: ${voiceMap[lang] || 'default'})`);
 
-        // Upload to Google Drive (async, don't wait)
-        googleDriveCache.uploadFile(cacheKey, lang, audioBuffer)
-            .then(() => logger.info(`   ☁️ Uploaded to Google Drive`))
-            .catch(err => logger.warn(`   ⚠️ Failed to upload to Drive: ${err.message}`));
+        // Upload to Cloudinary (async, don't wait)
+        cloudinaryCache.uploadFile(cacheKey, lang, audioBuffer)
+            .then(() => logger.info(`   ☁️ Uploaded to Cloudinary`))
+            .catch(err => logger.warn(`   ⚠️ Failed to upload to Cloudinary: ${err.message}`));
 
         // Send audio
         res.set('Content-Type', 'audio/mpeg');
