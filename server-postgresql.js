@@ -2939,7 +2939,7 @@ app.get('/api/word-sets/:setId', async (req, res) => {
         if (wordSet.level && wordSet.source_language) {
             // Determine target language from native_lang, languagePair, or userId
             let targetLang = 'english'; // default
-            let sourceLangCode = 'de';
+            let sourceLangCode = wordSet.source_language.substring(0, 2); // Get from word set's source language
 
             // Map language codes to full names
             const langMap = {
@@ -2950,19 +2950,43 @@ app.get('/api/word-sets/:setId', async (req, res) => {
                 'sr': 'serbian', 'sw': 'swahili'
             };
 
+            // Reverse map: full names to codes
+            const langToCode = {
+                'english': 'en', 'german': 'de', 'spanish': 'es', 'french': 'fr',
+                'russian': 'ru', 'italian': 'it', 'portuguese': 'pt', 'chinese': 'zh',
+                'japanese': 'ja', 'korean': 'ko', 'hindi': 'hi', 'arabic': 'ar',
+                'turkish': 'tr', 'ukrainian': 'uk', 'polish': 'pl', 'romanian': 'ro',
+                'serbian': 'sr', 'swahili': 'sw'
+            };
+
+            // Get the correct source language code from the word set
+            sourceLangCode = langToCode[wordSet.source_language] || wordSet.source_language.substring(0, 2);
+
             // 1. Try native_lang parameter (sent by frontend)
             if (native_lang) {
-                targetLang = langMap[native_lang] || native_lang;
-                logger.info(`[WORD-SETS] Using native_lang parameter: ${native_lang} → ${targetLang}`);
+                // IMPORTANT: native_lang is the TARGET (native) language, not source
+                // Don't use it if it matches the source language!
+                const nativeLangFull = langMap[native_lang] || native_lang;
+                if (nativeLangFull !== wordSet.source_language) {
+                    targetLang = nativeLangFull;
+                    logger.info(`[WORD-SETS] Using native_lang parameter: ${native_lang} → ${targetLang}`);
+                } else {
+                    logger.warn(`[WORD-SETS] native_lang ${native_lang} matches source language ${wordSet.source_language}, using default English`);
+                }
             }
             // 2. Try languagePair parameter (e.g., "de-ru")
             else if (languagePair) {
                 const parts = languagePair.split('-');
                 if (parts.length >= 2) {
-                    sourceLangCode = parts[0];
+                    const pairSourceCode = parts[0];
                     const targetLangCode = parts[1];
-                    targetLang = langMap[targetLangCode] || 'english';
-                    logger.info(`[WORD-SETS] Using languagePair parameter: ${languagePair}`);
+                    // Validate that languagePair source matches word set source
+                    if (pairSourceCode === sourceLangCode) {
+                        targetLang = langMap[targetLangCode] || 'english';
+                        logger.info(`[WORD-SETS] Using languagePair parameter: ${languagePair}`);
+                    } else {
+                        logger.warn(`[WORD-SETS] languagePair source ${pairSourceCode} doesn't match word set source ${sourceLangCode}, using default`);
+                    }
                 }
             }
             // 3. Fall back to userId lookup
@@ -2979,18 +3003,14 @@ app.get('/api/word-sets/:setId', async (req, res) => {
 
                     if (userLangResult.rows.length > 0) {
                         const { from_lang, to_lang } = userLangResult.rows[0];
-                        sourceLangCode = from_lang;
 
-                        const langMap = {
-                            'de': 'german', 'en': 'english', 'es': 'spanish', 'fr': 'french',
-                            'ru': 'russian', 'it': 'italian', 'pt': 'portuguese', 'zh': 'chinese',
-                            'ja': 'japanese', 'ko': 'korean', 'hi': 'hindi', 'ar': 'arabic',
-                            'tr': 'turkish', 'uk': 'ukrainian', 'pl': 'polish', 'ro': 'romanian',
-                            'sr': 'serbian', 'sw': 'swahili'
-                        };
-                        targetLang = langMap[to_lang] || 'english';
-
-                        logger.info(`[WORD-SETS] Got language pair from user ${userId}: ${from_lang} → ${to_lang}`);
+                        // Only use this if from_lang matches word set source
+                        if (from_lang === sourceLangCode) {
+                            targetLang = langMap[to_lang] || 'english';
+                            logger.info(`[WORD-SETS] Got language pair from user ${userId}: ${from_lang} → ${to_lang}`);
+                        } else {
+                            logger.warn(`[WORD-SETS] User's from_lang ${from_lang} doesn't match word set source ${sourceLangCode}`);
+                        }
                     }
                 } catch (err) {
                     logger.warn(`[WORD-SETS] Failed to get user language pair: ${err.message}`);
@@ -3221,15 +3241,25 @@ app.post('/api/word-sets/:setId/import', importLimiter, async (req, res) => {
         const exampleColumn = `example_${from_lang}`;
         const exampleTranslationColumn = `example_${to_lang}`;
 
-        // Check if base table has translations for this source language
-        const checkResult = await db.query(`
-            SELECT COUNT(*) as count
-            FROM ${baseTranslationTableName}
-            WHERE source_lang = $1
-            LIMIT 1
-        `, [from_lang]);
+        // Check if base table exists first, then check if it has translations for this source language
+        const tableExistsResult = await db.query(`
+            SELECT EXISTS (
+                SELECT FROM information_schema.tables
+                WHERE table_schema = 'public'
+                AND table_name = $1
+            )
+        `, [baseTranslationTableName]);
 
-        const useBaseTable = checkResult.rows[0].count > 0;
+        let useBaseTable = false;
+        if (tableExistsResult.rows[0].exists) {
+            const checkResult = await db.query(`
+                SELECT COUNT(*) as count
+                FROM ${baseTranslationTableName}
+                WHERE source_lang = $1
+                LIMIT 1
+            `, [from_lang]);
+            useBaseTable = checkResult.rows[0].count > 0;
+        }
         const translationTableName = useBaseTable
             ? baseTranslationTableName
             : `${baseTranslationTableName}_from_${from_lang}`;
