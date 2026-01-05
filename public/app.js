@@ -1132,6 +1132,11 @@ schreiben,Sie schreibt einen Brief.,Писать,Она пишет письmо.`
             input.className = 'text-input';
             input.placeholder = i18n.t('enterAnswer');
             input.dataset.enterPressed = 'false';
+            // Disable browser autofill/autocomplete
+            input.autocomplete = 'off';
+            input.autocorrect = 'off';
+            input.autocapitalize = 'off';
+            input.spellcheck = false;
             input.onkeypress = (e) => {
                 if (e.key === 'Enter') {
                     this.handleEnterPress(input);
@@ -1241,6 +1246,11 @@ schreiben,Sie schreibt einen Brief.,Писать,Она пишет письmо.`
             input.className = 'text-input';
             input.placeholder = i18n.t('enterAnswer');
             input.dataset.enterPressed = 'false';
+            // Disable browser autofill/autocomplete
+            input.autocomplete = 'off';
+            input.autocorrect = 'off';
+            input.autocapitalize = 'off';
+            input.spellcheck = false;
             input.onkeypress = (e) => {
                 if (e.key === 'Enter') {
                     this.handleReviewEnterPress(input);
@@ -2038,6 +2048,11 @@ schreiben,Sie schreibt einen Brief.,Писать,Она пишет письmо.`
         wordInput.className = 'word-building-input';
         wordInput.placeholder = i18n.t('buildTheWord');
         wordInput.dataset.enterPressed = 'false';
+        // Disable browser autofill/autocomplete
+        wordInput.autocomplete = 'off';
+        wordInput.autocorrect = 'off';
+        wordInput.autocapitalize = 'off';
+        wordInput.spellcheck = false;
 
         // Prevent mobile keyboard from appearing automatically
         wordInput.readOnly = true;
