@@ -2965,13 +2965,25 @@ app.get('/api/word-sets/:setId', async (req, res) => {
             // 1. Try native_lang parameter (sent by frontend)
             if (native_lang) {
                 // IMPORTANT: native_lang is the TARGET (native) language, not source
-                // Don't use it if it matches the source language!
+                // We need to check if target_translations_{lang} table exists
+                // German, Spanish, etc. are SOURCE languages and don't have target_translations tables!
                 const nativeLangFull = langMap[native_lang] || native_lang;
-                if (nativeLangFull !== wordSet.source_language) {
+
+                // List of languages that have target_translations tables (these are real target languages)
+                const validTargetLanguages = ['english', 'russian', 'french', 'italian', 'portuguese',
+                                             'chinese', 'arabic', 'turkish', 'ukrainian', 'polish',
+                                             'romanian', 'serbian', 'swahili', 'japanese', 'korean', 'hindi'];
+
+                if (nativeLangFull !== wordSet.source_language && validTargetLanguages.includes(nativeLangFull)) {
                     targetLang = nativeLangFull;
                     logger.info(`[WORD-SETS] Using native_lang parameter: ${native_lang} → ${targetLang}`);
                 } else {
-                    logger.warn(`[WORD-SETS] native_lang ${native_lang} matches source language ${wordSet.source_language}, using default English`);
+                    if (nativeLangFull === wordSet.source_language) {
+                        logger.warn(`[WORD-SETS] native_lang ${native_lang} matches source language ${wordSet.source_language}, using English`);
+                    } else {
+                        logger.warn(`[WORD-SETS] native_lang ${nativeLangFull} is not a valid target language (no target_translations table), using English`);
+                    }
+                    targetLang = 'english'; // Explicit fallback
                 }
             }
             // 2. Try languagePair parameter (e.g., "de-ru")
