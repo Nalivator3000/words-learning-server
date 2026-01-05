@@ -2919,6 +2919,7 @@ app.get('/api/word-sets', async (req, res) => {
 app.get('/api/word-sets/:setId', async (req, res) => {
     try {
         const { setId } = req.params;
+        const { userId, languagePair } = req.query; // Get target language from query params
 
         const setResult = await db.query(
             'SELECT * FROM word_sets WHERE id = $1',
@@ -2932,8 +2933,38 @@ app.get('/api/word-sets/:setId', async (req, res) => {
         const wordSet = setResult.rows[0];
 
         // Check if this is a new thematic collection (has level and theme)
-        // Load words from source_words_german instead of word_set_items
-        if (wordSet.level && wordSet.source_language === 'german') {
+        // Load words from source_words_* tables with appropriate translations
+        if (wordSet.level && wordSet.source_language) {
+            // Determine target language from languagePair parameter (e.g., "de-ru")
+            let targetLang = 'english'; // default
+            let sourceLangCode = 'de';
+
+            if (languagePair) {
+                const parts = languagePair.split('-');
+                if (parts.length >= 2) {
+                    sourceLangCode = parts[0];
+                    const targetLangCode = parts[1];
+
+                    // Map language codes to full names
+                    const langMap = {
+                        'de': 'german', 'en': 'english', 'es': 'spanish', 'fr': 'french',
+                        'ru': 'russian', 'it': 'italian', 'pt': 'portuguese', 'zh': 'chinese',
+                        'ja': 'japanese', 'ko': 'korean', 'hi': 'hindi', 'ar': 'arabic',
+                        'tr': 'turkish', 'uk': 'ukrainian', 'pl': 'polish', 'ro': 'romanian',
+                        'sr': 'serbian', 'sw': 'swahili'
+                    };
+
+                    targetLang = langMap[targetLangCode] || 'english';
+                }
+            }
+
+            const sourceTableName = `source_words_${wordSet.source_language}`;
+            const translationTableName = `target_translations_${targetLang}`;
+            const exampleColumn = `example_${sourceLangCode}`;
+            const exampleTranslationColumn = `example_${targetLang.substring(0, 2)}`;
+
+            logger.info(`[WORD-SETS] Loading set ${setId} with source=${wordSet.source_language}, target=${targetLang}`);
+
             const wordsResult = await db.query(`
                 SELECT
                     sw.id,
@@ -2942,13 +2973,13 @@ app.get('/api/word-sets/:setId', async (req, res) => {
                     sw.pos as word_type,
                     sw.level,
                     sw.theme,
-                    sw.example_de,
-                    tt.example_en as example_translation
-                FROM source_words_german sw
-                LEFT JOIN target_translations_english tt ON sw.id = tt.source_word_id AND tt.source_lang = 'de'
+                    sw.${exampleColumn} as example,
+                    tt.${exampleTranslationColumn} as example_translation
+                FROM ${sourceTableName} sw
+                LEFT JOIN ${translationTableName} tt ON sw.id = tt.source_word_id AND tt.source_lang = $3
                 WHERE sw.level = $1 AND (sw.theme = $2 OR (sw.theme IS NULL AND $2 IS NULL))
                 ORDER BY sw.word
-            `, [wordSet.level, wordSet.theme]);
+            `, [wordSet.level, wordSet.theme, sourceLangCode]);
 
             return res.json({
                 ...wordSet,
