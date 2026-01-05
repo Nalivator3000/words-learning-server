@@ -3203,6 +3203,9 @@ app.post('/api/word-sets/:setId/import', importLimiter, async (req, res) => {
         const target_language = langCodeToName[to_lang] || to_lang;
         const translationTableName = `target_translations_${target_language}`;
         const exampleColumn = `example_${from_lang}`;
+        const exampleTranslationColumn = `example_${to_lang}`;
+
+        logger.info(`[IMPORT] Importing set ${setId} for user ${userId}, from ${from_lang} to ${to_lang}, translation table: ${translationTableName}`);
 
         // Get all words from the source table with their translations
         const wordsResult = await db.query(`
@@ -3213,7 +3216,7 @@ app.post('/api/word-sets/:setId/import', importLimiter, async (req, res) => {
                 s.theme,
                 s.${exampleColumn} as example,
                 t.translation,
-                t.example_en as example_translation
+                t.${exampleTranslationColumn} as example_translation
             FROM ${sourceTableName} s
             LEFT JOIN ${translationTableName} t ON s.id = t.source_word_id AND t.source_lang = $${paramIndex}
             ${whereClause}
