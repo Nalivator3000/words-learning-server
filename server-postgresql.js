@@ -3020,16 +3020,7 @@ app.get('/api/word-sets/:setId', async (req, res) => {
             const sourceTableName = `source_words_${wordSet.source_language}`;
             const baseTranslationTableName = `target_translations_${targetLang}`;
 
-            // Map full language names to 2-letter codes for columns
-            const langToCode = {
-                'english': 'en', 'german': 'de', 'spanish': 'es', 'french': 'fr',
-                'russian': 'ru', 'italian': 'it', 'portuguese': 'pt', 'chinese': 'zh',
-                'japanese': 'ja', 'korean': 'ko', 'hindi': 'hi', 'arabic': 'ar',
-                'turkish': 'tr', 'ukrainian': 'uk', 'polish': 'pl', 'romanian': 'ro',
-                'serbian': 'sr', 'swahili': 'sw'
-            };
-
-            // Get source language code from word set's source_language
+            // Get source language code from word set's source_language (using langToCode defined above)
             const sourceLanguageCode = langToCode[wordSet.source_language] || wordSet.source_language.substring(0, 2);
             const exampleColumn = `example_${sourceLanguageCode}`;
             const targetLangCode = langToCode[targetLang] || targetLang.substring(0, 2);
