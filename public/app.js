@@ -304,14 +304,28 @@ class LanguageLearningApp {
     }
 
     setupAuthListeners() {
-        // Auth tab switching
-        document.getElementById('loginTab').addEventListener('click', () => this.switchAuthTab('login'));
-        document.getElementById('registerTab').addEventListener('click', () => this.switchAuthTab('register'));
-        
-        // Auth form submissions - iOS Safari requires touchstart priority
+        // CRITICAL FIX: Add null checks for all elements to prevent race conditions
+        const loginTab = document.getElementById('loginTab');
+        const registerTab = document.getElementById('registerTab');
         const loginBtn = document.getElementById('loginBtn');
         const registerBtn = document.getElementById('registerBtn');
         const googleLoginBtn = document.getElementById('googleLoginBtn');
+        const loginPassword = document.getElementById('loginPassword');
+        const registerPasswordConfirm = document.getElementById('registerPasswordConfirm');
+
+        // Check if elements exist before adding listeners
+        if (!loginTab || !registerTab || !loginBtn || !registerBtn || !googleLoginBtn) {
+            console.error('❌ Auth elements not found in DOM! Retrying in 100ms...');
+            // Retry after a short delay to ensure DOM is fully loaded
+            setTimeout(() => this.setupAuthListeners(), 100);
+            return;
+        }
+
+        console.log('✅ Setting up auth listeners...');
+
+        // Auth tab switching
+        loginTab.addEventListener('click', () => this.switchAuthTab('login'));
+        registerTab.addEventListener('click', () => this.switchAuthTab('register'));
 
         // Detect if touch device
         const isTouchDevice = ('ontouchstart' in window) || (navigator.maxTouchPoints > 0);
@@ -338,15 +352,21 @@ class LanguageLearningApp {
         addButtonHandler(loginBtn, () => this.handleLogin());
         addButtonHandler(registerBtn, () => this.handleRegister());
         addButtonHandler(googleLoginBtn, () => this.handleGoogleLogin());
-        
-        // Enter key support for auth forms
-        document.getElementById('loginPassword').addEventListener('keypress', (e) => {
-            if (e.key === 'Enter') this.handleLogin();
-        });
-        document.getElementById('registerPasswordConfirm').addEventListener('keypress', (e) => {
-            if (e.key === 'Enter') this.handleRegister();
-        });
 
+        // Enter key support for auth forms (with null checks)
+        if (loginPassword) {
+            loginPassword.addEventListener('keypress', (e) => {
+                if (e.key === 'Enter') this.handleLogin();
+            });
+        }
+
+        if (registerPasswordConfirm) {
+            registerPasswordConfirm.addEventListener('keypress', (e) => {
+                if (e.key === 'Enter') this.handleRegister();
+            });
+        }
+
+        console.log('✅ Auth listeners setup complete');
     }
 
     switchAuthTab(tab) {
