@@ -40,56 +40,33 @@
     <script src="https://accounts.google.com/gsi/client" async defer></script>
 
     <script>
-        // CRITICAL: Unregister old Service Workers first to clear any stale cache
+        // CRITICAL FIX: Unregister ALL Service Workers and clear ALL caches
+        // This is a one-time emergency fix to restore login functionality
         if ('serviceWorker' in navigator) {
+            // Unregister all Service Workers
             navigator.serviceWorker.getRegistrations().then(registrations => {
                 for (let registration of registrations) {
-                    console.log('🗑️ Unregistering old Service Worker:', registration.scope);
+                    console.log('🗑️ EMERGENCY: Unregistering Service Worker:', registration.scope);
                     registration.unregister();
                 }
             });
-        }
 
-        // PWA Service Worker Registration - RE-ENABLED with cache clearing
-        if ('serviceWorker' in navigator) {
-            window.addEventListener('load', () => {
-                navigator.serviceWorker.register('/service-worker.js')
-                    .then((registration) => {
-                        console.log('✅ Service Worker registered:', registration.scope);
-
-                        // AGGRESSIVE: Check for updates every 10 seconds
-                        setInterval(() => {
-                            registration.update().then(() => {
-                                console.log('🔍 Checked for updates...');
-                            });
-                        }, 10000);
-
-                        // Force update check immediately
-                        registration.update();
-
-                        // Check for updates
-                        registration.addEventListener('updatefound', () => {
-                            const newWorker = registration.installing;
-                            newWorker.addEventListener('statechange', () => {
-                                if (newWorker.state === 'installed' && navigator.serviceWorker.controller) {
-                                    // New version available
-                                    console.log('🔄 New version available! Refresh to update.');
-                                    showUpdateNotification(newWorker);
-                                }
-                            });
-                        });
+            // Clear all caches
+            caches.keys().then(cacheNames => {
+                return Promise.all(
+                    cacheNames.map(cacheName => {
+                        console.log('🗑️ EMERGENCY: Deleting cache:', cacheName);
+                        return caches.delete(cacheName);
                     })
-                    .catch((error) => {
-                        console.log('❌ Service Worker registration failed:', error);
-                    });
-            });
-
-            // Listen for controller change (new SW activated)
-            navigator.serviceWorker.addEventListener('controllerchange', () => {
-                console.log('🔄 Service Worker updated, reloading...');
-                window.location.reload();
+                );
+            }).then(() => {
+                console.log('✅ EMERGENCY: All Service Workers and caches cleared');
             });
         }
+
+        // Service Worker is DISABLED until cache issues are resolved
+        // Users will get fresh files directly from server
+        console.log('⚠️ Service Worker is disabled - all requests go directly to server');
 
         // Show update notification banner with auto-update
         function showUpdateNotification(newWorker) {
@@ -1451,7 +1428,7 @@
     <script src="profile-ui.js?v=5.2.7"></script>
     <script src="achievements-ui.js?v=5.2.7"></script>
     <script src="word-lists-ui.js?v=5.2.7"></script>
-    <script src="app.js?v=5.6.0"></script>
+    <script src="app.js?v=5.6.1"></script>
 
     <script>
         // Auto-detect device language and pre-select in registration form
