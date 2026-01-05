@@ -2998,7 +2998,7 @@ app.get('/api/word-sets/:setId', async (req, res) => {
             }
 
             const sourceTableName = `source_words_${wordSet.source_language}`;
-            const translationTableName = `target_translations_${targetLang}`;
+            const baseTranslationTableName = `target_translations_${targetLang}`;
 
             // Map full language names to 2-letter codes for columns
             const langToCode = {
@@ -3015,7 +3015,23 @@ app.get('/api/word-sets/:setId', async (req, res) => {
             const targetLangCode = langToCode[targetLang] || targetLang.substring(0, 2);
             const exampleTranslationColumn = `example_${targetLangCode}`;
 
+            // Check if base table has translations for this source language
+            const checkResult = await db.query(`
+                SELECT COUNT(*) as count
+                FROM ${baseTranslationTableName}
+                WHERE source_lang = $1
+                LIMIT 1
+            `, [sourceLanguageCode]);
+
+            const useBaseTable = checkResult.rows[0].count > 0;
+            const translationTableName = useBaseTable
+                ? baseTranslationTableName
+                : `${baseTranslationTableName}_from_${sourceLanguageCode}`;
+
             logger.info(`[WORD-SETS] Loading set ${setId} with source=${wordSet.source_language} (${sourceLanguageCode}), target=${targetLang} (${targetLangCode}), table=${translationTableName}`);
+
+            // Use different column names depending on table type
+            const exampleTranslationColumnActual = useBaseTable ? exampleTranslationColumn : 'example_native';
 
             const wordsResult = await db.query(`
                 SELECT
@@ -3026,12 +3042,12 @@ app.get('/api/word-sets/:setId', async (req, res) => {
                     sw.level,
                     sw.theme,
                     sw.${exampleColumn} as example,
-                    tt.${exampleTranslationColumn} as example_translation
+                    tt.${exampleTranslationColumnActual} as example_translation
                 FROM ${sourceTableName} sw
-                LEFT JOIN ${translationTableName} tt ON sw.id = tt.source_word_id AND tt.source_lang = $3
+                LEFT JOIN ${translationTableName} tt ON sw.id = tt.source_word_id ${useBaseTable ? 'AND tt.source_lang = $3' : ''}
                 WHERE sw.level = $1 AND (sw.theme = $2 OR (sw.theme IS NULL AND $2 IS NULL))
                 ORDER BY sw.word
-            `, [wordSet.level, wordSet.theme, sourceLanguageCode]);
+            `, useBaseTable ? [wordSet.level, wordSet.theme, sourceLanguageCode] : [wordSet.level, wordSet.theme]);
 
             return res.json({
                 ...wordSet,
@@ -3201,11 +3217,27 @@ app.post('/api/word-sets/:setId/import', importLimiter, async (req, res) => {
 
         const { from_lang, to_lang } = pairResult.rows[0];
         const target_language = langCodeToName[to_lang] || to_lang;
-        const translationTableName = `target_translations_${target_language}`;
+        const baseTranslationTableName = `target_translations_${target_language}`;
         const exampleColumn = `example_${from_lang}`;
         const exampleTranslationColumn = `example_${to_lang}`;
 
+        // Check if base table has translations for this source language
+        const checkResult = await db.query(`
+            SELECT COUNT(*) as count
+            FROM ${baseTranslationTableName}
+            WHERE source_lang = $1
+            LIMIT 1
+        `, [from_lang]);
+
+        const useBaseTable = checkResult.rows[0].count > 0;
+        const translationTableName = useBaseTable
+            ? baseTranslationTableName
+            : `${baseTranslationTableName}_from_${from_lang}`;
+
         logger.info(`[IMPORT] Importing set ${setId} for user ${userId}, from ${from_lang} to ${to_lang}, translation table: ${translationTableName}`);
+
+        // Use different column names depending on table type
+        const exampleTranslationColumnActual = useBaseTable ? exampleTranslationColumn : 'example_native';
 
         // Get all words from the source table with their translations
         const wordsResult = await db.query(`
@@ -3216,12 +3248,12 @@ app.post('/api/word-sets/:setId/import', importLimiter, async (req, res) => {
                 s.theme,
                 s.${exampleColumn} as example,
                 t.translation,
-                t.${exampleTranslationColumn} as example_translation
+                t.${exampleTranslationColumnActual} as example_translation
             FROM ${sourceTableName} s
-            LEFT JOIN ${translationTableName} t ON s.id = t.source_word_id AND t.source_lang = $${paramIndex}
+            LEFT JOIN ${translationTableName} t ON s.id = t.source_word_id ${useBaseTable ? `AND t.source_lang = $${paramIndex}` : ''}
             ${whereClause}
             ORDER BY s.id ASC
-        `, [...queryParams, from_lang]);
+        `, useBaseTable ? [...queryParams, from_lang] : queryParams);
 
         if (wordsResult.rows.length === 0) {
             return res.status(404).json({ error: 'Word set is empty or not found' });
