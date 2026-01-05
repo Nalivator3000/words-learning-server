@@ -134,8 +134,17 @@ class LanguageLearningApp {
         document.getElementById('importBtn').addEventListener('click', () => this.showSection('import'));
         document.getElementById('wordListsBtn').addEventListener('click', () => this.showSection('wordLists'));
         document.getElementById('studyBtn').addEventListener('click', () => this.showSection('study'));
-        document.getElementById('reviewBtn').addEventListener('click', () => this.showSection('review'));
-        document.getElementById('challengesBtn').addEventListener('click', () => this.showSection('challenges'));
+
+        // Optional buttons (may be hidden/commented out)
+        const reviewBtn = document.getElementById('reviewBtn');
+        if (reviewBtn) {
+            reviewBtn.addEventListener('click', () => this.showSection('review'));
+        }
+
+        const challengesBtn = document.getElementById('challengesBtn');
+        if (challengesBtn) {
+            challengesBtn.addEventListener('click', () => this.showSection('challenges'));
+        }
 
         // Gamification buttons (only visible for whitelisted users)
         if (userManager.hasGamificationAccess()) {
@@ -161,7 +170,11 @@ class LanguageLearningApp {
             document.getElementById('achievementsBtn').addEventListener('click', () => this.showSection('achievements'));
         }
 
-        document.getElementById('leaderboardBtn').addEventListener('click', () => this.showSection('leaderboard'));
+        const leaderboardBtn = document.getElementById('leaderboardBtn');
+        if (leaderboardBtn) {
+            leaderboardBtn.addEventListener('click', () => this.showSection('leaderboard'));
+        }
+
         document.getElementById('statsBtn').addEventListener('click', () => this.showSection('stats'));
 
         // User menu - direct navigation to settings
@@ -644,6 +657,9 @@ class LanguageLearningApp {
                 review: reviewEl?.textContent,
                 learned: learnedEl?.textContent
             });
+
+            // Update detailed review counts (review_1, review_3, review_7, etc.)
+            await this.updateReviewStats();
 
             // Update word lists
             await this.updateWordLists();

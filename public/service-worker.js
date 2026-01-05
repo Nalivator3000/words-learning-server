@@ -1,7 +1,7 @@
 // Service Worker for Words Learning App
-// Version 5.5.7 - Fix aggressive caching that requires Ctrl+Shift+R
+// Version 5.5.8 - Fix null button addEventListener errors
 
-const CACHE_VERSION = 'v5.5.7';
+const CACHE_VERSION = 'v5.5.8';
 const CACHE_NAME = `words-learning-${CACHE_VERSION}`;
 
 // Files to cache for offline use
