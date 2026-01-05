@@ -16906,6 +16906,7 @@ app.get('/api/tts', async (req, res) => {
             logger.info(`📦 Serving from local cache: "${text}"`);
             res.set('Content-Type', 'audio/mpeg');
             res.set('Cache-Control', 'public, max-age=31536000');
+            res.set('X-Cache-Status', 'HIT-LOCAL');
             return res.sendFile(cacheFile);
         }
 
@@ -16920,6 +16921,7 @@ app.get('/api/tts', async (req, res) => {
 
             res.set('Content-Type', 'audio/mpeg');
             res.set('Cache-Control', 'public, max-age=31536000');
+            res.set('X-Cache-Status', 'HIT-CLOUDINARY');
             return res.send(cloudinaryAudio);
         }
 
@@ -16976,6 +16978,7 @@ app.get('/api/tts', async (req, res) => {
         // Send audio
         res.set('Content-Type', 'audio/mpeg');
         res.set('Cache-Control', 'public, max-age=31536000');
+        res.set('X-Cache-Status', 'MISS-GENERATED');
         res.send(audioBuffer);
 
     } catch (err) {

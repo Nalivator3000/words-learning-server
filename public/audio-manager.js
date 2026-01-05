@@ -339,10 +339,18 @@ class AudioManager {
 
             console.log(`${logPrefix} ⏱️ Fetch completed in ${(fetchEnd - fetchStart).toFixed(2)}ms`);
             console.log(`${logPrefix} 📊 Response status: ${response.status} ${response.statusText}`);
+
+            const cacheStatus = response.headers.get('x-cache-status');
+            const cacheEmoji = cacheStatus === 'HIT-LOCAL' ? '📦' :
+                              cacheStatus === 'HIT-CLOUDINARY' ? '☁️' :
+                              cacheStatus === 'MISS-GENERATED' ? '🔊' : '❓';
+
+            console.log(`${logPrefix} ${cacheEmoji} CACHE STATUS: ${cacheStatus || 'UNKNOWN'}`);
             console.log(`${logPrefix} 📋 Response headers:`, {
                 contentType: response.headers.get('content-type'),
                 contentLength: response.headers.get('content-length'),
-                cacheControl: response.headers.get('cache-control')
+                cacheControl: response.headers.get('cache-control'),
+                cacheStatus: cacheStatus
             });
 
             if (!response.ok) {
