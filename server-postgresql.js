@@ -2921,6 +2921,8 @@ app.get('/api/word-sets/:setId', async (req, res) => {
         const { setId } = req.params;
         const { userId, languagePair, native_lang } = req.query; // Get target language from query params
 
+        logger.info(`[WORD-SETS] Request params: setId=${setId}, userId=${userId}, languagePair=${languagePair}, native_lang=${native_lang}`);
+
         const setResult = await db.query(
             'SELECT * FROM word_sets WHERE id = $1',
             [setId]
