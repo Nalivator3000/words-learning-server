@@ -331,10 +331,16 @@ class AudioManager {
 
             const url = `/api/tts?text=${encodeURIComponent(text)}&lang=${languageCode}`;
             console.log(`${logPrefix} 🔗 Request URL: ${url}`);
-            console.log(`${logPrefix} 📡 Sending fetch request...`);
+            console.log(`${logPrefix} 📡 Sending fetch request (bypassing all caches)...`);
 
             const fetchStart = performance.now();
-            const response = await fetch(url);
+            const response = await fetch(url, {
+                cache: 'no-store',  // Bypass Service Worker and HTTP cache
+                headers: {
+                    'Cache-Control': 'no-cache, no-store, must-revalidate',
+                    'Pragma': 'no-cache'
+                }
+            });
             const fetchEnd = performance.now();
 
             console.log(`${logPrefix} ⏱️ Fetch completed in ${(fetchEnd - fetchStart).toFixed(2)}ms`);
