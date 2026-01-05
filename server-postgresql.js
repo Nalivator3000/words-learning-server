@@ -2935,10 +2935,11 @@ app.get('/api/word-sets/:setId', async (req, res) => {
         // Check if this is a new thematic collection (has level and theme)
         // Load words from source_words_* tables with appropriate translations
         if (wordSet.level && wordSet.source_language) {
-            // Determine target language from languagePair parameter (e.g., "de-ru")
+            // Determine target language from languagePair parameter or userId
             let targetLang = 'english'; // default
             let sourceLangCode = 'de';
 
+            // Try to get language pair from query parameter first
             if (languagePair) {
                 const parts = languagePair.split('-');
                 if (parts.length >= 2) {
@@ -2955,6 +2956,35 @@ app.get('/api/word-sets/:setId', async (req, res) => {
                     };
 
                     targetLang = langMap[targetLangCode] || 'english';
+                }
+            } else if (userId) {
+                // If languagePair not provided, try to get it from user's active language pair
+                try {
+                    const userLangResult = await db.query(`
+                        SELECT from_lang, to_lang
+                        FROM language_pairs lp
+                        JOIN user_learning_profile ulp ON lp.id = ulp.active_language_pair_id
+                        WHERE ulp.user_id = $1
+                        LIMIT 1
+                    `, [userId]);
+
+                    if (userLangResult.rows.length > 0) {
+                        const { from_lang, to_lang } = userLangResult.rows[0];
+                        sourceLangCode = from_lang;
+
+                        const langMap = {
+                            'de': 'german', 'en': 'english', 'es': 'spanish', 'fr': 'french',
+                            'ru': 'russian', 'it': 'italian', 'pt': 'portuguese', 'zh': 'chinese',
+                            'ja': 'japanese', 'ko': 'korean', 'hi': 'hindi', 'ar': 'arabic',
+                            'tr': 'turkish', 'uk': 'ukrainian', 'pl': 'polish', 'ro': 'romanian',
+                            'sr': 'serbian', 'sw': 'swahili'
+                        };
+                        targetLang = langMap[to_lang] || 'english';
+
+                        logger.info(`[WORD-SETS] Got language pair from user ${userId}: ${from_lang} → ${to_lang}`);
+                    }
+                } catch (err) {
+                    logger.warn(`[WORD-SETS] Failed to get user language pair: ${err.message}`);
                 }
             }
 
