@@ -1,7 +1,7 @@
 // Service Worker for Words Learning App
-// Version 5.5.9 - Fix review section button null checks
+// Version 5.6.0 - Fix login page cache issue by unregistering old SW
 
-const CACHE_VERSION = 'v5.5.9';
+const CACHE_VERSION = 'v5.6.0';
 const CACHE_NAME = `words-learning-${CACHE_VERSION}`;
 
 // Files to cache for offline use

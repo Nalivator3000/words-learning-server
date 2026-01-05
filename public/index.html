@@ -40,8 +40,18 @@
     <script src="https://accounts.google.com/gsi/client" async defer></script>
 
     <script>
-        // PWA Service Worker Registration - TEMPORARILY DISABLED FOR CACHE DEBUGGING
-        if (false && 'serviceWorker' in navigator) {
+        // CRITICAL: Unregister old Service Workers first to clear any stale cache
+        if ('serviceWorker' in navigator) {
+            navigator.serviceWorker.getRegistrations().then(registrations => {
+                for (let registration of registrations) {
+                    console.log('🗑️ Unregistering old Service Worker:', registration.scope);
+                    registration.unregister();
+                }
+            });
+        }
+
+        // PWA Service Worker Registration - RE-ENABLED with cache clearing
+        if ('serviceWorker' in navigator) {
             window.addEventListener('load', () => {
                 navigator.serviceWorker.register('/service-worker.js')
                     .then((registration) => {
@@ -1441,7 +1451,7 @@
     <script src="profile-ui.js?v=5.2.7"></script>
     <script src="achievements-ui.js?v=5.2.7"></script>
     <script src="word-lists-ui.js?v=5.2.7"></script>
-    <script src="app.js?v=5.5.9"></script>
+    <script src="app.js?v=5.6.0"></script>
 
     <script>
         // Auto-detect device language and pre-select in registration form
