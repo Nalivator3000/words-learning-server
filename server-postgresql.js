@@ -2961,9 +2961,19 @@ app.get('/api/word-sets/:setId', async (req, res) => {
             const sourceTableName = `source_words_${wordSet.source_language}`;
             const translationTableName = `target_translations_${targetLang}`;
             const exampleColumn = `example_${sourceLangCode}`;
-            const exampleTranslationColumn = `example_${targetLang.substring(0, 2)}`;
 
-            logger.info(`[WORD-SETS] Loading set ${setId} with source=${wordSet.source_language}, target=${targetLang}`);
+            // Map full language names to 2-letter codes for example columns
+            const langToCode = {
+                'english': 'en', 'german': 'de', 'spanish': 'es', 'french': 'fr',
+                'russian': 'ru', 'italian': 'it', 'portuguese': 'pt', 'chinese': 'zh',
+                'japanese': 'ja', 'korean': 'ko', 'hindi': 'hi', 'arabic': 'ar',
+                'turkish': 'tr', 'ukrainian': 'uk', 'polish': 'pl', 'romanian': 'ro',
+                'serbian': 'sr', 'swahili': 'sw'
+            };
+            const targetLangCode = langToCode[targetLang] || targetLang.substring(0, 2);
+            const exampleTranslationColumn = `example_${targetLangCode}`;
+
+            logger.info(`[WORD-SETS] Loading set ${setId} with source=${wordSet.source_language}, target=${targetLang}, table=${translationTableName}`);
 
             const wordsResult = await db.query(`
                 SELECT
