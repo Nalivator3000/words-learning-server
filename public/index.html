@@ -40,8 +40,8 @@
     <script src="https://accounts.google.com/gsi/client" async defer></script>
 
     <script>
-        // PWA Service Worker Registration
-        if ('serviceWorker' in navigator) {
+        // PWA Service Worker Registration - TEMPORARILY DISABLED FOR CACHE DEBUGGING
+        if (false && 'serviceWorker' in navigator) {
             window.addEventListener('load', () => {
                 navigator.serviceWorker.register('/service-worker.js')
                     .then((registration) => {
