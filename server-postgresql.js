@@ -3162,7 +3162,7 @@ app.post('/api/word-sets/:setId/import', importLimiter, async (req, res) => {
 
         // Get word set info to determine source language
         const wordSetResult = await db.query(
-            'SELECT source_language, level, theme FROM word_sets WHERE id = $1',
+            'SELECT source_language, level, theme, word_count FROM word_sets WHERE id = $1',
             [setId]
         );
 
@@ -3170,7 +3170,7 @@ app.post('/api/word-sets/:setId/import', importLimiter, async (req, res) => {
             return res.status(404).json({ error: 'Word set not found' });
         }
 
-        const { source_language, level, theme } = wordSetResult.rows[0];
+        const { source_language, level, theme, word_count } = wordSetResult.rows[0];
         const sourceTableName = `source_words_${source_language}`;
 
         // Build query to get words from source table based on level and theme
@@ -3240,6 +3240,9 @@ app.post('/api/word-sets/:setId/import', importLimiter, async (req, res) => {
         const exampleTranslationColumnActual = useBaseTable ? exampleTranslationColumn : 'example_native';
 
         // Get all words from the source table with their translations
+        // IMPORTANT: Limit results to word_count to prevent importing entire level
+        const limitClause = word_count ? `LIMIT ${parseInt(word_count)}` : '';
+
         const wordsResult = await db.query(`
             SELECT
                 s.id,
@@ -3253,6 +3256,7 @@ app.post('/api/word-sets/:setId/import', importLimiter, async (req, res) => {
             LEFT JOIN ${translationTableName} t ON s.id = t.source_word_id ${useBaseTable ? `AND t.source_lang = $${paramIndex}` : ''}
             ${whereClause}
             ORDER BY s.id ASC
+            ${limitClause}
         `, useBaseTable ? [...queryParams, from_lang] : queryParams);
 
         if (wordsResult.rows.length === 0) {

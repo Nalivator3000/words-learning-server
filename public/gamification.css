@@ -934,8 +934,6 @@
     border-radius: 10px;
     overflow: hidden;
     position: relative;
-    align-self: center;
-    margin: auto 0; /* Force vertical centering */
 }
 
 .goal-progress-fill {
