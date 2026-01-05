@@ -12861,13 +12861,7 @@ app.get('/api/words/random-proportional/:count', async (req, res) => {
                         AND uwp.source_language = $4
                         AND tt.translation IS NOT NULL
                         AND tt.translation != ''
-                    ORDER BY
-                        CASE
-                            WHEN uwp.next_review_date IS NULL OR uwp.next_review_date <= CURRENT_TIMESTAMP THEN 0
-                            ELSE 1
-                        END,
-                        uwp.last_review_date ASC NULLS FIRST,
-                        RANDOM()
+                    ORDER BY RANDOM()
                     LIMIT $5
                 `;
                 const wordsResult = await db.query(wordsQuery, [
@@ -12889,8 +12883,11 @@ app.get('/api/words/random-proportional/:count', async (req, res) => {
             }
         }
 
-        // Final shuffle to mix all statuses
-        allWords.sort(() => Math.random() - 0.5);
+        // Final shuffle to mix all statuses using Fisher-Yates algorithm
+        for (let i = allWords.length - 1; i > 0; i--) {
+            const j = Math.floor(Math.random() * (i + 1));
+            [allWords[i], allWords[j]] = [allWords[j], allWords[i]];
+        }
 
         res.json(allWords);
     } catch (err) {
