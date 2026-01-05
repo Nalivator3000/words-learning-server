@@ -1,7 +1,7 @@
 // Service Worker for Words Learning App
-// Version 5.5.8 - Fix null button addEventListener errors
+// Version 5.5.9 - Fix review section button null checks
 
-const CACHE_VERSION = 'v5.5.8';
+const CACHE_VERSION = 'v5.5.9';
 const CACHE_NAME = `words-learning-${CACHE_VERSION}`;
 
 // Files to cache for offline use

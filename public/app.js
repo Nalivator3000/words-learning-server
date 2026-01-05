@@ -240,14 +240,26 @@ class LanguageLearningApp {
         document.getElementById('survivalBtn').addEventListener('click', () => this.startSurvivalMode());
         document.getElementById('complexModeBtn').addEventListener('click', () => this.startStudyQuiz('complex'));
 
-        // Review mode
-        document.getElementById('startReviewBtn').addEventListener('click', () => this.startReviewQuiz());
+        // Review mode (optional - may be commented out)
+        const startReviewBtn = document.getElementById('startReviewBtn');
+        if (startReviewBtn) {
+            startReviewBtn.addEventListener('click', () => this.startReviewQuiz());
+        }
 
         // Quiz navigation
         document.getElementById('nextBtn').addEventListener('click', () => this.nextQuestion());
         document.getElementById('finishStudyBtn').addEventListener('click', () => this.finishQuiz());
-        document.getElementById('reviewNextBtn').addEventListener('click', () => this.nextReviewQuestion());
-        document.getElementById('finishReviewBtn').addEventListener('click', () => this.finishReview());
+
+        // Review quiz navigation (optional - may be commented out)
+        const reviewNextBtn = document.getElementById('reviewNextBtn');
+        if (reviewNextBtn) {
+            reviewNextBtn.addEventListener('click', () => this.nextReviewQuestion());
+        }
+
+        const finishReviewBtn = document.getElementById('finishReviewBtn');
+        if (finishReviewBtn) {
+            finishReviewBtn.addEventListener('click', () => this.finishReview());
+        }
 
         // Export functionality
         document.getElementById('exportStudyingBtn').addEventListener('click', () => this.exportWords('studying'));
