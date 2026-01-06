@@ -3237,7 +3237,16 @@ schreiben,Sie schreibt einen Brief.,Писать,Она пишет письmо.`
                         'Spanish': { text: 'Hola! Esta es una prueba de la configuración actual.', lang: 'es-ES' },
                         'French': { text: 'Bonjour! Ceci est un test des paramètres actuels.', lang: 'fr-FR' },
                         'Italian': { text: 'Ciao! Questo è un test delle impostazioni attuali.', lang: 'it-IT' },
-                        'Russian': { text: i18n.t('voice_test_sample'), lang: 'ru-RU' }
+                        'Russian': { text: i18n.t('voice_test_sample'), lang: 'ru-RU' },
+                        'Hindi': { text: 'नमस्ते! यह वर्तमान सेटिंग्स का परीक्षण है।', lang: 'hi-IN' },
+                        'Portuguese': { text: 'Olá! Este é um teste das configurações atuais.', lang: 'pt-PT' },
+                        'Polish': { text: 'Cześć! To jest test bieżących ustawień.', lang: 'pl-PL' },
+                        'Turkish': { text: 'Merhaba! Bu mevcut ayarların bir testidir.', lang: 'tr-TR' },
+                        'Romanian': { text: 'Bună! Acesta este un test al setărilor actuale.', lang: 'ro-RO' },
+                        'Serbian': { text: 'Zdravo! Ovo je test trenutnih podešavanja.', lang: 'sr-RS' },
+                        'Ukrainian': { text: 'Привіт! Це тест поточних налаштувань.', lang: 'uk-UA' },
+                        'Arabic': { text: 'مرحبا! هذا اختبار للإعدادات الحالية.', lang: 'ar-XA' },
+                        'Swahili': { text: 'Hujambo! Hii ni jaribio la mipangilio ya sasa.', lang: 'sw-KE' }
                     };
                     const testData = testTexts[currentPair.fromLanguage];
                     if (testData) {

@@ -798,13 +798,14 @@ class LanguageManager {
             'Chinese': 'zh-CN',
             'Japanese': 'ja-JP',
             'Korean': 'ko-KR',
-            'Arabic': 'ar-SA',
+            'Arabic': 'ar-XA',
             'Polish': 'pl-PL',
             'Turkish': 'tr-TR',
             'Romanian': 'ro-RO',
             'Serbian': 'sr-RS',
             'Ukrainian': 'uk-UA',
-            'Swahili': 'sw-KE'
+            'Swahili': 'sw-KE',
+            'Hindi': 'hi-IN'
         };
 
         return audioCodes[language] || 'en-US';

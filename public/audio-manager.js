@@ -120,7 +120,7 @@ class AudioManager {
     }
 
     selectVoicesForLanguages(allVoices) {
-        const languages = ['ru-RU', 'en-US', 'de-DE', 'es-ES', 'fr-FR', 'it-IT'];
+        const languages = ['ru-RU', 'en-US', 'de-DE', 'es-ES', 'fr-FR', 'it-IT', 'hi-IN', 'pt-PT', 'pl-PL', 'tr-TR', 'ro-RO', 'sr-RS', 'uk-UA', 'ar-XA', 'sw-KE'];
 
         languages.forEach(langCode => {
             const customVoiceName = this.customVoices[langCode];

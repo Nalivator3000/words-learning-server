@@ -17684,6 +17684,9 @@ app.get('/api/tts', async (req, res) => {
             'tr-TR': 'tr-TR-Wavenet-A',     // Turkish
             'ro-RO': 'ro-RO-Wavenet-A',     // Romanian
             'uk-UA': 'uk-UA-Wavenet-A',     // Ukrainian
+            'hi-IN': 'hi-IN-Neural2-A',     // Hindi
+            'sr-RS': 'sr-RS-Standard-A',    // Serbian
+            'sw-KE': 'sw-KE-Wavenet-A',     // Swahili
         };
 
         const request = {
