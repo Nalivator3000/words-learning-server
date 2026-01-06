@@ -1933,9 +1933,8 @@ schreiben,Sie schreibt einen Brief.,Писать,Она пишет письmо.`
             }
 
             // Reload words and stats
-            await this.loadWords();
+            await this.updateWordLists();
             await this.updateStats();
-            this.renderWords();
 
         } catch (error) {
             console.error('Error resetting progress:', error);
