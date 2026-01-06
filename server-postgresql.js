@@ -2845,14 +2845,14 @@ app.get('/api/word-sets', async (req, res) => {
         const params = [];
         let paramIndex = 1;
 
-        // Support languagePair parameter (e.g., "en-de" format)
+        // Support languagePair parameter (e.g., "de-en" format)
         if (languagePair) {
-            // Parse languagePair format: "en-de" means:
-            // - User's native language: en (English)
+            // Parse languagePair format: "de-en" means:
             // - Learning language: de (German) <- THIS is the source_language for word sets!
+            // - User's native language: en (English)
             const parts = languagePair.split('-');
             if (parts.length >= 2) {
-                const learningLanguage = parts[1]; // Second part is the language being learned
+                const learningLanguage = parts[0]; // FIRST part is the language being learned
                 // Map short codes to full language names
                 const langMap = {
                     'de': 'german',
