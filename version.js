@@ -1,0 +1,1 @@
+const fs = require('fs'); const commitHash = fs.existsSync('./VERSION') ? fs.readFileSync('./VERSION', 'utf-8').trim() : 'unknown'; module.exports = { version: require('./package.json').version, commit: commitHash };

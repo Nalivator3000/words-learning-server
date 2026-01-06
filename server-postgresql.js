@@ -17257,6 +17257,16 @@ app.get('/health', (req, res) => {
     res.status(200).json({ status: 'ok', timestamp: new Date().toISOString() });
 });
 
+// Version check endpoint
+app.get('/api/version', (req, res) => {
+    const versionInfo = require('./version');
+    res.json({
+        version: versionInfo.version,
+        commit: versionInfo.commit,
+        timestamp: new Date().toISOString()
+    });
+});
+
 app.get('/', (req, res) => {
     res.sendFile(path.join(__dirname, 'public', 'index.html'));
 });
