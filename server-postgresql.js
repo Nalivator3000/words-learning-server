@@ -12757,7 +12757,7 @@ app.get('/api/words', async (req, res) => {
 
         // Map short language codes to full table names
         const sourceLanguageCode = langPairResult.rows[0].from_lang;
-        const targetLanguageCode = langPairResult.rows[0].to_lang;
+        let targetLanguageCode = langPairResult.rows[0].to_lang;
         const sourceLanguage = LANG_CODE_TO_FULL_NAME[sourceLanguageCode] || sourceLanguageCode;
         let targetLanguage = LANG_CODE_TO_FULL_NAME[targetLanguageCode] || targetLanguageCode;
 
@@ -12769,7 +12769,9 @@ app.get('/api/words', async (req, res) => {
         // If target language is invalid (like german, spanish which are source-only), use smart fallback
         if (!validTargetLanguages.includes(targetLanguage)) {
             targetLanguage = (sourceLanguage === 'english') ? 'russian' : 'english';
-            logger.warn(`[WORDS API] Invalid target language ${targetLanguage} for user ${userId}, using fallback: ${targetLanguage}`);
+            // Update targetLanguageCode to match the fallback language
+            targetLanguageCode = (sourceLanguage === 'english') ? 'ru' : 'en';
+            logger.warn(`[WORDS API] Invalid target language, using fallback: ${targetLanguage} (${targetLanguageCode})`);
         }
 
         const sourceTableName = `source_words_${sourceLanguage}`;
@@ -12917,9 +12919,22 @@ app.get('/api/words/random/:status/:count', async (req, res) => {
 
         // Map short language codes to full table names
         const sourceLanguageCode = langPairResult.rows[0].from_lang;
-        const targetLanguageCode = langPairResult.rows[0].to_lang;
+        let targetLanguageCode = langPairResult.rows[0].to_lang;
         const sourceLanguage = LANG_CODE_TO_FULL_NAME[sourceLanguageCode] || sourceLanguageCode;
-        const targetLanguage = LANG_CODE_TO_FULL_NAME[targetLanguageCode] || targetLanguageCode;
+        let targetLanguage = LANG_CODE_TO_FULL_NAME[targetLanguageCode] || targetLanguageCode;
+
+        // List of valid target languages (languages that have target_translations tables)
+        const validTargetLanguages = ['english', 'russian', 'french', 'italian', 'portuguese',
+                                     'chinese', 'arabic', 'turkish', 'ukrainian', 'polish',
+                                     'romanian', 'serbian', 'swahili', 'japanese', 'korean', 'hindi'];
+
+        // If target language is invalid (like german, spanish which are source-only), use smart fallback
+        if (!validTargetLanguages.includes(targetLanguage)) {
+            targetLanguage = (sourceLanguage === 'english') ? 'russian' : 'english';
+            // Update targetLanguageCode to match the fallback language
+            targetLanguageCode = (sourceLanguage === 'english') ? 'ru' : 'en';
+            logger.warn(`[RANDOM-WORDS] Invalid target language, using fallback: ${targetLanguage} (${targetLanguageCode})`);
+        }
 
         // Get words using new architecture
         const words = await getWordsWithProgress(
@@ -12958,9 +12973,23 @@ app.get('/api/words/random-proportional/:count', async (req, res) => {
         }
 
         const sourceLanguageCode = langPairResult.rows[0].from_lang;
-        const targetLanguageCode = langPairResult.rows[0].to_lang;
+        let targetLanguageCode = langPairResult.rows[0].to_lang;
         const sourceLanguage = LANG_CODE_TO_FULL_NAME[sourceLanguageCode] || sourceLanguageCode;
-        const targetLanguage = LANG_CODE_TO_FULL_NAME[targetLanguageCode] || targetLanguageCode;
+        let targetLanguage = LANG_CODE_TO_FULL_NAME[targetLanguageCode] || targetLanguageCode;
+
+        // List of valid target languages (languages that have target_translations tables)
+        const validTargetLanguages = ['english', 'russian', 'french', 'italian', 'portuguese',
+                                     'chinese', 'arabic', 'turkish', 'ukrainian', 'polish',
+                                     'romanian', 'serbian', 'swahili', 'japanese', 'korean', 'hindi'];
+
+        // If target language is invalid (like german, spanish which are source-only), use smart fallback
+        if (!validTargetLanguages.includes(targetLanguage)) {
+            targetLanguage = (sourceLanguage === 'english') ? 'russian' : 'english';
+            // Update targetLanguageCode to match the fallback language
+            targetLanguageCode = (sourceLanguage === 'english') ? 'ru' : 'en';
+            logger.warn(`[RANDOM-PROPORTIONAL] Invalid target language, using fallback: ${targetLanguage} (${targetLanguageCode})`);
+        }
+
         const sourceTableName = `source_words_${sourceLanguage}`;
 
         // Get counts for each status from user_word_progress
