@@ -13402,16 +13402,27 @@ app.delete('/api/words/all', async (req, res) => {
             return res.status(400).json({ error: 'userId and languagePairId are required' });
         }
 
-        const result = await db.query(
-            'DELETE FROM words WHERE user_id = $1 AND language_pair_id = $2',
-            [userId, languagePairId]
-        );
+        // Delete from both words table and user_word_progress table
+        const [wordsResult, progressResult] = await Promise.all([
+            db.query(
+                'DELETE FROM words WHERE user_id = $1 AND language_pair_id = $2',
+                [userId, languagePairId]
+            ),
+            db.query(
+                'DELETE FROM user_word_progress WHERE user_id = $1 AND language_pair_id = $2',
+                [userId, languagePairId]
+            )
+        ]);
 
-        logger.info(`🗑️ Deleted ${result.rowCount} words for user ${userId}, language pair ${languagePairId}`);
+        const totalDeleted = wordsResult.rowCount + progressResult.rowCount;
+
+        logger.info(`🗑️ Deleted ${wordsResult.rowCount} words and ${progressResult.rowCount} progress records for user ${userId}, language pair ${languagePairId}`);
 
         res.json({
-            message: 'All words deleted successfully',
-            deletedCount: result.rowCount
+            message: 'All words and progress deleted successfully',
+            deletedCount: totalDeleted,
+            wordsDeleted: wordsResult.rowCount,
+            progressDeleted: progressResult.rowCount
         });
     } catch (err) {
         logger.error('Error deleting words:', err);

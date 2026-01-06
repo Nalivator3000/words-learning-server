@@ -1886,9 +1886,9 @@ schreiben,Sie schreibt einen Brief.,Писать,Она пишет письmо.`
     async resetAllWordsToStudying() {
         // Show confirmation dialog
         const confirmed = confirm(
-            'Are you sure you want to reset ALL words to "studying" status and clear all progress?\n\n' +
+            'Are you sure you want to DELETE ALL words from your account?\n\n' +
             'This action is IRREVERSIBLE!\n\n' +
-            'All XP, correct/incorrect counts, and review dates will be lost.'
+            'All your words, progress, XP, and review data will be permanently deleted.'
         );
 
         if (!confirmed) {
@@ -1906,13 +1906,13 @@ schreiben,Sie schreibt einen Brief.,Писать,Она пишет письmо.`
 
             // Show loading indicator
             if (window.showToast) {
-                showToast('Resetting all progress...', 'info');
+                showToast('Deleting all words...', 'info');
             }
 
             const response = await fetch(
-                `/api/words/bulk/reset-to-studying?userId=${user.id}&languagePairId=${languagePair.id}`,
+                `/api/words/all?userId=${user.id}&languagePairId=${languagePair.id}`,
                 {
-                    method: 'PUT',
+                    method: 'DELETE',
                     headers: {
                         'Content-Type': 'application/json'
                     }
@@ -1920,16 +1920,16 @@ schreiben,Sie schreibt einen Brief.,Писать,Она пишет письmо.`
             );
 
             if (!response.ok) {
-                throw new Error('Failed to reset progress');
+                throw new Error('Failed to delete words');
             }
 
             const result = await response.json();
 
             // Show success message
             if (window.showToast) {
-                showToast(`✅ ${result.updatedCount} words reset to studying status!`, 'success');
+                showToast(`✅ ${result.deletedCount} words deleted successfully!`, 'success');
             } else {
-                alert(`Successfully reset ${result.updatedCount} words to studying status!`);
+                alert(`Successfully deleted ${result.deletedCount} words!`);
             }
 
             // Reload words and stats
@@ -1937,11 +1937,11 @@ schreiben,Sie schreibt einen Brief.,Писать,Она пишет письmо.`
             await this.updateStats();
 
         } catch (error) {
-            console.error('Error resetting progress:', error);
+            console.error('Error deleting words:', error);
             if (window.showToast) {
-                showToast('❌ Failed to reset progress', 'error');
+                showToast('❌ Failed to delete words', 'error');
             } else {
-                alert('Failed to reset progress: ' + error.message);
+                alert('Failed to delete words: ' + error.message);
             }
         }
     }
