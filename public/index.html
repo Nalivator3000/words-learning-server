@@ -6,7 +6,7 @@
     <meta name="google" content="notranslate">
     <title>LexyBooster - Language Learning & SRS</title>
     <meta name="description" content="Master languages with spaced repetition, gamification & streak tracking. Learn German, Spanish, French, and more!">
-    <!-- Version: v5.4.7-DEPLOY-TEST -->
+    <!-- Version: v5.4.9 -->
 
     <!-- Favicon -->
     <link rel="icon" type="image/png" sizes="32x32" href="/icons/icon-72x72.png">
@@ -234,7 +234,7 @@
 
                 // Get service worker version
                 navigator.serviceWorker.getRegistration().then(reg => {
-                    const swVersion = reg && reg.active ? 'v5.4.7' : 'none';
+                    const swVersion = reg && reg.active ? 'v5.4.9' : 'none';
                     document.getElementById('swVersion').textContent = swVersion;
                 });
 
@@ -247,8 +247,8 @@
                         document.getElementById('cssVersion').textContent = cssVersion;
 
                         // If cached CSS is old, force reload
-                        if (cssVersion !== 'v5.3.8') {
-                            console.warn('⚠️ OLD CSS DETECTED:', cssVersion, '!== v5.3.8');
+                        if (cssVersion !== 'v5.4.9') {
+                            console.warn('⚠️ OLD CSS DETECTED:', cssVersion, '!== v5.4.9');
                             console.warn('🔄 Clearing cache and reloading...');
 
                             if ('serviceWorker' in navigator) {
