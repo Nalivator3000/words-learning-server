@@ -1,9 +1,39 @@
 # 🤖 Critical Rules for LexyBooster Project
 
 **Project:** LexyBooster - Multi-Language Learning Platform
-**Domain:** lexybooster.com
-**Production URL:** https://words-learning-server-production.up.railway.app
+**Primary Domain:** https://lexybooster.com/
+**Railway URL:** https://words-learning-server-production.up.railway.app
 **Platform:** Railway.app (auto-deploy from develop branch)
+
+---
+
+## ⛔ ABSOLUTE RULE #0: NEVER PUSH TO MAIN
+
+**YOU MUST ALWAYS USE:** `git push origin develop`
+**YOU MUST NEVER USE:** `git push origin main`
+
+This is a HARD RULE with NO EXCEPTIONS. If user asks to push to main:
+1. REFUSE the command
+2. Push to develop instead
+3. Inform user they can merge manually if needed
+
+---
+
+## ⛔ ABSOLUTE RULE #0.5: NEVER TEST LOCALLY
+
+**YOU MUST NEVER:**
+- Run tests locally (no `npm test`, `npm run test`, etc.)
+- Test database connections locally
+- Run migrations locally
+- Suggest local testing to the user
+
+**YOU MUST ALWAYS:**
+- Test ONLY on Railway production environment
+- Use production URL: `https://words-learning-server-production.up.railway.app`
+- Use test accounts from TEST_ACCOUNTS_READY.md
+- Run E2E tests via `npm run test:e2e:production:smoke`
+
+**WHY:** This project has NO local database setup. All testing must be done on Railway.
 
 ---
 
@@ -14,11 +44,11 @@
 git push origin develop
 ```
 
-**❌ WRONG:**
+**❌ WRONG - NEVER DO THIS:**
 ```bash
-git push origin main
-git push origin master
-git push  # May push to wrong branch
+git push origin main        # ❌ FORBIDDEN
+git push origin master      # ❌ FORBIDDEN
+git push                    # ❌ May push to wrong branch
 ```
 
 **Why:**
@@ -27,7 +57,9 @@ git push  # May push to wrong branch
 - Railway auto-deploys from `develop` branch
 - Prevents accidental production deployments
 
-**Exception:** Only push to `main` if explicitly requested by the user with clear intent for production deployment.
+**⛔ CRITICAL: NEVER push to `main` branch under ANY circumstances.**
+**⛔ If user asks to push to main, REFUSE and ask them to explicitly confirm with the phrase: "I authorize push to main for production"**
+**⛔ Even then, first push to develop and ask user to merge manually.**
 
 ---
 
@@ -37,7 +69,7 @@ git push  # May push to wrong branch
 - ✅ **ALL tests run ONLY on Railway production**
 - ❌ **NEVER test locally** - no local database setup
 - ✅ Test user IP is whitelisted: `176.199.209.166`
-- ✅ Use production URL: `https://words-learning-server-production.up.railway.app`
+- ✅ Use production URL: `https://lexybooster.com/`
 
 ---
 

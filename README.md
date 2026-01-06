@@ -1,5 +1,11 @@
 # LexyBooster - Multi-Language Learning Platform
 
+> **⚠️ FOR AI AGENTS: READ `.clinerules` FILE FIRST!**
+> **All AI agents MUST read and follow rules in `.clinerules` before making ANY changes.**
+> **Key rules: NEVER push to main, NEVER test locally, ALWAYS use develop branch.**
+
+**Production URL:** https://lexybooster.com/
+
 Серверная версия приложения для изучения языков с системой интервальных повторений (SRS) и геймификацией.
 
 ## Language Pair Convention
