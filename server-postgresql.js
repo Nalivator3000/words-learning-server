@@ -73,6 +73,12 @@ const LANG_CODE_TO_FULL_NAME = {
     'sr': 'serbian', 'sw': 'swahili'
 };
 
+// Source languages that have example columns in their source_words_* tables
+// All other languages (arabic, chinese, hindi, italian, japanese, korean, polish,
+// portuguese, romanian, russian, serbian, swahili, turkish, ukrainian) do NOT have
+// example columns in their source tables
+const SOURCE_LANGUAGES_WITH_EXAMPLES = ['english', 'german', 'spanish', 'french'];
+
 // Middleware
 // Response compression (gzip/brotli) - reduces bandwidth by ~70-90%
 app.use(compression({
@@ -12493,6 +12499,8 @@ async function getWordsWithProgress(userId, languagePairId, sourceLanguage, sour
     const sourceTableName = `source_words_${sourceLanguage}`;
     const baseTranslationTableName = `target_translations_${targetLanguage}`;
 
+    const hasSourceExample = SOURCE_LANGUAGES_WITH_EXAMPLES.includes(sourceLanguage);
+
     // FIX: Check if base table exists and has translations for this source language
     // Some language pairs like de→fr or en→es need fallback to _from_XX tables
     const tableExistsResult = await db.query(`
@@ -12519,6 +12527,7 @@ async function getWordsWithProgress(userId, languagePairId, sourceLanguage, sour
         : `${baseTranslationTableName}_from_${sourceLanguageCode}`;
 
     const exampleTranslationColumnActual = useBaseTable ? `example_${targetLanguageCode}` : 'example_native';
+    const exampleSourceColumn = hasSourceExample ? `sw.example_${sourceLanguageCode}` : `''`;
 
     logger.info(`[GET-WORDS-WITH-PROGRESS] Using translation table: ${translationTableName} (useBaseTable: ${useBaseTable})`);
 
@@ -12569,7 +12578,7 @@ async function getWordsWithProgress(userId, languagePairId, sourceLanguage, sour
                 sw.level,
                 sw.theme,
                 tt.translation,
-                sw.example_${sourceLanguageCode} as example,
+                ${exampleSourceColumn} as example,
                 tt.${exampleTranslationColumnActual} as example_translation,
                 uwp.status,
                 uwp.correct_count,
@@ -12609,7 +12618,7 @@ async function getWordsWithProgress(userId, languagePairId, sourceLanguage, sour
                 sw.level,
                 sw.theme,
                 tt.translation,
-                sw.example_${sourceLanguageCode} as example,
+                ${exampleSourceColumn} as example,
                 tt.${exampleTranslationColumnActual} as example_translation,
                 uwp.status,
                 uwp.correct_count,
@@ -13097,87 +13106,66 @@ app.get('/api/words', async (req, res) => {
             useNativeExampleColumn = true; // These tables use example_native instead of example_XX
             logger.info(`[WORDS API] Using translation table with source suffix: ${translationTableName}`);
         } else {
-            // Use base target_translations_XXX format
-            translationTableName = `target_translations_${targetLanguage}`;
+            // For valid target languages, check if source language has example column
+            // If source doesn't have examples, use _from_XX format
+            if (!SOURCE_LANGUAGES_WITH_EXAMPLES.includes(sourceLanguage)) {
+                translationTableName = `target_translations_${targetLanguage}_from_${sourceLanguageCode}`;
+                logger.info(`[WORDS API] Source language ${sourceLanguage} has no examples, using: ${translationTableName}`);
+            } else {
+                // Use base target_translations_XXX format
+                translationTableName = `target_translations_${targetLanguage}`;
+            }
         }
 
         // Build query using new architecture
-        // For tables with _from_XX suffix, example_native is in translation table
-        const exampleTranslationColumn = useNativeExampleColumn
+        // Determine example column names based on source language structure
+        const hasSourceExample = SOURCE_LANGUAGES_WITH_EXAMPLES.includes(sourceLanguage);
+        const exampleSourceColumn = hasSourceExample
+            ? `sw.example_${sourceLanguageCode}`
+            : `''`;
+
+        // For translation example column:
+        // - If using _from_XX with source=en, use example_native
+        // - Otherwise use example_XX where XX is target language
+        const exampleTranslationColumn = (useNativeExampleColumn && sourceLanguageCode === 'en')
             ? `COALESCE(tt.example_native, '')`
-            : `tt.example_${targetLanguageCode}`;
+            : `COALESCE(tt.example_${targetLanguageCode}, '')`;
 
         // Translation column is always tt.translation
         const translationColumn = 'tt.translation';
 
-        let query;
-        if (useNativeExampleColumn) {
-            // Tables with _from_XX suffix - translation and example_native are in tt table
-            query = `
-                SELECT
-                    sw.id as source_word_id,
-                    sw.id as id,
-                    sw.word,
-                    sw.level,
-                    sw.theme,
-                    COALESCE(${translationColumn}, '') as translation,
-                    sw.example_${sourceLanguageCode} as example,
-                    ${exampleTranslationColumn} as example_translation,
-                    uwp.status,
-                    uwp.correct_count,
-                    uwp.incorrect_count,
-                    uwp.total_reviews,
-                    uwp.review_cycle,
-                    uwp.last_review_date,
-                    uwp.next_review_date,
-                    uwp.ease_factor,
-                    uwp.source_language,
-                    uwp.id as progress_id,
-                    uwp.created_at as createdAt
-                FROM ${sourceTableName} sw
-                INNER JOIN user_word_progress uwp ON (
-                    uwp.source_word_id = sw.id
-                    AND uwp.source_language = $1
-                    AND uwp.user_id = $2
-                    AND uwp.language_pair_id = $3
-                )
-                LEFT JOIN ${translationTableName} tt ON tt.source_word_id = sw.id
-                    AND tt.source_lang = $4
-            `;
-        } else {
-            // Standard tables - translation column exists
-            query = `
-                SELECT
-                    sw.id as source_word_id,
-                    sw.id as id,
-                    sw.word,
-                    sw.level,
-                    sw.theme,
-                    tt.translation,
-                    sw.example_${sourceLanguageCode} as example,
-                    ${exampleTranslationColumn} as example_translation,
-                    uwp.status,
-                    uwp.correct_count,
-                    uwp.incorrect_count,
-                    uwp.total_reviews,
-                    uwp.review_cycle,
-                    uwp.last_review_date,
-                    uwp.next_review_date,
-                    uwp.ease_factor,
-                    uwp.source_language,
-                    uwp.id as progress_id,
-                    uwp.created_at as createdAt
-                FROM ${sourceTableName} sw
-                INNER JOIN user_word_progress uwp ON (
-                    uwp.source_word_id = sw.id
-                    AND uwp.source_language = $1
-                    AND uwp.user_id = $2
-                    AND uwp.language_pair_id = $3
-                )
-                LEFT JOIN ${translationTableName} tt ON tt.source_word_id = sw.id
-                    AND tt.source_lang = $4
-            `;
-        }
+        // Build a unified query that works for all cases
+        query = `
+            SELECT
+                sw.id as source_word_id,
+                sw.id as id,
+                sw.word,
+                sw.level,
+                sw.theme,
+                COALESCE(${translationColumn}, '') as translation,
+                ${exampleSourceColumn} as example,
+                ${exampleTranslationColumn} as example_translation,
+                uwp.status,
+                uwp.correct_count,
+                uwp.incorrect_count,
+                uwp.total_reviews,
+                uwp.review_cycle,
+                uwp.last_review_date,
+                uwp.next_review_date,
+                uwp.ease_factor,
+                uwp.source_language,
+                uwp.id as progress_id,
+                uwp.created_at as createdAt
+            FROM ${sourceTableName} sw
+            INNER JOIN user_word_progress uwp ON (
+                uwp.source_word_id = sw.id
+                AND uwp.source_language = $1
+                AND uwp.user_id = $2
+                AND uwp.language_pair_id = $3
+            )
+            LEFT JOIN ${translationTableName} tt ON tt.source_word_id = sw.id
+                AND tt.source_lang = $4
+        `;
 
         // Both table types now use source_lang parameter in JOIN
         let params = [sourceLanguage, parseInt(userId), parseInt(languagePairId), sourceLanguageCode];
@@ -13402,6 +13390,8 @@ app.get('/api/words/random-proportional/:count', async (req, res) => {
         const allWords = [];
         const baseTranslationTableName = `target_translations_${targetLanguage}`;
 
+        const hasSourceExample = SOURCE_LANGUAGES_WITH_EXAMPLES.includes(sourceLanguage);
+
         // FIX: Check if base table exists and has translations for this source language
         // Some language pairs like de→fr need fallback to target_translations_french_from_de
         // because target_translations_french might not have German source words
@@ -13432,6 +13422,7 @@ app.get('/api/words/random-proportional/:count', async (req, res) => {
 
         // Use different column names depending on table type
         const exampleTranslationColumnActual = useBaseTable ? `example_${targetLanguageCode}` : 'example_native';
+        const exampleSourceColumn = hasSourceExample ? `sw.example_${sourceLanguageCode}` : `''`;
 
         for (const [status, allocation] of Object.entries(statusAllocations)) {
             if (allocation > 0) {
@@ -13441,7 +13432,7 @@ app.get('/api/words/random-proportional/:count', async (req, res) => {
                     SELECT
                         sw.id,
                         sw.word,
-                        sw.example_${sourceLanguageCode} as example,
+                        ${exampleSourceColumn} as example,
                         tt.translation,
                         tt.${exampleTranslationColumnActual} as exampleTranslation,
                         uwp.source_word_id,
