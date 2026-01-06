@@ -12,7 +12,8 @@
     "it": "Login",
     "es": "Acceso",
     "pt": "Conecte-se",
-    "sw": "Ingia"
+    "sw": "Ingia",
+    "fr": "Se connecter"
   },
   "register": {
     "en": "Register",
@@ -27,7 +28,8 @@
     "it": "Registro",
     "es": "Registro",
     "pt": "Cadastre-se",
-    "sw": "Sajili"
+    "sw": "Sajili",
+    "fr": "S'inscrire"
   },
   "email": {
     "en": "Email",
@@ -42,7 +44,8 @@
     "it": "E-mail",
     "es": "Correo electrónico",
     "pt": "E-mail",
-    "sw": "Barua pepe"
+    "sw": "Barua pepe",
+    "fr": "E-mail"
   },
   "password": {
     "en": "Password",
@@ -57,7 +60,8 @@
     "it": "Password",
     "es": "Contraseña",
     "pt": "Senha",
-    "sw": "Nenosiri"
+    "sw": "Nenosiri",
+    "fr": "Mot de passe"
   },
   "confirmPassword": {
     "en": "Confirm Password",
@@ -72,7 +76,8 @@
     "it": "Conferma password",
     "es": "confirmar Contraseña",
     "pt": "Confirme sua senha",
-    "sw": "Thibitisha Nenosiri"
+    "sw": "Thibitisha Nenosiri",
+    "fr": "Confirmer le mot de passe"
   },
   "name": {
     "en": "Name",
@@ -87,7 +92,8 @@
     "it": "Nome",
     "es": "Nombre",
     "pt": "Nome",
-    "sw": "Jina"
+    "sw": "Jina",
+    "fr": "Nom"
   },
   "loginWithGoogle": {
     "en": "Log in with Google",
@@ -102,7 +108,8 @@
     "it": "Accedi con Google",
     "es": "Iniciar sesión con Google",
     "pt": "Faça login com o Google",
-    "sw": "Ingia kwa kutumia Google"
+    "sw": "Ingia kwa kutumia Google",
+    "fr": "Se connecter avec Google"
   },
   "home": {
     "en": "Home",
@@ -117,7 +124,8 @@
     "it": "Casa",
     "es": "Hogar",
     "pt": "Lar",
-    "sw": "Nyumbani"
+    "sw": "Nyumbani",
+    "fr": "Accueil"
   },
   "import": {
     "en": "Import",
@@ -132,7 +140,8 @@
     "it": "Importare",
     "es": "Importar",
     "pt": "Importar",
-    "sw": "Ingiza"
+    "sw": "Ingiza",
+    "fr": "Importer"
   },
   "word_lists": {
     "en": "Word Lists",
@@ -147,7 +156,8 @@
     "it": "Elenchi di parole",
     "es": "Listas de palabras",
     "pt": "Listas de palavras",
-    "sw": "Orodha za Maneno"
+    "sw": "Orodha za Maneno",
+    "fr": "Listes de mots"
   },
   "study": {
     "en": "Study",
@@ -162,7 +172,8 @@
     "it": "Studio",
     "es": "Estudiar",
     "pt": "Estudar",
-    "sw": "Jifunze"
+    "sw": "Jifunze",
+    "fr": "Étudier"
   },
   "review": {
     "en": "Review",
@@ -177,7 +188,8 @@
     "it": "Revisione",
     "es": "Revisar",
     "pt": "Análise",
-    "sw": "Kagua"
+    "sw": "Kagua",
+    "fr": "Réviser"
   },
   "daily_challenges": {
     "en": "Challenges",
@@ -192,7 +204,8 @@
     "it": "Sfide",
     "es": "Desafíos",
     "pt": "Desafios",
-    "sw": "Changamoto"
+    "sw": "Changamoto",
+    "fr": "Défis"
   },
   "leagues_title": {
     "en": "Leagues",
@@ -207,7 +220,8 @@
     "it": "Leghe",
     "es": "Ligas",
     "pt": "Ligas",
-    "sw": "Ligi"
+    "sw": "Ligi",
+    "fr": "Ligues"
   },
   "weekly_challenges_title": {
     "en": "Weekly",
@@ -222,7 +236,8 @@
     "it": "Settimanale",
     "es": "Semanalmente",
     "pt": "Semanalmente",
-    "sw": "Kila wiki"
+    "sw": "Kila wiki",
+    "fr": "Hebdomadaire"
   },
   "personal_rating_title": {
     "en": "Rating",
@@ -237,7 +252,8 @@
     "it": "Valutazione",
     "es": "Clasificación",
     "pt": "Avaliação",
-    "sw": "Ukadiriaji"
+    "sw": "Ukadiriaji",
+    "fr": "Classement"
   },
   "personal_insights_title": {
     "en": "Insights",
@@ -252,7 +268,8 @@
     "it": "Approfondimenti",
     "es": "Perspectivas",
     "pt": "Percepções",
-    "sw": "Maarifa"
+    "sw": "Maarifa",
+    "fr": "Aperçus"
   },
   "friends_title": {
     "en": "Friends",
@@ -267,7 +284,8 @@
     "it": "Amici",
     "es": "Amigos",
     "pt": "Amigos",
-    "sw": "Marafiki"
+    "sw": "Marafiki",
+    "fr": "Amis"
   },
   "duels_title": {
     "en": "Duels",
@@ -282,7 +300,8 @@
     "it": "Duelli",
     "es": "Duelos",
     "pt": "Duelos",
-    "sw": "Duels"
+    "sw": "Duels",
+    "fr": "Duels"
   },
   "achievements_title": {
     "en": "Achievements",
@@ -297,7 +316,8 @@
     "it": "Risultati",
     "es": "Logros",
     "pt": "Conquistas",
-    "sw": "Mafanikio"
+    "sw": "Mafanikio",
+    "fr": "Succès"
   },
   "leaderboard": {
     "en": "Leaderboard",
@@ -312,7 +332,8 @@
     "it": "Classifica",
     "es": "Tabla de clasificación",
     "pt": "Tabela de classificação",
-    "sw": "Ubao wa wanaoongoza"
+    "sw": "Ubao wa wanaoongoza",
+    "fr": "Classement"
   },
   "statistics": {
     "en": "Statistics",
@@ -327,7 +348,8 @@
     "it": "Statistiche",
     "es": "Estadística",
     "pt": "Estatísticas",
-    "sw": "Takwimu"
+    "sw": "Takwimu",
+    "fr": "Statistiques"
   },
   "settings": {
     "en": "Settings",
@@ -342,7 +364,8 @@
     "it": "Impostazioni",
     "es": "Ajustes",
     "pt": "Configurações",
-    "sw": "Mipangilio"
+    "sw": "Mipangilio",
+    "fr": "Paramètres"
   },
   "logout": {
     "en": "Log Out",
@@ -357,7 +380,8 @@
     "it": "Esci",
     "es": "Finalizar la sesión",
     "pt": "Sair",
-    "sw": "Toka nje"
+    "sw": "Toka nje",
+    "fr": "Se déconnecter"
   },
   "account": {
     "en": "Account",
@@ -372,7 +396,8 @@
     "it": "Account",
     "es": "Cuenta",
     "pt": "Conta",
-    "sw": "Akaunti"
+    "sw": "Akaunti",
+    "fr": "Compte"
   },
   "confirm_logout": {
     "en": "Are you sure you want to log out?",
@@ -387,7 +412,8 @@
     "it": "Sei sicuro di voler uscire?",
     "es": "¿Está seguro de que desea cerrar sesión?",
     "pt": "Tem certeza de que deseja sair?",
-    "sw": "Je, una uhakika unataka kutoka?"
+    "sw": "Je, una uhakika unataka kutoka?",
+    "fr": "Êtes-vous sûr de vouloir vous déconnecter?"
   },
   "quickStudy": {
     "en": "Quick Study",
@@ -402,7 +428,8 @@
     "it": "Studio veloce",
     "es": "Estudio rápido",
     "pt": "Estudo rápido",
-    "sw": "Utafiti wa Haraka"
+    "sw": "Utafiti wa Haraka",
+    "fr": "Étude rapide"
   },
   "quickReview": {
     "en": "Quick Review",
@@ -417,7 +444,8 @@
     "it": "Revisione rapida",
     "es": "Revisión rápida",
     "pt": "Revisão rápida",
-    "sw": "Uhakiki wa Haraka"
+    "sw": "Uhakiki wa Haraka",
+    "fr": "Révision rapide"
   },
   "multipleChoice": {
     "en": "Multiple Choice",
@@ -432,7 +460,8 @@
     "it": "Scelta multipla",
     "es": "Opción múltiple",
     "pt": "Múltipla escolha",
-    "sw": "Chaguo Nyingi"
+    "sw": "Chaguo Nyingi",
+    "fr": "Choix multiple"
   },
   "reverseChoice": {
     "en": "Reverse Choice",
@@ -447,7 +476,8 @@
     "it": "Scelta inversa",
     "es": "Elección inversa",
     "pt": "Escolha reversa",
-    "sw": "Chaguo la Kugeuza"
+    "sw": "Chaguo la Kugeuza",
+    "fr": "Choix inversé"
   },
   "wordBuilding": {
     "en": "Word Building",
@@ -462,7 +492,8 @@
     "it": "Costruzione di parole",
     "es": "Construcción de palabras",
     "pt": "Construção de palavras",
-    "sw": "Ujenzi wa Neno"
+    "sw": "Ujenzi wa Neno",
+    "fr": "Construction de mots"
   },
   "typing": {
     "en": "Typing",
@@ -477,7 +508,8 @@
     "it": "Digitando",
     "es": "Mecanografía",
     "pt": "Digitando",
-    "sw": "Kuandika"
+    "sw": "Kuandika",
+    "fr": "Saisie"
   },
   "survivalMode": {
     "en": "Survival Mode",
@@ -492,7 +524,8 @@
     "it": "Modalità Sopravvivenza",
     "es": "Modo de supervivencia",
     "pt": "Modo de Sobrevivência",
-    "sw": "Hali ya Kuishi"
+    "sw": "Hali ya Kuishi",
+    "fr": "Mode survie"
   },
   "complexMode": {
     "en": "Complex Mode",
@@ -507,7 +540,8 @@
     "it": "Modalità complessa",
     "es": "Modo complejo",
     "pt": "Modo Complexo",
-    "sw": "Njia Changamano"
+    "sw": "Njia Changamano",
+    "fr": "Mode complexe"
   },
   "next": {
     "en": "Next",
@@ -542,7 +576,8 @@
     "it": "Fine",
     "es": "Finalizar",
     "pt": "Terminar",
-    "sw": "Maliza"
+    "sw": "Maliza",
+    "fr": "Terminer"
   },
   "word_1": {
     "en": "Word 1",
@@ -557,7 +592,8 @@
     "it": "Parola 1",
     "es": "Palabra 1",
     "pt": "Palavra 1",
-    "sw": "Neno 1"
+    "sw": "Neno 1",
+    "fr": "Mot 1"
   },
   "downloadTemplate": {
     "en": "Download CSV Template",
@@ -572,7 +608,8 @@
     "it": "Scarica il modello CSV",
     "es": "Descargar plantilla CSV",
     "pt": "Baixe o modelo CSV",
-    "sw": "Pakua Kiolezo cha CSV"
+    "sw": "Pakua Kiolezo cha CSV",
+    "fr": "Télécharger le modèle CSV"
   },
   "selectFile": {
     "en": "Select File",
@@ -587,7 +624,8 @@
     "it": "Seleziona File",
     "es": "Seleccionar archivo",
     "pt": "Selecione o arquivo",
-    "sw": "Chagua Faili"
+    "sw": "Chagua Faili",
+    "fr": "Sélectionner un fichier"
   },
   "googleSheetsUrl": {
     "en": "Google Sheets URL",
@@ -602,7 +640,8 @@
     "it": "URL di Fogli Google",
     "es": "URL de Hojas de cálculo de Google",
     "pt": "URL do Planilhas Google",
-    "sw": "URL ya Majedwali ya Google"
+    "sw": "URL ya Majedwali ya Google",
+    "fr": "URL Google Sheets"
   },
   "importFromCsv": {
     "en": "From CSV File",
@@ -617,7 +656,8 @@
     "it": "Dal file CSV",
     "es": "Desde archivo CSV",
     "pt": "Do arquivo CSV",
-    "sw": "Kutoka kwa Faili ya CSV"
+    "sw": "Kutoka kwa Faili ya CSV",
+    "fr": "Depuis un fichier CSV"
   },
   "importFromGoogle": {
     "en": "From Google Sheets",
@@ -632,7 +672,8 @@
     "it": "Da Fogli Google",
     "es": "De Hojas de cálculo de Google",
     "pt": "Do Planilhas Google",
-    "sw": "Kutoka Majedwali ya Google"
+    "sw": "Kutoka Majedwali ya Google",
+    "fr": "Depuis Google Sheets"
   },
   "howItWorks": {
     "en": "How it works",
@@ -647,7 +688,8 @@
     "it": "Come funziona",
     "es": "como funciona",
     "pt": "Como funciona",
-    "sw": "Jinsi inavyofanya kazi"
+    "sw": "Jinsi inavyofanya kazi",
+    "fr": "Comment ça marche"
   },
   "howItWorksTitle": {
     "en": "How does the spaced repetition system work?",
@@ -662,7 +704,8 @@
     "it": "Come funziona il sistema di ripetizione distanziata?",
     "es": "¿Cómo funciona el sistema de repeticiones espaciadas?",
     "pt": "Como funciona o sistema de repetição espaçada?",
-    "sw": "Je, mfumo wa kurudiarudia kwa nafasi hufanya kazi vipi?"
+    "sw": "Je, mfumo wa kurudiarudia kwa nafasi hufanya kazi vipi?",
+    "fr": "Comment fonctionne le système de répétition espacée?"
   },
   "uiLanguage": {
     "en": "Interface Language",
@@ -677,7 +720,8 @@
     "it": "Linguaggio dell'interfaccia",
     "es": "Idioma de la interfaz",
     "pt": "Idioma da interface",
-    "sw": "Lugha ya Kiolesura"
+    "sw": "Lugha ya Kiolesura",
+    "fr": "Langue de l'interface"
   },
   "selectLanguage": {
     "en": "Select language",
@@ -692,7 +736,8 @@
     "it": "Seleziona la lingua",
     "es": "Seleccionar idioma",
     "pt": "Selecione o idioma",
-    "sw": "Chagua lugha"
+    "sw": "Chagua lugha",
+    "fr": "Sélectionner la langue"
   },
   "learningLanguage": {
     "en": "Learning Language",
@@ -707,7 +752,8 @@
     "it": "Imparare la lingua",
     "es": "Aprender Idioma",
     "pt": "Aprendendo Idioma",
-    "sw": "Kujifunza Lugha"
+    "sw": "Kujifunza Lugha",
+    "fr": "Langue d'apprentissage"
   },
   "nativeLanguage": {
     "en": "Native Language",
@@ -722,7 +768,8 @@
     "it": "Madrelingua",
     "es": "Lengua materna",
     "pt": "Língua materna",
-    "sw": "Lugha ya Asili"
+    "sw": "Lugha ya Asili",
+    "fr": "Langue maternelle"
   },
   "darkTheme": {
     "en": "Dark Theme",
@@ -737,7 +784,8 @@
     "it": "Tema oscuro",
     "es": "Tema oscuro",
     "pt": "Tema escuro",
-    "sw": "Mandhari ya Giza"
+    "sw": "Mandhari ya Giza",
+    "fr": "Thème sombre"
   },
   "save": {
     "en": "Save",
@@ -752,7 +800,8 @@
     "it": "Salva",
     "es": "Ahorrar",
     "pt": "Salvar",
-    "sw": "Hifadhi"
+    "sw": "Hifadhi",
+    "fr": "Enregistrer"
   },
   "cancel": {
     "en": "Cancel",
@@ -767,7 +816,8 @@
     "it": "Cancellare",
     "es": "Cancelar",
     "pt": "Cancelar",
-    "sw": "Ghairi"
+    "sw": "Ghairi",
+    "fr": "Annuler"
   },
   "delete": {
     "en": "Delete",
@@ -782,7 +832,8 @@
     "it": "Eliminare",
     "es": "Borrar",
     "pt": "Excluir",
-    "sw": "Futa"
+    "sw": "Futa",
+    "fr": "Supprimer"
   },
   "edit": {
     "en": "Edit",
@@ -797,7 +848,8 @@
     "it": "Modificare",
     "es": "Editar",
     "pt": "Editar",
-    "sw": "Hariri"
+    "sw": "Hariri",
+    "fr": "Modifier"
   },
   "add": {
     "en": "Add",
@@ -812,7 +864,8 @@
     "it": "Aggiungere",
     "es": "Agregar",
     "pt": "Adicionar",
-    "sw": "Ongeza"
+    "sw": "Ongeza",
+    "fr": "Ajouter"
   },
   "close": {
     "en": "Close",
@@ -827,7 +880,8 @@
     "it": "Vicino",
     "es": "Cerca",
     "pt": "Fechar",
-    "sw": "Funga"
+    "sw": "Funga",
+    "fr": "Fermer"
   },
   "search": {
     "en": "Search",
@@ -842,7 +896,8 @@
     "it": "Ricerca",
     "es": "Buscar",
     "pt": "Procurar",
-    "sw": "Tafuta"
+    "sw": "Tafuta",
+    "fr": "Rechercher"
   },
   "filter": {
     "en": "Filter",
@@ -857,7 +912,8 @@
     "it": "Filtro",
     "es": "Filtrar",
     "pt": "Filtro",
-    "sw": "Chuja"
+    "sw": "Chuja",
+    "fr": "Filtrer"
   },
   "sort": {
     "en": "Sort",
@@ -872,7 +928,8 @@
     "it": "Ordinare",
     "es": "Clasificar",
     "pt": "Organizar",
-    "sw": "Panga"
+    "sw": "Panga",
+    "fr": "Trier"
   },
   "all": {
     "en": "All",
@@ -887,7 +944,8 @@
     "it": "Tutto",
     "es": "Todo",
     "pt": "Todos",
-    "sw": "Wote"
+    "sw": "Wote",
+    "fr": "Tous"
   },
   "loading": {
     "en": "Loading...",
@@ -902,7 +960,8 @@
     "it": "Caricamento...",
     "es": "Cargando...",
     "pt": "Carregando...",
-    "sw": "Inapakia..."
+    "sw": "Inapakia...",
+    "fr": "Chargement..."
   },
   "error": {
     "en": "Error",
@@ -917,7 +976,8 @@
     "it": "Errore",
     "es": "Error",
     "pt": "Erro",
-    "sw": "Hitilafu"
+    "sw": "Hitilafu",
+    "fr": "Erreur"
   },
   "success": {
     "en": "Success",
@@ -932,7 +992,8 @@
     "it": "Successo",
     "es": "Éxito",
     "pt": "Sucesso",
-    "sw": "Mafanikio"
+    "sw": "Mafanikio",
+    "fr": "Succès"
   },
   "confirm": {
     "en": "Confirm",
@@ -947,7 +1008,8 @@
     "it": "Confermare",
     "es": "Confirmar",
     "pt": "Confirmar",
-    "sw": "Thibitisha"
+    "sw": "Thibitisha",
+    "fr": "Confirmer"
   },
   "yes": {
     "en": "Yes",
@@ -962,7 +1024,8 @@
     "it": "SÌ",
     "es": "Sí",
     "pt": "Sim",
-    "sw": "Ndiyo"
+    "sw": "Ndiyo",
+    "fr": "Oui"
   },
   "no": {
     "en": "No",
@@ -977,7 +1040,8 @@
     "it": "NO",
     "es": "No",
     "pt": "Não",
-    "sw": "Hapana"
+    "sw": "Hapana",
+    "fr": "Non"
   },
   "total": {
     "en": "Total",
@@ -992,7 +1056,8 @@
     "it": "Totale",
     "es": "Total",
     "pt": "Total",
-    "sw": "Jumla"
+    "sw": "Jumla",
+    "fr": "Total"
   },
   "words": {
     "en": "Words",
@@ -1007,7 +1072,8 @@
     "it": "Parole",
     "es": "Palabras",
     "pt": "Palavras",
-    "sw": "Maneno"
+    "sw": "Maneno",
+    "fr": "Mots"
   },
   "points": {
     "en": "Points",
@@ -1022,7 +1088,8 @@
     "it": "Punti",
     "es": "Agujas",
     "pt": "Pontos",
-    "sw": "Pointi"
+    "sw": "Pointi",
+    "fr": "Points"
   },
   "level": {
     "en": "Level",
@@ -1037,7 +1104,8 @@
     "it": "Livello",
     "es": "Nivel",
     "pt": "Nível",
-    "sw": "Kiwango"
+    "sw": "Kiwango",
+    "fr": "Niveau"
   },
   "streak": {
     "en": "Streak",
@@ -1052,7 +1120,8 @@
     "it": "Strisciante",
     "es": "Racha",
     "pt": "Onda",
-    "sw": "Mfululizo"
+    "sw": "Mfululizo",
+    "fr": "Série"
   },
   "today": {
     "en": "Today",
@@ -1067,7 +1136,8 @@
     "it": "Oggi",
     "es": "Hoy",
     "pt": "Hoje",
-    "sw": "Leo"
+    "sw": "Leo",
+    "fr": "Aujourd'hui"
   },
   "week": {
     "en": "Week",
@@ -1082,7 +1152,8 @@
     "it": "Settimana",
     "es": "Semana",
     "pt": "Semana",
-    "sw": "Wiki"
+    "sw": "Wiki",
+    "fr": "Semaine"
   },
   "month": {
     "en": "Month",
@@ -1097,7 +1168,8 @@
     "it": "Mese",
     "es": "Mes",
     "pt": "Mês",
-    "sw": "Mwezi"
+    "sw": "Mwezi",
+    "fr": "Mois"
   },
   "year": {
     "en": "Year",
@@ -1112,7 +1184,8 @@
     "it": "Anno",
     "es": "Año",
     "pt": "Ano",
-    "sw": "Mwaka"
+    "sw": "Mwaka",
+    "fr": "Année"
   },
   "app_update_available": {
     "en": "A new version is available! Refresh to update?",
@@ -1127,7 +1200,8 @@
     "it": "Una nuova versione è disponibile! ",
     "es": "¡Una nueva versión está disponible! ",
     "pt": "Uma nova versão está disponível! ",
-    "sw": "Toleo jipya linapatikana! "
+    "sw": "Toleo jipya linapatikana! ",
+    "fr": "Une nouvelle version est disponible! Actualiser pour mettre à jour?"
   },
   "question": {
     "en": "Question",
@@ -1142,7 +1216,8 @@
     "it": "Domanda",
     "es": "Pregunta",
     "pt": "Pergunta",
-    "sw": "Swali"
+    "sw": "Swali",
+    "fr": "Question"
   },
   "of": {
     "en": "of",
@@ -1157,7 +1232,8 @@
     "it": "Di",
     "es": "de",
     "pt": "de",
-    "sw": "ya"
+    "sw": "ya",
+    "fr": "de"
   },
   "correct": {
     "en": "Correct!",
@@ -1172,7 +1248,8 @@
     "it": "Corretto!",
     "es": "¡Correcto!",
     "pt": "Correto!",
-    "sw": "Sahihi!"
+    "sw": "Sahihi!",
+    "fr": "Correct!"
   },
   "incorrect": {
     "en": "Incorrect",
@@ -1187,7 +1264,8 @@
     "it": "Errato",
     "es": "Incorrecto",
     "pt": "Incorreto",
-    "sw": "Si sahihi"
+    "sw": "Si sahihi",
+    "fr": "Incorrect"
   },
   "correctAnswer": {
     "en": "Correct answer:",
@@ -1202,7 +1280,8 @@
     "it": "Risposta corretta:",
     "es": "Respuesta correcta:",
     "pt": "Resposta correta:",
-    "sw": "Jibu sahihi:"
+    "sw": "Jibu sahihi:",
+    "fr": "Réponse correcte:"
   },
   "showAnswer": {
     "en": "Show Answer",
@@ -1217,7 +1296,8 @@
     "it": "Mostra risposta",
     "es": "Mostrar respuesta",
     "pt": "Mostrar resposta",
-    "sw": "Onyesha Jibu"
+    "sw": "Onyesha Jibu",
+    "fr": "Afficher la réponse"
   },
   "clear": {
     "en": "Clear",
@@ -1232,7 +1312,8 @@
     "it": "Chiaro",
     "es": "Claro",
     "pt": "Claro",
-    "sw": "Wazi"
+    "sw": "Wazi",
+    "fr": "Effacer"
   },
   "submit": {
     "en": "Submit",
@@ -1247,7 +1328,8 @@
     "it": "Invia",
     "es": "Entregar",
     "pt": "Enviar",
-    "sw": "Wasilisha"
+    "sw": "Wasilisha",
+    "fr": "Soumettre"
   },
   "buildTheWord": {
     "en": "Build the word...",
@@ -1262,7 +1344,8 @@
     "it": "Costruisci la parola...",
     "es": "Construye la palabra...",
     "pt": "Construa a palavra...",
-    "sw": "Tengeneza neno..."
+    "sw": "Tengeneza neno...",
+    "fr": "Construire le mot..."
   },
   "enterAnswer": {
     "en": "Enter answer...",
@@ -1277,7 +1360,8 @@
     "it": "Inserisci la risposta...",
     "es": "Introduce la respuesta...",
     "pt": "Digite a resposta...",
-    "sw": "Weka jibu..."
+    "sw": "Weka jibu...",
+    "fr": "Entrer la réponse..."
   },
   "quizCompleted": {
     "en": "Quiz completed!",
@@ -1292,7 +1376,8 @@
     "it": "Quiz completato!",
     "es": "¡Prueba completada!",
     "pt": "Questionário concluído!",
-    "sw": "Maswali yamekamilika!"
+    "sw": "Maswali yamekamilika!",
+    "fr": "Quiz terminé!"
   },
   "reviewCompleted": {
     "en": "Review completed!",
@@ -1307,7 +1392,8 @@
     "it": "Revisione completata!",
     "es": "¡Revisión completada!",
     "pt": "Revisão concluída!",
-    "sw": "Ukaguzi umekamilika!"
+    "sw": "Ukaguzi umekamilika!",
+    "fr": "Révision terminée!"
   },
   "result": {
     "en": "Result",
@@ -1322,7 +1408,8 @@
     "it": "Risultato",
     "es": "Resultado",
     "pt": "Resultado",
-    "sw": "Matokeo"
+    "sw": "Matokeo",
+    "fr": "Résultat"
   },
   "score": {
     "en": "Score",
@@ -1337,7 +1424,8 @@
     "it": "Punto",
     "es": "Puntaje",
     "pt": "Pontuação",
-    "sw": "Alama"
+    "sw": "Alama",
+    "fr": "Score"
   },
   "noWords": {
     "en": "No words",
@@ -1352,7 +1440,8 @@
     "it": "Nessuna parola",
     "es": "Sin palabras",
     "pt": "Sem palavras",
-    "sw": "Hakuna maneno"
+    "sw": "Hakuna maneno",
+    "fr": "Aucun mot"
   },
   "autoRecommended": {
     "en": "Auto (recommended)",
@@ -1367,7 +1456,8 @@
     "it": "Automatico (consigliato)",
     "es": "Automático (recomendado)",
     "pt": "Automático (recomendado)",
-    "sw": "Otomatiki (inapendekezwa)"
+    "sw": "Otomatiki (inapendekezwa)",
+    "fr": "Auto (recommandé)"
   },
   "almost": {
     "en": "Almost!",
@@ -1382,7 +1472,8 @@
     "it": "Quasi!",
     "es": "¡Casi!",
     "pt": "Quase!",
-    "sw": "Karibu!"
+    "sw": "Karibu!",
+    "fr": "Presque!"
   },
   "incorrectCorrectAnswer": {
     "en": "Incorrect. Correct answer:",
@@ -1397,7 +1488,8 @@
     "it": "Errato. ",
     "es": "Incorrecto. ",
     "pt": "Incorreto. ",
-    "sw": "Si sahihi. "
+    "sw": "Si sahihi. ",
+    "fr": "Incorrect. Réponse correcte:"
   },
   "almostCorrectAnswer": {
     "en": "Almost! Correct answer:",
@@ -1412,7 +1504,8 @@
     "it": "Quasi! ",
     "es": "¡Casi! ",
     "pt": "Quase! ",
-    "sw": "Karibu! "
+    "sw": "Karibu! ",
+    "fr": "Presque! Réponse correcte:"
   },
   "fromCSVFile": {
     "en": "From CSV File",
@@ -1427,7 +1520,8 @@
     "it": "Dal file CSV",
     "es": "Desde archivo CSV",
     "pt": "Do arquivo CSV",
-    "sw": "Kutoka kwa Faili ya CSV"
+    "sw": "Kutoka kwa Faili ya CSV",
+    "fr": "Depuis un fichier CSV"
   },
   "fromGoogleSheets": {
     "en": "From Google Sheets",
@@ -1442,7 +1536,8 @@
     "it": "Da Fogli Google",
     "es": "De Hojas de cálculo de Google",
     "pt": "Do Planilhas Google",
-    "sw": "Kutoka Majedwali ya Google"
+    "sw": "Kutoka Majedwali ya Google",
+    "fr": "Depuis Google Sheets"
   },
   "exportData": {
     "en": "Export Data",
@@ -1457,7 +1552,8 @@
     "it": "Esporta dati",
     "es": "Exportar datos",
     "pt": "Exportar dados",
-    "sw": "Hamisha Data"
+    "sw": "Hamisha Data",
+    "fr": "Exporter les données"
   },
   "skip": {
     "en": "Skip",
@@ -1472,7 +1568,8 @@
     "it": "Saltare",
     "es": "Saltar",
     "pt": "Pular",
-    "sw": "Ruka"
+    "sw": "Ruka",
+    "fr": "Passer"
   },
   "skipped": {
     "en": "Skipped",
@@ -1487,7 +1584,8 @@
     "it": "Saltato",
     "es": "Saltado",
     "pt": "Ignorado",
-    "sw": "Imerukwa"
+    "sw": "Imerukwa",
+    "fr": "Passé"
   },
   "correctAnswerWas": {
     "en": "The correct answer was",
@@ -1502,7 +1600,8 @@
     "it": "La risposta corretta era",
     "es": "La respuesta correcta fue",
     "pt": "A resposta correta foi",
-    "sw": "Jibu sahihi lilikuwa"
+    "sw": "Jibu sahihi lilikuwa",
+    "fr": "La réponse correcte était"
   },
   "notStudied": {
     "en": "Not studied",
@@ -1517,7 +1616,8 @@
     "it": "Non studiato",
     "es": "No estudiado",
     "pt": "Não estudado",
-    "sw": "Haijasomwa"
+    "sw": "Haijasomwa",
+    "fr": "Non étudié"
   },
   "dashboard": {
     "en": "Dashboard",
@@ -1532,7 +1632,8 @@
     "it": "Pannello di controllo",
     "es": "Panel",
     "pt": "Painel",
-    "sw": "Dashibodi"
+    "sw": "Dashibodi",
+    "fr": "Tableau de bord"
   },
   "studyingWords": {
     "en": "Studying",
@@ -1547,7 +1648,8 @@
     "it": "Studiando",
     "es": "Estudiando",
     "pt": "Estudo",
-    "sw": "Kusoma"
+    "sw": "Kusoma",
+    "fr": "Mots en cours d'étude"
   },
   "reviewWords": {
     "en": "Review",
@@ -1562,7 +1664,8 @@
     "it": "Revisione",
     "es": "Revisar",
     "pt": "Análise",
-    "sw": "Kagua"
+    "sw": "Kagua",
+    "fr": "Mots à réviser"
   },
   "learnedWords": {
     "en": "Learned",
@@ -1577,7 +1680,8 @@
     "it": "Imparato",
     "es": "Aprendió",
     "pt": "Aprendido",
-    "sw": "Kujifunza"
+    "sw": "Kujifunza",
+    "fr": "Mots appris"
   },
   "appTitle": {
     "en": "LexiBooster",
@@ -1592,7 +1696,8 @@
     "it": "LexiBooster",
     "es": "LexiBooster",
     "pt": "Lexi Booster",
-    "sw": "LexiBooster"
+    "sw": "LexiBooster",
+    "fr": "Application d'apprentissage des langues"
   },
   "play_audio": {
     "en": "Play audio",
@@ -1607,7 +1712,8 @@
     "it": "Riproduci l'audio",
     "es": "Reproducir audio",
     "pt": "Reproduzir áudio",
-    "sw": "Cheza sauti"
+    "sw": "Cheza sauti",
+    "fr": "Lire l'audio"
   },
   "selectMode": {
     "en": "Select Mode",
@@ -1622,7 +1728,8 @@
     "it": "Seleziona Modalità",
     "es": "Seleccionar modo",
     "pt": "Selecione o modo",
-    "sw": "Chagua Hali"
+    "sw": "Chagua Hali",
+    "fr": "Sélectionner le mode"
   },
   "no_weekly_challenges": {
     "en": "No weekly challenges available",
@@ -1637,7 +1744,8 @@
     "it": "Nessuna sfida settimanale disponibile",
     "es": "No hay desafíos semanales disponibles",
     "pt": "Não há desafios semanais disponíveis",
-    "sw": "Hakuna changamoto za kila wiki zinazopatikana"
+    "sw": "Hakuna changamoto za kila wiki zinazopatikana",
+    "fr": "Aucun défi hebdomadaire disponible"
   },
   "week_of": {
     "en": "Week of",
@@ -1652,7 +1760,8 @@
     "it": "Settimana di",
     "es": "Semana de",
     "pt": "Semana de",
-    "sw": "Wiki ya"
+    "sw": "Wiki ya",
+    "fr": "Semaine du"
   },
   "completed_this_week": {
     "en": "Completed",
@@ -1667,7 +1776,8 @@
     "it": "Completato",
     "es": "Terminado",
     "pt": "Concluído",
-    "sw": "Imekamilika"
+    "sw": "Imekamilika",
+    "fr": "Complété cette semaine"
   },
   "total_completed": {
     "en": "Total",
@@ -1682,7 +1792,8 @@
     "it": "Totale",
     "es": "Total",
     "pt": "Total",
-    "sw": "Jumla"
+    "sw": "Jumla",
+    "fr": "Total complété"
   },
   "claimed": {
     "en": "Claimed",
@@ -1697,7 +1808,8 @@
     "it": "Reclamato",
     "es": "Reclamado",
     "pt": "Reivindicado",
-    "sw": "Imedaiwa"
+    "sw": "Imedaiwa",
+    "fr": "Réclamé"
   },
   "claim_reward": {
     "en": "Claim Reward",
@@ -1712,7 +1824,8 @@
     "it": "Richiedi il premio",
     "es": "Reclamar recompensa",
     "pt": "Reivindicar recompensa",
-    "sw": "Dai Tuzo"
+    "sw": "Dai Tuzo",
+    "fr": "Réclamer la récompense"
   },
   "in_progress": {
     "en": "In Progress...",
@@ -1727,7 +1840,8 @@
     "it": "In corso...",
     "es": "En curso...",
     "pt": "Em andamento...",
-    "sw": "Inaendelea..."
+    "sw": "Inaendelea...",
+    "fr": "En cours"
   },
   "accept": {
     "en": "Accept",
@@ -1742,7 +1856,8 @@
     "it": "Accettare",
     "es": "Aceptar",
     "pt": "Aceitar",
-    "sw": "Kubali"
+    "sw": "Kubali",
+    "fr": "Accepter"
   },
   "achievements": {
     "en": "Achievements",
@@ -1757,7 +1872,8 @@
     "it": "Risultati",
     "es": "Logros",
     "pt": "Conquistas",
-    "sw": "Mafanikio"
+    "sw": "Mafanikio",
+    "fr": "Succès"
   },
   "achievements_showcase": {
     "en": "Achievements Showcase",
@@ -1772,7 +1888,8 @@
     "it": "Vetrina dei risultati ottenuti",
     "es": "Muestra de logros",
     "pt": "Demonstração de Conquistas",
-    "sw": "Maonyesho ya Mafanikio"
+    "sw": "Maonyesho ya Mafanikio",
+    "fr": "Vitrine des succès"
   },
   "achievements_unlocked": {
     "en": "Achievements Unlocked",
@@ -1787,7 +1904,8 @@
     "it": "Risultati sbloccati",
     "es": "Logros desbloqueados",
     "pt": "Conquistas desbloqueadas",
-    "sw": "Mafanikio Yamefunguliwa"
+    "sw": "Mafanikio Yamefunguliwa",
+    "fr": "Succès débloqués"
   },
   "active_duels": {
     "en": "Active Duels",
@@ -1802,7 +1920,8 @@
     "it": "Duelli attivi",
     "es": "Duelos activos",
     "pt": "Duelos Ativos",
-    "sw": "Dueli Zinazotumika"
+    "sw": "Dueli Zinazotumika",
+    "fr": "Duels actifs"
   },
   "activities": {
     "en": "Activities",
@@ -1817,7 +1936,8 @@
     "it": "Attività",
     "es": "Actividades",
     "pt": "Atividades",
-    "sw": "Shughuli"
+    "sw": "Shughuli",
+    "fr": "Activités"
   },
   "activity_feed": {
     "en": "Activity Feed",
@@ -1832,7 +1952,8 @@
     "it": "Feed attività",
     "es": "Feed de actividad",
     "pt": "Feed de atividades",
-    "sw": "Mlisho wa Shughuli"
+    "sw": "Mlisho wa Shughuli",
+    "fr": "Fil d'activité"
   },
   "activity_hint": {
     "en": "See what your friends are learning",
@@ -1847,7 +1968,8 @@
     "it": "Guarda cosa stanno imparando i tuoi amici",
     "es": "Mira lo que tus amigos están aprendiendo",
     "pt": "Veja o que seus amigos estão aprendendo",
-    "sw": "Tazama kile marafiki zako wanajifunza"
+    "sw": "Tazama kile marafiki zako wanajifunza",
+    "fr": "Voir les activités récentes de vos amis"
   },
   "add_friend": {
     "en": "Add Friend",
@@ -1862,7 +1984,8 @@
     "it": "Aggiungi amico",
     "es": "Agregar amigo",
     "pt": "Adicionar amigo",
-    "sw": "Ongeza Rafiki"
+    "sw": "Ongeza Rafiki",
+    "fr": "Ajouter un ami"
   },
   "advanced": {
     "en": "Advanced",
@@ -1877,7 +2000,8 @@
     "it": "Avanzato",
     "es": "Avanzado",
     "pt": "Avançado",
-    "sw": "Advanced"
+    "sw": "Advanced",
+    "fr": "Avancé"
   },
   "all_categories": {
     "en": "All Categories",
@@ -1892,7 +2016,8 @@
     "it": "Tutte le categorie",
     "es": "Todas las categorías",
     "pt": "Todas as categorias",
-    "sw": "Kategoria Zote"
+    "sw": "Kategoria Zote",
+    "fr": "Toutes les catégories"
   },
   "all_levels": {
     "en": "All Levels",
@@ -1907,7 +2032,8 @@
     "it": "Tutti i livelli",
     "es": "Todos los niveles",
     "pt": "Todos os níveis",
-    "sw": "Ngazi zote"
+    "sw": "Ngazi zote",
+    "fr": "Tous les niveaux"
   },
   "all_time": {
     "en": "All Time",
@@ -1922,7 +2048,8 @@
     "it": "Tutto il tempo",
     "es": "Todo el tiempo",
     "pt": "Todos os tempos",
-    "sw": "Wakati Wote"
+    "sw": "Wakati Wote",
+    "fr": "Tout le temps"
   },
   "all_topics": {
     "en": "All Topics",
@@ -1937,7 +2064,8 @@
     "it": "Tutti gli argomenti",
     "es": "Todos los temas",
     "pt": "Todos os tópicos",
-    "sw": "Mada Zote"
+    "sw": "Mada Zote",
+    "fr": "Tous les sujets"
   },
   "already_friends": {
     "en": "Already friends",
@@ -1952,7 +2080,8 @@
     "it": "Già amici",
     "es": "Ya amigos",
     "pt": "Já amigos",
-    "sw": "Tayari marafiki"
+    "sw": "Tayari marafiki",
+    "fr": "Déjà amis"
   },
   "average_per_period": {
     "en": "Average per period",
@@ -1967,7 +2096,8 @@
     "it": "Media per periodo",
     "es": "Promedio por periodo",
     "pt": "Média por período",
-    "sw": "Wastani kwa kila kipindi"
+    "sw": "Wastani kwa kila kipindi",
+    "fr": "Moyenne par période"
   },
   "average_score": {
     "en": "Average Score",
@@ -1982,7 +2112,8 @@
     "it": "Punteggio medio",
     "es": "Puntuación promedio",
     "pt": "Pontuação Média",
-    "sw": "Alama ya Wastani"
+    "sw": "Alama ya Wastani",
+    "fr": "Score moyen"
   },
   "awaiting_response": {
     "en": "Awaiting response",
@@ -1997,7 +2128,8 @@
     "it": "In attesa di risposta",
     "es": "Esperando respuesta",
     "pt": "Aguardando resposta",
-    "sw": "Inasubiri majibu"
+    "sw": "Inasubiri majibu",
+    "fr": "En attente de réponse"
   },
   "back": {
     "en": "Back",
@@ -2032,7 +2164,8 @@
     "it": "Torna al Login",
     "es": "Volver al Login",
     "pt": "Voltar ao Login",
-    "sw": "Rudi kwa Kuingia"
+    "sw": "Rudi kwa Kuingia",
+    "fr": "Retour à la connexion"
   },
   "beginner": {
     "en": "Beginner",
@@ -2047,7 +2180,8 @@
     "it": "Principiante",
     "es": "Principiante",
     "pt": "Novato",
-    "sw": "Mwanzilishi"
+    "sw": "Mwanzilishi",
+    "fr": "Débutant"
   },
   "best_period": {
     "en": "Best period",
@@ -2062,7 +2196,8 @@
     "it": "Periodo migliore",
     "es": "Mejor periodo",
     "pt": "Melhor período",
-    "sw": "Kipindi bora zaidi"
+    "sw": "Kipindi bora zaidi",
+    "fr": "Meilleure période"
   },
   "challenge_friend": {
     "en": "Challenge Friend",
@@ -2077,7 +2212,8 @@
     "it": "Sfida Amico",
     "es": "Amigo del desafío",
     "pt": "Desafio Amigo",
-    "sw": "Changamoto Rafiki"
+    "sw": "Changamoto Rafiki",
+    "fr": "Défier un ami"
   },
   "challenge_friend_hint": {
     "en": "Challenge your friends to a duel",
@@ -2092,7 +2228,8 @@
     "it": "Sfida i tuoi amici a duello",
     "es": "Desafía a tus amigos a un duelo",
     "pt": "Desafie seus amigos para um duelo",
-    "sw": "Changamoto kwa marafiki wako kwenye duwa"
+    "sw": "Changamoto kwa marafiki wako kwenye duwa",
+    "fr": "Sélectionnez un ami pour commencer un duel"
   },
   "complete": {
     "en": "Complete",
@@ -2107,7 +2244,8 @@
     "it": "Completare",
     "es": "Completo",
     "pt": "Completo",
-    "sw": "Kamilisha"
+    "sw": "Kamilisha",
+    "fr": "Complet"
   },
   "completed": {
     "en": "Completed",
@@ -2122,7 +2260,8 @@
     "it": "Completato",
     "es": "Terminado",
     "pt": "Concluído",
-    "sw": "Imekamilika"
+    "sw": "Imekamilika",
+    "fr": "Terminé"
   },
   "continue_duel": {
     "en": "Continue Duel",
@@ -2137,7 +2276,8 @@
     "it": "Continua Duello",
     "es": "Continuar duelo",
     "pt": "Continuar duelo",
-    "sw": "Endelea Duel"
+    "sw": "Endelea Duel",
+    "fr": "Continuer le duel"
   },
   "count": {
     "en": "Count",
@@ -2152,7 +2292,8 @@
     "it": "Contare",
     "es": "Contar",
     "pt": "Contar",
-    "sw": "Hesabu"
+    "sw": "Hesabu",
+    "fr": "Compte"
   },
   "current_period": {
     "en": "Current period",
@@ -2167,7 +2308,8 @@
     "it": "Periodo attuale",
     "es": "Periodo actual",
     "pt": "Período atual",
-    "sw": "Kipindi cha sasa"
+    "sw": "Kipindi cha sasa",
+    "fr": "Période actuelle"
   },
   "current_streak": {
     "en": "Current Streak",
@@ -2182,7 +2324,8 @@
     "it": "Serie attuale",
     "es": "Racha actual",
     "pt": "Sequência Atual",
-    "sw": "Mfululizo wa Sasa"
+    "sw": "Mfululizo wa Sasa",
+    "fr": "Série actuelle"
   },
   "day": {
     "en": "day",
@@ -2248,7 +2391,8 @@
     "it": "Declino",
     "es": "Rechazar",
     "pt": "Declínio",
-    "sw": "Kataa"
+    "sw": "Kataa",
+    "fr": "Refuser"
   },
   "difficulty": {
     "en": "Difficulty",
@@ -2263,7 +2407,8 @@
     "it": "Difficoltà",
     "es": "Dificultad",
     "pt": "Dificuldade",
-    "sw": "Ugumu"
+    "sw": "Ugumu",
+    "fr": "Difficulté"
   },
   "draws": {
     "en": "Draws",
@@ -2278,7 +2423,8 @@
     "it": "Disegna",
     "es": "Sorteos",
     "pt": "Empates",
-    "sw": "Huchora"
+    "sw": "Huchora",
+    "fr": "Égalités"
   },
   "duel_history": {
     "en": "Duel History",
@@ -2293,7 +2439,8 @@
     "it": "Storia del duello",
     "es": "Historia del duelo",
     "pt": "História do duelo",
-    "sw": "Historia ya Duel"
+    "sw": "Historia ya Duel",
+    "fr": "Historique des duels"
   },
   "edit_profile": {
     "en": "Edit Profile",
@@ -2308,7 +2455,8 @@
     "it": "Modifica profilo",
     "es": "Editar perfil",
     "pt": "Editar perfil",
-    "sw": "Badilisha Wasifu"
+    "sw": "Badilisha Wasifu",
+    "fr": "Modifier le profil"
   },
   "find_friends": {
     "en": "Find Friends",
@@ -2323,7 +2471,8 @@
     "it": "Trova amici",
     "es": "encontrar amigos",
     "pt": "Encontre amigos",
-    "sw": "Tafuta Marafiki"
+    "sw": "Tafuta Marafiki",
+    "fr": "Trouver des amis"
   },
   "find_friends_hint": {
     "en": "Search for users to add as friends",
@@ -2338,7 +2487,8 @@
     "it": "Cerca gli utenti da aggiungere come amici",
     "es": "Buscar usuarios para agregar como amigos",
     "pt": "Procure usuários para adicionar como amigos",
-    "sw": "Tafuta watumiaji wa kuongeza kama marafiki"
+    "sw": "Tafuta watumiaji wa kuongeza kama marafiki",
+    "fr": "Rechercher et ajouter des amis pour étudier ensemble"
   },
   "friend_requests": {
     "en": "Friend Requests",
@@ -2353,7 +2503,8 @@
     "it": "Richieste di amicizia",
     "es": "Solicitudes de amistad",
     "pt": "Pedidos de amizade",
-    "sw": "Maombi ya Rafiki"
+    "sw": "Maombi ya Rafiki",
+    "fr": "Demandes d'ami"
   },
   "history_hint": {
     "en": "View your past duels",
@@ -2368,7 +2519,8 @@
     "it": "Visualizza i tuoi duelli passati",
     "es": "Ver tus duelos pasados",
     "pt": "Veja seus duelos anteriores",
-    "sw": "Tazama pambano zako zilizopita"
+    "sw": "Tazama pambano zako zilizopita",
+    "fr": "Voir vos duels et défis passés"
   },
   "import_list": {
     "en": "Import List",
@@ -2383,7 +2535,8 @@
     "it": "Elenco di importazione",
     "es": "Lista de importación",
     "pt": "Lista de importação",
-    "sw": "Orodha ya Kuagiza"
+    "sw": "Orodha ya Kuagiza",
+    "fr": "Importer la liste"
   },
   "incoming_challenges": {
     "en": "Incoming Challenges",
@@ -2398,7 +2551,8 @@
     "it": "Sfide in arrivo",
     "es": "Desafíos entrantes",
     "pt": "Desafios recebidos",
-    "sw": "Changamoto Zinazoingia"
+    "sw": "Changamoto Zinazoingia",
+    "fr": "Défis reçus"
   },
   "insights_hint": {
     "en": "Detailed statistics about your learning",
@@ -2413,7 +2567,8 @@
     "it": "Statistiche dettagliate sul tuo apprendimento",
     "es": "Estadísticas detalladas sobre tu aprendizaje",
     "pt": "Estatísticas detalhadas sobre seu aprendizado",
-    "sw": "Takwimu za kina kuhusu mafunzo yako"
+    "sw": "Takwimu za kina kuhusu mafunzo yako",
+    "fr": "Suivez vos progrès et identifiez les domaines à améliorer"
   },
   "intermediate": {
     "en": "Intermediate",
@@ -2428,7 +2583,8 @@
     "it": "Intermedio",
     "es": "Intermedio",
     "pt": "Intermediário",
-    "sw": "Kati"
+    "sw": "Kati",
+    "fr": "Intermédiaire"
   },
   "languages": {
     "en": "Languages",
@@ -2443,7 +2599,8 @@
     "it": "Lingue",
     "es": "Idiomas",
     "pt": "Idiomas",
-    "sw": "Lugha"
+    "sw": "Lugha",
+    "fr": "Langues"
   },
   "leagueRule1": {
     "en": "Complete daily challenges and weekly quests",
@@ -2458,7 +2615,8 @@
     "it": "Completa le sfide quotidiane e le missioni settimanali",
     "es": "Completa desafíos diarios y misiones semanales.",
     "pt": "Complete desafios diários e missões semanais",
-    "sw": "Kamilisha changamoto za kila siku na safari za kila wiki"
+    "sw": "Kamilisha changamoto za kila siku na safari za kila wiki",
+    "fr": "Gagnez des points XP en étudiant et en révisant les mots"
   },
   "leagueRule2": {
     "en": "Top 3 players advance to the next league",
@@ -2473,7 +2631,8 @@
     "it": "I primi 3 giocatori avanzano al campionato successivo",
     "es": "Los 3 mejores jugadores avanzan a la siguiente liga",
     "pt": "Os 3 melhores jogadores avançam para a próxima liga",
-    "sw": "Wachezaji 3 bora wanaingia kwenye ligi inayofuata"
+    "sw": "Wachezaji 3 bora wanaingia kwenye ligi inayofuata",
+    "fr": "Les 3 meilleurs utilisateurs montent dans la ligue supérieure"
   },
   "leagueRule3": {
     "en": "Bottom 3 players are relegated",
@@ -2488,7 +2647,8 @@
     "it": "Retrocedono gli ultimi 3 giocatori",
     "es": "Los 3 últimos jugadores descienden",
     "pt": "Os 3 últimos jogadores são rebaixados",
-    "sw": "Wachezaji 3 wa chini wameshuka daraja"
+    "sw": "Wachezaji 3 wa chini wameshuka daraja",
+    "fr": "Les 3 derniers utilisateurs descendent dans la ligue inférieure"
   },
   "leagueRule4": {
     "en": "Season resets every Monday",
@@ -2503,7 +2663,8 @@
     "it": "La stagione si ripristina ogni lunedì",
     "es": "La temporada se reinicia todos los lunes",
     "pt": "A temporada é reiniciada toda segunda-feira",
-    "sw": "Msimu huwekwa upya kila Jumatatu"
+    "sw": "Msimu huwekwa upya kila Jumatatu",
+    "fr": "La ligue se réinitialise chaque lundi à 00:00 UTC"
   },
   "learning_achievements": {
     "en": "Learning Achievements",
@@ -2518,7 +2679,8 @@
     "it": "Risultati dell'apprendimento",
     "es": "Logros de aprendizaje",
     "pt": "Conquistas de aprendizagem",
-    "sw": "Mafanikio ya Kujifunza"
+    "sw": "Mafanikio ya Kujifunza",
+    "fr": "Succès d'apprentissage"
   },
   "losses": {
     "en": "Losses",
@@ -2533,7 +2695,8 @@
     "it": "Perdite",
     "es": "Pérdidas",
     "pt": "Perdas",
-    "sw": "Hasara"
+    "sw": "Hasara",
+    "fr": "Défaites"
   },
   "milestone_achievements": {
     "en": "Milestone Achievements",
@@ -2548,7 +2711,8 @@
     "it": "Risultati fondamentali",
     "es": "Logros importantes",
     "pt": "Conquistas marcantes",
-    "sw": "Mafanikio ya Milestone"
+    "sw": "Mafanikio ya Milestone",
+    "fr": "Succès jalons"
   },
   "minutes": {
     "en": "min",
@@ -2563,7 +2727,8 @@
     "it": "min",
     "es": "mín.",
     "pt": "min",
-    "sw": "min"
+    "sw": "min",
+    "fr": "Minutes"
   },
   "monthly": {
     "en": "Monthly",
@@ -2578,7 +2743,8 @@
     "it": "Mensile",
     "es": "Mensual",
     "pt": "Mensal",
-    "sw": "Kila mwezi"
+    "sw": "Kila mwezi",
+    "fr": "Mensuel"
   },
   "my_friends": {
     "en": "My Friends",
@@ -2593,7 +2759,8 @@
     "it": "I miei amici",
     "es": "mis amigos",
     "pt": "Meus amigos",
-    "sw": "Rafiki Zangu"
+    "sw": "Rafiki Zangu",
+    "fr": "Mes amis"
   },
   "no_achievements_category": {
     "en": "No achievements in this category yet",
@@ -2608,7 +2775,8 @@
     "it": "Nessun risultato ancora in questa categoria",
     "es": "Aún no hay logros en esta categoría.",
     "pt": "Nenhuma conquista nesta categoria ainda",
-    "sw": "Bado hakuna mafanikio katika kategoria hii"
+    "sw": "Bado hakuna mafanikio katika kategoria hii",
+    "fr": "Aucun succès dans cette catégorie"
   },
   "no_active_duels": {
     "en": "No active duels",
@@ -2623,7 +2791,8 @@
     "it": "Nessun duello attivo",
     "es": "Sin duelos activos",
     "pt": "Nenhum duelo ativo",
-    "sw": "Hakuna duwa zinazoendelea"
+    "sw": "Hakuna duwa zinazoendelea",
+    "fr": "Aucun duel actif"
   },
   "no_activity": {
     "en": "No activity yet",
@@ -2638,7 +2807,8 @@
     "it": "Nessuna attività ancora",
     "es": "Aún no hay actividad",
     "pt": "Nenhuma atividade ainda",
-    "sw": "Hakuna shughuli bado"
+    "sw": "Hakuna shughuli bado",
+    "fr": "Aucune activité récente"
   },
   "no_data_yet": {
     "en": "No data yet",
@@ -2653,7 +2823,8 @@
     "it": "Nessun dato ancora",
     "es": "Aún no hay datos",
     "pt": "Ainda não há dados",
-    "sw": "Hakuna data bado"
+    "sw": "Hakuna data bado",
+    "fr": "Pas encore de données"
   },
   "no_friends_yet": {
     "en": "No friends yet",
@@ -2668,7 +2839,8 @@
     "it": "Nessun amico ancora",
     "es": "Aún no hay amigos",
     "pt": "Ainda não há amigos",
-    "sw": "Hakuna marafiki bado"
+    "sw": "Hakuna marafiki bado",
+    "fr": "Pas encore d'amis"
   },
   "no_history": {
     "en": "No history yet",
@@ -2683,7 +2855,8 @@
     "it": "Nessuna storia ancora",
     "es": "Aún no hay historial",
     "pt": "Ainda não há histórico",
-    "sw": "Hakuna historia bado"
+    "sw": "Hakuna historia bado",
+    "fr": "Aucun historique"
   },
   "no_insights_yet": {
     "en": "No insights yet. Start learning!",
@@ -2698,7 +2871,8 @@
     "it": "Ancora nessun approfondimento. ",
     "es": "Aún no hay información. ",
     "pt": "Ainda não há insights. ",
-    "sw": "Bado hakuna maarifa. "
+    "sw": "Bado hakuna maarifa. ",
+    "fr": "Pas encore d'aperçus"
   },
   "no_pending_duels": {
     "en": "No pending duels",
@@ -2713,7 +2887,8 @@
     "it": "Nessun duello in sospeso",
     "es": "Sin duelos pendientes",
     "pt": "Nenhum duelo pendente",
-    "sw": "Hakuna mapigano yanayosubiri"
+    "sw": "Hakuna mapigano yanayosubiri",
+    "fr": "Aucun duel en attente"
   },
   "no_received_requests": {
     "en": "No received requests",
@@ -2728,7 +2903,8 @@
     "it": "Nessuna richiesta ricevuta",
     "es": "No se recibieron solicitudes",
     "pt": "Nenhuma solicitação recebida",
-    "sw": "Hakuna maombi yaliyopokelewa"
+    "sw": "Hakuna maombi yaliyopokelewa",
+    "fr": "Aucune demande reçue"
   },
   "no_sent_requests": {
     "en": "No sent requests",
@@ -2743,7 +2919,8 @@
     "it": "Nessuna richiesta inviata",
     "es": "No se enviaron solicitudes",
     "pt": "Nenhuma solicitação enviada",
-    "sw": "Hakuna maombi yaliyotumwa"
+    "sw": "Hakuna maombi yaliyotumwa",
+    "fr": "Aucune demande envoyée"
   },
   "no_showcase": {
     "en": "No achievements in showcase yet",
@@ -2758,7 +2935,8 @@
     "it": "Nessun risultato ancora in vetrina",
     "es": "Aún no hay logros en exhibición",
     "pt": "Nenhuma conquista no showcase ainda",
-    "sw": "Bado hakuna mafanikio katika onyesho"
+    "sw": "Bado hakuna mafanikio katika onyesho",
+    "fr": "Aucun succès dans la vitrine"
   },
   "no_stats": {
     "en": "No statistics yet",
@@ -2773,7 +2951,8 @@
     "it": "Nessuna statistica ancora",
     "es": "Aún no hay estadísticas",
     "pt": "Ainda não há estatísticas",
-    "sw": "Bado hakuna takwimu"
+    "sw": "Bado hakuna takwimu",
+    "fr": "Aucune statistique disponible"
   },
   "no_word_lists": {
     "en": "No word lists yet",
@@ -2788,7 +2967,8 @@
     "it": "Nessun elenco di parole ancora",
     "es": "Aún no hay listas de palabras",
     "pt": "Ainda não há listas de palavras",
-    "sw": "Hakuna orodha za maneno bado"
+    "sw": "Hakuna orodha za maneno bado",
+    "fr": "Aucune liste de mots"
   },
   "outgoing_challenges": {
     "en": "Outgoing Challenges",
@@ -2803,7 +2983,8 @@
     "it": "Sfide in uscita",
     "es": "Desafíos salientes",
     "pt": "Desafios de saída",
-    "sw": "Changamoto Zinazotoka"
+    "sw": "Changamoto Zinazotoka",
+    "fr": "Défis envoyés"
   },
   "peak_hour": {
     "en": "Peak hour",
@@ -2818,7 +2999,8 @@
     "it": "Ora di punta",
     "es": "Hora pico",
     "pt": "Horário de pico",
-    "sw": "Saa ya kilele"
+    "sw": "Saa ya kilele",
+    "fr": "Heure de pointe"
   },
   "pending": {
     "en": "Pending",
@@ -2833,7 +3015,8 @@
     "it": "In attesa di",
     "es": "Pendiente",
     "pt": "Pendente",
-    "sw": "Inasubiri"
+    "sw": "Inasubiri",
+    "fr": "En attente"
   },
   "pending_duels": {
     "en": "Pending Duels",
@@ -2848,7 +3031,8 @@
     "it": "Duelli in sospeso",
     "es": "Duelos pendientes",
     "pt": "Duelos Pendentes",
-    "sw": "Mashindano Yanayosubiri"
+    "sw": "Mashindano Yanayosubiri",
+    "fr": "Duels en attente"
   },
   "pending_duels_hint": {
     "en": "Duels waiting for your response",
@@ -2863,7 +3047,8 @@
     "it": "Duelli in attesa della tua risposta",
     "es": "Duelos esperando tu respuesta",
     "pt": "Duelos aguardando sua resposta",
-    "sw": "Mashindano yanasubiri majibu yako"
+    "sw": "Mashindano yanasubiri majibu yako",
+    "fr": "Répondez aux défis de vos amis"
   },
   "perfect_quizzes": {
     "en": "Perfect quizzes",
@@ -2878,7 +3063,8 @@
     "it": "Quiz perfetti",
     "es": "cuestionarios perfectos",
     "pt": "Testes perfeitos",
-    "sw": "Maswali kamili"
+    "sw": "Maswali kamili",
+    "fr": "Quiz parfaits"
   },
   "previous_period": {
     "en": "Previous period",
@@ -2893,7 +3079,8 @@
     "it": "Periodo precedente",
     "es": "Periodo anterior",
     "pt": "Período anterior",
-    "sw": "Kipindi kilichopita"
+    "sw": "Kipindi kilichopita",
+    "fr": "Période précédente"
   },
   "questions": {
     "en": "Questions",
@@ -2908,7 +3095,8 @@
     "it": "Domande",
     "es": "Preguntas",
     "pt": "Questões",
-    "sw": "Maswali"
+    "sw": "Maswali",
+    "fr": "Questions"
   },
   "quizzes_completed": {
     "en": "Quizzes completed",
@@ -2923,7 +3111,8 @@
     "it": "Quiz completati",
     "es": "Cuestionarios completados",
     "pt": "Testes concluídos",
-    "sw": "Maswali yamekamilika"
+    "sw": "Maswali yamekamilika",
+    "fr": "Quiz terminés"
   },
   "received_requests": {
     "en": "Received Requests",
@@ -2938,7 +3127,8 @@
     "it": "Richieste ricevute",
     "es": "Solicitudes recibidas",
     "pt": "Solicitações recebidas",
-    "sw": "Maombi Yanayopokelewa"
+    "sw": "Maombi Yanayopokelewa",
+    "fr": "Demandes reçues"
   },
   "remove_friend": {
     "en": "Remove Friend",
@@ -2953,7 +3143,8 @@
     "it": "Rimuovi amico",
     "es": "Eliminar amigo",
     "pt": "Remover amigo",
-    "sw": "Ondoa Rafiki"
+    "sw": "Ondoa Rafiki",
+    "fr": "Retirer l'ami"
   },
   "request_sent": {
     "en": "Request sent",
@@ -2968,7 +3159,8 @@
     "it": "Richiesta inviata",
     "es": "Solicitud enviada",
     "pt": "Solicitação enviada",
-    "sw": "Ombi limetumwa"
+    "sw": "Ombi limetumwa",
+    "fr": "Demande envoyée"
   },
   "reset_filters": {
     "en": "Reset Filters",
@@ -2983,7 +3175,8 @@
     "it": "Reimposta filtri",
     "es": "Restablecer filtros",
     "pt": "Redefinir filtros",
-    "sw": "Weka upya Vichujio"
+    "sw": "Weka upya Vichujio",
+    "fr": "Réinitialiser les filtres"
   },
   "search_hint": {
     "en": "Search by name or email",
@@ -2998,7 +3191,8 @@
     "it": "Cerca per nome o email",
     "es": "Buscar por nombre o correo electrónico",
     "pt": "Pesquise por nome ou e-mail",
-    "sw": "Tafuta kwa jina au barua pepe"
+    "sw": "Tafuta kwa jina au barua pepe",
+    "fr": "Rechercher des amis par nom ou e-mail"
   },
   "send_challenge": {
     "en": "Send Challenge",
@@ -3013,7 +3207,8 @@
     "it": "Invia sfida",
     "es": "Enviar desafío",
     "pt": "Enviar desafio",
-    "sw": "Tuma Changamoto"
+    "sw": "Tuma Changamoto",
+    "fr": "Envoyer un défi"
   },
   "sent_requests": {
     "en": "Sent Requests",
@@ -3028,7 +3223,8 @@
     "it": "Richieste inviate",
     "es": "Solicitudes enviadas",
     "pt": "Solicitações enviadas",
-    "sw": "Maombi yaliyotumwa"
+    "sw": "Maombi yaliyotumwa",
+    "fr": "Demandes envoyées"
   },
   "showing_lists_for": {
     "en": "Showing lists for",
@@ -3043,7 +3239,8 @@
     "it": "Visualizzazione degli elenchi per",
     "es": "Mostrando listas para",
     "pt": "Mostrando listas de",
-    "sw": "Inaonyesha orodha za"
+    "sw": "Inaonyesha orodha za",
+    "fr": "Affichage des listes pour"
   },
   "social_achievements": {
     "en": "Social Achievements",
@@ -3058,7 +3255,8 @@
     "it": "Risultati sociali",
     "es": "Logros Sociales",
     "pt": "Conquistas Sociais",
-    "sw": "Mafanikio ya Kijamii"
+    "sw": "Mafanikio ya Kijamii",
+    "fr": "Succès sociaux"
   },
   "special_achievements": {
     "en": "Special Achievements",
@@ -3073,7 +3271,8 @@
     "it": "Risultati speciali",
     "es": "Logros especiales",
     "pt": "Conquistas Especiais",
-    "sw": "Mafanikio Maalum"
+    "sw": "Mafanikio Maalum",
+    "fr": "Succès spéciaux"
   },
   "stats_hint": {
     "en": "Track your learning progress",
@@ -3088,7 +3287,8 @@
     "it": "Tieni traccia dei tuoi progressi nell'apprendimento",
     "es": "Realice un seguimiento de su progreso de aprendizaje",
     "pt": "Acompanhe o seu progresso de aprendizagem",
-    "sw": "Fuatilia maendeleo yako ya kujifunza"
+    "sw": "Fuatilia maendeleo yako ya kujifunza",
+    "fr": "Voir vos statistiques d'apprentissage détaillées"
   },
   "this_month": {
     "en": "This Month",
@@ -3103,7 +3303,8 @@
     "it": "Questo mese",
     "es": "este mes",
     "pt": "Este mês",
-    "sw": "Mwezi Huu"
+    "sw": "Mwezi Huu",
+    "fr": "Ce mois-ci"
   },
   "this_week": {
     "en": "This Week",
@@ -3118,7 +3319,8 @@
     "it": "Questa settimana",
     "es": "Esta semana",
     "pt": "Essa semana",
-    "sw": "Wiki Hii"
+    "sw": "Wiki Hii",
+    "fr": "Cette semaine"
   },
   "topic": {
     "en": "Topic",
@@ -3133,7 +3335,8 @@
     "it": "Argomento",
     "es": "Tema",
     "pt": "Tópico",
-    "sw": "Mada"
+    "sw": "Mada",
+    "fr": "Sujet"
   },
   "topic_business": {
     "en": "Business",
@@ -3148,7 +3351,8 @@
     "it": "Attività commerciale",
     "es": "Negocio",
     "pt": "Negócios",
-    "sw": "Biashara"
+    "sw": "Biashara",
+    "fr": "Affaires"
   },
   "topic_daily_life": {
     "en": "Daily Life",
@@ -3163,7 +3367,8 @@
     "it": "Vita quotidiana",
     "es": "Vida diaria",
     "pt": "Vida Diária",
-    "sw": "Maisha ya Kila Siku"
+    "sw": "Maisha ya Kila Siku",
+    "fr": "Vie quotidienne"
   },
   "topic_food": {
     "en": "Food",
@@ -3178,7 +3383,8 @@
     "it": "Cibo",
     "es": "Alimento",
     "pt": "Comida",
-    "sw": "Chakula"
+    "sw": "Chakula",
+    "fr": "Nourriture"
   },
   "topic_nature": {
     "en": "Nature",
@@ -3193,7 +3399,8 @@
     "it": "Natura",
     "es": "Naturaleza",
     "pt": "Natureza",
-    "sw": "Asili"
+    "sw": "Asili",
+    "fr": "Nature"
   },
   "topic_travel": {
     "en": "Travel",
@@ -3208,7 +3415,8 @@
     "it": "Viaggio",
     "es": "Viajar",
     "pt": "Viagem",
-    "sw": "Safari"
+    "sw": "Safari",
+    "fr": "Voyage"
   },
   "topic_general": {
     "en": "General",
@@ -3226,7 +3434,9 @@
     "ja": "一般",
     "ko": "일반",
     "hi": "सामान्य",
-    "sw": "Jumla"
+    "sw": "Jumla",
+    "ro": "General",
+    "sr": "Опште"
   },
   "topic_family": {
     "en": "Family",
@@ -3244,7 +3454,9 @@
     "ja": "家族",
     "ko": "가족",
     "hi": "परिवार",
-    "sw": "Familia"
+    "sw": "Familia",
+    "ro": "Familie",
+    "sr": "Породица"
   },
   "topic_home": {
     "en": "Home",
@@ -3262,7 +3474,9 @@
     "ja": "家",
     "ko": "집",
     "hi": "घर",
-    "sw": "Nyumbani"
+    "sw": "Nyumbani",
+    "ro": "Acasă",
+    "sr": "Кућа"
   },
   "topic_health": {
     "en": "Health",
@@ -3280,7 +3494,9 @@
     "ja": "健康",
     "ko": "건강",
     "hi": "स्वास्थ्य",
-    "sw": "Afya"
+    "sw": "Afya",
+    "ro": "Sănătate",
+    "sr": "Здравље"
   },
   "topic_work": {
     "en": "Work",
@@ -3298,7 +3514,9 @@
     "ja": "仕事",
     "ko": "일",
     "hi": "काम",
-    "sw": "Kazi"
+    "sw": "Kazi",
+    "ro": "Muncă",
+    "sr": "Посао"
   },
   "topic_education": {
     "en": "Education",
@@ -3316,7 +3534,9 @@
     "ja": "教育",
     "ko": "교육",
     "hi": "शिक्षा",
-    "sw": "Elimu"
+    "sw": "Elimu",
+    "ro": "Educație",
+    "sr": "Образовање"
   },
   "topic_weather": {
     "en": "Weather",
@@ -3334,7 +3554,9 @@
     "ja": "天気",
     "ko": "날씨",
     "hi": "मौसम",
-    "sw": "Hali ya hewa"
+    "sw": "Hali ya hewa",
+    "ro": "Vreme",
+    "sr": "Време"
   },
   "topic_communication": {
     "en": "Communication",
@@ -3352,7 +3574,9 @@
     "ja": "コミュニケーション",
     "ko": "의사소통",
     "hi": "संचार",
-    "sw": "Mawasiliano"
+    "sw": "Mawasiliano",
+    "ro": "Comunicare",
+    "sr": "Комуникација"
   },
   "topic_culture": {
     "en": "Culture",
@@ -3370,7 +3594,9 @@
     "ja": "文化",
     "ko": "문화",
     "hi": "संस्कृति",
-    "sw": "Utamaduni"
+    "sw": "Utamaduni",
+    "ro": "Cultură",
+    "sr": "Култура"
   },
   "topic_emotions": {
     "en": "Emotions",
@@ -3388,7 +3614,9 @@
     "ja": "感情",
     "ko": "감정",
     "hi": "भावनाएं",
-    "sw": "Hisia"
+    "sw": "Hisia",
+    "ro": "Emoții",
+    "sr": "Емоције"
   },
   "topic_sports": {
     "en": "Sports",
@@ -3406,7 +3634,9 @@
     "ja": "スポーツ",
     "ko": "스포츠",
     "hi": "खेल",
-    "sw": "Michezo"
+    "sw": "Michezo",
+    "ro": "Sport",
+    "sr": "Спорт"
   },
   "topic_technology": {
     "en": "Technology",
@@ -3424,7 +3654,9 @@
     "ja": "技術",
     "ko": "기술",
     "hi": "प्रौद्योगिकी",
-    "sw": "Teknolojia"
+    "sw": "Teknolojia",
+    "ro": "Tehnologie",
+    "sr": "Технологија"
   },
   "topic_time": {
     "en": "Time",
@@ -3442,7 +3674,9 @@
     "ja": "時間",
     "ko": "시간",
     "hi": "समय",
-    "sw": "Muda"
+    "sw": "Muda",
+    "ro": "Timp",
+    "sr": "Време"
   },
   "topic_numbers": {
     "en": "Numbers",
@@ -3460,7 +3694,9 @@
     "ja": "数字",
     "ko": "숫자",
     "hi": "संख्याएं",
-    "sw": "Nambari"
+    "sw": "Nambari",
+    "ro": "Numere",
+    "sr": "Бројеви"
   },
   "topic_colors": {
     "en": "Colors",
@@ -3478,7 +3714,9 @@
     "ja": "色",
     "ko": "색상",
     "hi": "रंग",
-    "sw": "Rangi"
+    "sw": "Rangi",
+    "ro": "Culori",
+    "sr": "Боје"
   },
   "topic_clothing": {
     "en": "Clothing",
@@ -3496,7 +3734,9 @@
     "ja": "衣服",
     "ko": "의류",
     "hi": "कपड़े",
-    "sw": "Nguo"
+    "sw": "Nguo",
+    "ro": "Îmbrăcăminte",
+    "sr": "Одећа"
   },
   "topic_shopping": {
     "en": "Shopping",
@@ -3514,7 +3754,9 @@
     "ja": "買い物",
     "ko": "쇼핑",
     "hi": "खरीदारी",
-    "sw": "Ununuzi"
+    "sw": "Ununuzi",
+    "ro": "Cumpărături",
+    "sr": "Куповина"
   },
   "topic_essential_vocabulary_1": {
     "en": "Essential Vocabulary 1",
@@ -3532,7 +3774,9 @@
     "ja": "基本語彙 1",
     "ko": "필수 어휘 1",
     "hi": "आवश्यक शब्दावली 1",
-    "sw": "Msamiati Muhimu 1"
+    "sw": "Msamiati Muhimu 1",
+    "ro": "Vocabular Esențial 1",
+    "sr": "Основни Вокабулар 1"
   },
   "topic_essential_vocabulary_2": {
     "en": "Essential Vocabulary 2",
@@ -3550,7 +3794,9 @@
     "ja": "基本語彙 2",
     "ko": "필수 어휘 2",
     "hi": "आवश्यक शब्दावली 2",
-    "sw": "Msamiati Muhimu 2"
+    "sw": "Msamiati Muhimu 2",
+    "ro": "Vocabular Esențial 2",
+    "sr": "Основни Вокабулар 2"
   },
   "topic_essential_vocabulary_3": {
     "en": "Essential Vocabulary 3",
@@ -3568,7 +3814,9 @@
     "ja": "基本語彙 3",
     "ko": "필수 어휘 3",
     "hi": "आवश्यक शब्दावली 3",
-    "sw": "Msamiati Muhimu 3"
+    "sw": "Msamiati Muhimu 3",
+    "ro": "Vocabular Esențial 3",
+    "sr": "Основни Вокабулар 3"
   },
   "topic_essential_vocabulary_4": {
     "en": "Essential Vocabulary 4",
@@ -3586,7 +3834,9 @@
     "ja": "基本語彙 4",
     "ko": "필수 어휘 4",
     "hi": "आवश्यक शब्दावली 4",
-    "sw": "Msamiati Muhimu 4"
+    "sw": "Msamiati Muhimu 4",
+    "ro": "Vocabular Esențial 4",
+    "sr": "Основни Вокабулар 4"
   },
   "topic_essential_vocabulary_5": {
     "en": "Essential Vocabulary 5",
@@ -3604,7 +3854,9 @@
     "ja": "基本語彙 5",
     "ko": "필수 어휘 5",
     "hi": "आवश्यक शब्दावली 5",
-    "sw": "Msamiati Muhimu 5"
+    "sw": "Msamiati Muhimu 5",
+    "ro": "Vocabular Esențial 5",
+    "sr": "Основни Вокабулар 5"
   },
   "topic_essential_vocabulary_6": {
     "en": "Essential Vocabulary 6",
@@ -3622,7 +3874,9 @@
     "ja": "基本語彙 6",
     "ko": "필수 어휘 6",
     "hi": "आवश्यक शब्दावली 6",
-    "sw": "Msamiati Muhimu 6"
+    "sw": "Msamiati Muhimu 6",
+    "ro": "Vocabular Esențial 6",
+    "sr": "Основни Вокабулар 6"
   },
   "topic_essential_vocabulary_7": {
     "en": "Essential Vocabulary 7",
@@ -3640,7 +3894,9 @@
     "ja": "基本語彙 7",
     "ko": "필수 어휘 7",
     "hi": "आवश्यक शब्दावली 7",
-    "sw": "Msamiati Muhimu 7"
+    "sw": "Msamiati Muhimu 7",
+    "ro": "Vocabular Esențial 7",
+    "sr": "Основни Вокабулар 7"
   },
   "topic_essential_vocabulary_8": {
     "en": "Essential Vocabulary 8",
@@ -3658,7 +3914,9 @@
     "ja": "基本語彙 8",
     "ko": "필수 어휘 8",
     "hi": "आवश्यक शब्दावली 8",
-    "sw": "Msamiati Muhimu 8"
+    "sw": "Msamiati Muhimu 8",
+    "ro": "Vocabular Esențial 8",
+    "sr": "Основни Вокабулар 8"
   },
   "topic_essential_vocabulary_9": {
     "en": "Essential Vocabulary 9",
@@ -3676,7 +3934,9 @@
     "ja": "基本語彙 9",
     "ko": "필수 어휘 9",
     "hi": "आवश्यक शब्दावली 9",
-    "sw": "Msamiati Muhimu 9"
+    "sw": "Msamiati Muhimu 9",
+    "ro": "Vocabular Esențial 9",
+    "sr": "Основни Вокабулар 9"
   },
   "topic_essential_vocabulary_10": {
     "en": "Essential Vocabulary 10",
@@ -3694,7 +3954,9 @@
     "ja": "基本語彙 10",
     "ko": "필수 어휘 10",
     "hi": "आवश्यक शब्दावली 10",
-    "sw": "Msamiati Muhimu 10"
+    "sw": "Msamiati Muhimu 10",
+    "ro": "Vocabular Esențial 10",
+    "sr": "Основни Вокабулар 10"
   },
   "topic_food_and_drinks": {
     "en": "Food and Drinks",
@@ -3712,7 +3974,9 @@
     "ja": "食べ物と飲み物",
     "ko": "음식과 음료",
     "hi": "भोजन और पेय",
-    "sw": "Chakula na vinywaji"
+    "sw": "Chakula na vinywaji",
+    "ro": "Mâncare și Băuturi",
+    "sr": "Храна и Пиће"
   },
   "topic_people_&_relationships": {
     "en": "People & Relationships",
@@ -3730,7 +3994,9 @@
     "ja": "人と関係",
     "ko": "사람과 관계",
     "hi": "लोग और रिश्ते",
-    "sw": "Watu na uhusiano"
+    "sw": "Watu na uhusiano",
+    "ro": "Oameni & Relații",
+    "sr": "Људи & Односи"
   },
   "topic_days,_months,_time": {
     "en": "Days, Months, Time",
@@ -3748,7 +4014,9 @@
     "ja": "日、月、時間",
     "ko": "일, 월, 시간",
     "hi": "दिन, महीने, समय",
-    "sw": "Siku, miezi, wakati"
+    "sw": "Siku, miezi, wakati",
+    "ro": "Zile, Luni, Timp",
+    "sr": "Дани, Месеци, Време"
   },
   "topic_house_and_furniture": {
     "en": "House and Furniture",
@@ -3766,7 +4034,9 @@
     "ja": "家と家具",
     "ko": "집과 가구",
     "hi": "घर और फर्नीचर",
-    "sw": "Nyumba na samani"
+    "sw": "Nyumba na samani",
+    "ro": "Casă și Mobilier",
+    "sr": "Кућа и Намештај"
   },
   "topic_numbers,_time_&_basic_concepts": {
     "en": "Numbers, Time & Basic Concepts",
@@ -3784,7 +4054,9 @@
     "ja": "数字、時間、基本概念",
     "ko": "숫자, 시간 및 기본 개념",
     "hi": "संख्याएँ, समय और बुनियादी अवधारणाएँ",
-    "sw": "Nambari, wakati na dhana za msingi"
+    "sw": "Nambari, wakati na dhana za msingi",
+    "ro": "Numere, Timp & Concepte de Bază",
+    "sr": "Бројеви, Време & Основни Концепти"
   },
   "topic_everyday_life_&_basic_activities": {
     "en": "Everyday Life & Basic Activities",
@@ -3802,7 +4074,9 @@
     "ja": "日常生活と基本活動",
     "ko": "일상 생활 및 기본 활동",
     "hi": "दैनिक जीवन और बुनियादी गतिविधियाँ",
-    "sw": "Maisha ya kila siku na shughuli za msingi"
+    "sw": "Maisha ya kila siku na shughuli za msingi",
+    "ro": "Viața de Zi cu Zi & Activități de Bază",
+    "sr": "Свакодневни Живот & Основне Активности"
   },
   "topic_food_&_drinks": {
     "en": "Food & Drinks",
@@ -3820,7 +4094,9 @@
     "ja": "食べ物と飲み物",
     "ko": "음식과 음료",
     "hi": "भोजन और पेय",
-    "sw": "Chakula na vinywaji"
+    "sw": "Chakula na vinywaji",
+    "ro": "Mâncare & Băuturi",
+    "sr": "Храна & Пиће"
   },
   "topic_weather_and_seasons": {
     "en": "Weather and Seasons",
@@ -3838,7 +4114,9 @@
     "ja": "天気と季節",
     "ko": "날씨와 계절",
     "hi": "मौसम और ऋतुएँ",
-    "sw": "Hali ya hewa na majira"
+    "sw": "Hali ya hewa na majira",
+    "ro": "Vreme și Anotimpuri",
+    "sr": "Време и Годишња Доба"
   },
   "topic_places_&_directions": {
     "en": "Places & Directions",
@@ -3856,7 +4134,9 @@
     "ja": "場所と方向",
     "ko": "장소와 방향",
     "hi": "स्थान और दिशाएँ",
-    "sw": "Maeneo na mwelekeo"
+    "sw": "Maeneo na mwelekeo",
+    "ro": "Locuri & Direcții",
+    "sr": "Места & Правци"
   },
   "topic_question_words": {
     "en": "Question Words",
@@ -3874,7 +4154,9 @@
     "ja": "疑問詞",
     "ko": "의문사",
     "hi": "प्रश्नवाचक शब्द",
-    "sw": "Maneno ya swali"
+    "sw": "Maneno ya swali",
+    "ro": "Cuvinte Interogative",
+    "sr": "Упитне Речи"
   },
   "topic_past_experiences_and_future_plans": {
     "en": "Past Experiences and Future Plans",
@@ -3892,7 +4174,9 @@
     "ja": "過去の経験と将来の計画",
     "ko": "과거 경험과 미래 계획",
     "hi": "अतीत के अनुभव और भविष्य की योजनाएँ",
-    "sw": "Uzoefu wa zamani na mipango ya baadaye"
+    "sw": "Uzoefu wa zamani na mipango ya baadaye",
+    "ro": "Experiențe din Trecut și Planuri de Viitor",
+    "sr": "Прошла Искуства и Будући Планови"
   },
   "topic_shopping_and_services": {
     "en": "Shopping and Services",
@@ -3910,7 +4194,9 @@
     "ja": "買い物とサービス",
     "ko": "쇼핑 및 서비스",
     "hi": "खरीदारी और सेवाएँ",
-    "sw": "Ununuzi na huduma"
+    "sw": "Ununuzi na huduma",
+    "ro": "Cumpărături și Servicii",
+    "sr": "Куповина и Услуге"
   },
   "topic_descriptions_of_people_and_places": {
     "en": "Descriptions of People and Places",
@@ -3928,7 +4214,9 @@
     "ja": "人と場所の説明",
     "ko": "사람과 장소에 대한 설명",
     "hi": "लोगों और स्थानों का विवरण",
-    "sw": "Maelezo ya watu na maeneo"
+    "sw": "Maelezo ya watu na maeneo",
+    "ro": "Descrieri ale Oamenilor și Locurilor",
+    "sr": "Описи Људи и Места"
   },
   "topic_daily_routines_and_habits": {
     "en": "Daily Routines and Habits",
@@ -3946,7 +4234,9 @@
     "ja": "日常のルーティンと習慣",
     "ko": "일상 루틴과 습관",
     "hi": "दैनिक दिनचर्या और आदतें",
-    "sw": "Mazoea ya kila siku na tabia"
+    "sw": "Mazoea ya kila siku na tabia",
+    "ro": "Rutine Zilnice și Obiceiuri",
+    "sr": "Дневне Рутине и Навике"
   },
   "topic_hobbies_and_leisure": {
     "en": "Hobbies and Leisure",
@@ -3964,7 +4254,9 @@
     "ja": "趣味とレジャー",
     "ko": "취미와 여가",
     "hi": "शौक और अवकाश",
-    "sw": "Burudani na mapumziko"
+    "sw": "Burudani na mapumziko",
+    "ro": "Hobby-uri și Timp Liber",
+    "sr": "Хобији и Слободно Време"
   },
   "topic_work_and_study": {
     "en": "Work and Study",
@@ -3982,7 +4274,9 @@
     "ja": "仕事と勉強",
     "ko": "일과 공부",
     "hi": "काम और पढ़ाई",
-    "sw": "Kazi na masomo"
+    "sw": "Kazi na masomo",
+    "ro": "Muncă și Studiu",
+    "sr": "Посао и Студије"
   },
   "topic_soziale_beziehungen": {
     "en": "Social Relationships",
@@ -4000,7 +4294,9 @@
     "ja": "社会的関係",
     "ko": "사회적 관계",
     "hi": "सामाजिक संबंध",
-    "sw": "Mahusiano ya kijamii"
+    "sw": "Mahusiano ya kijamii",
+    "ro": "Relații Sociale",
+    "sr": "Друштвени Односи"
   },
   "topic_arbeit_und_beruf": {
     "en": "Work and Profession",
@@ -4018,7 +4314,9 @@
     "ja": "仕事と職業",
     "ko": "일과 직업",
     "hi": "काम और पेशा",
-    "sw": "Kazi na taaluma"
+    "sw": "Kazi na taaluma",
+    "ro": "Muncă și Profesie",
+    "sr": "Посао и Професија"
   },
   "topic_money_and_finance": {
     "en": "Money and Finance",
@@ -4036,7 +4334,9 @@
     "ja": "お金と金融",
     "ko": "돈과 금융",
     "hi": "धन और वित्त",
-    "sw": "Pesa na fedha"
+    "sw": "Pesa na fedha",
+    "ro": "Bani și Finanțe",
+    "sr": "Новац и Финансије"
   },
   "topic_medien_und_technologie": {
     "en": "Media and Technology",
@@ -4054,7 +4354,9 @@
     "ja": "メディアとテクノロジー",
     "ko": "미디어와 기술",
     "hi": "मीडिया और प्रौद्योगिकी",
-    "sw": "Vyombo vya habari na teknolojia"
+    "sw": "Vyombo vya habari na teknolojia",
+    "ro": "Media și Tehnologie",
+    "sr": "Медији и Технологија"
   },
   "topic_reisen_und_geografie": {
     "en": "Travel and Geography",
@@ -4072,7 +4374,9 @@
     "ja": "旅行と地理",
     "ko": "여행과 지리",
     "hi": "यात्रा और भूगोल",
-    "sw": "Usafiri na jiografia"
+    "sw": "Usafiri na jiografia",
+    "ro": "Călătorii și Geografie",
+    "sr": "Путовања и Географија"
   },
   "topic_culture_and_arts": {
     "en": "Culture and Arts",
@@ -4090,7 +4394,9 @@
     "ja": "文化と芸術",
     "ko": "문화와 예술",
     "hi": "संस्कृति और कला",
-    "sw": "Utamaduni na sanaa"
+    "sw": "Utamaduni na sanaa",
+    "ro": "Cultură și Arte",
+    "sr": "Култура и Уметност"
   },
   "topic_bildung_und_entwicklung": {
     "en": "Education and Development",
@@ -4108,7 +4414,9 @@
     "ja": "教育と開発",
     "ko": "교육과 개발",
     "hi": "शिक्षा और विकास",
-    "sw": "Elimu na maendeleo"
+    "sw": "Elimu na maendeleo",
+    "ro": "Educație și Dezvoltare",
+    "sr": "Образовање и Развој"
   },
   "topic_gesundheit_und_lebensstil": {
     "en": "Health and Lifestyle",
@@ -4126,7 +4434,9 @@
     "ja": "健康とライフスタイル",
     "ko": "건강과 라이프스타일",
     "hi": "स्वास्थ्य और जीवन शैली",
-    "sw": "Afya na mtindo wa maisha"
+    "sw": "Afya na mtindo wa maisha",
+    "ro": "Sănătate și Stil de Viață",
+    "sr": "Здравље и Начин Живота"
   },
   "topic_sports_and_hobbies": {
     "en": "Sports and Hobbies",
@@ -4144,7 +4454,9 @@
     "ja": "スポーツと趣味",
     "ko": "스포츠와 취미",
     "hi": "खेल और शौक",
-    "sw": "Michezo na burudani"
+    "sw": "Michezo na burudani",
+    "ro": "Sport și Hobby-uri",
+    "sr": "Спорт и Хобији"
   },
   "topic_emotions_and_personality": {
     "en": "Emotions and Personality",
@@ -4162,7 +4474,9 @@
     "ja": "感情と性格",
     "ko": "감정과 성격",
     "hi": "भावनाएँ और व्यक्तित्व",
-    "sw": "Hisia na utu"
+    "sw": "Hisia na utu",
+    "ro": "Emoții și Personalitate",
+    "sr": "Емоције и Личност"
   },
   "topic_housing_and_living_situations": {
     "en": "Housing and Living Situations",
@@ -4180,7 +4494,9 @@
     "ja": "住宅と生活状況",
     "ko": "주택 및 생활 상황",
     "hi": "आवास और जीवन की स्थिति",
-    "sw": "Nyumba na hali za maisha"
+    "sw": "Nyumba na hali za maisha",
+    "ro": "Locuință și Situații de Trai",
+    "sr": "Становање и Животне Ситуације"
   },
   "topic_shopping_and_consumer_behavior": {
     "en": "Shopping and Consumer Behavior",
@@ -4198,7 +4514,9 @@
     "ja": "買い物と消費者行動",
     "ko": "쇼핑 및 소비자 행동",
     "hi": "खरीदारी और उपभोक्ता व्यवहार",
-    "sw": "Ununuzi na tabia ya watumiaji"
+    "sw": "Ununuzi na tabia ya watumiaji",
+    "ro": "Cumpărături și Comportament de Consum",
+    "sr": "Куповина и Потрошачко Понашање"
   },
   "topic_food_and_dining": {
     "en": "Food and Dining",
@@ -4216,7 +4534,9 @@
     "ja": "食べ物と食事",
     "ko": "음식과 식사",
     "hi": "भोजन और भोजन",
-    "sw": "Chakula na ulaji"
+    "sw": "Chakula na ulaji",
+    "ro": "Mâncare și Masă",
+    "sr": "Храна и Оброци"
   },
   "topic_politics": {
     "en": "Politics",
@@ -4234,7 +4554,9 @@
     "ja": "政治",
     "ko": "정치",
     "hi": "राजनीति",
-    "sw": "Siasa"
+    "sw": "Siasa",
+    "ro": "Politică",
+    "sr": "Политика"
   },
   "topic_science": {
     "en": "Science",
@@ -4252,7 +4574,9 @@
     "ja": "科学",
     "ko": "과학",
     "hi": "विज्ञान",
-    "sw": "Sayansi"
+    "sw": "Sayansi",
+    "ro": "Știință",
+    "sr": "Наука"
   },
   "topic_abstract_concepts_&_complex_ideas": {
     "en": "Abstract Concepts & Complex Ideas",
@@ -4270,7 +4594,9 @@
     "ja": "抽象的な概念と複雑なアイデア",
     "ko": "추상적 개념 및 복잡한 아이디어",
     "hi": "अमूर्त अवधारणाएँ और जटिल विचार",
-    "sw": "Dhana za kifikra na mawazo magumu"
+    "sw": "Dhana za kifikra na mawazo magumu",
+    "ro": "Concepte Abstracte & Idei Complexe",
+    "sr": "Апстрактни Концепти & Сложене Идеје"
   },
   "topic_complex_emotions_&_psychological_states": {
     "en": "Complex Emotions & Psychological States",
@@ -4288,7 +4614,9 @@
     "ja": "複雑な感情と心理状態",
     "ko": "복잡한 감정 및 심리 상태",
     "hi": "जटिल भावनाएँ और मनोवैज्ञानिक अवस्थाएँ",
-    "sw": "Hisia ngumu na hali za kisaikolojia"
+    "sw": "Hisia ngumu na hali za kisaikolojia",
+    "ro": "Emoții Complexe & Stări Psihologice",
+    "sr": "Сложене Емоције & Психолошка Стања"
   },
   "topic_advanced_literary_&_artistic_vocabulary": {
     "en": "Advanced Literary & Artistic Vocabulary",
@@ -4306,7 +4634,9 @@
     "ja": "高度な文学的・芸術的語彙",
     "ko": "고급 문학 및 예술 어휘",
     "hi": "उन्नत साहित्यिक और कलात्मक शब्दावली",
-    "sw": "Msamiati wa hali ya juu wa fasihi na sanaa"
+    "sw": "Msamiati wa hali ya juu wa fasihi na sanaa",
+    "ro": "Vocabular Literar & Artistic Avansat",
+    "sr": "Напредни Књижевни & Уметнички Вокабулар"
   },
   "topic_law": {
     "en": "Law",
@@ -4324,7 +4654,9 @@
     "ja": "法律",
     "ko": "법률",
     "hi": "कानून",
-    "sw": "Sheria"
+    "sw": "Sheria",
+    "ro": "Drept",
+    "sr": "Право"
   },
   "topic_advanced_abstract_concepts_&_philosophy": {
     "en": "Advanced Abstract Concepts & Philosophy",
@@ -4342,7 +4674,9 @@
     "ja": "高度な抽象的概念と哲学",
     "ko": "고급 추상 개념 및 철학",
     "hi": "उन्नत अमूर्त अवधारणाएँ और दर्शन",
-    "sw": "Dhana za hali ya juu za kifikra na falsafa"
+    "sw": "Dhana za hali ya juu za kifikra na falsafa",
+    "ro": "Concepte Abstracte Avansate & Filosofie",
+    "sr": "Напредни Апстрактни Концепти & Филозофија"
   },
   "topic_advanced_academic_&_professional_concepts": {
     "en": "Advanced Academic & Professional Concepts",
@@ -4360,7 +4694,9 @@
     "ja": "高度な学術的・専門的概念",
     "ko": "고급 학술 및 전문 개념",
     "hi": "उन्नत अकादमिक और व्यावसायिक अवधारणाएँ",
-    "sw": "Dhana za hali ya juu za kitaaluma na kitaaluma"
+    "sw": "Dhana za hali ya juu za kitaaluma na kitaaluma",
+    "ro": "Concepte Academice & Profesionale Avansate",
+    "sr": "Напредни Академски & Професионални Концепти"
   },
   "topic_philosophy": {
     "en": "Philosophy",
@@ -4378,7 +4714,9 @@
     "ja": "哲学",
     "ko": "철학",
     "hi": "दर्शन",
-    "sw": "Falsafa"
+    "sw": "Falsafa",
+    "ro": "Filosofie",
+    "sr": "Филозофија"
   },
   "topic_society,_culture_&_human_relations": {
     "en": "Society, Culture & Human Relations",
@@ -4396,7 +4734,9 @@
     "ja": "社会、文化、人間関係",
     "ko": "사회, 문화 및 인간 관계",
     "hi": "समाज, संस्कृति और मानव संबंध",
-    "sw": "Jamii, utamaduni na mahusiano ya kibinadamu"
+    "sw": "Jamii, utamaduni na mahusiano ya kibinadamu",
+    "ro": "Societate, Cultură & Relații Umane",
+    "sr": "Друштво, Култура & Људски Односи"
   },
   "topic_business_&_professional_communication": {
     "en": "Business & Professional Communication",
@@ -4414,7 +4754,9 @@
     "ja": "ビジネスと専門的コミュニケーション",
     "ko": "비즈니스 및 전문 커뮤니케이션",
     "hi": "व्यापार और व्यावसायिक संचार",
-    "sw": "Biashara na mawasiliano ya kitaaluma"
+    "sw": "Biashara na mawasiliano ya kitaaluma",
+    "ro": "Afaceri & Comunicare Profesională",
+    "sr": "Пословање & Професионална Комуникација"
   },
   "topic_environment,_climate_&_sustainability": {
     "en": "Environment, Climate & Sustainability",
@@ -4432,7 +4774,9 @@
     "ja": "環境、気候、持続可能性",
     "ko": "환경, 기후 및 지속 가능성",
     "hi": "पर्यावरण, जलवायु और स्थिरता",
-    "sw": "Mazingira, hali ya hewa na uendelevu"
+    "sw": "Mazingira, hali ya hewa na uendelevu",
+    "ro": "Mediu, Climă & Sustenabilitate",
+    "sr": "Животна Средина, Клима & Одрживост"
   },
   "topic_economics": {
     "en": "Economics",
@@ -4450,7 +4794,9 @@
     "ja": "経済学",
     "ko": "경제학",
     "hi": "अर्थशास्त्र",
-    "sw": "Uchumi"
+    "sw": "Uchumi",
+    "ro": "Economie",
+    "sr": "Економија"
   },
   "topic_science,_technology_&_innovation": {
     "en": "Science, Technology & Innovation",
@@ -4468,7 +4814,9 @@
     "ja": "科学、技術、イノベーション",
     "ko": "과학, 기술 및 혁신",
     "hi": "विज्ञान, प्रौद्योगिकी और नवाचार",
-    "sw": "Sayansi, teknolojia na ubunifu"
+    "sw": "Sayansi, teknolojia na ubunifu",
+    "ro": "Știință, Tehnologie & Inovație",
+    "sr": "Наука, Технологија & Иновације"
   },
   "topic_environment": {
     "en": "Environment",
@@ -4486,7 +4834,9 @@
     "ja": "環境",
     "ko": "환경",
     "hi": "पर्यावरण",
-    "sw": "Mazingira"
+    "sw": "Mazingira",
+    "ro": "Mediu",
+    "sr": "Животна Средина"
   },
   "topic_health,_psychology_&_personal_development": {
     "en": "Health, Psychology & Personal Development",
@@ -4504,7 +4854,9 @@
     "ja": "健康、心理学、自己啓発",
     "ko": "건강, 심리학 및 자기 계발",
     "hi": "स्वास्थ्य, मनोविज्ञान और व्यक्तिगत विकास",
-    "sw": "Afya, saikolojia na maendeleo ya kibinafsi"
+    "sw": "Afya, saikolojia na maendeleo ya kibinafsi",
+    "ro": "Sănătate, Psihologie & Dezvoltare Personală",
+    "sr": "Здравље, Психологија & Лични Развој"
   },
   "topic_advanced_communication_&_rhetoric": {
     "en": "Advanced Communication & Rhetoric",
@@ -4522,7 +4874,9 @@
     "ja": "高度なコミュニケーションと修辞学",
     "ko": "고급 커뮤니케이션 및 수사학",
     "hi": "उन्नत संचार और वक्तृत्व",
-    "sw": "Mawasiliano ya hali ya juu na usemaji"
+    "sw": "Mawasiliano ya hali ya juu na usemaji",
+    "ro": "Comunicare Avansată & Retorică",
+    "sr": "Напредна Комуникација & Реторика"
   },
   "topic_education,_culture_&_media": {
     "en": "Education, Culture & Media",
@@ -4540,7 +4894,9 @@
     "ja": "教育、文化、メディア",
     "ko": "교육, 문화 및 미디어",
     "hi": "शिक्षा, संस्कृति और मीडिया",
-    "sw": "Elimu, utamaduni na vyombo vya habari"
+    "sw": "Elimu, utamaduni na vyombo vya habari",
+    "ro": "Educație, Cultură & Media",
+    "sr": "Образовање, Култура & Медији"
   },
   "topic_psychology": {
     "en": "Psychology",
@@ -4558,7 +4914,9 @@
     "ja": "心理学",
     "ko": "심리학",
     "hi": "मनोविज्ञान",
-    "sw": "Saikolojia"
+    "sw": "Saikolojia",
+    "ro": "Psihologie",
+    "sr": "Психологија"
   },
   "topic_medicine": {
     "en": "Medicine",
@@ -4576,7 +4934,9 @@
     "ja": "医学",
     "ko": "의학",
     "hi": "चिकित्सा",
-    "sw": "Tiba"
+    "sw": "Tiba",
+    "ro": "Medicină",
+    "sr": "Медицина"
   },
   "topic_sociology": {
     "en": "Sociology",
@@ -4594,7 +4954,9 @@
     "ja": "社会学",
     "ko": "사회학",
     "hi": "समाजशास्त्र",
-    "sw": "Elimu ya jamii"
+    "sw": "Elimu ya jamii",
+    "ro": "Sociologie",
+    "sr": "Социологија"
   },
   "topic_advanced_expressions_and_nuanced_language": {
     "en": "Advanced Expressions and Nuanced Language",
@@ -4612,7 +4974,9 @@
     "ja": "高度な表現とニュアンスのある言語",
     "ko": "고급 표현 및 미묘한 언어",
     "hi": "उन्नत अभिव्यक्तियाँ और सूक्ष्म भाषा",
-    "sw": "Misemo ya hali ya juu na lugha yenye utata"
+    "sw": "Misemo ya hali ya juu na lugha yenye utata",
+    "ro": "Expresii Avansate și Limbaj Nuanțat",
+    "sr": "Напредни Изрази и Нијансирани Језик"
   },
   "topic_academic_and_intellectual_discourse": {
     "en": "Academic and Intellectual Discourse",
@@ -4630,7 +4994,9 @@
     "ja": "学術的・知的言説",
     "ko": "학술적 및 지적 담론",
     "hi": "शैक्षणिक और बौद्धिक विमर्श",
-    "sw": "Majadiliano ya kitaaluma na kiakili"
+    "sw": "Majadiliano ya kitaaluma na kiakili",
+    "ro": "Discurs Academic și Intelectual",
+    "sr": "Академски и Интелектуални Дискурс"
   },
   "topic_professional_and_technical_terminology": {
     "en": "Professional and Technical Terminology",
@@ -4648,7 +5014,9 @@
     "ja": "専門的・技術的用語",
     "ko": "전문 및 기술 용어",
     "hi": "व्यावसायिक और तकनीकी शब्दावली",
-    "sw": "Istilahi za kitaaluma na kiufundi"
+    "sw": "Istilahi za kitaaluma na kiufundi",
+    "ro": "Terminologie Profesională și Tehnică",
+    "sr": "Професионална и Техничка Терминологија"
   },
   "topic_cultural,_social_and_political_discourse": {
     "en": "Cultural, Social and Political Discourse",
@@ -4666,7 +5034,9 @@
     "ja": "文化的・社会的・政治的言説",
     "ko": "문화적, 사회적 및 정치적 담론",
     "hi": "सांस्कृतिक, सामाजिक और राजनीतिक विमर्श",
-    "sw": "Majadiliano ya kitamaduni, kijamii na kisiasa"
+    "sw": "Majadiliano ya kitamaduni, kijamii na kisiasa",
+    "ro": "Discurs Cultural, Social și Politic",
+    "sr": "Културни, Друштвени и Политички Дискурс"
   },
   "topic_cutting-edge_technology_&_innovation": {
     "en": "Cutting-Edge Technology & Innovation",
@@ -4684,7 +5054,9 @@
     "ja": "最先端技術とイノベーション",
     "ko": "최첨단 기술 및 혁신",
     "hi": "अत्याधुनिक प्रौद्योगिकी और नवाचार",
-    "sw": "Teknolojia ya kisasa na ubunifu"
+    "sw": "Teknolojia ya kisasa na ubunifu",
+    "ro": "Tehnologie de Vârf & Inovație",
+    "sr": "Најсавременија Технологија & Иновације"
   },
   "topic_advanced_psychology_&_human_behavior": {
     "en": "Advanced Psychology & Human Behavior",
@@ -4702,7 +5074,9 @@
     "ja": "高度な心理学と人間行動",
     "ko": "고급 심리학 및 인간 행동",
     "hi": "उन्नत मनोविज्ञान और मानव व्यवहार",
-    "sw": "Saikolojia ya hali ya juu na tabia za kibinadamu"
+    "sw": "Saikolojia ya hali ya juu na tabia za kibinadamu",
+    "ro": "Psihologie Avansată & Comportament Uman",
+    "sr": "Напредна Психологија & Људско Понашање"
   },
   "topic_ethics_&_moral_philosophy": {
     "en": "Ethics & Moral Philosophy",
@@ -4720,7 +5094,9 @@
     "ja": "倫理学と道徳哲学",
     "ko": "윤리학 및 도덕 철학",
     "hi": "नैतिकता और नैतिक दर्शन",
-    "sw": "Maadili na falsafa ya maadili"
+    "sw": "Maadili na falsafa ya maadili",
+    "ro": "Etică & Filosofie Morală",
+    "sr": "Етика & Морална Филозофија"
   },
   "topic_religion_&_theology": {
     "en": "Religion & Theology",
@@ -4738,7 +5114,9 @@
     "ja": "宗教と神学",
     "ko": "종교 및 신학",
     "hi": "धर्म और धर्मशास्त्र",
-    "sw": "Dini na theolojia"
+    "sw": "Dini na theolojia",
+    "ro": "Religie & Teologie",
+    "sr": "Религија & Теологија"
   },
   "topic_linguistic_theory_&_communication_science": {
     "en": "Linguistic Theory & Communication Science",
@@ -4756,7 +5134,9 @@
     "ja": "言語理論とコミュニケーション科学",
     "ko": "언어 이론 및 커뮤니케이션 과학",
     "hi": "भाषाविज्ञान सिद्धांत और संचार विज्ञान",
-    "sw": "Nadharia ya lugha na sayansi ya mawasiliano"
+    "sw": "Nadharia ya lugha na sayansi ya mawasiliano",
+    "ro": "Teorie Lingvistică & Știința Comunicării",
+    "sr": "Лингвистичка Теорија & Наука о Комуникацији"
   },
   "topic_musicology_&_music_theory": {
     "en": "Musicology & Music Theory",
@@ -4774,7 +5154,9 @@
     "ja": "音楽学と音楽理論",
     "ko": "음악학 및 음악 이론",
     "hi": "संगीतविज्ञान और संगीत सिद्धांत",
-    "sw": "Elimu ya muziki na nadharia ya muziki"
+    "sw": "Elimu ya muziki na nadharia ya muziki",
+    "ro": "Muzicologie & Teorie Muzicală",
+    "sr": "Музикологија & Музичка Теорија"
   },
   "topic_advanced_business_&_management": {
     "en": "Advanced Business & Management",
@@ -4792,7 +5174,9 @@
     "ja": "高度なビジネスとマネジメント",
     "ko": "고급 비즈니스 및 경영",
     "hi": "उन्नत व्यवसाय और प्रबंधन",
-    "sw": "Biashara na usimamizi wa hali ya juu"
+    "sw": "Biashara na usimamizi wa hali ya juu",
+    "ro": "Afaceri & Management Avansat",
+    "sr": "Напредно Пословање & Менаџмент"
   },
   "topic_astronomy_&_cosmology": {
     "en": "Astronomy & Cosmology",
@@ -4810,7 +5194,9 @@
     "ja": "天文学と宇宙論",
     "ko": "천문학 및 우주론",
     "hi": "खगोल विज्ञान और ब्रह्मांड विज्ञान",
-    "sw": "Astronomia na kosmolojia"
+    "sw": "Astronomia na kosmolojia",
+    "ro": "Astronomie & Cosmologie",
+    "sr": "Астрономија & Космологија"
   },
   "topic_geography_&_geopolitics": {
     "en": "Geography & Geopolitics",
@@ -4828,7 +5214,9 @@
     "ja": "地理学と地政学",
     "ko": "지리학 및 지정학",
     "hi": "भूगोल और भूराजनीति",
-    "sw": "Jiografia na jiosaikolojia"
+    "sw": "Jiografia na jiosaikolojia",
+    "ro": "Geografie & Geopolitică",
+    "sr": "географија & Геополитика"
   },
   "topic_film_&_media_theory": {
     "en": "Film & Media Theory",
@@ -4846,7 +5234,9 @@
     "ja": "映画とメディア理論",
     "ko": "영화 및 미디어 이론",
     "hi": "फिल्म और मीडिया सिद्धांत",
-    "sw": "Nadharia ya filamu na vyombo vya habari"
+    "sw": "Nadharia ya filamu na vyombo vya habari",
+    "ro": "Teorie Cinematografică & Media",
+    "sr": "Филмска & Медијска Теорија"
   },
   "topic_advanced_chemistry_&_physics": {
     "en": "Advanced Chemistry & Physics",
@@ -4864,7 +5254,9 @@
     "ja": "高度な化学と物理学",
     "ko": "고급 화학 및 물리학",
     "hi": "उन्नत रसायन विज्ञान और भौतिकी",
-    "sw": "Kemia na fizikia ya hali ya juu"
+    "sw": "Kemia na fizikia ya hali ya juu",
+    "ro": "Chimie & Fizică Avansată",
+    "sr": "Напредна Хемија & Физика"
   },
   "topic_historical_&_archaeological_terminology": {
     "en": "Historical & Archaeological Terminology",
@@ -4882,7 +5274,9 @@
     "ja": "歴史的・考古学的用語",
     "ko": "역사 및 고고학 용어",
     "hi": "ऐतिहासिक और पुरातात्विक शब्दावली",
-    "sw": "Istilahi za kihistoria na ukombozi"
+    "sw": "Istilahi za kihistoria na ukombozi",
+    "ro": "Terminologie Istorică & Arheologică",
+    "sr": "Историјска & Археолошка Терминологија"
   },
   "topic_advanced_legal_&_jurisprudence": {
     "en": "Advanced Legal & Jurisprudence",
@@ -4900,7 +5294,9 @@
     "ja": "高度な法律と法理学",
     "ko": "고급 법률 및 법학",
     "hi": "उन्नत कानून और न्यायशास्त्र",
-    "sw": "Sheria na usheria wa hali ya juu"
+    "sw": "Sheria na usheria wa hali ya juu",
+    "ro": "Drept Avansat & Jurisprudență",
+    "sr": "Напредно Право & Правна Наука"
   },
   "topic_advanced_neuroscience_&_cognitive_science": {
     "en": "Advanced Neuroscience & Cognitive Science",
@@ -4918,7 +5314,9 @@
     "ja": "高度な神経科学と認知科学",
     "ko": "고급 신경과학 및 인지과학",
     "hi": "उन्नत तंत्रिका विज्ञान और संज्ञानात्मक विज्ञान",
-    "sw": "Sayansi ya neva na utambuzi wa hali ya juu"
+    "sw": "Sayansi ya neva na utambuzi wa hali ya juu",
+    "ro": "Neuroștiință Avansată & Știința Cognitivă",
+    "sr": "Напредна Неуронаука & Когнитивна Наука"
   },
   "topic_advanced_cultural_&_sociological_analysis": {
     "en": "Advanced Cultural & Sociological Analysis",
@@ -4936,7 +5334,9 @@
     "ja": "高度な文化的・社会学的分析",
     "ko": "고급 문화 및 사회학적 분석",
     "hi": "उन्नत सांस्कृतिक और समाजशास्त्रीय विश्लेषण",
-    "sw": "Uchambuzi wa kitamaduni na kijamii wa hali ya juu"
+    "sw": "Uchambuzi wa kitamaduni na kijamii wa hali ya juu",
+    "ro": "Analiză Culturală & Sociologică Avansată",
+    "sr": "Напредна Културна & Социолошка Анализа"
   },
   "total_duels": {
     "en": "Total Duels",
@@ -4951,7 +5351,8 @@
     "it": "Duelli totali",
     "es": "Duelos totales",
     "pt": "Total de duelos",
-    "sw": "Jumla ya Duels"
+    "sw": "Jumla ya Duels",
+    "fr": "Total des duels"
   },
   "total_xp": {
     "en": "Total XP",
@@ -4966,7 +5367,8 @@
     "it": "XP totali",
     "es": "XP total",
     "pt": "EXP total",
-    "sw": "Jumla ya XP"
+    "sw": "Jumla ya XP",
+    "fr": "XP total"
   },
   "try_again": {
     "en": "Try Again",
@@ -4981,7 +5383,8 @@
     "it": "Riprova",
     "es": "Intentar otra vez",
     "pt": "Tente novamente",
-    "sw": "Jaribu Tena"
+    "sw": "Jaribu Tena",
+    "fr": "Réessayer"
   },
   "users": {
     "en": "Users",
@@ -4996,7 +5399,8 @@
     "it": "Utenti",
     "es": "Usuarios",
     "pt": "Usuários",
-    "sw": "Watumiaji"
+    "sw": "Watumiaji",
+    "fr": "Utilisateurs"
   },
   "view_list": {
     "en": "View List",
@@ -5011,7 +5415,8 @@
     "it": "Visualizza elenco",
     "es": "Ver lista",
     "pt": "Ver lista",
-    "sw": "Orodha ya Tazama"
+    "sw": "Orodha ya Tazama",
+    "fr": "Voir la liste"
   },
   "view_profile": {
     "en": "View Profile",
@@ -5026,7 +5431,8 @@
     "it": "Visualizza profilo",
     "es": "Ver perfil",
     "pt": "Ver perfil",
-    "sw": "Tazama Wasifu"
+    "sw": "Tazama Wasifu",
+    "fr": "Voir le profil"
   },
   "views": {
     "en": "Views",
@@ -5041,7 +5447,8 @@
     "it": "Viste",
     "es": "Vistas",
     "pt": "Visualizações",
-    "sw": "Maoni"
+    "sw": "Maoni",
+    "fr": "Vues"
   },
   "vs": {
     "en": "vs",
@@ -5056,7 +5463,8 @@
     "it": "contro",
     "es": "vs",
     "pt": "contra",
-    "sw": "dhidi ya"
+    "sw": "dhidi ya",
+    "fr": "vs"
   },
   "waiting": {
     "en": "Waiting",
@@ -5071,7 +5479,8 @@
     "it": "In attesa",
     "es": "Espera",
     "pt": "Esperando",
-    "sw": "Kusubiri"
+    "sw": "Kusubiri",
+    "fr": "En attente"
   },
   "weekly": {
     "en": "Weekly",
@@ -5086,7 +5495,8 @@
     "it": "Settimanale",
     "es": "Semanalmente",
     "pt": "Semanalmente",
-    "sw": "Kila wiki"
+    "sw": "Kila wiki",
+    "fr": "Hebdomadaire"
   },
   "win_rate": {
     "en": "Win Rate",
@@ -5101,7 +5511,8 @@
     "it": "Tasso di vincita",
     "es": "Tasa de victorias",
     "pt": "Taxa de vitórias",
-    "sw": "Kiwango cha Ushindi"
+    "sw": "Kiwango cha Ushindi",
+    "fr": "Taux de victoire"
   },
   "wins": {
     "en": "Wins",
@@ -5116,7 +5527,8 @@
     "it": "Vince",
     "es": "gana",
     "pt": "Vitórias",
-    "sw": "Mafanikio"
+    "sw": "Mafanikio",
+    "fr": "Victoires"
   },
   "words_learned": {
     "en": "Words Learned",
@@ -5131,7 +5543,8 @@
     "it": "Parole apprese",
     "es": "Palabras aprendidas",
     "pt": "Palavras aprendidas",
-    "sw": "Maneno Yanayojifunza"
+    "sw": "Maneno Yanayojifunza",
+    "fr": "Mots appris"
   },
   "you": {
     "en": "You",
@@ -5146,7 +5559,8 @@
     "it": "Voi",
     "es": "Tú",
     "pt": "Você",
-    "sw": "Wewe"
+    "sw": "Wewe",
+    "fr": "Vous"
   },
   "your_insights": {
     "en": "Your Insights",
@@ -5161,7 +5575,8 @@
     "it": "Le tue intuizioni",
     "es": "Tus ideas",
     "pt": "Suas percepções",
-    "sw": "Maarifa Yako"
+    "sw": "Maarifa Yako",
+    "fr": "Vos aperçus"
   },
   "welcome": {
     "en": "Welcome",
@@ -5176,7 +5591,8 @@
     "it": "Benvenuto",
     "es": "Bienvenido",
     "pt": "Bem-vindo",
-    "sw": "Karibu"
+    "sw": "Karibu",
+    "fr": "Bienvenue"
   },
   "challenges_description": {
     "en": "Complete daily challenges to earn rewards",
@@ -5191,7 +5607,8 @@
     "it": "Completa le sfide quotidiane per guadagnare premi",
     "es": "Completa desafíos diarios para ganar recompensas.",
     "pt": "Complete desafios diários para ganhar recompensas",
-    "sw": "Kamilisha changamoto za kila siku ili upate zawadi"
+    "sw": "Kamilisha changamoto za kila siku ili upate zawadi",
+    "fr": "Complétez les défis quotidiens pour gagner des points XP bonus"
   },
   "no_challenges_today": {
     "en": "No challenges available today",
@@ -5206,7 +5623,8 @@
     "it": "Nessuna sfida disponibile oggi",
     "es": "No hay desafíos disponibles hoy",
     "pt": "Nenhum desafio disponível hoje",
-    "sw": "Hakuna changamoto zinazopatikana leo"
+    "sw": "Hakuna changamoto zinazopatikana leo",
+    "fr": "Aucun défi aujourd'hui"
   },
   "challenges_completed_today": {
     "en": "Challenges Completed Today",
@@ -5221,7 +5639,8 @@
     "it": "Sfide completate oggi",
     "es": "Desafíos completados hoy",
     "pt": "Desafios concluídos hoje",
-    "sw": "Changamoto Zilizokamilishwa Leo"
+    "sw": "Changamoto Zilizokamilishwa Leo",
+    "fr": "Défis complétés aujourd'hui"
   },
   "challenges_streak": {
     "en": "Challenge Streak",
@@ -5236,7 +5655,8 @@
     "it": "Serie di sfide",
     "es": "Racha de desafíos",
     "pt": "Sequência de Desafios",
-    "sw": "Mfululizo wa Changamoto"
+    "sw": "Mfululizo wa Changamoto",
+    "fr": "Série de défis"
   },
   "days_short": {
     "en": "days",
@@ -5251,7 +5671,8 @@
     "it": "giorni",
     "es": "días",
     "pt": "dias",
-    "sw": "siku"
+    "sw": "siku",
+    "fr": "j"
   },
   "challenges_total": {
     "en": "Total Challenges",
@@ -5266,7 +5687,8 @@
     "it": "Sfide totali",
     "es": "Desafíos totales",
     "pt": "Desafios totais",
-    "sw": "Jumla ya Changamoto"
+    "sw": "Jumla ya Changamoto",
+    "fr": "Total des défis"
   },
   "importWords": {
     "en": "Import Words",
@@ -5281,7 +5703,8 @@
     "it": "Importa parole",
     "es": "Importar palabras",
     "pt": "Importar palavras",
-    "sw": "Ingiza Maneno"
+    "sw": "Ingiza Maneno",
+    "fr": "Importer des mots"
   },
   "audio_settings": {
     "en": "🔊 Audio Settings",
@@ -5296,7 +5719,8 @@
     "it": "🔊 Impostazioni audio",
     "es": "🔊 Configuración de audio",
     "pt": "🔊 Configurações de áudio",
-    "sw": "🔊 Mipangilio ya Sauti"
+    "sw": "🔊 Mipangilio ya Sauti",
+    "fr": "Paramètres audio"
   },
   "auto_play_words": {
     "en": "Auto-play words",
@@ -5311,7 +5735,8 @@
     "it": "Parole riprodotte automaticamente",
     "es": "Palabras de reproducción automática",
     "pt": "Reproduzir palavras automaticamente",
-    "sw": "Cheza maneno kiotomatiki"
+    "sw": "Cheza maneno kiotomatiki",
+    "fr": "Lecture automatique des mots"
   },
   "auto_play_description": {
     "en": "Automatically pronounce the correct answer after checking in exercises",
@@ -5326,7 +5751,8 @@
     "it": "Pronuncia automaticamente la risposta corretta dopo aver controllato gli esercizi",
     "es": "Pronuncia automáticamente la respuesta correcta después de comprobar los ejercicios.",
     "pt": "Pronuncie automaticamente a resposta correta após verificar os exercícios",
-    "sw": "Tamka jibu sahihi kiotomatiki baada ya kuangalia katika mazoezi"
+    "sw": "Tamka jibu sahihi kiotomatiki baada ya kuangalia katika mazoezi",
+    "fr": "Lire automatiquement l'audio des mots pendant l'étude"
   },
   "startReview": {
     "en": "Start Review",
@@ -5341,7 +5767,8 @@
     "it": "Inizia la revisione",
     "es": "Iniciar revisión",
     "pt": "Iniciar revisão",
-    "sw": "Anza Ukaguzi"
+    "sw": "Anza Ukaguzi",
+    "fr": "Commencer la révision"
   },
   "review_1day": {
     "en": "1 day",
@@ -5356,7 +5783,8 @@
     "it": "1 giorno",
     "es": "1 dia",
     "pt": "1 dia",
-    "sw": "siku 1"
+    "sw": "siku 1",
+    "fr": "1 jour"
   },
   "review_3days": {
     "en": "3 days",
@@ -5371,7 +5799,8 @@
     "it": "3 giorni",
     "es": "3 dias",
     "pt": "3 dias",
-    "sw": "siku 3"
+    "sw": "siku 3",
+    "fr": "3 jours"
   },
   "review_7days": {
     "en": "7 days",
@@ -5386,7 +5815,8 @@
     "it": "7 giorni",
     "es": "7 dias",
     "pt": "7 dias",
-    "sw": "siku 7"
+    "sw": "siku 7",
+    "fr": "7 jours"
   },
   "review_14days": {
     "en": "14 days",
@@ -5401,7 +5831,8 @@
     "it": "14 giorni",
     "es": "14 dias",
     "pt": "14 dias",
-    "sw": "siku 14"
+    "sw": "siku 14",
+    "fr": "14 jours"
   },
   "review_30days": {
     "en": "30 days",
@@ -5416,7 +5847,8 @@
     "it": "30 giorni",
     "es": "30 dias",
     "pt": "30 dias",
-    "sw": "siku 30"
+    "sw": "siku 30",
+    "fr": "30 jours"
   },
   "review_60days": {
     "en": "60 days",
@@ -5431,7 +5863,8 @@
     "it": "60 giorni",
     "es": "60 días",
     "pt": "60 dias",
-    "sw": "siku 60"
+    "sw": "siku 60",
+    "fr": "60 jours"
   },
   "review_120days": {
     "en": "120 days",
@@ -5446,7 +5879,8 @@
     "it": "120 giorni",
     "es": "120 días",
     "pt": "120 dias",
-    "sw": "siku 120"
+    "sw": "siku 120",
+    "fr": "120 jours"
   },
   "sync": {
     "en": "Sync",
@@ -5461,7 +5895,8 @@
     "it": "Sincronizzazione",
     "es": "Sincronizar",
     "pt": "Sincronizar",
-    "sw": "Sawazisha"
+    "sw": "Sawazisha",
+    "fr": "Synchroniser"
   },
   "Synchronization": {
     "en": "Synchronization",
@@ -5476,7 +5911,8 @@
     "it": "Sincronizzazione",
     "es": "Sincronización",
     "pt": "Sincronização",
-    "sw": "Usawazishaji"
+    "sw": "Usawazishaji",
+    "fr": "Synchronisation"
   },
   "training_intro": {
     "en": "Training Introduction",
@@ -5491,7 +5927,8 @@
     "it": "Introduzione alla formazione",
     "es": "Introducción a la formación",
     "pt": "Introdução ao treinamento",
-    "sw": "Utangulizi wa Mafunzo"
+    "sw": "Utangulizi wa Mafunzo",
+    "fr": "Introduction à l'entraînement"
   },
   "app_features_tour": {
     "en": "Repeat interactive tour",
@@ -5506,7 +5943,8 @@
     "it": "Ripeti il ​​tour interattivo",
     "es": "Repetir recorrido interactivo",
     "pt": "Repita o tour interativo",
-    "sw": "Rudia ziara ya mwingiliano"
+    "sw": "Rudia ziara ya mwingiliano",
+    "fr": "Visite des fonctionnalités de l'application"
   },
   "start_tour_again": {
     "en": "Start Tour Again",
@@ -5521,7 +5959,8 @@
     "it": "Ricomincia il tour",
     "es": "Comenzar el recorrido nuevamente",
     "pt": "Iniciar tour novamente",
-    "sw": "Anza Ziara Tena"
+    "sw": "Anza Ziara Tena",
+    "fr": "Recommencer la visite"
   },
   "languagePairs": {
     "en": "Language Pairs",
@@ -5536,7 +5975,8 @@
     "it": "Coppie linguistiche",
     "es": "Pares de idiomas",
     "pt": "Pares de idiomas",
-    "sw": "Jozi za Lugha"
+    "sw": "Jozi za Lugha",
+    "fr": "Paires de langues"
   },
   "addLanguagePair": {
     "en": "Add Language Pair",
@@ -5551,7 +5991,8 @@
     "it": "Aggiungi coppia linguistica",
     "es": "Agregar par de idiomas",
     "pt": "Adicionar par de idiomas",
-    "sw": "Ongeza Jozi ya Lugha"
+    "sw": "Ongeza Jozi ya Lugha",
+    "fr": "Ajouter une paire de langues"
   },
   "studySettings": {
     "en": "Study Settings",
@@ -5566,7 +6007,8 @@
     "it": "Impostazioni di studio",
     "es": "Entornos de estudio",
     "pt": "Configurações de estudo",
-    "sw": "Mipangilio ya Masomo"
+    "sw": "Mipangilio ya Masomo",
+    "fr": "Paramètres d'étude"
   },
   "wordsPerLesson": {
     "en": "Words Per Lesson",
@@ -5581,7 +6023,8 @@
     "it": "Parole per lezione",
     "es": "Palabras por lección",
     "pt": "Palavras por lição",
-    "sw": "Maneno Kwa Somo"
+    "sw": "Maneno Kwa Somo",
+    "fr": "Mots par leçon"
   },
   "onboarding_languages_title": {
     "en": "Choose Your Languages",
@@ -5596,7 +6039,8 @@
     "it": "Scegli le tue lingue",
     "es": "Elige tus idiomas",
     "pt": "Escolha seus idiomas",
-    "sw": "Chagua Lugha Zako"
+    "sw": "Chagua Lugha Zako",
+    "fr": "Quelles langues souhaitez-vous apprendre?"
   },
   "onboarding_languages_desc": {
     "en": "Select your native language and the language you want to learn",
@@ -5611,7 +6055,8 @@
     "it": "Seleziona la tua lingua madre e la lingua che desideri imparare",
     "es": "Selecciona tu idioma nativo y el idioma que deseas aprender",
     "pt": "Selecione seu idioma nativo e o idioma que deseja aprender",
-    "sw": "Chagua lugha yako ya asili na lugha unayotaka kujifunza"
+    "sw": "Chagua lugha yako ya asili na lugha unayotaka kujifunza",
+    "fr": "Choisissez votre langue maternelle et la langue que vous souhaitez apprendre"
   },
   "i_speak": {
     "en": "I speak:",
@@ -5626,7 +6071,8 @@
     "it": "parlo:",
     "es": "hablo:",
     "pt": "eu falo:",
-    "sw": "Ninazungumza:"
+    "sw": "Ninazungumza:",
+    "fr": "Je parle"
   },
   "i_want_to_learn": {
     "en": "I want to learn:",
@@ -5641,7 +6087,8 @@
     "it": "Voglio imparare:",
     "es": "Quiero aprender:",
     "pt": "Eu quero aprender:",
-    "sw": "Nataka kujifunza:"
+    "sw": "Nataka kujifunza:",
+    "fr": "Je veux apprendre"
   },
   "onboarding_goal_title": {
     "en": "Set Your Daily Goal",
@@ -5656,7 +6103,8 @@
     "it": "Imposta il tuo obiettivo quotidiano",
     "es": "Establece tu objetivo diario",
     "pt": "Defina sua meta diária",
-    "sw": "Weka Lengo Lako la Kila Siku"
+    "sw": "Weka Lengo Lako la Kila Siku",
+    "fr": "Définissez votre objectif quotidien"
   },
   "onboarding_goal_desc": {
     "en": "How much time can you dedicate to learning each day?",
@@ -5671,7 +6119,8 @@
     "it": "Quanto tempo puoi dedicare all’apprendimento ogni giorno?",
     "es": "¿Cuánto tiempo puedes dedicar a aprender cada día?",
     "pt": "Quanto tempo você pode dedicar ao aprendizado todos os dias?",
-    "sw": "Je, ni muda gani unaweza kujitolea kujifunza kila siku?"
+    "sw": "Je, ni muda gani unaweza kujitolea kujifunza kila siku?",
+    "fr": "Combien de temps pouvez-vous vous engager chaque jour?"
   },
   "onboarding_theme_title": {
     "en": "Choose Your Theme",
@@ -5686,7 +6135,8 @@
     "it": "Scegli il tuo tema",
     "es": "Elige tu tema",
     "pt": "Escolha o seu tema",
-    "sw": "Chagua Mandhari Yako"
+    "sw": "Chagua Mandhari Yako",
+    "fr": "Choisissez votre thème"
   },
   "onboarding_theme_desc": {
     "en": "Select the appearance you prefer",
@@ -5701,7 +6151,8 @@
     "it": "Seleziona l'aspetto che preferisci",
     "es": "Selecciona la apariencia que prefieras",
     "pt": "Selecione a aparência que você prefere",
-    "sw": "Chagua mwonekano unaopendelea"
+    "sw": "Chagua mwonekano unaopendelea",
+    "fr": "Sélectionnez votre thème préféré pour l'application"
   },
   "dark_theme": {
     "en": "Dark",
@@ -5716,7 +6167,8 @@
     "it": "Buio",
     "es": "Oscuro",
     "pt": "Escuro",
-    "sw": "Giza"
+    "sw": "Giza",
+    "fr": "Thème sombre"
   },
   "light_theme": {
     "en": "Light",
@@ -5731,7 +6183,8 @@
     "it": "Leggero",
     "es": "Luz",
     "pt": "Luz",
-    "sw": "Mwanga"
+    "sw": "Mwanga",
+    "fr": "Thème clair"
   },
   "get_started": {
     "en": "Get Started!",
@@ -5746,7 +6199,8 @@
     "it": "Inizia!",
     "es": "¡Empieza!",
     "pt": "Comece!",
-    "sw": "Anza!"
+    "sw": "Anza!",
+    "fr": "Commencer"
   },
   "words_goal": {
     "en": "Words",
@@ -5761,7 +6215,8 @@
     "it": "Parole",
     "es": "Palabras",
     "pt": "Palavras",
-    "sw": "Maneno"
+    "sw": "Maneno",
+    "fr": "Objectif de mots"
   },
   "xp_goal": {
     "en": "XP",
@@ -5776,7 +6231,8 @@
     "it": "XP",
     "es": "experiencia",
     "pt": "EXP",
-    "sw": "XP"
+    "sw": "XP",
+    "fr": "Objectif XP"
   },
   "tasks_goal": {
     "en": "Tasks",
@@ -5791,7 +6247,8 @@
     "it": "Compiti",
     "es": "Tareas",
     "pt": "Tarefas",
-    "sw": "Kazi"
+    "sw": "Kazi",
+    "fr": "Objectif de tâches"
   },
   "word_lists_description": {
     "en": "Browse and import curated word collections by topic, level, and language",
@@ -6631,7 +7088,15 @@
     "de": "Schwaches Passwort",
     "es": "Contraseña débil",
     "fr": "Mot de passe faible",
-    "it": "Password debole"
+    "it": "Password debole",
+    "pl": "Słabe hasło",
+    "ar": "كلمة مرور ضعيفة",
+    "tr": "Zayıf şifre",
+    "uk": "Слабкий пароль",
+    "pt": "Senha fraca",
+    "sw": "Nenosiri dhaifu",
+    "ro": "Parolă slabă",
+    "sr": "Слаба лозинка"
   },
   "password_medium": {
     "en": "Medium password",
@@ -6639,7 +7104,15 @@
     "de": "Mittleres Passwort",
     "es": "Contraseña media",
     "fr": "Mot de passe moyen",
-    "it": "Password media"
+    "it": "Password media",
+    "pl": "Średnie hasło",
+    "ar": "كلمة مرور متوسطة",
+    "tr": "Orta şifre",
+    "uk": "Середній пароль",
+    "pt": "Senha média",
+    "sw": "Nenosiri la kati",
+    "ro": "Parolă medie",
+    "sr": "Средња лозинка"
   },
   "password_strong": {
     "en": "Strong password",
@@ -6647,7 +7120,15 @@
     "de": "Starkes Passwort",
     "es": "Contraseña fuerte",
     "fr": "Mot de passe fort",
-    "it": "Password forte"
+    "it": "Password forte",
+    "pl": "Silne hasło",
+    "ar": "كلمة مرور قوية",
+    "tr": "Güçlü şifre",
+    "uk": "Сильний пароль",
+    "pt": "Senha forte",
+    "sw": "Nenosiri imara",
+    "ro": "Parolă puternică",
+    "sr": "Јака лозинка"
   },
   "password_min_chars": {
     "en": "minimum 6 characters",
@@ -6655,7 +7136,15 @@
     "de": "mindestens 6 Zeichen",
     "es": "mínimo 6 caracteres",
     "fr": "minimum 6 caractères",
-    "it": "minimo 6 caratteri"
+    "it": "minimo 6 caratteri",
+    "pl": "minimum 6 znaków",
+    "ar": "6 أحرف على الأقل",
+    "tr": "minimum 6 karakter",
+    "uk": "мінімум 6 символів",
+    "pt": "mínimo 6 caracteres",
+    "sw": "angalau herufi 6",
+    "ro": "minim 6 caractere",
+    "sr": "минимум 6 карактера"
   },
   "uppercase_letters": {
     "en": "uppercase letters",
@@ -6663,7 +7152,15 @@
     "de": "Großbuchstaben",
     "es": "letras mayúsculas",
     "fr": "lettres majuscules",
-    "it": "lettere maiuscole"
+    "it": "lettere maiuscole",
+    "pl": "wielkie litery",
+    "ar": "أحرف كبيرة",
+    "tr": "büyük harfler",
+    "uk": "великі літери",
+    "pt": "letras maiúsculas",
+    "sw": "herufi kubwa",
+    "ro": "litere mari",
+    "sr": "велика слова"
   },
   "numbers": {
     "en": "numbers",
@@ -6671,7 +7168,15 @@
     "de": "Zahlen",
     "es": "números",
     "fr": "chiffres",
-    "it": "numeri"
+    "it": "numeri",
+    "pl": "cyfry",
+    "ar": "أرقام",
+    "tr": "rakamlar",
+    "uk": "цифри",
+    "pt": "números",
+    "sw": "nambari",
+    "ro": "cifre",
+    "sr": "бројеви"
   },
   "special_chars": {
     "en": "special characters",
@@ -6679,7 +7184,15 @@
     "de": "Sonderzeichen",
     "es": "caracteres especiales",
     "fr": "caractères spéciaux",
-    "it": "caratteri speciali"
+    "it": "caratteri speciali",
+    "pl": "znaki specjalne",
+    "ar": "أحرف خاصة",
+    "tr": "özel karakterler",
+    "uk": "спеціальні символи",
+    "pt": "caracteres especiais",
+    "sw": "herufi maalum",
+    "ro": "caractere speciale",
+    "sr": "специјални карактери"
   },
   "add_suggestion": {
     "en": "add",
@@ -6687,7 +7200,15 @@
     "de": "fügen Sie hinzu",
     "es": "añadir",
     "fr": "ajoutez",
-    "it": "aggiungi"
+    "it": "aggiungi",
+    "pl": "dodaj",
+    "ar": "إضافة",
+    "tr": "ekle",
+    "uk": "додати",
+    "pt": "adicionar",
+    "sw": "ongeza",
+    "ro": "adaugă",
+    "sr": "додај"
   },
   "email_valid": {
     "en": "Email looks correct",
@@ -6695,7 +7216,15 @@
     "de": "E-Mail sieht korrekt aus",
     "es": "El correo parece correcto",
     "fr": "L'e-mail semble correct",
-    "it": "L'email sembra corretta"
+    "it": "L'email sembra corretta",
+    "pl": "Email wygląda poprawnie",
+    "ar": "البريد الإلكتروني يبدو صحيحاً",
+    "tr": "E-posta doğru görünüyor",
+    "uk": "Email виглядає правильно",
+    "pt": "E-mail parece correto",
+    "sw": "Barua pepe inaonekana sawa",
+    "ro": "Emailul arată corect",
+    "sr": "Емаил изгледа исправно"
   },
   "email_invalid": {
     "en": "Invalid email format",
@@ -6703,7 +7232,15 @@
     "de": "Ungültiges E-Mail-Format",
     "es": "Formato de correo inválido",
     "fr": "Format d'e-mail invalide",
-    "it": "Formato email non valido"
+    "it": "Formato email non valido",
+    "pl": "Nieprawidłowy format e-mail",
+    "ar": "تنسيق البريد الإلكتروني غير صالح",
+    "tr": "Geçersiz e-posta formatı",
+    "uk": "Невірний формат email",
+    "pt": "Formato de e-mail inválido",
+    "sw": "Muundo wa barua pepe si sahihi",
+    "ro": "Format email invalid",
+    "sr": "Неисправан формат емаила"
   },
   "terms_of_service_text": {
     "en": "Terms of Service:\n\n1. You agree to use the application for language learning.\n2. You will not use the application for illegal purposes.\n3. We may change the terms with user notification.\n\nFull version of terms will be available in future updates.",
@@ -6711,7 +7248,15 @@
     "de": "Nutzungsbedingungen:\n\n1. Sie stimmen zu, die Anwendung zum Sprachenlernen zu verwenden.\n2. Sie werden die Anwendung nicht für illegale Zwecke verwenden.\n3. Wir können die Bedingungen mit Benutzerbenachrichtigung ändern.\n\nDie vollständige Version der Bedingungen wird in zukünftigen Updates verfügbar sein.",
     "es": "Términos de servicio:\n\n1. Acepta usar la aplicación para aprender idiomas.\n2. No usará la aplicación con fines ilegales.\n3. Podemos cambiar los términos con notificación al usuario.\n\nLa versión completa de los términos estará disponible en futuras actualizaciones.",
     "fr": "Conditions d'utilisation:\n\n1. Vous acceptez d'utiliser l'application pour l'apprentissage des langues.\n2. Vous n'utiliserez pas l'application à des fins illégales.\n3. Nous pouvons modifier les conditions avec notification à l'utilisateur.\n\nLa version complète des conditions sera disponible dans les prochaines mises à jour.",
-    "it": "Termini di servizio:\n\n1. Accetti di utilizzare l'applicazione per l'apprendimento delle lingue.\n2. Non utilizzerai l'applicazione per scopi illegali.\n3. Potremmo modificare i termini con notifica all'utente.\n\nLa versione completa dei termini sarà disponibile nei prossimi aggiornamenti."
+    "it": "Termini di servizio:\n\n1. Accetti di utilizzare l'applicazione per l'apprendimento delle lingue.\n2. Non utilizzerai l'applicazione per scopi illegali.\n3. Potremmo modificare i termini con notifica all'utente.\n\nLa versione completa dei termini sarà disponibile nei prossimi aggiornamenti.",
+    "pl": "Warunki korzystania z usługi:\n\n1. Zgadzasz się używać aplikacji do nauki języków.\n2. Nie będziesz używać aplikacji do celów nielegalnych.\n3. Możemy zmienić warunki z powiadomieniem użytkownika.\n\nPełna wersja warunków będzie dostępna w przyszłych aktualizacjach.",
+    "ar": "شروط الخدمة:\n\n1. أنت توافق على استخدام التطبيق لتعلم اللغة.\n2. لن تستخدم التطبيق لأغراض غير قانونية.\n3. قد نغير الشروط مع إخطار المستخدم.\n\nالنسخة الكاملة من الشروط ستكون متاحة في التحديثات المستقبلية.",
+    "tr": "Hizmet Şartları:\n\n1. Uygulamayı dil öğrenmek için kullanmayı kabul ediyorsunuz.\n2. Uygulamayı yasadışı amaçlar için kullanmayacaksınız.\n3. Kullanıcı bildirimi ile şartları değiştirebiliriz.\n\nŞartların tam sürümü gelecek güncellemelerde mevcut olacaktır.",
+    "uk": "Умови надання послуг:\n\n1. Ви погоджуєтеся використовувати додаток для вивчення мов.\n2. Ви не будете використовувати додаток для незаконних цілей.\n3. Ми можемо змінювати умови з повідомленням користувача.\n\nПовна версія умов буде доступна в майбутніх оновленнях.",
+    "pt": "Termos de Serviço:\n\n1. Você concorda em usar o aplicativo para aprendizado de idiomas.\n2. Você não usará o aplicativo para fins ilegais.\n3. Podemos alterar os termos com notificação ao usuário.\n\nA versão completa dos termos estará disponível em futuras atualizações.",
+    "sw": "Masharti ya Huduma:\n\n1. Unakubali kutumia programu kwa kujifunza lugha.\n2. Hutatatumia programu kwa madhumuni yasiyo halali.\n3. Tunaweza kubadilisha masharti kwa kutaarifa watumiaji.\n\nToleo kamili la masharti litapatikana katika masasisho ya siku zijazo.",
+    "ro": "Termeni și Condiții:\n\n1. Sunteți de acord să folosiți aplicația pentru învățarea limbilor.\n2. Nu veți folosi aplicația în scopuri ilegale.\n3. Putem modifica termenii cu notificarea utilizatorului.\n\nVersiunea completă a termenilor va fi disponibilă în actualizări viitoare.",
+    "sr": "Услови коришћења:\n\n1. Слажете се да користите апликацију за учење језика.\n2. Нећете користити апликацију у незаконите сврхе.\n3. Можемо променити услове уз обавештење корисника.\n\nПотпуна верзија услова биће доступна у будућим ажурирањима."
   },
   "privacy_policy_text": {
     "en": "Privacy Policy:\n\n1. We only collect necessary data (name, email, learning progress).\n2. Your data is stored on secure servers.\n3. We do not sell your data to third parties.\n4. You can delete your account at any time.\n\nFull version of the policy will be available in future updates.",
@@ -6719,7 +7264,15 @@
     "de": "Datenschutzrichtlinie:\n\n1. Wir sammeln nur notwendige Daten (Name, E-Mail, Lernfortschritt).\n2. Ihre Daten werden auf sicheren Servern gespeichert.\n3. Wir verkaufen Ihre Daten nicht an Dritte.\n4. Sie können Ihr Konto jederzeit löschen.\n\nDie vollständige Version der Richtlinie wird in zukünftigen Updates verfügbar sein.",
     "es": "Política de privacidad:\n\n1. Solo recopilamos datos necesarios (nombre, correo, progreso de aprendizaje).\n2. Tus datos se almacenan en servidores seguros.\n3. No vendemos tus datos a terceros.\n4. Puedes eliminar tu cuenta en cualquier momento.\n\nLa versión completa de la política estará disponible en futuras actualizaciones.",
     "fr": "Politique de confidentialité:\n\n1. Nous ne collectons que les données nécessaires (nom, e-mail, progression d'apprentissage).\n2. Vos données sont stockées sur des serveurs sécurisés.\n3. Nous ne vendons pas vos données à des tiers.\n4. Vous pouvez supprimer votre compte à tout moment.\n\nLa version complète de la politique sera disponible dans les prochaines mises à jour.",
-    "it": "Politica sulla privacy:\n\n1. Raccogliamo solo i dati necessari (nome, email, progressi di apprendimento).\n2. I tuoi dati sono archiviati su server sicuri.\n3. Non vendiamo i tuoi dati a terze parti.\n4. Puoi eliminare il tuo account in qualsiasi momento.\n\nLa versione completa della politica sarà disponibile nei prossimi aggiornamenti."
+    "it": "Politica sulla privacy:\n\n1. Raccogliamo solo i dati necessari (nome, email, progressi di apprendimento).\n2. I tuoi dati sono archiviati su server sicuri.\n3. Non vendiamo i tuoi dati a terze parti.\n4. Puoi eliminare il tuo account in qualsiasi momento.\n\nLa versione completa della politica sarà disponibile nei prossimi aggiornamenti.",
+    "pl": "Polityka prywatności:\n\n1. Zbieramy tylko niezbędne dane (imię, e-mail, postępy w nauce).\n2. Twoje dane są przechowywane na bezpiecznych serwerach.\n3. Nie sprzedajemy Twoich danych stronom trzecim.\n4. Możesz usunąć swoje konto w dowolnym momencie.\n\nPełna wersja polityki będzie dostępna w przyszłych aktualizacjach.",
+    "ar": "سياسة الخصوصية:\n\n1. نجمع فقط البيانات الضرورية (الاسم، البريد الإلكتروني، تقدم التعلم).\n2. يتم تخزين بياناتك على خوادم آمنة.\n3. نحن لا نبيع بياناتك لأطراف ثالثة.\n4. يمكنك حذف حسابك في أي وقت.\n\nالنسخة الكاملة من السياسة ستكون متاحة في التحديثات المستقبلية.",
+    "tr": "Gizlilik Politikası:\n\n1. Sadece gerekli verileri topluyoruz (ad, e-posta, öğrenme ilerlemesi).\n2. Verileriniz güvenli sunucularda saklanır.\n3. Verilerinizi üçüncü taraflara satmıyoruz.\n4. Hesabınızı istediğiniz zaman silebilirsiniz.\n\nPolitikanın tam sürümü gelecek güncellemelerde mevcut olacaktır.",
+    "uk": "Політика конфіденційності:\n\n1. Ми збираємо лише необхідні дані (ім'я, email, прогрес навчання).\n2. Ваші дані зберігаються на захищених серверах.\n3. Ми не продаємо ваші дані третім особам.\n4. Ви можете видалити свій обліковий запис у будь-який час.\n\nПовна версія політики буде доступна в майбутніх оновленнях.",
+    "pt": "Política de Privacidade:\n\n1. Coletamos apenas dados necessários (nome, e-mail, progresso de aprendizagem).\n2. Seus dados são armazenados em servidores seguros.\n3. Não vendemos seus dados a terceiros.\n4. Você pode excluir sua conta a qualquer momento.\n\nA versão completa da política estará disponível em futuras atualizações.",
+    "sw": "Sera ya Faragha:\n\n1. Tunakusanya data muhimu tu (jina, barua pepe, maendeleo ya kujifunza).\n2. Data yako inahifadhiwa kwenye seva salama.\n3. Hatuuzi data yako kwa wahusika wa tatu.\n4. Unaweza kufuta akaunti yako wakati wowote.\n\nToleo kamili la sera litapatikana katika masasisho ya siku zijazo.",
+    "ro": "Politica de Confidențialitate:\n\n1. Colectăm doar date necesare (nume, email, progres în învățare).\n2. Datele dumneavoastră sunt stocate pe servere securizate.\n3. Nu vindem datele dumneavoastră către terțe părți.\n4. Puteți șterge contul dumneavoastră oricând.\n\nVersiunea completă a politicii va fi disponibilă în actualizări viitoare.",
+    "sr": "Политика приватности:\n\n1. Прикупљамо само неопходне податке (име, емаил, напредак у учењу).\n2. Ваши подаци се чувају на сигурним серверима.\n3. Не продајемо ваше податке трећим странама.\n4. Можете обрисати свој налог у било ком тренутку.\n\nПотпуна верзија политике биће доступна у будућим ажурирањима."
   },
   "daily_goals_title": {
     "en": "Daily Goals",
@@ -6737,7 +7290,9 @@
     "ja": "毎日の目標",
     "ko": "일일 목표",
     "hi": "दैनिक लक्ष्य",
-    "sw": "Malengo ya Kila Siku"
+    "sw": "Malengo ya Kila Siku",
+    "ro": "Obiective Zilnice",
+    "sr": "Дневни Циљеви"
   },
   "daily_xp_goal": {
     "en": "Daily XP Goal:",
@@ -6755,7 +7310,9 @@
     "ja": "毎日のXP目標：",
     "ko": "일일 XP 목표:",
     "hi": "दैनिक XP लक्ष्य:",
-    "sw": "Lengo la XP la Kila Siku:"
+    "sw": "Lengo la XP la Kila Siku:",
+    "ro": "Obiectiv XP Zilnic:",
+    "sr": "Дневни XP Циљ:"
   },
   "daily_words_goal": {
     "en": "Words to Learn Daily:",
@@ -6773,7 +7330,9 @@
     "ja": "毎日学ぶ単語数：",
     "ko": "매일 배울 단어 수:",
     "hi": "प्रतिदिन सीखने के लिए शब्द:",
-    "sw": "Maneno ya Kujifunza Kila Siku:"
+    "sw": "Maneno ya Kujifunza Kila Siku:",
+    "ro": "Cuvinte de Învățat Zilnic:",
+    "sr": "Речи за Учење Дневно:"
   },
   "daily_exercises_goal": {
     "en": "Exercises to Complete Daily:",
@@ -6791,7 +7350,9 @@
     "ja": "毎日完了するエクササイズ数：",
     "ko": "매일 완료할 연습 수:",
     "hi": "प्रतिदिन पूरा करने के लिए अभ्यास:",
-    "sw": "Zoezi za Kukamilisha Kila Siku:"
+    "sw": "Zoezi za Kukamilisha Kila Siku:",
+    "ro": "Exerciții de Completat Zilnic:",
+    "sr": "Вежбе за Завршавање Дневно:"
   },
   "save_goals": {
     "en": "Save Goals",
@@ -6809,7 +7370,9 @@
     "ja": "目標を保存",
     "ko": "목표 저장",
     "hi": "लक्ष्य सहेजें",
-    "sw": "Hifadhi Malengo"
+    "sw": "Hifadhi Malengo",
+    "ro": "Salvează Obiectivele",
+    "sr": "Сачувај Циљеве"
   },
   "daily_xp": {
     "en": "Daily XP",
@@ -6827,7 +7390,9 @@
     "ja": "毎日のXP",
     "ko": "일일 XP",
     "hi": "दैनिक XP",
-    "sw": "XP ya Kila Siku"
+    "sw": "XP ya Kila Siku",
+    "ro": "XP Zilnic",
+    "sr": "Дневни XP"
   },
   "exercises_completed": {
     "en": "Exercises Completed",
@@ -6845,7 +7410,9 @@
     "ja": "完了したエクササイズ",
     "ko": "완료된 연습",
     "hi": "पूर्ण अभ्यास",
-    "sw": "Zoezi Zilizokamilishwa"
+    "sw": "Zoezi Zilizokamilishwa",
+    "ro": "Exerciții Completate",
+    "sr": "Завршене Вежбе"
   },
   "goals_completed": {
     "en": "Completed!",
@@ -6863,7 +7430,9 @@
     "ja": "完了！",
     "ko": "완료!",
     "hi": "पूर्ण!",
-    "sw": "Imekamilika!"
+    "sw": "Imekamilika!",
+    "ro": "Finalizat!",
+    "sr": "Завршено!"
   },
   "goals_bonus": {
     "en": "+25 XP bonus for completing all goals!",
@@ -6881,7 +7450,9 @@
     "ja": "すべての目標達成で+25 XPボーナス！",
     "ko": "모든 목표 완료 시 +25 XP 보너스!",
     "hi": "सभी लक्ष्य पूरे करने के लिए +25 XP बोनस!",
-    "sw": "+25 XP zawadi kwa kukamilisha malengo yote!"
+    "sw": "+25 XP zawadi kwa kukamilisha malengo yote!",
+    "ro": "+25 XP bonus pentru completarea tuturor obiectivelor!",
+    "sr": "+25 XP бонус за завршавање свих циљева!"
   },
   "lang_german": {
     "en": "German",
@@ -6899,7 +7470,9 @@
     "ja": "ドイツ語",
     "ko": "독일어",
     "hi": "जर्मन",
-    "sw": "Kijerumani"
+    "sw": "Kijerumani",
+    "ro": "Germană",
+    "sr": "Немачки"
   },
   "lang_english": {
     "en": "English",
@@ -6917,7 +7490,9 @@
     "ja": "英語",
     "ko": "영어",
     "hi": "अंग्रेज़ी",
-    "sw": "Kiingereza"
+    "sw": "Kiingereza",
+    "ro": "Engleză",
+    "sr": "Енглески"
   },
   "lang_spanish": {
     "en": "Spanish",
@@ -6935,7 +7510,9 @@
     "ja": "スペイン語",
     "ko": "스페인어",
     "hi": "स्पेनिश",
-    "sw": "Kihispania"
+    "sw": "Kihispania",
+    "ro": "Spaniolă",
+    "sr": "Шпански"
   },
   "lang_french": {
     "en": "French",
@@ -6953,7 +7530,9 @@
     "ja": "フランス語",
     "ko": "프랑스어",
     "hi": "फ़्रेंच",
-    "sw": "Kifaransa"
+    "sw": "Kifaransa",
+    "ro": "Franceză",
+    "sr": "Француски"
   },
   "lang_italian": {
     "en": "Italian",
@@ -6971,7 +7550,9 @@
     "ja": "イタリア語",
     "ko": "이탈리아어",
     "hi": "इतालवी",
-    "sw": "Kiitaliano"
+    "sw": "Kiitaliano",
+    "ro": "Italiană",
+    "sr": "Италијански"
   },
   "lang_portuguese": {
     "en": "Portuguese",
@@ -6989,7 +7570,9 @@
     "ja": "ポルトガル語",
     "ko": "포르투갈어",
     "hi": "पुर्तगाली",
-    "sw": "Kireno"
+    "sw": "Kireno",
+    "ro": "Portugheză",
+    "sr": "Португалски"
   },
   "lang_hindi": {
     "en": "Hindi",
@@ -7007,7 +7590,9 @@
     "ja": "ヒンディー語",
     "ko": "힌디어",
     "hi": "हिन्दी",
-    "sw": "Kihindi"
+    "sw": "Kihindi",
+    "ro": "Hindi",
+    "sr": "Хинди"
   },
   "lang_japanese": {
     "en": "Japanese",
@@ -7025,7 +7610,9 @@
     "ja": "日本語",
     "ko": "일본어",
     "hi": "जापानी",
-    "sw": "Kijapani"
+    "sw": "Kijapani",
+    "ro": "Japoneză",
+    "sr": "Јапански"
   },
   "lang_swahili": {
     "en": "Swahili",
@@ -7043,7 +7630,9 @@
     "ja": "スワヒリ語",
     "ko": "스와힐리어",
     "hi": "स्वाहिली",
-    "sw": "Kiswahili"
+    "sw": "Kiswahili",
+    "ro": "Swahili",
+    "sr": "Свахили"
   },
   "vocabulary": {
     "en": "vocabulary",
@@ -7061,7 +7650,9 @@
     "ja": "語彙",
     "ko": "어휘",
     "hi": "शब्दावली",
-    "sw": "msamiati"
+    "sw": "msamiati",
+    "ro": "vocabular",
+    "sr": "вокабулар"
   },
   "no_description": {
     "en": "No description",
@@ -7079,7 +7670,9 @@
     "ja": "説明なし",
     "ko": "설명 없음",
     "hi": "कोई विवरण नहीं",
-    "sw": "Hakuna maelezo"
+    "sw": "Hakuna maelezo",
+    "ro": "Fără descriere",
+    "sr": "Без описа"
   },
   "import_success": {
     "en": "Successfully imported {count} words!",
@@ -7097,7 +7690,9 @@
     "ja": "{count} 語を正常にインポートしました！",
     "ko": "{count}개의 단어를 성功적으로 가져왔습니다!",
     "hi": "{count} शब्द सफलतापूर्वक आयात किए गए!",
-    "sw": "Maneno {count} yameingizwa kwa mafanikio!"
+    "sw": "Maneno {count} yameingizwa kwa mafanikio!",
+    "ro": "Au fost importate cu succes {count} cuvinte!",
+    "sr": "Успешно увезено {count} речи!"
   },
   "import_new_words": {
     "en": "+{count} new words",
@@ -7115,7 +7710,9 @@
     "ja": "+{count} 新しい単語",
     "ko": "+{count} 새 단어",
     "hi": "+{count} नए शब्द",
-    "sw": "+{count} maneno mapya"
+    "sw": "+{count} maneno mapya",
+    "ro": "+{count} cuvinte noi",
+    "sr": "+{count} нових речи"
   },
   "import_already_in_collection": {
     "en": "All {count} words from this set are already in your collection",
@@ -7133,7 +7730,9 @@
     "ja": "このセットの {count} 単語はすべてコレクションに既にあります",
     "ko": "이 세트의 {count}개 단어가 모두 이미 컬렉션에 있습니다",
     "hi": "इस सेट के सभी {count} शब्द पहले से ही आपके संग्रह में हैं",
-    "sw": "Maneno {count} yote kutoka seti hii tayari yana mkusanyiko wako"
+    "sw": "Maneno {count} yote kutoka seti hii tayari yana mkusanyiko wako",
+    "ro": "Toate {count} cuvintele din acest set sunt deja în colecția ta",
+    "sr": "Свих {count} речи из овог сета су већ у вашој колекцији"
   },
   "add_new_word": {
     "en": "Add New Word",
@@ -7891,7 +8490,9 @@
     "ja": "基本語彙 11",
     "ko": "필수 어휘 11",
     "hi": "आवश्यक शब्दावली 11",
-    "sw": "Msamiati Muhimu 11"
+    "sw": "Msamiati Muhimu 11",
+    "ro": "Vocabular Esențial 11",
+    "sr": "Основни Вокабулар 11"
   },
   "topic_essential_vocabulary_12": {
     "en": "Essential Vocabulary 12",
@@ -7909,7 +8510,9 @@
     "ja": "基本語彙 12",
     "ko": "필수 어휘 12",
     "hi": "आवश्यक शब्दावली 12",
-    "sw": "Msamiati Muhimu 12"
+    "sw": "Msamiati Muhimu 12",
+    "ro": "Vocabular Esențial 12",
+    "sr": "Основни Вокабулар 12"
   },
   "topic_essential_vocabulary_13": {
     "en": "Essential Vocabulary 13",
@@ -7927,7 +8530,9 @@
     "ja": "基本語彙 13",
     "ko": "필수 어휘 13",
     "hi": "आवश्यक शब्दावली 13",
-    "sw": "Msamiati Muhimu 13"
+    "sw": "Msamiati Muhimu 13",
+    "ro": "Vocabular Esențial 13",
+    "sr": "Основни Вокабулар 13"
   },
   "topic_essential_vocabulary_14": {
     "en": "Essential Vocabulary 14",
@@ -7945,7 +8550,9 @@
     "ja": "基本語彙 14",
     "ko": "필수 어휘 14",
     "hi": "आवश्यक शब्दावली 14",
-    "sw": "Msamiati Muhimu 14"
+    "sw": "Msamiati Muhimu 14",
+    "ro": "Vocabular Esențial 14",
+    "sr": "Основни Вокабулар 14"
   },
   "topic_essential_vocabulary_15": {
     "en": "Essential Vocabulary 15",
@@ -7963,7 +8570,9 @@
     "ja": "基本語彙 15",
     "ko": "필수 어휘 15",
     "hi": "आवश्यक शब्दावली 15",
-    "sw": "Msamiati Muhimu 15"
+    "sw": "Msamiati Muhimu 15",
+    "ro": "Vocabular Esențial 15",
+    "sr": "Основни Вокабулар 15"
   },
   "topic_essential_vocabulary_16": {
     "en": "Essential Vocabulary 16",
@@ -7981,7 +8590,9 @@
     "ja": "基本語彙 16",
     "ko": "필수 어휘 16",
     "hi": "आवश्यक शब्दावली 16",
-    "sw": "Msamiati Muhimu 16"
+    "sw": "Msamiati Muhimu 16",
+    "ro": "Vocabular Esențial 16",
+    "sr": "Основни Вокабулар 16"
   },
   "topic_essential_vocabulary_17": {
     "en": "Essential Vocabulary 17",
@@ -7999,7 +8610,9 @@
     "ja": "基本語彙 17",
     "ko": "필수 어휘 17",
     "hi": "आवश्यक शब्दावली 17",
-    "sw": "Msamiati Muhimu 17"
+    "sw": "Msamiati Muhimu 17",
+    "ro": "Vocabular Esențial 17",
+    "sr": "Основни Вокабулар 17"
   },
   "topic_essential_vocabulary_18": {
     "en": "Essential Vocabulary 18",
@@ -8017,7 +8630,9 @@
     "ja": "基本語彙 18",
     "ko": "필수 어휘 18",
     "hi": "आवश्यक शब्दावली 18",
-    "sw": "Msamiati Muhimu 18"
+    "sw": "Msamiati Muhimu 18",
+    "ro": "Vocabular Esențial 18",
+    "sr": "Основни Вокабулар 18"
   },
   "topic_essential_vocabulary_19": {
     "en": "Essential Vocabulary 19",
@@ -8035,7 +8650,9 @@
     "ja": "基本語彙 19",
     "ko": "필수 어휘 19",
     "hi": "आवश्यक शब्दावली 19",
-    "sw": "Msamiati Muhimu 19"
+    "sw": "Msamiati Muhimu 19",
+    "ro": "Vocabular Esențial 19",
+    "sr": "Основни Вокабулар 19"
   },
   "topic_essential_vocabulary_20": {
     "en": "Essential Vocabulary 20",
@@ -8053,7 +8670,9 @@
     "ja": "基本語彙 20",
     "ko": "필수 어휘 20",
     "hi": "आवश्यक शब्दावली 20",
-    "sw": "Msamiati Muhimu 20"
+    "sw": "Msamiati Muhimu 20",
+    "ro": "Vocabular Esențial 20",
+    "sr": "Основни Вокабулар 20"
   },
   "topic_essential_vocabulary_21": {
     "en": "Essential Vocabulary 21",
@@ -8071,7 +8690,9 @@
     "ja": "基本語彙 21",
     "ko": "필수 어휘 21",
     "hi": "आवश्यक शब्दावली 21",
-    "sw": "Msamiati Muhimu 21"
+    "sw": "Msamiati Muhimu 21",
+    "ro": "Vocabular Esențial 21",
+    "sr": "Основни Вокабулар 21"
   },
   "topic_essential_vocabulary_22": {
     "en": "Essential Vocabulary 22",
@@ -8089,7 +8710,9 @@
     "ja": "基本語彙 22",
     "ko": "필수 어휘 22",
     "hi": "आवश्यक शब्दावली 22",
-    "sw": "Msamiati Muhimu 22"
+    "sw": "Msamiati Muhimu 22",
+    "ro": "Vocabular Esențial 22",
+    "sr": "Основни Вокабулар 22"
   },
   "topic_essential_vocabulary_23": {
     "en": "Essential Vocabulary 23",
@@ -8107,7 +8730,9 @@
     "ja": "基本語彙 23",
     "ko": "필수 어휘 23",
     "hi": "आवश्यक शब्दावली 23",
-    "sw": "Msamiati Muhimu 23"
+    "sw": "Msamiati Muhimu 23",
+    "ro": "Vocabular Esențial 23",
+    "sr": "Основни Вокабулар 23"
   },
   "topic_essential_vocabulary_24": {
     "en": "Essential Vocabulary 24",
@@ -8125,7 +8750,9 @@
     "ja": "基本語彙 24",
     "ko": "필수 어휘 24",
     "hi": "आवश्यक शब्दावली 24",
-    "sw": "Msamiati Muhimu 24"
+    "sw": "Msamiati Muhimu 24",
+    "ro": "Vocabular Esențial 24",
+    "sr": "Основни Вокабулар 24"
   },
   "topic_essential_vocabulary_25": {
     "en": "Essential Vocabulary 25",
@@ -8143,7 +8770,9 @@
     "ja": "基本語彙 25",
     "ko": "필수 어휘 25",
     "hi": "आवश्यक शब्दावली 25",
-    "sw": "Msamiati Muhimu 25"
+    "sw": "Msamiati Muhimu 25",
+    "ro": "Vocabular Esențial 25",
+    "sr": "Основни Вокабулар 25"
   },
   "topic_essential_vocabulary_26": {
     "en": "Essential Vocabulary 26",
@@ -8161,7 +8790,9 @@
     "ja": "基本語彙 26",
     "ko": "필수 어휘 26",
     "hi": "आवश्यक शब्दावली 26",
-    "sw": "Msamiati Muhimu 26"
+    "sw": "Msamiati Muhimu 26",
+    "ro": "Vocabular Esențial 26",
+    "sr": "Основни Вокабулар 26"
   },
   "topic_essential_vocabulary_27": {
     "en": "Essential Vocabulary 27",
@@ -8179,7 +8810,9 @@
     "ja": "基本語彙 27",
     "ko": "필수 어휘 27",
     "hi": "आवश्यक शब्दावली 27",
-    "sw": "Msamiati Muhimu 27"
+    "sw": "Msamiati Muhimu 27",
+    "ro": "Vocabular Esențial 27",
+    "sr": "Основни Вокабулар 27"
   },
   "topic_essential_vocabulary_28": {
     "en": "Essential Vocabulary 28",
@@ -8197,7 +8830,9 @@
     "ja": "基本語彙 28",
     "ko": "필수 어휘 28",
     "hi": "आवश्यक शब्दावली 28",
-    "sw": "Msamiati Muhimu 28"
+    "sw": "Msamiati Muhimu 28",
+    "ro": "Vocabular Esențial 28",
+    "sr": "Основни Вокабулар 28"
   },
   "topic_essential_vocabulary_29": {
     "en": "Essential Vocabulary 29",
@@ -8215,7 +8850,9 @@
     "ja": "基本語彙 29",
     "ko": "필수 어휘 29",
     "hi": "आवश्यक शब्दावली 29",
-    "sw": "Msamiati Muhimu 29"
+    "sw": "Msamiati Muhimu 29",
+    "ro": "Vocabular Esențial 29",
+    "sr": "Основни Вокабулар 29"
   },
   "topic_essential_vocabulary_30": {
     "en": "Essential Vocabulary 30",
@@ -8233,7 +8870,9 @@
     "ja": "基本語彙 30",
     "ko": "필수 어휘 30",
     "hi": "आवश्यक शब्दावली 30",
-    "sw": "Msamiati Muhimu 30"
+    "sw": "Msamiati Muhimu 30",
+    "ro": "Vocabular Esențial 30",
+    "sr": "Основни Вокабулар 30"
   },
   "topic_essential_vocabulary_31": {
     "en": "Essential Vocabulary 31",
@@ -8251,7 +8890,9 @@
     "ja": "基本語彙 31",
     "ko": "필수 어휘 31",
     "hi": "आवश्यक शब्दावली 31",
-    "sw": "Msamiati Muhimu 31"
+    "sw": "Msamiati Muhimu 31",
+    "ro": "Vocabular Esențial 31",
+    "sr": "Основни Вокабулар 31"
   },
   "topic_essential_vocabulary_32": {
     "en": "Essential Vocabulary 32",
@@ -8269,7 +8910,9 @@
     "ja": "基本語彙 32",
     "ko": "필수 어휘 32",
     "hi": "आवश्यक शब्दावली 32",
-    "sw": "Msamiati Muhimu 32"
+    "sw": "Msamiati Muhimu 32",
+    "ro": "Vocabular Esențial 32",
+    "sr": "Основни Вокабулар 32"
   },
   "topic_essential_vocabulary_33": {
     "en": "Essential Vocabulary 33",
@@ -8287,7 +8930,9 @@
     "ja": "基本語彙 33",
     "ko": "필수 어휘 33",
     "hi": "आवश्यक शब्दावली 33",
-    "sw": "Msamiati Muhimu 33"
+    "sw": "Msamiati Muhimu 33",
+    "ro": "Vocabular Esențial 33",
+    "sr": "Основни Вокабулар 33"
   },
   "topic_essential_vocabulary_34": {
     "en": "Essential Vocabulary 34",
@@ -8305,7 +8950,9 @@
     "ja": "基本語彙 34",
     "ko": "필수 어휘 34",
     "hi": "आवश्यक शब्दावली 34",
-    "sw": "Msamiati Muhimu 34"
+    "sw": "Msamiati Muhimu 34",
+    "ro": "Vocabular Esențial 34",
+    "sr": "Основни Вокабулар 34"
   },
   "topic_essential_vocabulary_35": {
     "en": "Essential Vocabulary 35",
@@ -8323,7 +8970,9 @@
     "ja": "基本語彙 35",
     "ko": "필수 어휘 35",
     "hi": "आवश्यक शब्दावली 35",
-    "sw": "Msamiati Muhimu 35"
+    "sw": "Msamiati Muhimu 35",
+    "ro": "Vocabular Esențial 35",
+    "sr": "Основни Вокабулар 35"
   },
   "topic_essential_vocabulary_36": {
     "en": "Essential Vocabulary 36",
@@ -8341,7 +8990,9 @@
     "ja": "基本語彙 36",
     "ko": "필수 어휘 36",
     "hi": "आवश्यक शब्दावली 36",
-    "sw": "Msamiati Muhimu 36"
+    "sw": "Msamiati Muhimu 36",
+    "ro": "Vocabular Esențial 36",
+    "sr": "Основни Вокабулар 36"
   },
   "topic_essential_vocabulary_37": {
     "en": "Essential Vocabulary 37",
@@ -8359,7 +9010,9 @@
     "ja": "基本語彙 37",
     "ko": "필수 어휘 37",
     "hi": "आवश्यक शब्दावली 37",
-    "sw": "Msamiati Muhimu 37"
+    "sw": "Msamiati Muhimu 37",
+    "ro": "Vocabular Esențial 37",
+    "sr": "Основни Вокабулар 37"
   },
   "topic_essential_vocabulary_38": {
     "en": "Essential Vocabulary 38",
@@ -8377,7 +9030,9 @@
     "ja": "基本語彙 38",
     "ko": "필수 어휘 38",
     "hi": "आवश्यक शब्दावली 38",
-    "sw": "Msamiati Muhimu 38"
+    "sw": "Msamiati Muhimu 38",
+    "ro": "Vocabular Esențial 38",
+    "sr": "Основни Вокабулар 38"
   },
   "topic_essential_vocabulary_39": {
     "en": "Essential Vocabulary 39",
@@ -8395,7 +9050,9 @@
     "ja": "基本語彙 39",
     "ko": "필수 어휘 39",
     "hi": "आवश्यक शब्दावली 39",
-    "sw": "Msamiati Muhimu 39"
+    "sw": "Msamiati Muhimu 39",
+    "ro": "Vocabular Esențial 39",
+    "sr": "Основни Вокабулар 39"
   },
   "topic_essential_vocabulary_40": {
     "en": "Essential Vocabulary 40",
@@ -8413,7 +9070,9 @@
     "ja": "基本語彙 40",
     "ko": "필수 어휘 40",
     "hi": "आवश्यक शब्दावली 40",
-    "sw": "Msamiati Muhimu 40"
+    "sw": "Msamiati Muhimu 40",
+    "ro": "Vocabular Esențial 40",
+    "sr": "Основни Вокабулар 40"
   },
   "topic_essential_vocabulary_41": {
     "en": "Essential Vocabulary 41",
@@ -8431,7 +9090,9 @@
     "ja": "基本語彙 41",
     "ko": "필수 어휘 41",
     "hi": "आवश्यक शब्दावली 41",
-    "sw": "Msamiati Muhimu 41"
+    "sw": "Msamiati Muhimu 41",
+    "ro": "Vocabular Esențial 41",
+    "sr": "Основни Вокабулар 41"
   },
   "topic_essential_vocabulary_42": {
     "en": "Essential Vocabulary 42",
@@ -8449,7 +9110,9 @@
     "ja": "基本語彙 42",
     "ko": "필수 어휘 42",
     "hi": "आवश्यक शब्दावली 42",
-    "sw": "Msamiati Muhimu 42"
+    "sw": "Msamiati Muhimu 42",
+    "ro": "Vocabular Esențial 42",
+    "sr": "Основни Вокабулар 42"
   },
   "topic_essential_vocabulary_43": {
     "en": "Essential Vocabulary 43",
@@ -8467,7 +9130,9 @@
     "ja": "基本語彙 43",
     "ko": "필수 어휘 43",
     "hi": "आवश्यक शब्दावली 43",
-    "sw": "Msamiati Muhimu 43"
+    "sw": "Msamiati Muhimu 43",
+    "ro": "Vocabular Esențial 43",
+    "sr": "Основни Вокабулар 43"
   },
   "topic_essential_vocabulary_44": {
     "en": "Essential Vocabulary 44",
@@ -8485,7 +9150,9 @@
     "ja": "基本語彙 44",
     "ko": "필수 어휘 44",
     "hi": "आवश्यक शब्दावली 44",
-    "sw": "Msamiati Muhimu 44"
+    "sw": "Msamiati Muhimu 44",
+    "ro": "Vocabular Esențial 44",
+    "sr": "Основни Вокабулар 44"
   },
   "topic_essential_vocabulary_45": {
     "en": "Essential Vocabulary 45",
@@ -8503,7 +9170,9 @@
     "ja": "基本語彙 45",
     "ko": "필수 어휘 45",
     "hi": "आवश्यक शब्दावली 45",
-    "sw": "Msamiati Muhimu 45"
+    "sw": "Msamiati Muhimu 45",
+    "ro": "Vocabular Esențial 45",
+    "sr": "Основни Вокабулар 45"
   },
   "topic_essential_vocabulary_46": {
     "en": "Essential Vocabulary 46",
@@ -8521,7 +9190,9 @@
     "ja": "基本語彙 46",
     "ko": "필수 어휘 46",
     "hi": "आवश्यक शब्दावली 46",
-    "sw": "Msamiati Muhimu 46"
+    "sw": "Msamiati Muhimu 46",
+    "ro": "Vocabular Esențial 46",
+    "sr": "Основни Вокабулар 46"
   },
   "topic_essential_vocabulary_47": {
     "en": "Essential Vocabulary 47",
@@ -8539,7 +9210,9 @@
     "ja": "基本語彙 47",
     "ko": "필수 어휘 47",
     "hi": "आवश्यक शब्दावली 47",
-    "sw": "Msamiati Muhimu 47"
+    "sw": "Msamiati Muhimu 47",
+    "ro": "Vocabular Esențial 47",
+    "sr": "Основни Вокабулар 47"
   },
   "topic_essential_vocabulary_48": {
     "en": "Essential Vocabulary 48",
@@ -8557,7 +9230,9 @@
     "ja": "基本語彙 48",
     "ko": "필수 어휘 48",
     "hi": "आवश्यक शब्दावली 48",
-    "sw": "Msamiati Muhimu 48"
+    "sw": "Msamiati Muhimu 48",
+    "ro": "Vocabular Esențial 48",
+    "sr": "Основни Вокабулар 48"
   },
   "topic_essential_vocabulary_49": {
     "en": "Essential Vocabulary 49",
@@ -8575,7 +9250,9 @@
     "ja": "基本語彙 49",
     "ko": "필수 어휘 49",
     "hi": "आवश्यक शब्दावली 49",
-    "sw": "Msamiati Muhimu 49"
+    "sw": "Msamiati Muhimu 49",
+    "ro": "Vocabular Esențial 49",
+    "sr": "Основни Вокабулар 49"
   },
   "topic_essential_vocabulary_50": {
     "en": "Essential Vocabulary 50",
@@ -8593,7 +9270,9 @@
     "ja": "基本語彙 50",
     "ko": "필수 어휘 50",
     "hi": "आवश्यक शब्दावली 50",
-    "sw": "Msamiati Muhimu 50"
+    "sw": "Msamiati Muhimu 50",
+    "ro": "Vocabular Esențial 50",
+    "sr": "Основни Вокабулар 50"
   },
   "topic_general_1": {
     "en": "General 1",

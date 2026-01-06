@@ -7,7 +7,7 @@
     <title>LexyBooster - Language Learning & SRS</title>
     <meta name="description" content="Master languages with spaced repetition, gamification & streak tracking. Learn German, Spanish, French, and more!">
     <!-- Version: v5.4.21 -->
-    <!-- Commit: 🐛 FIX: Handle languages without example columns in source tables -->
+    <!-- Commit:  -->
 
     <!-- Favicon -->
     <link rel="icon" type="image/png" sizes="32x32" href="/icons/icon-72x72.png">
@@ -269,7 +269,7 @@
 
                         // Extract commit message from HTML comment
                         const htmlContent = document.documentElement.outerHTML;
-                        const commitMatch = htmlContent.match(/<!-- Commit: (.+?) -->/);
+                        const commitMatch = htmlContent.match(/<!-- Commit:  -->/);
                         const commitMessage = commitMatch ? commitMatch[1] : 'Unknown';
 
                         // Log all versions
@@ -289,7 +289,7 @@
 
                 // Update commit message in status bar
                 const htmlContent = document.documentElement.outerHTML;
-                const commitMatch = htmlContent.match(/<!-- Commit: (.+?) -->/);
+                const commitMatch = htmlContent.match(/<!-- Commit:  -->/);
                 if (commitMatch) {
                     const fullCommit = commitMatch[1];
                     const shortCommit = fullCommit.length > 35 ? fullCommit.substring(0, 32) + '...' : fullCommit;
@@ -1400,7 +1400,7 @@
             <div style="margin-bottom: 3px;"><strong>App:</strong> <span id="appVersion">loading...</span></div>
             <div style="margin-bottom: 3px;"><strong>SW:</strong> <span id="swVersion">loading...</span></div>
             <div style="margin-bottom: 3px;"><strong>CSS:</strong> <span id="cssVersion">loading...</span></div>
-            <div style="max-width: 250px; overflow: hidden; text-overflow: ellipsis; white-space: nowrap;" title="🐛 FIX: Handle languages without example columns in source tables"><strong>Commit:</strong> <span id="commitMessage">🐛 FIX: Handle languages...</span></div>
+            <div style="max-width: 250px; overflow: hidden; text-overflow: ellipsis; white-space: nowrap;" title="✨ FEATURE: Add commit message to version status bar"><strong>Commit:</strong> <span id="commitMessage">✨ FEATURE: Add commit...</span></div>
         </div>
 
         <!-- New Version Indicator -->
