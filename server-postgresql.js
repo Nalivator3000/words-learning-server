@@ -14113,7 +14113,17 @@ app.put('/api/words/:id/progress', async (req, res) => {
 app.delete('/api/words/:id', async (req, res) => {
     try {
         const { id } = req.params;
-        const result = await db.query('DELETE FROM words WHERE id = $1', [id]);
+
+        // Try deleting from user_word_progress first (new architecture)
+        let result = await db.query(
+            'DELETE FROM user_word_progress WHERE id = $1 OR source_word_id = $1',
+            [id]
+        );
+
+        // If not found, try words table (legacy support)
+        if (result.rowCount === 0) {
+            result = await db.query('DELETE FROM words WHERE id = $1', [id]);
+        }
 
         if (result.rowCount === 0) {
             return res.status(404).json({ error: 'Word not found' });
@@ -14141,10 +14151,19 @@ app.put('/api/words/:id/status', async (req, res) => {
             return res.status(400).json({ error: 'Invalid status' });
         }
 
-        const result = await db.query(
-            'UPDATE words SET status = $1, updatedAt = CURRENT_TIMESTAMP WHERE id = $2',
+        // Try updating user_word_progress first (new architecture)
+        let result = await db.query(
+            'UPDATE user_word_progress SET status = $1, updated_at = CURRENT_TIMESTAMP WHERE id = $2 OR source_word_id = $2',
             [status, id]
         );
+
+        // If not found, try words table (legacy support)
+        if (result.rowCount === 0) {
+            result = await db.query(
+                'UPDATE words SET status = $1, updatedAt = CURRENT_TIMESTAMP WHERE id = $2',
+                [status, id]
+            );
+        }
 
         if (result.rowCount === 0) {
             return res.status(404).json({ error: 'Word not found' });
@@ -14209,16 +14228,31 @@ app.put('/api/words/:id/manual-advance', async (req, res) => {
         }
 
         // Update status, reviewCycle, correctCount, and nextReviewDate
-        const result = await db.query(
-            `UPDATE words
+        // Try user_word_progress first (new architecture)
+        let result = await db.query(
+            `UPDATE user_word_progress
              SET status = $1,
-                 reviewCycle = $2,
-                 correctCount = $3,
-                 nextReviewDate = $4,
-                 updatedAt = CURRENT_TIMESTAMP
-             WHERE id = $5`,
+                 review_cycle = $2,
+                 correct_count = $3,
+                 next_review_date = $4,
+                 updated_at = CURRENT_TIMESTAMP
+             WHERE id = $5 OR source_word_id = $5`,
             [status, reviewCycle, correctCount, nextReviewDate, id]
         );
+
+        // If not found, try words table (legacy support)
+        if (result.rowCount === 0) {
+            result = await db.query(
+                `UPDATE words
+                 SET status = $1,
+                     reviewCycle = $2,
+                     correctCount = $3,
+                     nextReviewDate = $4,
+                     updatedAt = CURRENT_TIMESTAMP
+                 WHERE id = $5`,
+                [status, reviewCycle, correctCount, nextReviewDate, id]
+            );
+        }
 
         if (result.rowCount === 0) {
             return res.status(404).json({ error: 'Word not found' });
