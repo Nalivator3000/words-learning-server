@@ -12740,6 +12740,7 @@ app.get('/api/language-pair/:id', async (req, res) => {
 app.get('/api/words', async (req, res) => {
     try {
         const { page = 1, limit = 100000, status, userId, languagePairId } = req.query;
+        logger.info(`[WORDS API v5.4.9] Request: userId=${userId}, languagePairId=${languagePairId}, limit=${limit} (requested: ${req.query.limit || 'default'})`);
         const offset = (page - 1) * limit;
 
         if (!userId || !languagePairId) {
