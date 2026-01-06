@@ -13392,7 +13392,38 @@ app.get('/api/words/random-proportional/:count', async (req, res) => {
 
         // Fetch words from each status by joining user_word_progress with source_words
         const allWords = [];
-        const translationTableName = `target_translations_${targetLanguage}`;
+        const baseTranslationTableName = `target_translations_${targetLanguage}`;
+
+        // FIX: Check if base table exists and has translations for this source language
+        // Some language pairs like de→fr need fallback to target_translations_french_from_de
+        // because target_translations_french might not have German source words
+        const tableExistsResult = await db.query(`
+            SELECT EXISTS (
+                SELECT FROM information_schema.tables
+                WHERE table_schema = 'public'
+                AND table_name = $1
+            )
+        `, [baseTranslationTableName]);
+
+        let useBaseTable = false;
+        if (tableExistsResult.rows[0].exists) {
+            const checkResult = await db.query(`
+                SELECT COUNT(*) as count
+                FROM ${baseTranslationTableName}
+                WHERE source_lang = $1
+                LIMIT 1
+            `, [sourceLanguageCode]);
+            useBaseTable = checkResult.rows[0].count > 0;
+        }
+
+        const translationTableName = useBaseTable
+            ? baseTranslationTableName
+            : `${baseTranslationTableName}_from_${sourceLanguageCode}`;
+
+        logger.info(`[RANDOM-PROPORTIONAL] Using translation table: ${translationTableName} (useBaseTable: ${useBaseTable})`);
+
+        // Use different column names depending on table type
+        const exampleTranslationColumnActual = useBaseTable ? `example_${targetLanguageCode}` : 'example_native';
 
         for (const [status, allocation] of Object.entries(statusAllocations)) {
             if (allocation > 0) {
@@ -13404,7 +13435,7 @@ app.get('/api/words/random-proportional/:count', async (req, res) => {
                         sw.word,
                         sw.example_${sourceLanguageCode} as example,
                         tt.translation,
-                        tt.example_${targetLanguageCode} as exampleTranslation,
+                        tt.${exampleTranslationColumnActual} as exampleTranslation,
                         uwp.source_word_id,
                         uwp.status,
                         uwp.correct_count,
@@ -13414,7 +13445,7 @@ app.get('/api/words/random-proportional/:count', async (req, res) => {
                     FROM user_word_progress uwp
                     JOIN ${sourceTableName} sw ON sw.id = uwp.source_word_id
                     LEFT JOIN ${translationTableName} tt ON tt.source_word_id = sw.id
-                        AND tt.source_lang = $6
+                        ${useBaseTable ? 'AND tt.source_lang = $6' : ''}
                     WHERE uwp.status = $1
                         AND uwp.user_id = $2
                         AND uwp.language_pair_id = $3
@@ -13424,14 +13455,11 @@ app.get('/api/words/random-proportional/:count', async (req, res) => {
                     ORDER BY RANDOM()
                     LIMIT $5
                 `;
-                const wordsResult = await db.query(wordsQuery, [
-                    status,
-                    parseInt(userId),
-                    parseInt(languagePairId),
-                    sourceLanguage,
-                    allocation,
-                    sourceLanguageCode
-                ]);
+                const queryParams = useBaseTable
+                    ? [status, parseInt(userId), parseInt(languagePairId), sourceLanguage, allocation, sourceLanguageCode]
+                    : [status, parseInt(userId), parseInt(languagePairId), sourceLanguage, allocation];
+
+                const wordsResult = await db.query(wordsQuery, queryParams);
 
                 // Set defaults for missing translations
                 wordsResult.rows.forEach(word => {
