@@ -17860,23 +17860,23 @@ startServer().catch(err => {
     process.exit(1);
 });
 
-// Auto-start translation worker on Railway
-if (process.env.NODE_ENV === "production" && process.env.RAILWAY_ENVIRONMENT) {
-    const { spawn } = require("child_process");
-    const translationWorker = path.join(__dirname, "start-translations-once.js");
-    
-    console.log("🤖 Translation worker will start in background every 3 hours");
-    
-    // First run after 30 seconds
-    setTimeout(() => {
-        console.log("🚀 Starting first translation batch...");
-        spawn("node", [translationWorker], { stdio: "inherit", detached: false });
-    }, 30000);
-    
-    // Then every 3 hours
-    setInterval(() => {
-        console.log("🔄 Starting scheduled translation batch...");
-        spawn("node", [translationWorker], { stdio: "inherit", detached: false });
-    }, 3 * 60 * 60 * 1000);
-}
+// Auto-start translation worker on Railway - DISABLED (all translations complete)
+// if (process.env.NODE_ENV === "production" && process.env.RAILWAY_ENVIRONMENT) {
+//     const { spawn } = require("child_process");
+//     const translationWorker = path.join(__dirname, "start-translations-once.js");
+//
+//     console.log("🤖 Translation worker will start in background every 3 hours");
+//
+//     // First run after 30 seconds
+//     setTimeout(() => {
+//         console.log("🚀 Starting first translation batch...");
+//         spawn("node", [translationWorker], { stdio: "inherit", detached: false });
+//     }, 30000);
+//
+//     // Then every 3 hours
+//     setInterval(() => {
+//         console.log("🔄 Starting scheduled translation batch...");
+//         spawn("node", [translationWorker], { stdio: "inherit", detached: false });
+//     }, 3 * 60 * 60 * 1000);
+// }
 
