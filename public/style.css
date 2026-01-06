@@ -1800,10 +1800,12 @@ body.quiz-active .user-menu {
 /* Settings button in navigation */
 .settings-nav-btn {
     position: relative;
+    font-size: var(--text-xl);
+    min-width: 48px;
 }
 
 .settings-nav-btn:hover {
-    transform: scale(1.05) rotate(90deg);
+    transform: scale(1.1) rotate(90deg);
 }
 
 /* Subtle pulse animation for active nav button */
@@ -3748,8 +3750,7 @@ input:focus, textarea:focus, select:focus {
     #studyBtn,
     #wordListsBtn,
     #statsBtn,
-    #settingsNavBtn,
-    #themeToggleNav {
+    #userMenuBtn {
         display: flex !important;
     }
 
