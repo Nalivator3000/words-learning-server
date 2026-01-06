@@ -17,7 +17,7 @@ class I18nManager {
         const savedLang = localStorage.getItem('uiLanguage');
         if (savedLang) {
             this.currentLanguage = savedLang;
-        } else if (['ru', 'en', 'de', 'es', 'fr', 'it', 'pl', 'ar', 'tr', 'ro', 'sr', 'uk', 'pt', 'sw'].includes(langCode)) {
+        } else if (['ru', 'en', 'de', 'es', 'fr', 'it', 'pl', 'ar', 'tr', 'ro', 'sr', 'uk', 'pt', 'sw', 'hi'].includes(langCode)) {
             this.currentLanguage = langCode;
         }
     }
@@ -91,6 +91,96 @@ class I18nManager {
     }
 
     /**
+     * Get plural form of a word based on count
+     * @param {string} key - Base translation key (e.g., 'day')
+     * @param {number} count - Number for pluralization
+     * @returns {string} Pluralized text with count
+     */
+    plural(key, count) {
+        const lang = this.currentLanguage;
+
+        // Get the plural form index based on language rules
+        const pluralFormIndex = this.getPluralFormIndex(count, lang);
+
+        // Try to find the specific plural form key
+        let pluralKey = key;
+        if (pluralFormIndex === 0) {
+            // Singular form - try key_one, key_singular, or just key
+            pluralKey = this.translations[lang]?.[`${key}_one`] ? `${key}_one` :
+                       this.translations[lang]?.[`${key}_singular`] ? `${key}_singular` : key;
+        } else if (pluralFormIndex === 1) {
+            // Plural form - try key_other, key_plural, keys, or key + 's'
+            pluralKey = this.translations[lang]?.[`${key}_other`] ? `${key}_other` :
+                       this.translations[lang]?.[`${key}_plural`] ? `${key}_plural` :
+                       this.translations[lang]?.[`${key}s`] ? `${key}s` : key;
+        } else if (pluralFormIndex === 2) {
+            // Some languages have a special form for few (2-4 in Slavic languages)
+            pluralKey = this.translations[lang]?.[`${key}_few`] ? `${key}_few` :
+                       this.translations[lang]?.[`${key}_other`] ? `${key}_other` : key;
+        }
+
+        const text = this.t(pluralKey);
+        return `${count} ${text}`;
+    }
+
+    /**
+     * Get plural form index based on language-specific rules
+     * @param {number} n - The count
+     * @param {string} lang - Language code
+     * @returns {number} Plural form index (0=one, 1=other, 2=few, etc.)
+     */
+    getPluralFormIndex(n, lang) {
+        // English, German, Spanish, Italian, Portuguese: singular (1) vs plural (other)
+        if (['en', 'de', 'es', 'it', 'pt', 'sw'].includes(lang)) {
+            return n === 1 ? 0 : 1;
+        }
+
+        // Russian, Ukrainian, Serbian, Polish: complex rules
+        // 1, 21, 31... = one
+        // 2-4, 22-24, 32-34... = few
+        // 5-20, 25-30... = many/other
+        if (['ru', 'uk', 'sr', 'pl'].includes(lang)) {
+            const mod10 = n % 10;
+            const mod100 = n % 100;
+
+            if (mod10 === 1 && mod100 !== 11) {
+                return 0; // one: 1 день
+            } else if (mod10 >= 2 && mod10 <= 4 && (mod100 < 12 || mod100 > 14)) {
+                return 2; // few: 2 дня
+            } else {
+                return 1; // other: 5 дней
+            }
+        }
+
+        // Hindi: singular (1) vs plural (other)
+        if (lang === 'hi') {
+            return n === 1 ? 0 : 1;
+        }
+
+        // Arabic: complex rules with special forms for 0, 1, 2, 3-10, 11-99, 100+
+        if (lang === 'ar') {
+            if (n === 0) return 0;
+            if (n === 1) return 0;
+            if (n === 2) return 2;
+            if (n >= 3 && n <= 10) return 1;
+            return 1;
+        }
+
+        // French: 0-1 are singular, rest plural
+        if (lang === 'fr') {
+            return n === 0 || n === 1 ? 0 : 1;
+        }
+
+        // Turkish, Romanian: singular vs plural
+        if (['tr', 'ro'].includes(lang)) {
+            return n === 1 ? 0 : 1;
+        }
+
+        // Default: simple singular/plural
+        return n === 1 ? 0 : 1;
+    }
+
+    /**
      * Interpolate parameters into text
      * Example: "Hello {name}" with { name: "World" } -> "Hello World"
      */
@@ -105,7 +195,7 @@ class I18nManager {
      * @param {string} lang - Language code (en, ru, de, es, fr, it, pl, ar, tr, ro, sr, uk, pt, sw)
      */
     async setLanguage(lang) {
-        if (!['ru', 'en', 'de', 'es', 'fr', 'it', 'pl', 'ar', 'tr', 'ro', 'sr', 'uk', 'pt', 'sw'].includes(lang)) {
+        if (!['ru', 'en', 'de', 'es', 'fr', 'it', 'pl', 'ar', 'tr', 'ro', 'sr', 'uk', 'pt', 'sw', 'hi'].includes(lang)) {
             console.error(`❌ Unsupported language: ${lang}`);
             return false;
         }

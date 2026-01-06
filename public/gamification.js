@@ -183,7 +183,7 @@ class Gamification {
                     <span class="xp-text">${totalXP} XP</span>
                 </div>
                 <div class="streak-display" title="Current Streak">
-                    🔥 ${currentStreak} ${i18n.t(currentStreak === 1 ? 'day' : 'days')}
+                    🔥 ${i18n.plural('day', currentStreak)}
                 </div>
             </div>
         `;

@@ -216,9 +216,9 @@ class FeaturesUI {
                 <div class="freeze-card">
                     <div class="freeze-icon">❄️</div>
                     <div class="freeze-info">
-                        <h4>${freeze.freeze_days} ${i18n.t('days_short')}</h4>
+                        <h4>${i18n.plural('day', freeze.freeze_days)}</h4>
                         <p>${i18n.t('freeze_expires')}: ${expiresDate}</p>
-                        <p class="freeze-days-left">${daysLeft} ${i18n.t('freeze_days_left')}</p>
+                        <p class="freeze-days-left">${i18n.plural('day', daysLeft)} ${i18n.t('freeze_left')}</p>
                     </div>
                     <div class="freeze-status active">
                         ${i18n.t('freeze_active')}
@@ -324,7 +324,7 @@ class FeaturesUI {
                 <div class="history-item">
                     <span class="history-icon">${type}</span>
                     <span class="history-date">${date}</span>
-                    <span class="history-days">${item.freeze_days} ${i18n.t('days_short')}</span>
+                    <span class="history-days">${i18n.plural('day', item.freeze_days)}</span>
                 </div>
             `;
         }).join('');
