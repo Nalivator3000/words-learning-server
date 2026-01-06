@@ -2978,12 +2978,16 @@ app.get('/api/word-sets/:setId', async (req, res) => {
                     targetLang = nativeLangFull;
                     logger.info(`[WORD-SETS] Using native_lang parameter: ${native_lang} → ${targetLang}`);
                 } else {
+                    // Native lang is invalid or matches source - use smart fallback
                     if (nativeLangFull === wordSet.source_language) {
-                        logger.warn(`[WORD-SETS] native_lang ${native_lang} matches source language ${wordSet.source_language}, using English`);
+                        logger.warn(`[WORD-SETS] native_lang ${native_lang} matches source language ${wordSet.source_language}`);
                     } else {
-                        logger.warn(`[WORD-SETS] native_lang ${nativeLangFull} is not a valid target language (no target_translations table), using English`);
+                        logger.warn(`[WORD-SETS] native_lang ${nativeLangFull} is not a valid target language (no target_translations table)`);
                     }
-                    targetLang = 'english'; // Explicit fallback
+
+                    // Smart fallback: use Russian if source is English, otherwise use English
+                    targetLang = (wordSet.source_language === 'english') ? 'russian' : 'english';
+                    logger.info(`[WORD-SETS] Falling back to ${targetLang} for source language ${wordSet.source_language}`);
                 }
             }
             // 2. Try languagePair parameter (e.g., "de-ru")
