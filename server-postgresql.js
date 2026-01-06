@@ -3325,6 +3325,8 @@ app.post('/api/word-sets/:setId/import', importLimiter, async (req, res) => {
         let importedCount = 0;
         let skippedCount = 0;
 
+        logger.info(`[IMPORT DEBUG] About to import ${wordsResult.rows.length} words for user ${userId}, languagePairId=${languagePairId}, source_language="${sourceLanguageForProgress}"`);
+
         for (const sourceWord of wordsResult.rows) {
             // Check if word already exists in user_word_progress
             const existingProgress = await db.query(`
@@ -3355,6 +3357,20 @@ app.post('/api/word-sets/:setId/import', importLimiter, async (req, res) => {
                 skippedCount++;
             }
         }
+
+        logger.info(`[IMPORT DEBUG] Import complete: imported=${importedCount}, skipped=${skippedCount}, total=${wordsResult.rows.length}`);
+
+        // Verify the import by counting total words for this user/pair/language
+        const verifyResult = await db.query(`
+            SELECT status, COUNT(*) as status_count
+            FROM user_word_progress
+            WHERE user_id = $1
+            AND language_pair_id = $2
+            AND source_language = $3
+            GROUP BY status
+        `, [userId, languagePairId, sourceLanguageForProgress]);
+
+        logger.info(`[IMPORT DEBUG] Current word counts after import:`, verifyResult.rows);
 
         res.json({
             message: 'Word set imported successfully',
