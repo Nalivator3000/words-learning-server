@@ -2844,12 +2844,14 @@ app.get('/api/word-sets', async (req, res) => {
         const params = [];
         let paramIndex = 1;
 
-        // Support languagePair parameter (e.g., "de-en" format)
+        // Support languagePair parameter (e.g., "en-de" format)
         if (languagePair) {
-            // Parse languagePair format: "de-en" -> source language is "de" (German)
+            // Parse languagePair format: "en-de" means:
+            // - User's native language: en (English)
+            // - Learning language: de (German) <- THIS is the source_language for word sets!
             const parts = languagePair.split('-');
-            if (parts.length >= 1) {
-                const sourceLanguage = parts[0]; // First part is source language
+            if (parts.length >= 2) {
+                const learningLanguage = parts[1]; // Second part is the language being learned
                 // Map short codes to full language names
                 const langMap = {
                     'de': 'german',
@@ -2860,12 +2862,15 @@ app.get('/api/word-sets', async (req, res) => {
                     'it': 'italian',
                     'pt': 'portuguese',
                     'ru': 'russian',
-                    'uk': 'ukrainian'
+                    'uk': 'ukrainian',
+                    'ja': 'japanese',
+                    'sw': 'swahili'
                 };
-                const fullLanguageName = langMap[sourceLanguage] || sourceLanguage;
+                const fullLanguageName = langMap[learningLanguage] || learningLanguage;
                 query += ` AND source_language = $${paramIndex}`;
                 params.push(fullLanguageName);
                 paramIndex++;
+                logger.info(`[WORD-SETS] languagePair=${languagePair} → showing ${fullLanguageName} word sets`);
             }
         } else if (sourceLang) {
             query += ` AND source_language = $${paramIndex}`;
