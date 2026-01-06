@@ -1,0 +1,1096 @@
+olmak
+yapmak
+istemek
+vermek
+bitirmek
+durmak
+beklemek
+oturmak
+kalkmak
+bulmak
+açmak
+hazırlanmak
+açı
+büyük
+kocaman
+iri
+dev
+küçük
+minik
+ufak
+uzun
+kısa
+dar
+kalın
+ince
+ağır
+hafif
+boş
+yeni
+eski
+modern
+antika
+orta
+vasat
+normal
+olağan
+buz gibi
+donmuş
+kapalı
+kule
+sinagog
+manastır
+belediye
+emniyet müdürlüğü
+jandarma
+hapishane
+cezaevi
+mağaza
+kuyumcu
+banka
+ATM
+gece kulübü
+ağır
+antika
+hapishane
+küçük
+bitirmek
+ince
+buz gibi
+vasat
+açmak
+olmak
+kalın
+dev
+almak
+beklemek
+kısa
+yer
+kalkmak
+gelmek
+boş
+orta
+modern
+iri
+özel
+gitmek
+derece
+olağan
+uzun
+yapmak
+kaybetmek
+dar
+kapatmak
+kışla
+istemek
+ev sahibi
+kırmızı şarap
+anahtar
+elektrikli süpürge
+kuşak
+minik
+avize
+durmak
+normal
+gecelik
+manastır
+atıştırmalık
+kuyumcu
+kahvehane
+kocaman
+trafik lambası
+polis karakolu
+tarih
+otel
+sürdürülebilirlik
+kan
+fırın tepsisi
+oturmak
+konuşmak
+spor ayakkabı
+yaz
+ufak
+kule
+şişe açacağı
+banka
+belediye
+kapalı
+hafif
+donmuş
+hırdavat
+açı
+acayip
+su
+ekmek fırını
+sinagog
+peçete
+şubat
+anahtarı
+bitki çayı
+arka bahçe
+damat
+çay kaşığı
+kitap evi
+karpuz
+ATM
+on yedi
+ketçap
+pencere
+aydınlatma
+eski
+vantilatör
+geniş
+kasırga
+aramak
+faraş
+küvet
+et
+omlet
+gece kulübü
+yemek yemek
+maden suyu
+salata
+bulmak
+bira
+hazırlanmak
+gazete bayii
+hava
+jandarma
+cezaevi
+büyük
+nişanlı
+ağır
+antika
+hapishane
+küçük
+bitirmek
+ince
+buz gibi
+vasat
+açmak
+olmak
+kalın
+dev
+almak
+beklemek
+kısa
+yer
+kalkmak
+gelmek
+boş
+orta
+modern
+iri
+özel
+gitmek
+derece
+olağan
+uzun
+yapmak
+kaybetmek
+dar
+kapatmak
+kışla
+istemek
+ev sahibi
+kırmızı şarap
+anahtar
+elektrikli süpürge
+kuşak
+minik
+avize
+durmak
+normal
+gecelik
+manastır
+atıştırmalık
+kuyumcu
+kahvehane
+kocaman
+trafik lambası
+polis karakolu
+tarih
+otel
+sürdürülebilirlik
+kan
+fırın tepsisi
+oturmak
+konuşmak
+spor ayakkabı
+yaz
+ufak
+kule
+şişe açacağı
+banka
+belediye
+kapalı
+hafif
+donmuş
+hırdavat
+açı
+acayip
+su
+ekmek fırını
+sinagog
+peçete
+şubat
+anahtarı
+bitki çayı
+arka bahçe
+damat
+çay kaşığı
+kitap evi
+karpuz
+ATM
+on yedi
+ketçap
+pencere
+aydınlatma
+eski
+vantilatör
+geniş
+kasırga
+aramak
+faraş
+küvet
+et
+omlet
+gece kulübü
+yemek yemek
+maden suyu
+salata
+bulmak
+bira
+hazırlanmak
+gazete bayii
+hava
+jandarma
+cezaevi
+büyük
+nişanlı
+domates çorbası
+konser salonu
+kapı
+hükümet
+başlamak
+etmek
+kaymakamlık
+yeni
+mikrodalga
+adam
+patlıcan
+dinlemek
+toruna
+misafir odası
+çatı katı
+yemekhane
+yıkanmak
+günbatımı
+merdiven
+emniyet müdürlüğü
+domates
+kaynar
+anne
+güneş
+deri
+yağmurlu
+tren istasyonu
+mağaza
+diyalektik
+cilt
+çıkış
+evet
+hostel
+bankamatik
+belediye binası
+gözlük
+tuzluk
+vermek
+market
+güneşli
+gider
+elektrik düğmesi
+görmek
+kasaba
+iş günü
+sıradan
+ağır
+antika
+hapishane
+küçük
+bitirmek
+ince
+buz gibi
+vasat
+açmak
+olmak
+kalın
+dev
+almak
+beklemek
+sürdürülebilirlik
+ağır
+antika
+hapishane
+küçük
+bitirmek
+ince
+buz gibi
+vasat
+açmak
+olmak
+kalın
+dev
+almak
+beklemek
+kısa
+yer
+kalkmak
+gelmek
+boş
+orta
+modern
+iri
+özel
+gitmek
+derece
+olağan
+uzun
+yapmak
+kaybetmek
+dar
+kapatmak
+kışla
+istemek
+ev sahibi
+kırmızı şarap
+anahtar
+elektrikli süpürge
+kuşak
+minik
+avize
+durmak
+normal
+gecelik
+manastır
+atıştırmalık
+kuyumcu
+kahvehane
+kocaman
+trafik lambası
+polis karakolu
+tarih
+otel
+sürdürülebilirlik
+kan
+fırın tepsisi
+oturmak
+konuşmak
+spor ayakkabı
+yaz
+ufak
+kule
+şişe açacağı
+banka
+belediye
+kapalı
+hafif
+donmuş
+hırdavat
+açı
+acayip
+su
+ekmek fırını
+sinagog
+peçete
+şubat
+anahtarı
+bitki çayı
+arka bahçe
+damat
+çay kaşığı
+kitap evi
+karpuz
+ATM
+on yedi
+ketçap
+pencere
+aydınlatma
+eski
+vantilatör
+geniş
+kasırga
+aramak
+faraş
+küvet
+et
+omlet
+gece kulübü
+yemek yemek
+maden suyu
+salata
+bulmak
+bira
+hazırlanmak
+gazete bayii
+hava
+jandarma
+cezaevi
+büyük
+nişanlı
+domates çorbası
+konser salonu
+kapı
+hükümet
+başlamak
+etmek
+kaymakamlık
+yeni
+mikrodalga
+adam
+patlıcan
+dinlemek
+toruna
+misafir odası
+çatı katı
+yemekhane
+yıkanmak
+günbatımı
+merdiven
+emniyet müdürlüğü
+domates
+kaynar
+anne
+güneş
+deri
+yağmurlu
+tren istasyonu
+mağaza
+diyalektik
+cilt
+çıkış
+evet
+hostel
+bankamatik
+belediye binası
+gözlük
+tuzluk
+vermek
+market
+güneşli
+gider
+elektrik düğmesi
+görmek
+kasaba
+iş günü
+sıradan
+ağır
+antika
+hapishane
+küçük
+bitirmek
+ince
+buz gibi
+vasat
+açmak
+olmak
+kalın
+dev
+almak
+beklemek
+kısa
+yer
+kalkmak
+gelmek
+boş
+orta
+modern
+iri
+özel
+gitmek
+derece
+olağan
+uzun
+yapmak
+kaybetmek
+dar
+kapatmak
+kışla
+istemek
+ev sahibi
+kırmızı şarap
+anahtar
+elektrikli süpürge
+kuşak
+minik
+avize
+durmak
+normal
+gecelik
+manastır
+atıştırmalık
+kuyumcu
+kahvehane
+kocaman
+trafik lambası
+polis karakolu
+tarih
+otel
+sürdürülebilirlik
+kan
+fırın tepsisi
+oturmak
+konuşmak
+spor ayakkabı
+yaz
+ufak
+kule
+şişe açacağı
+banka
+belediye
+kapalı
+hafif
+donmuş
+hırdavat
+ağır
+antika
+hapishane
+küçük
+bitirmek
+ince
+buz gibi
+vasat
+açmak
+olmak
+kalın
+dev
+almak
+beklemek
+kısa
+yer
+kalkmak
+gelmek
+boş
+orta
+modern
+iri
+özel
+gitmek
+derece
+olağan
+uzun
+yapmak
+kaybetmek
+dar
+kapatmak
+kışla
+istemek
+ev sahibi
+kırmızı şarap
+anahtar
+elektrikli süpürge
+kuşak
+minik
+avize
+durmak
+normal
+gecelik
+manastır
+atıştırmalık
+kuyumcu
+kahvehane
+kocaman
+trafik lambası
+polis karakolu
+tarih
+otel
+sürdürülebilirlik
+kan
+fırın tepsisi
+oturmak
+konuşmak
+spor ayakkabı
+yaz
+ufak
+kule
+şişe açacağı
+banka
+belediye
+kapalı
+hafif
+donmuş
+hırdavat
+açı
+acayip
+su
+ekmek fırını
+sinagog
+peçete
+şubat
+anahtarı
+bitki çayı
+arka bahçe
+damat
+çay kaşığı
+kitap evi
+karpuz
+ATM
+on yedi
+ketçap
+pencere
+aydınlatma
+eski
+vantilatör
+geniş
+kasırga
+aramak
+faraş
+küvet
+et
+omlet
+gece kulübü
+yemek yemek
+maden suyu
+salata
+bulmak
+bira
+hazırlanmak
+gazete bayii
+hava
+jandarma
+cezaevi
+büyük
+nişanlı
+domates çorbası
+konser salonu
+kapı
+hükümet
+başlamak
+etmek
+kaymakamlık
+yeni
+mikrodalga
+adam
+patlıcan
+dinlemek
+toruna
+misafir odası
+çatı katı
+yemekhane
+yıkanmak
+günbatımı
+merdiven
+emniyet müdürlüğü
+domates
+kaynar
+anne
+güneş
+deri
+yağmurlu
+tren istasyonu
+mağaza
+diyalektik
+cilt
+çıkış
+evet
+hostel
+bankamatik
+belediye binası
+gözlük
+tuzluk
+vermek
+market
+güneşli
+gider
+elektrik düğmesi
+görmek
+kasaba
+iş günü
+sıradan
+ağır
+antika
+hapishane
+küçük
+bitirmek
+ince
+buz gibi
+vasat
+açmak
+olmak
+kalın
+dev
+almak
+beklemek
+kısa
+yer
+kalkmak
+gelmek
+boş
+orta
+modern
+iri
+özel
+gitmek
+derece
+olağan
+uzun
+yapmak
+kaybetmek
+dar
+kapatmak
+kışla
+istemek
+ev sahibi
+kırmızı şarap
+anahtar
+elektrikli süpürge
+kuşak
+minik
+avize
+durmak
+normal
+gecelik
+manastır
+atıştırmalık
+kuyumcu
+kahvehane
+kocaman
+trafik lambası
+polis karakolu
+tarih
+otel
+sürdürülebilirlik
+kan
+fırın tepsisi
+oturmak
+konuşmak
+spor ayakkabı
+yaz
+ufak
+kule
+şişe açacağı
+banka
+belediye
+kapalı
+hafif
+donmuş
+hırdavat
+açı
+acayip
+su
+ekmek fırını
+sinagog
+peçete
+şubat
+anahtarı
+bitki çayı
+arka bahçe
+damat
+çay kaşığı
+kitap evi
+karpuz
+ATM
+on yedi
+ketçap
+pencere
+aydınlatma
+eski
+vantilatör
+geniş
+kasırga
+aramak
+faraş
+küvet
+et
+omlet
+gece kulübü
+yemek yemek
+maden suyu
+salata
+bulmak
+bira
+hazırlanmak
+gazete bayii
+hava
+jandarma
+cezaevi
+büyük
+nişanlı
+domates çorbası
+konser salonu
+kapı
+hükümet
+başlamak
+etmek
+kaymakamlık
+yeni
+mikrodalga
+adam
+patlıcan
+dinlemek
+toruna
+misafir odası
+çatı katı
+yemekhane
+yıkanmak
+günbatımı
+merdiven
+emniyet müdürlüğü
+domates
+kaynar
+anne
+güneş
+deri
+yağmurlu
+tren istasyonu
+mağaza
+diyalektik
+cilt
+çıkış
+evet
+hostel
+bankamatik
+belediye binası
+gözlük
+tuzluk
+vermek
+market
+güneşli
+gider
+elektrik düğmesi
+görmek
+kasaba
+iş günü
+sıradan
+ağır
+antika
+hapishane
+küçük
+bitirmek
+ince
+buz gibi
+vasat
+diyalektik
+ağır
+antika
+hapishane
+küçük
+bitirmek
+ince
+buz gibi
+vasat
+açmak
+olmak
+kalın
+dev
+almak
+beklemek
+kısa
+yer
+kalkmak
+gelmek
+boş
+orta
+modern
+iri
+özel
+gitmek
+derece
+olağan
+uzun
+yapmak
+kaybetmek
+dar
+kapatmak
+kışla
+istemek
+ev sahibi
+kırmızı şarap
+anahtar
+elektrikli süpürge
+kuşak
+minik
+avize
+durmak
+normal
+gecelik
+manastır
+atıştırmalık
+kuyumcu
+kahvehane
+kocaman
+trafik lambası
+polis karakolu
+tarih
+otel
+sürdürülebilirlik
+kan
+fırın tepsisi
+oturmak
+konuşmak
+spor ayakkabı
+yaz
+ufak
+kule
+şişe açacağı
+banka
+belediye
+kapalı
+hafif
+donmuş
+hırdavat
+açı
+acayip
+su
+ekmek fırını
+sinagog
+peçete
+şubat
+anahtarı
+bitki çayı
+arka bahçe
+damat
+çay kaşığı
+kitap evi
+karpuz
+ATM
+on yedi
+ketçap
+pencere
+aydınlatma
+eski
+vantilatör
+geniş
+kasırga
+aramak
+faraş
+küvet
+et
+omlet
+gece kulübü
+yemek yemek
+maden suyu
+salata
+bulmak
+bira
+hazırlanmak
+gazete bayii
+hava
+jandarma
+cezaevi
+büyük
+nişanlı
+domates çorbası
+konser salonu
+kapı
+hükümet
+başlamak
+etmek
+kaymakamlık
+yeni
+mikrodalga
+adam
+patlıcan
+dinlemek
+toruna
+misafir odası
+çatı katı
+yemekhane
+yıkanmak
+günbatımı
+merdiven
+emniyet müdürlüğü
+domates
+kaynar
+anne
+güneş
+deri
+yağmurlu
+tren istasyonu
+mağaza
+diyalektik
+cilt
+çıkış
+evet
+hostel
+bankamatik
+belediye binası
+gözlük
+tuzluk
+vermek
+market
+güneşli
+gider
+elektrik düğmesi
+görmek
+kasaba
+iş günü
+sıradan
+ağır
+antika
+hapishane
+küçük
+bitirmek
+ince
+buz gibi
+vasat
+açmak
+olmak
+kalın
+dev
+almak
+beklemek
+kısa
+yer
+kalkmak
+gelmek
+boş
+orta
+modern
+iri
+özel
+gitmek
+derece
+olağan
+uzun
+yapmak
+kaybetmek
+dar
+kapatmak
+kışla
+istemek
+ev sahibi
+kırmızı şarap
+anahtar
+elektrikli süpürge
+kuşak
+minik
+avize
+durmak
+normal
+gecelik
+manastır
+atıştırmalık
+kuyumcu
+kahvehane
+kocaman
+trafik lambası
+polis karakolu
+tarih
+otel
+sürdürülebilirlik
+kan
+fırın tepsisi
+oturmak
+konuşmak
+spor ayakkabı
+yaz
+ufak
+kule
+şişe açacağı
+banka
+belediye
+kapalı
+hafif
+donmuş
+hırdavat

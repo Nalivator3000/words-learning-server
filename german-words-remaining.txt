@@ -1,0 +1,1554 @@
+ich
+du
+er
+sie
+es
+wir
+ihr
+Sie
+Bis bald
+ja
+nein
+bitte
+danke
+wie
+was
+wo
+wer
+wann
+warum
+welche(r/s)
+null
+eins
+zwei
+drei
+vier
+fünf
+sechs
+sieben
+acht
+neun
+zehn
+elf
+zwölf
+dreizehn
+vierzehn
+fünfzehn
+sechzehn
+siebzehn
+achtzehn
+neunzehn
+zwanzig
+die Familie
+die Mutter
+der Vater
+die Eltern
+der Bruder
+die Schwester
+die Geschwister
+die Oma / Großmutter
+der Opa / Großvater
+die Großeltern
+das Kind
+die Kinder
+das Baby
+der Sohn
+die Tochter
+der Mann
+die Frau
+der Freund
+die Freundin
+die Leute
+die Person
+der Mensch
+der Junge
+das Mädchen
+der Lehrer
+die Lehrerin
+der Arzt
+die Ärztin
+der Student
+die Studentin
+der Schüler
+die Schülerin
+das Haus
+die Wohnung
+das Zimmer
+die Tür
+das Fenster
+der Tisch
+der Stuhl
+das Bett
+der Schrank
+die Lampe
+der Schlüssel
+die Uhr
+das Bild
+der Spiegel
+der Teppich
+die Kleidung
+die Hose
+das Hemd
+das T-Shirt
+das Kleid
+der Rock
+die Schuhe
+die Jacke
+der Mantel
+der Pullover
+die Socken
+der Hut
+die Schule
+das Buch
+das Heft
+der Stift
+der Bleistift
+der Kuli
+die Tasche
+der Rucksack
+das Papier
+das Lineal
+der Radiergummi
+die Schere
+der Computer
+das Essen
+das Brot
+das Brötchen
+die Butter
+der Käse
+das Ei
+die Eier
+das Fleisch
+der Fisch
+die Wurst
+der Schinken
+die Suppe
+der Salat
+das Gemüse
+das Obst
+der Apfel
+die Banane
+die Kartoffel
+der Reis
+die Nudeln
+das Wasser
+die Milch
+der Kaffee
+der Tee
+der Saft
+das Bier
+der Wein
+die Cola
+der Kakao
+das Frühstück
+das Mittagessen
+das Abendessen
+das Restaurant
+das Café
+die Küche
+der Teller
+die Tasse
+das Glas
+das Messer
+die Gabel
+der Löffel
+der Hunger
+der Durst
+der Tag
+die Woche
+der Montag
+der Dienstag
+der Mittwoch
+der Donnerstag
+der Freitag
+der Samstag
+der Sonntag
+das Wochenende
+der Monat
+das Jahr
+der Januar
+der Februar
+der März
+der April
+der Mai
+der Juni
+der Juli
+der August
+der September
+der Oktober
+der November
+der Dezember
+die Jahreszeit
+der Frühling
+der Sommer
+der Herbst
+der Winter
+heute
+morgen
+gestern
+jetzt
+später
+bald
+immer
+nie
+manchmal
+oft
+die Stunde
+die Minute
+die Stadt
+das Dorf
+die Straße
+der Platz
+der Park
+das Geschäft
+der Laden
+der Supermarkt
+die Bank
+die Post
+das Krankenhaus
+die Apotheke
+die Kirche
+der Bahnhof
+der Flughafen
+das Bad
+das Badezimmer
+die Toilette
+das Wohnzimmer
+das Schlafzimmer
+das Esszimmer
+der Balkon
+der Garten
+links
+rechts
+geradeaus
+hier
+dort
+da
+oben
+unten
+vorne
+hinten
+neben
+in
+auf
+bei
+gehen
+kommen
+fahren
+laufen
+fliegen
+rennen
+stehen
+sitzen
+liegen
+machen
+arbeiten
+lernen
+studieren
+spielen
+essen
+trinken
+kochen
+schlafen
+aufstehen
+aufwachen
+sprechen
+sagen
+fragen
+antworten
+hören
+sehen
+lesen
+schreiben
+verstehen
+wohnen
+bleiben
+geben
+nehmen
+kaufen
+verkaufen
+bezahlen
+öffnen
+schließen
+helfen
+suchen
+finden
+wissen
+kennen
+mögen
+lieben
+wollen
+müssen
+können
+dürfen
+die Farbe
+rot
+blau
+grün
+gelb
+schwarz
+weiß
+grau
+braun
+orange
+rosa
+lila
+groß
+klein
+lang
+kurz
+dick
+dünn
+hoch
+niedrig
+breit
+schmal
+gut
+schlecht
+schön
+hässlich
+neu
+alt
+jung
+schnell
+langsam
+laut
+leise
+heiß
+kalt
+warm
+kühl
+hell
+dunkel
+leicht
+schwer
+teuer
+billig
+voll
+leer
+sauber
+schmutzig
+richtig
+falsch
+der Preis
+das Geld
+der Euro
+der Cent
+kosten
+die Kasse
+der Markt
+die Tüte
+viel
+wenig
+mehr
+weniger
+genug
+zu viel
+zu wenig
+etwas
+nichts
+alles
+ein bisschen
+ein paar
+alle
+kein
+die Zahl
+die Nummer
+das Stück
+die Packung
+die Flasche
+die Dose
+das Auto
+der Bus
+der Zug
+die Bahn
+die S-Bahn
+die U-Bahn
+die Straßenbahn
+das Fahrrad
+das Rad
+das Motorrad
+das Taxi
+das Flugzeug
+das Schiff
+steigen
+einsteigen
+aussteigen
+umsteigen
+die Haltestelle
+die Fahrkarte
+das Ticket
+die Fahrt
+die Reise
+ankommen
+abfahren
+der Parkplatz
+parken
+der Körper
+der Kopf
+das Haar
+die Haare
+das Gesicht
+das Auge
+die Augen
+das Ohr
+die Ohren
+die Nase
+der Mund
+der Zahn
+die Zähne
+die Lippe
+der Hals
+die Schulter
+der Arm
+die Hand
+der Finger
+der Bauch
+der Rücken
+das Bein
+das Knie
+der Fuß
+die Füße
+die Zehe
+gesund
+krank
+der Schmerz
+die Schmerzen
+wehtun
+die Medizin
+das Medikament
+die Tablette
+das Pflaster
+die Erkältung
+das Fieber
+der Husten
+der Schnupfen
+müde
+wach
+fit
+der Sport
+der Fußball
+der Basketball
+der Tennis
+das Schwimmen
+schwimmen
+joggen
+wandern
+tanzen
+das Yoga
+das Training
+die Musik
+das Lied
+das Konzert
+singen
+der Film
+das Kino
+das Theater
+das Fernsehen
+der Fernseher
+das Radio
+das Hobby
+die Freizeit
+das Spiel
+das Internet
+das Handy
+das Telefon
+telefonieren
+die E-Mail
+das Foto
+fotografieren
+malen
+zeichnen
+basteln
+treffen
+sich treffen
+besuchen
+die Party
+feiern
+die Feier
+der Geburtstag
+das Geschenk
+einladen
+die Einladung
+ausgehen
+spazieren gehen
+der Spaziergang
+Spaß haben
+der Spaß
+sich freuen
+lachen
+weinen
+sich anziehen
+sich ausziehen
+sich waschen
+sich duschen
+sich baden
+sich kämmen
+sich rasieren
+sich schminken
+sich die Zähne putzen
+sich fertig machen
+frühstücken
+zu Mittag essen
+zu Abend essen
+die Seife
+das Shampoo
+die Zahnbürste
+die Zahnpasta
+das Handtuch
+der Kamm
+die Bürste
+der Föhn
+die Creme
+das Make-up
+der Lippenstift
+das Parfüm
+das Deodorant
+der Rasierer
+der Morgen
+der Vormittag
+der Mittag
+der Nachmittag
+der Abend
+die Nacht
+der Tagesablauf
+die Routine
+täglich
+jeden Tag
+morgens
+mittags
+abends
+nachts
+früh
+spät
+pünktlich
+rechtzeitig
+verspätet
+das Einfamilienhaus
+das Mehrfamilienhaus
+die Mietwohnung
+die Eigentumswohnung
+das Hochhaus
+das Reihenhaus
+der Altbau
+der Neubau
+das Erdgeschoss
+der Stock
+die Etage
+der Aufzug
+das Treppenhaus
+das Sofa
+der Sessel
+das Regal
+der Schreibtisch
+der Kühlschrank
+der Herd
+die Spülmaschine
+die Waschmaschine
+der Trockner
+der Staubsauger
+das Bügeleisen
+der Vorhang
+die Gardine
+das Kissen
+die Decke
+die Miete
+der Mieter
+der Vermieter
+mieten
+vermieten
+der Mietvertrag
+die Nebenkosten
+die Kaution
+umziehen
+der Umzug
+einziehen
+ausziehen
+renovieren
+einrichten
+die Einrichtung
+der Nachbar
+die Nachbarin
+die Nachbarschaft
+der Hausmeister
+die Hausordnung
+die Adresse
+die Postleitzahl
+der Briefkasten
+die Zentralheizung
+die Klimaanlage
+die Heizung
+der Müll
+die Bäckerei
+die Metzgerei
+die Buchhandlung
+die Drogerie
+der Kiosk
+das Kaufhaus
+das Einkaufszentrum
+die Boutique
+der Bioladen
+einkaufen
+der Einkauf
+die Einkaufsliste
+der Einkaufswagen
+der Einkaufskorb
+auswählen
+anprobieren
+die Umkleidekabine
+passen
+umtauschen
+zurückgeben
+die Quittung
+der Kassenzettel
+das Angebot
+der Rabatt
+reduziert
+im Angebot
+der Sonderpreis
+die Mehrwertsteuer
+bar bezahlen
+mit Karte bezahlen
+die Kreditkarte
+die EC-Karte
+das Kleingeld
+das Wechselgeld
+der Kunde
+die Kundin
+der Service
+die Beratung
+beraten
+empfehlen
+die Empfehlung
+sich beschweren
+die Beschwerde
+die Garantie
+die Ausstellung
+das Museum
+die Galerie
+die Oper
+das Ballet
+die Disco
+der Club
+die Bar
+die Kneipe
+das Fest
+das Festival
+die Veranstaltung
+das Interesse
+sich interessieren für
+sammeln
+die Sammlung
+nähen
+stricken
+backen
+gärtnern
+reisen
+der Ausflug
+zelten
+das Zelt
+das Schach
+die Dame
+das Kartenspiel
+die Karte
+würfeln
+der Würfel
+gewinnen
+verlieren
+der Gewinner
+der Verlierer
+das Turnier
+der Wettkampf
+trainieren
+der Trainer
+die Mannschaft
+der Verein
+das Mitglied
+das Wetter
+die Sonne
+sonnig
+der Regen
+regnen
+regnerisch
+der Schnee
+schneien
+der Wind
+windig
+der Sturm
+stürmisch
+das Gewitter
+der Donner
+der Blitz
+die Wolke
+wolkig
+der Nebel
+neblig
+das Eis
+eisig
+die Temperatur
+der Grad
+feucht
+trocken
+die Natur
+die Landschaft
+der Wald
+der Baum
+der Busch
+die Blume
+die Pflanze
+das Gras
+das Blatt
+der Berg
+der Hügel
+das Tal
+der See
+der Fluss
+das Meer
+der Strand
+das Gefühl
+fühlen
+glücklich
+das Glück
+zufrieden
+froh
+fröhlich
+traurig
+die Trauer
+lustig
+aufgeregt
+die Aufregung
+nervös
+ruhig
+entspannt
+wütend
+die Wut
+ärgerlich
+der Ärger
+sich ärgern
+enttäuscht
+die Enttäuschung
+überrascht
+die Überraschung
+erstaunt
+erschrocken
+die Angst
+ängstlich
+Angst haben vor
+mutig
+der Mut
+stolz
+der Stolz
+eifersüchtig
+die Eifersucht
+neidisch
+der Neid
+verliebt
+sich verlieben
+die Liebe
+hassen
+der Hass
+hoffen
+die Hoffnung
+einsam
+die Einsamkeit
+begeistert
+die Begeisterung
+der Charakter
+die Persönlichkeit
+ehrlich
+die Ehrlichkeit
+zuverlässig
+verantwortlich
+die Verantwortung
+fleißig
+faul
+geduldig
+die Geduld
+ungeduldig
+höflich
+unhöflich
+freundlich
+unfreundlich
+selbstbewusst
+schüchtern
+feige
+die Beziehung
+die Freundschaft
+sich verstehen
+sich streiten
+der Streit
+sich versöhnen
+vertrauen
+das Vertrauen
+misstrauen
+das Missvertrauen
+der Partner
+die Partnerin
+der Verlobte
+die Verlobte
+sich verloben
+die Verlobung
+heiraten
+die Hochzeit
+sich scheiden lassen
+die Scheidung
+geschieden
+der Ex
+ledig
+verheiratet
+der Bekannte
+die Bekannte
+sich kennenlernen
+sich verabreden
+die Verabredung
+absagen
+zusagen
+ablehnen
+der Besuch
+der Gast
+der Gastgeber
+begrüßen
+die Begrüßung
+verabschieden
+der Abschied
+vermissen
+sich erinnern an
+die Erinnerung
+vergessen
+die Meinung
+meinen
+der Standpunkt
+die Ansicht
+glauben
+denken
+meiner Meinung nach
+aus meiner Sicht
+überzeugt sein
+die Überzeugung
+zustimmen
+die Zustimmung
+widersprechen
+der Widerspruch
+kritisieren
+die Kritik
+loben
+das Lob
+das Argument
+argumentieren
+der Grund
+begründen
+die Begründung
+beweisen
+der Beweis
+behaupten
+die Behauptung
+feststellen
+die Feststellung
+annehmen
+die Annahme
+vermuten
+die Vermutung
+die Schlussfolgerung
+folgern
+logisch
+unlogisch
+diskutieren
+die Diskussion
+besprechen
+erörtern
+debattieren
+die Debatte
+das Thema
+das Gespräch
+sich unterhalten
+die Unterhaltung
+erwähnen
+ansprechen
+hinweisen auf
+der Hinweis
+betonen
+hervorheben
+unterbrechen
+die Unterbrechung
+fortfahren
+fortsetzen
+zusammenfassen
+die Zusammenfassung
+die Gesellschaft
+gesellschaftlich
+sozial
+die Politik
+politisch
+der Politiker
+die Regierung
+die Wahl
+abstimmen
+das Gesetz
+das Recht
+die Pflicht
+die Freiheit
+die Demokratie
+demokratisch
+die Umwelt
+der Umweltschutz
+umweltfreundlich
+schützen
+verschmutzen
+die Verschmutzung
+recyceln
+das Recycling
+wegwerfen
+sparen
+verschwenden
+der Klimawandel
+nachhaltig
+die Nachhaltigkeit
+erneuerbar
+die Energie
+global
+international
+weltweit
+die Globalisierung
+die Wirtschaft
+wirtschaftlich
+die Krise
+das Problem
+der Konflikt
+der Frieden
+friedlich
+die Armut
+die Gerechtigkeit
+gerecht
+ungerecht
+die Gleichheit
+gleich
+der Unterschied
+unterschiedlich
+die Vielfalt
+vielfältig
+die Vergangenheit
+die Gegenwart
+die Zukunft
+vergangen
+gegenwärtig
+zukünftig
+sich ändern
+die Änderung
+verändern
+die Veränderung
+sich entwickeln
+die Entwicklung
+sich verbessern
+die Verbesserung
+die Eigenschaft
+die Qualität
+sich unterscheiden
+ähnlich
+die Ähnlichkeit
+der Gegensatz
+vergleichen
+der Vergleich
+besonders
+allgemein
+typisch
+normal
+üblich
+existieren
+die Existenz
+die Tatsache
+tatsächlich
+wirklich
+die Wirklichkeit
+möglich
+die Möglichkeit
+unmöglich
+wahrscheinlich
+sicher
+die Sicherheit
+unsicher
+der Zweifel
+zweifeln
+garantieren
+bestätigen
+die Herausforderung
+der Einfluss
+die Entscheidung
+die Voraussetzung
+die Unterstützung
+das Verhalten
+das Ergebnis
+die Konsequenz
+die Maßnahme
+die Meinungsfreiheit
+die Gleichberechtigung
+die Integration
+die Migration
+die Nachrichten
+die Werbung
+die Schlagzeile
+die Quelle
+veröffentlichen
+berichten über
+beeinflussen
+natürlich
+die Geografie
+geografisch
+das Gebirge
+der Gipfel
+fließen
+der Bach
+der Ozean
+die Küste
+die Insel
+die Halbinsel
+der Kontinent
+die Wüste
+pflanzen
+wachsen
+blühen
+die Blüte
+das Tier
+das Säugetier
+der Vogel
+das Insekt
+die Art
+aussterben
+wehen
+gefrieren
+schmelzen
+das Gebäude
+bauen
+der Bau
+die Terrasse
+der Keller
+der Dachboden
+die Treppe
+das Stockwerk
+der Eigentümer
+das Eigentum
+das Möbel
+heizen
+putzen
+aufräumen
+ordentlich
+unordentlich
+Sport treiben
+der Sportler
+sportlich
+der Spieler
+wetteifern
+der Wettbewerb
+der Gegner
+das Tor
+schießen
+der Ball
+werfen
+fangen
+der Läufer
+springen
+der Sprung
+der Schwimmer
+tauchen
+klettern
+die Wanderung
+Ski fahren
+Schlittschuh laufen
+reiten
+die Erholung
+genießen
+der Genuss
+unterhalten
+das Vergnügen
+die Zeit
+zeitlich
+der Zeitpunkt
+der Zeitraum
+dauern
+die Dauer
+vergehen
+verbringen
+früher
+danach
+davor
+gleichzeitig
+währenddessen
+inzwischen
+mittlerweile
+sofort
+plötzlich
+allmählich
+häufig
+selten
+gelegentlich
+regelmäßig
+ständig
+niemals
+das Datum
+der Zeitplan
+vorzeitig
+die Ambivalenz
+ambivalent
+die Melancholie
+melancholisch
+die Euphorie
+euphorisch
+die Nostalgie
+nostalgisch
+die Wehmut
+wehmütig
+die Sehnsucht
+sehnsüchtig
+die Ernüchterung
+ernüchtert
+ernüchtern
+die Resignation
+resignieren
+resigniert
+die Verzweiflung
+verzweifeln
+verzweifelt
+die Betroffenheit
+betroffen
+die Erschütterung
+erschüttern
+die Überwältigung
+überwältigen
+überwältigt
+die Zerrissenheit
+zerrissen
+zerreißen
+die Leere
+die Sinnlosigkeit
+sinnlos
+die Ohnmacht
+ohnmächtig
+die Hilflosigkeit
+hilflos
+die Verletzlichkeit
+verletzlich
+verletzen
+verletzt
+die Kränkung
+kränken
+gekränkt
+die Demütigung
+demütigen
+gedemütigt
+die Beschämung
+die Empathie
+empathisch
+die Sympathie
+sympathisch
+sympathisieren
+die Antipathie
+antipathisch
+die Zuneigung
+zugeneigt
+die Abneigung
+abgeneigt
+die Vertrautheit
+vertraut
+die Distanz
+distanzieren
+distanziert
+die Nähe
+nähern
+die Intimität
+intim
+die Missverständnis
+die Gelassenheit
+gelassen
+die Geborgenheit
+geborgen
+die Erfüllung
+erfüllt
+die Zufriedenheit
+die Unzufriedenheit
+unzufrieden
+die Rastlosigkeit
+rastlos
+die Unruhe
+unruhig
+die Ruhe
+die Ausgeglichenheit
+ausgeglichen
+die Leidenschaft
+leidenschaftlich
+die Gleichgültigkeit
+gleichgültig
+die Teilnahmslosigkeit
+teilnahmslos
+die Apathie
+auf dem Holzweg sein
+jemanden im Regen stehen lassen
+aus dem Nähkästchen plaudern
+den Nagel auf den Kopf treffen
+durch die Blume sagen
+jemandem um den Bart gehen
+ins Fettnäpfchen treten
+eine Lanze für jemanden brechen
+Öl ins Feuer gießen
+ein Fass aufmachen
+die Katze aus dem Sack lassen
+ein Auge zudrücken
+die Flinte ins Korn werfen
+jemandem auf die Schliche kommen
+das Kind mit dem Bade ausschütten
+die Rechnung ohne den Wirt machen
+jemanden hinters Licht führen
+auf Granit beißen
+nicht auf den Mund gefallen sein
+das Rad neu erfinden
+Perlen vor die Säue werfen
+die Kirche im Dorf lassen
+alle Register ziehen
+jemandem das Wasser reichen können
+mit allen Wassern gewaschen sein
+jemandem den Marsch blasen
+auf die Barrikaden gehen
+die Weichen stellen
+aus allen Wolken fallen
+sein Pulver verschossen haben
+die Suppe auslöffeln müssen
+jemandem die Leviten lesen
+aufs falsche Pferd setzen
+die Kastanien aus dem Feuer holen
+den Teufel an die Wand malen
+nicht um den heißen Brei herumreden
+ein heißes Eisen anfassen
+die Daumenschrauben anziehen
+den Bock zum Gärtner machen
+sich auf seinen Lorbeeren ausruhen
+etwas auf dem Kasten haben
+jemandem auf die Nerven gehen
+die Nase voll haben
+jemanden auf dem Kieker haben
+auf den Putz hauen
+jemandem die Daumen drücken
+die Beine in die Hand nehmen
+jemandem die Show stehlen
+den Kürzeren ziehen
+in die Röhre gucken
+jemandem einen Bären aufbinden
+Schwein haben
+etwas auf die lange Bank schieben
+jemandem die Hölle heiß machen
+nicht ganz koscher sein
+auf Wolke sieben schweben
+jemandem einen Korb geben
+wie auf Rosen gebettet sein
+jemandem um den Hals fallen
+die Schnauze voll haben
+jemanden abblitzen lassen
+jemandem die Schau stehlen
+auf dem Schlauch stehen
+ins Schwarze treffen
+aus der Haut fahren
+die Ohren steif halten
+jemandem die Meinung geigen
+den Bach runtergehen
+aus dem Häuschen sein
+die Katze im Sack kaufen
+wie vom Donner gerührt sein
+jemandem das Fell über die Ohren ziehen
+alle Hebel in Bewegung setzen
+jemandem auf der Tasche liegen
+das Heft in die Hand nehmen
+mit Kind und Kegel
+wie Kraut und Rüben
+auf Herz und Nieren prüfen
+jemandem aufs Dach steigen
+in den sauren Apfel beißen
+jemandem einen Denkzettel verpassen
+sein Fett abbekommen
+die Fliege machen
+Kohldampf schieben
+eine ruhige Kugel schieben
+jemanden zur Schnecke machen
+seinen Senf dazugeben
+wie am Schnürchen laufen
+jemandem einen Strich durch die Rechnung machen
+das ist ein Tropfen auf den heißen Stein
+gegen Windmühlen kämpfen
+Wasser in den Wein gießen
+jemandem die Würmer aus der Nase ziehen
+Eulen nach Athen tragen
+wie aus dem Ei gepellt
+ein Fass ohne Boden
+auf großem Fuß leben
+den Gürtel enger schnallen
+auf keinen grünen Zweig kommen
+nicht auf der Brennsuppe dahergeschwommen sein
+sein Schäfchen ins Trockene bringen
+jemandem die Stange halten
+etwas vom Zaun brechen
+auf der faulen Haut liegen
+wie Hund und Katze sein
+jemandem goldene Brücken bauen
+wie Phönix aus der Asche
+auf Biegen und Brechen
+das A und O
+wie ein Lauffeuer
+auf des Messers Schneide stehen
+die Gunst der Stunde nutzen
+an der Oberfläche kratzen
+auf Teufel komm raus
+verinnerlichen
+verkörpern
+zelebrieren
+zementieren
+verschärfen
+verschleiern
+verwässern
+beschwichtigen
+herbeiführen
+heraufbeschwören
+hintertreiben
+untergraben
+aushöhlen
+torpedieren
+sabotieren
+blockieren
+verschleppen
+verfestigen
+manifestieren
+kulminieren
+kanalisieren
+kompensieren
+neutralisieren
+nivellieren
+polarisieren
+fragmentieren
+monopolisieren
+marginalisieren
+sich verausgaben
+sich aufopfern
+sich aufreiben
+sich verzetteln
+sich verrennen
+sich verstricken
+sich verheddern
+sich herausreden
+sich herauswinden
+sich drücken
+sich sträuben
+sich wehren
+sich empören
+sich entrüsten
+sich ereifern
+sich echauffieren
+sich erzürnen
+sich verschanzen
+sich verbarrikadieren
+sich abschotten
+sich zurückziehen
+sich besinnen
+sich ermahnen
+sich zusammenreißen
+sich aufraffen
+sich überwinden
+sich durchringen
+sich anschicken
+sich erkühnen
+veranlassen
+bewirken
+bewerkstelligen
+erwirken
+erzielen
+zeitigen
+nach sich ziehen
+auslösen
+hervorrufen
+evozieren
+induzieren
+initiieren
+inaugurieren
+lancieren
+implementieren
+etablieren
+kodifizieren
+normieren
+vereinheitlichen
+harmonisieren
+synchronisieren
+orchestrieren
+anmuten
+dünken
+währen
+obliegen
+zukommen
+gebühren
+zustehen
+zuteilwerden
+widerfahren
+zustoßen
+ereilen
+heimsuchen
+befallen
+ergreifen
+erfassen
+überkommen
+übermannen
+erliegen
+verfallen
+geraten
+münden
+umschlagen
+entgleisen
+ausufern
+ausarten
+gipfeln
+kulminie ren
+zwiegespalten
+uneinheitlich
+heterogen
+disparate
+heteroklit
+eklektisch
+schillernd
+facettenreich
+filigran
+elaboriert
+ausgeklügelt
+raffiniert
+sophistiziert
+avanciert
+hochentwickelt
+durchdacht
+wohlüberlegt
+umsichtig
+besonnen
+bedacht
+überlegt
+abgewogen
+ausbalanciert
+äquilibristisch
+prekär
+heikel
+delikat
+brisant
+neuralgisch
+sensibel
+haptisch
+taktil
+greifbar
+offenkundig
+manifest
+eklatant
+gravierend
+fundamental
+konstitutiv
+quintessenziell
+prototypisch
+exemplarisch
+mustergültig
+vorbildlich
+maßgeblich
+richtungsweisend
+wegweisend
+bahnbrechend
+monumental
+titanisch
+herkulisch
+kolossal
+immens
+exorbitant
+astronomisch
+horrend
+prohibitiv
+marginal
+vernachlässigbar
+infinitesimal
+rudimentär
+trivial
+banal
+profan
+schnöde
+obsolet
+antiquiert
+anachronistisch
+archaisch
+atavistisch
+fossil
+reliktisch
+ausgesprochen
+ausnehmend
+außerordentlich
+überaus
+höchst
+äußerst
+ungemein
+ungeheuer
+enorm
+eminent
+extraordinär
+exzeptionell
+superlativ
+vortrefflich
+vorzüglich
+exquisit
+erlesen
+auserlesen
+exzellent
+virtuos
+meisterhaft
+fulminant
+brillant
+genial
+ingeniös
+dezent
+diskret
+behutsam
+sachte
+sacht
+gemach
+bedächtig
+unverwandt
+unablässig
+unaufhörlich
+unausgesetzt
+pausenlos
+unermüdlich
+unbeirrt
+unbeirrbar
+unerschütterlich
+gänzlich
+vollends
+durchweg
+durchwegs
+durchgängig
+ausnahmslos
+restlos
+voll und ganz
+in vollem Umfang
+uneingeschränkt
+vorbehaltlos
+bedingungslos
+unleugbar
+unwiderlegbar
+unwidersprochen
+unweigerlich
+zwangsläufig
+notgedrungen
+nolens volens
+gezwungenermaßen
+notwendigerweise
+zwingend
+imperativ
+unabdingbar
+unerlässlich
+unumgänglich
+unvermeidlich
+unausweichlich
+unvermeidbar
+unabwendbar
+schicksalhaft
+verhängnisvoll
+fatal
+desaströs
+katastrophal
+verheerend
+vernichtend
+ruinös
+deletär
+nachteilig

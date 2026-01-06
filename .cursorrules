@@ -1,0 +1,27 @@
+# Critical Rules for All AI Agents
+
+⚠️ **BEFORE DOING ANYTHING, READ `.clinerules` FILE!**
+
+## Absolute Rules (NO EXCEPTIONS):
+
+1. **NEVER** push to `main` branch - ONLY use `develop`
+2. **NEVER** test locally - ONLY test on Railway production
+3. **NEVER** suggest local testing or local database operations
+4. **ALWAYS** read `.clinerules` file before starting any task
+
+## Git Commands:
+- ✅ ALLOWED: `git push origin develop`
+- ❌ FORBIDDEN: `git push origin main`
+- ❌ FORBIDDEN: `git push` (without explicit branch)
+
+## Testing:
+- ✅ ALLOWED: `npm run test:e2e:production:smoke` (Railway)
+- ❌ FORBIDDEN: Any local testing commands
+- ❌ FORBIDDEN: Local database connections
+
+## Why:
+- This project has NO local database setup
+- Railway auto-deploys from `develop` branch
+- `main` branch is production-only
+
+**READ FULL RULES IN `.clinerules` FILE NOW!**

@@ -1,0 +1,241 @@
+================================================================================
+JAPANESE VOCABULARY - COMMAND REFERENCE
+================================================================================
+
+QUICK SETUP (ONE COMMAND)
+================================================================================
+
+  # Windows PowerShell
+  $env:ANTHROPIC_API_KEY="your-api-key-here"
+  node setup-japanese-complete.js
+
+  # Windows CMD
+  set ANTHROPIC_API_KEY=your-api-key-here
+  node setup-japanese-complete.js
+
+  # Linux/Mac
+  export ANTHROPIC_API_KEY="your-api-key-here"
+  node setup-japanese-complete.js
+
+  TIME: 45-90 minutes
+  COST: ~$3-5 USD
+
+
+CHECK STATUS
+================================================================================
+
+  node check-japanese-status.js
+
+  Shows:
+  - Total words (target: 10,000)
+  - Real vs synthetic breakdown
+  - Distribution by level
+  - Distribution by theme
+  - Word sets created
+  - What to do next
+
+
+INDIVIDUAL STEPS
+================================================================================
+
+  Step 1: Cleanup synthetic data
+  -------------------------------
+  node cleanup-japanese-synthetic.js
+
+  Time: < 1 minute
+  What: Deletes test data like "はい_123_A1"
+
+
+  Step 2: Generate vocabulary
+  ----------------------------
+  node generate-japanese-vocabulary.js
+
+  Time: 30-60 minutes
+  What: Creates 10,000 real Japanese words
+  Needs: ANTHROPIC_API_KEY
+
+
+  Step 3: Assign themes
+  ----------------------
+  node assign-japanese-themes-llm.js
+
+  Time: 20-30 minutes
+  What: Categorizes words by theme
+  Needs: ANTHROPIC_API_KEY
+
+
+  Step 4: Create word sets
+  -------------------------
+  node create-japanese-word-sets.js
+
+  Time: < 1 minute
+  What: Creates thematic learning sets
+
+
+WINDOWS BATCH FILE
+================================================================================
+
+  # Set API key first
+  set ANTHROPIC_API_KEY=your-key
+
+  # Then double-click or run:
+  run-japanese-setup.bat
+
+
+GET API KEY
+================================================================================
+
+  1. Go to: https://console.anthropic.com/
+  2. Sign up / Log in
+  3. Create API key
+  4. Copy and set in environment
+
+
+VERIFY RESULTS
+================================================================================
+
+  After setup, run:
+  node check-japanese-status.js
+
+  Expected:
+  - Total words: ~10,000
+  - Real words: 100%
+  - Themed words: 100%
+  - Word sets: ~100-150
+
+
+TROUBLESHOOTING
+================================================================================
+
+  Problem: "API key not set"
+  Solution: $env:ANTHROPIC_API_KEY="your-key"
+
+  Problem: Rate limit errors
+  Solution: Wait, scripts auto-delay
+
+  Problem: Script failed partway
+  Solution: Safe to re-run
+
+  Problem: Not enough words
+  Solution: Re-run generate script
+
+
+FILE LOCATIONS
+================================================================================
+
+  Scripts:
+  - cleanup-japanese-synthetic.js
+  - generate-japanese-vocabulary.js
+  - assign-japanese-themes-llm.js
+  - create-japanese-word-sets.js
+  - setup-japanese-complete.js
+  - check-japanese-status.js
+  - run-japanese-setup.bat
+
+  Docs:
+  - JAPANESE_README.md (start here)
+  - JAPANESE_QUICK_START.md
+  - JAPANESE_SETUP_GUIDE.md
+  - JAPANESE_VOCABULARY_COMPLETE.md
+
+
+VOCABULARY TARGET
+================================================================================
+
+  Level   Words   Description
+  -----   -----   -----------
+  A1      1,000   Basic
+  A2      1,000   Elementary
+  B1      1,500   Intermediate
+  B2      2,000   Upper Intermediate
+  C1      2,500   Advanced
+  C2      2,000   Proficiency
+  -----   -----
+  Total  10,000   Complete
+
+
+THEMES (19 total)
+================================================================================
+
+  - communication   - food         - home
+  - time           - work         - emotions
+  - travel         - numbers      - weather
+  - colors         - health       - clothing
+  - family         - culture      - nature
+  - sports         - education    - technology
+  - general (catchall)
+
+
+INSTALLATION
+================================================================================
+
+  # Install SDK (if needed)
+  npm install @anthropic-ai/sdk
+
+
+COST ESTIMATE
+================================================================================
+
+  API Calls: ~300-400 requests
+  Model: Claude 3.5 Sonnet
+  Cost: ~$3-5 USD total
+
+
+EXPECTED TIMELINE
+================================================================================
+
+  Cleanup:     < 1 minute
+  Generate:    30-60 minutes
+  Themes:      20-30 minutes
+  Word Sets:   < 1 minute
+  -----------
+  Total:       45-90 minutes
+
+
+DATABASE TABLES AFFECTED
+================================================================================
+
+  source_words_japanese
+  - Before: ~10,000 synthetic
+  - After:  ~10,000 real
+
+  word_sets
+  - Adds: ~100-150 sets
+  - For: Japanese language
+
+
+QUICK TIPS
+================================================================================
+
+  ✓ Set API key before running
+  ✓ Run check-status to see progress
+  ✓ Safe to re-run any script
+  ✓ Scripts prevent duplicates
+  ✓ Full logs in console
+  ✓ Takes 45-90 minutes total
+
+
+MOST COMMON WORKFLOW
+================================================================================
+
+  1. $env:ANTHROPIC_API_KEY="your-key"
+  2. node setup-japanese-complete.js
+  3. Wait 45-90 minutes
+  4. node check-japanese-status.js
+  5. Done!
+
+
+DOCUMENTATION FILES
+================================================================================
+
+  Quick:      JAPANESE_README.md
+  Reference:  JAPANESE_QUICK_START.md
+  Complete:   JAPANESE_SETUP_GUIDE.md
+  Full Docs:  JAPANESE_VOCABULARY_COMPLETE.md
+  Commands:   JAPANESE_COMMANDS.txt (this file)
+
+
+================================================================================
+For detailed help, see JAPANESE_SETUP_GUIDE.md
+For quick start, see JAPANESE_QUICK_START.md
+================================================================================

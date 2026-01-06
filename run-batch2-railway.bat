@@ -1,0 +1,3 @@
+@echo off
+echo Starting Railway shell and executing batch 2 script...
+railway shell --silent -c "node apply-themes-batch2.js"

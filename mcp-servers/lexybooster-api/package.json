@@ -1,0 +1,30 @@
+{
+  "name": "@lexybooster/mcp-api-server",
+  "version": "1.0.0",
+  "description": "MCP Server for LexyBooster API - provides AI agents access to all API endpoints and test accounts",
+  "main": "index.js",
+  "bin": {
+    "lexybooster-api": "./index.js"
+  },
+  "scripts": {
+    "start": "node index.js",
+    "test": "node test.js"
+  },
+  "keywords": [
+    "mcp",
+    "model-context-protocol",
+    "lexybooster",
+    "api",
+    "testing",
+    "ai-agents"
+  ],
+  "author": "LexyBooster Team",
+  "license": "MIT",
+  "engines": {
+    "node": ">=20.0.0"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/yourusername/words-learning-server"
+  }
+}

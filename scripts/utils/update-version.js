@@ -22,9 +22,10 @@ function getCommitHash() {
 // Get version from package.json or generate
 function getVersion() {
     try {
-        const pkg = require('./package.json');
+        const pkg = require(path.join(__dirname, '..', '..', 'package.json'));
         return pkg.version || '5.0';
-    } catch {
+    } catch (error) {
+        console.error('Error reading package.json:', error.message);
         return '5.0';
     }
 }
@@ -62,34 +63,27 @@ function getFeatureName() {
 
 // Update version in index.html
 function updateIndexHtml() {
-    const indexPath = path.join(__dirname, 'public', 'index.html');
+    const indexPath = path.join(__dirname, '..', '..', 'public', 'index.html');
 
     if (!fs.existsSync(indexPath)) {
-        console.error('index.html not found!');
+        console.error('index.html not found at:', indexPath);
         return false;
     }
 
     const commitHash = getCommitHash();
     const version = getVersion();
-    const feature = getFeatureName();
-    const newVersion = `v${version}-${feature}-${commitHash}`;
+    const newVersion = `v${version}`;
 
     let content = fs.readFileSync(indexPath, 'utf8');
 
-    // Update meta comment
+    // Update meta comment (simple version format)
     content = content.replace(
-        /<!-- Version: v[\d.]+-[\w-]+-[a-f0-9]+ -->/,
+        /<!-- Version: v[\d.]+(?:-[\w-]+-[a-f0-9]+)? -->/,
         `<!-- Version: ${newVersion} -->`
     );
 
-    // Update footer version
-    content = content.replace(
-        /(<!-- Version Info -->[\s\S]*?<footer[^>]*>)\s*v[\d.]+-[\w-]+-[a-f0-9]+/,
-        `$1\n            ${newVersion}`
-    );
-
     fs.writeFileSync(indexPath, content, 'utf8');
-    console.log(`✅ Version updated to: ${newVersion}`);
+    console.log(`✅ Version updated to: ${newVersion} (commit: ${commitHash})`);
     return true;
 }
 

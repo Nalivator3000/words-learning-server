@@ -1,0 +1,483 @@
+die Programmiererin
+die Mechanikerin
+die Elektrikerin
+die Friseurin
+der Job
+verdienen
+die Überstunde
+die Mittagspause
+der Feierabend
+das Meeting
+die Sitzung
+die Bewerbung
+sich bewerben
+das Vorstellungsgespräch
+kündigen
+die Kündigung
+die Buchhandlung
+die Drogerie
+der Kiosk
+das Kaufhaus
+das Einkaufszentrum
+die Boutique
+der Bioladen
+die Einkaufsliste
+der Einkaufswagen
+der Einkaufskorb
+die Umkleidekabine
+der Kassenzettel
+das Angebot
+der Rabatt
+reduziert
+im Angebot
+der Sonderpreis
+die Mehrwertsteuer
+bar bezahlen
+mit Karte bezahlen
+die EC-Karte
+das Kleingeld
+der Service
+die Beratung
+die Beschwerde
+die Garantie
+der Kindergarten
+die Grundschule
+das Gymnasium
+die Realschule
+die Hauptschule
+die Gesamtschule
+die Hochschule
+die Fachhochschule
+die Volkshochschule
+der Kurs
+die Vorlesung
+das Seminar
+die Klausur
+der Test
+die Zensur
+durchfallen
+üben
+wiederholen
+vorbereiten
+die Vorbereitung
+pauken
+auswendig lernen
+notieren
+abschreiben
+lösen
+verbessern
+der Fehler
+der Fortschritt
+die Kenntnis
+das Wissen
+die Fähigkeit
+der Abschluss
+abschließen
+das Abitur
+die Galerie
+die Oper
+das Ballet
+die Disco
+der Club
+die Bar
+die Kneipe
+das Fest
+das Festival
+die Veranstaltung
+das Interesse
+sich interessieren für
+die Sammlung
+gärtnern
+der Ausflug
+zelten
+das Schach
+die Dame
+das Kartenspiel
+die Karte
+würfeln
+der Würfel
+der Gewinner
+der Verlierer
+das Turnier
+der Wettkampf
+trainieren
+die Mannschaft
+das Mitglied
+regnen
+schneien
+wolkig
+eisig
+feucht
+die Landschaft
+der Hügel
+das Tal
+Wie fühlen Sie sich?
+die Gesundheit
+Gesundheit!
+das Symptom
+die Bauchschmerzen
+die Halsschmerzen
+die Zahnschmerzen
+die Rückenschmerzen
+der Durchfall
+die Übelkeit
+der Schwindel
+niesen
+husten
+sich übergeben
+die Allergie
+allergisch
+die Infektion
+die Entzündung
+die Verletzung
+sich verletzen
+die Wunde
+bluten
+die Praxis
+der Patient
+die Patientin
+untersuchen
+die Untersuchung
+verschreiben
+die Spritze
+impfen
+die Impfung
+die Behandlung
+heilen
+die Heilung
+sich erholen
+die Genesung
+gesund werden
+die Krankenversicherung
+versichert
+sich bewegen
+die Bewegung
+aktiv
+fit bleiben
+gestresst
+der Anruf
+zurückrufen
+auflegen
+abnehmen
+klingeln
+wählen
+die Verbindung
+die SMS
+simsen
+die Mailbox
+online
+offline
+surfen
+googeln
+die Homepage
+der Link
+klicken
+anklicken
+herunterladen
+hochladen
+der Download
+der Upload
+die Datei
+das Passwort
+einloggen
+ausloggen
+der Benutzer
+das Benutzerkonto
+das soziale Netzwerk
+der Post
+posten
+liken
+der Like
+kommentieren
+der Kommentar
+der Follower
+chatten
+der Chat
+der Reisende
+die Reisende
+der Tourist
+die Touristin
+buchen
+die Buchung
+reservieren
+die Reservierung
+die Bestätigung
+stornieren
+die Stornierung
+das Hotel
+die Pension
+die Jugendherberge
+das Hostel
+die Unterkunft
+übernachten
+die Übernachtung
+einchecken
+auschecken
+das Einzelzimmer
+das Doppelzimmer
+die Rezeption
+der Empfang
+der Abflug
+die Ankunft
+der Flug
+das Gate
+der Passagier
+die Passagierin
+das Gepäck
+der Koffer
+das Handgepäck
+der Reisepass
+der Pass
+das Visum
+die Bordkarte
+der Zoll
+die Durchsage
+das Gleis
+der Bahnsteig
+der Pfeffer
+der Zucker
+das Öl
+der Essig
+die Soße
+die Sahne
+der Joghurt
+der Quark
+das Müsli
+die Marmelade
+der Honig
+die Schokolade
+der Appetit
+Guten Appetit!
+Mahlzeit!
+hungrig
+satt
+roh
+gekocht
+gebraten
+gegrillt
+gebacken
+die Speisekarte
+die Bestellung
+die Vorspeise
+das Hauptgericht
+die Beilage
+der Nachtisch
+das Dessert
+zusammen zahlen
+getrennt zahlen
+das Trinkgeld
+das Gefühl
+froh
+die Aufregung
+entspannt
+ärgerlich
+der Ärger
+die Enttäuschung
+die Überraschung
+Angst haben vor
+mutig
+die Eifersucht
+der Neid
+verliebt
+sich verlieben
+die Einsamkeit
+begeistert
+die Begeisterung
+der Charakter
+die Persönlichkeit
+ehrlich
+die Ehrlichkeit
+zuverlässig
+verantwortlich
+die Verantwortung
+fleißig
+faul
+geduldig
+ungeduldig
+höflich
+unhöflich
+freundlich
+unfreundlich
+selbstbewusst
+schüchtern
+feige
+die Freundschaft
+sich verstehen
+sich streiten
+der Streit
+sich versöhnen
+das Vertrauen
+misstrauen
+das Missvertrauen
+der Partner
+die Partnerin
+der Verlobte
+die Verlobte
+sich verloben
+die Verlobung
+heiraten
+die Hochzeit
+sich scheiden lassen
+die Scheidung
+der Ex
+der Bekannte
+die Bekannte
+sich kennenlernen
+sich verabreden
+die Verabredung
+absagen
+zusagen
+ablehnen
+der Gastgeber
+begrüßen
+die Begrüßung
+verabschieden
+der Abschied
+vermissen
+sich erinnern an
+die Erinnerung
+der Standpunkt
+die Ansicht
+meiner Meinung nach
+aus meiner Sicht
+überzeugt sein
+die Überzeugung
+die Zustimmung
+der Widerspruch
+kritisieren
+die Kritik
+loben
+das Lob
+das Argument
+argumentieren
+begründen
+die Begründung
+der Beweis
+die Behauptung
+die Feststellung
+die Annahme
+die Vermutung
+die Schlussfolgerung
+folgern
+logisch
+unlogisch
+besprechen
+erörtern
+debattieren
+die Debatte
+das Thema
+ansprechen
+der Hinweis
+betonen
+zusammenfassen
+die Zusammenfassung
+die Karriere
+der Lebenslauf
+das Anschreiben
+der Vertrag
+befristet
+unbefristet
+die Probezeit
+die Gehaltserhöhung
+der Mindestlohn
+der Vorgesetzte
+die Zusammenarbeit
+zusammenarbeiten
+die Deadline
+die Aufgabe
+zuständig
+planen
+delegieren
+koordinieren
+präsentieren
+die Qualifikation
+qualifiziert
+die Erfahrung
+die Kompetenz
+kompetent
+fähig
+die Fertigkeit
+geschickt
+die Ausbildung
+sich weiterbilden
+die Weiterbildung
+die Fortbildung
+das Zertifikat
+befördert werden
+der Aufstieg
+die Gesellschaft
+gesellschaftlich
+sozial
+die Politik
+politisch
+der Politiker
+die Regierung
+die Wahl
+abstimmen
+das Gesetz
+die Demokratie
+demokratisch
+die Umwelt
+der Umweltschutz
+umweltfreundlich
+schützen
+verschmutzen
+die Verschmutzung
+recyceln
+das Recycling
+sparen
+verschwenden
+der Klimawandel
+nachhaltig
+die Nachhaltigkeit
+erneuerbar
+die Energie
+international
+weltweit
+die Globalisierung
+die Wirtschaft
+wirtschaftlich
+die Krise
+der Konflikt
+friedlich
+die Armut
+gerecht
+ungerecht
+der Unterschied
+die Vielfalt
+vielfältig
+vergangen
+gegenwärtig
+zukünftig
+sich ändern
+die Änderung
+verändern
+die Veränderung
+sich entwickeln
+die Entwicklung
+sich verbessern
+die Verbesserung
+die Eigenschaft
+die Qualität
+sich unterscheiden
+die Ähnlichkeit
+der Gegensatz
+der Vergleich
+allgemein
+typisch
+normal
+existieren
+die Existenz
+tatsächlich
+wirklich
+die Wirklichkeit
+wahrscheinlich
+die Sicherheit
+der Zweifel
+zweifeln
+garantieren
+das CO2
+die Mise en abyme
+das Man
+die Différance
+der pH-Wert

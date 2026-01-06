@@ -1,0 +1,1602 @@
+[
+  {
+    "translation_id": 41,
+    "source_word_id": 41,
+    "german": "Bis bald",
+    "english": "See you soon",
+    "example_de": "Bis bald!",
+    "russian": ""
+  },
+  {
+    "translation_id": 42,
+    "source_word_id": 42,
+    "german": "ja",
+    "english": "yes",
+    "example_de": "Ja, das stimmt",
+    "russian": ""
+  },
+  {
+    "translation_id": 43,
+    "source_word_id": 43,
+    "german": "nein",
+    "english": "no",
+    "example_de": "Nein, danke",
+    "russian": ""
+  },
+  {
+    "translation_id": 44,
+    "source_word_id": 44,
+    "german": "bitte",
+    "english": "please / you're welcome",
+    "example_de": "Bitte schön!",
+    "russian": ""
+  },
+  {
+    "translation_id": 45,
+    "source_word_id": 45,
+    "german": "danke",
+    "english": "thank you",
+    "example_de": "Danke!",
+    "russian": ""
+  },
+  {
+    "translation_id": 47,
+    "source_word_id": 47,
+    "german": "wie",
+    "english": "how",
+    "example_de": "Wie geht es dir?",
+    "russian": ""
+  },
+  {
+    "translation_id": 48,
+    "source_word_id": 48,
+    "german": "was",
+    "english": "what",
+    "example_de": "Was ist das?",
+    "russian": ""
+  },
+  {
+    "translation_id": 49,
+    "source_word_id": 49,
+    "german": "wo",
+    "english": "where",
+    "example_de": "Wo wohnst du?",
+    "russian": ""
+  },
+  {
+    "translation_id": 50,
+    "source_word_id": 50,
+    "german": "wer",
+    "english": "who",
+    "example_de": "Wer bist du?",
+    "russian": ""
+  },
+  {
+    "translation_id": 51,
+    "source_word_id": 51,
+    "german": "wann",
+    "english": "when",
+    "example_de": "Wann kommst du?",
+    "russian": ""
+  },
+  {
+    "translation_id": 52,
+    "source_word_id": 52,
+    "german": "warum",
+    "english": "why",
+    "example_de": "Warum lernst du Deutsch?",
+    "russian": ""
+  },
+  {
+    "translation_id": 53,
+    "source_word_id": 53,
+    "german": "welche(r/s)",
+    "english": "which",
+    "example_de": "Welches Buch?",
+    "russian": ""
+  },
+  {
+    "translation_id": 154,
+    "source_word_id": 154,
+    "german": "das Fleisch",
+    "english": "meat",
+    "example_de": "Das Fleisch ist zart",
+    "russian": ""
+  },
+  {
+    "translation_id": 155,
+    "source_word_id": 155,
+    "german": "der Fisch",
+    "english": "fish",
+    "example_de": "Der Fisch ist frisch",
+    "russian": ""
+  },
+  {
+    "translation_id": 156,
+    "source_word_id": 156,
+    "german": "die Wurst",
+    "english": "sausage",
+    "example_de": "Die Wurst schmeckt gut",
+    "russian": ""
+  },
+  {
+    "translation_id": 157,
+    "source_word_id": 157,
+    "german": "der Schinken",
+    "english": "ham",
+    "example_de": "Der Schinken ist lecker",
+    "russian": ""
+  },
+  {
+    "translation_id": 158,
+    "source_word_id": 158,
+    "german": "die Suppe",
+    "english": "soup",
+    "example_de": "Die Suppe ist heiß",
+    "russian": ""
+  },
+  {
+    "translation_id": 159,
+    "source_word_id": 159,
+    "german": "der Salat",
+    "english": "salad",
+    "example_de": "Der Salat ist frisch",
+    "russian": ""
+  },
+  {
+    "translation_id": 160,
+    "source_word_id": 160,
+    "german": "das Gemüse",
+    "english": "vegetable(s)",
+    "example_de": "Gemüse ist gesund",
+    "russian": ""
+  },
+  {
+    "translation_id": 161,
+    "source_word_id": 161,
+    "german": "das Obst",
+    "english": "fruit",
+    "example_de": "Obst ist süß",
+    "russian": ""
+  },
+  {
+    "translation_id": 162,
+    "source_word_id": 162,
+    "german": "der Apfel",
+    "english": "apple",
+    "example_de": "Der Apfel ist rot",
+    "russian": ""
+  },
+  {
+    "translation_id": 163,
+    "source_word_id": 163,
+    "german": "die Banane",
+    "english": "banana",
+    "example_de": "Die Banane ist gelb",
+    "russian": ""
+  },
+  {
+    "translation_id": 164,
+    "source_word_id": 164,
+    "german": "die Kartoffel",
+    "english": "potato",
+    "example_de": "Kartoffeln kochen",
+    "russian": ""
+  },
+  {
+    "translation_id": 165,
+    "source_word_id": 165,
+    "german": "der Reis",
+    "english": "rice",
+    "example_de": "Reis mit Gemüse",
+    "russian": ""
+  },
+  {
+    "translation_id": 166,
+    "source_word_id": 166,
+    "german": "die Nudeln",
+    "english": "noodles/pasta",
+    "example_de": "Nudeln mit Soße",
+    "russian": ""
+  },
+  {
+    "translation_id": 167,
+    "source_word_id": 167,
+    "german": "das Wasser",
+    "english": "water",
+    "example_de": "Ein Glas Wasser",
+    "russian": ""
+  },
+  {
+    "translation_id": 168,
+    "source_word_id": 168,
+    "german": "die Milch",
+    "english": "milk",
+    "example_de": "Milch ist weiß",
+    "russian": ""
+  },
+  {
+    "translation_id": 169,
+    "source_word_id": 169,
+    "german": "der Kaffee",
+    "english": "coffee",
+    "example_de": "Der Kaffee ist heiß",
+    "russian": ""
+  },
+  {
+    "translation_id": 170,
+    "source_word_id": 170,
+    "german": "der Tee",
+    "english": "tea",
+    "example_de": "Tee mit Zucker",
+    "russian": ""
+  },
+  {
+    "translation_id": 171,
+    "source_word_id": 171,
+    "german": "der Saft",
+    "english": "juice",
+    "example_de": "Orangensaft, bitte",
+    "russian": ""
+  },
+  {
+    "translation_id": 172,
+    "source_word_id": 172,
+    "german": "das Bier",
+    "english": "beer",
+    "example_de": "Ein Bier, bitte",
+    "russian": ""
+  },
+  {
+    "translation_id": 173,
+    "source_word_id": 173,
+    "german": "der Wein",
+    "english": "wine",
+    "example_de": "Rotwein oder Weißwein?",
+    "russian": ""
+  },
+  {
+    "translation_id": 174,
+    "source_word_id": 174,
+    "german": "die Cola",
+    "english": "cola",
+    "example_de": "Eine Cola, bitte",
+    "russian": ""
+  },
+  {
+    "translation_id": 175,
+    "source_word_id": 175,
+    "german": "der Kakao",
+    "english": "cocoa",
+    "example_de": "Kakao ist süß",
+    "russian": ""
+  },
+  {
+    "translation_id": 176,
+    "source_word_id": 176,
+    "german": "das Frühstück",
+    "english": "breakfast",
+    "example_de": "Frühstück um sieben",
+    "russian": ""
+  },
+  {
+    "translation_id": 177,
+    "source_word_id": 177,
+    "german": "das Mittagessen",
+    "english": "lunch",
+    "example_de": "Mittagessen um zwölf",
+    "russian": ""
+  },
+  {
+    "translation_id": 178,
+    "source_word_id": 178,
+    "german": "das Abendessen",
+    "english": "dinner",
+    "example_de": "Abendessen um sechs",
+    "russian": ""
+  },
+  {
+    "translation_id": 179,
+    "source_word_id": 179,
+    "german": "das Restaurant",
+    "english": "restaurant",
+    "example_de": "Im Restaurant essen",
+    "russian": ""
+  },
+  {
+    "translation_id": 180,
+    "source_word_id": 180,
+    "german": "das Café",
+    "english": "café",
+    "example_de": "Im Café trinken",
+    "russian": ""
+  },
+  {
+    "translation_id": 181,
+    "source_word_id": 181,
+    "german": "die Küche",
+    "english": "kitchen",
+    "example_de": "In der Küche kochen",
+    "russian": ""
+  },
+  {
+    "translation_id": 182,
+    "source_word_id": 182,
+    "german": "der Teller",
+    "english": "plate",
+    "example_de": "Der Teller ist voll",
+    "russian": ""
+  },
+  {
+    "translation_id": 183,
+    "source_word_id": 183,
+    "german": "die Tasse",
+    "english": "cup",
+    "example_de": "Eine Tasse Kaffee",
+    "russian": ""
+  },
+  {
+    "translation_id": 184,
+    "source_word_id": 184,
+    "german": "das Glas",
+    "english": "glass",
+    "example_de": "Ein Glas Wasser",
+    "russian": ""
+  },
+  {
+    "translation_id": 185,
+    "source_word_id": 185,
+    "german": "das Messer",
+    "english": "knife",
+    "example_de": "Das Messer ist scharf",
+    "russian": ""
+  },
+  {
+    "translation_id": 186,
+    "source_word_id": 186,
+    "german": "die Gabel",
+    "english": "fork",
+    "example_de": "Die Gabel liegt links",
+    "russian": ""
+  },
+  {
+    "translation_id": 187,
+    "source_word_id": 187,
+    "german": "der Löffel",
+    "english": "spoon",
+    "example_de": "Ein Löffel Zucker",
+    "russian": ""
+  },
+  {
+    "translation_id": 188,
+    "source_word_id": 188,
+    "german": "der Hunger",
+    "english": "hunger",
+    "example_de": "Ich habe Hunger",
+    "russian": ""
+  },
+  {
+    "translation_id": 189,
+    "source_word_id": 189,
+    "german": "der Durst",
+    "english": "thirst",
+    "example_de": "Ich habe Durst",
+    "russian": ""
+  },
+  {
+    "translation_id": 190,
+    "source_word_id": 190,
+    "german": "der Tag",
+    "english": "day",
+    "example_de": "Ein schöner Tag",
+    "russian": ""
+  },
+  {
+    "translation_id": 191,
+    "source_word_id": 191,
+    "german": "die Woche",
+    "english": "week",
+    "example_de": "Nächste Woche",
+    "russian": ""
+  },
+  {
+    "translation_id": 192,
+    "source_word_id": 192,
+    "german": "der Montag",
+    "english": "Monday",
+    "example_de": "Am Montag arbeite ich",
+    "russian": ""
+  },
+  {
+    "translation_id": 193,
+    "source_word_id": 193,
+    "german": "der Dienstag",
+    "english": "Tuesday",
+    "example_de": "Dienstag ist Training",
+    "russian": ""
+  },
+  {
+    "translation_id": 194,
+    "source_word_id": 194,
+    "german": "der Mittwoch",
+    "english": "Wednesday",
+    "example_de": "Mittwoch habe ich frei",
+    "russian": ""
+  },
+  {
+    "translation_id": 195,
+    "source_word_id": 195,
+    "german": "der Donnerstag",
+    "english": "Thursday",
+    "example_de": "Donnerstag kommt Besuch",
+    "russian": ""
+  },
+  {
+    "translation_id": 196,
+    "source_word_id": 196,
+    "german": "der Freitag",
+    "english": "Friday",
+    "example_de": "Freitag ist Party",
+    "russian": ""
+  },
+  {
+    "translation_id": 197,
+    "source_word_id": 197,
+    "german": "der Samstag",
+    "english": "Saturday",
+    "example_de": "Samstag schlafe ich lang",
+    "russian": ""
+  },
+  {
+    "translation_id": 198,
+    "source_word_id": 198,
+    "german": "der Sonntag",
+    "english": "Sunday",
+    "example_de": "Sonntag besuche ich Oma",
+    "russian": ""
+  },
+  {
+    "translation_id": 199,
+    "source_word_id": 199,
+    "german": "das Wochenende",
+    "english": "weekend",
+    "example_de": "Am Wochenende relaxen",
+    "russian": ""
+  },
+  {
+    "translation_id": 200,
+    "source_word_id": 200,
+    "german": "der Monat",
+    "english": "month",
+    "example_de": "Jeden Monat",
+    "russian": ""
+  },
+  {
+    "translation_id": 201,
+    "source_word_id": 201,
+    "german": "das Jahr",
+    "english": "year",
+    "example_de": "Ein Jahr hat 12 Monate",
+    "russian": ""
+  },
+  {
+    "translation_id": 202,
+    "source_word_id": 202,
+    "german": "der Januar",
+    "english": "January",
+    "example_de": "Im Januar ist kalt",
+    "russian": ""
+  },
+  {
+    "translation_id": 203,
+    "source_word_id": 203,
+    "german": "der Februar",
+    "english": "February",
+    "example_de": "Februar ist kurz",
+    "russian": ""
+  },
+  {
+    "translation_id": 204,
+    "source_word_id": 204,
+    "german": "der März",
+    "english": "March",
+    "example_de": "März - Frühlingsanfang",
+    "russian": ""
+  },
+  {
+    "translation_id": 205,
+    "source_word_id": 205,
+    "german": "der April",
+    "english": "April",
+    "example_de": "April, April",
+    "russian": ""
+  },
+  {
+    "translation_id": 206,
+    "source_word_id": 206,
+    "german": "der Mai",
+    "english": "May",
+    "example_de": "Mai ist warm",
+    "russian": ""
+  },
+  {
+    "translation_id": 207,
+    "source_word_id": 207,
+    "german": "der Juni",
+    "english": "June",
+    "example_de": "Juni - Sommeranfang",
+    "russian": ""
+  },
+  {
+    "translation_id": 208,
+    "source_word_id": 208,
+    "german": "der Juli",
+    "english": "July",
+    "example_de": "Juli ist heiß",
+    "russian": ""
+  },
+  {
+    "translation_id": 209,
+    "source_word_id": 209,
+    "german": "der August",
+    "english": "August",
+    "example_de": "August - Urlaub",
+    "russian": ""
+  },
+  {
+    "translation_id": 210,
+    "source_word_id": 210,
+    "german": "der September",
+    "english": "September",
+    "example_de": "September - Herbst",
+    "russian": ""
+  },
+  {
+    "translation_id": 211,
+    "source_word_id": 211,
+    "german": "der Oktober",
+    "english": "October",
+    "example_de": "Oktober ist bunt",
+    "russian": ""
+  },
+  {
+    "translation_id": 212,
+    "source_word_id": 212,
+    "german": "der November",
+    "english": "November",
+    "example_de": "November ist grau",
+    "russian": ""
+  },
+  {
+    "translation_id": 213,
+    "source_word_id": 213,
+    "german": "der Dezember",
+    "english": "December",
+    "example_de": "Dezember - Weihnachten",
+    "russian": ""
+  },
+  {
+    "translation_id": 214,
+    "source_word_id": 214,
+    "german": "die Jahreszeit",
+    "english": "season",
+    "example_de": "Vier Jahreszeiten",
+    "russian": ""
+  },
+  {
+    "translation_id": 215,
+    "source_word_id": 215,
+    "german": "der Frühling",
+    "english": "spring",
+    "example_de": "Im Frühling blüht alles",
+    "russian": ""
+  },
+  {
+    "translation_id": 216,
+    "source_word_id": 216,
+    "german": "der Sommer",
+    "english": "summer",
+    "example_de": "Sommer ist warm",
+    "russian": ""
+  },
+  {
+    "translation_id": 217,
+    "source_word_id": 217,
+    "german": "der Herbst",
+    "english": "autumn/fall",
+    "example_de": "Herbst - bunte Blätter",
+    "russian": ""
+  },
+  {
+    "translation_id": 218,
+    "source_word_id": 218,
+    "german": "der Winter",
+    "english": "winter",
+    "example_de": "Winter ist kalt",
+    "russian": ""
+  },
+  {
+    "translation_id": 219,
+    "source_word_id": 219,
+    "german": "heute",
+    "english": "today",
+    "example_de": "Heute ist Montag",
+    "russian": ""
+  },
+  {
+    "translation_id": 220,
+    "source_word_id": 220,
+    "german": "morgen",
+    "english": "tomorrow",
+    "example_de": "Morgen komme ich",
+    "russian": ""
+  },
+  {
+    "translation_id": 221,
+    "source_word_id": 221,
+    "german": "gestern",
+    "english": "yesterday",
+    "example_de": "Gestern war schön",
+    "russian": ""
+  },
+  {
+    "translation_id": 222,
+    "source_word_id": 222,
+    "german": "jetzt",
+    "english": "now",
+    "example_de": "Jetzt sofort!",
+    "russian": ""
+  },
+  {
+    "translation_id": 223,
+    "source_word_id": 223,
+    "german": "später",
+    "english": "later",
+    "example_de": "Bis später!",
+    "russian": ""
+  },
+  {
+    "translation_id": 224,
+    "source_word_id": 224,
+    "german": "bald",
+    "english": "soon",
+    "example_de": "Bis bald!",
+    "russian": ""
+  },
+  {
+    "translation_id": 225,
+    "source_word_id": 225,
+    "german": "immer",
+    "english": "always",
+    "example_de": "Immer pünktlich",
+    "russian": ""
+  },
+  {
+    "translation_id": 226,
+    "source_word_id": 226,
+    "german": "nie",
+    "english": "never",
+    "example_de": "Nie zu spät",
+    "russian": ""
+  },
+  {
+    "translation_id": 227,
+    "source_word_id": 227,
+    "german": "manchmal",
+    "english": "sometimes",
+    "example_de": "Manchmal müde",
+    "russian": ""
+  },
+  {
+    "translation_id": 228,
+    "source_word_id": 228,
+    "german": "oft",
+    "english": "often",
+    "example_de": "Oft hier",
+    "russian": ""
+  },
+  {
+    "translation_id": 229,
+    "source_word_id": 229,
+    "german": "die Stunde",
+    "english": "hour",
+    "example_de": "Eine Stunde warten",
+    "russian": ""
+  },
+  {
+    "translation_id": 230,
+    "source_word_id": 230,
+    "german": "die Minute",
+    "english": "minute",
+    "example_de": "Zehn Minuten",
+    "russian": ""
+  },
+  {
+    "translation_id": 231,
+    "source_word_id": 231,
+    "german": "die Stadt",
+    "english": "city",
+    "example_de": "Die Stadt ist groß",
+    "russian": ""
+  },
+  {
+    "translation_id": 232,
+    "source_word_id": 232,
+    "german": "das Dorf",
+    "english": "village",
+    "example_de": "Ein kleines Dorf",
+    "russian": ""
+  },
+  {
+    "translation_id": 233,
+    "source_word_id": 233,
+    "german": "die Straße",
+    "english": "street",
+    "example_de": "Eine lange Straße",
+    "russian": ""
+  },
+  {
+    "translation_id": 234,
+    "source_word_id": 234,
+    "german": "der Platz",
+    "english": "square / place",
+    "example_de": "Der Marktplatz",
+    "russian": ""
+  },
+  {
+    "translation_id": 235,
+    "source_word_id": 235,
+    "german": "der Park",
+    "english": "park",
+    "example_de": "Im Park spazieren",
+    "russian": ""
+  },
+  {
+    "translation_id": 236,
+    "source_word_id": 236,
+    "german": "das Geschäft",
+    "english": "shop",
+    "example_de": "Im Geschäft kaufen",
+    "russian": ""
+  },
+  {
+    "translation_id": 237,
+    "source_word_id": 237,
+    "german": "der Laden",
+    "english": "store",
+    "example_de": "Ein kleiner Laden",
+    "russian": ""
+  },
+  {
+    "translation_id": 238,
+    "source_word_id": 238,
+    "german": "der Supermarkt",
+    "english": "supermarket",
+    "example_de": "Im Supermarkt einkaufen",
+    "russian": ""
+  },
+  {
+    "translation_id": 239,
+    "source_word_id": 239,
+    "german": "die Bank",
+    "english": "bank",
+    "example_de": "Zur Bank gehen",
+    "russian": ""
+  },
+  {
+    "translation_id": 240,
+    "source_word_id": 240,
+    "german": "die Post",
+    "english": "post office",
+    "example_de": "Brief zur Post",
+    "russian": ""
+  },
+  {
+    "translation_id": 241,
+    "source_word_id": 241,
+    "german": "das Krankenhaus",
+    "english": "hospital",
+    "example_de": "Im Krankenhaus",
+    "russian": ""
+  },
+  {
+    "translation_id": 242,
+    "source_word_id": 242,
+    "german": "die Apotheke",
+    "english": "pharmacy",
+    "example_de": "Apotheke suchen",
+    "russian": ""
+  },
+  {
+    "translation_id": 243,
+    "source_word_id": 243,
+    "german": "die Kirche",
+    "english": "church",
+    "example_de": "Die Kirche ist alt",
+    "russian": ""
+  },
+  {
+    "translation_id": 244,
+    "source_word_id": 244,
+    "german": "der Bahnhof",
+    "english": "train station",
+    "example_de": "Am Bahnhof",
+    "russian": ""
+  },
+  {
+    "translation_id": 245,
+    "source_word_id": 245,
+    "german": "der Flughafen",
+    "english": "airport",
+    "example_de": "Zum Flughafen",
+    "russian": ""
+  },
+  {
+    "translation_id": 246,
+    "source_word_id": 246,
+    "german": "das Bad",
+    "english": "bathroom",
+    "example_de": "Im Bad duschen",
+    "russian": ""
+  },
+  {
+    "translation_id": 247,
+    "source_word_id": 247,
+    "german": "das Badezimmer",
+    "english": "bathroom",
+    "example_de": "Das Badezimmer putzen",
+    "russian": ""
+  },
+  {
+    "translation_id": 248,
+    "source_word_id": 248,
+    "german": "die Toilette",
+    "english": "toilet",
+    "example_de": "Wo ist die Toilette?",
+    "russian": ""
+  },
+  {
+    "translation_id": 249,
+    "source_word_id": 249,
+    "german": "das Wohnzimmer",
+    "english": "living room",
+    "example_de": "Im Wohnzimmer sitzen",
+    "russian": ""
+  },
+  {
+    "translation_id": 250,
+    "source_word_id": 250,
+    "german": "das Schlafzimmer",
+    "english": "bedroom",
+    "example_de": "Im Schlafzimmer schlafen",
+    "russian": ""
+  },
+  {
+    "translation_id": 251,
+    "source_word_id": 251,
+    "german": "das Esszimmer",
+    "english": "dining room",
+    "example_de": "Im Esszimmer essen",
+    "russian": ""
+  },
+  {
+    "translation_id": 252,
+    "source_word_id": 252,
+    "german": "der Balkon",
+    "english": "balcony",
+    "example_de": "Auf dem Balkon sitzen",
+    "russian": ""
+  },
+  {
+    "translation_id": 253,
+    "source_word_id": 253,
+    "german": "der Garten",
+    "english": "garden",
+    "example_de": "Im Garten arbeiten",
+    "russian": ""
+  },
+  {
+    "translation_id": 254,
+    "source_word_id": 254,
+    "german": "links",
+    "english": "left",
+    "example_de": "Nach links gehen",
+    "russian": ""
+  },
+  {
+    "translation_id": 255,
+    "source_word_id": 255,
+    "german": "rechts",
+    "english": "right",
+    "example_de": "Nach rechts abbiegen",
+    "russian": ""
+  },
+  {
+    "translation_id": 256,
+    "source_word_id": 256,
+    "german": "geradeaus",
+    "english": "straight ahead",
+    "example_de": "Immer geradeaus",
+    "russian": ""
+  },
+  {
+    "translation_id": 257,
+    "source_word_id": 257,
+    "german": "hier",
+    "english": "here",
+    "example_de": "Hier wohne ich",
+    "russian": ""
+  },
+  {
+    "translation_id": 258,
+    "source_word_id": 258,
+    "german": "dort",
+    "english": "there",
+    "example_de": "Dort ist der Bahnhof",
+    "russian": ""
+  },
+  {
+    "translation_id": 259,
+    "source_word_id": 259,
+    "german": "da",
+    "english": "there",
+    "example_de": "Da drüben",
+    "russian": ""
+  },
+  {
+    "translation_id": 260,
+    "source_word_id": 260,
+    "german": "oben",
+    "english": "up / upstairs",
+    "example_de": "Oben im Haus",
+    "russian": ""
+  },
+  {
+    "translation_id": 261,
+    "source_word_id": 261,
+    "german": "unten",
+    "english": "down / downstairs",
+    "example_de": "Unten warten",
+    "russian": ""
+  },
+  {
+    "translation_id": 262,
+    "source_word_id": 262,
+    "german": "vorne",
+    "english": "in front",
+    "example_de": "Vorne sitzen",
+    "russian": ""
+  },
+  {
+    "translation_id": 263,
+    "source_word_id": 263,
+    "german": "hinten",
+    "english": "in back",
+    "example_de": "Hinten stehen",
+    "russian": ""
+  },
+  {
+    "translation_id": 264,
+    "source_word_id": 264,
+    "german": "neben",
+    "english": "next to",
+    "example_de": "Neben der Tür",
+    "russian": ""
+  },
+  {
+    "translation_id": 265,
+    "source_word_id": 265,
+    "german": "in",
+    "english": "in",
+    "example_de": "Im Haus",
+    "russian": ""
+  },
+  {
+    "translation_id": 266,
+    "source_word_id": 266,
+    "german": "auf",
+    "english": "on",
+    "example_de": "Auf dem Tisch",
+    "russian": ""
+  },
+  {
+    "translation_id": 267,
+    "source_word_id": 267,
+    "german": "bei",
+    "english": "at / near",
+    "example_de": "Bei mir",
+    "russian": ""
+  },
+  {
+    "translation_id": 268,
+    "source_word_id": 268,
+    "german": "gehen",
+    "english": "to walk / go",
+    "example_de": "Zu Fuß gehen",
+    "russian": ""
+  },
+  {
+    "translation_id": 269,
+    "source_word_id": 269,
+    "german": "kommen",
+    "english": "to come",
+    "example_de": "Kommst du mit?",
+    "russian": ""
+  },
+  {
+    "translation_id": 270,
+    "source_word_id": 270,
+    "german": "fahren",
+    "english": "to drive / go",
+    "example_de": "Auto fahren",
+    "russian": ""
+  },
+  {
+    "translation_id": 271,
+    "source_word_id": 271,
+    "german": "laufen",
+    "english": "to run",
+    "example_de": "Jeden Tag laufen",
+    "russian": ""
+  },
+  {
+    "translation_id": 272,
+    "source_word_id": 272,
+    "german": "fliegen",
+    "english": "to fly",
+    "example_de": "Nach Paris fliegen",
+    "russian": ""
+  },
+  {
+    "translation_id": 273,
+    "source_word_id": 273,
+    "german": "rennen",
+    "english": "to run",
+    "example_de": "Kinder rennen",
+    "russian": ""
+  },
+  {
+    "translation_id": 274,
+    "source_word_id": 274,
+    "german": "stehen",
+    "english": "to stand",
+    "example_de": "Ich stehe hier",
+    "russian": ""
+  },
+  {
+    "translation_id": 275,
+    "source_word_id": 275,
+    "german": "sitzen",
+    "english": "to sit",
+    "example_de": "Wir sitzen im Café",
+    "russian": ""
+  },
+  {
+    "translation_id": 276,
+    "source_word_id": 276,
+    "german": "liegen",
+    "english": "to lie",
+    "example_de": "Das Buch liegt dort",
+    "russian": ""
+  },
+  {
+    "translation_id": 277,
+    "source_word_id": 277,
+    "german": "machen",
+    "english": "to do / make",
+    "example_de": "Was machst du?",
+    "russian": ""
+  },
+  {
+    "translation_id": 278,
+    "source_word_id": 278,
+    "german": "arbeiten",
+    "english": "to work",
+    "example_de": "Ich arbeite hier",
+    "russian": ""
+  },
+  {
+    "translation_id": 279,
+    "source_word_id": 279,
+    "german": "lernen",
+    "english": "to learn / study",
+    "example_de": "Deutsch lernen",
+    "russian": ""
+  },
+  {
+    "translation_id": 280,
+    "source_word_id": 280,
+    "german": "studieren",
+    "english": "to study (university)",
+    "example_de": "Ich studiere Medizin",
+    "russian": ""
+  },
+  {
+    "translation_id": 281,
+    "source_word_id": 281,
+    "german": "spielen",
+    "english": "to play",
+    "example_de": "Draußen spielen",
+    "russian": ""
+  },
+  {
+    "translation_id": 282,
+    "source_word_id": 282,
+    "german": "essen",
+    "english": "to eat",
+    "example_de": "Ich esse Brot",
+    "russian": ""
+  },
+  {
+    "translation_id": 283,
+    "source_word_id": 283,
+    "german": "trinken",
+    "english": "to drink",
+    "example_de": "Wasser trinken",
+    "russian": ""
+  },
+  {
+    "translation_id": 284,
+    "source_word_id": 284,
+    "german": "kochen",
+    "english": "to cook",
+    "example_de": "Mama kocht Suppe",
+    "russian": ""
+  },
+  {
+    "translation_id": 285,
+    "source_word_id": 285,
+    "german": "schlafen",
+    "english": "to sleep",
+    "example_de": "Ich schlafe gut",
+    "russian": ""
+  },
+  {
+    "translation_id": 286,
+    "source_word_id": 286,
+    "german": "aufstehen",
+    "english": "to get up",
+    "example_de": "Früh aufstehen",
+    "russian": ""
+  },
+  {
+    "translation_id": 287,
+    "source_word_id": 287,
+    "german": "aufwachen",
+    "english": "to wake up",
+    "example_de": "Um 7 Uhr aufwachen",
+    "russian": ""
+  },
+  {
+    "translation_id": 288,
+    "source_word_id": 288,
+    "german": "sprechen",
+    "english": "to speak",
+    "example_de": "Deutsch sprechen",
+    "russian": ""
+  },
+  {
+    "translation_id": 289,
+    "source_word_id": 289,
+    "german": "sagen",
+    "english": "to say",
+    "example_de": "Was sagst du?",
+    "russian": ""
+  },
+  {
+    "translation_id": 290,
+    "source_word_id": 290,
+    "german": "fragen",
+    "english": "to ask",
+    "example_de": "Ich frage dich",
+    "russian": ""
+  },
+  {
+    "translation_id": 291,
+    "source_word_id": 291,
+    "german": "antworten",
+    "english": "to answer",
+    "example_de": "Bitte antworten!",
+    "russian": ""
+  },
+  {
+    "translation_id": 292,
+    "source_word_id": 292,
+    "german": "hören",
+    "english": "to hear / listen",
+    "example_de": "Musik hören",
+    "russian": ""
+  },
+  {
+    "translation_id": 293,
+    "source_word_id": 293,
+    "german": "sehen",
+    "english": "to see",
+    "example_de": "Ich sehe dich",
+    "russian": ""
+  },
+  {
+    "translation_id": 294,
+    "source_word_id": 294,
+    "german": "lesen",
+    "english": "to read",
+    "example_de": "Ich lese gern",
+    "russian": ""
+  },
+  {
+    "translation_id": 295,
+    "source_word_id": 295,
+    "german": "schreiben",
+    "english": "to write",
+    "example_de": "Einen Brief schreiben",
+    "russian": ""
+  },
+  {
+    "translation_id": 296,
+    "source_word_id": 296,
+    "german": "verstehen",
+    "english": "to understand",
+    "example_de": "Ich verstehe nicht",
+    "russian": ""
+  },
+  {
+    "translation_id": 297,
+    "source_word_id": 297,
+    "german": "wohnen",
+    "english": "to live",
+    "example_de": "Ich wohne in Berlin",
+    "russian": ""
+  },
+  {
+    "translation_id": 298,
+    "source_word_id": 298,
+    "german": "bleiben",
+    "english": "to stay",
+    "example_de": "Hier bleiben",
+    "russian": ""
+  },
+  {
+    "translation_id": 299,
+    "source_word_id": 299,
+    "german": "geben",
+    "english": "to give",
+    "example_de": "Gib mir das Buch",
+    "russian": ""
+  },
+  {
+    "translation_id": 300,
+    "source_word_id": 300,
+    "german": "nehmen",
+    "english": "to take",
+    "example_de": "Ich nehme das",
+    "russian": ""
+  },
+  {
+    "translation_id": 301,
+    "source_word_id": 301,
+    "german": "kaufen",
+    "english": "to buy",
+    "example_de": "Ich kaufe Brot",
+    "russian": ""
+  },
+  {
+    "translation_id": 302,
+    "source_word_id": 302,
+    "german": "verkaufen",
+    "english": "to sell",
+    "example_de": "Er verkauft Autos",
+    "russian": ""
+  },
+  {
+    "translation_id": 303,
+    "source_word_id": 303,
+    "german": "bezahlen",
+    "english": "to pay",
+    "example_de": "An der Kasse bezahlen",
+    "russian": ""
+  },
+  {
+    "translation_id": 304,
+    "source_word_id": 304,
+    "german": "öffnen",
+    "english": "to open",
+    "example_de": "Die Tür öffnen",
+    "russian": ""
+  },
+  {
+    "translation_id": 305,
+    "source_word_id": 305,
+    "german": "schließen",
+    "english": "to close",
+    "example_de": "Das Fenster schließen",
+    "russian": ""
+  },
+  {
+    "translation_id": 306,
+    "source_word_id": 306,
+    "german": "helfen",
+    "english": "to help",
+    "example_de": "Kannst du helfen?",
+    "russian": ""
+  },
+  {
+    "translation_id": 307,
+    "source_word_id": 307,
+    "german": "suchen",
+    "english": "to search",
+    "example_de": "Ich suche meinen Schlüssel",
+    "russian": ""
+  },
+  {
+    "translation_id": 308,
+    "source_word_id": 308,
+    "german": "finden",
+    "english": "to find",
+    "example_de": "Ich finde es nicht",
+    "russian": ""
+  },
+  {
+    "translation_id": 309,
+    "source_word_id": 309,
+    "german": "wissen",
+    "english": "to know (facts)",
+    "example_de": "Ich weiß es nicht",
+    "russian": ""
+  },
+  {
+    "translation_id": 310,
+    "source_word_id": 310,
+    "german": "kennen",
+    "english": "to know (be acquainted)",
+    "example_de": "Ich kenne ihn",
+    "russian": ""
+  },
+  {
+    "translation_id": 311,
+    "source_word_id": 311,
+    "german": "mögen",
+    "english": "to like",
+    "example_de": "Ich mag Schokolade",
+    "russian": ""
+  },
+  {
+    "translation_id": 312,
+    "source_word_id": 312,
+    "german": "lieben",
+    "english": "to love",
+    "example_de": "Ich liebe dich",
+    "russian": ""
+  },
+  {
+    "translation_id": 313,
+    "source_word_id": 313,
+    "german": "wollen",
+    "english": "to want",
+    "example_de": "Ich will schlafen",
+    "russian": ""
+  },
+  {
+    "translation_id": 314,
+    "source_word_id": 314,
+    "german": "müssen",
+    "english": "must / have to",
+    "example_de": "Ich muss gehen",
+    "russian": ""
+  },
+  {
+    "translation_id": 315,
+    "source_word_id": 315,
+    "german": "können",
+    "english": "can / to be able",
+    "example_de": "Ich kann schwimmen",
+    "russian": ""
+  },
+  {
+    "translation_id": 316,
+    "source_word_id": 316,
+    "german": "dürfen",
+    "english": "may / to be allowed",
+    "example_de": "Darf ich?",
+    "russian": ""
+  },
+  {
+    "translation_id": 317,
+    "source_word_id": 317,
+    "german": "die Farbe",
+    "english": "color",
+    "example_de": "Welche Farbe?",
+    "russian": ""
+  },
+  {
+    "translation_id": 318,
+    "source_word_id": 318,
+    "german": "rot",
+    "english": "red",
+    "example_de": "Ein roter Apfel",
+    "russian": ""
+  },
+  {
+    "translation_id": 319,
+    "source_word_id": 319,
+    "german": "blau",
+    "english": "blue",
+    "example_de": "Der blaue Himmel",
+    "russian": ""
+  },
+  {
+    "translation_id": 320,
+    "source_word_id": 320,
+    "german": "grün",
+    "english": "green",
+    "example_de": "Grünes Gras",
+    "russian": ""
+  },
+  {
+    "translation_id": 321,
+    "source_word_id": 321,
+    "german": "gelb",
+    "english": "yellow",
+    "example_de": "Eine gelbe Banane",
+    "russian": ""
+  },
+  {
+    "translation_id": 322,
+    "source_word_id": 322,
+    "german": "schwarz",
+    "english": "black",
+    "example_de": "Schwarze Schuhe",
+    "russian": ""
+  },
+  {
+    "translation_id": 323,
+    "source_word_id": 323,
+    "german": "weiß",
+    "english": "white",
+    "example_de": "Weißes Papier",
+    "russian": ""
+  },
+  {
+    "translation_id": 324,
+    "source_word_id": 324,
+    "german": "grau",
+    "english": "gray",
+    "example_de": "Graue Wolken",
+    "russian": ""
+  },
+  {
+    "translation_id": 325,
+    "source_word_id": 325,
+    "german": "braun",
+    "english": "brown",
+    "example_de": "Braune Haare",
+    "russian": ""
+  },
+  {
+    "translation_id": 326,
+    "source_word_id": 326,
+    "german": "orange",
+    "english": "orange",
+    "example_de": "Eine Orange",
+    "russian": ""
+  },
+  {
+    "translation_id": 327,
+    "source_word_id": 327,
+    "german": "rosa",
+    "english": "pink",
+    "example_de": "Rosa Blumen",
+    "russian": ""
+  },
+  {
+    "translation_id": 328,
+    "source_word_id": 328,
+    "german": "lila",
+    "english": "purple",
+    "example_de": "Lila Kleid",
+    "russian": ""
+  },
+  {
+    "translation_id": 329,
+    "source_word_id": 329,
+    "german": "groß",
+    "english": "big / tall",
+    "example_de": "Ein großes Haus",
+    "russian": ""
+  },
+  {
+    "translation_id": 330,
+    "source_word_id": 330,
+    "german": "klein",
+    "english": "small",
+    "example_de": "Ein kleines Kind",
+    "russian": ""
+  },
+  {
+    "translation_id": 331,
+    "source_word_id": 331,
+    "german": "lang",
+    "english": "long",
+    "example_de": "Lange Haare",
+    "russian": ""
+  },
+  {
+    "translation_id": 332,
+    "source_word_id": 332,
+    "german": "kurz",
+    "english": "short",
+    "example_de": "Kurze Hose",
+    "russian": ""
+  },
+  {
+    "translation_id": 333,
+    "source_word_id": 333,
+    "german": "dick",
+    "english": "thick / fat",
+    "example_de": "Ein dickes Buch",
+    "russian": ""
+  },
+  {
+    "translation_id": 334,
+    "source_word_id": 334,
+    "german": "dünn",
+    "english": "thin",
+    "example_de": "Dünnes Papier",
+    "russian": ""
+  },
+  {
+    "translation_id": 335,
+    "source_word_id": 335,
+    "german": "hoch",
+    "english": "high",
+    "example_de": "Ein hoher Berg",
+    "russian": ""
+  },
+  {
+    "translation_id": 336,
+    "source_word_id": 336,
+    "german": "niedrig",
+    "english": "low",
+    "example_de": "Niedriger Preis",
+    "russian": ""
+  },
+  {
+    "translation_id": 337,
+    "source_word_id": 337,
+    "german": "breit",
+    "english": "wide",
+    "example_de": "Breite Straße",
+    "russian": ""
+  },
+  {
+    "translation_id": 338,
+    "source_word_id": 338,
+    "german": "schmal",
+    "english": "narrow",
+    "example_de": "Schmaler Weg",
+    "russian": ""
+  },
+  {
+    "translation_id": 339,
+    "source_word_id": 339,
+    "german": "gut",
+    "english": "good",
+    "example_de": "Gutes Essen",
+    "russian": ""
+  },
+  {
+    "translation_id": 340,
+    "source_word_id": 340,
+    "german": "schlecht",
+    "english": "bad",
+    "example_de": "Schlechtes Wetter",
+    "russian": ""
+  },
+  {
+    "translation_id": 341,
+    "source_word_id": 341,
+    "german": "schön",
+    "english": "beautiful / nice",
+    "example_de": "Schöner Tag",
+    "russian": ""
+  }
+]

@@ -1,0 +1,329 @@
+1. die Krankenversicherung | health insurance
+2. versichert | insured
+3. sich bewegen | to exercise
+4. die Bewegung | movement/exercise
+5. aktiv | active
+6. fit bleiben | to stay fit
+7. gestresst | stressed
+8. der Anruf | call
+9. zurückrufen | to call back
+10. auflegen | to hang up
+11. abnehmen | to pick up
+12. klingeln | to ring
+13. wählen | to dial
+14. die Verbindung | connection
+15. die SMS | text message
+16. simsen | to text
+17. die Mailbox | voicemail
+18. online | online
+19. offline | offline
+20. surfen | to surf
+21. googeln | to google
+22. die Homepage | homepage
+23. der Link | link
+24. klicken | to click
+25. anklicken | to click on
+26. herunterladen | to download
+27. hochladen | to upload
+28. der Download | download
+29. der Upload | upload
+30. die Datei | file
+31. das Passwort | password
+32. einloggen | to log in
+33. ausloggen | to log out
+34. der Benutzer | user
+35. das Benutzerkonto | user account
+36. das soziale Netzwerk | social network
+37. der Post | post
+38. posten | to post
+39. liken | to like
+40. der Like | like
+41. kommentieren | to comment
+42. der Kommentar | comment
+43. der Follower | follower
+44. chatten | to chat
+45. der Chat | chat
+46. der Reisende | traveler (m)
+47. die Reisende | traveler (f)
+48. der Tourist | tourist (m)
+49. die Touristin | tourist (f)
+50. buchen | to book
+51. die Buchung | booking
+52. reservieren | to reserve
+53. die Reservierung | reservation
+54. die Bestätigung | confirmation
+55. stornieren | to cancel
+56. die Stornierung | cancellation
+57. das Hotel | hotel
+58. die Pension | guesthouse
+59. die Jugendherberge | youth hostel
+60. das Hostel | hostel
+61. die Unterkunft | accommodation
+62. die Übernachtung | overnight stay
+63. einchecken | to check in
+64. auschecken | to check out
+65. das Einzelzimmer | single room
+66. das Doppelzimmer | double room
+67. die Rezeption | reception
+68. der Empfang | reception
+69. der Abflug | departure (flight)
+70. die Ankunft | arrival
+71. der Flug | flight
+72. das Gate | gate
+73. der Passagier | passenger
+74. die Passagierin | passenger (f)
+75. das Gepäck | luggage
+76. der Koffer | suitcase
+77. das Handgepäck | carry-on luggage
+78. der Reisepass | passport
+79. der Pass | passport
+80. das Visum | visa
+81. die Bordkarte | boarding pass
+82. der Zoll | customs
+83. die Durchsage | announcement
+84. das Gleis | platform/track
+85. der Bahnsteig | platform
+86. der Pfeffer | pepper
+87. der Zucker | sugar
+88. das Öl | oil
+89. der Essig | vinegar
+90. die Soße | sauce
+91. die Sahne | cream
+92. der Joghurt | yogurt
+93. der Quark | quark
+94. das Müsli | muesli/granola
+95. die Marmelade | jam
+96. der Honig | honey
+97. die Schokolade | chocolate
+98. der Appetit | appetite
+99. Guten Appetit! | Enjoy your meal!
+100. Mahlzeit! | Enjoy your meal!
+101. hungrig | hungry
+102. satt | full/satisfied
+103. roh | raw
+104. gekocht | cooked
+105. gebraten | fried
+106. gegrillt | grilled
+107. gebacken | baked
+108. die Speisekarte | menu
+109. die Bestellung | order
+110. die Vorspeise | appetizer
+111. das Hauptgericht | main course
+112. die Beilage | side dish
+113. der Nachtisch | dessert
+114. das Dessert | dessert
+115. zusammen zahlen | to pay together
+116. getrennt zahlen | to pay separately
+117. das Trinkgeld | tip
+118. das Gefühl | feeling
+119. froh | glad
+120. die Aufregung | excitement
+121. entspannt | relaxed
+122. ärgerlich | annoying/annoyed
+123. der Ärger | trouble/annoyance
+124. die Enttäuschung | disappointment
+125. die Überraschung | surprise
+126. Angst haben vor | to be afraid of
+127. mutig | brave
+128. die Eifersucht | jealousy
+129. der Neid | envy
+130. verliebt | in love
+131. sich verlieben | to fall in love
+132. die Einsamkeit | loneliness
+133. begeistert | enthusiastic
+134. die Begeisterung | enthusiasm
+135. der Charakter | character
+136. die Persönlichkeit | personality
+137. ehrlich | honest
+138. die Ehrlichkeit | honesty
+139. zuverlässig | reliable
+140. verantwortlich | responsible
+141. die Verantwortung | responsibility
+142. fleißig | diligent
+143. faul | lazy
+144. geduldig | patient
+145. ungeduldig | impatient
+146. höflich | polite
+147. unhöflich | impolite
+148. freundlich | friendly
+149. unfreundlich | unfriendly
+150. selbstbewusst | self-confident
+151. schüchtern | shy
+152. feige | cowardly
+153. die Freundschaft | friendship
+154. sich verstehen | to get along
+155. sich streiten | to argue
+156. der Streit | argument
+157. sich versöhnen | to reconcile
+158. das Vertrauen | trust
+159. misstrauen | to distrust
+160. das Missvertrauen | distrust
+161. der Partner | partner (m)
+162. die Partnerin | partner (f)
+163. der Verlobte | fiancé
+164. die Verlobte | fiancée
+165. sich verloben | to get engaged
+166. die Verlobung | engagement
+167. heiraten | to marry
+168. die Hochzeit | wedding
+169. sich scheiden lassen | to get divorced
+170. die Scheidung | divorce
+171. der Ex | ex
+172. der Bekannte | acquaintance (m)
+173. die Bekannte | acquaintance (f)
+174. sich kennenlernen | to get to know
+175. sich verabreden | to make plans
+176. die Verabredung | date
+177. absagen | to cancel
+178. zusagen | to accept
+179. ablehnen | to decline
+180. der Gastgeber | host
+181. begrüßen | to greet
+182. die Begrüßung | greeting
+183. der Abschied | farewell
+184. vermissen | to miss
+185. sich erinnern an | to remember
+186. die Erinnerung | memory
+187. der Standpunkt | point of view
+188. die Ansicht | view
+189. meiner Meinung nach | in my opinion
+190. aus meiner Sicht | from my view
+191. überzeugt sein | to be convinced
+192. die Überzeugung | conviction
+193. die Zustimmung | agreement
+194. der Widerspruch | contradiction
+195. kritisieren | to criticize
+196. die Kritik | criticism
+197. loben | to praise
+198. das Lob | praise
+199. das Argument | argument
+200. argumentieren | to argue
+201. begründen | to justify
+202. die Begründung | justification
+203. der Beweis | proof
+204. die Behauptung | claim
+205. die Feststellung | statement
+206. die Annahme | assumption
+207. die Vermutung | assumption
+208. die Schlussfolgerung | conclusion
+209. folgern | to conclude
+210. logisch | logical
+211. unlogisch | illogical
+212. besprechen | to discuss
+213. erörtern | to discuss
+214. debattieren | to debate
+215. die Debatte | debate
+216. das Thema | topic
+217. ansprechen | to address
+218. der Hinweis | hint
+219. betonen | to emphasize
+220. zusammenfassen | to summarize
+221. die Zusammenfassung | summary
+222. die Karriere | career
+223. der Lebenslauf | CV/resume
+224. das Anschreiben | cover letter
+225. der Vertrag | contract
+226. befristet | temporary
+227. unbefristet | permanent
+228. die Probezeit | probation period
+229. die Gehaltserhöhung | raise
+230. der Mindestlohn | minimum wage
+231. der Vorgesetzte | superior
+232. die Zusammenarbeit | collaboration
+233. zusammenarbeiten | to collaborate
+234. die Deadline | deadline
+235. die Aufgabe | task
+236. zuständig | responsible for
+237. planen | to plan
+238. delegieren | to delegate
+239. koordinieren | to coordinate
+240. präsentieren | to present
+241. die Qualifikation | qualification
+242. qualifiziert | qualified
+243. die Erfahrung | experience
+244. die Kompetenz | competence
+245. kompetent | competent
+246. fähig | capable
+247. die Fertigkeit | skill
+248. geschickt | skilled
+249. die Ausbildung | training
+250. sich weiterbilden | to further educate
+251. die Weiterbildung | further education
+252. die Fortbildung | advanced training
+253. das Zertifikat | certificate
+254. befördert werden | to be promoted
+255. der Aufstieg | advancement
+256. die Gesellschaft | society
+257. gesellschaftlich | social
+258. sozial | social
+259. die Politik | politics
+260. politisch | political
+261. der Politiker | politician
+262. die Regierung | government
+263. die Wahl | election
+264. abstimmen | to vote
+265. das Gesetz | law
+266. die Demokratie | democracy
+267. demokratisch | democratic
+268. die Umwelt | environment
+269. der Umweltschutz | environmental protection
+270. umweltfreundlich | eco-friendly
+271. schützen | to protect
+272. verschmutzen | to pollute
+273. die Verschmutzung | pollution
+274. recyceln | to recycle
+275. das Recycling | recycling
+276. verschwenden | to waste
+277. der Klimawandel | climate change
+278. nachhaltig | sustainable
+279. die Nachhaltigkeit | sustainability
+280. erneuerbar | renewable
+281. die Energie | energy
+282. international | international
+283. weltweit | worldwide
+284. die Globalisierung | globalization
+285. die Wirtschaft | economy
+286. wirtschaftlich | economic
+287. die Krise | crisis
+288. der Konflikt | conflict
+289. friedlich | peaceful
+290. die Armut | poverty
+291. gerecht | just
+292. ungerecht | unjust
+293. der Unterschied | difference
+294. die Vielfalt | diversity
+295. vielfältig | diverse
+296. vergangen | past
+297. gegenwärtig | current
+298. zukünftig | future
+299. sich ändern | to change
+300. die Änderung | change
+301. die Veränderung | change
+302. sich entwickeln | to develop
+303. die Entwicklung | development
+304. sich verbessern | to improve
+305. die Verbesserung | improvement
+306. die Eigenschaft | characteristic
+307. die Qualität | quality
+308. sich unterscheiden | to differ
+309. die Ähnlichkeit | similarity
+310. der Gegensatz | opposite
+311. der Vergleich | comparison
+312. allgemein | general
+313. typisch | typical
+314. normal | normal
+315. existieren | to exist
+316. die Existenz | existence
+317. tatsächlich | actually
+318. wirklich | really
+319. die Wirklichkeit | reality
+320. wahrscheinlich | probable
+321. die Sicherheit | certainty
+322. der Zweifel | doubt
+323. zweifeln | to doubt
+324. garantieren | to guarantee
+325. das CO2 | CO2
+326. die Mise en abyme | mise en abyme
+327. das Man | das Man
+328. die Différance | différance
+329. der pH-Wert | pH

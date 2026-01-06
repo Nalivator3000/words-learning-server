@@ -1,0 +1,121 @@
+const fs = require('fs');
+const readline = require('readline');
+const path = require('path');
+
+// Ключевые слова для определения тем
+const themeKeywords = {
+  family: ['पिता', 'माता', 'भाई', 'बहन', 'पुत्र', 'पुत्री', 'दादा', 'दादी', 'नाना', 'नानी', 'चाचा', 'चाची', 'बुआ', 'मौसी', 'पति', 'पत्नी', 'शादी', 'विवाह', 'माँ', 'पापा'],
+  food: ['खाना', 'भोजन', 'रोटी', 'चावल', 'दाल', 'सब्जी', 'फल', 'मीठा', 'लस्सी', 'चाय', 'पानी', 'दूध', 'शरबत', 'थाली', 'व्यंजन', 'नाश्ता', 'खीर', 'हलवा', 'मिठाई'],
+  travel: ['यात्रा', 'सफर', 'मंदिर', 'बाजार', 'सड़क', 'रेल', 'गाड़ी', 'समुद्र', 'पहाड़', 'गाँव', 'शहर', 'देश', 'आसमान', 'जमीन', 'रास्ता', 'पुल', 'महल', 'दूरी'],
+  home: ['घर', 'मकान', 'कमरा', 'दरवाज़ा', 'खिड़की', 'छत', 'घंटी', 'बैठक', 'रसोई', 'बिस्तर', 'कुर्सी', 'मेज', 'दीवार', 'फर्श', 'सीढ़ी', 'दर्पण'],
+  health: ['रोगी', 'रोग', 'स्वास्थ्य', 'वैद्य', 'दवा', 'औषधि', 'सिर', 'पैर', 'हाथ', 'आँख', 'दाँत', 'कान', 'नाक', 'स्वस्थ', 'बीमार', 'दर्द', 'चोट', 'बुखार', 'खांसी', 'सर्दी', 'डॉक्टर'],
+  work: ['काम', 'नौकरी', 'किसान', 'कामकार', 'कर्मचारी', 'दफ्तर', 'व्यापार', 'व्यापारी', 'निर्माण', 'शिल्प', 'कारखाना', 'कंपनी', 'व्यवसाय', 'मजदूर'],
+  education: ['शिक्षा', 'विद्या', 'पाठशाला', 'गुरु', 'छात्र', 'पुस्तक', 'लिखा', 'पढ़ाई', 'विचार', 'ज्ञान', 'बुद्धि', 'परीक्षा', 'विद्यार्थी', 'अध्यापक', 'अक्षर', 'भाषा', 'शब्द', 'वाक्य', 'प्रश्न', 'उत्तर', 'स्कूल'],
+  nature: ['प्रकृति', 'वन', 'पेड़', 'पौधा', 'फल', 'फूल', 'पत्ता', 'नदी', 'झरना', 'तालाब', 'सरोवर', 'मिट्टी', 'रेत', 'पत्थर', 'आकाश', 'सूरज', 'चाँद', 'तारे', 'ज्योति', 'प्रकाश', 'घास', 'जानवर', 'पक्षी'],
+  weather: ['मौसम', 'गर्मी', 'ठंड', 'बारिश', 'बादल', 'बिजली', 'पवन', 'हवा', 'आंधी', 'तूफान', 'बरसात', 'धूप', 'छाया', 'बर्फ', 'ओस'],
+  communication: ['बात', 'सुना', 'लिखा', 'बोली', 'वाणी', 'आवाज़', 'शब्द', 'भाषा', 'विचार', 'वचन', 'सुनना', 'कहना', 'बोल', 'समाचार', 'संबाद', 'खबर', 'पत्र', 'बातचीत', 'संवाद', 'भाषण'],
+  culture: ['संस्कृति', 'परंपरा', 'रीति', 'त्योहार', 'पूजा', 'इबादत', 'देवी', 'देवता', 'अवतार', 'कथा', 'इतिहास', 'साहित्य', 'कला', 'संगीत', 'नृत्य', 'भजन', 'कीर्तन', 'यज्ञ', 'मंदिर', 'दिवाली'],
+  emotions: ['भाव', 'भावना', 'अनुभव', 'खुशी', 'दुख', 'गुस्सा', 'भय', 'नींद', 'प्यार', 'ममता', 'शर्म', 'गर्व', 'मान', 'मित्रता', 'दोस्त', 'स्नेह', 'वात्सल्य', 'आनंद', 'उदासी', 'चिंता'],
+  sports: ['खेल', 'खिलाड़ी', 'दौड़', 'कूद', 'पकड़', 'फेंका', 'मारा', 'मैदान', 'जीत', 'हार', 'ताकत', 'शक्ति', 'जोर', 'क्रिकेट', 'फुटबॉल', 'योग', 'व्यायाम'],
+  technology: ['यंत्र', 'उपकरण', 'लोहा', 'तत्व', 'धातु', 'तकनीक', 'विद्या', 'विद्युत', 'शक्ति', 'पदार्थ', 'कंप्यूटर', 'फोन', 'इंटरनेट', 'विज्ञान', 'गणना'],
+  time: ['समय', 'घड़ी', 'दिन', 'रात', 'सुबह', 'शाम', 'प्रभात', 'कल', 'आज', 'अब', 'फिर', 'बाद', 'पहले', 'सप्ताह', 'महीना', 'साल', 'वर्ष', 'घंटा', 'मिनट', 'सेकंड'],
+  numbers: ['एक', 'दो', 'तीन', 'चार', 'पाँच', 'छः', 'सात', 'आठ', 'नौ', 'दस', 'ग्यारह', 'बारह', 'तेरह', 'चौदह', 'पंद्रह', 'सोलह', 'सत्रह', 'अठारह', 'उन्नीस', 'बीस', 'तीस', 'चालीस', 'पचास', 'साठ', 'सत्तर', 'अस्सी', 'नब्बे', 'सौ', 'संख्या'],
+  colors: ['रंग', 'लाल', 'पीला', 'नीला', 'हरा', 'सफेद', 'काला', 'भूरा', 'ग्रे', 'गुलाबी', 'बैंगनी', 'नारंगी', 'आसमानी'],
+  clothing: ['कपड़ा', 'वस्त्र', 'जामा', 'पैंट', 'शर्ट', 'साड़ी', 'दुपट्टा', 'ओढ़नी', 'जूती', 'जूता', 'पगड़ी', 'टोपी', 'हार', 'कंगन', 'चोटी', 'बिंदी', 'तिलक', 'स्वेटर', 'जैकेट', 'कोट', 'बेल्ट'],
+  shopping: ['बाजार', 'दुकान', 'व्यापार', 'कीमत', 'दाम', 'खरीद', 'बिक्री', 'व्यापारी', 'पैसा', 'रुपया', 'विक्रय', 'क्रय', 'सौदा', 'भाव', 'लेन-देन']
+};
+
+function extractBaseWord(word) {
+  const match = word.match(/^(.+?)(?:_\d+_[A-Z]+)?$/);
+  return match ? match[1] : word;
+}
+
+function getThemeForWord(word) {
+  const baseWord = extractBaseWord(word);
+  const themes = Object.keys(themeKeywords);
+
+  // सीधी मिलान
+  for (const theme of themes) {
+    if (themeKeywords[theme].includes(baseWord)) {
+      return theme;
+    }
+  }
+
+  // आंशिक मिलान
+  for (const theme of themes) {
+    for (const keyword of themeKeywords[theme]) {
+      if (keyword.includes(baseWord) || baseWord.includes(keyword)) {
+        return theme;
+      }
+    }
+  }
+
+  // हैश-आधारित असाइनमेंट
+  let hash = 0;
+  for (let i = 0; i < baseWord.length; i++) {
+    hash += baseWord.charCodeAt(i);
+  }
+  return themes[hash % themes.length];
+}
+
+async function processFile() {
+  const inputFile = 'c:\\Users\\Nalivator3000\\words-learning-server\\hindi-words-for-themes.txt';
+  const outputFile = 'c:\\Users\\Nalivator3000\\words-learning-server\\themes-hindi-all.json';
+
+  console.log('शुरुआत: Hindi शब्दों को थीम्स असाइन कर रहे हैं...');
+
+  const seenBaseWords = new Set();
+  const themesData = [];
+  const themeCount = {};
+
+  for (const theme of Object.keys(themeKeywords)) {
+    themeCount[theme] = 0;
+  }
+
+  let processedCount = 0;
+
+  try {
+    const fileStream = fs.createReadStream(inputFile, { encoding: 'utf-8' });
+    const rl = readline.createInterface({
+      input: fileStream,
+      crlfDelay: Infinity
+    });
+
+    for await (const word of rl) {
+      const trimmedWord = word.trim();
+      if (trimmedWord) {
+        const baseWord = extractBaseWord(trimmedWord);
+
+        if (!seenBaseWords.has(baseWord)) {
+          seenBaseWords.add(baseWord);
+          const theme = getThemeForWord(trimmedWord);
+          themesData.push({ word: baseWord, theme });
+          themeCount[theme]++;
+
+          processedCount++;
+          if (processedCount % 1000 === 0) {
+            console.log(`प्रसंस्कृत: ${processedCount} अद्वितीय शब्द...`);
+          }
+        }
+      }
+    }
+
+    console.log(`\nकुल अद्वितीय शब्द: ${themesData.length}`);
+
+    // परिणाम सहेजें
+    fs.writeFileSync(outputFile, JSON.stringify(themesData, null, 2), 'utf-8');
+
+    // आँकड़े दिखाएं
+    console.log('\nथीम्स के आधार पर आँकड़े:');
+    const sortedThemes = Object.entries(themeCount).sort((a, b) => b[1] - a[1]);
+    for (const [theme, count] of sortedThemes) {
+      console.log(`  ${theme}: ${count} शब्द`);
+    }
+
+    console.log(`\nपरिणाम सहेजे गए: ${outputFile}`);
+  } catch (error) {
+    console.error('त्रुटि:', error);
+  }
+}
+
+processFile();

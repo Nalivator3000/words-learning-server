@@ -1,0 +1,18 @@
+{
+  "mcpServers": {
+    "playwright": {
+      "command": "npx",
+      "args": ["@playwright/mcp"],
+      "env": {
+        "PLAYWRIGHT_BASE_URL": "http://localhost:3001"
+      }
+    },
+    "lexybooster-api": {
+      "command": "node",
+      "args": ["mcp-servers/lexybooster-api/index.js"],
+      "env": {
+        "LEXYBOOSTER_BASE_URL": "https://lexybooster.com"
+      }
+    }
+  }
+}

@@ -1,0 +1,2118 @@
+НЕМЕЦКИЕ НАБОРЫ СЛОВ
+Всего наборов: 151
+Дата экспорта: 02.01.2026, 22:56:48
+================================================================================
+
+1. German A1
+   ID: 1
+   Описание: Beginner - Essential vocabulary for absolute beginners
+   Язык источника: german
+   Уровень: A1
+   Тема: не указана
+   Количество слов: 30
+   Публичный: Нет
+
+   СЛОВА В НАБОРЕ:
+   1. null (ID: 1232)
+   2. null (ID: 1252)
+   3. ledig (ID: 1143)
+   4. null (ID: 1236)
+   5. die Reservierung (ID: 960)
+   6. politisch (ID: 1293)
+   7. zusagen (ID: 1154)
+   8. die Gerechtigkeit (ID: 1335)
+   9. fleißig (ID: 1108)
+   10. der Gast (ID: 1158)
+   11. kommentieren (ID: 947)
+   12. hochladen (ID: 929)
+   13. die Vielfalt (ID: 1342)
+   14. null (ID: 1148)
+   15. die Reisende (ID: 954)
+   16. hervorheben (ID: 1222)
+   17. kompetent (ID: 1274)
+   18. erörtern (ID: 1210)
+   19. der Zucker (ID: 1005)
+   20. null (ID: 1330)
+   21. null (ID: 1239)
+   22. klicken (ID: 926)
+   23. abstimmen (ID: 1298)
+   24. höflich (ID: 1113)
+   25. frisch (ID: 1031)
+   26. zustimmen (ID: 1179)
+   27. vergangen (ID: 1347)
+   28. vertrauen (ID: 1127)
+   29. die Datei (ID: 932)
+   30. die Weiterbildung (ID: 1281)
+
+--------------------------------------------------------------------------------
+
+2. German A1: Essential Vocabulary 1
+   ID: 278
+   Описание: A1 level essential vocabulary - Part 1
+   Язык источника: german
+   Уровень: A1
+   Тема: general
+   Количество слов: 0
+   Публичный: Да
+
+   СЛОВА В НАБОРЕ:
+
+--------------------------------------------------------------------------------
+
+3. German A1: Essential Vocabulary 2
+   ID: 280
+   Описание: A1 level essential vocabulary - Part 2
+   Язык источника: german
+   Уровень: A1
+   Тема: general
+   Количество слов: 0
+   Публичный: Да
+
+   СЛОВА В НАБОРЕ:
+
+--------------------------------------------------------------------------------
+
+4. German A1: Essential Vocabulary 3
+   ID: 281
+   Описание: A1 level essential vocabulary - Part 3
+   Язык источника: german
+   Уровень: A1
+   Тема: general
+   Количество слов: 0
+   Публичный: Да
+
+   СЛОВА В НАБОРЕ:
+
+--------------------------------------------------------------------------------
+
+5. German A1: Essential Vocabulary 4
+   ID: 282
+   Описание: A1 level essential vocabulary - Part 4
+   Язык источника: german
+   Уровень: A1
+   Тема: general
+   Количество слов: 0
+   Публичный: Да
+
+   СЛОВА В НАБОРЕ:
+
+--------------------------------------------------------------------------------
+
+6. German A1: Essential Vocabulary 5
+   ID: 283
+   Описание: A1 level essential vocabulary - Part 5
+   Язык источника: german
+   Уровень: A1
+   Тема: general
+   Количество слов: 0
+   Публичный: Да
+
+   СЛОВА В НАБОРЕ:
+
+--------------------------------------------------------------------------------
+
+7. German A1: Essential Vocabulary 6
+   ID: 284
+   Описание: A1 level essential vocabulary - Part 6
+   Язык источника: german
+   Уровень: A1
+   Тема: general
+   Количество слов: 0
+   Публичный: Да
+
+   СЛОВА В НАБОРЕ:
+
+--------------------------------------------------------------------------------
+
+8. German A1: Essential Vocabulary 7
+   ID: 285
+   Описание: A1 level essential vocabulary - Part 7
+   Язык источника: german
+   Уровень: A1
+   Тема: general
+   Количество слов: 0
+   Публичный: Да
+
+   СЛОВА В НАБОРЕ:
+
+--------------------------------------------------------------------------------
+
+9. German A1: Essential Vocabulary 8
+   ID: 286
+   Описание: A1 level essential vocabulary - Part 8
+   Язык источника: german
+   Уровень: A1
+   Тема: general
+   Количество слов: 0
+   Публичный: Да
+
+   СЛОВА В НАБОРЕ:
+
+--------------------------------------------------------------------------------
+
+10. German A1: Essential Vocabulary 9
+   ID: 287
+   Описание: A1 level essential vocabulary - Part 9
+   Язык источника: german
+   Уровень: A1
+   Тема: general
+   Количество слов: 0
+   Публичный: Да
+
+   СЛОВА В НАБОРЕ:
+
+--------------------------------------------------------------------------------
+
+11. German A1: Essential Vocabulary 10
+   ID: 288
+   Описание: A1 level essential vocabulary - Part 10
+   Язык источника: german
+   Уровень: A1
+   Тема: general
+   Количество слов: 0
+   Публичный: Да
+
+   СЛОВА В НАБОРЕ:
+
+--------------------------------------------------------------------------------
+
+12. German A1: Food and Drinks
+   ID: 289
+   Описание: A1 level vocabulary: Food and Drinks
+   Язык источника: german
+   Уровень: A1
+   Тема: Food and Drinks
+   Количество слов: 0
+   Публичный: Да
+
+   СЛОВА В НАБОРЕ:
+
+--------------------------------------------------------------------------------
+
+13. German A1: People & Relationships
+   ID: 290
+   Описание: A1 level vocabulary: People & Relationships
+   Язык источника: german
+   Уровень: A1
+   Тема: People & Relationships
+   Количество слов: 0
+   Публичный: Да
+
+   СЛОВА В НАБОРЕ:
+
+--------------------------------------------------------------------------------
+
+14. German A1: Days, Months, Time
+   ID: 291
+   Описание: A1 level vocabulary: Days, Months, Time
+   Язык источника: german
+   Уровень: A1
+   Тема: Days, Months, Time
+   Количество слов: 0
+   Публичный: Да
+
+   СЛОВА В НАБОРЕ:
+
+--------------------------------------------------------------------------------
+
+15. German A1: House and Furniture
+   ID: 292
+   Описание: A1 level vocabulary: House and Furniture
+   Язык источника: german
+   Уровень: A1
+   Тема: House and Furniture
+   Количество слов: 0
+   Публичный: Да
+
+   СЛОВА В НАБОРЕ:
+
+--------------------------------------------------------------------------------
+
+16. German A1: Numbers, Time & Basic Concepts
+   ID: 293
+   Описание: A1 level vocabulary: Numbers, Time & Basic Concepts
+   Язык источника: german
+   Уровень: A1
+   Тема: Numbers, Time & Basic Concepts
+   Количество слов: 0
+   Публичный: Да
+
+   СЛОВА В НАБОРЕ:
+
+--------------------------------------------------------------------------------
+
+17. German A1: Everyday Life & Basic Activities
+   ID: 294
+   Описание: A1 level vocabulary: Everyday Life & Basic Activities
+   Язык источника: german
+   Уровень: A1
+   Тема: Everyday Life & Basic Activities
+   Количество слов: 0
+   Публичный: Да
+
+   СЛОВА В НАБОРЕ:
+
+--------------------------------------------------------------------------------
+
+18. German A1: Food & Drinks
+   ID: 295
+   Описание: A1 level vocabulary: Food & Drinks
+   Язык источника: german
+   Уровень: A1
+   Тема: Food & Drinks
+   Количество слов: 0
+   Публичный: Да
+
+   СЛОВА В НАБОРЕ:
+
+--------------------------------------------------------------------------------
+
+19. German A1: Weather and Seasons
+   ID: 296
+   Описание: A1 level vocabulary: Weather and Seasons
+   Язык источника: german
+   Уровень: A1
+   Тема: Weather and Seasons
+   Количество слов: 0
+   Публичный: Да
+
+   СЛОВА В НАБОРЕ:
+
+--------------------------------------------------------------------------------
+
+20. German A1: Places & Directions
+   ID: 298
+   Описание: A1 level vocabulary: Places & Directions
+   Язык источника: german
+   Уровень: A1
+   Тема: Places & Directions
+   Количество слов: 0
+   Публичный: Да
+
+   СЛОВА В НАБОРЕ:
+
+--------------------------------------------------------------------------------
+
+21. German A1: Question Words
+   ID: 297
+   Описание: A1 level vocabulary: Question Words
+   Язык источника: german
+   Уровень: A1
+   Тема: Question Words
+   Количество слов: 0
+   Публичный: Да
+
+   СЛОВА В НАБОРЕ:
+
+--------------------------------------------------------------------------------
+
+22. German A2
+   ID: 2
+   Описание: Elementary - Basic everyday vocabulary
+   Язык источника: german
+   Уровень: A2
+   Тема: не указана
+   Количество слов: 30
+   Публичный: Нет
+
+   СЛОВА В НАБОРЕ:
+   1. wegwerfen (ID: 1314)
+   2. wahrscheinlich (ID: 1381)
+   3. der Besuch (ID: 1157)
+   4. die Freiheit (ID: 1302)
+   5. befördert werden (ID: 1287)
+   6. ungerecht (ID: 1337)
+   7. das Doppelzimmer (ID: 975)
+   8. friedlich (ID: 1333)
+   9. der Hinweis (ID: 1220)
+   10. die Feststellung (ID: 1197)
+   11. sich unterhalten (ID: 1215)
+   12. verschwenden (ID: 1316)
+   13. bitter (ID: 1029)
+   14. tatsächlich (ID: 1375)
+   15. die Verlobung (ID: 1136)
+   16. logisch (ID: 1205)
+   17. die Reisende (ID: 954)
+   18. der Konflikt (ID: 1331)
+   19. die Passagierin (ID: 984)
+   20. die Soße (ID: 1008)
+   21. die Ähnlichkeit (ID: 1363)
+   22. das Benutzerkonto (ID: 940)
+   23. die Politik (ID: 1292)
+   24. der Ex (ID: 1142)
+   25. der Verlobte (ID: 1133)
+   26. die Bestätigung (ID: 961)
+   27. die Begeisterung (ID: 1100)
+   28. die Vielfalt (ID: 1342)
+   29. null (ID: 1233)
+   30. die Möglichkeit (ID: 1379)
+
+--------------------------------------------------------------------------------
+
+23. German A2: health
+   ID: 305
+   Описание: A2 level vocabulary: health
+   Язык источника: german
+   Уровень: A2
+   Тема: health
+   Количество слов: 0
+   Публичный: Да
+
+   СЛОВА В НАБОРЕ:
+
+--------------------------------------------------------------------------------
+
+24. German A2: food
+   ID: 306
+   Описание: A2 level vocabulary: food
+   Язык источника: german
+   Уровень: A2
+   Тема: food
+   Количество слов: 0
+   Публичный: Да
+
+   СЛОВА В НАБОРЕ:
+
+--------------------------------------------------------------------------------
+
+25. German A2: Essential Vocabulary 1
+   ID: 299
+   Описание: A2 level essential vocabulary - Part 1
+   Язык источника: german
+   Уровень: A2
+   Тема: general
+   Количество слов: 0
+   Публичный: Да
+
+   СЛОВА В НАБОРЕ:
+
+--------------------------------------------------------------------------------
+
+26. German A2: Essential Vocabulary 2
+   ID: 300
+   Описание: A2 level essential vocabulary - Part 2
+   Язык источника: german
+   Уровень: A2
+   Тема: general
+   Количество слов: 0
+   Публичный: Да
+
+   СЛОВА В НАБОРЕ:
+
+--------------------------------------------------------------------------------
+
+27. German A2: Essential Vocabulary 3
+   ID: 301
+   Описание: A2 level essential vocabulary - Part 3
+   Язык источника: german
+   Уровень: A2
+   Тема: general
+   Количество слов: 0
+   Публичный: Да
+
+   СЛОВА В НАБОРЕ:
+
+--------------------------------------------------------------------------------
+
+28. German A2: Essential Vocabulary 4
+   ID: 302
+   Описание: A2 level essential vocabulary - Part 4
+   Язык источника: german
+   Уровень: A2
+   Тема: general
+   Количество слов: 0
+   Публичный: Да
+
+   СЛОВА В НАБОРЕ:
+
+--------------------------------------------------------------------------------
+
+29. German A2: Essential Vocabulary 5
+   ID: 303
+   Описание: A2 level essential vocabulary - Part 5
+   Язык источника: german
+   Уровень: A2
+   Тема: general
+   Количество слов: 0
+   Публичный: Да
+
+   СЛОВА В НАБОРЕ:
+
+--------------------------------------------------------------------------------
+
+30. German A2: communication
+   ID: 307
+   Описание: A2 level vocabulary: communication
+   Язык источника: german
+   Уровень: A2
+   Тема: communication
+   Количество слов: 0
+   Публичный: Да
+
+   СЛОВА В НАБОРЕ:
+
+--------------------------------------------------------------------------------
+
+31. German A2: work
+   ID: 308
+   Описание: A2 level vocabulary: work
+   Язык источника: german
+   Уровень: A2
+   Тема: work
+   Количество слов: 0
+   Публичный: Да
+
+   СЛОВА В НАБОРЕ:
+
+--------------------------------------------------------------------------------
+
+32. German A2: education
+   ID: 309
+   Описание: A2 level vocabulary: education
+   Язык источника: german
+   Уровень: A2
+   Тема: education
+   Количество слов: 0
+   Публичный: Да
+
+   СЛОВА В НАБОРЕ:
+
+--------------------------------------------------------------------------------
+
+33. German A2: Past Experiences and Future Plans
+   ID: 311
+   Описание: A2 level vocabulary: Past Experiences and Future Plans
+   Язык источника: german
+   Уровень: A2
+   Тема: Past Experiences and Future Plans
+   Количество слов: 0
+   Публичный: Да
+
+   СЛОВА В НАБОРЕ:
+
+--------------------------------------------------------------------------------
+
+34. German A2: travel
+   ID: 310
+   Описание: A2 level vocabulary: travel
+   Язык источника: german
+   Уровень: A2
+   Тема: travel
+   Количество слов: 0
+   Публичный: Да
+
+   СЛОВА В НАБОРЕ:
+
+--------------------------------------------------------------------------------
+
+35. German A2: Shopping and Services
+   ID: 312
+   Описание: A2 level vocabulary: Shopping and Services
+   Язык источника: german
+   Уровень: A2
+   Тема: Shopping and Services
+   Количество слов: 0
+   Публичный: Да
+
+   СЛОВА В НАБОРЕ:
+
+--------------------------------------------------------------------------------
+
+36. German A2: Descriptions of People and Places
+   ID: 313
+   Описание: A2 level vocabulary: Descriptions of People and Places
+   Язык источника: german
+   Уровень: A2
+   Тема: Descriptions of People and Places
+   Количество слов: 0
+   Публичный: Да
+
+   СЛОВА В НАБОРЕ:
+
+--------------------------------------------------------------------------------
+
+37. German A2: Essential Vocabulary 6
+   ID: 304
+   Описание: A2 level essential vocabulary - Part 6
+   Язык источника: german
+   Уровень: A2
+   Тема: general
+   Количество слов: 0
+   Публичный: Да
+
+   СЛОВА В НАБОРЕ:
+
+--------------------------------------------------------------------------------
+
+38. German A2: Daily Routines and Habits
+   ID: 314
+   Описание: A2 level vocabulary: Daily Routines and Habits
+   Язык источника: german
+   Уровень: A2
+   Тема: Daily Routines and Habits
+   Количество слов: 0
+   Публичный: Да
+
+   СЛОВА В НАБОРЕ:
+
+--------------------------------------------------------------------------------
+
+39. German A2: Hobbies and Leisure
+   ID: 315
+   Описание: A2 level vocabulary: Hobbies and Leisure
+   Язык источника: german
+   Уровень: A2
+   Тема: Hobbies and Leisure
+   Количество слов: 0
+   Публичный: Да
+
+   СЛОВА В НАБОРЕ:
+
+--------------------------------------------------------------------------------
+
+40. German A2: Work and Study
+   ID: 316
+   Описание: A2 level vocabulary: Work and Study
+   Язык источника: german
+   Уровень: A2
+   Тема: Work and Study
+   Количество слов: 0
+   Публичный: Да
+
+   СЛОВА В НАБОРЕ:
+
+--------------------------------------------------------------------------------
+
+41. German B1
+   ID: 3
+   Описание: Intermediate - Common words for daily communication
+   Язык источника: german
+   Уровень: B1
+   Тема: не указана
+   Количество слов: 30
+   Публичный: Нет
+
+   СЛОВА В НАБОРЕ:
+   1. scharf (ID: 1030)
+   2. planen (ID: 1264)
+   3. null (ID: 1245)
+   4. vermuten (ID: 1200)
+   5. hungrig (ID: 1020)
+   6. die Zusammenfassung (ID: 1229)
+   7. löschen (ID: 934)
+   8. das Missvertrauen (ID: 1130)
+   9. die Aufgabe (ID: 1260)
+   10. sicher (ID: 1382)
+   11. ähnlich (ID: 1362)
+   12. meinen (ID: 1169)
+   13. sich kennenlernen (ID: 1147)
+   14. der Gegensatz (ID: 1364)
+   15. vertrauen (ID: 1127)
+   16. begeistert (ID: 1099)
+   17. der Besuch (ID: 1157)
+   18. null (ID: 1238)
+   19. beweisen (ID: 1192)
+   20. die Probezeit (ID: 1244)
+   21. qualifiziert (ID: 1270)
+   22. die Überzeugung (ID: 1178)
+   23. die Nachricht (ID: 914)
+   24. das Benutzerkonto (ID: 940)
+   25. weltweit (ID: 1324)
+   26. sich scheiden lassen (ID: 1139)
+   27. sauer (ID: 1028)
+   28. die Verschmutzung (ID: 1310)
+   29. null (ID: 1237)
+   30. lecker (ID: 1024)
+
+--------------------------------------------------------------------------------
+
+42. German B1: Essential Vocabulary 1
+   ID: 317
+   Описание: B1 level essential vocabulary - Part 1
+   Язык источника: german
+   Уровень: B1
+   Тема: general
+   Количество слов: 0
+   Публичный: Да
+
+   СЛОВА В НАБОРЕ:
+
+--------------------------------------------------------------------------------
+
+43. German B1: Essential Vocabulary 2
+   ID: 318
+   Описание: B1 level essential vocabulary - Part 2
+   Язык источника: german
+   Уровень: B1
+   Тема: general
+   Количество слов: 0
+   Публичный: Да
+
+   СЛОВА В НАБОРЕ:
+
+--------------------------------------------------------------------------------
+
+44. German B1: Essential Vocabulary 3
+   ID: 319
+   Описание: B1 level essential vocabulary - Part 3
+   Язык источника: german
+   Уровень: B1
+   Тема: general
+   Количество слов: 0
+   Публичный: Да
+
+   СЛОВА В НАБОРЕ:
+
+--------------------------------------------------------------------------------
+
+45. German B1: Essential Vocabulary 4
+   ID: 320
+   Описание: B1 level essential vocabulary - Part 4
+   Язык источника: german
+   Уровень: B1
+   Тема: general
+   Количество слов: 0
+   Публичный: Да
+
+   СЛОВА В НАБОРЕ:
+
+--------------------------------------------------------------------------------
+
+46. German B1: work
+   ID: 322
+   Описание: B1 level vocabulary: work
+   Язык источника: german
+   Уровень: B1
+   Тема: work
+   Количество слов: 0
+   Публичный: Да
+
+   СЛОВА В НАБОРЕ:
+
+--------------------------------------------------------------------------------
+
+47. German B1: Soziale Beziehungen
+   ID: 323
+   Описание: B1 level vocabulary: Soziale Beziehungen
+   Язык источника: german
+   Уровень: B1
+   Тема: Soziale Beziehungen
+   Количество слов: 0
+   Публичный: Да
+
+   СЛОВА В НАБОРЕ:
+
+--------------------------------------------------------------------------------
+
+48. German B1: Arbeit und Beruf
+   ID: 324
+   Описание: B1 level vocabulary: Arbeit und Beruf
+   Язык источника: german
+   Уровень: B1
+   Тема: Arbeit und Beruf
+   Количество слов: 0
+   Публичный: Да
+
+   СЛОВА В НАБОРЕ:
+
+--------------------------------------------------------------------------------
+
+49. German B1: Money and Finance
+   ID: 325
+   Описание: B1 level vocabulary: Money and Finance
+   Язык источника: german
+   Уровень: B1
+   Тема: Money and Finance
+   Количество слов: 0
+   Публичный: Да
+
+   СЛОВА В НАБОРЕ:
+
+--------------------------------------------------------------------------------
+
+50. German B1: Medien und Technologie
+   ID: 326
+   Описание: B1 level vocabulary: Medien und Technologie
+   Язык источника: german
+   Уровень: B1
+   Тема: Medien und Technologie
+   Количество слов: 0
+   Публичный: Да
+
+   СЛОВА В НАБОРЕ:
+
+--------------------------------------------------------------------------------
+
+51. German B1: Reisen und Geografie
+   ID: 327
+   Описание: B1 level vocabulary: Reisen und Geografie
+   Язык источника: german
+   Уровень: B1
+   Тема: Reisen und Geografie
+   Количество слов: 0
+   Публичный: Да
+
+   СЛОВА В НАБОРЕ:
+
+--------------------------------------------------------------------------------
+
+52. German B1: Culture and Arts
+   ID: 328
+   Описание: B1 level vocabulary: Culture and Arts
+   Язык источника: german
+   Уровень: B1
+   Тема: Culture and Arts
+   Количество слов: 0
+   Публичный: Да
+
+   СЛОВА В НАБОРЕ:
+
+--------------------------------------------------------------------------------
+
+53. German B1: Essential Vocabulary 5
+   ID: 321
+   Описание: B1 level essential vocabulary - Part 5
+   Язык источника: german
+   Уровень: B1
+   Тема: general
+   Количество слов: 0
+   Публичный: Да
+
+   СЛОВА В НАБОРЕ:
+
+--------------------------------------------------------------------------------
+
+54. German B1: Bildung und Entwicklung
+   ID: 330
+   Описание: B1 level vocabulary: Bildung und Entwicklung
+   Язык источника: german
+   Уровень: B1
+   Тема: Bildung und Entwicklung
+   Количество слов: 0
+   Публичный: Да
+
+   СЛОВА В НАБОРЕ:
+
+--------------------------------------------------------------------------------
+
+55. German B1: Gesundheit und Lebensstil
+   ID: 329
+   Описание: B1 level vocabulary: Gesundheit und Lebensstil
+   Язык источника: german
+   Уровень: B1
+   Тема: Gesundheit und Lebensstil
+   Количество слов: 0
+   Публичный: Да
+
+   СЛОВА В НАБОРЕ:
+
+--------------------------------------------------------------------------------
+
+56. German B1: Sports and Hobbies
+   ID: 331
+   Описание: B1 level vocabulary: Sports and Hobbies
+   Язык источника: german
+   Уровень: B1
+   Тема: Sports and Hobbies
+   Количество слов: 0
+   Публичный: Да
+
+   СЛОВА В НАБОРЕ:
+
+--------------------------------------------------------------------------------
+
+57. German B1: Emotions and Personality
+   ID: 332
+   Описание: B1 level vocabulary: Emotions and Personality
+   Язык источника: german
+   Уровень: B1
+   Тема: Emotions and Personality
+   Количество слов: 0
+   Публичный: Да
+
+   СЛОВА В НАБОРЕ:
+
+--------------------------------------------------------------------------------
+
+58. German B1: Housing and Living Situations
+   ID: 333
+   Описание: B1 level vocabulary: Housing and Living Situations
+   Язык источника: german
+   Уровень: B1
+   Тема: Housing and Living Situations
+   Количество слов: 0
+   Публичный: Да
+
+   СЛОВА В НАБОРЕ:
+
+--------------------------------------------------------------------------------
+
+59. German B1: Shopping and Consumer Behavior
+   ID: 334
+   Описание: B1 level vocabulary: Shopping and Consumer Behavior
+   Язык источника: german
+   Уровень: B1
+   Тема: Shopping and Consumer Behavior
+   Количество слов: 0
+   Публичный: Да
+
+   СЛОВА В НАБОРЕ:
+
+--------------------------------------------------------------------------------
+
+60. German B1: Food and Dining
+   ID: 335
+   Описание: B1 level vocabulary: Food and Dining
+   Язык источника: german
+   Уровень: B1
+   Тема: Food and Dining
+   Количество слов: 0
+   Публичный: Да
+
+   СЛОВА В НАБОРЕ:
+
+--------------------------------------------------------------------------------
+
+61. German B2
+   ID: 4
+   Описание: Upper Intermediate - Advanced everyday vocabulary
+   Язык источника: german
+   Уровень: B2
+   Тема: не указана
+   Количество слов: 30
+   Публичный: Нет
+
+   СЛОВА В НАБОРЕ:
+   1. die Erfahrung (ID: 1271)
+   2. der Beweis (ID: 1193)
+   3. die Wahl (ID: 1297)
+   4. sich entwickeln (ID: 1354)
+   5. der Gastgeber (ID: 1159)
+   6. verabschieden (ID: 1162)
+   7. null (ID: 1283)
+   8. ablehnen (ID: 1155)
+   9. die Pension (ID: 965)
+   10. kommentieren (ID: 947)
+   11. die Bordkarte (ID: 992)
+   12. die Unterbrechung (ID: 1224)
+   13. zusagen (ID: 1154)
+   14. sich verabreden (ID: 1149)
+   15. zukünftig (ID: 1349)
+   16. null (ID: 1172)
+   17. null (ID: 1250)
+   18. der Joghurt (ID: 1010)
+   19. die Karriere (ID: 1230)
+   20. die Verlobte (ID: 1134)
+   21. die Vielfalt (ID: 1342)
+   22. Guten Appetit! (ID: 1017)
+   23. null (ID: 1257)
+   24. einloggen (ID: 937)
+   25. allgemein (ID: 1368)
+   26. null (ID: 1249)
+   27. die Soße (ID: 1008)
+   28. der Passagier (ID: 983)
+   29. die Zusammenarbeit (ID: 1254)
+   30. hervorheben (ID: 1222)
+
+--------------------------------------------------------------------------------
+
+62. German B2: communication
+   ID: 336
+   Описание: B2 level vocabulary: communication
+   Язык источника: german
+   Уровень: B2
+   Тема: communication
+   Количество слов: 0
+   Публичный: Да
+
+   СЛОВА В НАБОРЕ:
+
+--------------------------------------------------------------------------------
+
+63. German B2: work
+   ID: 337
+   Описание: B2 level vocabulary: work
+   Язык источника: german
+   Уровень: B2
+   Тема: work
+   Количество слов: 0
+   Публичный: Да
+
+   СЛОВА В НАБОРЕ:
+
+--------------------------------------------------------------------------------
+
+64. German B2: politics
+   ID: 338
+   Описание: B2 level vocabulary: politics
+   Язык источника: german
+   Уровень: B2
+   Тема: politics
+   Количество слов: 0
+   Публичный: Да
+
+   СЛОВА В НАБОРЕ:
+
+--------------------------------------------------------------------------------
+
+65. German B2: health
+   ID: 342
+   Описание: B2 level vocabulary: health
+   Язык источника: german
+   Уровень: B2
+   Тема: health
+   Количество слов: 0
+   Публичный: Да
+
+   СЛОВА В НАБОРЕ:
+
+--------------------------------------------------------------------------------
+
+66. German B2: science
+   ID: 343
+   Описание: B2 level vocabulary: science
+   Язык источника: german
+   Уровень: B2
+   Тема: science
+   Количество слов: 0
+   Публичный: Да
+
+   СЛОВА В НАБОРЕ:
+
+--------------------------------------------------------------------------------
+
+67. German B2: Essential Vocabulary 1
+   ID: 339
+   Описание: B2 level essential vocabulary - Part 1
+   Язык источника: german
+   Уровень: B2
+   Тема: general
+   Количество слов: 0
+   Публичный: Да
+
+   СЛОВА В НАБОРЕ:
+
+--------------------------------------------------------------------------------
+
+68. German B2: Essential Vocabulary 2
+   ID: 340
+   Описание: B2 level essential vocabulary - Part 2
+   Язык источника: german
+   Уровень: B2
+   Тема: general
+   Количество слов: 0
+   Публичный: Да
+
+   СЛОВА В НАБОРЕ:
+
+--------------------------------------------------------------------------------
+
+69. German B2: culture
+   ID: 344
+   Описание: B2 level vocabulary: culture
+   Язык источника: german
+   Уровень: B2
+   Тема: culture
+   Количество слов: 0
+   Публичный: Да
+
+   СЛОВА В НАБОРЕ:
+
+--------------------------------------------------------------------------------
+
+70. German B2: Abstract Concepts & Complex Ideas
+   ID: 345
+   Описание: B2 level vocabulary: Abstract Concepts & Complex Ideas
+   Язык источника: german
+   Уровень: B2
+   Тема: Abstract Concepts & Complex Ideas
+   Количество слов: 0
+   Публичный: Да
+
+   СЛОВА В НАБОРЕ:
+
+--------------------------------------------------------------------------------
+
+71. German B2: Complex Emotions & Psychological States
+   ID: 346
+   Описание: B2 level vocabulary: Complex Emotions & Psychological States
+   Язык источника: german
+   Уровень: B2
+   Тема: Complex Emotions & Psychological States
+   Количество слов: 0
+   Публичный: Да
+
+   СЛОВА В НАБОРЕ:
+
+--------------------------------------------------------------------------------
+
+72. German B2: Advanced Literary & Artistic Vocabulary
+   ID: 347
+   Описание: B2 level vocabulary: Advanced Literary & Artistic Vocabulary
+   Язык источника: german
+   Уровень: B2
+   Тема: Advanced Literary & Artistic Vocabulary
+   Количество слов: 0
+   Публичный: Да
+
+   СЛОВА В НАБОРЕ:
+
+--------------------------------------------------------------------------------
+
+73. German B2: law
+   ID: 348
+   Описание: B2 level vocabulary: law
+   Язык источника: german
+   Уровень: B2
+   Тема: law
+   Количество слов: 0
+   Публичный: Да
+
+   СЛОВА В НАБОРЕ:
+
+--------------------------------------------------------------------------------
+
+74. German B2: Advanced Abstract Concepts & Philosophy
+   ID: 351
+   Описание: B2 level vocabulary: Advanced Abstract Concepts & Philosophy
+   Язык источника: german
+   Уровень: B2
+   Тема: Advanced Abstract Concepts & Philosophy
+   Количество слов: 0
+   Публичный: Да
+
+   СЛОВА В НАБОРЕ:
+
+--------------------------------------------------------------------------------
+
+75. German B2: Advanced Academic & Professional Concepts
+   ID: 349
+   Описание: B2 level vocabulary: Advanced Academic & Professional Concepts
+   Язык источника: german
+   Уровень: B2
+   Тема: Advanced Academic & Professional Concepts
+   Количество слов: 0
+   Публичный: Да
+
+   СЛОВА В НАБОРЕ:
+
+--------------------------------------------------------------------------------
+
+76. German B2: philosophy
+   ID: 350
+   Описание: B2 level vocabulary: philosophy
+   Язык источника: german
+   Уровень: B2
+   Тема: philosophy
+   Количество слов: 0
+   Публичный: Да
+
+   СЛОВА В НАБОРЕ:
+
+--------------------------------------------------------------------------------
+
+77. German B2: food
+   ID: 352
+   Описание: B2 level vocabulary: food
+   Язык источника: german
+   Уровень: B2
+   Тема: food
+   Количество слов: 0
+   Публичный: Да
+
+   СЛОВА В НАБОРЕ:
+
+--------------------------------------------------------------------------------
+
+78. German B2: Society, Culture & Human Relations
+   ID: 353
+   Описание: B2 level vocabulary: Society, Culture & Human Relations
+   Язык источника: german
+   Уровень: B2
+   Тема: Society, Culture & Human Relations
+   Количество слов: 0
+   Публичный: Да
+
+   СЛОВА В НАБОРЕ:
+
+--------------------------------------------------------------------------------
+
+79. German B2: Business & Professional Communication
+   ID: 355
+   Описание: B2 level vocabulary: Business & Professional Communication
+   Язык источника: german
+   Уровень: B2
+   Тема: Business & Professional Communication
+   Количество слов: 0
+   Публичный: Да
+
+   СЛОВА В НАБОРЕ:
+
+--------------------------------------------------------------------------------
+
+80. German B2: Environment, Climate & Sustainability
+   ID: 354
+   Описание: B2 level vocabulary: Environment, Climate & Sustainability
+   Язык источника: german
+   Уровень: B2
+   Тема: Environment, Climate & Sustainability
+   Количество слов: 0
+   Публичный: Да
+
+   СЛОВА В НАБОРЕ:
+
+--------------------------------------------------------------------------------
+
+81. German B2: Essential Vocabulary 3
+   ID: 341
+   Описание: B2 level essential vocabulary - Part 3
+   Язык источника: german
+   Уровень: B2
+   Тема: general
+   Количество слов: 0
+   Публичный: Да
+
+   СЛОВА В НАБОРЕ:
+
+--------------------------------------------------------------------------------
+
+82. German B2: economics
+   ID: 358
+   Описание: B2 level vocabulary: economics
+   Язык источника: german
+   Уровень: B2
+   Тема: economics
+   Количество слов: 0
+   Публичный: Да
+
+   СЛОВА В НАБОРЕ:
+
+--------------------------------------------------------------------------------
+
+83. German B2: Science, Technology & Innovation
+   ID: 356
+   Описание: B2 level vocabulary: Science, Technology & Innovation
+   Язык источника: german
+   Уровень: B2
+   Тема: Science, Technology & Innovation
+   Количество слов: 0
+   Публичный: Да
+
+   СЛОВА В НАБОРЕ:
+
+--------------------------------------------------------------------------------
+
+84. German B2: travel
+   ID: 357
+   Описание: B2 level vocabulary: travel
+   Язык источника: german
+   Уровень: B2
+   Тема: travel
+   Количество слов: 0
+   Публичный: Да
+
+   СЛОВА В НАБОРЕ:
+
+--------------------------------------------------------------------------------
+
+85. German B2: environment
+   ID: 360
+   Описание: B2 level vocabulary: environment
+   Язык источника: german
+   Уровень: B2
+   Тема: environment
+   Количество слов: 0
+   Публичный: Да
+
+   СЛОВА В НАБОРЕ:
+
+--------------------------------------------------------------------------------
+
+86. German B2: Health, Psychology & Personal Development
+   ID: 359
+   Описание: B2 level vocabulary: Health, Psychology & Personal Development
+   Язык источника: german
+   Уровень: B2
+   Тема: Health, Psychology & Personal Development
+   Количество слов: 0
+   Публичный: Да
+
+   СЛОВА В НАБОРЕ:
+
+--------------------------------------------------------------------------------
+
+87. German B2: Advanced Communication & Rhetoric
+   ID: 361
+   Описание: B2 level vocabulary: Advanced Communication & Rhetoric
+   Язык источника: german
+   Уровень: B2
+   Тема: Advanced Communication & Rhetoric
+   Количество слов: 0
+   Публичный: Да
+
+   СЛОВА В НАБОРЕ:
+
+--------------------------------------------------------------------------------
+
+88. German B2: Education, Culture & Media
+   ID: 362
+   Описание: B2 level vocabulary: Education, Culture & Media
+   Язык источника: german
+   Уровень: B2
+   Тема: Education, Culture & Media
+   Количество слов: 0
+   Публичный: Да
+
+   СЛОВА В НАБОРЕ:
+
+--------------------------------------------------------------------------------
+
+89. German B2: psychology
+   ID: 363
+   Описание: B2 level vocabulary: psychology
+   Язык источника: german
+   Уровень: B2
+   Тема: psychology
+   Количество слов: 0
+   Публичный: Да
+
+   СЛОВА В НАБОРЕ:
+
+--------------------------------------------------------------------------------
+
+90. German beginner
+   ID: 5
+   Описание: German vocabulary at beginner level
+   Язык источника: german
+   Уровень: beginner
+   Тема: не указана
+   Количество слов: 30
+   Публичный: Нет
+
+   СЛОВА В НАБОРЕ:
+   1. null (ID: 1258)
+   2. recyceln (ID: 1311)
+   3. annehmen (ID: 1198)
+   4. zusammenfassen (ID: 1228)
+   5. die Überzeugung (ID: 1178)
+   6. das Müsli (ID: 1012)
+   7. die Durchsage (ID: 995)
+   8. der Klimawandel (ID: 1317)
+   9. die Fortbildung (ID: 1282)
+   10. weltweit (ID: 1324)
+   11. scharf (ID: 1030)
+   12. der Abschied (ID: 1163)
+   13. null (ID: 1257)
+   14. die Sicherheit (ID: 1383)
+   15. der Konflikt (ID: 1331)
+   16. schmecken (ID: 1023)
+   17. null (ID: 1237)
+   18. normal (ID: 1370)
+   19. geschieden (ID: 1141)
+   20. die Weiterbildung (ID: 1281)
+   21. die Zusammenfassung (ID: 1229)
+   22. gekocht (ID: 1033)
+   23. null (ID: 1250)
+   24. sich unterscheiden (ID: 1361)
+   25. ausloggen (ID: 938)
+   26. null (ID: 1275)
+   27. die Buchung (ID: 958)
+   28. die Begründung (ID: 1191)
+   29. die Scheidung (ID: 1140)
+   30. die Wahl (ID: 1297)
+
+--------------------------------------------------------------------------------
+
+91. German C1
+   ID: 6
+   Описание: Advanced - Complex and nuanced vocabulary
+   Язык источника: german
+   Уровень: C1
+   Тема: не указана
+   Количество слов: 0
+   Публичный: Нет
+
+   СЛОВА В НАБОРЕ:
+
+--------------------------------------------------------------------------------
+
+92. German C1: education
+   ID: 364
+   Описание: C1 level vocabulary: education
+   Язык источника: german
+   Уровень: C1
+   Тема: education
+   Количество слов: 0
+   Публичный: Да
+
+   СЛОВА В НАБОРЕ:
+
+--------------------------------------------------------------------------------
+
+93. German C1: culture
+   ID: 365
+   Описание: C1 level vocabulary: culture
+   Язык источника: german
+   Уровень: C1
+   Тема: culture
+   Количество слов: 0
+   Публичный: Да
+
+   СЛОВА В НАБОРЕ:
+
+--------------------------------------------------------------------------------
+
+94. German C1: work
+   ID: 366
+   Описание: C1 level vocabulary: work
+   Язык источника: german
+   Уровень: C1
+   Тема: work
+   Количество слов: 0
+   Публичный: Да
+
+   СЛОВА В НАБОРЕ:
+
+--------------------------------------------------------------------------------
+
+95. German C1: politics
+   ID: 367
+   Описание: C1 level vocabulary: politics
+   Язык источника: german
+   Уровень: C1
+   Тема: politics
+   Количество слов: 0
+   Публичный: Да
+
+   СЛОВА В НАБОРЕ:
+
+--------------------------------------------------------------------------------
+
+96. German C1: economics
+   ID: 368
+   Описание: C1 level vocabulary: economics
+   Язык источника: german
+   Уровень: C1
+   Тема: economics
+   Количество слов: 0
+   Публичный: Да
+
+   СЛОВА В НАБОРЕ:
+
+--------------------------------------------------------------------------------
+
+97. German C1: medicine
+   ID: 369
+   Описание: C1 level vocabulary: medicine
+   Язык источника: german
+   Уровень: C1
+   Тема: medicine
+   Количество слов: 0
+   Публичный: Да
+
+   СЛОВА В НАБОРЕ:
+
+--------------------------------------------------------------------------------
+
+98. German C1: science
+   ID: 370
+   Описание: C1 level vocabulary: science
+   Язык источника: german
+   Уровень: C1
+   Тема: science
+   Количество слов: 0
+   Публичный: Да
+
+   СЛОВА В НАБОРЕ:
+
+--------------------------------------------------------------------------------
+
+99. German C1: philosophy
+   ID: 371
+   Описание: C1 level vocabulary: philosophy
+   Язык источника: german
+   Уровень: C1
+   Тема: philosophy
+   Количество слов: 0
+   Публичный: Да
+
+   СЛОВА В НАБОРЕ:
+
+--------------------------------------------------------------------------------
+
+100. German C1: psychology
+   ID: 372
+   Описание: C1 level vocabulary: psychology
+   Язык источника: german
+   Уровень: C1
+   Тема: psychology
+   Количество слов: 0
+   Публичный: Да
+
+   СЛОВА В НАБОРЕ:
+
+--------------------------------------------------------------------------------
+
+101. German C1: sociology
+   ID: 373
+   Описание: C1 level vocabulary: sociology
+   Язык источника: german
+   Уровень: C1
+   Тема: sociology
+   Количество слов: 0
+   Публичный: Да
+
+   СЛОВА В НАБОРЕ:
+
+--------------------------------------------------------------------------------
+
+102. German C1: law
+   ID: 374
+   Описание: C1 level vocabulary: law
+   Язык источника: german
+   Уровень: C1
+   Тема: law
+   Количество слов: 0
+   Публичный: Да
+
+   СЛОВА В НАБОРЕ:
+
+--------------------------------------------------------------------------------
+
+103. German C1: environment
+   ID: 377
+   Описание: C1 level vocabulary: environment
+   Язык источника: german
+   Уровень: C1
+   Тема: environment
+   Количество слов: 0
+   Публичный: Да
+
+   СЛОВА В НАБОРЕ:
+
+--------------------------------------------------------------------------------
+
+104. German C1: Essential Vocabulary 1
+   ID: 375
+   Описание: C1 level essential vocabulary - Part 1
+   Язык источника: german
+   Уровень: C1
+   Тема: general
+   Количество слов: 0
+   Публичный: Да
+
+   СЛОВА В НАБОРЕ:
+
+--------------------------------------------------------------------------------
+
+105. German C1: Advanced Expressions and Nuanced Language
+   ID: 378
+   Описание: C1 level vocabulary: Advanced Expressions and Nuanced Language
+   Язык источника: german
+   Уровень: C1
+   Тема: Advanced Expressions and Nuanced Language
+   Количество слов: 0
+   Публичный: Да
+
+   СЛОВА В НАБОРЕ:
+
+--------------------------------------------------------------------------------
+
+106. German C1: Essential Vocabulary 2
+   ID: 376
+   Описание: C1 level essential vocabulary - Part 2
+   Язык источника: german
+   Уровень: C1
+   Тема: general
+   Количество слов: 0
+   Публичный: Да
+
+   СЛОВА В НАБОРЕ:
+
+--------------------------------------------------------------------------------
+
+107. German C1: Academic and Intellectual Discourse
+   ID: 379
+   Описание: C1 level vocabulary: Academic and Intellectual Discourse
+   Язык источника: german
+   Уровень: C1
+   Тема: Academic and Intellectual Discourse
+   Количество слов: 0
+   Публичный: Да
+
+   СЛОВА В НАБОРЕ:
+
+--------------------------------------------------------------------------------
+
+108. German C1: Professional and Technical Terminology
+   ID: 380
+   Описание: C1 level vocabulary: Professional and Technical Terminology
+   Язык источника: german
+   Уровень: C1
+   Тема: Professional and Technical Terminology
+   Количество слов: 0
+   Публичный: Да
+
+   СЛОВА В НАБОРЕ:
+
+--------------------------------------------------------------------------------
+
+109. German C1: Cultural, Social and Political Discourse
+   ID: 381
+   Описание: C1 level vocabulary: Cultural, Social and Political Discourse
+   Язык источника: german
+   Уровень: C1
+   Тема: Cultural, Social and Political Discourse
+   Количество слов: 0
+   Публичный: Да
+
+   СЛОВА В НАБОРЕ:
+
+--------------------------------------------------------------------------------
+
+110. German C2
+   ID: 7
+   Описание: Proficiency - Academic and specialized vocabulary
+   Язык источника: german
+   Уровень: C2
+   Тема: не указана
+   Количество слов: 0
+   Публичный: Нет
+
+   СЛОВА В НАБОРЕ:
+
+--------------------------------------------------------------------------------
+
+111. German C2: science
+   ID: 382
+   Описание: C2 level vocabulary: science
+   Язык источника: german
+   Уровень: C2
+   Тема: science
+   Количество слов: 0
+   Публичный: Да
+
+   СЛОВА В НАБОРЕ:
+
+--------------------------------------------------------------------------------
+
+112. German C2: education
+   ID: 383
+   Описание: C2 level vocabulary: education
+   Язык источника: german
+   Уровень: C2
+   Тема: education
+   Количество слов: 0
+   Публичный: Да
+
+   СЛОВА В НАБОРЕ:
+
+--------------------------------------------------------------------------------
+
+113. German C2: culture
+   ID: 392
+   Описание: C2 level vocabulary: culture
+   Язык источника: german
+   Уровень: C2
+   Тема: culture
+   Количество слов: 0
+   Публичный: Да
+
+   СЛОВА В НАБОРЕ:
+
+--------------------------------------------------------------------------------
+
+114. German C2: politics
+   ID: 393
+   Описание: C2 level vocabulary: politics
+   Язык источника: german
+   Уровень: C2
+   Тема: politics
+   Количество слов: 0
+   Публичный: Да
+
+   СЛОВА В НАБОРЕ:
+
+--------------------------------------------------------------------------------
+
+115. German C2: economics
+   ID: 394
+   Описание: C2 level vocabulary: economics
+   Язык источника: german
+   Уровень: C2
+   Тема: economics
+   Количество слов: 0
+   Публичный: Да
+
+   СЛОВА В НАБОРЕ:
+
+--------------------------------------------------------------------------------
+
+116. German C2: law
+   ID: 395
+   Описание: C2 level vocabulary: law
+   Язык источника: german
+   Уровень: C2
+   Тема: law
+   Количество слов: 0
+   Публичный: Да
+
+   СЛОВА В НАБОРЕ:
+
+--------------------------------------------------------------------------------
+
+117. German C2: philosophy
+   ID: 396
+   Описание: C2 level vocabulary: philosophy
+   Язык источника: german
+   Уровень: C2
+   Тема: philosophy
+   Количество слов: 0
+   Публичный: Да
+
+   СЛОВА В НАБОРЕ:
+
+--------------------------------------------------------------------------------
+
+118. German C2: environment
+   ID: 397
+   Описание: C2 level vocabulary: environment
+   Язык источника: german
+   Уровень: C2
+   Тема: environment
+   Количество слов: 0
+   Публичный: Да
+
+   СЛОВА В НАБОРЕ:
+
+--------------------------------------------------------------------------------
+
+119. German C2: Cutting-Edge Technology & Innovation
+   ID: 398
+   Описание: C2 level vocabulary: Cutting-Edge Technology & Innovation
+   Язык источника: german
+   Уровень: C2
+   Тема: Cutting-Edge Technology & Innovation
+   Количество слов: 0
+   Публичный: Да
+
+   СЛОВА В НАБОРЕ:
+
+--------------------------------------------------------------------------------
+
+120. German C2: Advanced Psychology & Human Behavior
+   ID: 399
+   Описание: C2 level vocabulary: Advanced Psychology & Human Behavior
+   Язык источника: german
+   Уровень: C2
+   Тема: Advanced Psychology & Human Behavior
+   Количество слов: 0
+   Публичный: Да
+
+   СЛОВА В НАБОРЕ:
+
+--------------------------------------------------------------------------------
+
+121. German C2: Ethics & Moral Philosophy
+   ID: 401
+   Описание: C2 level vocabulary: Ethics & Moral Philosophy
+   Язык источника: german
+   Уровень: C2
+   Тема: Ethics & Moral Philosophy
+   Количество слов: 0
+   Публичный: Да
+
+   СЛОВА В НАБОРЕ:
+
+--------------------------------------------------------------------------------
+
+122. German C2: Religion & Theology
+   ID: 400
+   Описание: C2 level vocabulary: Religion & Theology
+   Язык источника: german
+   Уровень: C2
+   Тема: Religion & Theology
+   Количество слов: 0
+   Публичный: Да
+
+   СЛОВА В НАБОРЕ:
+
+--------------------------------------------------------------------------------
+
+123. German C2: Linguistic Theory & Communication Science
+   ID: 402
+   Описание: C2 level vocabulary: Linguistic Theory & Communication Science
+   Язык источника: german
+   Уровень: C2
+   Тема: Linguistic Theory & Communication Science
+   Количество слов: 0
+   Публичный: Да
+
+   СЛОВА В НАБОРЕ:
+
+--------------------------------------------------------------------------------
+
+124. German C2: Musicology & Music Theory
+   ID: 403
+   Описание: C2 level vocabulary: Musicology & Music Theory
+   Язык источника: german
+   Уровень: C2
+   Тема: Musicology & Music Theory
+   Количество слов: 0
+   Публичный: Да
+
+   СЛОВА В НАБОРЕ:
+
+--------------------------------------------------------------------------------
+
+125. German C2: Advanced Business & Management
+   ID: 404
+   Описание: C2 level vocabulary: Advanced Business & Management
+   Язык источника: german
+   Уровень: C2
+   Тема: Advanced Business & Management
+   Количество слов: 0
+   Публичный: Да
+
+   СЛОВА В НАБОРЕ:
+
+--------------------------------------------------------------------------------
+
+126. German C2: Astronomy & Cosmology
+   ID: 405
+   Описание: C2 level vocabulary: Astronomy & Cosmology
+   Язык источника: german
+   Уровень: C2
+   Тема: Astronomy & Cosmology
+   Количество слов: 0
+   Публичный: Да
+
+   СЛОВА В НАБОРЕ:
+
+--------------------------------------------------------------------------------
+
+127. German C2: Geography & Geopolitics
+   ID: 406
+   Описание: C2 level vocabulary: Geography & Geopolitics
+   Язык источника: german
+   Уровень: C2
+   Тема: Geography & Geopolitics
+   Количество слов: 0
+   Публичный: Да
+
+   СЛОВА В НАБОРЕ:
+
+--------------------------------------------------------------------------------
+
+128. German C2: Film & Media Theory
+   ID: 407
+   Описание: C2 level vocabulary: Film & Media Theory
+   Язык источника: german
+   Уровень: C2
+   Тема: Film & Media Theory
+   Количество слов: 0
+   Публичный: Да
+
+   СЛОВА В НАБОРЕ:
+
+--------------------------------------------------------------------------------
+
+129. German C2: Advanced Chemistry & Physics
+   ID: 408
+   Описание: C2 level vocabulary: Advanced Chemistry & Physics
+   Язык источника: german
+   Уровень: C2
+   Тема: Advanced Chemistry & Physics
+   Количество слов: 0
+   Публичный: Да
+
+   СЛОВА В НАБОРЕ:
+
+--------------------------------------------------------------------------------
+
+130. German C2: Historical & Archaeological Terminology
+   ID: 409
+   Описание: C2 level vocabulary: Historical & Archaeological Terminology
+   Язык источника: german
+   Уровень: C2
+   Тема: Historical & Archaeological Terminology
+   Количество слов: 0
+   Публичный: Да
+
+   СЛОВА В НАБОРЕ:
+
+--------------------------------------------------------------------------------
+
+131. German C2: Essential Vocabulary 1
+   ID: 384
+   Описание: C2 level essential vocabulary - Part 1
+   Язык источника: german
+   Уровень: C2
+   Тема: general
+   Количество слов: 0
+   Публичный: Да
+
+   СЛОВА В НАБОРЕ:
+
+--------------------------------------------------------------------------------
+
+132. German C2: Essential Vocabulary 2
+   ID: 385
+   Описание: C2 level essential vocabulary - Part 2
+   Язык источника: german
+   Уровень: C2
+   Тема: general
+   Количество слов: 0
+   Публичный: Да
+
+   СЛОВА В НАБОРЕ:
+
+--------------------------------------------------------------------------------
+
+133. German C2: Essential Vocabulary 3
+   ID: 386
+   Описание: C2 level essential vocabulary - Part 3
+   Язык источника: german
+   Уровень: C2
+   Тема: general
+   Количество слов: 0
+   Публичный: Да
+
+   СЛОВА В НАБОРЕ:
+
+--------------------------------------------------------------------------------
+
+134. German C2: Essential Vocabulary 4
+   ID: 387
+   Описание: C2 level essential vocabulary - Part 4
+   Язык источника: german
+   Уровень: C2
+   Тема: general
+   Количество слов: 0
+   Публичный: Да
+
+   СЛОВА В НАБОРЕ:
+
+--------------------------------------------------------------------------------
+
+135. German C2: Essential Vocabulary 5
+   ID: 388
+   Описание: C2 level essential vocabulary - Part 5
+   Язык источника: german
+   Уровень: C2
+   Тема: general
+   Количество слов: 0
+   Публичный: Да
+
+   СЛОВА В НАБОРЕ:
+
+--------------------------------------------------------------------------------
+
+136. German C2: Essential Vocabulary 6
+   ID: 389
+   Описание: C2 level essential vocabulary - Part 6
+   Язык источника: german
+   Уровень: C2
+   Тема: general
+   Количество слов: 0
+   Публичный: Да
+
+   СЛОВА В НАБОРЕ:
+
+--------------------------------------------------------------------------------
+
+137. German C2: Essential Vocabulary 7
+   ID: 390
+   Описание: C2 level essential vocabulary - Part 7
+   Язык источника: german
+   Уровень: C2
+   Тема: general
+   Количество слов: 0
+   Публичный: Да
+
+   СЛОВА В НАБОРЕ:
+
+--------------------------------------------------------------------------------
+
+138. German C2: Advanced Legal & Jurisprudence
+   ID: 410
+   Описание: C2 level vocabulary: Advanced Legal & Jurisprudence
+   Язык источника: german
+   Уровень: C2
+   Тема: Advanced Legal & Jurisprudence
+   Количество слов: 0
+   Публичный: Да
+
+   СЛОВА В НАБОРЕ:
+
+--------------------------------------------------------------------------------
+
+139. German C2: Essential Vocabulary 8
+   ID: 391
+   Описание: C2 level essential vocabulary - Part 8
+   Язык источника: german
+   Уровень: C2
+   Тема: general
+   Количество слов: 0
+   Публичный: Да
+
+   СЛОВА В НАБОРЕ:
+
+--------------------------------------------------------------------------------
+
+140. German C2: Advanced Neuroscience & Cognitive Science
+   ID: 411
+   Описание: C2 level vocabulary: Advanced Neuroscience & Cognitive Science
+   Язык источника: german
+   Уровень: C2
+   Тема: Advanced Neuroscience & Cognitive Science
+   Количество слов: 0
+   Публичный: Да
+
+   СЛОВА В НАБОРЕ:
+
+--------------------------------------------------------------------------------
+
+141. German C2: Advanced Cultural & Sociological Analysis
+   ID: 412
+   Описание: C2 level vocabulary: Advanced Cultural & Sociological Analysis
+   Язык источника: german
+   Уровень: C2
+   Тема: Advanced Cultural & Sociological Analysis
+   Количество слов: 0
+   Публичный: Да
+
+   СЛОВА В НАБОРЕ:
+
+--------------------------------------------------------------------------------
+
+142. German - General
+   ID: 8
+   Описание: German vocabulary related to general
+   Язык источника: german
+   Уровень: не указан
+   Тема: general
+   Количество слов: 0
+   Публичный: Нет
+
+   СЛОВА В НАБОРЕ:
+
+--------------------------------------------------------------------------------
+
+143. German - Education
+   ID: 9
+   Описание: German vocabulary related to education
+   Язык источника: german
+   Уровень: не указан
+   Тема: education
+   Количество слов: 0
+   Публичный: Нет
+
+   СЛОВА В НАБОРЕ:
+
+--------------------------------------------------------------------------------
+
+144. German - Science
+   ID: 10
+   Описание: German vocabulary related to science
+   Язык источника: german
+   Уровень: не указан
+   Тема: science
+   Количество слов: 0
+   Публичный: Нет
+
+   СЛОВА В НАБОРЕ:
+
+--------------------------------------------------------------------------------
+
+145. German - Culture
+   ID: 11
+   Описание: German vocabulary related to culture
+   Язык источника: german
+   Уровень: не указан
+   Тема: culture
+   Количество слов: 0
+   Публичный: Нет
+
+   СЛОВА В НАБОРЕ:
+
+--------------------------------------------------------------------------------
+
+146. German - Politics
+   ID: 12
+   Описание: German vocabulary related to politics
+   Язык источника: german
+   Уровень: не указан
+   Тема: politics
+   Количество слов: 0
+   Публичный: Нет
+
+   СЛОВА В НАБОРЕ:
+
+--------------------------------------------------------------------------------
+
+147. German - Work
+   ID: 13
+   Описание: German vocabulary related to work
+   Язык источника: german
+   Уровень: не указан
+   Тема: work
+   Количество слов: 0
+   Публичный: Нет
+
+   СЛОВА В НАБОРЕ:
+
+--------------------------------------------------------------------------------
+
+148. German - Economics
+   ID: 14
+   Описание: German vocabulary related to economics
+   Язык источника: german
+   Уровень: не указан
+   Тема: economics
+   Количество слов: 0
+   Публичный: Нет
+
+   СЛОВА В НАБОРЕ:
+
+--------------------------------------------------------------------------------
+
+149. German - Law
+   ID: 15
+   Описание: German vocabulary related to law
+   Язык источника: german
+   Уровень: не указан
+   Тема: law
+   Количество слов: 0
+   Публичный: Нет
+
+   СЛОВА В НАБОРЕ:
+
+--------------------------------------------------------------------------------
+
+150. German - Philosophy
+   ID: 16
+   Описание: German vocabulary related to philosophy
+   Язык источника: german
+   Уровень: не указан
+   Тема: philosophy
+   Количество слов: 0
+   Публичный: Нет
+
+   СЛОВА В НАБОРЕ:
+
+--------------------------------------------------------------------------------
+
+151. German - Communication
+   ID: 17
+   Описание: German vocabulary related to communication
+   Язык источника: german
+   Уровень: не указан
+   Тема: communication
+   Количество слов: 0
+   Публичный: Нет
+
+   СЛОВА В НАБОРЕ:
+
+--------------------------------------------------------------------------------
+

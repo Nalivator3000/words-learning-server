@@ -1,0 +1,2 @@
+Error: ENOTEMPTY: directory not empty, rmdir 'C:\Users\Nalivator3000\words-learning-server\test-results'
+

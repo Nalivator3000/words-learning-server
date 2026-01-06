@@ -1,0 +1,1237 @@
+{
+  "export_date": "2026-01-02T21:56:48.994Z",
+  "total_source_words": 8368,
+  "words_with_themes": 8368,
+  "words_with_examples": 8368,
+  "total_word_sets": 151,
+  "total_words_in_sets": 150,
+  "translations_by_language": {
+    "english": 0,
+    "spanish": 0,
+    "french": 0,
+    "russian": 0,
+    "ukrainian": 0,
+    "portuguese": 0,
+    "italian": 0,
+    "chinese": 0,
+    "japanese": 0,
+    "korean": 0,
+    "hindi": 0,
+    "arabic": 0,
+    "turkish": 0,
+    "polish": 0,
+    "romanian": 0,
+    "serbian": 0,
+    "swahili": 0
+  },
+  "word_sets": [
+    {
+      "id": 1,
+      "title": "German A1",
+      "word_count": 30,
+      "source_language": "german",
+      "level": "A1",
+      "theme": null
+    },
+    {
+      "id": 278,
+      "title": "German A1: Essential Vocabulary 1",
+      "word_count": 0,
+      "source_language": "german",
+      "level": "A1",
+      "theme": "general"
+    },
+    {
+      "id": 280,
+      "title": "German A1: Essential Vocabulary 2",
+      "word_count": 0,
+      "source_language": "german",
+      "level": "A1",
+      "theme": "general"
+    },
+    {
+      "id": 281,
+      "title": "German A1: Essential Vocabulary 3",
+      "word_count": 0,
+      "source_language": "german",
+      "level": "A1",
+      "theme": "general"
+    },
+    {
+      "id": 282,
+      "title": "German A1: Essential Vocabulary 4",
+      "word_count": 0,
+      "source_language": "german",
+      "level": "A1",
+      "theme": "general"
+    },
+    {
+      "id": 283,
+      "title": "German A1: Essential Vocabulary 5",
+      "word_count": 0,
+      "source_language": "german",
+      "level": "A1",
+      "theme": "general"
+    },
+    {
+      "id": 284,
+      "title": "German A1: Essential Vocabulary 6",
+      "word_count": 0,
+      "source_language": "german",
+      "level": "A1",
+      "theme": "general"
+    },
+    {
+      "id": 285,
+      "title": "German A1: Essential Vocabulary 7",
+      "word_count": 0,
+      "source_language": "german",
+      "level": "A1",
+      "theme": "general"
+    },
+    {
+      "id": 286,
+      "title": "German A1: Essential Vocabulary 8",
+      "word_count": 0,
+      "source_language": "german",
+      "level": "A1",
+      "theme": "general"
+    },
+    {
+      "id": 287,
+      "title": "German A1: Essential Vocabulary 9",
+      "word_count": 0,
+      "source_language": "german",
+      "level": "A1",
+      "theme": "general"
+    },
+    {
+      "id": 288,
+      "title": "German A1: Essential Vocabulary 10",
+      "word_count": 0,
+      "source_language": "german",
+      "level": "A1",
+      "theme": "general"
+    },
+    {
+      "id": 289,
+      "title": "German A1: Food and Drinks",
+      "word_count": 0,
+      "source_language": "german",
+      "level": "A1",
+      "theme": "Food and Drinks"
+    },
+    {
+      "id": 290,
+      "title": "German A1: People & Relationships",
+      "word_count": 0,
+      "source_language": "german",
+      "level": "A1",
+      "theme": "People & Relationships"
+    },
+    {
+      "id": 291,
+      "title": "German A1: Days, Months, Time",
+      "word_count": 0,
+      "source_language": "german",
+      "level": "A1",
+      "theme": "Days, Months, Time"
+    },
+    {
+      "id": 292,
+      "title": "German A1: House and Furniture",
+      "word_count": 0,
+      "source_language": "german",
+      "level": "A1",
+      "theme": "House and Furniture"
+    },
+    {
+      "id": 293,
+      "title": "German A1: Numbers, Time & Basic Concepts",
+      "word_count": 0,
+      "source_language": "german",
+      "level": "A1",
+      "theme": "Numbers, Time & Basic Concepts"
+    },
+    {
+      "id": 294,
+      "title": "German A1: Everyday Life & Basic Activities",
+      "word_count": 0,
+      "source_language": "german",
+      "level": "A1",
+      "theme": "Everyday Life & Basic Activities"
+    },
+    {
+      "id": 295,
+      "title": "German A1: Food & Drinks",
+      "word_count": 0,
+      "source_language": "german",
+      "level": "A1",
+      "theme": "Food & Drinks"
+    },
+    {
+      "id": 296,
+      "title": "German A1: Weather and Seasons",
+      "word_count": 0,
+      "source_language": "german",
+      "level": "A1",
+      "theme": "Weather and Seasons"
+    },
+    {
+      "id": 298,
+      "title": "German A1: Places & Directions",
+      "word_count": 0,
+      "source_language": "german",
+      "level": "A1",
+      "theme": "Places & Directions"
+    },
+    {
+      "id": 297,
+      "title": "German A1: Question Words",
+      "word_count": 0,
+      "source_language": "german",
+      "level": "A1",
+      "theme": "Question Words"
+    },
+    {
+      "id": 2,
+      "title": "German A2",
+      "word_count": 30,
+      "source_language": "german",
+      "level": "A2",
+      "theme": null
+    },
+    {
+      "id": 305,
+      "title": "German A2: health",
+      "word_count": 0,
+      "source_language": "german",
+      "level": "A2",
+      "theme": "health"
+    },
+    {
+      "id": 306,
+      "title": "German A2: food",
+      "word_count": 0,
+      "source_language": "german",
+      "level": "A2",
+      "theme": "food"
+    },
+    {
+      "id": 299,
+      "title": "German A2: Essential Vocabulary 1",
+      "word_count": 0,
+      "source_language": "german",
+      "level": "A2",
+      "theme": "general"
+    },
+    {
+      "id": 300,
+      "title": "German A2: Essential Vocabulary 2",
+      "word_count": 0,
+      "source_language": "german",
+      "level": "A2",
+      "theme": "general"
+    },
+    {
+      "id": 301,
+      "title": "German A2: Essential Vocabulary 3",
+      "word_count": 0,
+      "source_language": "german",
+      "level": "A2",
+      "theme": "general"
+    },
+    {
+      "id": 302,
+      "title": "German A2: Essential Vocabulary 4",
+      "word_count": 0,
+      "source_language": "german",
+      "level": "A2",
+      "theme": "general"
+    },
+    {
+      "id": 303,
+      "title": "German A2: Essential Vocabulary 5",
+      "word_count": 0,
+      "source_language": "german",
+      "level": "A2",
+      "theme": "general"
+    },
+    {
+      "id": 307,
+      "title": "German A2: communication",
+      "word_count": 0,
+      "source_language": "german",
+      "level": "A2",
+      "theme": "communication"
+    },
+    {
+      "id": 308,
+      "title": "German A2: work",
+      "word_count": 0,
+      "source_language": "german",
+      "level": "A2",
+      "theme": "work"
+    },
+    {
+      "id": 309,
+      "title": "German A2: education",
+      "word_count": 0,
+      "source_language": "german",
+      "level": "A2",
+      "theme": "education"
+    },
+    {
+      "id": 311,
+      "title": "German A2: Past Experiences and Future Plans",
+      "word_count": 0,
+      "source_language": "german",
+      "level": "A2",
+      "theme": "Past Experiences and Future Plans"
+    },
+    {
+      "id": 310,
+      "title": "German A2: travel",
+      "word_count": 0,
+      "source_language": "german",
+      "level": "A2",
+      "theme": "travel"
+    },
+    {
+      "id": 312,
+      "title": "German A2: Shopping and Services",
+      "word_count": 0,
+      "source_language": "german",
+      "level": "A2",
+      "theme": "Shopping and Services"
+    },
+    {
+      "id": 313,
+      "title": "German A2: Descriptions of People and Places",
+      "word_count": 0,
+      "source_language": "german",
+      "level": "A2",
+      "theme": "Descriptions of People and Places"
+    },
+    {
+      "id": 304,
+      "title": "German A2: Essential Vocabulary 6",
+      "word_count": 0,
+      "source_language": "german",
+      "level": "A2",
+      "theme": "general"
+    },
+    {
+      "id": 314,
+      "title": "German A2: Daily Routines and Habits",
+      "word_count": 0,
+      "source_language": "german",
+      "level": "A2",
+      "theme": "Daily Routines and Habits"
+    },
+    {
+      "id": 315,
+      "title": "German A2: Hobbies and Leisure",
+      "word_count": 0,
+      "source_language": "german",
+      "level": "A2",
+      "theme": "Hobbies and Leisure"
+    },
+    {
+      "id": 316,
+      "title": "German A2: Work and Study",
+      "word_count": 0,
+      "source_language": "german",
+      "level": "A2",
+      "theme": "Work and Study"
+    },
+    {
+      "id": 3,
+      "title": "German B1",
+      "word_count": 30,
+      "source_language": "german",
+      "level": "B1",
+      "theme": null
+    },
+    {
+      "id": 317,
+      "title": "German B1: Essential Vocabulary 1",
+      "word_count": 0,
+      "source_language": "german",
+      "level": "B1",
+      "theme": "general"
+    },
+    {
+      "id": 318,
+      "title": "German B1: Essential Vocabulary 2",
+      "word_count": 0,
+      "source_language": "german",
+      "level": "B1",
+      "theme": "general"
+    },
+    {
+      "id": 319,
+      "title": "German B1: Essential Vocabulary 3",
+      "word_count": 0,
+      "source_language": "german",
+      "level": "B1",
+      "theme": "general"
+    },
+    {
+      "id": 320,
+      "title": "German B1: Essential Vocabulary 4",
+      "word_count": 0,
+      "source_language": "german",
+      "level": "B1",
+      "theme": "general"
+    },
+    {
+      "id": 322,
+      "title": "German B1: work",
+      "word_count": 0,
+      "source_language": "german",
+      "level": "B1",
+      "theme": "work"
+    },
+    {
+      "id": 323,
+      "title": "German B1: Soziale Beziehungen",
+      "word_count": 0,
+      "source_language": "german",
+      "level": "B1",
+      "theme": "Soziale Beziehungen"
+    },
+    {
+      "id": 324,
+      "title": "German B1: Arbeit und Beruf",
+      "word_count": 0,
+      "source_language": "german",
+      "level": "B1",
+      "theme": "Arbeit und Beruf"
+    },
+    {
+      "id": 325,
+      "title": "German B1: Money and Finance",
+      "word_count": 0,
+      "source_language": "german",
+      "level": "B1",
+      "theme": "Money and Finance"
+    },
+    {
+      "id": 326,
+      "title": "German B1: Medien und Technologie",
+      "word_count": 0,
+      "source_language": "german",
+      "level": "B1",
+      "theme": "Medien und Technologie"
+    },
+    {
+      "id": 327,
+      "title": "German B1: Reisen und Geografie",
+      "word_count": 0,
+      "source_language": "german",
+      "level": "B1",
+      "theme": "Reisen und Geografie"
+    },
+    {
+      "id": 328,
+      "title": "German B1: Culture and Arts",
+      "word_count": 0,
+      "source_language": "german",
+      "level": "B1",
+      "theme": "Culture and Arts"
+    },
+    {
+      "id": 321,
+      "title": "German B1: Essential Vocabulary 5",
+      "word_count": 0,
+      "source_language": "german",
+      "level": "B1",
+      "theme": "general"
+    },
+    {
+      "id": 330,
+      "title": "German B1: Bildung und Entwicklung",
+      "word_count": 0,
+      "source_language": "german",
+      "level": "B1",
+      "theme": "Bildung und Entwicklung"
+    },
+    {
+      "id": 329,
+      "title": "German B1: Gesundheit und Lebensstil",
+      "word_count": 0,
+      "source_language": "german",
+      "level": "B1",
+      "theme": "Gesundheit und Lebensstil"
+    },
+    {
+      "id": 331,
+      "title": "German B1: Sports and Hobbies",
+      "word_count": 0,
+      "source_language": "german",
+      "level": "B1",
+      "theme": "Sports and Hobbies"
+    },
+    {
+      "id": 332,
+      "title": "German B1: Emotions and Personality",
+      "word_count": 0,
+      "source_language": "german",
+      "level": "B1",
+      "theme": "Emotions and Personality"
+    },
+    {
+      "id": 333,
+      "title": "German B1: Housing and Living Situations",
+      "word_count": 0,
+      "source_language": "german",
+      "level": "B1",
+      "theme": "Housing and Living Situations"
+    },
+    {
+      "id": 334,
+      "title": "German B1: Shopping and Consumer Behavior",
+      "word_count": 0,
+      "source_language": "german",
+      "level": "B1",
+      "theme": "Shopping and Consumer Behavior"
+    },
+    {
+      "id": 335,
+      "title": "German B1: Food and Dining",
+      "word_count": 0,
+      "source_language": "german",
+      "level": "B1",
+      "theme": "Food and Dining"
+    },
+    {
+      "id": 4,
+      "title": "German B2",
+      "word_count": 30,
+      "source_language": "german",
+      "level": "B2",
+      "theme": null
+    },
+    {
+      "id": 336,
+      "title": "German B2: communication",
+      "word_count": 0,
+      "source_language": "german",
+      "level": "B2",
+      "theme": "communication"
+    },
+    {
+      "id": 337,
+      "title": "German B2: work",
+      "word_count": 0,
+      "source_language": "german",
+      "level": "B2",
+      "theme": "work"
+    },
+    {
+      "id": 338,
+      "title": "German B2: politics",
+      "word_count": 0,
+      "source_language": "german",
+      "level": "B2",
+      "theme": "politics"
+    },
+    {
+      "id": 342,
+      "title": "German B2: health",
+      "word_count": 0,
+      "source_language": "german",
+      "level": "B2",
+      "theme": "health"
+    },
+    {
+      "id": 343,
+      "title": "German B2: science",
+      "word_count": 0,
+      "source_language": "german",
+      "level": "B2",
+      "theme": "science"
+    },
+    {
+      "id": 339,
+      "title": "German B2: Essential Vocabulary 1",
+      "word_count": 0,
+      "source_language": "german",
+      "level": "B2",
+      "theme": "general"
+    },
+    {
+      "id": 340,
+      "title": "German B2: Essential Vocabulary 2",
+      "word_count": 0,
+      "source_language": "german",
+      "level": "B2",
+      "theme": "general"
+    },
+    {
+      "id": 344,
+      "title": "German B2: culture",
+      "word_count": 0,
+      "source_language": "german",
+      "level": "B2",
+      "theme": "culture"
+    },
+    {
+      "id": 345,
+      "title": "German B2: Abstract Concepts & Complex Ideas",
+      "word_count": 0,
+      "source_language": "german",
+      "level": "B2",
+      "theme": "Abstract Concepts & Complex Ideas"
+    },
+    {
+      "id": 346,
+      "title": "German B2: Complex Emotions & Psychological States",
+      "word_count": 0,
+      "source_language": "german",
+      "level": "B2",
+      "theme": "Complex Emotions & Psychological States"
+    },
+    {
+      "id": 347,
+      "title": "German B2: Advanced Literary & Artistic Vocabulary",
+      "word_count": 0,
+      "source_language": "german",
+      "level": "B2",
+      "theme": "Advanced Literary & Artistic Vocabulary"
+    },
+    {
+      "id": 348,
+      "title": "German B2: law",
+      "word_count": 0,
+      "source_language": "german",
+      "level": "B2",
+      "theme": "law"
+    },
+    {
+      "id": 351,
+      "title": "German B2: Advanced Abstract Concepts & Philosophy",
+      "word_count": 0,
+      "source_language": "german",
+      "level": "B2",
+      "theme": "Advanced Abstract Concepts & Philosophy"
+    },
+    {
+      "id": 349,
+      "title": "German B2: Advanced Academic & Professional Concepts",
+      "word_count": 0,
+      "source_language": "german",
+      "level": "B2",
+      "theme": "Advanced Academic & Professional Concepts"
+    },
+    {
+      "id": 350,
+      "title": "German B2: philosophy",
+      "word_count": 0,
+      "source_language": "german",
+      "level": "B2",
+      "theme": "philosophy"
+    },
+    {
+      "id": 352,
+      "title": "German B2: food",
+      "word_count": 0,
+      "source_language": "german",
+      "level": "B2",
+      "theme": "food"
+    },
+    {
+      "id": 353,
+      "title": "German B2: Society, Culture & Human Relations",
+      "word_count": 0,
+      "source_language": "german",
+      "level": "B2",
+      "theme": "Society, Culture & Human Relations"
+    },
+    {
+      "id": 355,
+      "title": "German B2: Business & Professional Communication",
+      "word_count": 0,
+      "source_language": "german",
+      "level": "B2",
+      "theme": "Business & Professional Communication"
+    },
+    {
+      "id": 354,
+      "title": "German B2: Environment, Climate & Sustainability",
+      "word_count": 0,
+      "source_language": "german",
+      "level": "B2",
+      "theme": "Environment, Climate & Sustainability"
+    },
+    {
+      "id": 341,
+      "title": "German B2: Essential Vocabulary 3",
+      "word_count": 0,
+      "source_language": "german",
+      "level": "B2",
+      "theme": "general"
+    },
+    {
+      "id": 358,
+      "title": "German B2: economics",
+      "word_count": 0,
+      "source_language": "german",
+      "level": "B2",
+      "theme": "economics"
+    },
+    {
+      "id": 356,
+      "title": "German B2: Science, Technology & Innovation",
+      "word_count": 0,
+      "source_language": "german",
+      "level": "B2",
+      "theme": "Science, Technology & Innovation"
+    },
+    {
+      "id": 357,
+      "title": "German B2: travel",
+      "word_count": 0,
+      "source_language": "german",
+      "level": "B2",
+      "theme": "travel"
+    },
+    {
+      "id": 360,
+      "title": "German B2: environment",
+      "word_count": 0,
+      "source_language": "german",
+      "level": "B2",
+      "theme": "environment"
+    },
+    {
+      "id": 359,
+      "title": "German B2: Health, Psychology & Personal Development",
+      "word_count": 0,
+      "source_language": "german",
+      "level": "B2",
+      "theme": "Health, Psychology & Personal Development"
+    },
+    {
+      "id": 361,
+      "title": "German B2: Advanced Communication & Rhetoric",
+      "word_count": 0,
+      "source_language": "german",
+      "level": "B2",
+      "theme": "Advanced Communication & Rhetoric"
+    },
+    {
+      "id": 362,
+      "title": "German B2: Education, Culture & Media",
+      "word_count": 0,
+      "source_language": "german",
+      "level": "B2",
+      "theme": "Education, Culture & Media"
+    },
+    {
+      "id": 363,
+      "title": "German B2: psychology",
+      "word_count": 0,
+      "source_language": "german",
+      "level": "B2",
+      "theme": "psychology"
+    },
+    {
+      "id": 5,
+      "title": "German beginner",
+      "word_count": 30,
+      "source_language": "german",
+      "level": "beginner",
+      "theme": null
+    },
+    {
+      "id": 6,
+      "title": "German C1",
+      "word_count": 0,
+      "source_language": "german",
+      "level": "C1",
+      "theme": null
+    },
+    {
+      "id": 364,
+      "title": "German C1: education",
+      "word_count": 0,
+      "source_language": "german",
+      "level": "C1",
+      "theme": "education"
+    },
+    {
+      "id": 365,
+      "title": "German C1: culture",
+      "word_count": 0,
+      "source_language": "german",
+      "level": "C1",
+      "theme": "culture"
+    },
+    {
+      "id": 366,
+      "title": "German C1: work",
+      "word_count": 0,
+      "source_language": "german",
+      "level": "C1",
+      "theme": "work"
+    },
+    {
+      "id": 367,
+      "title": "German C1: politics",
+      "word_count": 0,
+      "source_language": "german",
+      "level": "C1",
+      "theme": "politics"
+    },
+    {
+      "id": 368,
+      "title": "German C1: economics",
+      "word_count": 0,
+      "source_language": "german",
+      "level": "C1",
+      "theme": "economics"
+    },
+    {
+      "id": 369,
+      "title": "German C1: medicine",
+      "word_count": 0,
+      "source_language": "german",
+      "level": "C1",
+      "theme": "medicine"
+    },
+    {
+      "id": 370,
+      "title": "German C1: science",
+      "word_count": 0,
+      "source_language": "german",
+      "level": "C1",
+      "theme": "science"
+    },
+    {
+      "id": 371,
+      "title": "German C1: philosophy",
+      "word_count": 0,
+      "source_language": "german",
+      "level": "C1",
+      "theme": "philosophy"
+    },
+    {
+      "id": 372,
+      "title": "German C1: psychology",
+      "word_count": 0,
+      "source_language": "german",
+      "level": "C1",
+      "theme": "psychology"
+    },
+    {
+      "id": 373,
+      "title": "German C1: sociology",
+      "word_count": 0,
+      "source_language": "german",
+      "level": "C1",
+      "theme": "sociology"
+    },
+    {
+      "id": 374,
+      "title": "German C1: law",
+      "word_count": 0,
+      "source_language": "german",
+      "level": "C1",
+      "theme": "law"
+    },
+    {
+      "id": 377,
+      "title": "German C1: environment",
+      "word_count": 0,
+      "source_language": "german",
+      "level": "C1",
+      "theme": "environment"
+    },
+    {
+      "id": 375,
+      "title": "German C1: Essential Vocabulary 1",
+      "word_count": 0,
+      "source_language": "german",
+      "level": "C1",
+      "theme": "general"
+    },
+    {
+      "id": 378,
+      "title": "German C1: Advanced Expressions and Nuanced Language",
+      "word_count": 0,
+      "source_language": "german",
+      "level": "C1",
+      "theme": "Advanced Expressions and Nuanced Language"
+    },
+    {
+      "id": 376,
+      "title": "German C1: Essential Vocabulary 2",
+      "word_count": 0,
+      "source_language": "german",
+      "level": "C1",
+      "theme": "general"
+    },
+    {
+      "id": 379,
+      "title": "German C1: Academic and Intellectual Discourse",
+      "word_count": 0,
+      "source_language": "german",
+      "level": "C1",
+      "theme": "Academic and Intellectual Discourse"
+    },
+    {
+      "id": 380,
+      "title": "German C1: Professional and Technical Terminology",
+      "word_count": 0,
+      "source_language": "german",
+      "level": "C1",
+      "theme": "Professional and Technical Terminology"
+    },
+    {
+      "id": 381,
+      "title": "German C1: Cultural, Social and Political Discourse",
+      "word_count": 0,
+      "source_language": "german",
+      "level": "C1",
+      "theme": "Cultural, Social and Political Discourse"
+    },
+    {
+      "id": 7,
+      "title": "German C2",
+      "word_count": 0,
+      "source_language": "german",
+      "level": "C2",
+      "theme": null
+    },
+    {
+      "id": 382,
+      "title": "German C2: science",
+      "word_count": 0,
+      "source_language": "german",
+      "level": "C2",
+      "theme": "science"
+    },
+    {
+      "id": 383,
+      "title": "German C2: education",
+      "word_count": 0,
+      "source_language": "german",
+      "level": "C2",
+      "theme": "education"
+    },
+    {
+      "id": 392,
+      "title": "German C2: culture",
+      "word_count": 0,
+      "source_language": "german",
+      "level": "C2",
+      "theme": "culture"
+    },
+    {
+      "id": 393,
+      "title": "German C2: politics",
+      "word_count": 0,
+      "source_language": "german",
+      "level": "C2",
+      "theme": "politics"
+    },
+    {
+      "id": 394,
+      "title": "German C2: economics",
+      "word_count": 0,
+      "source_language": "german",
+      "level": "C2",
+      "theme": "economics"
+    },
+    {
+      "id": 395,
+      "title": "German C2: law",
+      "word_count": 0,
+      "source_language": "german",
+      "level": "C2",
+      "theme": "law"
+    },
+    {
+      "id": 396,
+      "title": "German C2: philosophy",
+      "word_count": 0,
+      "source_language": "german",
+      "level": "C2",
+      "theme": "philosophy"
+    },
+    {
+      "id": 397,
+      "title": "German C2: environment",
+      "word_count": 0,
+      "source_language": "german",
+      "level": "C2",
+      "theme": "environment"
+    },
+    {
+      "id": 398,
+      "title": "German C2: Cutting-Edge Technology & Innovation",
+      "word_count": 0,
+      "source_language": "german",
+      "level": "C2",
+      "theme": "Cutting-Edge Technology & Innovation"
+    },
+    {
+      "id": 399,
+      "title": "German C2: Advanced Psychology & Human Behavior",
+      "word_count": 0,
+      "source_language": "german",
+      "level": "C2",
+      "theme": "Advanced Psychology & Human Behavior"
+    },
+    {
+      "id": 401,
+      "title": "German C2: Ethics & Moral Philosophy",
+      "word_count": 0,
+      "source_language": "german",
+      "level": "C2",
+      "theme": "Ethics & Moral Philosophy"
+    },
+    {
+      "id": 400,
+      "title": "German C2: Religion & Theology",
+      "word_count": 0,
+      "source_language": "german",
+      "level": "C2",
+      "theme": "Religion & Theology"
+    },
+    {
+      "id": 402,
+      "title": "German C2: Linguistic Theory & Communication Science",
+      "word_count": 0,
+      "source_language": "german",
+      "level": "C2",
+      "theme": "Linguistic Theory & Communication Science"
+    },
+    {
+      "id": 403,
+      "title": "German C2: Musicology & Music Theory",
+      "word_count": 0,
+      "source_language": "german",
+      "level": "C2",
+      "theme": "Musicology & Music Theory"
+    },
+    {
+      "id": 404,
+      "title": "German C2: Advanced Business & Management",
+      "word_count": 0,
+      "source_language": "german",
+      "level": "C2",
+      "theme": "Advanced Business & Management"
+    },
+    {
+      "id": 405,
+      "title": "German C2: Astronomy & Cosmology",
+      "word_count": 0,
+      "source_language": "german",
+      "level": "C2",
+      "theme": "Astronomy & Cosmology"
+    },
+    {
+      "id": 406,
+      "title": "German C2: Geography & Geopolitics",
+      "word_count": 0,
+      "source_language": "german",
+      "level": "C2",
+      "theme": "Geography & Geopolitics"
+    },
+    {
+      "id": 407,
+      "title": "German C2: Film & Media Theory",
+      "word_count": 0,
+      "source_language": "german",
+      "level": "C2",
+      "theme": "Film & Media Theory"
+    },
+    {
+      "id": 408,
+      "title": "German C2: Advanced Chemistry & Physics",
+      "word_count": 0,
+      "source_language": "german",
+      "level": "C2",
+      "theme": "Advanced Chemistry & Physics"
+    },
+    {
+      "id": 409,
+      "title": "German C2: Historical & Archaeological Terminology",
+      "word_count": 0,
+      "source_language": "german",
+      "level": "C2",
+      "theme": "Historical & Archaeological Terminology"
+    },
+    {
+      "id": 384,
+      "title": "German C2: Essential Vocabulary 1",
+      "word_count": 0,
+      "source_language": "german",
+      "level": "C2",
+      "theme": "general"
+    },
+    {
+      "id": 385,
+      "title": "German C2: Essential Vocabulary 2",
+      "word_count": 0,
+      "source_language": "german",
+      "level": "C2",
+      "theme": "general"
+    },
+    {
+      "id": 386,
+      "title": "German C2: Essential Vocabulary 3",
+      "word_count": 0,
+      "source_language": "german",
+      "level": "C2",
+      "theme": "general"
+    },
+    {
+      "id": 387,
+      "title": "German C2: Essential Vocabulary 4",
+      "word_count": 0,
+      "source_language": "german",
+      "level": "C2",
+      "theme": "general"
+    },
+    {
+      "id": 388,
+      "title": "German C2: Essential Vocabulary 5",
+      "word_count": 0,
+      "source_language": "german",
+      "level": "C2",
+      "theme": "general"
+    },
+    {
+      "id": 389,
+      "title": "German C2: Essential Vocabulary 6",
+      "word_count": 0,
+      "source_language": "german",
+      "level": "C2",
+      "theme": "general"
+    },
+    {
+      "id": 390,
+      "title": "German C2: Essential Vocabulary 7",
+      "word_count": 0,
+      "source_language": "german",
+      "level": "C2",
+      "theme": "general"
+    },
+    {
+      "id": 410,
+      "title": "German C2: Advanced Legal & Jurisprudence",
+      "word_count": 0,
+      "source_language": "german",
+      "level": "C2",
+      "theme": "Advanced Legal & Jurisprudence"
+    },
+    {
+      "id": 391,
+      "title": "German C2: Essential Vocabulary 8",
+      "word_count": 0,
+      "source_language": "german",
+      "level": "C2",
+      "theme": "general"
+    },
+    {
+      "id": 411,
+      "title": "German C2: Advanced Neuroscience & Cognitive Science",
+      "word_count": 0,
+      "source_language": "german",
+      "level": "C2",
+      "theme": "Advanced Neuroscience & Cognitive Science"
+    },
+    {
+      "id": 412,
+      "title": "German C2: Advanced Cultural & Sociological Analysis",
+      "word_count": 0,
+      "source_language": "german",
+      "level": "C2",
+      "theme": "Advanced Cultural & Sociological Analysis"
+    },
+    {
+      "id": 8,
+      "title": "German - General",
+      "word_count": 0,
+      "source_language": "german",
+      "level": null,
+      "theme": "general"
+    },
+    {
+      "id": 9,
+      "title": "German - Education",
+      "word_count": 0,
+      "source_language": "german",
+      "level": null,
+      "theme": "education"
+    },
+    {
+      "id": 10,
+      "title": "German - Science",
+      "word_count": 0,
+      "source_language": "german",
+      "level": null,
+      "theme": "science"
+    },
+    {
+      "id": 11,
+      "title": "German - Culture",
+      "word_count": 0,
+      "source_language": "german",
+      "level": null,
+      "theme": "culture"
+    },
+    {
+      "id": 12,
+      "title": "German - Politics",
+      "word_count": 0,
+      "source_language": "german",
+      "level": null,
+      "theme": "politics"
+    },
+    {
+      "id": 13,
+      "title": "German - Work",
+      "word_count": 0,
+      "source_language": "german",
+      "level": null,
+      "theme": "work"
+    },
+    {
+      "id": 14,
+      "title": "German - Economics",
+      "word_count": 0,
+      "source_language": "german",
+      "level": null,
+      "theme": "economics"
+    },
+    {
+      "id": 15,
+      "title": "German - Law",
+      "word_count": 0,
+      "source_language": "german",
+      "level": null,
+      "theme": "law"
+    },
+    {
+      "id": 16,
+      "title": "German - Philosophy",
+      "word_count": 0,
+      "source_language": "german",
+      "level": null,
+      "theme": "philosophy"
+    },
+    {
+      "id": 17,
+      "title": "German - Communication",
+      "word_count": 0,
+      "source_language": "german",
+      "level": null,
+      "theme": "communication"
+    }
+  ]
+}

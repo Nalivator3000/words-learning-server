@@ -1,0 +1,283 @@
+{
+  "production_url": "https://words-learning-server-production.up.railway.app",
+  "local_url": "http://localhost:3000",
+  "default_password": "test123",
+
+  "priority_groups": {
+    "high": [
+      {
+        "username": "test_de_en",
+        "email": "test.de.en@lexibooster.test",
+        "password": "test123",
+        "user_id": 50,
+        "from_lang": "de",
+        "to_lang": "en",
+        "from_name": "German",
+        "to_name": "English",
+        "purpose": "Main functionality testing, CEFR levels, themes"
+      },
+      {
+        "username": "test_de_ru",
+        "email": "test.de.ru@lexibooster.test",
+        "password": "test123",
+        "user_id": 51,
+        "from_lang": "de",
+        "to_lang": "ru",
+        "from_name": "German",
+        "to_name": "Russian",
+        "purpose": "Cyrillic support, themes, quizzes"
+      },
+      {
+        "username": "test_en_ru",
+        "email": "test.en.ru@lexibooster.test",
+        "password": "test123",
+        "user_id": 60,
+        "from_lang": "en",
+        "to_lang": "ru",
+        "from_name": "English",
+        "to_name": "Russian",
+        "purpose": "Reverse direction, Russian UI"
+      },
+      {
+        "username": "test_en_de",
+        "email": "test.en.de@lexibooster.test",
+        "password": "test123",
+        "user_id": 61,
+        "from_lang": "en",
+        "to_lang": "de",
+        "from_name": "English",
+        "to_name": "German",
+        "purpose": "Basic features testing"
+      }
+    ],
+
+    "medium": [
+      {
+        "username": "test_de_es",
+        "email": "test.de.es@lexibooster.test",
+        "password": "test123",
+        "user_id": 52,
+        "from_lang": "de",
+        "to_lang": "es",
+        "from_name": "German",
+        "to_name": "Spanish",
+        "purpose": "Spanish language support"
+      },
+      {
+        "username": "test_de_fr",
+        "email": "test.de.fr@lexibooster.test",
+        "password": "test123",
+        "user_id": 53,
+        "from_lang": "de",
+        "to_lang": "fr",
+        "from_name": "German",
+        "to_name": "French",
+        "purpose": "French language support"
+      },
+      {
+        "username": "test_en_es",
+        "email": "test.en.es@lexibooster.test",
+        "password": "test123",
+        "user_id": 62,
+        "from_lang": "en",
+        "to_lang": "es",
+        "from_name": "English",
+        "to_name": "Spanish",
+        "purpose": "English to Spanish"
+      },
+      {
+        "username": "test_hi_en",
+        "email": "test.hi.en@lexibooster.test",
+        "password": "test123",
+        "user_id": 87,
+        "from_lang": "hi",
+        "to_lang": "en",
+        "from_name": "Hindi",
+        "to_name": "English",
+        "purpose": "Hindi script, Devanagari support"
+      },
+      {
+        "username": "test_hi_de",
+        "email": "test.hi.de@lexibooster.test",
+        "password": "test123",
+        "user_id": 88,
+        "from_lang": "hi",
+        "to_lang": "de",
+        "from_name": "Hindi",
+        "to_name": "German",
+        "purpose": "Hindi to German"
+      }
+    ],
+
+    "low": [
+      {
+        "username": "test_ar_en",
+        "email": "test.ar.en@lexibooster.test",
+        "password": "test123",
+        "user_id": 81,
+        "from_lang": "ar",
+        "to_lang": "en",
+        "from_name": "Arabic",
+        "to_name": "English",
+        "rtl": true,
+        "purpose": "RTL (right-to-left) language testing"
+      },
+      {
+        "username": "test_zh_en",
+        "email": "test.zh.en@lexibooster.test",
+        "password": "test123",
+        "user_id": 83,
+        "from_lang": "zh",
+        "to_lang": "en",
+        "from_name": "Chinese",
+        "to_name": "English",
+        "purpose": "Chinese characters, ideographs"
+      }
+    ],
+
+    "empty_state": [
+      {
+        "username": "test_ru_en",
+        "email": "test.ru.en@lexibooster.test",
+        "password": "test123",
+        "user_id": 85,
+        "from_lang": "ru",
+        "to_lang": "en",
+        "from_name": "Russian",
+        "to_name": "English",
+        "word_sets": 0,
+        "purpose": "Empty state testing - no word sets available"
+      },
+      {
+        "username": "test_ru_de",
+        "email": "test.ru.de@lexibooster.test",
+        "password": "test123",
+        "user_id": 86,
+        "from_lang": "ru",
+        "to_lang": "de",
+        "from_name": "Russian",
+        "to_name": "German",
+        "word_sets": 0,
+        "purpose": "Empty state testing - no word sets available"
+      }
+    ]
+  },
+
+  "all_accounts": {
+    "german": [
+      {"email": "test.de.en@lexibooster.test", "to": "en", "id": 50},
+      {"email": "test.de.ru@lexibooster.test", "to": "ru", "id": 51},
+      {"email": "test.de.es@lexibooster.test", "to": "es", "id": 52},
+      {"email": "test.de.fr@lexibooster.test", "to": "fr", "id": 53},
+      {"email": "test.de.it@lexibooster.test", "to": "it", "id": 54},
+      {"email": "test.de.pt@lexibooster.test", "to": "pt", "id": 55},
+      {"email": "test.de.ar@lexibooster.test", "to": "ar", "id": 56},
+      {"email": "test.de.zh@lexibooster.test", "to": "zh", "id": 57},
+      {"email": "test.de.ja@lexibooster.test", "to": "ja", "id": 58},
+      {"email": "test.de.tr@lexibooster.test", "to": "tr", "id": 59}
+    ],
+    "english": [
+      {"email": "test.en.ru@lexibooster.test", "to": "ru", "id": 60},
+      {"email": "test.en.de@lexibooster.test", "to": "de", "id": 61},
+      {"email": "test.en.es@lexibooster.test", "to": "es", "id": 62},
+      {"email": "test.en.fr@lexibooster.test", "to": "fr", "id": 63},
+      {"email": "test.en.it@lexibooster.test", "to": "it", "id": 64},
+      {"email": "test.en.pt@lexibooster.test", "to": "pt", "id": 65},
+      {"email": "test.en.ar@lexibooster.test", "to": "ar", "id": 66},
+      {"email": "test.en.zh@lexibooster.test", "to": "zh", "id": 67},
+      {"email": "test.en.ja@lexibooster.test", "to": "ja", "id": 68},
+      {"email": "test.en.tr@lexibooster.test", "to": "tr", "id": 69}
+    ],
+    "spanish": [
+      {"email": "test.es.en@lexibooster.test", "to": "en", "id": 70},
+      {"email": "test.es.de@lexibooster.test", "to": "de", "id": 71},
+      {"email": "test.es.fr@lexibooster.test", "to": "fr", "id": 72},
+      {"email": "test.es.pt@lexibooster.test", "to": "pt", "id": 73}
+    ],
+    "french": [
+      {"email": "test.fr.en@lexibooster.test", "to": "en", "id": 74},
+      {"email": "test.fr.de@lexibooster.test", "to": "de", "id": 75},
+      {"email": "test.fr.es@lexibooster.test", "to": "es", "id": 76}
+    ],
+    "italian": [
+      {"email": "test.it.en@lexibooster.test", "to": "en", "id": 77},
+      {"email": "test.it.de@lexibooster.test", "to": "de", "id": 78}
+    ],
+    "portuguese": [
+      {"email": "test.pt.en@lexibooster.test", "to": "en", "id": 79},
+      {"email": "test.pt.de@lexibooster.test", "to": "de", "id": 80}
+    ],
+    "arabic": [
+      {"email": "test.ar.en@lexibooster.test", "to": "en", "id": 81, "rtl": true},
+      {"email": "test.ar.de@lexibooster.test", "to": "de", "id": 82, "rtl": true}
+    ],
+    "chinese": [
+      {"email": "test.zh.en@lexibooster.test", "to": "en", "id": 83},
+      {"email": "test.zh.de@lexibooster.test", "to": "de", "id": 84}
+    ],
+    "russian": [
+      {"email": "test.ru.en@lexibooster.test", "to": "en", "id": 85, "empty": true},
+      {"email": "test.ru.de@lexibooster.test", "to": "de", "id": 86, "empty": true}
+    ],
+    "hindi": [
+      {"email": "test.hi.en@lexibooster.test", "to": "en", "id": 87},
+      {"email": "test.hi.de@lexibooster.test", "to": "de", "id": 88}
+    ]
+  },
+
+  "test_scenarios": {
+    "quick_5min": {
+      "account": "test.de.en@lexibooster.test",
+      "steps": [
+        "Login",
+        "View dashboard",
+        "Start quiz",
+        "Answer 5 questions",
+        "Logout"
+      ]
+    },
+    "basic_15min": {
+      "accounts": [
+        "test.de.en@lexibooster.test",
+        "test.ar.en@lexibooster.test",
+        "test.ru.en@lexibooster.test"
+      ],
+      "steps": [
+        "Login with HIGH PRIORITY account",
+        "Check all CEFR levels (A1-C2)",
+        "Check thematic collections",
+        "Complete full quiz",
+        "Add custom word",
+        "Test RTL with Arabic account",
+        "Test empty state with Russian account"
+      ]
+    },
+    "full_30min": {
+      "accounts": [
+        "test.de.en@lexibooster.test",
+        "test.hi.en@lexibooster.test",
+        "test.zh.en@lexibooster.test",
+        "test.ar.en@lexibooster.test",
+        "test.ru.en@lexibooster.test"
+      ],
+      "steps": [
+        "All from basic test",
+        "Test Hindi (Devanagari script)",
+        "Test Chinese (ideographs)",
+        "Check progress tracking",
+        "Import/export words",
+        "Profile settings",
+        "Change UI language"
+      ]
+    }
+  },
+
+  "notes": {
+    "password": "All accounts use the same password: test123",
+    "url": "Production URL: https://words-learning-server-production.up.railway.app",
+    "total_accounts": 40,
+    "created_date": "2026-01-03",
+    "last_verified": "2026-01-03",
+    "status": "All accounts active and ready for testing"
+  }
+}

@@ -1,0 +1,2871 @@
+[
+  {
+    "id": 1,
+    "title": "German A1",
+    "description": "Beginner - Essential vocabulary for absolute beginners",
+    "source_language": "german",
+    "level": "A1",
+    "theme": null,
+    "word_count": 674,
+    "is_public": false,
+    "created_at": "2025-12-30T10:27:51.200Z",
+    "updated_at": "2025-12-30T10:28:11.180Z",
+    "actual_word_count": 30,
+    "words": [
+      {
+        "source_word": null,
+        "word_id": 1232,
+        "order_index": 0
+      },
+      {
+        "source_word": null,
+        "word_id": 1252,
+        "order_index": 1
+      },
+      {
+        "source_word": "ledig",
+        "word_id": 1143,
+        "order_index": 2
+      },
+      {
+        "source_word": null,
+        "word_id": 1236,
+        "order_index": 3
+      },
+      {
+        "source_word": "die Reservierung",
+        "word_id": 960,
+        "order_index": 4
+      },
+      {
+        "source_word": "politisch",
+        "word_id": 1293,
+        "order_index": 5
+      },
+      {
+        "source_word": "zusagen",
+        "word_id": 1154,
+        "order_index": 6
+      },
+      {
+        "source_word": "die Gerechtigkeit",
+        "word_id": 1335,
+        "order_index": 7
+      },
+      {
+        "source_word": "fleißig",
+        "word_id": 1108,
+        "order_index": 8
+      },
+      {
+        "source_word": "der Gast",
+        "word_id": 1158,
+        "order_index": 9
+      },
+      {
+        "source_word": "kommentieren",
+        "word_id": 947,
+        "order_index": 10
+      },
+      {
+        "source_word": "hochladen",
+        "word_id": 929,
+        "order_index": 11
+      },
+      {
+        "source_word": "die Vielfalt",
+        "word_id": 1342,
+        "order_index": 12
+      },
+      {
+        "source_word": null,
+        "word_id": 1148,
+        "order_index": 13
+      },
+      {
+        "source_word": "die Reisende",
+        "word_id": 954,
+        "order_index": 14
+      },
+      {
+        "source_word": "hervorheben",
+        "word_id": 1222,
+        "order_index": 15
+      },
+      {
+        "source_word": "kompetent",
+        "word_id": 1274,
+        "order_index": 16
+      },
+      {
+        "source_word": "erörtern",
+        "word_id": 1210,
+        "order_index": 17
+      },
+      {
+        "source_word": "der Zucker",
+        "word_id": 1005,
+        "order_index": 18
+      },
+      {
+        "source_word": null,
+        "word_id": 1330,
+        "order_index": 19
+      },
+      {
+        "source_word": null,
+        "word_id": 1239,
+        "order_index": 20
+      },
+      {
+        "source_word": "klicken",
+        "word_id": 926,
+        "order_index": 21
+      },
+      {
+        "source_word": "abstimmen",
+        "word_id": 1298,
+        "order_index": 22
+      },
+      {
+        "source_word": "höflich",
+        "word_id": 1113,
+        "order_index": 23
+      },
+      {
+        "source_word": "frisch",
+        "word_id": 1031,
+        "order_index": 24
+      },
+      {
+        "source_word": "zustimmen",
+        "word_id": 1179,
+        "order_index": 25
+      },
+      {
+        "source_word": "vergangen",
+        "word_id": 1347,
+        "order_index": 26
+      },
+      {
+        "source_word": "vertrauen",
+        "word_id": 1127,
+        "order_index": 27
+      },
+      {
+        "source_word": "die Datei",
+        "word_id": 932,
+        "order_index": 28
+      },
+      {
+        "source_word": "die Weiterbildung",
+        "word_id": 1281,
+        "order_index": 29
+      }
+    ]
+  },
+  {
+    "id": 278,
+    "title": "German A1: Essential Vocabulary 1",
+    "description": "A1 level essential vocabulary - Part 1",
+    "source_language": "german",
+    "level": "A1",
+    "theme": "general",
+    "word_count": 50,
+    "is_public": true,
+    "created_at": "2025-12-30T18:27:52.385Z",
+    "updated_at": "2025-12-30T18:27:52.385Z",
+    "actual_word_count": 0,
+    "words": []
+  },
+  {
+    "id": 280,
+    "title": "German A1: Essential Vocabulary 2",
+    "description": "A1 level essential vocabulary - Part 2",
+    "source_language": "german",
+    "level": "A1",
+    "theme": "general",
+    "word_count": 50,
+    "is_public": true,
+    "created_at": "2025-12-30T18:28:35.825Z",
+    "updated_at": "2025-12-30T18:28:35.825Z",
+    "actual_word_count": 0,
+    "words": []
+  },
+  {
+    "id": 281,
+    "title": "German A1: Essential Vocabulary 3",
+    "description": "A1 level essential vocabulary - Part 3",
+    "source_language": "german",
+    "level": "A1",
+    "theme": "general",
+    "word_count": 50,
+    "is_public": true,
+    "created_at": "2025-12-30T18:28:35.881Z",
+    "updated_at": "2025-12-30T18:28:35.881Z",
+    "actual_word_count": 0,
+    "words": []
+  },
+  {
+    "id": 282,
+    "title": "German A1: Essential Vocabulary 4",
+    "description": "A1 level essential vocabulary - Part 4",
+    "source_language": "german",
+    "level": "A1",
+    "theme": "general",
+    "word_count": 50,
+    "is_public": true,
+    "created_at": "2025-12-30T18:28:35.943Z",
+    "updated_at": "2025-12-30T18:28:35.943Z",
+    "actual_word_count": 0,
+    "words": []
+  },
+  {
+    "id": 283,
+    "title": "German A1: Essential Vocabulary 5",
+    "description": "A1 level essential vocabulary - Part 5",
+    "source_language": "german",
+    "level": "A1",
+    "theme": "general",
+    "word_count": 50,
+    "is_public": true,
+    "created_at": "2025-12-30T18:28:36.007Z",
+    "updated_at": "2025-12-30T18:28:36.007Z",
+    "actual_word_count": 0,
+    "words": []
+  },
+  {
+    "id": 284,
+    "title": "German A1: Essential Vocabulary 6",
+    "description": "A1 level essential vocabulary - Part 6",
+    "source_language": "german",
+    "level": "A1",
+    "theme": "general",
+    "word_count": 50,
+    "is_public": true,
+    "created_at": "2025-12-30T18:28:36.101Z",
+    "updated_at": "2025-12-30T18:28:36.101Z",
+    "actual_word_count": 0,
+    "words": []
+  },
+  {
+    "id": 285,
+    "title": "German A1: Essential Vocabulary 7",
+    "description": "A1 level essential vocabulary - Part 7",
+    "source_language": "german",
+    "level": "A1",
+    "theme": "general",
+    "word_count": 50,
+    "is_public": true,
+    "created_at": "2025-12-30T18:28:36.169Z",
+    "updated_at": "2025-12-30T18:28:36.169Z",
+    "actual_word_count": 0,
+    "words": []
+  },
+  {
+    "id": 286,
+    "title": "German A1: Essential Vocabulary 8",
+    "description": "A1 level essential vocabulary - Part 8",
+    "source_language": "german",
+    "level": "A1",
+    "theme": "general",
+    "word_count": 50,
+    "is_public": true,
+    "created_at": "2025-12-30T18:28:36.227Z",
+    "updated_at": "2025-12-30T18:28:36.227Z",
+    "actual_word_count": 0,
+    "words": []
+  },
+  {
+    "id": 287,
+    "title": "German A1: Essential Vocabulary 9",
+    "description": "A1 level essential vocabulary - Part 9",
+    "source_language": "german",
+    "level": "A1",
+    "theme": "general",
+    "word_count": 50,
+    "is_public": true,
+    "created_at": "2025-12-30T18:28:36.293Z",
+    "updated_at": "2025-12-30T18:28:36.293Z",
+    "actual_word_count": 0,
+    "words": []
+  },
+  {
+    "id": 288,
+    "title": "German A1: Essential Vocabulary 10",
+    "description": "A1 level essential vocabulary - Part 10",
+    "source_language": "german",
+    "level": "A1",
+    "theme": "general",
+    "word_count": 30,
+    "is_public": true,
+    "created_at": "2025-12-30T18:28:36.350Z",
+    "updated_at": "2025-12-30T18:28:36.350Z",
+    "actual_word_count": 0,
+    "words": []
+  },
+  {
+    "id": 289,
+    "title": "German A1: Food and Drinks",
+    "description": "A1 level vocabulary: Food and Drinks",
+    "source_language": "german",
+    "level": "A1",
+    "theme": "Food and Drinks",
+    "word_count": 29,
+    "is_public": true,
+    "created_at": "2025-12-30T18:28:36.379Z",
+    "updated_at": "2025-12-30T18:28:36.379Z",
+    "actual_word_count": 0,
+    "words": []
+  },
+  {
+    "id": 290,
+    "title": "German A1: People & Relationships",
+    "description": "A1 level vocabulary: People & Relationships",
+    "source_language": "german",
+    "level": "A1",
+    "theme": "People & Relationships",
+    "word_count": 22,
+    "is_public": true,
+    "created_at": "2025-12-30T18:28:36.412Z",
+    "updated_at": "2025-12-30T18:28:36.412Z",
+    "actual_word_count": 0,
+    "words": []
+  },
+  {
+    "id": 291,
+    "title": "German A1: Days, Months, Time",
+    "description": "A1 level vocabulary: Days, Months, Time",
+    "source_language": "german",
+    "level": "A1",
+    "theme": "Days, Months, Time",
+    "word_count": 19,
+    "is_public": true,
+    "created_at": "2025-12-30T18:28:36.439Z",
+    "updated_at": "2025-12-30T18:28:36.439Z",
+    "actual_word_count": 0,
+    "words": []
+  },
+  {
+    "id": 292,
+    "title": "German A1: House and Furniture",
+    "description": "A1 level vocabulary: House and Furniture",
+    "source_language": "german",
+    "level": "A1",
+    "theme": "House and Furniture",
+    "word_count": 17,
+    "is_public": true,
+    "created_at": "2025-12-30T18:28:36.469Z",
+    "updated_at": "2025-12-30T18:28:36.469Z",
+    "actual_word_count": 0,
+    "words": []
+  },
+  {
+    "id": 293,
+    "title": "German A1: Numbers, Time & Basic Concepts",
+    "description": "A1 level vocabulary: Numbers, Time & Basic Concepts",
+    "source_language": "german",
+    "level": "A1",
+    "theme": "Numbers, Time & Basic Concepts",
+    "word_count": 17,
+    "is_public": true,
+    "created_at": "2025-12-30T18:28:36.493Z",
+    "updated_at": "2025-12-30T18:28:36.493Z",
+    "actual_word_count": 0,
+    "words": []
+  },
+  {
+    "id": 294,
+    "title": "German A1: Everyday Life & Basic Activities",
+    "description": "A1 level vocabulary: Everyday Life & Basic Activities",
+    "source_language": "german",
+    "level": "A1",
+    "theme": "Everyday Life & Basic Activities",
+    "word_count": 16,
+    "is_public": true,
+    "created_at": "2025-12-30T18:28:36.516Z",
+    "updated_at": "2025-12-30T18:28:36.516Z",
+    "actual_word_count": 0,
+    "words": []
+  },
+  {
+    "id": 295,
+    "title": "German A1: Food & Drinks",
+    "description": "A1 level vocabulary: Food & Drinks",
+    "source_language": "german",
+    "level": "A1",
+    "theme": "Food & Drinks",
+    "word_count": 16,
+    "is_public": true,
+    "created_at": "2025-12-30T18:28:36.539Z",
+    "updated_at": "2025-12-30T18:28:36.539Z",
+    "actual_word_count": 0,
+    "words": []
+  },
+  {
+    "id": 296,
+    "title": "German A1: Weather and Seasons",
+    "description": "A1 level vocabulary: Weather and Seasons",
+    "source_language": "german",
+    "level": "A1",
+    "theme": "Weather and Seasons",
+    "word_count": 15,
+    "is_public": true,
+    "created_at": "2025-12-30T18:28:36.565Z",
+    "updated_at": "2025-12-30T18:28:36.565Z",
+    "actual_word_count": 0,
+    "words": []
+  },
+  {
+    "id": 298,
+    "title": "German A1: Places & Directions",
+    "description": "A1 level vocabulary: Places & Directions",
+    "source_language": "german",
+    "level": "A1",
+    "theme": "Places & Directions",
+    "word_count": 11,
+    "is_public": true,
+    "created_at": "2025-12-30T18:28:36.618Z",
+    "updated_at": "2025-12-30T18:28:36.618Z",
+    "actual_word_count": 0,
+    "words": []
+  },
+  {
+    "id": 297,
+    "title": "German A1: Question Words",
+    "description": "A1 level vocabulary: Question Words",
+    "source_language": "german",
+    "level": "A1",
+    "theme": "Question Words",
+    "word_count": 11,
+    "is_public": true,
+    "created_at": "2025-12-30T18:28:36.589Z",
+    "updated_at": "2025-12-30T18:28:36.589Z",
+    "actual_word_count": 0,
+    "words": []
+  },
+  {
+    "id": 2,
+    "title": "German A2",
+    "description": "Elementary - Basic everyday vocabulary",
+    "source_language": "german",
+    "level": "A2",
+    "theme": null,
+    "word_count": 720,
+    "is_public": false,
+    "created_at": "2025-12-30T10:27:51.260Z",
+    "updated_at": "2025-12-30T10:28:11.251Z",
+    "actual_word_count": 30,
+    "words": [
+      {
+        "source_word": "wegwerfen",
+        "word_id": 1314,
+        "order_index": 0
+      },
+      {
+        "source_word": "wahrscheinlich",
+        "word_id": 1381,
+        "order_index": 1
+      },
+      {
+        "source_word": "der Besuch",
+        "word_id": 1157,
+        "order_index": 2
+      },
+      {
+        "source_word": "die Freiheit",
+        "word_id": 1302,
+        "order_index": 3
+      },
+      {
+        "source_word": "befördert werden",
+        "word_id": 1287,
+        "order_index": 4
+      },
+      {
+        "source_word": "ungerecht",
+        "word_id": 1337,
+        "order_index": 5
+      },
+      {
+        "source_word": "das Doppelzimmer",
+        "word_id": 975,
+        "order_index": 6
+      },
+      {
+        "source_word": "friedlich",
+        "word_id": 1333,
+        "order_index": 7
+      },
+      {
+        "source_word": "der Hinweis",
+        "word_id": 1220,
+        "order_index": 8
+      },
+      {
+        "source_word": "die Feststellung",
+        "word_id": 1197,
+        "order_index": 9
+      },
+      {
+        "source_word": "sich unterhalten",
+        "word_id": 1215,
+        "order_index": 10
+      },
+      {
+        "source_word": "verschwenden",
+        "word_id": 1316,
+        "order_index": 11
+      },
+      {
+        "source_word": "bitter",
+        "word_id": 1029,
+        "order_index": 12
+      },
+      {
+        "source_word": "tatsächlich",
+        "word_id": 1375,
+        "order_index": 13
+      },
+      {
+        "source_word": "die Verlobung",
+        "word_id": 1136,
+        "order_index": 14
+      },
+      {
+        "source_word": "logisch",
+        "word_id": 1205,
+        "order_index": 15
+      },
+      {
+        "source_word": "die Reisende",
+        "word_id": 954,
+        "order_index": 16
+      },
+      {
+        "source_word": "der Konflikt",
+        "word_id": 1331,
+        "order_index": 17
+      },
+      {
+        "source_word": "die Passagierin",
+        "word_id": 984,
+        "order_index": 18
+      },
+      {
+        "source_word": "die Soße",
+        "word_id": 1008,
+        "order_index": 19
+      },
+      {
+        "source_word": "die Ähnlichkeit",
+        "word_id": 1363,
+        "order_index": 20
+      },
+      {
+        "source_word": "das Benutzerkonto",
+        "word_id": 940,
+        "order_index": 21
+      },
+      {
+        "source_word": "die Politik",
+        "word_id": 1292,
+        "order_index": 22
+      },
+      {
+        "source_word": "der Ex",
+        "word_id": 1142,
+        "order_index": 23
+      },
+      {
+        "source_word": "der Verlobte",
+        "word_id": 1133,
+        "order_index": 24
+      },
+      {
+        "source_word": "die Bestätigung",
+        "word_id": 961,
+        "order_index": 25
+      },
+      {
+        "source_word": "die Begeisterung",
+        "word_id": 1100,
+        "order_index": 26
+      },
+      {
+        "source_word": "die Vielfalt",
+        "word_id": 1342,
+        "order_index": 27
+      },
+      {
+        "source_word": null,
+        "word_id": 1233,
+        "order_index": 28
+      },
+      {
+        "source_word": "die Möglichkeit",
+        "word_id": 1379,
+        "order_index": 29
+      }
+    ]
+  },
+  {
+    "id": 305,
+    "title": "German A2: health",
+    "description": "A2 level vocabulary: health",
+    "source_language": "german",
+    "level": "A2",
+    "theme": "health",
+    "word_count": 53,
+    "is_public": true,
+    "created_at": "2025-12-30T19:27:52.935Z",
+    "updated_at": "2025-12-30T19:27:52.935Z",
+    "actual_word_count": 0,
+    "words": []
+  },
+  {
+    "id": 306,
+    "title": "German A2: food",
+    "description": "A2 level vocabulary: food",
+    "source_language": "german",
+    "level": "A2",
+    "theme": "food",
+    "word_count": 51,
+    "is_public": true,
+    "created_at": "2025-12-30T19:27:52.989Z",
+    "updated_at": "2025-12-30T19:27:52.989Z",
+    "actual_word_count": 0,
+    "words": []
+  },
+  {
+    "id": 299,
+    "title": "German A2: Essential Vocabulary 1",
+    "description": "A2 level essential vocabulary - Part 1",
+    "source_language": "german",
+    "level": "A2",
+    "theme": "general",
+    "word_count": 50,
+    "is_public": true,
+    "created_at": "2025-12-30T19:27:52.455Z",
+    "updated_at": "2025-12-30T19:27:52.455Z",
+    "actual_word_count": 0,
+    "words": []
+  },
+  {
+    "id": 300,
+    "title": "German A2: Essential Vocabulary 2",
+    "description": "A2 level essential vocabulary - Part 2",
+    "source_language": "german",
+    "level": "A2",
+    "theme": "general",
+    "word_count": 50,
+    "is_public": true,
+    "created_at": "2025-12-30T19:27:52.522Z",
+    "updated_at": "2025-12-30T19:27:52.522Z",
+    "actual_word_count": 0,
+    "words": []
+  },
+  {
+    "id": 301,
+    "title": "German A2: Essential Vocabulary 3",
+    "description": "A2 level essential vocabulary - Part 3",
+    "source_language": "german",
+    "level": "A2",
+    "theme": "general",
+    "word_count": 50,
+    "is_public": true,
+    "created_at": "2025-12-30T19:27:52.600Z",
+    "updated_at": "2025-12-30T19:27:52.600Z",
+    "actual_word_count": 0,
+    "words": []
+  },
+  {
+    "id": 302,
+    "title": "German A2: Essential Vocabulary 4",
+    "description": "A2 level essential vocabulary - Part 4",
+    "source_language": "german",
+    "level": "A2",
+    "theme": "general",
+    "word_count": 50,
+    "is_public": true,
+    "created_at": "2025-12-30T19:27:52.736Z",
+    "updated_at": "2025-12-30T19:27:52.736Z",
+    "actual_word_count": 0,
+    "words": []
+  },
+  {
+    "id": 303,
+    "title": "German A2: Essential Vocabulary 5",
+    "description": "A2 level essential vocabulary - Part 5",
+    "source_language": "german",
+    "level": "A2",
+    "theme": "general",
+    "word_count": 50,
+    "is_public": true,
+    "created_at": "2025-12-30T19:27:52.813Z",
+    "updated_at": "2025-12-30T19:27:52.813Z",
+    "actual_word_count": 0,
+    "words": []
+  },
+  {
+    "id": 307,
+    "title": "German A2: communication",
+    "description": "A2 level vocabulary: communication",
+    "source_language": "german",
+    "level": "A2",
+    "theme": "communication",
+    "word_count": 49,
+    "is_public": true,
+    "created_at": "2025-12-30T19:27:53.046Z",
+    "updated_at": "2025-12-30T19:27:53.046Z",
+    "actual_word_count": 0,
+    "words": []
+  },
+  {
+    "id": 308,
+    "title": "German A2: work",
+    "description": "A2 level vocabulary: work",
+    "source_language": "german",
+    "level": "A2",
+    "theme": "work",
+    "word_count": 49,
+    "is_public": true,
+    "created_at": "2025-12-30T19:27:53.100Z",
+    "updated_at": "2025-12-30T19:27:53.100Z",
+    "actual_word_count": 0,
+    "words": []
+  },
+  {
+    "id": 309,
+    "title": "German A2: education",
+    "description": "A2 level vocabulary: education",
+    "source_language": "german",
+    "level": "A2",
+    "theme": "education",
+    "word_count": 46,
+    "is_public": true,
+    "created_at": "2025-12-30T19:27:53.153Z",
+    "updated_at": "2025-12-30T19:27:53.153Z",
+    "actual_word_count": 0,
+    "words": []
+  },
+  {
+    "id": 311,
+    "title": "German A2: Past Experiences and Future Plans",
+    "description": "A2 level vocabulary: Past Experiences and Future Plans",
+    "source_language": "german",
+    "level": "A2",
+    "theme": "Past Experiences and Future Plans",
+    "word_count": 42,
+    "is_public": true,
+    "created_at": "2025-12-30T19:27:53.271Z",
+    "updated_at": "2025-12-30T19:27:53.271Z",
+    "actual_word_count": 0,
+    "words": []
+  },
+  {
+    "id": 310,
+    "title": "German A2: travel",
+    "description": "A2 level vocabulary: travel",
+    "source_language": "german",
+    "level": "A2",
+    "theme": "travel",
+    "word_count": 42,
+    "is_public": true,
+    "created_at": "2025-12-30T19:27:53.207Z",
+    "updated_at": "2025-12-30T19:27:53.207Z",
+    "actual_word_count": 0,
+    "words": []
+  },
+  {
+    "id": 312,
+    "title": "German A2: Shopping and Services",
+    "description": "A2 level vocabulary: Shopping and Services",
+    "source_language": "german",
+    "level": "A2",
+    "theme": "Shopping and Services",
+    "word_count": 29,
+    "is_public": true,
+    "created_at": "2025-12-30T19:27:53.333Z",
+    "updated_at": "2025-12-30T19:27:53.333Z",
+    "actual_word_count": 0,
+    "words": []
+  },
+  {
+    "id": 313,
+    "title": "German A2: Descriptions of People and Places",
+    "description": "A2 level vocabulary: Descriptions of People and Places",
+    "source_language": "german",
+    "level": "A2",
+    "theme": "Descriptions of People and Places",
+    "word_count": 27,
+    "is_public": true,
+    "created_at": "2025-12-30T19:27:53.396Z",
+    "updated_at": "2025-12-30T19:27:53.396Z",
+    "actual_word_count": 0,
+    "words": []
+  },
+  {
+    "id": 304,
+    "title": "German A2: Essential Vocabulary 6",
+    "description": "A2 level essential vocabulary - Part 6",
+    "source_language": "german",
+    "level": "A2",
+    "theme": "general",
+    "word_count": 25,
+    "is_public": true,
+    "created_at": "2025-12-30T19:27:52.890Z",
+    "updated_at": "2025-12-30T19:27:52.890Z",
+    "actual_word_count": 0,
+    "words": []
+  },
+  {
+    "id": 314,
+    "title": "German A2: Daily Routines and Habits",
+    "description": "A2 level vocabulary: Daily Routines and Habits",
+    "source_language": "german",
+    "level": "A2",
+    "theme": "Daily Routines and Habits",
+    "word_count": 22,
+    "is_public": true,
+    "created_at": "2025-12-30T19:27:53.462Z",
+    "updated_at": "2025-12-30T19:27:53.462Z",
+    "actual_word_count": 0,
+    "words": []
+  },
+  {
+    "id": 315,
+    "title": "German A2: Hobbies and Leisure",
+    "description": "A2 level vocabulary: Hobbies and Leisure",
+    "source_language": "german",
+    "level": "A2",
+    "theme": "Hobbies and Leisure",
+    "word_count": 15,
+    "is_public": true,
+    "created_at": "2025-12-30T19:27:53.529Z",
+    "updated_at": "2025-12-30T19:27:53.529Z",
+    "actual_word_count": 0,
+    "words": []
+  },
+  {
+    "id": 316,
+    "title": "German A2: Work and Study",
+    "description": "A2 level vocabulary: Work and Study",
+    "source_language": "german",
+    "level": "A2",
+    "theme": "Work and Study",
+    "word_count": 15,
+    "is_public": true,
+    "created_at": "2025-12-30T19:27:53.554Z",
+    "updated_at": "2025-12-30T19:27:53.554Z",
+    "actual_word_count": 0,
+    "words": []
+  },
+  {
+    "id": 3,
+    "title": "German B1",
+    "description": "Intermediate - Common words for daily communication",
+    "source_language": "german",
+    "level": "B1",
+    "theme": null,
+    "word_count": 502,
+    "is_public": false,
+    "created_at": "2025-12-30T10:27:51.308Z",
+    "updated_at": "2025-12-30T10:28:11.301Z",
+    "actual_word_count": 30,
+    "words": [
+      {
+        "source_word": "scharf",
+        "word_id": 1030,
+        "order_index": 0
+      },
+      {
+        "source_word": "planen",
+        "word_id": 1264,
+        "order_index": 1
+      },
+      {
+        "source_word": null,
+        "word_id": 1245,
+        "order_index": 2
+      },
+      {
+        "source_word": "vermuten",
+        "word_id": 1200,
+        "order_index": 3
+      },
+      {
+        "source_word": "hungrig",
+        "word_id": 1020,
+        "order_index": 4
+      },
+      {
+        "source_word": "die Zusammenfassung",
+        "word_id": 1229,
+        "order_index": 5
+      },
+      {
+        "source_word": "löschen",
+        "word_id": 934,
+        "order_index": 6
+      },
+      {
+        "source_word": "das Missvertrauen",
+        "word_id": 1130,
+        "order_index": 7
+      },
+      {
+        "source_word": "die Aufgabe",
+        "word_id": 1260,
+        "order_index": 8
+      },
+      {
+        "source_word": "sicher",
+        "word_id": 1382,
+        "order_index": 9
+      },
+      {
+        "source_word": "ähnlich",
+        "word_id": 1362,
+        "order_index": 10
+      },
+      {
+        "source_word": "meinen",
+        "word_id": 1169,
+        "order_index": 11
+      },
+      {
+        "source_word": "sich kennenlernen",
+        "word_id": 1147,
+        "order_index": 12
+      },
+      {
+        "source_word": "der Gegensatz",
+        "word_id": 1364,
+        "order_index": 13
+      },
+      {
+        "source_word": "vertrauen",
+        "word_id": 1127,
+        "order_index": 14
+      },
+      {
+        "source_word": "begeistert",
+        "word_id": 1099,
+        "order_index": 15
+      },
+      {
+        "source_word": "der Besuch",
+        "word_id": 1157,
+        "order_index": 16
+      },
+      {
+        "source_word": null,
+        "word_id": 1238,
+        "order_index": 17
+      },
+      {
+        "source_word": "beweisen",
+        "word_id": 1192,
+        "order_index": 18
+      },
+      {
+        "source_word": "die Probezeit",
+        "word_id": 1244,
+        "order_index": 19
+      },
+      {
+        "source_word": "qualifiziert",
+        "word_id": 1270,
+        "order_index": 20
+      },
+      {
+        "source_word": "die Überzeugung",
+        "word_id": 1178,
+        "order_index": 21
+      },
+      {
+        "source_word": "die Nachricht",
+        "word_id": 914,
+        "order_index": 22
+      },
+      {
+        "source_word": "das Benutzerkonto",
+        "word_id": 940,
+        "order_index": 23
+      },
+      {
+        "source_word": "weltweit",
+        "word_id": 1324,
+        "order_index": 24
+      },
+      {
+        "source_word": "sich scheiden lassen",
+        "word_id": 1139,
+        "order_index": 25
+      },
+      {
+        "source_word": "sauer",
+        "word_id": 1028,
+        "order_index": 26
+      },
+      {
+        "source_word": "die Verschmutzung",
+        "word_id": 1310,
+        "order_index": 27
+      },
+      {
+        "source_word": null,
+        "word_id": 1237,
+        "order_index": 28
+      },
+      {
+        "source_word": "lecker",
+        "word_id": 1024,
+        "order_index": 29
+      }
+    ]
+  },
+  {
+    "id": 317,
+    "title": "German B1: Essential Vocabulary 1",
+    "description": "B1 level essential vocabulary - Part 1",
+    "source_language": "german",
+    "level": "B1",
+    "theme": "general",
+    "word_count": 50,
+    "is_public": true,
+    "created_at": "2025-12-30T19:27:53.633Z",
+    "updated_at": "2025-12-30T19:27:53.633Z",
+    "actual_word_count": 0,
+    "words": []
+  },
+  {
+    "id": 318,
+    "title": "German B1: Essential Vocabulary 2",
+    "description": "B1 level essential vocabulary - Part 2",
+    "source_language": "german",
+    "level": "B1",
+    "theme": "general",
+    "word_count": 50,
+    "is_public": true,
+    "created_at": "2025-12-30T19:27:53.731Z",
+    "updated_at": "2025-12-30T19:27:53.731Z",
+    "actual_word_count": 0,
+    "words": []
+  },
+  {
+    "id": 319,
+    "title": "German B1: Essential Vocabulary 3",
+    "description": "B1 level essential vocabulary - Part 3",
+    "source_language": "german",
+    "level": "B1",
+    "theme": "general",
+    "word_count": 50,
+    "is_public": true,
+    "created_at": "2025-12-30T19:27:53.815Z",
+    "updated_at": "2025-12-30T19:27:53.815Z",
+    "actual_word_count": 0,
+    "words": []
+  },
+  {
+    "id": 320,
+    "title": "German B1: Essential Vocabulary 4",
+    "description": "B1 level essential vocabulary - Part 4",
+    "source_language": "german",
+    "level": "B1",
+    "theme": "general",
+    "word_count": 50,
+    "is_public": true,
+    "created_at": "2025-12-30T19:27:53.918Z",
+    "updated_at": "2025-12-30T19:27:53.918Z",
+    "actual_word_count": 0,
+    "words": []
+  },
+  {
+    "id": 322,
+    "title": "German B1: work",
+    "description": "B1 level vocabulary: work",
+    "source_language": "german",
+    "level": "B1",
+    "theme": "work",
+    "word_count": 40,
+    "is_public": true,
+    "created_at": "2025-12-30T19:27:54.177Z",
+    "updated_at": "2025-12-30T19:27:54.177Z",
+    "actual_word_count": 0,
+    "words": []
+  },
+  {
+    "id": 323,
+    "title": "German B1: Soziale Beziehungen",
+    "description": "B1 level vocabulary: Soziale Beziehungen",
+    "source_language": "german",
+    "level": "B1",
+    "theme": "Soziale Beziehungen",
+    "word_count": 32,
+    "is_public": true,
+    "created_at": "2025-12-30T19:27:54.314Z",
+    "updated_at": "2025-12-30T19:27:54.314Z",
+    "actual_word_count": 0,
+    "words": []
+  },
+  {
+    "id": 324,
+    "title": "German B1: Arbeit und Beruf",
+    "description": "B1 level vocabulary: Arbeit und Beruf",
+    "source_language": "german",
+    "level": "B1",
+    "theme": "Arbeit und Beruf",
+    "word_count": 28,
+    "is_public": true,
+    "created_at": "2025-12-30T19:27:54.473Z",
+    "updated_at": "2025-12-30T19:27:54.473Z",
+    "actual_word_count": 0,
+    "words": []
+  },
+  {
+    "id": 325,
+    "title": "German B1: Money and Finance",
+    "description": "B1 level vocabulary: Money and Finance",
+    "source_language": "german",
+    "level": "B1",
+    "theme": "Money and Finance",
+    "word_count": 23,
+    "is_public": true,
+    "created_at": "2025-12-30T19:27:54.619Z",
+    "updated_at": "2025-12-30T19:27:54.619Z",
+    "actual_word_count": 0,
+    "words": []
+  },
+  {
+    "id": 326,
+    "title": "German B1: Medien und Technologie",
+    "description": "B1 level vocabulary: Medien und Technologie",
+    "source_language": "german",
+    "level": "B1",
+    "theme": "Medien und Technologie",
+    "word_count": 20,
+    "is_public": true,
+    "created_at": "2025-12-30T19:27:54.754Z",
+    "updated_at": "2025-12-30T19:27:54.754Z",
+    "actual_word_count": 0,
+    "words": []
+  },
+  {
+    "id": 327,
+    "title": "German B1: Reisen und Geografie",
+    "description": "B1 level vocabulary: Reisen und Geografie",
+    "source_language": "german",
+    "level": "B1",
+    "theme": "Reisen und Geografie",
+    "word_count": 19,
+    "is_public": true,
+    "created_at": "2025-12-30T19:27:54.907Z",
+    "updated_at": "2025-12-30T19:27:54.907Z",
+    "actual_word_count": 0,
+    "words": []
+  },
+  {
+    "id": 328,
+    "title": "German B1: Culture and Arts",
+    "description": "B1 level vocabulary: Culture and Arts",
+    "source_language": "german",
+    "level": "B1",
+    "theme": "Culture and Arts",
+    "word_count": 17,
+    "is_public": true,
+    "created_at": "2025-12-30T19:27:55.055Z",
+    "updated_at": "2025-12-30T19:27:55.055Z",
+    "actual_word_count": 0,
+    "words": []
+  },
+  {
+    "id": 321,
+    "title": "German B1: Essential Vocabulary 5",
+    "description": "B1 level essential vocabulary - Part 5",
+    "source_language": "german",
+    "level": "B1",
+    "theme": "general",
+    "word_count": 17,
+    "is_public": true,
+    "created_at": "2025-12-30T19:27:54.061Z",
+    "updated_at": "2025-12-30T19:27:54.061Z",
+    "actual_word_count": 0,
+    "words": []
+  },
+  {
+    "id": 330,
+    "title": "German B1: Bildung und Entwicklung",
+    "description": "B1 level vocabulary: Bildung und Entwicklung",
+    "source_language": "german",
+    "level": "B1",
+    "theme": "Bildung und Entwicklung",
+    "word_count": 16,
+    "is_public": true,
+    "created_at": "2025-12-30T19:27:55.574Z",
+    "updated_at": "2025-12-30T19:27:55.574Z",
+    "actual_word_count": 0,
+    "words": []
+  },
+  {
+    "id": 329,
+    "title": "German B1: Gesundheit und Lebensstil",
+    "description": "B1 level vocabulary: Gesundheit und Lebensstil",
+    "source_language": "german",
+    "level": "B1",
+    "theme": "Gesundheit und Lebensstil",
+    "word_count": 16,
+    "is_public": true,
+    "created_at": "2025-12-30T19:27:55.282Z",
+    "updated_at": "2025-12-30T19:27:55.282Z",
+    "actual_word_count": 0,
+    "words": []
+  },
+  {
+    "id": 331,
+    "title": "German B1: Sports and Hobbies",
+    "description": "B1 level vocabulary: Sports and Hobbies",
+    "source_language": "german",
+    "level": "B1",
+    "theme": "Sports and Hobbies",
+    "word_count": 15,
+    "is_public": true,
+    "created_at": "2025-12-30T19:27:55.602Z",
+    "updated_at": "2025-12-30T19:27:55.602Z",
+    "actual_word_count": 0,
+    "words": []
+  },
+  {
+    "id": 332,
+    "title": "German B1: Emotions and Personality",
+    "description": "B1 level vocabulary: Emotions and Personality",
+    "source_language": "german",
+    "level": "B1",
+    "theme": "Emotions and Personality",
+    "word_count": 14,
+    "is_public": true,
+    "created_at": "2025-12-30T19:27:55.662Z",
+    "updated_at": "2025-12-30T19:27:55.662Z",
+    "actual_word_count": 0,
+    "words": []
+  },
+  {
+    "id": 333,
+    "title": "German B1: Housing and Living Situations",
+    "description": "B1 level vocabulary: Housing and Living Situations",
+    "source_language": "german",
+    "level": "B1",
+    "theme": "Housing and Living Situations",
+    "word_count": 12,
+    "is_public": true,
+    "created_at": "2025-12-30T19:27:55.750Z",
+    "updated_at": "2025-12-30T19:27:55.750Z",
+    "actual_word_count": 0,
+    "words": []
+  },
+  {
+    "id": 334,
+    "title": "German B1: Shopping and Consumer Behavior",
+    "description": "B1 level vocabulary: Shopping and Consumer Behavior",
+    "source_language": "german",
+    "level": "B1",
+    "theme": "Shopping and Consumer Behavior",
+    "word_count": 11,
+    "is_public": true,
+    "created_at": "2025-12-30T19:27:55.777Z",
+    "updated_at": "2025-12-30T19:27:55.777Z",
+    "actual_word_count": 0,
+    "words": []
+  },
+  {
+    "id": 335,
+    "title": "German B1: Food and Dining",
+    "description": "B1 level vocabulary: Food and Dining",
+    "source_language": "german",
+    "level": "B1",
+    "theme": "Food and Dining",
+    "word_count": 10,
+    "is_public": true,
+    "created_at": "2025-12-30T19:27:55.813Z",
+    "updated_at": "2025-12-30T19:27:55.813Z",
+    "actual_word_count": 0,
+    "words": []
+  },
+  {
+    "id": 4,
+    "title": "German B2",
+    "description": "Upper Intermediate - Advanced everyday vocabulary",
+    "source_language": "german",
+    "level": "B2",
+    "theme": null,
+    "word_count": 1177,
+    "is_public": false,
+    "created_at": "2025-12-30T10:27:51.383Z",
+    "updated_at": "2025-12-30T10:28:11.347Z",
+    "actual_word_count": 30,
+    "words": [
+      {
+        "source_word": "die Erfahrung",
+        "word_id": 1271,
+        "order_index": 0
+      },
+      {
+        "source_word": "der Beweis",
+        "word_id": 1193,
+        "order_index": 1
+      },
+      {
+        "source_word": "die Wahl",
+        "word_id": 1297,
+        "order_index": 2
+      },
+      {
+        "source_word": "sich entwickeln",
+        "word_id": 1354,
+        "order_index": 3
+      },
+      {
+        "source_word": "der Gastgeber",
+        "word_id": 1159,
+        "order_index": 4
+      },
+      {
+        "source_word": "verabschieden",
+        "word_id": 1162,
+        "order_index": 5
+      },
+      {
+        "source_word": null,
+        "word_id": 1283,
+        "order_index": 6
+      },
+      {
+        "source_word": "ablehnen",
+        "word_id": 1155,
+        "order_index": 7
+      },
+      {
+        "source_word": "die Pension",
+        "word_id": 965,
+        "order_index": 8
+      },
+      {
+        "source_word": "kommentieren",
+        "word_id": 947,
+        "order_index": 9
+      },
+      {
+        "source_word": "die Bordkarte",
+        "word_id": 992,
+        "order_index": 10
+      },
+      {
+        "source_word": "die Unterbrechung",
+        "word_id": 1224,
+        "order_index": 11
+      },
+      {
+        "source_word": "zusagen",
+        "word_id": 1154,
+        "order_index": 12
+      },
+      {
+        "source_word": "sich verabreden",
+        "word_id": 1149,
+        "order_index": 13
+      },
+      {
+        "source_word": "zukünftig",
+        "word_id": 1349,
+        "order_index": 14
+      },
+      {
+        "source_word": null,
+        "word_id": 1172,
+        "order_index": 15
+      },
+      {
+        "source_word": null,
+        "word_id": 1250,
+        "order_index": 16
+      },
+      {
+        "source_word": "der Joghurt",
+        "word_id": 1010,
+        "order_index": 17
+      },
+      {
+        "source_word": "die Karriere",
+        "word_id": 1230,
+        "order_index": 18
+      },
+      {
+        "source_word": "die Verlobte",
+        "word_id": 1134,
+        "order_index": 19
+      },
+      {
+        "source_word": "die Vielfalt",
+        "word_id": 1342,
+        "order_index": 20
+      },
+      {
+        "source_word": "Guten Appetit!",
+        "word_id": 1017,
+        "order_index": 21
+      },
+      {
+        "source_word": null,
+        "word_id": 1257,
+        "order_index": 22
+      },
+      {
+        "source_word": "einloggen",
+        "word_id": 937,
+        "order_index": 23
+      },
+      {
+        "source_word": "allgemein",
+        "word_id": 1368,
+        "order_index": 24
+      },
+      {
+        "source_word": null,
+        "word_id": 1249,
+        "order_index": 25
+      },
+      {
+        "source_word": "die Soße",
+        "word_id": 1008,
+        "order_index": 26
+      },
+      {
+        "source_word": "der Passagier",
+        "word_id": 983,
+        "order_index": 27
+      },
+      {
+        "source_word": "die Zusammenarbeit",
+        "word_id": 1254,
+        "order_index": 28
+      },
+      {
+        "source_word": "hervorheben",
+        "word_id": 1222,
+        "order_index": 29
+      }
+    ]
+  },
+  {
+    "id": 336,
+    "title": "German B2: communication",
+    "description": "B2 level vocabulary: communication",
+    "source_language": "german",
+    "level": "B2",
+    "theme": "communication",
+    "word_count": 173,
+    "is_public": true,
+    "created_at": "2025-12-30T19:27:55.868Z",
+    "updated_at": "2025-12-30T19:27:55.868Z",
+    "actual_word_count": 0,
+    "words": []
+  },
+  {
+    "id": 337,
+    "title": "German B2: work",
+    "description": "B2 level vocabulary: work",
+    "source_language": "german",
+    "level": "B2",
+    "theme": "work",
+    "word_count": 164,
+    "is_public": true,
+    "created_at": "2025-12-30T19:27:55.909Z",
+    "updated_at": "2025-12-30T19:27:55.909Z",
+    "actual_word_count": 0,
+    "words": []
+  },
+  {
+    "id": 338,
+    "title": "German B2: politics",
+    "description": "B2 level vocabulary: politics",
+    "source_language": "german",
+    "level": "B2",
+    "theme": "politics",
+    "word_count": 129,
+    "is_public": true,
+    "created_at": "2025-12-30T19:27:55.948Z",
+    "updated_at": "2025-12-30T19:27:55.948Z",
+    "actual_word_count": 0,
+    "words": []
+  },
+  {
+    "id": 342,
+    "title": "German B2: health",
+    "description": "B2 level vocabulary: health",
+    "source_language": "german",
+    "level": "B2",
+    "theme": "health",
+    "word_count": 115,
+    "is_public": true,
+    "created_at": "2025-12-30T19:27:56.187Z",
+    "updated_at": "2025-12-30T19:27:56.187Z",
+    "actual_word_count": 0,
+    "words": []
+  },
+  {
+    "id": 343,
+    "title": "German B2: science",
+    "description": "B2 level vocabulary: science",
+    "source_language": "german",
+    "level": "B2",
+    "theme": "science",
+    "word_count": 95,
+    "is_public": true,
+    "created_at": "2025-12-30T19:27:56.221Z",
+    "updated_at": "2025-12-30T19:27:56.221Z",
+    "actual_word_count": 0,
+    "words": []
+  },
+  {
+    "id": 339,
+    "title": "German B2: Essential Vocabulary 1",
+    "description": "B2 level essential vocabulary - Part 1",
+    "source_language": "german",
+    "level": "B2",
+    "theme": "general",
+    "word_count": 50,
+    "is_public": true,
+    "created_at": "2025-12-30T19:27:56.005Z",
+    "updated_at": "2025-12-30T19:27:56.005Z",
+    "actual_word_count": 0,
+    "words": []
+  },
+  {
+    "id": 340,
+    "title": "German B2: Essential Vocabulary 2",
+    "description": "B2 level essential vocabulary - Part 2",
+    "source_language": "german",
+    "level": "B2",
+    "theme": "general",
+    "word_count": 50,
+    "is_public": true,
+    "created_at": "2025-12-30T19:27:56.078Z",
+    "updated_at": "2025-12-30T19:27:56.078Z",
+    "actual_word_count": 0,
+    "words": []
+  },
+  {
+    "id": 344,
+    "title": "German B2: culture",
+    "description": "B2 level vocabulary: culture",
+    "source_language": "german",
+    "level": "B2",
+    "theme": "culture",
+    "word_count": 47,
+    "is_public": true,
+    "created_at": "2025-12-30T19:27:56.251Z",
+    "updated_at": "2025-12-30T19:27:56.251Z",
+    "actual_word_count": 0,
+    "words": []
+  },
+  {
+    "id": 345,
+    "title": "German B2: Abstract Concepts & Complex Ideas",
+    "description": "B2 level vocabulary: Abstract Concepts & Complex Ideas",
+    "source_language": "german",
+    "level": "B2",
+    "theme": "Abstract Concepts & Complex Ideas",
+    "word_count": 24,
+    "is_public": true,
+    "created_at": "2025-12-30T19:27:56.296Z",
+    "updated_at": "2025-12-30T19:27:56.296Z",
+    "actual_word_count": 0,
+    "words": []
+  },
+  {
+    "id": 346,
+    "title": "German B2: Complex Emotions & Psychological States",
+    "description": "B2 level vocabulary: Complex Emotions & Psychological States",
+    "source_language": "german",
+    "level": "B2",
+    "theme": "Complex Emotions & Psychological States",
+    "word_count": 24,
+    "is_public": true,
+    "created_at": "2025-12-30T19:27:56.321Z",
+    "updated_at": "2025-12-30T19:27:56.321Z",
+    "actual_word_count": 0,
+    "words": []
+  },
+  {
+    "id": 347,
+    "title": "German B2: Advanced Literary & Artistic Vocabulary",
+    "description": "B2 level vocabulary: Advanced Literary & Artistic Vocabulary",
+    "source_language": "german",
+    "level": "B2",
+    "theme": "Advanced Literary & Artistic Vocabulary",
+    "word_count": 23,
+    "is_public": true,
+    "created_at": "2025-12-30T19:27:56.357Z",
+    "updated_at": "2025-12-30T19:27:56.357Z",
+    "actual_word_count": 0,
+    "words": []
+  },
+  {
+    "id": 348,
+    "title": "German B2: law",
+    "description": "B2 level vocabulary: law",
+    "source_language": "german",
+    "level": "B2",
+    "theme": "law",
+    "word_count": 21,
+    "is_public": true,
+    "created_at": "2025-12-30T19:27:56.382Z",
+    "updated_at": "2025-12-30T19:27:56.382Z",
+    "actual_word_count": 0,
+    "words": []
+  },
+  {
+    "id": 351,
+    "title": "German B2: Advanced Abstract Concepts & Philosophy",
+    "description": "B2 level vocabulary: Advanced Abstract Concepts & Philosophy",
+    "source_language": "german",
+    "level": "B2",
+    "theme": "Advanced Abstract Concepts & Philosophy",
+    "word_count": 20,
+    "is_public": true,
+    "created_at": "2025-12-30T19:27:56.508Z",
+    "updated_at": "2025-12-30T19:27:56.508Z",
+    "actual_word_count": 0,
+    "words": []
+  },
+  {
+    "id": 349,
+    "title": "German B2: Advanced Academic & Professional Concepts",
+    "description": "B2 level vocabulary: Advanced Academic & Professional Concepts",
+    "source_language": "german",
+    "level": "B2",
+    "theme": "Advanced Academic & Professional Concepts",
+    "word_count": 20,
+    "is_public": true,
+    "created_at": "2025-12-30T19:27:56.414Z",
+    "updated_at": "2025-12-30T19:27:56.414Z",
+    "actual_word_count": 0,
+    "words": []
+  },
+  {
+    "id": 350,
+    "title": "German B2: philosophy",
+    "description": "B2 level vocabulary: philosophy",
+    "source_language": "german",
+    "level": "B2",
+    "theme": "philosophy",
+    "word_count": 20,
+    "is_public": true,
+    "created_at": "2025-12-30T19:27:56.445Z",
+    "updated_at": "2025-12-30T19:27:56.445Z",
+    "actual_word_count": 0,
+    "words": []
+  },
+  {
+    "id": 352,
+    "title": "German B2: food",
+    "description": "B2 level vocabulary: food",
+    "source_language": "german",
+    "level": "B2",
+    "theme": "food",
+    "word_count": 19,
+    "is_public": true,
+    "created_at": "2025-12-30T19:27:56.543Z",
+    "updated_at": "2025-12-30T19:27:56.543Z",
+    "actual_word_count": 0,
+    "words": []
+  },
+  {
+    "id": 353,
+    "title": "German B2: Society, Culture & Human Relations",
+    "description": "B2 level vocabulary: Society, Culture & Human Relations",
+    "source_language": "german",
+    "level": "B2",
+    "theme": "Society, Culture & Human Relations",
+    "word_count": 19,
+    "is_public": true,
+    "created_at": "2025-12-30T19:27:56.597Z",
+    "updated_at": "2025-12-30T19:27:56.597Z",
+    "actual_word_count": 0,
+    "words": []
+  },
+  {
+    "id": 355,
+    "title": "German B2: Business & Professional Communication",
+    "description": "B2 level vocabulary: Business & Professional Communication",
+    "source_language": "german",
+    "level": "B2",
+    "theme": "Business & Professional Communication",
+    "word_count": 16,
+    "is_public": true,
+    "created_at": "2025-12-30T19:27:56.666Z",
+    "updated_at": "2025-12-30T19:27:56.666Z",
+    "actual_word_count": 0,
+    "words": []
+  },
+  {
+    "id": 354,
+    "title": "German B2: Environment, Climate & Sustainability",
+    "description": "B2 level vocabulary: Environment, Climate & Sustainability",
+    "source_language": "german",
+    "level": "B2",
+    "theme": "Environment, Climate & Sustainability",
+    "word_count": 16,
+    "is_public": true,
+    "created_at": "2025-12-30T19:27:56.625Z",
+    "updated_at": "2025-12-30T19:27:56.625Z",
+    "actual_word_count": 0,
+    "words": []
+  },
+  {
+    "id": 341,
+    "title": "German B2: Essential Vocabulary 3",
+    "description": "B2 level essential vocabulary - Part 3",
+    "source_language": "german",
+    "level": "B2",
+    "theme": "general",
+    "word_count": 16,
+    "is_public": true,
+    "created_at": "2025-12-30T19:27:56.148Z",
+    "updated_at": "2025-12-30T19:27:56.148Z",
+    "actual_word_count": 0,
+    "words": []
+  },
+  {
+    "id": 358,
+    "title": "German B2: economics",
+    "description": "B2 level vocabulary: economics",
+    "source_language": "german",
+    "level": "B2",
+    "theme": "economics",
+    "word_count": 14,
+    "is_public": true,
+    "created_at": "2025-12-30T19:27:56.785Z",
+    "updated_at": "2025-12-30T19:27:56.785Z",
+    "actual_word_count": 0,
+    "words": []
+  },
+  {
+    "id": 356,
+    "title": "German B2: Science, Technology & Innovation",
+    "description": "B2 level vocabulary: Science, Technology & Innovation",
+    "source_language": "german",
+    "level": "B2",
+    "theme": "Science, Technology & Innovation",
+    "word_count": 14,
+    "is_public": true,
+    "created_at": "2025-12-30T19:27:56.706Z",
+    "updated_at": "2025-12-30T19:27:56.706Z",
+    "actual_word_count": 0,
+    "words": []
+  },
+  {
+    "id": 357,
+    "title": "German B2: travel",
+    "description": "B2 level vocabulary: travel",
+    "source_language": "german",
+    "level": "B2",
+    "theme": "travel",
+    "word_count": 14,
+    "is_public": true,
+    "created_at": "2025-12-30T19:27:56.731Z",
+    "updated_at": "2025-12-30T19:27:56.731Z",
+    "actual_word_count": 0,
+    "words": []
+  },
+  {
+    "id": 360,
+    "title": "German B2: environment",
+    "description": "B2 level vocabulary: environment",
+    "source_language": "german",
+    "level": "B2",
+    "theme": "environment",
+    "word_count": 13,
+    "is_public": true,
+    "created_at": "2025-12-30T19:27:56.840Z",
+    "updated_at": "2025-12-30T19:27:56.840Z",
+    "actual_word_count": 0,
+    "words": []
+  },
+  {
+    "id": 359,
+    "title": "German B2: Health, Psychology & Personal Development",
+    "description": "B2 level vocabulary: Health, Psychology & Personal Development",
+    "source_language": "german",
+    "level": "B2",
+    "theme": "Health, Psychology & Personal Development",
+    "word_count": 13,
+    "is_public": true,
+    "created_at": "2025-12-30T19:27:56.815Z",
+    "updated_at": "2025-12-30T19:27:56.815Z",
+    "actual_word_count": 0,
+    "words": []
+  },
+  {
+    "id": 361,
+    "title": "German B2: Advanced Communication & Rhetoric",
+    "description": "B2 level vocabulary: Advanced Communication & Rhetoric",
+    "source_language": "german",
+    "level": "B2",
+    "theme": "Advanced Communication & Rhetoric",
+    "word_count": 11,
+    "is_public": true,
+    "created_at": "2025-12-30T19:27:56.898Z",
+    "updated_at": "2025-12-30T19:27:56.898Z",
+    "actual_word_count": 0,
+    "words": []
+  },
+  {
+    "id": 362,
+    "title": "German B2: Education, Culture & Media",
+    "description": "B2 level vocabulary: Education, Culture & Media",
+    "source_language": "german",
+    "level": "B2",
+    "theme": "Education, Culture & Media",
+    "word_count": 10,
+    "is_public": true,
+    "created_at": "2025-12-30T19:27:56.922Z",
+    "updated_at": "2025-12-30T19:27:56.922Z",
+    "actual_word_count": 0,
+    "words": []
+  },
+  {
+    "id": 363,
+    "title": "German B2: psychology",
+    "description": "B2 level vocabulary: psychology",
+    "source_language": "german",
+    "level": "B2",
+    "theme": "psychology",
+    "word_count": 10,
+    "is_public": true,
+    "created_at": "2025-12-30T19:27:56.946Z",
+    "updated_at": "2025-12-30T19:27:56.946Z",
+    "actual_word_count": 0,
+    "words": []
+  },
+  {
+    "id": 5,
+    "title": "German beginner",
+    "description": "German vocabulary at beginner level",
+    "source_language": "german",
+    "level": "beginner",
+    "theme": null,
+    "word_count": 25,
+    "is_public": false,
+    "created_at": "2025-12-30T10:27:51.443Z",
+    "updated_at": "2025-12-30T10:28:11.424Z",
+    "actual_word_count": 30,
+    "words": [
+      {
+        "source_word": null,
+        "word_id": 1258,
+        "order_index": 0
+      },
+      {
+        "source_word": "recyceln",
+        "word_id": 1311,
+        "order_index": 1
+      },
+      {
+        "source_word": "annehmen",
+        "word_id": 1198,
+        "order_index": 2
+      },
+      {
+        "source_word": "zusammenfassen",
+        "word_id": 1228,
+        "order_index": 3
+      },
+      {
+        "source_word": "die Überzeugung",
+        "word_id": 1178,
+        "order_index": 4
+      },
+      {
+        "source_word": "das Müsli",
+        "word_id": 1012,
+        "order_index": 5
+      },
+      {
+        "source_word": "die Durchsage",
+        "word_id": 995,
+        "order_index": 6
+      },
+      {
+        "source_word": "der Klimawandel",
+        "word_id": 1317,
+        "order_index": 7
+      },
+      {
+        "source_word": "die Fortbildung",
+        "word_id": 1282,
+        "order_index": 8
+      },
+      {
+        "source_word": "weltweit",
+        "word_id": 1324,
+        "order_index": 9
+      },
+      {
+        "source_word": "scharf",
+        "word_id": 1030,
+        "order_index": 10
+      },
+      {
+        "source_word": "der Abschied",
+        "word_id": 1163,
+        "order_index": 11
+      },
+      {
+        "source_word": null,
+        "word_id": 1257,
+        "order_index": 12
+      },
+      {
+        "source_word": "die Sicherheit",
+        "word_id": 1383,
+        "order_index": 13
+      },
+      {
+        "source_word": "der Konflikt",
+        "word_id": 1331,
+        "order_index": 14
+      },
+      {
+        "source_word": "schmecken",
+        "word_id": 1023,
+        "order_index": 15
+      },
+      {
+        "source_word": null,
+        "word_id": 1237,
+        "order_index": 16
+      },
+      {
+        "source_word": "normal",
+        "word_id": 1370,
+        "order_index": 17
+      },
+      {
+        "source_word": "geschieden",
+        "word_id": 1141,
+        "order_index": 18
+      },
+      {
+        "source_word": "die Weiterbildung",
+        "word_id": 1281,
+        "order_index": 19
+      },
+      {
+        "source_word": "die Zusammenfassung",
+        "word_id": 1229,
+        "order_index": 20
+      },
+      {
+        "source_word": "gekocht",
+        "word_id": 1033,
+        "order_index": 21
+      },
+      {
+        "source_word": null,
+        "word_id": 1250,
+        "order_index": 22
+      },
+      {
+        "source_word": "sich unterscheiden",
+        "word_id": 1361,
+        "order_index": 23
+      },
+      {
+        "source_word": "ausloggen",
+        "word_id": 938,
+        "order_index": 24
+      },
+      {
+        "source_word": null,
+        "word_id": 1275,
+        "order_index": 25
+      },
+      {
+        "source_word": "die Buchung",
+        "word_id": 958,
+        "order_index": 26
+      },
+      {
+        "source_word": "die Begründung",
+        "word_id": 1191,
+        "order_index": 27
+      },
+      {
+        "source_word": "die Scheidung",
+        "word_id": 1140,
+        "order_index": 28
+      },
+      {
+        "source_word": "die Wahl",
+        "word_id": 1297,
+        "order_index": 29
+      }
+    ]
+  },
+  {
+    "id": 6,
+    "title": "German C1",
+    "description": "Advanced - Complex and nuanced vocabulary",
+    "source_language": "german",
+    "level": "C1",
+    "theme": null,
+    "word_count": 1903,
+    "is_public": false,
+    "created_at": "2025-12-30T10:27:51.509Z",
+    "updated_at": "2025-12-30T10:28:11.500Z",
+    "actual_word_count": 0,
+    "words": []
+  },
+  {
+    "id": 364,
+    "title": "German C1: education",
+    "description": "C1 level vocabulary: education",
+    "source_language": "german",
+    "level": "C1",
+    "theme": "education",
+    "word_count": 335,
+    "is_public": true,
+    "created_at": "2025-12-30T19:27:57.031Z",
+    "updated_at": "2025-12-30T19:27:57.031Z",
+    "actual_word_count": 0,
+    "words": []
+  },
+  {
+    "id": 365,
+    "title": "German C1: culture",
+    "description": "C1 level vocabulary: culture",
+    "source_language": "german",
+    "level": "C1",
+    "theme": "culture",
+    "word_count": 204,
+    "is_public": true,
+    "created_at": "2025-12-30T19:27:57.057Z",
+    "updated_at": "2025-12-30T19:27:57.057Z",
+    "actual_word_count": 0,
+    "words": []
+  },
+  {
+    "id": 366,
+    "title": "German C1: work",
+    "description": "C1 level vocabulary: work",
+    "source_language": "german",
+    "level": "C1",
+    "theme": "work",
+    "word_count": 152,
+    "is_public": true,
+    "created_at": "2025-12-30T19:27:57.088Z",
+    "updated_at": "2025-12-30T19:27:57.088Z",
+    "actual_word_count": 0,
+    "words": []
+  },
+  {
+    "id": 367,
+    "title": "German C1: politics",
+    "description": "C1 level vocabulary: politics",
+    "source_language": "german",
+    "level": "C1",
+    "theme": "politics",
+    "word_count": 132,
+    "is_public": true,
+    "created_at": "2025-12-30T19:27:57.119Z",
+    "updated_at": "2025-12-30T19:27:57.119Z",
+    "actual_word_count": 0,
+    "words": []
+  },
+  {
+    "id": 368,
+    "title": "German C1: economics",
+    "description": "C1 level vocabulary: economics",
+    "source_language": "german",
+    "level": "C1",
+    "theme": "economics",
+    "word_count": 129,
+    "is_public": true,
+    "created_at": "2025-12-30T19:27:57.150Z",
+    "updated_at": "2025-12-30T19:27:57.150Z",
+    "actual_word_count": 0,
+    "words": []
+  },
+  {
+    "id": 369,
+    "title": "German C1: medicine",
+    "description": "C1 level vocabulary: medicine",
+    "source_language": "german",
+    "level": "C1",
+    "theme": "medicine",
+    "word_count": 123,
+    "is_public": true,
+    "created_at": "2025-12-30T19:27:57.175Z",
+    "updated_at": "2025-12-30T19:27:57.175Z",
+    "actual_word_count": 0,
+    "words": []
+  },
+  {
+    "id": 370,
+    "title": "German C1: science",
+    "description": "C1 level vocabulary: science",
+    "source_language": "german",
+    "level": "C1",
+    "theme": "science",
+    "word_count": 109,
+    "is_public": true,
+    "created_at": "2025-12-30T19:27:57.203Z",
+    "updated_at": "2025-12-30T19:27:57.203Z",
+    "actual_word_count": 0,
+    "words": []
+  },
+  {
+    "id": 371,
+    "title": "German C1: philosophy",
+    "description": "C1 level vocabulary: philosophy",
+    "source_language": "german",
+    "level": "C1",
+    "theme": "philosophy",
+    "word_count": 103,
+    "is_public": true,
+    "created_at": "2025-12-30T19:27:57.237Z",
+    "updated_at": "2025-12-30T19:27:57.237Z",
+    "actual_word_count": 0,
+    "words": []
+  },
+  {
+    "id": 372,
+    "title": "German C1: psychology",
+    "description": "C1 level vocabulary: psychology",
+    "source_language": "german",
+    "level": "C1",
+    "theme": "psychology",
+    "word_count": 103,
+    "is_public": true,
+    "created_at": "2025-12-30T19:27:57.269Z",
+    "updated_at": "2025-12-30T19:27:57.269Z",
+    "actual_word_count": 0,
+    "words": []
+  },
+  {
+    "id": 373,
+    "title": "German C1: sociology",
+    "description": "C1 level vocabulary: sociology",
+    "source_language": "german",
+    "level": "C1",
+    "theme": "sociology",
+    "word_count": 99,
+    "is_public": true,
+    "created_at": "2025-12-30T19:27:57.307Z",
+    "updated_at": "2025-12-30T19:27:57.307Z",
+    "actual_word_count": 0,
+    "words": []
+  },
+  {
+    "id": 374,
+    "title": "German C1: law",
+    "description": "C1 level vocabulary: law",
+    "source_language": "german",
+    "level": "C1",
+    "theme": "law",
+    "word_count": 95,
+    "is_public": true,
+    "created_at": "2025-12-30T19:27:57.332Z",
+    "updated_at": "2025-12-30T19:27:57.332Z",
+    "actual_word_count": 0,
+    "words": []
+  },
+  {
+    "id": 377,
+    "title": "German C1: environment",
+    "description": "C1 level vocabulary: environment",
+    "source_language": "german",
+    "level": "C1",
+    "theme": "environment",
+    "word_count": 80,
+    "is_public": true,
+    "created_at": "2025-12-30T19:27:57.615Z",
+    "updated_at": "2025-12-30T19:27:57.615Z",
+    "actual_word_count": 0,
+    "words": []
+  },
+  {
+    "id": 375,
+    "title": "German C1: Essential Vocabulary 1",
+    "description": "C1 level essential vocabulary - Part 1",
+    "source_language": "german",
+    "level": "C1",
+    "theme": "general",
+    "word_count": 50,
+    "is_public": true,
+    "created_at": "2025-12-30T19:27:57.505Z",
+    "updated_at": "2025-12-30T19:27:57.505Z",
+    "actual_word_count": 0,
+    "words": []
+  },
+  {
+    "id": 378,
+    "title": "German C1: Advanced Expressions and Nuanced Language",
+    "description": "C1 level vocabulary: Advanced Expressions and Nuanced Language",
+    "source_language": "german",
+    "level": "C1",
+    "theme": "Advanced Expressions and Nuanced Language",
+    "word_count": 46,
+    "is_public": true,
+    "created_at": "2025-12-30T19:27:57.650Z",
+    "updated_at": "2025-12-30T19:27:57.650Z",
+    "actual_word_count": 0,
+    "words": []
+  },
+  {
+    "id": 376,
+    "title": "German C1: Essential Vocabulary 2",
+    "description": "C1 level essential vocabulary - Part 2",
+    "source_language": "german",
+    "level": "C1",
+    "theme": "general",
+    "word_count": 43,
+    "is_public": true,
+    "created_at": "2025-12-30T19:27:57.582Z",
+    "updated_at": "2025-12-30T19:27:57.582Z",
+    "actual_word_count": 0,
+    "words": []
+  },
+  {
+    "id": 379,
+    "title": "German C1: Academic and Intellectual Discourse",
+    "description": "C1 level vocabulary: Academic and Intellectual Discourse",
+    "source_language": "german",
+    "level": "C1",
+    "theme": "Academic and Intellectual Discourse",
+    "word_count": 40,
+    "is_public": true,
+    "created_at": "2025-12-30T19:27:57.689Z",
+    "updated_at": "2025-12-30T19:27:57.689Z",
+    "actual_word_count": 0,
+    "words": []
+  },
+  {
+    "id": 380,
+    "title": "German C1: Professional and Technical Terminology",
+    "description": "C1 level vocabulary: Professional and Technical Terminology",
+    "source_language": "german",
+    "level": "C1",
+    "theme": "Professional and Technical Terminology",
+    "word_count": 32,
+    "is_public": true,
+    "created_at": "2025-12-30T19:27:57.713Z",
+    "updated_at": "2025-12-30T19:27:57.713Z",
+    "actual_word_count": 0,
+    "words": []
+  },
+  {
+    "id": 381,
+    "title": "German C1: Cultural, Social and Political Discourse",
+    "description": "C1 level vocabulary: Cultural, Social and Political Discourse",
+    "source_language": "german",
+    "level": "C1",
+    "theme": "Cultural, Social and Political Discourse",
+    "word_count": 24,
+    "is_public": true,
+    "created_at": "2025-12-30T19:27:57.738Z",
+    "updated_at": "2025-12-30T19:27:57.738Z",
+    "actual_word_count": 0,
+    "words": []
+  },
+  {
+    "id": 7,
+    "title": "German C2",
+    "description": "Proficiency - Academic and specialized vocabulary",
+    "source_language": "german",
+    "level": "C2",
+    "theme": null,
+    "word_count": 3075,
+    "is_public": false,
+    "created_at": "2025-12-30T10:27:51.561Z",
+    "updated_at": "2025-12-30T10:28:11.555Z",
+    "actual_word_count": 0,
+    "words": []
+  },
+  {
+    "id": 382,
+    "title": "German C2: science",
+    "description": "C2 level vocabulary: science",
+    "source_language": "german",
+    "level": "C2",
+    "theme": "science",
+    "word_count": 390,
+    "is_public": true,
+    "created_at": "2025-12-30T19:27:57.805Z",
+    "updated_at": "2025-12-30T19:27:57.805Z",
+    "actual_word_count": 0,
+    "words": []
+  },
+  {
+    "id": 383,
+    "title": "German C2: education",
+    "description": "C2 level vocabulary: education",
+    "source_language": "german",
+    "level": "C2",
+    "theme": "education",
+    "word_count": 375,
+    "is_public": true,
+    "created_at": "2025-12-30T19:27:57.834Z",
+    "updated_at": "2025-12-30T19:27:57.834Z",
+    "actual_word_count": 0,
+    "words": []
+  },
+  {
+    "id": 392,
+    "title": "German C2: culture",
+    "description": "C2 level vocabulary: culture",
+    "source_language": "german",
+    "level": "C2",
+    "theme": "culture",
+    "word_count": 219,
+    "is_public": true,
+    "created_at": "2025-12-30T19:27:58.574Z",
+    "updated_at": "2025-12-30T19:27:58.574Z",
+    "actual_word_count": 0,
+    "words": []
+  },
+  {
+    "id": 393,
+    "title": "German C2: politics",
+    "description": "C2 level vocabulary: politics",
+    "source_language": "german",
+    "level": "C2",
+    "theme": "politics",
+    "word_count": 203,
+    "is_public": true,
+    "created_at": "2025-12-30T19:27:58.681Z",
+    "updated_at": "2025-12-30T19:27:58.681Z",
+    "actual_word_count": 0,
+    "words": []
+  },
+  {
+    "id": 394,
+    "title": "German C2: economics",
+    "description": "C2 level vocabulary: economics",
+    "source_language": "german",
+    "level": "C2",
+    "theme": "economics",
+    "word_count": 171,
+    "is_public": true,
+    "created_at": "2025-12-30T19:27:58.759Z",
+    "updated_at": "2025-12-30T19:27:58.759Z",
+    "actual_word_count": 0,
+    "words": []
+  },
+  {
+    "id": 395,
+    "title": "German C2: law",
+    "description": "C2 level vocabulary: law",
+    "source_language": "german",
+    "level": "C2",
+    "theme": "law",
+    "word_count": 171,
+    "is_public": true,
+    "created_at": "2025-12-30T19:27:58.802Z",
+    "updated_at": "2025-12-30T19:27:58.802Z",
+    "actual_word_count": 0,
+    "words": []
+  },
+  {
+    "id": 396,
+    "title": "German C2: philosophy",
+    "description": "C2 level vocabulary: philosophy",
+    "source_language": "german",
+    "level": "C2",
+    "theme": "philosophy",
+    "word_count": 126,
+    "is_public": true,
+    "created_at": "2025-12-30T19:27:58.853Z",
+    "updated_at": "2025-12-30T19:27:58.853Z",
+    "actual_word_count": 0,
+    "words": []
+  },
+  {
+    "id": 397,
+    "title": "German C2: environment",
+    "description": "C2 level vocabulary: environment",
+    "source_language": "german",
+    "level": "C2",
+    "theme": "environment",
+    "word_count": 109,
+    "is_public": true,
+    "created_at": "2025-12-30T19:27:58.916Z",
+    "updated_at": "2025-12-30T19:27:58.916Z",
+    "actual_word_count": 0,
+    "words": []
+  },
+  {
+    "id": 398,
+    "title": "German C2: Cutting-Edge Technology & Innovation",
+    "description": "C2 level vocabulary: Cutting-Edge Technology & Innovation",
+    "source_language": "german",
+    "level": "C2",
+    "theme": "Cutting-Edge Technology & Innovation",
+    "word_count": 92,
+    "is_public": true,
+    "created_at": "2025-12-30T19:27:58.966Z",
+    "updated_at": "2025-12-30T19:27:58.966Z",
+    "actual_word_count": 0,
+    "words": []
+  },
+  {
+    "id": 399,
+    "title": "German C2: Advanced Psychology & Human Behavior",
+    "description": "C2 level vocabulary: Advanced Psychology & Human Behavior",
+    "source_language": "german",
+    "level": "C2",
+    "theme": "Advanced Psychology & Human Behavior",
+    "word_count": 80,
+    "is_public": true,
+    "created_at": "2025-12-30T19:27:59.013Z",
+    "updated_at": "2025-12-30T19:27:59.013Z",
+    "actual_word_count": 0,
+    "words": []
+  },
+  {
+    "id": 401,
+    "title": "German C2: Ethics & Moral Philosophy",
+    "description": "C2 level vocabulary: Ethics & Moral Philosophy",
+    "source_language": "german",
+    "level": "C2",
+    "theme": "Ethics & Moral Philosophy",
+    "word_count": 79,
+    "is_public": true,
+    "created_at": "2025-12-30T19:27:59.104Z",
+    "updated_at": "2025-12-30T19:27:59.104Z",
+    "actual_word_count": 0,
+    "words": []
+  },
+  {
+    "id": 400,
+    "title": "German C2: Religion & Theology",
+    "description": "C2 level vocabulary: Religion & Theology",
+    "source_language": "german",
+    "level": "C2",
+    "theme": "Religion & Theology",
+    "word_count": 79,
+    "is_public": true,
+    "created_at": "2025-12-30T19:27:59.055Z",
+    "updated_at": "2025-12-30T19:27:59.055Z",
+    "actual_word_count": 0,
+    "words": []
+  },
+  {
+    "id": 402,
+    "title": "German C2: Linguistic Theory & Communication Science",
+    "description": "C2 level vocabulary: Linguistic Theory & Communication Science",
+    "source_language": "german",
+    "level": "C2",
+    "theme": "Linguistic Theory & Communication Science",
+    "word_count": 77,
+    "is_public": true,
+    "created_at": "2025-12-30T19:27:59.213Z",
+    "updated_at": "2025-12-30T19:27:59.213Z",
+    "actual_word_count": 0,
+    "words": []
+  },
+  {
+    "id": 403,
+    "title": "German C2: Musicology & Music Theory",
+    "description": "C2 level vocabulary: Musicology & Music Theory",
+    "source_language": "german",
+    "level": "C2",
+    "theme": "Musicology & Music Theory",
+    "word_count": 77,
+    "is_public": true,
+    "created_at": "2025-12-30T19:27:59.289Z",
+    "updated_at": "2025-12-30T19:27:59.289Z",
+    "actual_word_count": 0,
+    "words": []
+  },
+  {
+    "id": 404,
+    "title": "German C2: Advanced Business & Management",
+    "description": "C2 level vocabulary: Advanced Business & Management",
+    "source_language": "german",
+    "level": "C2",
+    "theme": "Advanced Business & Management",
+    "word_count": 74,
+    "is_public": true,
+    "created_at": "2025-12-30T19:27:59.356Z",
+    "updated_at": "2025-12-30T19:27:59.356Z",
+    "actual_word_count": 0,
+    "words": []
+  },
+  {
+    "id": 405,
+    "title": "German C2: Astronomy & Cosmology",
+    "description": "C2 level vocabulary: Astronomy & Cosmology",
+    "source_language": "german",
+    "level": "C2",
+    "theme": "Astronomy & Cosmology",
+    "word_count": 69,
+    "is_public": true,
+    "created_at": "2025-12-30T19:27:59.420Z",
+    "updated_at": "2025-12-30T19:27:59.420Z",
+    "actual_word_count": 0,
+    "words": []
+  },
+  {
+    "id": 406,
+    "title": "German C2: Geography & Geopolitics",
+    "description": "C2 level vocabulary: Geography & Geopolitics",
+    "source_language": "german",
+    "level": "C2",
+    "theme": "Geography & Geopolitics",
+    "word_count": 67,
+    "is_public": true,
+    "created_at": "2025-12-30T19:27:59.480Z",
+    "updated_at": "2025-12-30T19:27:59.480Z",
+    "actual_word_count": 0,
+    "words": []
+  },
+  {
+    "id": 407,
+    "title": "German C2: Film & Media Theory",
+    "description": "C2 level vocabulary: Film & Media Theory",
+    "source_language": "german",
+    "level": "C2",
+    "theme": "Film & Media Theory",
+    "word_count": 64,
+    "is_public": true,
+    "created_at": "2025-12-30T19:27:59.543Z",
+    "updated_at": "2025-12-30T19:27:59.543Z",
+    "actual_word_count": 0,
+    "words": []
+  },
+  {
+    "id": 408,
+    "title": "German C2: Advanced Chemistry & Physics",
+    "description": "C2 level vocabulary: Advanced Chemistry & Physics",
+    "source_language": "german",
+    "level": "C2",
+    "theme": "Advanced Chemistry & Physics",
+    "word_count": 62,
+    "is_public": true,
+    "created_at": "2025-12-30T19:27:59.596Z",
+    "updated_at": "2025-12-30T19:27:59.596Z",
+    "actual_word_count": 0,
+    "words": []
+  },
+  {
+    "id": 409,
+    "title": "German C2: Historical & Archaeological Terminology",
+    "description": "C2 level vocabulary: Historical & Archaeological Terminology",
+    "source_language": "german",
+    "level": "C2",
+    "theme": "Historical & Archaeological Terminology",
+    "word_count": 56,
+    "is_public": true,
+    "created_at": "2025-12-30T19:27:59.651Z",
+    "updated_at": "2025-12-30T19:27:59.651Z",
+    "actual_word_count": 0,
+    "words": []
+  },
+  {
+    "id": 384,
+    "title": "German C2: Essential Vocabulary 1",
+    "description": "C2 level essential vocabulary - Part 1",
+    "source_language": "german",
+    "level": "C2",
+    "theme": "general",
+    "word_count": 50,
+    "is_public": true,
+    "created_at": "2025-12-30T19:27:57.893Z",
+    "updated_at": "2025-12-30T19:27:57.893Z",
+    "actual_word_count": 0,
+    "words": []
+  },
+  {
+    "id": 385,
+    "title": "German C2: Essential Vocabulary 2",
+    "description": "C2 level essential vocabulary - Part 2",
+    "source_language": "german",
+    "level": "C2",
+    "theme": "general",
+    "word_count": 50,
+    "is_public": true,
+    "created_at": "2025-12-30T19:27:57.984Z",
+    "updated_at": "2025-12-30T19:27:57.984Z",
+    "actual_word_count": 0,
+    "words": []
+  },
+  {
+    "id": 386,
+    "title": "German C2: Essential Vocabulary 3",
+    "description": "C2 level essential vocabulary - Part 3",
+    "source_language": "german",
+    "level": "C2",
+    "theme": "general",
+    "word_count": 50,
+    "is_public": true,
+    "created_at": "2025-12-30T19:27:58.064Z",
+    "updated_at": "2025-12-30T19:27:58.064Z",
+    "actual_word_count": 0,
+    "words": []
+  },
+  {
+    "id": 387,
+    "title": "German C2: Essential Vocabulary 4",
+    "description": "C2 level essential vocabulary - Part 4",
+    "source_language": "german",
+    "level": "C2",
+    "theme": "general",
+    "word_count": 50,
+    "is_public": true,
+    "created_at": "2025-12-30T19:27:58.133Z",
+    "updated_at": "2025-12-30T19:27:58.133Z",
+    "actual_word_count": 0,
+    "words": []
+  },
+  {
+    "id": 388,
+    "title": "German C2: Essential Vocabulary 5",
+    "description": "C2 level essential vocabulary - Part 5",
+    "source_language": "german",
+    "level": "C2",
+    "theme": "general",
+    "word_count": 50,
+    "is_public": true,
+    "created_at": "2025-12-30T19:27:58.208Z",
+    "updated_at": "2025-12-30T19:27:58.208Z",
+    "actual_word_count": 0,
+    "words": []
+  },
+  {
+    "id": 389,
+    "title": "German C2: Essential Vocabulary 6",
+    "description": "C2 level essential vocabulary - Part 6",
+    "source_language": "german",
+    "level": "C2",
+    "theme": "general",
+    "word_count": 50,
+    "is_public": true,
+    "created_at": "2025-12-30T19:27:58.318Z",
+    "updated_at": "2025-12-30T19:27:58.318Z",
+    "actual_word_count": 0,
+    "words": []
+  },
+  {
+    "id": 390,
+    "title": "German C2: Essential Vocabulary 7",
+    "description": "C2 level essential vocabulary - Part 7",
+    "source_language": "german",
+    "level": "C2",
+    "theme": "general",
+    "word_count": 50,
+    "is_public": true,
+    "created_at": "2025-12-30T19:27:58.447Z",
+    "updated_at": "2025-12-30T19:27:58.447Z",
+    "actual_word_count": 0,
+    "words": []
+  },
+  {
+    "id": 410,
+    "title": "German C2: Advanced Legal & Jurisprudence",
+    "description": "C2 level vocabulary: Advanced Legal & Jurisprudence",
+    "source_language": "german",
+    "level": "C2",
+    "theme": "Advanced Legal & Jurisprudence",
+    "word_count": 25,
+    "is_public": true,
+    "created_at": "2025-12-30T19:27:59.717Z",
+    "updated_at": "2025-12-30T19:27:59.717Z",
+    "actual_word_count": 0,
+    "words": []
+  },
+  {
+    "id": 391,
+    "title": "German C2: Essential Vocabulary 8",
+    "description": "C2 level essential vocabulary - Part 8",
+    "source_language": "german",
+    "level": "C2",
+    "theme": "general",
+    "word_count": 23,
+    "is_public": true,
+    "created_at": "2025-12-30T19:27:58.527Z",
+    "updated_at": "2025-12-30T19:27:58.527Z",
+    "actual_word_count": 0,
+    "words": []
+  },
+  {
+    "id": 411,
+    "title": "German C2: Advanced Neuroscience & Cognitive Science",
+    "description": "C2 level vocabulary: Advanced Neuroscience & Cognitive Science",
+    "source_language": "german",
+    "level": "C2",
+    "theme": "Advanced Neuroscience & Cognitive Science",
+    "word_count": 17,
+    "is_public": true,
+    "created_at": "2025-12-30T19:27:59.774Z",
+    "updated_at": "2025-12-30T19:27:59.774Z",
+    "actual_word_count": 0,
+    "words": []
+  },
+  {
+    "id": 412,
+    "title": "German C2: Advanced Cultural & Sociological Analysis",
+    "description": "C2 level vocabulary: Advanced Cultural & Sociological Analysis",
+    "source_language": "german",
+    "level": "C2",
+    "theme": "Advanced Cultural & Sociological Analysis",
+    "word_count": 12,
+    "is_public": true,
+    "created_at": "2025-12-30T19:27:59.843Z",
+    "updated_at": "2025-12-30T19:27:59.843Z",
+    "actual_word_count": 0,
+    "words": []
+  },
+  {
+    "id": 8,
+    "title": "German - General",
+    "description": "German vocabulary related to general",
+    "source_language": "german",
+    "level": null,
+    "theme": "general",
+    "word_count": 1554,
+    "is_public": false,
+    "created_at": "2025-12-30T10:27:51.674Z",
+    "updated_at": "2025-12-30T10:28:11.651Z",
+    "actual_word_count": 0,
+    "words": []
+  },
+  {
+    "id": 9,
+    "title": "German - Education",
+    "description": "German vocabulary related to education",
+    "source_language": "german",
+    "level": null,
+    "theme": "education",
+    "word_count": 764,
+    "is_public": false,
+    "created_at": "2025-12-30T10:27:51.731Z",
+    "updated_at": "2025-12-30T10:28:11.704Z",
+    "actual_word_count": 0,
+    "words": []
+  },
+  {
+    "id": 10,
+    "title": "German - Science",
+    "description": "German vocabulary related to science",
+    "source_language": "german",
+    "level": null,
+    "theme": "science",
+    "word_count": 594,
+    "is_public": false,
+    "created_at": "2025-12-30T10:27:51.813Z",
+    "updated_at": "2025-12-30T10:28:11.764Z",
+    "actual_word_count": 0,
+    "words": []
+  },
+  {
+    "id": 11,
+    "title": "German - Culture",
+    "description": "German vocabulary related to culture",
+    "source_language": "german",
+    "level": null,
+    "theme": "culture",
+    "word_count": 470,
+    "is_public": false,
+    "created_at": "2025-12-30T10:27:51.871Z",
+    "updated_at": "2025-12-30T10:28:11.854Z",
+    "actual_word_count": 0,
+    "words": []
+  },
+  {
+    "id": 12,
+    "title": "German - Politics",
+    "description": "German vocabulary related to politics",
+    "source_language": "german",
+    "level": null,
+    "theme": "politics",
+    "word_count": 464,
+    "is_public": false,
+    "created_at": "2025-12-30T10:27:51.932Z",
+    "updated_at": "2025-12-30T10:28:11.903Z",
+    "actual_word_count": 0,
+    "words": []
+  },
+  {
+    "id": 13,
+    "title": "German - Work",
+    "description": "German vocabulary related to work",
+    "source_language": "german",
+    "level": null,
+    "theme": "work",
+    "word_count": 405,
+    "is_public": false,
+    "created_at": "2025-12-30T10:27:51.981Z",
+    "updated_at": "2025-12-30T10:28:11.956Z",
+    "actual_word_count": 0,
+    "words": []
+  },
+  {
+    "id": 14,
+    "title": "German - Economics",
+    "description": "German vocabulary related to economics",
+    "source_language": "german",
+    "level": null,
+    "theme": "economics",
+    "word_count": 314,
+    "is_public": false,
+    "created_at": "2025-12-30T10:27:52.046Z",
+    "updated_at": "2025-12-30T10:28:12.036Z",
+    "actual_word_count": 0,
+    "words": []
+  },
+  {
+    "id": 15,
+    "title": "German - Law",
+    "description": "German vocabulary related to law",
+    "source_language": "german",
+    "level": null,
+    "theme": "law",
+    "word_count": 287,
+    "is_public": false,
+    "created_at": "2025-12-30T10:27:52.110Z",
+    "updated_at": "2025-12-30T10:28:12.091Z",
+    "actual_word_count": 0,
+    "words": []
+  },
+  {
+    "id": 16,
+    "title": "German - Philosophy",
+    "description": "German vocabulary related to philosophy",
+    "source_language": "german",
+    "level": null,
+    "theme": "philosophy",
+    "word_count": 249,
+    "is_public": false,
+    "created_at": "2025-12-30T10:27:52.166Z",
+    "updated_at": "2025-12-30T10:28:12.148Z",
+    "actual_word_count": 0,
+    "words": []
+  },
+  {
+    "id": 17,
+    "title": "German - Communication",
+    "description": "German vocabulary related to communication",
+    "source_language": "german",
+    "level": null,
+    "theme": "communication",
+    "word_count": 222,
+    "is_public": false,
+    "created_at": "2025-12-30T10:27:52.216Z",
+    "updated_at": "2025-12-30T10:28:12.207Z",
+    "actual_word_count": 0,
+    "words": []
+  }
+]
