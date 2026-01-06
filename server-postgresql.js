@@ -2855,17 +2855,24 @@ app.get('/api/word-sets', async (req, res) => {
                 const learningLanguage = parts[0]; // FIRST part is the language being learned
                 // Map short codes to full language names
                 const langMap = {
+                    'ar': 'arabic',
                     'de': 'german',
                     'en': 'english',
-                    'hi': 'hindi',
                     'es': 'spanish',
                     'fr': 'french',
+                    'hi': 'hindi',
                     'it': 'italian',
-                    'pt': 'portuguese',
-                    'ru': 'russian',
-                    'uk': 'ukrainian',
                     'ja': 'japanese',
-                    'sw': 'swahili'
+                    'ko': 'korean',
+                    'pl': 'polish',
+                    'pt': 'portuguese',
+                    'ro': 'romanian',
+                    'ru': 'russian',
+                    'sr': 'serbian',
+                    'sw': 'swahili',
+                    'tr': 'turkish',
+                    'uk': 'ukrainian',
+                    'zh': 'chinese'
                 };
                 const fullLanguageName = langMap[learningLanguage] || learningLanguage;
                 query += ` AND source_language = $${paramIndex}`;
