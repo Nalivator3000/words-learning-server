@@ -13257,16 +13257,111 @@ app.post('/api/words', async (req, res) => {
             return;
         }
 
-        // Check if word already exists for this user and language pair
-        const existingWord = await db.query(
-            'SELECT id FROM words WHERE LOWER(word) = LOWER($1) AND user_id = $2 AND language_pair_id = $3',
-            [word, userId, languagePairId]
+        // Get language pair to determine source language
+        const langPairResult = await db.query(
+            'SELECT from_lang, to_lang FROM language_pairs WHERE id = $1 AND user_id = $2',
+            [parseInt(languagePairId), parseInt(userId)]
         );
 
-        if (existingWord.rows.length > 0) {
+        if (langPairResult.rows.length === 0) {
+            return res.status(404).json({ error: 'Language pair not found' });
+        }
+
+        const { from_lang, to_lang } = langPairResult.rows[0];
+        const sourceLanguage = LANG_CODE_TO_FULL_NAME[from_lang] || from_lang;
+        const sourceTableName = `source_words_${sourceLanguage}`;
+
+        // Check if word already exists in user_word_progress
+        // First, check if this word exists in source_words table
+        const existingSourceWord = await db.query(
+            `SELECT id FROM ${sourceTableName} WHERE LOWER(word) = LOWER($1)`,
+            [word]
+        );
+
+        let sourceWordId;
+
+        if (existingSourceWord.rows.length > 0) {
+            // Word exists in source table, use that ID
+            sourceWordId = existingSourceWord.rows[0].id;
+        } else {
+            // Word doesn't exist in source table, create it as custom word
+            const exampleColumn = `example_${from_lang}`;
+            const insertResult = await db.query(
+                `INSERT INTO ${sourceTableName} (word, ${exampleColumn}, level, theme)
+                 VALUES ($1, $2, 'custom', 'custom') RETURNING id`,
+                [word, example || '']
+            );
+            sourceWordId = insertResult.rows[0].id;
+
+            // Also add translation to target_translations table if it exists
+            const targetLanguage = LANG_CODE_TO_FULL_NAME[to_lang] || to_lang;
+            const baseTranslationTableName = `target_translations_${targetLanguage}`;
+
+            // Check if base table exists
+            const tableExistsResult = await db.query(`
+                SELECT EXISTS (
+                    SELECT FROM information_schema.tables
+                    WHERE table_schema = 'public'
+                    AND table_name = $1
+                )
+            `, [baseTranslationTableName]);
+
+            if (tableExistsResult.rows[0].exists) {
+                // Try to insert translation
+                try {
+                    const exampleTranslationColumn = `example_${to_lang}`;
+                    await db.query(
+                        `INSERT INTO ${baseTranslationTableName} (source_word_id, source_lang, translation, ${exampleTranslationColumn})
+                         VALUES ($1, $2, $3, $4)
+                         ON CONFLICT (source_word_id, source_lang) DO UPDATE
+                         SET translation = EXCLUDED.translation, ${exampleTranslationColumn} = EXCLUDED.${exampleTranslationColumn}`,
+                        [sourceWordId, from_lang, translation, exampleTranslation || '']
+                    );
+                } catch (translationErr) {
+                    logger.warn(`Could not add translation to ${baseTranslationTableName}:`, translationErr.message);
+                }
+            }
+        }
+
+        // Check if this word is already in user's progress
+        const existingProgress = await db.query(`
+            SELECT id FROM user_word_progress
+            WHERE user_id = $1
+            AND language_pair_id = $2
+            AND source_language = $3
+            AND source_word_id = $4
+        `, [userId, languagePairId, sourceLanguage, sourceWordId]);
+
+        if (existingProgress.rows.length > 0) {
             return res.status(400).json({ error: 'Это слово уже есть в вашем списке' });
         }
 
+        // Add word to user_word_progress (NEW ARCHITECTURE)
+        logger.info(`[ADD WORD] Attempting to add word to user_word_progress: userId=${userId}, languagePairId=${languagePairId}, sourceLanguage=${sourceLanguage}, sourceWordId=${sourceWordId}`);
+
+        try {
+            await db.query(`
+                INSERT INTO user_word_progress (
+                    user_id, language_pair_id, source_language, source_word_id,
+                    status, correct_count, incorrect_count, total_reviews,
+                    ease_factor, next_review_date, created_at, updated_at
+                )
+                VALUES ($1, $2, $3, $4, 'new', 0, 0, 0, 2.5, CURRENT_DATE, CURRENT_TIMESTAMP, CURRENT_TIMESTAMP)
+            `, [
+                userId,
+                languagePairId,
+                sourceLanguage,
+                sourceWordId
+            ]);
+            logger.info(`[ADD WORD] ✅ Successfully added to user_word_progress`);
+        } catch (uwpErr) {
+            logger.error(`[ADD WORD] ❌ Failed to add to user_word_progress:`, uwpErr.message);
+            logger.error(`[ADD WORD] Error details:`, uwpErr);
+            throw uwpErr; // Re-throw to prevent adding to legacy table
+        }
+
+        // ALSO add to legacy words table for backwards compatibility
+        logger.info(`[ADD WORD] Adding to legacy words table`);
         const query = `INSERT INTO words (word, translation, example, exampleTranslation, user_id, language_pair_id, is_custom, source, notes, tags)
                        VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9, $10) RETURNING id`;
 
@@ -13277,14 +13372,16 @@ app.post('/api/words', async (req, res) => {
             exampleTranslation || '',
             userId,
             languagePairId,
-            isCustom || false,
+            isCustom || true,  // Custom words are always custom
             source || 'user_added',
             notes || null,
             tags || null
         ]);
 
+        logger.info(`[ADD WORD] ✅ Word added successfully with ID: ${result.rows[0].id}`);
         res.json({ id: result.rows[0].id, message: 'Word added successfully' });
     } catch (err) {
+        logger.error('Error adding word:', err);
         res.status(500).json({ error: err.message });
     }
 });
