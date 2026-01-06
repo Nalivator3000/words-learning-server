@@ -61,6 +61,18 @@ function getFeatureName() {
     }
 }
 
+// Get full commit message (first line only)
+function getCommitMessage() {
+    try {
+        const message = execSync('git log -1 --pretty=%s').toString().trim();
+        // Limit to 80 characters for the comment
+        return message.length > 80 ? message.substring(0, 77) + '...' : message;
+    } catch (error) {
+        console.error('Error getting commit message:', error.message);
+        return 'Unknown commit';
+    }
+}
+
 // Update version in index.html
 function updateIndexHtml() {
     const indexPath = path.join(__dirname, '..', '..', 'public', 'index.html');
@@ -73,6 +85,7 @@ function updateIndexHtml() {
     const commitHash = getCommitHash();
     const version = getVersion();
     const newVersion = `v${version}`;
+    const commitMsg = getCommitMessage();
 
     let content = fs.readFileSync(indexPath, 'utf8');
 
@@ -81,6 +94,20 @@ function updateIndexHtml() {
         /<!-- Version: v[\d.]+(?:-[\w-]+-[a-f0-9]+)? -->/,
         `<!-- Version: ${newVersion} -->`
     );
+
+    // Update or add commit message comment
+    if (content.includes('<!-- Commit:')) {
+        content = content.replace(
+            /<!-- Commit: .+? -->/,
+            `<!-- Commit: ${commitMsg} -->`
+        );
+    } else {
+        // Add commit comment after version comment
+        content = content.replace(
+            /<!-- Version: v[\d.]+ -->/,
+            `<!-- Version: ${newVersion} -->\n    <!-- Commit: ${commitMsg} -->`
+        );
+    }
 
     fs.writeFileSync(indexPath, content, 'utf8');
     console.log(`✅ Version updated to: ${newVersion} (commit: ${commitHash})`);
@@ -100,4 +127,4 @@ if (require.main === module) {
     }
 }
 
-module.exports = { updateIndexHtml, getCommitHash, getVersion, getFeatureName };
+module.exports = { updateIndexHtml, getCommitHash, getVersion, getFeatureName, getCommitMessage };

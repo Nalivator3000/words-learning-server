@@ -7,6 +7,7 @@
     <title>LexyBooster - Language Learning & SRS</title>
     <meta name="description" content="Master languages with spaced repetition, gamification & streak tracking. Learn German, Spanish, French, and more!">
     <!-- Version: v5.4.21 -->
+    <!-- Commit: 🐛 FIX: Handle languages without example columns in source tables -->
 
     <!-- Favicon -->
     <link rel="icon" type="image/png" sizes="32x32" href="/icons/icon-72x72.png">
@@ -266,6 +267,11 @@
                             }
                         }
 
+                        // Extract commit message from HTML comment
+                        const htmlContent = document.documentElement.outerHTML;
+                        const commitMatch = htmlContent.match(/<!-- Commit: (.+?) -->/);
+                        const commitMessage = commitMatch ? commitMatch[1] : 'Unknown';
+
                         // Log all versions
                         console.log('%c════════════════════════════════════════', 'color: #8B5CF6; font-weight: bold;');
                         console.log('%c🚀 BUILD INFORMATION', 'color: #06B6D4; font-size: 16px; font-weight: bold;');
@@ -273,12 +279,26 @@
                         console.log('%c📱 App Version:', 'color: #10B981; font-weight: bold;', appVersion);
                         console.log('%c⚙️  Service Worker:', 'color: #F59E0B; font-weight: bold;', swVersion);
                         console.log('%c🎨 CSS Version:', 'color: #EF4444; font-weight: bold;', cssVersion);
+                        console.log('%c💬 Commit:', 'color: #A78BFA; font-weight: bold;', commitMessage);
                         console.log('%c🌐 URL:', 'color: #8B5CF6; font-weight: bold;', window.location.href);
                         console.log('%c🕐 Loaded at:', 'color: #06B6D4; font-weight: bold;', new Date().toLocaleString());
                         console.log('%c════════════════════════════════════════', 'color: #8B5CF6; font-weight: bold;');
                     });
 
                 document.getElementById('appVersion').textContent = appVersion;
+
+                // Update commit message in status bar
+                const htmlContent = document.documentElement.outerHTML;
+                const commitMatch = htmlContent.match(/<!-- Commit: (.+?) -->/);
+                if (commitMatch) {
+                    const fullCommit = commitMatch[1];
+                    const shortCommit = fullCommit.length > 35 ? fullCommit.substring(0, 32) + '...' : fullCommit;
+                    const commitEl = document.getElementById('commitMessage');
+                    if (commitEl) {
+                        commitEl.textContent = shortCommit;
+                        commitEl.parentElement.title = fullCommit;
+                    }
+                }
             });
         })();
     </script>
@@ -1379,7 +1399,8 @@
         <div id="versionInfo" style="position: fixed; bottom: 10px; right: 10px; background: rgba(0,0,0,0.8); color: white; padding: 8px 12px; border-radius: 8px; font-size: 11px; z-index: 10000; font-family: 'Courier New', monospace; border: 1px solid rgba(255,255,255,0.2);">
             <div style="margin-bottom: 3px;"><strong>App:</strong> <span id="appVersion">loading...</span></div>
             <div style="margin-bottom: 3px;"><strong>SW:</strong> <span id="swVersion">loading...</span></div>
-            <div><strong>CSS:</strong> <span id="cssVersion">loading...</span></div>
+            <div style="margin-bottom: 3px;"><strong>CSS:</strong> <span id="cssVersion">loading...</span></div>
+            <div style="max-width: 250px; overflow: hidden; text-overflow: ellipsis; white-space: nowrap;" title="🐛 FIX: Handle languages without example columns in source tables"><strong>Commit:</strong> <span id="commitMessage">🐛 FIX: Handle languages...</span></div>
         </div>
 
         <!-- New Version Indicator -->
