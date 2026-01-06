@@ -95,17 +95,32 @@ function updateIndexHtml() {
         `<!-- Version: ${newVersion} -->`
     );
 
-    // Update or add commit message comment
-    if (content.includes('<!-- Commit:')) {
+    // Update or add commit hash comment (only in HTML head section, not in JavaScript)
+    // Match the pattern at the start of a line with optional whitespace
+    if (content.includes('<!-- CommitHash:')) {
         content = content.replace(
-            /<!-- Commit: .+? -->/,
-            `<!-- Commit: ${commitMsg} -->`
+            /^(\s*)<!-- CommitHash: .*? -->/m,
+            `$1<!-- CommitHash: ${commitHash} -->`
         );
     } else {
-        // Add commit comment after version comment
+        // Add commit hash comment after version comment
         content = content.replace(
-            /<!-- Version: v[\d.]+ -->/,
-            `<!-- Version: ${newVersion} -->\n    <!-- Commit: ${commitMsg} -->`
+            /^(\s*)<!-- Version: v[\d.]+ -->/m,
+            `$1<!-- Version: ${newVersion} -->\n$1<!-- CommitHash: ${commitHash} -->`
+        );
+    }
+
+    // Update or add commit message comment (only in HTML head section, not in JavaScript)
+    if (content.includes('<!-- Commit:')) {
+        content = content.replace(
+            /^(\s*)<!-- Commit: .*? -->/m,
+            `$1<!-- Commit: ${commitMsg} -->`
+        );
+    } else {
+        // Add commit comment after commit hash comment
+        content = content.replace(
+            /^(\s*)<!-- CommitHash: .*? -->/m,
+            `$1<!-- CommitHash: ${commitHash} -->\n$1<!-- Commit: ${commitMsg} -->`
         );
     }
 

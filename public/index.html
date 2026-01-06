@@ -7,7 +7,8 @@
     <title>LexyBooster - Language Learning & SRS</title>
     <meta name="description" content="Master languages with spaced repetition, gamification & streak tracking. Learn German, Spanish, French, and more!">
     <!-- Version: v5.4.21 -->
-    <!-- Commit:  -->
+    <!-- CommitHash: c43f424 -->
+    <!-- Commit: 🔧 CONFIG: Update commit message display to current commit -->
 
     <!-- Favicon -->
     <link rel="icon" type="image/png" sizes="32x32" href="/icons/icon-72x72.png">
@@ -267,9 +268,11 @@
                             }
                         }
 
-                        // Extract commit message from HTML comment
+                        // Extract commit hash and message from HTML comments
                         const htmlContent = document.documentElement.outerHTML;
-                        const commitMatch = htmlContent.match(/<!-- Commit:  -->/);
+                        const commitHashMatch = htmlContent.match(/<!-- CommitHash: (.+?) -->/);
+                        const commitMatch = htmlContent.match(/<!-- Commit: (.+?) -->/);
+                        const commitHash = commitHashMatch ? commitHashMatch[1] : 'Unknown';
                         const commitMessage = commitMatch ? commitMatch[1] : 'Unknown';
 
                         // Log all versions
@@ -279,6 +282,7 @@
                         console.log('%c📱 App Version:', 'color: #10B981; font-weight: bold;', appVersion);
                         console.log('%c⚙️  Service Worker:', 'color: #F59E0B; font-weight: bold;', swVersion);
                         console.log('%c🎨 CSS Version:', 'color: #EF4444; font-weight: bold;', cssVersion);
+                        console.log('%c🔑 Commit Hash:', 'color: #A78BFA; font-weight: bold;', commitHash);
                         console.log('%c💬 Commit:', 'color: #A78BFA; font-weight: bold;', commitMessage);
                         console.log('%c🌐 URL:', 'color: #8B5CF6; font-weight: bold;', window.location.href);
                         console.log('%c🕐 Loaded at:', 'color: #06B6D4; font-weight: bold;', new Date().toLocaleString());
@@ -287,16 +291,25 @@
 
                 document.getElementById('appVersion').textContent = appVersion;
 
-                // Update commit message in status bar
+                // Update commit hash and message in status bar
                 const htmlContent = document.documentElement.outerHTML;
-                const commitMatch = htmlContent.match(/<!-- Commit:  -->/);
+                const commitHashMatch = htmlContent.match(/<!-- CommitHash: (.+?) -->/);
+                const commitMatch = htmlContent.match(/<!-- Commit: (.+?) -->/);
+
+                if (commitHashMatch) {
+                    const commitHashEl = document.getElementById('commitHash');
+                    if (commitHashEl) {
+                        commitHashEl.textContent = commitHashMatch[1];
+                    }
+                }
+
                 if (commitMatch) {
                     const fullCommit = commitMatch[1];
-                    const shortCommit = fullCommit.length > 35 ? fullCommit.substring(0, 32) + '...' : fullCommit;
+                    const shortCommit = fullCommit.length > 30 ? fullCommit.substring(0, 27) + '...' : fullCommit;
                     const commitEl = document.getElementById('commitMessage');
                     if (commitEl) {
                         commitEl.textContent = shortCommit;
-                        commitEl.parentElement.title = fullCommit;
+                        commitEl.parentElement.title = commitHashMatch ? `${commitHashMatch[1]} - ${fullCommit}` : fullCommit;
                     }
                 }
             });
@@ -1400,7 +1413,7 @@
             <div style="margin-bottom: 3px;"><strong>App:</strong> <span id="appVersion">loading...</span></div>
             <div style="margin-bottom: 3px;"><strong>SW:</strong> <span id="swVersion">loading...</span></div>
             <div style="margin-bottom: 3px;"><strong>CSS:</strong> <span id="cssVersion">loading...</span></div>
-            <div style="max-width: 250px; overflow: hidden; text-overflow: ellipsis; white-space: nowrap;" title="✨ FEATURE: Add commit message to version status bar"><strong>Commit:</strong> <span id="commitMessage">✨ FEATURE: Add commit...</span></div>
+            <div style="max-width: 250px; overflow: hidden; text-overflow: ellipsis; white-space: nowrap;" title="✨ FEATURE: Add commit message to version status bar"><strong>Commit:</strong> <span id="commitHash">loading...</span> - <span id="commitMessage">loading...</span></div>
         </div>
 
         <!-- New Version Indicator -->
