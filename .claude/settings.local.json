@@ -170,7 +170,13 @@
       "Bash(timeout /t 5)",
       "Bash(node populate-de-es-translations.js:*)",
       "Bash(node check-de-tables.js:*)",
-      "Bash(timeout /t 3)"
+      "Bash(timeout /t 3)",
+      "Bash(timeout /t:*)",
+      "Bash(node check-table-structure.js:*)",
+      "Bash(DATABASE_URL=\"postgresql://postgres:uPGJKLcZLFGTZeRbnzPOVTlzWRObbnKO@mainline.proxy.rlwy.net:54625/railway\" node -e \"const {Pool}=require\\(''pg''\\);const p=new Pool\\({connectionString:process.env.DATABASE_URL,ssl:{rejectUnauthorized:false}}\\);p.query\\(''SELECT title FROM word_sets WHERE source_language=\\\\''german\\\\'' AND level=\\\\''A1\\\\'' ORDER BY id LIMIT 15''\\).then\\(r=>{console.log\\(''German A1 sets:''\\);r.rows.forEach\\(row=>console.log\\(''  -'',row.title\\)\\);p.end\\(\\);}\\)\")",
+      "Bash(node server-postgresql.js:*)",
+      "Bash(node scripts/check-hermano.js:*)",
+      "Bash(set DB_PASSWORD=Poiuytrewq1)"
     ],
     "deny": [
       "Bash(git push origin main:*)",

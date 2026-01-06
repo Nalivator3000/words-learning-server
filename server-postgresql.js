@@ -3326,23 +3326,35 @@ app.post('/api/word-sets/:setId/import', importLimiter, async (req, res) => {
         const { source_language, level, theme, word_count } = wordSetResult.rows[0];
         const sourceTableName = `source_words_${source_language}`;
 
-        // Build query to get words from source table based on level and theme
+        // Check if this set has specific words in word_set_items
+        const itemsCheckResult = await db.query(`
+            SELECT COUNT(*) as count
+            FROM word_set_items
+            WHERE word_set_id = $1
+        `, [setId]);
+
+        const hasSpecificWords = itemsCheckResult.rows[0].count > 0;
+
+        // Build query to get words - either from word_set_items or dynamically by level+theme
         let whereConditions = [];
         let queryParams = [];
         let paramIndex = 1;
 
-        if (level) {
-            whereConditions.push(`s.level = $${paramIndex}`);
-            queryParams.push(level);
-            paramIndex++;
-        }
+        if (!hasSpecificWords) {
+            // Fall back to dynamic loading by level+theme
+            if (level) {
+                whereConditions.push(`s.level = $${paramIndex}`);
+                queryParams.push(level);
+                paramIndex++;
+            }
 
-        // If theme is 'general', don't filter by theme (take all words of that level)
-        // Otherwise, filter by specific theme
-        if (theme && theme !== 'general') {
-            whereConditions.push(`s.theme = $${paramIndex}`);
-            queryParams.push(theme);
-            paramIndex++;
+            // If theme is 'general', don't filter by theme (take all words of that level)
+            // Otherwise, filter by specific theme
+            if (theme && theme !== 'general') {
+                whereConditions.push(`s.theme = $${paramIndex}`);
+                queryParams.push(theme);
+                paramIndex++;
+            }
         }
 
         const whereClause = whereConditions.length > 0
@@ -3419,24 +3431,48 @@ app.post('/api/word-sets/:setId/import', importLimiter, async (req, res) => {
         const exampleTranslationColumnActual = useBaseTable ? exampleTranslationColumn : 'example_native';
 
         // Get all words from the source table with their translations
-        // IMPORTANT: Limit results to word_count to prevent importing entire level
-        const limitClause = word_count ? `LIMIT ${parseInt(word_count)}` : '';
+        let wordsResult;
 
-        const wordsResult = await db.query(`
-            SELECT
-                s.id,
-                s.word,
-                s.level,
-                s.theme,
-                s.${exampleColumn} as example,
-                t.translation,
-                t.${exampleTranslationColumnActual} as example_translation
-            FROM ${sourceTableName} s
-            LEFT JOIN ${translationTableName} t ON s.id = t.source_word_id ${useBaseTable ? `AND t.source_lang = $${paramIndex}` : ''}
-            ${whereClause}
-            ORDER BY s.id ASC
-            ${limitClause}
-        `, useBaseTable ? [...queryParams, from_lang] : queryParams);
+        if (hasSpecificWords) {
+            // Load specific words from word_set_items
+            logger.info(`[IMPORT] Loading ${itemsCheckResult.rows[0].count} specific words from word_set_items for set ${setId}`);
+
+            wordsResult = await db.query(`
+                SELECT
+                    s.id,
+                    s.word,
+                    s.level,
+                    s.theme,
+                    s.${exampleColumn} as example,
+                    t.translation,
+                    t.${exampleTranslationColumnActual} as example_translation
+                FROM word_set_items wsi
+                JOIN ${sourceTableName} s ON wsi.word_id = s.id
+                LEFT JOIN ${translationTableName} t ON s.id = t.source_word_id ${useBaseTable ? `AND t.source_lang = $${paramIndex}` : ''}
+                WHERE wsi.word_set_id = $${paramIndex}
+                ORDER BY wsi.order_index ASC
+            `, useBaseTable ? [setId, from_lang] : [setId]);
+        } else {
+            // Fall back to dynamic loading by level+theme
+            // IMPORTANT: Limit results to word_count to prevent importing entire level
+            const limitClause = word_count ? `LIMIT ${parseInt(word_count)}` : '';
+
+            wordsResult = await db.query(`
+                SELECT
+                    s.id,
+                    s.word,
+                    s.level,
+                    s.theme,
+                    s.${exampleColumn} as example,
+                    t.translation,
+                    t.${exampleTranslationColumnActual} as example_translation
+                FROM ${sourceTableName} s
+                LEFT JOIN ${translationTableName} t ON s.id = t.source_word_id ${useBaseTable ? `AND t.source_lang = $${paramIndex}` : ''}
+                ${whereClause}
+                ORDER BY s.id ASC
+                ${limitClause}
+            `, useBaseTable ? [...queryParams, from_lang] : queryParams);
+        }
 
         if (wordsResult.rows.length === 0) {
             return res.status(404).json({ error: 'Word set is empty or not found' });
@@ -3528,38 +3564,62 @@ app.post('/api/word-sets/previews/batch', async (req, res) => {
         for (const wordSet of setsResult.rows) {
             const sourceTableName = `source_words_${wordSet.source_language}`;
 
-            // Build where conditions
-            let whereConditions = [];
-            let queryParams = [];
-            let paramIndex = 1;
+            // PRIORITY 1: Check if this set has specific words in word_set_items
+            const itemsCheckResult = await db.query(`
+                SELECT COUNT(*) as count
+                FROM word_set_items
+                WHERE word_set_id = $1
+            `, [wordSet.id]);
 
-            if (wordSet.level) {
-                whereConditions.push(`level = $${paramIndex}`);
-                queryParams.push(wordSet.level);
-                paramIndex++;
+            const hasSpecificWords = itemsCheckResult.rows[0].count > 0;
+
+            let wordsResult;
+
+            if (hasSpecificWords) {
+                // Load preview from word_set_items
+                wordsResult = await db.query(`
+                    SELECT sw.word
+                    FROM word_set_items wsi
+                    JOIN ${sourceTableName} sw ON wsi.word_id = sw.id
+                    WHERE wsi.word_set_id = $1
+                    ORDER BY wsi.order_index ASC
+                    LIMIT $2
+                `, [wordSet.id, limit]);
+            } else {
+                // PRIORITY 2: Fall back to dynamic loading by level+theme
+                // Build where conditions
+                let whereConditions = [];
+                let queryParams = [];
+                let paramIndex = 1;
+
+                if (wordSet.level) {
+                    whereConditions.push(`level = $${paramIndex}`);
+                    queryParams.push(wordSet.level);
+                    paramIndex++;
+                }
+
+                // If theme is 'general', don't filter by theme (take all words of that level)
+                // Otherwise, filter by specific theme
+                if (wordSet.theme && wordSet.theme !== 'general') {
+                    whereConditions.push(`theme = $${paramIndex}`);
+                    queryParams.push(wordSet.theme);
+                    paramIndex++;
+                }
+
+                const whereClause = whereConditions.length > 0
+                    ? `WHERE ${whereConditions.join(' AND ')}`
+                    : '';
+
+                queryParams.push(limit);
+
+                wordsResult = await db.query(`
+                    SELECT word
+                    FROM ${sourceTableName}
+                    ${whereClause}
+                    ORDER BY word
+                    LIMIT $${paramIndex}
+                `, queryParams);
             }
-
-            // If theme is 'general', don't filter by theme (take all words of that level)
-            // Otherwise, filter by specific theme
-            if (wordSet.theme && wordSet.theme !== 'general') {
-                whereConditions.push(`theme = $${paramIndex}`);
-                queryParams.push(wordSet.theme);
-                paramIndex++;
-            }
-
-            const whereClause = whereConditions.length > 0
-                ? `WHERE ${whereConditions.join(' AND ')}`
-                : '';
-
-            queryParams.push(limit);
-
-            const wordsResult = await db.query(`
-                SELECT word
-                FROM ${sourceTableName}
-                ${whereClause}
-                ORDER BY word
-                LIMIT $${paramIndex}
-            `, queryParams);
 
             previews[wordSet.id] = {
                 setId: wordSet.id,
@@ -3597,6 +3657,39 @@ app.get('/api/word-sets/:setId/preview', async (req, res) => {
         const wordSet = setResult.rows[0];
         const sourceTableName = `source_words_${wordSet.source_language}`;
 
+        // PRIORITY 1: Check if this set has specific words in word_set_items
+        const itemsCheckResult = await db.query(`
+            SELECT COUNT(*) as count
+            FROM word_set_items
+            WHERE word_set_id = $1
+        `, [setId]);
+
+        const hasSpecificWords = itemsCheckResult.rows[0].count > 0;
+
+        if (hasSpecificWords) {
+            // Load preview from word_set_items
+            logger.info(`[PREVIEW] Set ${setId} has word_set_items, using specific words`);
+
+            const wordsResult = await db.query(`
+                SELECT sw.word
+                FROM word_set_items wsi
+                JOIN ${sourceTableName} sw ON wsi.word_id = sw.id
+                WHERE wsi.word_set_id = $1
+                ORDER BY wsi.order_index ASC
+                LIMIT $2
+            `, [setId, limit]);
+
+            return res.json({
+                setId: wordSet.id,
+                title: wordSet.title,
+                level: wordSet.level,
+                theme: wordSet.theme,
+                wordCount: wordSet.word_count,
+                preview: wordsResult.rows
+            });
+        }
+
+        // PRIORITY 2: Fall back to dynamic loading by level+theme
         // Check if source table exists
         const tableCheck = await db.query(`
             SELECT EXISTS (
@@ -3644,8 +3737,6 @@ app.get('/api/word-sets/:setId/preview', async (req, res) => {
         queryParams.push(limit);
 
         // Get preview words from source table based on level and theme
-        // Note: We only select 'word' column as 'example' column doesn't exist in all source tables
-        // and the client-side code only uses the word field anyway
         let wordsResult;
         try {
             wordsResult = await db.query(`
