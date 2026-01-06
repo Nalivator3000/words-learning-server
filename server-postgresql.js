@@ -13012,7 +13012,7 @@ app.get('/api/words', async (req, res) => {
                 AND uwp.language_pair_id = $3
             )
             LEFT JOIN ${translationTableName} tt ON tt.source_word_id = sw.id
-                AND tt.source_lang = $4
+                ${useNativeExampleColumn ? '' : 'AND tt.source_lang = $4'}
         `;
 
         let params = [sourceLanguage, parseInt(userId), parseInt(languagePairId), sourceLanguageCode];
