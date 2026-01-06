@@ -1265,23 +1265,27 @@ class WordListsUI {
             });
 
             console.log('📥 Response status:', response.status);
+            console.log('📥 Response OK?', response.ok);
             const data = await response.json();
-            console.log('📊 Response data:', data);
+            console.log('📊 Response data:', JSON.stringify(data));
 
             if (response.ok) {
-                console.log('✅ Word added successfully!');
+                console.log('✅ Word added successfully! Updating stats...');
                 if (window.showToast) {
                     showToast(i18n.t('word_added_successfully') || 'Word added successfully!', 'success');
                 }
 
                 // Update stats counters
                 if (window.app && window.app.updateStats) {
+                    console.log('📊 Calling updateStats()...');
                     await window.app.updateStats();
+                    console.log('📊 updateStats() complete!');
                 }
 
                 return true;
             } else {
-                console.error('❌ Failed to add word:', data.error);
+                console.error('❌ Failed to add word! Status:', response.status);
+                console.error('❌ Error message:', data.error);
                 if (window.showToast) {
                     showToast(data.error || 'Failed to add word', 'error');
                 }
