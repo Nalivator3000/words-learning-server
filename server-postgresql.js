@@ -3250,7 +3250,19 @@ app.post('/api/word-sets/:setId/import', importLimiter, async (req, res) => {
         const { from_lang, to_lang } = pairResult.rows[0];
         const target_language = langCodeToName[to_lang] || to_lang;
         const baseTranslationTableName = `target_translations_${target_language}`;
-        const exampleColumn = `example_${from_lang}`;
+
+        // Map full language name back to code for example column
+        const langNameToCode = {
+            'german': 'de', 'english': 'en', 'spanish': 'es', 'french': 'fr',
+            'russian': 'ru', 'italian': 'it', 'portuguese': 'pt', 'chinese': 'zh',
+            'japanese': 'ja', 'korean': 'ko', 'hindi': 'hi', 'arabic': 'ar',
+            'turkish': 'tr', 'ukrainian': 'uk', 'polish': 'pl', 'romanian': 'ro',
+            'serbian': 'sr', 'swahili': 'sw'
+        };
+
+        // Example column should match the SOURCE language of the word set, not from_lang
+        const sourceLangCode = langNameToCode[source_language] || source_language.substring(0, 2);
+        const exampleColumn = `example_${sourceLangCode}`;
         const exampleTranslationColumn = `example_${to_lang}`;
 
         // Check if base table exists first, then check if it has translations for this source language
