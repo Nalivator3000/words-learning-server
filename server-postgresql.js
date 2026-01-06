@@ -13069,45 +13069,93 @@ app.get('/api/words', async (req, res) => {
         }
 
         // Build query using new architecture
-        // For tables with _from_XX suffix, use example_native column; otherwise use example_XX
+        // For tables with _from_XX suffix, use example from target language table; otherwise use example_XX from translation table
         const exampleTranslationColumn = useNativeExampleColumn
-            ? 'tt.example_native'
+            ? `COALESCE(tw.example_${targetLanguageCode}, '')`
             : `tt.example_${targetLanguageCode}`;
 
-        let query = `
-            SELECT
-                sw.id as source_word_id,
-                sw.id as id,
-                sw.word,
-                sw.level,
-                sw.theme,
-                tt.translation,
-                sw.example_${sourceLanguageCode} as example,
-                ${exampleTranslationColumn} as example_translation,
-                uwp.status,
-                uwp.correct_count,
-                uwp.incorrect_count,
-                uwp.total_reviews,
-                uwp.review_cycle,
-                uwp.last_review_date,
-                uwp.next_review_date,
-                uwp.ease_factor,
-                uwp.source_language,
-                uwp.id as progress_id,
-                uwp.created_at as createdAt
-            FROM ${sourceTableName} sw
-            INNER JOIN user_word_progress uwp ON (
-                uwp.source_word_id = sw.id
-                AND uwp.source_language = $1
-                AND uwp.user_id = $2
-                AND uwp.language_pair_id = $3
-            )
-            LEFT JOIN ${translationTableName} tt ON tt.source_word_id = sw.id
-                ${useNativeExampleColumn ? '' : 'AND tt.source_lang = $4'}
-        `;
+        // For tables with _from_XX suffix, translation comes from target word table
+        const translationColumn = useNativeExampleColumn
+            ? 'tw.word'
+            : 'tt.translation';
 
-        let params = [sourceLanguage, parseInt(userId), parseInt(languagePairId), sourceLanguageCode];
-        let paramIndex = 5;
+        // For tables with _from_XX suffix, need to join target words table
+        const targetWordsTableName = `source_words_${targetLanguage}`;
+
+        let query;
+        if (useNativeExampleColumn) {
+            // Tables with _from_XX suffix - join through target_word_id
+            query = `
+                SELECT
+                    sw.id as source_word_id,
+                    sw.id as id,
+                    sw.word,
+                    sw.level,
+                    sw.theme,
+                    COALESCE(${translationColumn}, '') as translation,
+                    sw.example_${sourceLanguageCode} as example,
+                    ${exampleTranslationColumn} as example_translation,
+                    uwp.status,
+                    uwp.correct_count,
+                    uwp.incorrect_count,
+                    uwp.total_reviews,
+                    uwp.review_cycle,
+                    uwp.last_review_date,
+                    uwp.next_review_date,
+                    uwp.ease_factor,
+                    uwp.source_language,
+                    uwp.id as progress_id,
+                    uwp.created_at as createdAt
+                FROM ${sourceTableName} sw
+                INNER JOIN user_word_progress uwp ON (
+                    uwp.source_word_id = sw.id
+                    AND uwp.source_language = $1
+                    AND uwp.user_id = $2
+                    AND uwp.language_pair_id = $3
+                )
+                LEFT JOIN ${translationTableName} tt ON tt.source_word_id = sw.id
+                LEFT JOIN ${targetWordsTableName} tw ON tw.id = tt.target_word_id
+            `;
+        } else {
+            // Standard tables - translation column exists
+            query = `
+                SELECT
+                    sw.id as source_word_id,
+                    sw.id as id,
+                    sw.word,
+                    sw.level,
+                    sw.theme,
+                    tt.translation,
+                    sw.example_${sourceLanguageCode} as example,
+                    ${exampleTranslationColumn} as example_translation,
+                    uwp.status,
+                    uwp.correct_count,
+                    uwp.incorrect_count,
+                    uwp.total_reviews,
+                    uwp.review_cycle,
+                    uwp.last_review_date,
+                    uwp.next_review_date,
+                    uwp.ease_factor,
+                    uwp.source_language,
+                    uwp.id as progress_id,
+                    uwp.created_at as createdAt
+                FROM ${sourceTableName} sw
+                INNER JOIN user_word_progress uwp ON (
+                    uwp.source_word_id = sw.id
+                    AND uwp.source_language = $1
+                    AND uwp.user_id = $2
+                    AND uwp.language_pair_id = $3
+                )
+                LEFT JOIN ${translationTableName} tt ON tt.source_word_id = sw.id
+                    AND tt.source_lang = $4
+            `;
+        }
+
+        // For tables with _from_XX suffix, we don't use source_lang parameter
+        let params = useNativeExampleColumn
+            ? [sourceLanguage, parseInt(userId), parseInt(languagePairId)]
+            : [sourceLanguage, parseInt(userId), parseInt(languagePairId), sourceLanguageCode];
+        let paramIndex = useNativeExampleColumn ? 4 : 5;
 
         if (status) {
             // Special handling for 'studying' - include both 'new' and 'studying' statuses
