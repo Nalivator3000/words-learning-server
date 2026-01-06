@@ -2972,11 +2972,11 @@ app.get('/api/word-sets/:setId', async (req, res) => {
             if (native_lang) {
                 // IMPORTANT: native_lang is the TARGET (native) language, not source
                 // We need to check if target_translations_{lang} table exists
-                // German, Spanish, etc. are SOURCE languages and don't have target_translations tables!
+                // Note: German is typically a SOURCE language, but Spanish can be both source and target
                 const nativeLangFull = langMap[native_lang] || native_lang;
 
                 // List of languages that have target_translations tables (these are real target languages)
-                const validTargetLanguages = ['english', 'russian', 'french', 'italian', 'portuguese',
+                const validTargetLanguages = ['english', 'spanish', 'russian', 'french', 'italian', 'portuguese',
                                              'chinese', 'arabic', 'turkish', 'ukrainian', 'polish',
                                              'romanian', 'serbian', 'swahili', 'japanese', 'korean', 'hindi'];
 
