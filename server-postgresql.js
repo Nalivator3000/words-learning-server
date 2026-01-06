@@ -3025,6 +3025,10 @@ app.get('/api/word-sets/:setId', async (req, res) => {
             const exampleColumn = `example_${sourceLangCode}`;
             const exampleTranslationColumn = `example_${targetLangCode}`;
 
+            // Check if source language has pos column (only english, german, spanish, french have it)
+            const hasSourcePos = SOURCE_LANGUAGES_WITH_EXAMPLES.includes(wordSet.source_language);
+            const posColumn = hasSourcePos ? 'sw.pos' : 'NULL';
+
             // Check which translation table to use
             const checkResult = await db.query(`
                 SELECT COUNT(*) as count
@@ -3047,7 +3051,7 @@ app.get('/api/word-sets/:setId', async (req, res) => {
                     sw.id,
                     sw.word,
                     tt.translation,
-                    sw.pos as word_type,
+                    ${posColumn} as word_type,
                     sw.level,
                     sw.theme,
                     sw.${exampleColumn} as example,
@@ -3174,6 +3178,10 @@ app.get('/api/word-sets/:setId', async (req, res) => {
             const targetLangCode = langToCode[targetLang] || targetLang.substring(0, 2);
             const exampleTranslationColumn = `example_${targetLangCode}`;
 
+            // Check if source language has pos column (only english, german, spanish, french have it)
+            const hasSourcePos = SOURCE_LANGUAGES_WITH_EXAMPLES.includes(wordSet.source_language);
+            const posColumn = hasSourcePos ? 'sw.pos' : 'NULL';
+
             // Check if base table has translations for this source language
             const checkResult = await db.query(`
                 SELECT COUNT(*) as count
@@ -3197,7 +3205,7 @@ app.get('/api/word-sets/:setId', async (req, res) => {
                     sw.id,
                     sw.word,
                     tt.translation,
-                    sw.pos as word_type,
+                    ${posColumn} as word_type,
                     sw.level,
                     sw.theme,
                     sw.${exampleColumn} as example,
