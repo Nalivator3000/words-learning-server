@@ -1803,10 +1803,14 @@ body.quiz-active .user-menu {
     font-size: var(--text-xl);
     min-width: 48px;
 }
-.settings-nav-btn::before {    content: '⚙️';}
+.settings-nav-btn::before {
+    content: '⚙️';
+    display: inline-block;
+    transition: transform 0.3s ease;
+}
 
-.settings-nav-btn:hover {
-    transform: scale(1.1) rotate(90deg);
+.settings-nav-btn:hover::before {
+    transform: rotate(90deg);
 }
 
 /* Subtle pulse animation for active nav button */
