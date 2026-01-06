@@ -1,3 +1,4 @@
+// LexyBooster Server - v5.4.9 with German/Spanish support
 const express = require('express');
 const { Pool } = require('pg');
 const path = require('path');
