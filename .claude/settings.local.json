@@ -3,7 +3,7 @@
     "allow": [
       "Bash(git add:*)",
       "Bash(git commit -m \"$(cat <<''EOF''\n🎨 REDESIGN HEADER: Unified single-line navigation layout\n\n- Reorganize header to single line with app title, nav menu, and settings\n- Move app title to left side (renamed to \"German Words Learning\")  \n- Center navigation buttons in header (Home, Import, Study, Review, Stats)\n- Move settings gear icon to right side of header\n- Position username info below header in separate bar\n- Update CSS for new unified header structure\n- Remove separate nav container, integrate into header\n\n🤖 Generated with [Claude Code](https://claude.com/claude-code)\n\nCo-Authored-By: Claude <noreply@anthropic.com>\nEOF\n)\")",
-      "Bash(git push:*)",
+      "Bash(git push origin develop:*)",
       "WebFetch(domain:prnt.sc)",
       "Read(//c/Users/Nalivator3000/Downloads/**)",
       "Bash(grep:*)",
@@ -154,7 +154,12 @@
       "Bash(DATABASE_URL=\"postgresql://postgres:uPGJKLcZLFGTZeRbnzPOVTlzWRObbnKO@mainline.proxy.rlwy.net:54625/railway\" node -e:*)",
       "Bash(start /b cmd /c \"npm start > server-test.log 2>&1\")"
     ],
-    "deny": [],
+    "deny": [
+      "Bash(git push origin main:*)",
+      "Bash(git push origin master:*)",
+      "Bash(git push main:*)",
+      "Bash(git push master:*)"
+    ],
     "ask": []
   }
 }
