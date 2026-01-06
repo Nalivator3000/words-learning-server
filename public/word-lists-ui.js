@@ -22,12 +22,26 @@ class WordListsUI {
     translateSetTitle(set) {
         const title = set.title || set.name || '';
 
-        // Parse pattern: "German A1: family" or "Spanish B2: travel"
+        // Parse pattern: "German A1: family" or "Spanish B2: travel" or "German A1: General 2"
         const match = title.match(/^(\w+)\s+([ABC][12]):\s*(.+)$/);
 
         if (!match) return title; // Return as-is if doesn't match pattern
 
-        const [, sourceLang, level, theme] = match;
+        const [, sourceLang, level, themeWithNumber] = match;
+
+        // Check if theme has a number at the end (e.g., "General 2", "General 10")
+        const themeMatch = themeWithNumber.match(/^(.+?)\s+(\d+)$/);
+
+        let theme, partNumber;
+        if (themeMatch) {
+            // Has a part number: "General 2" -> theme="General", partNumber="2"
+            theme = themeMatch[1];
+            partNumber = themeMatch[2];
+        } else {
+            // No part number: "family" -> theme="family"
+            theme = themeWithNumber;
+            partNumber = null;
+        }
 
         // Map language names to translation keys
         const langKey = `lang_${sourceLang.toLowerCase()}`;
@@ -37,7 +51,12 @@ class WordListsUI {
         const translatedLang = i18n.t(langKey) || sourceLang;
         const translatedTheme = i18n.t(themeKey) || theme;
 
-        return `${translatedLang} ${level}: ${translatedTheme}`;
+        // If has part number, append it
+        if (partNumber) {
+            return `${translatedLang} ${level}: ${translatedTheme} ${partNumber}`;
+        } else {
+            return `${translatedLang} ${level}: ${translatedTheme}`;
+        }
     }
 
     // Translate word set description
