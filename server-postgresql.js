@@ -12761,21 +12761,23 @@ app.get('/api/words', async (req, res) => {
         const sourceLanguage = LANG_CODE_TO_FULL_NAME[sourceLanguageCode] || sourceLanguageCode;
         let targetLanguage = LANG_CODE_TO_FULL_NAME[targetLanguageCode] || targetLanguageCode;
 
-        // List of valid target languages (languages that have target_translations tables)
+        // List of valid target languages (languages that have base target_translations tables)
         const validTargetLanguages = ['english', 'russian', 'french', 'italian', 'portuguese',
                                      'chinese', 'arabic', 'turkish', 'ukrainian', 'polish',
                                      'romanian', 'serbian', 'swahili', 'japanese', 'korean', 'hindi'];
 
-        // If target language is invalid (like german, spanish which are source-only), use smart fallback
-        if (!validTargetLanguages.includes(targetLanguage)) {
-            targetLanguage = (sourceLanguage === 'english') ? 'russian' : 'english';
-            // Update targetLanguageCode to match the fallback language
-            targetLanguageCode = (sourceLanguage === 'english') ? 'ru' : 'en';
-            logger.warn(`[WORDS API] Invalid target language, using fallback: ${targetLanguage} (${targetLanguageCode})`);
-        }
-
         const sourceTableName = `source_words_${sourceLanguage}`;
-        const translationTableName = `target_translations_${targetLanguage}`;
+        let translationTableName;
+
+        // Check if target language needs _from_XX suffix (like german, spanish)
+        if (!validTargetLanguages.includes(targetLanguage)) {
+            // Try target_translations_XXX_from_YYY format
+            translationTableName = `target_translations_${targetLanguage}_from_${sourceLanguageCode}`;
+            logger.info(`[WORDS API] Using translation table with source suffix: ${translationTableName}`);
+        } else {
+            // Use base target_translations_XXX format
+            translationTableName = `target_translations_${targetLanguage}`;
+        }
 
         // Build query using new architecture
         let query = `
