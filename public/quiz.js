@@ -282,42 +282,72 @@ class QuizManager {
     }
 
     checkTypingAnswerDetailed(userAnswer, correctAnswer) {
-        // Normalize strings for comparison
-        const normalize = (str) => {
-            return str.toLowerCase()
-                .trim()
-                .replace(/[äöüß]/g, (match) => {
-                    const replacements = { 'ä': 'a', 'ö': 'o', 'ü': 'u', 'ß': 'ss' };
-                    return replacements[match] || match;
-                })
-                .replace(/[^\w\s]/g, ''); // Remove punctuation
+        // Detect if we're working with a non-Latin script (e.g., Hindi, Arabic, etc.)
+        const isNonLatinScript = (str) => {
+            // Check for common non-Latin Unicode ranges
+            return /[\u0900-\u097F\u0600-\u06FF\u0400-\u04FF\u4E00-\u9FFF\u3040-\u309F\u30A0-\u30FF]/.test(str);
         };
 
-        const normalizedUser = normalize(userAnswer);
-        const normalizedCorrect = normalize(correctAnswer);
+        const correctIsNonLatin = isNonLatinScript(correctAnswer);
+
+        // Normalize strings for comparison
+        const normalize = (str, isNonLatin) => {
+            let normalized = str.toLowerCase().trim();
+
+            if (!isNonLatin) {
+                // For Latin scripts (German, English, etc.): normalize umlauts and remove punctuation
+                normalized = normalized
+                    .replace(/[äöüß]/g, (match) => {
+                        const replacements = { 'ä': 'a', 'ö': 'o', 'ü': 'u', 'ß': 'ss' };
+                        return replacements[match] || match;
+                    })
+                    .replace(/[^\w\s]/g, ''); // Remove punctuation
+            } else {
+                // For non-Latin scripts: only trim whitespace, preserve all characters
+                // This ensures Hindi, Arabic, Cyrillic, etc. characters are preserved
+                normalized = normalized.replace(/\s+/g, ' '); // Normalize multiple spaces to single space
+            }
+
+            return normalized;
+        };
+
+        const normalizedUser = normalize(userAnswer, correctIsNonLatin);
+        const normalizedCorrect = normalize(correctAnswer, correctIsNonLatin);
 
         // Exact match
         if (normalizedUser === normalizedCorrect) {
             return { correct: true, partiallyCorrect: false };
         }
 
-        // Check for German article errors
-        const articleResult = this.checkGermanArticles(userAnswer.toLowerCase().trim(), correctAnswer.toLowerCase().trim());
-        if (articleResult.partialMatch) {
-            return { correct: false, partiallyCorrect: true };
-        }
+        // Only apply German-specific checks for Latin scripts
+        if (!correctIsNonLatin) {
+            // Check for German article errors
+            const articleResult = this.checkGermanArticles(userAnswer.toLowerCase().trim(), correctAnswer.toLowerCase().trim());
+            if (articleResult.partialMatch) {
+                return { correct: false, partiallyCorrect: true };
+            }
 
-        // Check for German ei/ie swap
-        if (this.checkGermanEiIeSwap(userAnswer.toLowerCase().trim(), correctAnswer.toLowerCase().trim())) {
-            return { correct: false, partiallyCorrect: true };
-        }
+            // Check for German ei/ie swap
+            if (this.checkGermanEiIeSwap(userAnswer.toLowerCase().trim(), correctAnswer.toLowerCase().trim())) {
+                return { correct: false, partiallyCorrect: true };
+            }
 
-        // Allow for minor typos using Levenshtein distance
-        const distance = this.levenshteinDistance(normalizedUser, normalizedCorrect);
-        const maxAllowedDistance = Math.floor(normalizedCorrect.length * 0.2); // Allow 20% error
-        
-        if (distance <= maxAllowedDistance && distance <= 2) {
-            return { correct: false, partiallyCorrect: true };
+            // Allow for minor typos using Levenshtein distance
+            const distance = this.levenshteinDistance(normalizedUser, normalizedCorrect);
+            const maxAllowedDistance = Math.floor(normalizedCorrect.length * 0.2); // Allow 20% error
+
+            if (distance <= maxAllowedDistance && distance <= 2) {
+                return { correct: false, partiallyCorrect: true };
+            }
+        } else {
+            // For non-Latin scripts, be more strict - only allow very minor typos
+            const distance = this.levenshteinDistance(normalizedUser, normalizedCorrect);
+
+            // For non-Latin scripts, only allow 1 character difference for shorter words
+            // This prevents completely wrong answers from being accepted
+            if (distance === 1 && normalizedCorrect.length >= 3) {
+                return { correct: false, partiallyCorrect: true };
+            }
         }
 
         return { correct: false, partiallyCorrect: false };
