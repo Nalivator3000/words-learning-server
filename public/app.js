@@ -621,14 +621,22 @@ class LanguageLearningApp {
             const counts = await database.getWordCounts();
             console.log('📊 Review stats received:', counts);
 
-            // Update all review stage counts
-            document.getElementById('review1Count').textContent = counts.review_1 || 0;
-            document.getElementById('review3Count').textContent = counts.review_3 || 0;
-            document.getElementById('review7Count').textContent = counts.review_7 || 0;
-            document.getElementById('review14Count').textContent = counts.review_14 || 0;
-            document.getElementById('review30Count').textContent = counts.review_30 || 0;
-            document.getElementById('review60Count').textContent = counts.review_60 || 0;
-            document.getElementById('review120Count').textContent = counts.review_120 || 0;
+            // Update all review stage counts (with null checks)
+            const review1El = document.getElementById('review1Count');
+            const review3El = document.getElementById('review3Count');
+            const review7El = document.getElementById('review7Count');
+            const review14El = document.getElementById('review14Count');
+            const review30El = document.getElementById('review30Count');
+            const review60El = document.getElementById('review60Count');
+            const review120El = document.getElementById('review120Count');
+
+            if (review1El) review1El.textContent = counts.review_1 || 0;
+            if (review3El) review3El.textContent = counts.review_3 || 0;
+            if (review7El) review7El.textContent = counts.review_7 || 0;
+            if (review14El) review14El.textContent = counts.review_14 || 0;
+            if (review30El) review30El.textContent = counts.review_30 || 0;
+            if (review60El) review60El.textContent = counts.review_60 || 0;
+            if (review120El) review120El.textContent = counts.review_120 || 0;
 
             console.log('✅ Updated review counts:', {
                 review_1: counts.review_1 || 0,

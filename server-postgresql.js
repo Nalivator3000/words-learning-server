@@ -2947,7 +2947,120 @@ app.get('/api/word-sets/:setId', async (req, res) => {
 
         const wordSet = setResult.rows[0];
 
-        // Check if this is a new thematic collection (has level and theme)
+        // PRIORITY 1: Check if this set has specific words in word_set_items
+        // This allows us to have multiple sets with same level+theme but different words
+        const itemsCheckResult = await db.query(`
+            SELECT COUNT(*) as count
+            FROM word_set_items
+            WHERE word_set_id = $1
+        `, [setId]);
+
+        const hasSpecificWords = itemsCheckResult.rows[0].count > 0;
+
+        if (hasSpecificWords) {
+            logger.info(`[WORD-SETS] Set ${setId} has word_set_items, using specific word list`);
+
+            // Determine target language for translations
+            let targetLang = 'english'; // default
+            const langMap = {
+                'de': 'german', 'en': 'english', 'es': 'spanish', 'fr': 'french',
+                'ru': 'russian', 'it': 'italian', 'pt': 'portuguese', 'zh': 'chinese',
+                'ja': 'japanese', 'ko': 'korean', 'hi': 'hindi', 'ar': 'arabic',
+                'tr': 'turkish', 'uk': 'ukrainian', 'pl': 'polish', 'ro': 'romanian',
+                'sr': 'serbian', 'sw': 'swahili'
+            };
+
+            const langToCode = {
+                'english': 'en', 'german': 'de', 'spanish': 'es', 'french': 'fr',
+                'russian': 'ru', 'italian': 'it', 'portuguese': 'pt', 'chinese': 'zh',
+                'japanese': 'ja', 'korean': 'ko', 'hindi': 'hi', 'arabic': 'ar',
+                'turkish': 'tr', 'ukrainian': 'uk', 'polish': 'pl', 'romanian': 'ro',
+                'serbian': 'sr', 'swahili': 'sw'
+            };
+
+            const sourceLangCode = langToCode[wordSet.source_language] || wordSet.source_language.substring(0, 2);
+
+            // Determine target language from parameters
+            if (native_lang) {
+                const nativeLangFull = langMap[native_lang] || native_lang;
+                const validTargetLanguages = ['english', 'spanish', 'russian', 'french', 'italian', 'portuguese',
+                                             'chinese', 'arabic', 'turkish', 'ukrainian', 'polish',
+                                             'romanian', 'serbian', 'swahili', 'japanese', 'korean', 'hindi'];
+                if (nativeLangFull !== wordSet.source_language && validTargetLanguages.includes(nativeLangFull)) {
+                    targetLang = nativeLangFull;
+                } else {
+                    targetLang = (wordSet.source_language === 'english') ? 'russian' : 'english';
+                }
+            } else if (languagePair) {
+                const parts = languagePair.split('-');
+                if (parts.length >= 2 && parts[0] === sourceLangCode) {
+                    targetLang = langMap[parts[1]] || 'english';
+                }
+            } else if (userId) {
+                try {
+                    const userLangResult = await db.query(`
+                        SELECT from_lang, to_lang
+                        FROM language_pairs lp
+                        JOIN user_learning_profile ulp ON lp.id = ulp.active_language_pair_id
+                        WHERE ulp.user_id = $1
+                        LIMIT 1
+                    `, [userId]);
+                    if (userLangResult.rows.length > 0 && userLangResult.rows[0].from_lang === sourceLangCode) {
+                        targetLang = langMap[userLangResult.rows[0].to_lang] || 'english';
+                    }
+                } catch (err) {
+                    logger.warn(`[WORD-SETS] Failed to get user language pair: ${err.message}`);
+                }
+            }
+
+            const sourceTableName = `source_words_${wordSet.source_language}`;
+            const baseTranslationTableName = `target_translations_${targetLang}`;
+            const targetLangCode = langToCode[targetLang] || targetLang.substring(0, 2);
+            const exampleColumn = `example_${sourceLangCode}`;
+            const exampleTranslationColumn = `example_${targetLangCode}`;
+
+            // Check which translation table to use
+            const checkResult = await db.query(`
+                SELECT COUNT(*) as count
+                FROM ${baseTranslationTableName}
+                WHERE source_lang = $1
+                LIMIT 1
+            `, [sourceLangCode]);
+
+            const useBaseTable = checkResult.rows[0].count > 0;
+            const translationTableName = useBaseTable
+                ? baseTranslationTableName
+                : `${baseTranslationTableName}_from_${sourceLangCode}`;
+            const exampleTranslationColumnActual = useBaseTable ? exampleTranslationColumn : 'example_native';
+
+            logger.info(`[WORD-SETS] Loading ${itemsCheckResult.rows[0].count} specific words with translations from ${translationTableName}`);
+
+            // Load words from word_set_items with translations
+            const wordsResult = await db.query(`
+                SELECT
+                    sw.id,
+                    sw.word,
+                    tt.translation,
+                    sw.pos as word_type,
+                    sw.level,
+                    sw.theme,
+                    sw.${exampleColumn} as example,
+                    tt.${exampleTranslationColumnActual} as example_translation,
+                    wsi.order_index
+                FROM word_set_items wsi
+                JOIN ${sourceTableName} sw ON wsi.word_id = sw.id
+                LEFT JOIN ${translationTableName} tt ON sw.id = tt.source_word_id ${useBaseTable ? 'AND tt.source_lang = $2' : ''}
+                WHERE wsi.word_set_id = $1
+                ORDER BY wsi.order_index ASC
+            `, useBaseTable ? [setId, sourceLangCode] : [setId]);
+
+            return res.json({
+                ...wordSet,
+                words: wordsResult.rows
+            });
+        }
+
+        // PRIORITY 2: Check if this is a new thematic collection (has level and theme)
         // Load words from source_words_* tables with appropriate translations
         if (wordSet.level && wordSet.source_language) {
             // Determine target language from native_lang, languagePair, or userId
@@ -9097,7 +9210,7 @@ app.post('/api/word-lists/:id/import', async (req, res) => {
             return res.status(400).json({ error: 'Missing required fields: userId, languagePairId' });
         }
 
-        // Get language pair info to determine native language
+        // Get language pair info
         const langPair = await db.query(
             'SELECT from_lang, to_lang FROM language_pairs WHERE id = $1',
             [parseInt(languagePairId)]
@@ -9107,7 +9220,7 @@ app.post('/api/word-lists/:id/import', async (req, res) => {
             return res.status(404).json({ error: 'Language pair not found' });
         }
 
-        const native_lang = langPair.rows[0].to_lang;  // to_lang is native language
+        const { from_lang, to_lang } = langPair.rows[0];
 
         // Get collection info
         const collection = await db.query(
@@ -9121,52 +9234,104 @@ app.post('/api/word-lists/:id/import', async (req, res) => {
 
         const source_lang = collection.rows[0].source_lang;
 
+        // Map language codes to full names for table names
+        const langCodeToName = {
+            'de': 'german', 'en': 'english', 'es': 'spanish', 'fr': 'french',
+            'ru': 'russian', 'it': 'italian', 'pt': 'portuguese', 'zh': 'chinese',
+            'ja': 'japanese', 'ko': 'korean', 'hi': 'hindi', 'ar': 'arabic',
+            'tr': 'turkish', 'uk': 'ukrainian', 'pl': 'polish', 'ro': 'romanian',
+            'sr': 'serbian', 'sw': 'swahili'
+        };
+
+        const sourceLanguageFullName = langCodeToName[source_lang] || source_lang;
+        const targetLanguageFullName = langCodeToName[to_lang] || to_lang;
+        const sourceLanguageForProgress = langCodeToName[from_lang] || from_lang;
+
         // Build table names
-        const targetLangTable = LANG_CODE_TO_FULL_NAME[native_lang];
-        if (!targetLangTable) {
-            return res.status(400).json({ error: `Unsupported native language: ${native_lang}` });
+        const sourceTableName = `source_words_${sourceLanguageFullName}`;
+        const baseTranslationTableName = `target_translations_${targetLanguageFullName}`;
+
+        // Check if base table exists and has translations for this source language
+        const tableExistsResult = await db.query(`
+            SELECT EXISTS (
+                SELECT FROM information_schema.tables
+                WHERE table_schema = 'public'
+                AND table_name = $1
+            )
+        `, [baseTranslationTableName]);
+
+        let useBaseTable = false;
+        if (tableExistsResult.rows[0].exists) {
+            const checkResult = await db.query(`
+                SELECT COUNT(*) as count
+                FROM ${baseTranslationTableName}
+                WHERE source_lang = $1
+                LIMIT 1
+            `, [from_lang]);
+            useBaseTable = checkResult.rows[0].count > 0;
         }
+
+        const translationTableName = useBaseTable
+            ? baseTranslationTableName
+            : `${baseTranslationTableName}_from_${from_lang}`;
+
+        logger.info(`[IMPORT WORD LIST] Importing collection ${id} for user ${userId}, from ${from_lang} to ${to_lang}, collection.source_lang=${source_lang}, progress.source_language=${sourceLanguageForProgress}, translation table: ${translationTableName}`);
 
         // Get collection words with translations
         const words = await db.query(`
             SELECT
+                cw.source_word_id,
                 sw.word,
-                tt.translation,
-                sw.example_de as example
+                tt.translation
             FROM universal_collection_words cw
-            JOIN source_words_${source_lang === 'de' ? 'german' : source_lang} sw ON cw.source_word_id = sw.id
-            LEFT JOIN target_translations_${targetLangTable} tt ON tt.source_word_id = sw.id AND tt.source_lang = $1
-            WHERE cw.collection_id = $2
+            JOIN ${sourceTableName} sw ON cw.source_word_id = sw.id
+            LEFT JOIN ${translationTableName} tt ON tt.source_word_id = sw.id ${useBaseTable ? 'AND tt.source_lang = $2' : ''}
+            WHERE cw.collection_id = $1
             ORDER BY cw.order_index
-        `, [source_lang, parseInt(id)]);
+        `, useBaseTable ? [parseInt(id), from_lang] : [parseInt(id)]);
+
+        if (words.rows.length === 0) {
+            return res.status(404).json({ error: 'Collection is empty or not found' });
+        }
 
         await db.query('BEGIN');
 
         let importedCount = 0;
+        let skippedCount = 0;
 
-        // Add each word to user's collection
+        // Add each word to user_word_progress
         for (const word of words.rows) {
-            if (!word.translation) continue;  // Skip words without translations
+            if (!word.translation) {
+                skippedCount++;
+                continue;  // Skip words without translations
+            }
 
-            // Check if word already exists for this user
-            const existing = await db.query(
-                'SELECT id FROM words WHERE user_id = $1 AND language_pair_id = $2 AND word = $3',
-                [parseInt(userId), parseInt(languagePairId), word.word]
-            );
+            // Check if word already exists in user_word_progress
+            const existing = await db.query(`
+                SELECT id FROM user_word_progress
+                WHERE user_id = $1
+                AND language_pair_id = $2
+                AND source_language = $3
+                AND source_word_id = $4
+            `, [parseInt(userId), parseInt(languagePairId), sourceLanguageForProgress, word.source_word_id]);
 
             if (existing.rows.length === 0) {
                 await db.query(`
-                    INSERT INTO words (user_id, language_pair_id, word, translation, example, exampleTranslation, next_review_date)
-                    VALUES ($1, $2, $3, $4, $5, $6, NOW())
+                    INSERT INTO user_word_progress (
+                        user_id, language_pair_id, source_language, source_word_id,
+                        status, correct_count, incorrect_count, total_reviews,
+                        ease_factor, next_review_date, created_at, updated_at
+                    )
+                    VALUES ($1, $2, $3, $4, 'new', 0, 0, 0, 2.5, CURRENT_DATE, CURRENT_TIMESTAMP, CURRENT_TIMESTAMP)
                 `, [
                     parseInt(userId),
                     parseInt(languagePairId),
-                    word.word,
-                    word.translation,
-                    word.example || '',
-                    word.exampleTranslation || ''
+                    sourceLanguageForProgress,
+                    word.source_word_id
                 ]);
                 importedCount++;
+            } else {
+                skippedCount++;
             }
         }
 
@@ -9178,11 +9343,13 @@ app.post('/api/word-lists/:id/import', async (req, res) => {
 
         await db.query('COMMIT');
 
+        logger.info(`[IMPORT WORD LIST] Import complete: imported=${importedCount}, skipped=${skippedCount}, total=${words.rows.length}`);
+
         res.json({
             success: true,
             imported_count: importedCount,
             total_words: words.rows.length,
-            skipped: words.rows.length - importedCount
+            skipped: skippedCount
         });
     } catch (err) {
         await db.query('ROLLBACK');
