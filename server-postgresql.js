@@ -13142,6 +13142,7 @@ app.get('/api/words', async (req, res) => {
                     AND uwp.language_pair_id = $3
                 )
                 LEFT JOIN ${translationTableName} tt ON tt.source_word_id = sw.id
+                    AND tt.source_lang = $4
             `;
         } else {
             // Standard tables - translation column exists
@@ -13178,11 +13179,9 @@ app.get('/api/words', async (req, res) => {
             `;
         }
 
-        // For tables with _from_XX suffix, we don't use source_lang parameter
-        let params = useNativeExampleColumn
-            ? [sourceLanguage, parseInt(userId), parseInt(languagePairId)]
-            : [sourceLanguage, parseInt(userId), parseInt(languagePairId), sourceLanguageCode];
-        let paramIndex = useNativeExampleColumn ? 4 : 5;
+        // Both table types now use source_lang parameter in JOIN
+        let params = [sourceLanguage, parseInt(userId), parseInt(languagePairId), sourceLanguageCode];
+        let paramIndex = 5;
 
         if (status) {
             // Special handling for 'studying' - include both 'new' and 'studying' statuses
