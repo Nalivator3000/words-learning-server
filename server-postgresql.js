@@ -13334,22 +13334,13 @@ app.get('/api/words/random-proportional/:count', async (req, res) => {
         }
 
         const sourceLanguageCode = langPairResult.rows[0].from_lang;
-        let targetLanguageCode = langPairResult.rows[0].to_lang;
+        const targetLanguageCode = langPairResult.rows[0].to_lang;
         const sourceLanguage = LANG_CODE_TO_FULL_NAME[sourceLanguageCode] || sourceLanguageCode;
-        let targetLanguage = LANG_CODE_TO_FULL_NAME[targetLanguageCode] || targetLanguageCode;
+        const targetLanguage = LANG_CODE_TO_FULL_NAME[targetLanguageCode] || targetLanguageCode;
 
-        // List of valid target languages (languages that have target_translations tables)
-        const validTargetLanguages = ['english', 'russian', 'french', 'italian', 'portuguese',
-                                     'chinese', 'arabic', 'turkish', 'ukrainian', 'polish',
-                                     'romanian', 'serbian', 'swahili', 'japanese', 'korean', 'hindi'];
-
-        // If target language is invalid (like german, spanish which are source-only), use smart fallback
-        if (!validTargetLanguages.includes(targetLanguage)) {
-            targetLanguage = (sourceLanguage === 'english') ? 'russian' : 'english';
-            // Update targetLanguageCode to match the fallback language
-            targetLanguageCode = (sourceLanguage === 'english') ? 'ru' : 'en';
-            logger.warn(`[RANDOM-PROPORTIONAL] Invalid target language, using fallback: ${targetLanguage} (${targetLanguageCode})`);
-        }
+        // FIX: Don't use language fallback - table selection logic below will handle it
+        // Previously this code would fallback to Russian for languages like Spanish/German
+        // which caused incorrect translations to be shown in quizzes
 
         const sourceTableName = `source_words_${sourceLanguage}`;
 
