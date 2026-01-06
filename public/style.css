@@ -1803,6 +1803,7 @@ body.quiz-active .user-menu {
     font-size: var(--text-xl);
     min-width: 48px;
 }
+.settings-nav-btn::before {    content: '⚙️';}
 
 .settings-nav-btn:hover {
     transform: scale(1.1) rotate(90deg);
