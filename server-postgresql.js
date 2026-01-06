@@ -12738,7 +12738,7 @@ app.get('/api/language-pair/:id', async (req, res) => {
 // Get all words with pagination (NEW ARCHITECTURE: uses source_words_* + user_word_progress)
 app.get('/api/words', async (req, res) => {
     try {
-        const { page = 1, limit = 50, status, userId, languagePairId } = req.query;
+        const { page = 1, limit = 100000, status, userId, languagePairId } = req.query;
         const offset = (page - 1) * limit;
 
         if (!userId || !languagePairId) {
