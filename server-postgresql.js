@@ -3448,8 +3448,8 @@ app.post('/api/word-sets/:setId/import', importLimiter, async (req, res) => {
                     t.${exampleTranslationColumnActual} as example_translation
                 FROM word_set_items wsi
                 JOIN ${sourceTableName} s ON wsi.word_id = s.id
-                LEFT JOIN ${translationTableName} t ON s.id = t.source_word_id ${useBaseTable ? `AND t.source_lang = $${paramIndex}` : ''}
-                WHERE wsi.word_set_id = $${paramIndex}
+                LEFT JOIN ${translationTableName} t ON s.id = t.source_word_id ${useBaseTable ? `AND t.source_lang = $2` : ''}
+                WHERE wsi.word_set_id = $1
                 ORDER BY wsi.order_index ASC
             `, useBaseTable ? [setId, from_lang] : [setId]);
         } else {
