@@ -151,10 +151,15 @@ class Gamification {
             const response = await fetch(`/api/gamification/daily-goals/${userId}`, {
                 method: 'PUT',
                 headers: { 'Content-Type': 'application/json' },
+                credentials: 'include',
                 body: JSON.stringify({ xpGoal, wordsGoal, quizzesGoal })
             });
 
-            if (!response.ok) throw new Error('Failed to update daily goals');
+            if (!response.ok) {
+                const errorData = await response.json().catch(() => ({ error: 'Unknown error' }));
+                console.error('Update daily goals failed:', response.status, errorData);
+                throw new Error(`Failed to update daily goals: ${response.status} - ${errorData.error || 'Unknown error'}`);
+            }
             return await response.json();
         } catch (err) {
             console.error('Error updating daily goals:', err);

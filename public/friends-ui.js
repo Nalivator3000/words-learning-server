@@ -558,11 +558,14 @@ class FriendsUI {
             const response = await fetch(`/api/friends/${friendshipId}`, {
                 method: 'DELETE',
                 headers: { 'Content-Type': 'application/json' },
+                credentials: 'include',
                 body: JSON.stringify({ userId: this.userId })
             });
 
             if (!response.ok) {
-                throw new Error('Failed to remove friend');
+                const errorData = await response.json().catch(() => ({ error: 'Unknown error' }));
+                console.error('Remove friend failed:', response.status, errorData);
+                throw new Error(`Failed to remove friend: ${response.status} - ${errorData.error || 'Unknown error'}`);
             }
 
             if (window.showToast) {

@@ -338,11 +338,14 @@ class UserManager {
 
         try {
             const response = await fetch(`${this.apiUrl}/api/users/${this.currentUser.id}/language-pairs/${pairId}/activate`, {
-                method: 'PUT'
+                method: 'PUT',
+                credentials: 'include'
             });
 
             if (!response.ok) {
-                throw new Error('Failed to activate language pair');
+                const errorData = await response.json().catch(() => ({ error: 'Unknown error' }));
+                console.error('Activate language pair failed:', response.status, errorData);
+                throw new Error(`Failed to activate language pair: ${response.status} - ${errorData.error || 'Unknown error'}`);
             }
 
             const activatedPair = await response.json();
@@ -375,12 +378,14 @@ class UserManager {
 
         try {
             const response = await fetch(`${this.apiUrl}/api/users/${this.currentUser.id}/language-pairs/${pairId}`, {
-                method: 'DELETE'
+                method: 'DELETE',
+                credentials: 'include'
             });
 
             if (!response.ok) {
-                const error = await response.json();
-                throw new Error(error.error || 'Failed to delete language pair');
+                const errorData = await response.json().catch(() => ({ error: 'Unknown error' }));
+                console.error('Delete language pair failed:', response.status, errorData);
+                throw new Error(`Failed to delete language pair: ${response.status} - ${errorData.error || 'Unknown error'}`);
             }
 
             // Remove from local state
@@ -426,13 +431,16 @@ class UserManager {
                 headers: {
                     'Content-Type': 'application/json',
                 },
+                credentials: 'include',
                 body: JSON.stringify({
                     lessonSize: Math.max(5, Math.min(50, size))
                 })
             });
 
             if (!response.ok) {
-                throw new Error('Failed to update lesson size');
+                const errorData = await response.json().catch(() => ({ error: 'Unknown error' }));
+                console.error('Update lesson size failed:', response.status, errorData);
+                throw new Error(`Failed to update lesson size: ${response.status} - ${errorData.error || 'Unknown error'}`);
             }
 
             const updatedPair = await response.json();

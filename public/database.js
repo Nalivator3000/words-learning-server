@@ -78,6 +78,7 @@ class Database {
                 headers: {
                     'Content-Type': 'application/json',
                 },
+                credentials: 'include',
                 body: JSON.stringify({
                     correct: isCorrect,
                     questionType: quizType,
@@ -87,7 +88,9 @@ class Database {
             });
 
             if (!response.ok) {
-                throw new Error(`Server error: ${response.status}`);
+                const errorData = await response.json().catch(() => ({ error: 'Unknown error' }));
+                console.error('Update word progress failed:', response.status, errorData);
+                throw new Error(`Server error: ${response.status} - ${errorData.error || 'Unknown error'}`);
             }
 
             const result = await response.json();
