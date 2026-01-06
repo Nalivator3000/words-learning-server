@@ -17840,6 +17840,106 @@ app.get('/api/version', (req, res) => {
     });
 });
 
+// Temporary endpoint to run Hindi POS migration
+app.post('/api/migrate-hindi-pos', async (req, res) => {
+    try {
+        logger.info('🔧 Starting Hindi POS column migration...');
+
+        // Check if table exists
+        const tableCheck = await db.query(`
+            SELECT EXISTS (
+                SELECT FROM information_schema.tables
+                WHERE table_name = 'source_words_hindi'
+            ) as exists
+        `);
+
+        if (!tableCheck.rows[0].exists) {
+            return res.status(404).json({
+                success: false,
+                error: 'source_words_hindi table does not exist'
+            });
+        }
+
+        // Check if pos column already exists
+        const columnCheck = await db.query(`
+            SELECT EXISTS (
+                SELECT FROM information_schema.columns
+                WHERE table_name = 'source_words_hindi'
+                AND column_name = 'pos'
+            ) as exists
+        `);
+
+        if (columnCheck.rows[0].exists) {
+            logger.info('⚠️  Column pos already exists in source_words_hindi');
+
+            const stats = await db.query(`
+                SELECT
+                    COUNT(*) as total,
+                    COUNT(pos) as with_pos,
+                    COUNT(*) - COUNT(pos) as without_pos
+                FROM source_words_hindi
+            `);
+
+            return res.json({
+                success: true,
+                already_exists: true,
+                message: 'Column pos already exists',
+                stats: stats.rows[0]
+            });
+        }
+
+        // Add pos column
+        logger.info('🔨 Adding pos column to source_words_hindi...');
+
+        await db.query(`
+            ALTER TABLE source_words_hindi
+            ADD COLUMN pos VARCHAR(50)
+        `);
+
+        // Create index
+        await db.query(`
+            CREATE INDEX IF NOT EXISTS idx_source_words_hindi_pos ON source_words_hindi(pos)
+        `);
+
+        // Add comment
+        await db.query(`
+            COMMENT ON COLUMN source_words_hindi.pos IS 'Part of speech: noun, verb, adjective, adverb, etc.'
+        `);
+
+        logger.info('✅ Migration completed successfully!');
+
+        // Get stats
+        const stats = await db.query(`
+            SELECT
+                COUNT(*) as total,
+                COUNT(pos) as with_pos,
+                COUNT(*) - COUNT(pos) as without_pos
+            FROM source_words_hindi
+        `);
+
+        // Test the query
+        const testQuery = await db.query(`
+            SELECT id, word, pos, level, theme
+            FROM source_words_hindi
+            LIMIT 5
+        `);
+
+        res.json({
+            success: true,
+            message: 'Migration completed successfully',
+            stats: stats.rows[0],
+            sample_data: testQuery.rows
+        });
+
+    } catch (err) {
+        logger.error('❌ Migration failed:', err);
+        res.status(500).json({
+            success: false,
+            error: err.message
+        });
+    }
+});
+
 app.get('/', (req, res) => {
     res.sendFile(path.join(__dirname, 'public', 'index.html'));
 });
