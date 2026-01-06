@@ -175,16 +175,18 @@ class WordListsUI {
             console.log(`📋 [WORD-SETS] this.languagePair:`, this.languagePair);
 
             // Build language pair code
-            // IMPORTANT: The FIRST part should be the language being LEARNED (toLanguage)
-            // For user learning Spanish from English (en→es):
-            // - fromLanguage = en (native)
-            // - toLanguage = es (learning)
-            // - We need Spanish word sets, so: "es-en"
+            // IMPORTANT: The FIRST part should be the language being LEARNED
+            // In the DB: from_lang = language being learned, to_lang = native language
+            // After transformation: fromLanguage = learning, toLanguage = native
+            // For user learning Spanish from English (hi→en in DB):
+            // - fromLanguage = hi (learning)
+            // - toLanguage = en (native)
+            // - We need Hindi word sets, so: "hi-en"
             const langPairCode = this.languagePair
-                ? `${this.languagePair.toLanguage}-${this.languagePair.fromLanguage}`
+                ? `${this.languagePair.fromLanguage}-${this.languagePair.toLanguage}`
                 : null;
 
-            console.log(`📋 [WORD-SETS] Built langPairCode: ${langPairCode} (learning ${this.languagePair?.toLanguage} from ${this.languagePair?.fromLanguage})`);
+            console.log(`📋 [WORD-SETS] Built langPairCode: ${langPairCode} (learning ${this.languagePair?.fromLanguage} from ${this.languagePair?.toLanguage})`);
 
             if (!langPairCode) {
                 console.warn(`❌ [WORD-SETS] No language pair code, aborting`);
