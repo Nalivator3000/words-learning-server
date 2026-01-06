@@ -12768,11 +12768,13 @@ app.get('/api/words', async (req, res) => {
 
         const sourceTableName = `source_words_${sourceLanguage}`;
         let translationTableName;
+        let useNativeExampleColumn = false;
 
         // Check if target language needs _from_XX suffix (like german, spanish)
         if (!validTargetLanguages.includes(targetLanguage)) {
             // Try target_translations_XXX_from_YYY format
             translationTableName = `target_translations_${targetLanguage}_from_${sourceLanguageCode}`;
+            useNativeExampleColumn = true; // These tables use example_native instead of example_XX
             logger.info(`[WORDS API] Using translation table with source suffix: ${translationTableName}`);
         } else {
             // Use base target_translations_XXX format
@@ -12780,6 +12782,11 @@ app.get('/api/words', async (req, res) => {
         }
 
         // Build query using new architecture
+        // For tables with _from_XX suffix, use example_native column; otherwise use example_XX
+        const exampleTranslationColumn = useNativeExampleColumn
+            ? 'tt.example_native'
+            : `tt.example_${targetLanguageCode}`;
+
         let query = `
             SELECT
                 sw.id as source_word_id,
@@ -12789,7 +12796,7 @@ app.get('/api/words', async (req, res) => {
                 sw.theme,
                 tt.translation,
                 sw.example_${sourceLanguageCode} as example,
-                tt.example_${targetLanguageCode} as example_translation,
+                ${exampleTranslationColumn} as example_translation,
                 uwp.status,
                 uwp.correct_count,
                 uwp.incorrect_count,
