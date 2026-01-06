@@ -1105,11 +1105,18 @@ class WordListsUI {
                 console.warn('⚠️ window.wordManager not available');
             }
 
-            if (window.app && window.app.updateStats) {
-                console.log('📊 Updating stats...');
-                await window.app.updateStats();
+            // Update both stats and word lists
+            if (window.app) {
+                if (window.app.updateStats) {
+                    console.log('📊 Updating stats...');
+                    await window.app.updateStats();
+                }
+                if (window.app.updateStatsPage) {
+                    console.log('📊 Updating stats page and word lists...');
+                    await window.app.updateStatsPage();
+                }
             } else {
-                console.warn('⚠️ window.app.updateStats not available');
+                console.warn('⚠️ window.app not available');
             }
 
             // Visual feedback: change button to indicate imported
@@ -1289,8 +1296,14 @@ class WordListsUI {
                     window.wordManager.renderWords();
                 }
 
-                if (window.app && window.app.updateStats) {
-                    await window.app.updateStats();
+                // Update both stats and word lists
+                if (window.app) {
+                    if (window.app.updateStats) {
+                        await window.app.updateStats();
+                    }
+                    if (window.app.updateStatsPage) {
+                        await window.app.updateStatsPage();
+                    }
                 }
 
                 return true;
