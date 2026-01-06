@@ -1,6 +1,6 @@
 {
   "name": "lexybooster-server",
-  "version": "5.4.19",
+  "version": "5.4.20",
   "description": "LexyBooster - Language learning app with SRS and gamification",
   "main": "server-postgresql.js",
   "scripts": {
@@ -73,6 +73,7 @@
     "passport": "^0.7.0",
     "passport-google-oauth20": "^2.0.0",
     "pg": "^8.11.3",
+    "sqlite3": "^5.1.7",
     "terser": "^5.44.0"
   },
   "devDependencies": {

@@ -12491,7 +12491,36 @@ app.get('/api/words/popular/:userId', async (req, res) => {
  */
 async function getWordsWithProgress(userId, languagePairId, sourceLanguage, sourceLanguageCode, targetLanguage, targetLanguageCode, status, limit, onlyDue = true) {
     const sourceTableName = `source_words_${sourceLanguage}`;
-    const translationTableName = `target_translations_${targetLanguage}`;
+    const baseTranslationTableName = `target_translations_${targetLanguage}`;
+
+    // FIX: Check if base table exists and has translations for this source language
+    // Some language pairs like de→fr or en→es need fallback to _from_XX tables
+    const tableExistsResult = await db.query(`
+        SELECT EXISTS (
+            SELECT FROM information_schema.tables
+            WHERE table_schema = 'public'
+            AND table_name = $1
+        )
+    `, [baseTranslationTableName]);
+
+    let useBaseTable = false;
+    if (tableExistsResult.rows[0].exists) {
+        const checkResult = await db.query(`
+            SELECT COUNT(*) as count
+            FROM ${baseTranslationTableName}
+            WHERE source_lang = $1
+            LIMIT 1
+        `, [sourceLanguageCode]);
+        useBaseTable = checkResult.rows[0].count > 0;
+    }
+
+    const translationTableName = useBaseTable
+        ? baseTranslationTableName
+        : `${baseTranslationTableName}_from_${sourceLanguageCode}`;
+
+    const exampleTranslationColumnActual = useBaseTable ? `example_${targetLanguageCode}` : 'example_native';
+
+    logger.info(`[GET-WORDS-WITH-PROGRESS] Using translation table: ${translationTableName} (useBaseTable: ${useBaseTable})`);
 
     let query;
     let params;
@@ -12541,7 +12570,7 @@ async function getWordsWithProgress(userId, languagePairId, sourceLanguage, sour
                 sw.theme,
                 tt.translation,
                 sw.example_${sourceLanguageCode} as example,
-                tt.example_${targetLanguageCode} as example_translation,
+                tt.${exampleTranslationColumnActual} as example_translation,
                 uwp.status,
                 uwp.correct_count,
                 uwp.incorrect_count,
@@ -12560,13 +12589,15 @@ async function getWordsWithProgress(userId, languagePairId, sourceLanguage, sour
                 AND uwp.language_pair_id = $3
             )
             LEFT JOIN ${translationTableName} tt ON tt.source_word_id = sw.id
-                AND tt.source_lang = $5
+                ${useBaseTable ? 'AND tt.source_lang = $5' : ''}
             WHERE uwp.status LIKE 'review_%'
             ${onlyDue ? 'AND (uwp.next_review_date IS NULL OR uwp.next_review_date <= CURRENT_TIMESTAMP)' : ''}
             ORDER BY RANDOM()
             LIMIT $4
         `;
-        params = [sourceLanguage, userId, languagePairId, limit, sourceLanguageCode];
+        params = useBaseTable
+            ? [sourceLanguage, userId, languagePairId, limit, sourceLanguageCode]
+            : [sourceLanguage, userId, languagePairId, limit];
 
     } else {
         // Get words with specific status (studying, mastered, etc.)
@@ -12579,7 +12610,7 @@ async function getWordsWithProgress(userId, languagePairId, sourceLanguage, sour
                 sw.theme,
                 tt.translation,
                 sw.example_${sourceLanguageCode} as example,
-                tt.example_${targetLanguageCode} as example_translation,
+                tt.${exampleTranslationColumnActual} as example_translation,
                 uwp.status,
                 uwp.correct_count,
                 uwp.incorrect_count,
@@ -12598,12 +12629,14 @@ async function getWordsWithProgress(userId, languagePairId, sourceLanguage, sour
                 AND uwp.language_pair_id = $3
             )
             LEFT JOIN ${translationTableName} tt ON tt.source_word_id = sw.id
-                AND tt.source_lang = $5
+                ${useBaseTable ? 'AND tt.source_lang = $5' : ''}
             WHERE uwp.status = $4
             ORDER BY RANDOM()
-            LIMIT $6
+            LIMIT ${useBaseTable ? '$6' : '$5'}
         `;
-        params = [sourceLanguage, userId, languagePairId, status, sourceLanguageCode, limit];
+        params = useBaseTable
+            ? [sourceLanguage, userId, languagePairId, status, sourceLanguageCode, limit]
+            : [sourceLanguage, userId, languagePairId, status, limit];
     }
 
     const result = await db.query(query, params);
@@ -13069,22 +13102,17 @@ app.get('/api/words', async (req, res) => {
         }
 
         // Build query using new architecture
-        // For tables with _from_XX suffix, use example from target language table; otherwise use example_XX from translation table
+        // For tables with _from_XX suffix, example_native is in translation table
         const exampleTranslationColumn = useNativeExampleColumn
-            ? `COALESCE(tw.example_${targetLanguageCode}, '')`
+            ? `COALESCE(tt.example_native, '')`
             : `tt.example_${targetLanguageCode}`;
 
-        // For tables with _from_XX suffix, translation comes from target word table
-        const translationColumn = useNativeExampleColumn
-            ? 'tw.word'
-            : 'tt.translation';
-
-        // For tables with _from_XX suffix, need to join target words table
-        const targetWordsTableName = `source_words_${targetLanguage}`;
+        // Translation column is always tt.translation
+        const translationColumn = 'tt.translation';
 
         let query;
         if (useNativeExampleColumn) {
-            // Tables with _from_XX suffix - join through target_word_id
+            // Tables with _from_XX suffix - translation and example_native are in tt table
             query = `
                 SELECT
                     sw.id as source_word_id,
@@ -13114,7 +13142,6 @@ app.get('/api/words', async (req, res) => {
                     AND uwp.language_pair_id = $3
                 )
                 LEFT JOIN ${translationTableName} tt ON tt.source_word_id = sw.id
-                LEFT JOIN ${targetWordsTableName} tw ON tw.id = tt.target_word_id
             `;
         } else {
             // Standard tables - translation column exists
@@ -13267,18 +13294,9 @@ app.get('/api/words/random/:status/:count', async (req, res) => {
         const sourceLanguage = LANG_CODE_TO_FULL_NAME[sourceLanguageCode] || sourceLanguageCode;
         let targetLanguage = LANG_CODE_TO_FULL_NAME[targetLanguageCode] || targetLanguageCode;
 
-        // List of valid target languages (languages that have target_translations tables)
-        const validTargetLanguages = ['english', 'russian', 'french', 'italian', 'portuguese',
-                                     'chinese', 'arabic', 'turkish', 'ukrainian', 'polish',
-                                     'romanian', 'serbian', 'swahili', 'japanese', 'korean', 'hindi'];
-
-        // If target language is invalid (like german, spanish which are source-only), use smart fallback
-        if (!validTargetLanguages.includes(targetLanguage)) {
-            targetLanguage = (sourceLanguage === 'english') ? 'russian' : 'english';
-            // Update targetLanguageCode to match the fallback language
-            targetLanguageCode = (sourceLanguage === 'english') ? 'ru' : 'en';
-            logger.warn(`[RANDOM-WORDS] Invalid target language, using fallback: ${targetLanguage} (${targetLanguageCode})`);
-        }
+        // FIX: Don't use language fallback - getWordsWithProgress will handle table selection
+        // Previously this code would fallback to Russian/English for languages like Spanish/German
+        // which caused incorrect translations to be shown in quizzes
 
         // Get words using new architecture
         const words = await getWordsWithProgress(
