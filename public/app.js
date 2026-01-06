@@ -649,7 +649,10 @@ class LanguageLearningApp {
                 total: counts.review || 0
             });
 
-            document.getElementById('startReviewBtn').disabled = counts.review === 0;
+            const startReviewBtn = document.getElementById('startReviewBtn');
+            if (startReviewBtn) {
+                startReviewBtn.disabled = counts.review === 0;
+            }
 
             // Show review notification for demo account only
             const user = userManager.getCurrentUser();
@@ -739,6 +742,10 @@ class LanguageLearningApp {
 
     renderWordList(containerId, words) {
         const container = document.getElementById(containerId);
+        if (!container) {
+            console.error(`❌ Container not found: ${containerId}`);
+            return;
+        }
         container.innerHTML = '';
 
         if (words.length === 0) {
@@ -1733,11 +1740,14 @@ schreiben,Sie schreibt einen Brief.,Писать,Она пишет письmо.`
     async deleteWordFromList(wordId) {
         try {
             const response = await fetch(`/api/words/${wordId}`, {
-                method: 'DELETE'
+                method: 'DELETE',
+                credentials: 'include'
             });
 
             if (!response.ok) {
-                throw new Error('Failed to delete word');
+                const errorData = await response.json().catch(() => ({ error: 'Unknown error' }));
+                console.error('Delete failed:', response.status, errorData);
+                throw new Error(`Failed to delete word: ${response.status} - ${errorData.error || 'Unknown error'}`);
             }
 
             if (window.showToast) {
@@ -1774,11 +1784,14 @@ schreiben,Sie schreibt einen Brief.,Писать,Она пишет письmо.`
                 headers: {
                     'Content-Type': 'application/json'
                 },
+                credentials: 'include',
                 body: JSON.stringify({ status: 'learned' })
             });
 
             if (!response.ok) {
-                throw new Error('Failed to mark word as learned');
+                const errorData = await response.json().catch(() => ({ error: 'Unknown error' }));
+                console.error('Mark as learned failed:', response.status, errorData);
+                throw new Error(`Failed to mark word as learned: ${response.status} - ${errorData.error || 'Unknown error'}`);
             }
 
             if (window.showToast) {
@@ -1845,6 +1858,7 @@ schreiben,Sie schreibt einen Brief.,Писать,Она пишет письmо.`
                 headers: {
                     'Content-Type': 'application/json'
                 },
+                credentials: 'include',
                 body: JSON.stringify({
                     status: nextStatus,
                     reviewCycle: nextStatus === 'learned' ? reviewCycle : reviewCycle
@@ -1852,7 +1866,9 @@ schreiben,Sie schreibt einen Brief.,Писать,Она пишет письmо.`
             });
 
             if (!response.ok) {
-                throw new Error('Failed to move word to next stage');
+                const errorData = await response.json().catch(() => ({ error: 'Unknown error' }));
+                console.error('Manual advance failed:', response.status, errorData);
+                throw new Error(`Failed to move word to next stage: ${response.status} - ${errorData.error || 'Unknown error'}`);
             }
 
             const statusName = nextStatus === 'learned'
@@ -1923,12 +1939,15 @@ schreiben,Sie schreibt einen Brief.,Писать,Она пишет письmо.`
                     method: 'DELETE',
                     headers: {
                         'Content-Type': 'application/json'
-                    }
+                    },
+                    credentials: 'include'
                 }
             );
 
             if (!response.ok) {
-                throw new Error('Failed to delete words');
+                const errorData = await response.json().catch(() => ({ error: 'Unknown error' }));
+                console.error('Delete all words failed:', response.status, errorData);
+                throw new Error(`Failed to delete words: ${response.status} - ${errorData.error || 'Unknown error'}`);
             }
 
             const result = await response.json();
@@ -2831,6 +2850,7 @@ schreiben,Sie schreibt einen Brief.,Писать,Она пишет письmо.`
                 headers: {
                     'Content-Type': 'application/json',
                 },
+                credentials: 'include',
                 body: JSON.stringify({
                     xpGoal,
                     wordsGoal,
@@ -2839,7 +2859,9 @@ schreiben,Sie schreibt einen Brief.,Писать,Она пишет письmо.`
             });
 
             if (!response.ok) {
-                throw new Error('Failed to save daily goals');
+                const errorData = await response.json().catch(() => ({ error: 'Unknown error' }));
+                console.error('Save daily goals failed:', response.status, errorData);
+                throw new Error(`Failed to save daily goals: ${response.status} - ${errorData.error || 'Unknown error'}`);
             }
 
             this.showNotification('Daily goals saved successfully!', 'success');
