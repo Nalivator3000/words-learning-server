@@ -3252,6 +3252,10 @@ app.post('/api/word-sets/:setId/import', importLimiter, async (req, res) => {
         const target_language = langCodeToName[to_lang] || to_lang;
         const baseTranslationTableName = `target_translations_${target_language}`;
 
+        // IMPORTANT: source_language_for_progress should be from_lang (the language user learns FROM)
+        // This is different from word_set.source_language (the language of the words in the set)
+        const sourceLanguageForProgress = langCodeToName[from_lang] || from_lang;
+
         // Map full language name back to code for example column
         const langNameToCode = {
             'german': 'de', 'english': 'en', 'spanish': 'es', 'french': 'fr',
@@ -3289,7 +3293,7 @@ app.post('/api/word-sets/:setId/import', importLimiter, async (req, res) => {
             ? baseTranslationTableName
             : `${baseTranslationTableName}_from_${from_lang}`;
 
-        logger.info(`[IMPORT] Importing set ${setId} for user ${userId}, from ${from_lang} to ${to_lang}, translation table: ${translationTableName}`);
+        logger.info(`[IMPORT] Importing set ${setId} for user ${userId}, from ${from_lang} to ${to_lang}, word_set.source_language=${source_language}, progress.source_language=${sourceLanguageForProgress}, translation table: ${translationTableName}`);
 
         // Use different column names depending on table type
         const exampleTranslationColumnActual = useBaseTable ? exampleTranslationColumn : 'example_native';
@@ -3329,7 +3333,7 @@ app.post('/api/word-sets/:setId/import', importLimiter, async (req, res) => {
                 AND language_pair_id = $2
                 AND source_language = $3
                 AND source_word_id = $4
-            `, [userId, languagePairId, source_language, sourceWord.id]);
+            `, [userId, languagePairId, sourceLanguageForProgress, sourceWord.id]);
 
             if (existingProgress.rows.length === 0) {
                 // Import the word to user_word_progress
@@ -3343,7 +3347,7 @@ app.post('/api/word-sets/:setId/import', importLimiter, async (req, res) => {
                 `, [
                     userId,
                     languagePairId,
-                    source_language,
+                    sourceLanguageForProgress,
                     sourceWord.id
                 ]);
                 importedCount++;
