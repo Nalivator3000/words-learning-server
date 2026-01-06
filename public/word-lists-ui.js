@@ -1095,28 +1095,12 @@ class WordListsUI {
 
             console.log('🔄 Refreshing word manager and stats...');
 
-            // Refresh word manager and stats if available
-            if (window.wordManager) {
-                console.log('🔄 Loading words...');
-                await window.wordManager.loadWords();
-                console.log('🎨 Rendering words...');
-                window.wordManager.renderWords();
+            // Update stats counters
+            if (window.app && window.app.updateStats) {
+                console.log('📊 Updating stats...');
+                await window.app.updateStats();
             } else {
-                console.warn('⚠️ window.wordManager not available');
-            }
-
-            // Update both stats and word lists
-            if (window.app) {
-                if (window.app.updateStats) {
-                    console.log('📊 Updating stats...');
-                    await window.app.updateStats();
-                }
-                if (window.app.updateStatsPage) {
-                    console.log('📊 Updating stats page and word lists...');
-                    await window.app.updateStatsPage();
-                }
-            } else {
-                console.warn('⚠️ window.app not available');
+                console.warn('⚠️ window.app.updateStats not available');
             }
 
             // Visual feedback: change button to indicate imported
@@ -1290,20 +1274,9 @@ class WordListsUI {
                     showToast(i18n.t('word_added_successfully') || 'Word added successfully!', 'success');
                 }
 
-                // Refresh word manager if available
-                if (window.wordManager) {
-                    await window.wordManager.loadWords();
-                    window.wordManager.renderWords();
-                }
-
-                // Update both stats and word lists
-                if (window.app) {
-                    if (window.app.updateStats) {
-                        await window.app.updateStats();
-                    }
-                    if (window.app.updateStatsPage) {
-                        await window.app.updateStatsPage();
-                    }
+                // Update stats counters
+                if (window.app && window.app.updateStats) {
+                    await window.app.updateStats();
                 }
 
                 return true;

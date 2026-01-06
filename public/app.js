@@ -780,7 +780,7 @@ class LanguageLearningApp {
             const lastReviewed = word.lastreviewdate || word.lastReviewDate;
 
             const dateAdded = createdAt ? new Date(createdAt).toLocaleDateString('ru-RU') : 'N/A';
-            const dateStudied = lastReviewed ? new Date(lastReviewed).toLocaleDateString('ru-RU') : i18n.t('not_studied');
+            const dateStudied = lastReviewed ? new Date(lastReviewed).toLocaleDateString('ru-RU') : (i18n.t('notStudied') || 'Not studied');
 
             let metaHTML = `📅 Added: ${dateAdded} | 📚 Studied: ${dateStudied}`;
 
