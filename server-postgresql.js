@@ -3074,7 +3074,7 @@ app.get('/api/word-sets/:setId', async (req, res) => {
             const translationTableName = useBaseTable
                 ? baseTranslationTableName
                 : `${baseTranslationTableName}_from_${sourceLangCode}`;
-            const exampleTranslationColumnActual = useBaseTable ? exampleTranslationColumn : 'example_native';
+            const exampleTranslationColumnActual = exampleTranslationColumn;
 
             logger.info(`[WORD-SETS] Loading ${itemsCheckResult.rows[0].count} specific words with translations from ${translationTableName}`);
 
@@ -3238,7 +3238,7 @@ app.get('/api/word-sets/:setId', async (req, res) => {
             logger.info(`[WORD-SETS] Loading set ${setId} with source=${wordSet.source_language} (${sourceLanguageCode}), target=${targetLang} (${targetLangCode}), table=${translationTableName}`);
 
             // Use different column names depending on table type
-            const exampleTranslationColumnActual = useBaseTable ? exampleTranslationColumn : 'example_native';
+            const exampleTranslationColumnActual = exampleTranslationColumn;
 
             const wordsResult = await db.query(`
                 SELECT
@@ -3482,7 +3482,7 @@ app.post('/api/word-sets/:setId/import', importLimiter, async (req, res) => {
         logger.info(`[IMPORT] Importing set ${setId} for user ${userId}, from ${from_lang} to ${to_lang}, word_set.source_language=${source_language}, progress.source_language=${sourceLanguageForProgress}, translation table: ${translationTableName}`);
 
         // Use different column names depending on table type
-        const exampleTranslationColumnActual = useBaseTable ? exampleTranslationColumn : 'example_native';
+        const exampleTranslationColumnActual = exampleTranslationColumn;
 
         // Get all words from the source table with their translations
         let wordsResult;
@@ -12574,7 +12574,7 @@ async function getWordsWithProgress(userId, languagePairId, sourceLanguage, sour
         ? baseTranslationTableName
         : `${baseTranslationTableName}_from_${sourceLanguageCode}`;
 
-    const exampleTranslationColumnActual = useBaseTable ? `example_${targetLanguageCode}` : 'example_native';
+    const exampleTranslationColumnActual = `example_${targetLanguageCode}`;
     const exampleSourceColumn = hasSourceExample ? `sw.example_${sourceLanguageCode}` : `''`;
 
     logger.info(`[GET-WORDS-WITH-PROGRESS] Using translation table: ${translationTableName} (useBaseTable: ${useBaseTable})`);
@@ -13469,7 +13469,7 @@ app.get('/api/words/random-proportional/:count', async (req, res) => {
         logger.info(`[RANDOM-PROPORTIONAL] Using translation table: ${translationTableName} (useBaseTable: ${useBaseTable})`);
 
         // Use different column names depending on table type
-        const exampleTranslationColumnActual = useBaseTable ? `example_${targetLanguageCode}` : 'example_native';
+        const exampleTranslationColumnActual = `example_${targetLanguageCode}`;
         const exampleSourceColumn = hasSourceExample ? `sw.example_${sourceLanguageCode}` : `''`;
 
         for (const [status, allocation] of Object.entries(statusAllocations)) {
@@ -13481,8 +13481,8 @@ app.get('/api/words/random-proportional/:count', async (req, res) => {
                         sw.id,
                         sw.word,
                         ${exampleSourceColumn} as example,
-                        tt.translation,
-                        tt.${exampleTranslationColumnActual} as exampleTranslation,
+                        COALESCE(tt.translation, '') as translation,
+                        COALESCE(tt.${exampleTranslationColumnActual}, '') as exampleTranslation,
                         uwp.source_word_id,
                         uwp.status,
                         uwp.correct_count,
@@ -13497,8 +13497,6 @@ app.get('/api/words/random-proportional/:count', async (req, res) => {
                         AND uwp.user_id = $2
                         AND uwp.language_pair_id = $3
                         AND uwp.source_language = $4
-                        AND tt.translation IS NOT NULL
-                        AND tt.translation != ''
                     ORDER BY RANDOM()
                     LIMIT $5
                 `;
