@@ -43,9 +43,47 @@ git commit -m "feat: descriptive message
 
 Co-Authored-By: Claude Sonnet 4.5 <noreply@anthropic.com>"
 
-# 3. ALWAYS push to develop
+# 3. ALWAYS pull before push (critical when multiple agents work in parallel)
+git pull origin develop
+
+# 4. Resolve conflicts if any, then push
 git push origin develop
 ```
+
+---
+
+## 🔄 CRITICAL: Multiple Agents Working in Parallel
+
+### ⚠️ ALWAYS Pull Before Push
+
+When multiple AI agents work on the same project simultaneously, you MUST follow this workflow:
+
+```bash
+# Before EVERY push, ALWAYS do:
+git pull origin develop
+
+# If there are conflicts:
+# 1. Git will show conflict markers in files
+# 2. Resolve conflicts manually (read files, edit to merge changes)
+# 3. Stage resolved files: git add .
+# 4. Complete merge: git commit (or use the merge commit message)
+
+# Then push:
+git push origin develop
+```
+
+**Why This is CRITICAL:**
+- Multiple agents may push commits while you're working
+- Pushing without pulling first will fail with "rejected - non-fast-forward"
+- You'll lose context of what other agents changed
+- May cause deployment issues if changes conflict
+
+**Best Practice:**
+1. `git fetch origin develop` - Check for new commits
+2. `git log HEAD..origin/develop` - See what changed
+3. `git pull origin develop` - Merge changes
+4. Resolve any conflicts
+5. `git push origin develop` - Push your work
 
 ---
 
@@ -123,12 +161,13 @@ railway run npm run db:migrate:users
 ## ⚠️ Common Pitfalls to Avoid
 
 1. **Never push to `main` by default** - Always use `develop`
-2. **Never commit sensitive data** - Check .env, credentials, API keys
-3. **Never use bash for file operations** - Use Read/Edit/Write/Grep tools
-4. **Never assume Railway CLI is logged in** - Remind user to `railway login`
-5. **Always read files before editing** - Use Read tool first
-6. **NEVER test locally** - All testing ONLY on Railway production environment
-7. **ALWAYS check and bump version before commit** - Use `git log -1` to check previous commit message for version (e.g., v5.1.2), then increment it (e.g., v5.1.3) in your commit message
+2. **Never push without pulling first** - ALWAYS `git pull origin develop` before `git push` (critical when multiple agents work in parallel)
+3. **Never commit sensitive data** - Check .env, credentials, API keys
+4. **Never use bash for file operations** - Use Read/Edit/Write/Grep tools
+5. **Never assume Railway CLI is logged in** - Remind user to `railway login`
+6. **Always read files before editing** - Use Read tool first
+7. **NEVER test locally** - All testing ONLY on Railway production environment
+8. **ALWAYS check and bump version before commit** - Use `git log -1` to check previous commit message for version (e.g., v5.4.23 → v5.4.24)
 
 ---
 
@@ -138,9 +177,10 @@ Before every commit:
 - [ ] Read relevant code before making changes
 - [ ] Use TodoWrite for multi-step tasks
 - [ ] Test changes (minimum: syntax check)
-- [ ] **Check previous commit version and bump it** ← CRITICAL! (e.g., 5.1.2 → 5.1.3)
+- [ ] **Check previous commit version and bump it** ← CRITICAL! (e.g., 5.4.23 → 5.4.24)
 - [ ] Commit with descriptive message
-- [ ] **Push to `develop` branch** ← CRITICAL!
+- [ ] **ALWAYS pull before push: `git pull origin develop`** ← CRITICAL when multiple agents work!
+- [ ] **Push to `develop` branch: `git push origin develop`** ← CRITICAL!
 - [ ] Create clear manual instructions if needed
 - [ ] Verify no sensitive data in commits
 
@@ -241,6 +281,7 @@ npm run test:e2e:production:report
 
 **MOST IMPORTANT:**
 - ✅ **ALWAYS check and bump version** (use `git log -1` before commit)
+- ✅ **ALWAYS pull before push** (`git pull origin develop` - critical with multiple agents!)
 - ✅ **ALWAYS `git push origin develop`** (never main by default)
 - ✅ **ALL testing ONLY on Railway** (never locally)
 - ✅ Use Read/Edit/Write tools (not bash cat/sed/echo)
@@ -263,11 +304,18 @@ feat: your message
 
 Co-Authored-By: Claude Sonnet 4.5 <noreply@anthropic.com>"
 
+# CRITICAL: Always pull before push (especially when multiple agents work in parallel)
+git pull origin develop
+
+# Then push
 git push origin develop  # ← ALWAYS develop!
 ```
 
 ---
 
-**Version:** 1.1
-**Last Updated:** January 6, 2026
+**Version:** 1.2
+**Last Updated:** January 7, 2026
 **For:** Claude Code AI Agents
+**Changelog:**
+- v1.2: Added critical guidelines for multiple agents working in parallel (ALWAYS pull before push)
+- v1.1: Initial version management and deployment guidelines
