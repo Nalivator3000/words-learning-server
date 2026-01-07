@@ -32,7 +32,7 @@ class QuizManager {
         words = words.slice(0, questionCount);
 
         if (words.length === 0) {
-            throw new Error(i18n.t('no_words_to_study'));
+            throw new Error(i18n?.t('no_words_to_study') || 'No words to study. Please import some words first!');
         }
 
         // Store word count for proper scoring in complex mode

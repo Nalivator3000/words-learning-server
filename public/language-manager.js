@@ -145,7 +145,14 @@ class LanguageManager {
                 'voiceTestButton': '🔊 Тест с текущиmи настройкаmи',
 
                 // Word building
-                'buildTheWord': 'Составьте слово...'
+                'buildTheWord': 'Составьте слово...',
+
+                // Quiz error messages
+                'no_words_to_study': 'Нет слов для изучения. Пожалуйста, импортируйте слова!',
+                'no_words_to_review': 'Нет слов для повторения. Сначала изучите несколько слов!',
+                'incorrectCorrectAnswer': 'Неправильно. Правильный ответ:',
+                'almostCorrectAnswer': 'Почти правильно! Правильный ответ:',
+                'skip': 'Пропустить'
             },
             
             'en': {
@@ -257,7 +264,14 @@ class LanguageManager {
                 'voiceTestButton': '🔊 Test with current settings',
 
                 // Word building
-                'buildTheWord': 'Build the word...'
+                'buildTheWord': 'Build the word...',
+
+                // Quiz error messages
+                'no_words_to_study': 'No words to study. Please import some words first!',
+                'no_words_to_review': 'No words to review. Study some words first!',
+                'incorrectCorrectAnswer': 'Incorrect. Correct answer:',
+                'almostCorrectAnswer': 'Almost! Correct answer:',
+                'skip': 'Skip'
             },
             
             'de': {

@@ -1039,7 +1039,10 @@ schreiben,Sie schreibt einen Brief.,Писать,Она пишет письmо.`
             console.error('Error starting study quiz:', error);
 
             // Show friendly message for no words
-            if (error.message.includes('No words')) {
+            // Check for various error messages related to empty word sets
+            if (error.message.includes('No words') ||
+                error.message.includes('no_words') ||
+                error.message.toLowerCase().includes('import')) {
                 if (window.showToast) {
                     showToast(i18n?.t('no_words_to_study') || 'No words to study. Please import some words first!', 'info');
                 } else {
@@ -1069,7 +1072,10 @@ schreiben,Sie schreibt einen Brief.,Писать,Она пишет письmо.`
             console.error('Error starting review quiz:', error);
 
             // Show friendly message for no words
-            if (error.message.includes('No words')) {
+            // Check for various error messages related to empty word sets
+            if (error.message.includes('No words') ||
+                error.message.includes('no_words') ||
+                error.message.toLowerCase().includes('import')) {
                 if (window.showToast) {
                     showToast(i18n?.t('no_words_to_review') || 'No words to review. Study some words first!', 'info');
                 } else {
