@@ -3431,6 +3431,18 @@ class SwipeHandler {
 
 // Initialize app when DOM is loaded
 document.addEventListener('DOMContentLoaded', async () => {
+    // Wait for translations to load before initializing app
+    await new Promise(resolve => {
+        if (window.i18n && window.i18n.translations && Object.keys(window.i18n.translations).length > 0) {
+            // Translations already loaded
+            resolve();
+        } else {
+            // Wait for translationsLoaded event
+            window.addEventListener('translationsLoaded', resolve, { once: true });
+        }
+    });
+
+    console.log('✅ Translations loaded, initializing app...');
     window.app = new LanguageLearningApp();
     window.swipeHandler = new SwipeHandler();
     console.log('👆 Swipe gestures enabled! Swipe right to go to next question.');

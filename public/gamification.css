@@ -867,12 +867,16 @@
     justify-content: space-between;
     align-items: center;
     margin-bottom: 20px;
+    gap: 12px;
+    flex-wrap: wrap;
 }
 
 .daily-goals-header h3 {
     font-size: 22px;
     margin: 0;
     color: #2c3e50;
+    flex: 1 1 auto;
+    min-width: 0;
 }
 
 .goals-completed-badge {
@@ -882,6 +886,8 @@
     border-radius: 20px;
     font-size: 14px;
     font-weight: 600;
+    white-space: nowrap;
+    flex-shrink: 0;
 }
 
 .daily-goals-list {
