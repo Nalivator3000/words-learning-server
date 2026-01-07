@@ -1,44 +1,42 @@
-# UI Fix Deployment Status
+# 🚀 Deployment Status - 2026-01-07
 
-## Commit Details
+## Current Situation
 
-**Branch:** main
-**Commit:** ea66572 → 32fff03
-**Message:** 🎨 FIX: Auth UI spacing issues
+### Production
+- **Version:** v5.4.0
+- **Timestamp:** 2026-01-07T14:10:20.917Z  
+- **Status:** ✅ Running (old version)
 
-## Changes Pushed
+### Repository
+- **Latest commit:** 10b998e - Restore package.json
+- **Branch:** develop
+- **Commits ahead:** 4
 
-✅ Added `gap: 8px` to `.auth-tabs` (fixes button overlap)
-✅ Merged duplicate `.auth-divider` styles
-✅ Added `display: inline-block` to `.auth-divider` (fixes red space)
+## Issue: Deployment Stuck/Failed
 
-## Deployment
+**Symptoms:**
+- Production stuck on v5.4.0 (30+ minutes)
+- Migration endpoint 404: POST /api/migrate-hindi-pos
 
-**Platform:** Railway
-**Auto-deploy:** Yes (connected to GitHub main branch)
-**Expected deployment time:** ~2-3 minutes
+**Likely Cause:**
+- Commit a42d160 accidentally moved package.json to archive/
+- Railway build failed without package.json
+- Commit 10b998e restored it
+- May need manual redeploy from Railway dashboard
 
-## Verification
+## Required Action
 
-Once deployed, verify on https://lexybooster.com:
+⚠️ **MANUAL:** Check Railway dashboard for build errors
+- Go to https://railway.app
+- Check deployment logs
+- Manually trigger redeploy if needed
 
-1. **Hard refresh** to clear cache: `Ctrl+Shift+R` (Windows) or `Cmd+Shift+R` (Mac)
-2. Check **Log In/Register buttons** - should have 8px gap
-3. Check **Google button** - red space below should be gone
-4. Check **"или" divider** - should display correctly
+## After Deployment
 
-## Files Changed
+```bash
+# Run migration
+curl -X POST https://words-learning-server-production.up.railway.app/api/migrate-hindi-pos
+```
 
-- `public/style.css` - CSS fixes applied
-
-## Notes
-
-- CSS has version-based cache busting (`?v=Date.now()`)
-- Changes are backward compatible
-- No JavaScript changes required
-- Deploy includes all previous develop branch work (231 files total merge)
-
----
-
-**Status:** ✅ Deployed to main
-**Timestamp:** 2025-12-24 11:15 UTC
+**Status:** ⏸️ BLOCKED - Waiting for Railway
+**Created:** 2026-01-07 ~14:46 UTC
