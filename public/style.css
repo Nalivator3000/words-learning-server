@@ -1,4 +1,4 @@
-/* LexyBooster v5.4.9 - Fix close button using class-based modal state */
+/* LexyBooster v5.4.26 - Hindi German word sets fix */
 @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&display=swap');
 
 :root {
@@ -3937,13 +3937,14 @@ input:focus, textarea:focus, select:focus {
         min-height: auto;
         max-height: calc(100dvh - 140px - env(safe-area-inset-bottom, 0px));
         height: calc(100dvh - 140px - env(safe-area-inset-bottom, 0px));
-        overflow-y: visible;
+        overflow-y: auto;
         overflow-x: hidden;
         display: flex;
         flex-direction: column;
         position: relative;
         box-shadow: none;
         padding-bottom: 120px; /* Space for fixed feedback + button */
+        -webkit-overflow-scrolling: touch; /* Smooth scrolling on iOS */
     }
 
     .progress-bar {
