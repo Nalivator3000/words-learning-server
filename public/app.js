@@ -23,24 +23,24 @@ class LanguageLearningApp {
         let className, text;
         const correctCount = word.correctcount || word.correctCount || 0;
 
-        if (correctCount === 0) {
-            className = 'score-none';
-            text = `${i18n.t('notStudied')} 🌱`;
+        if (score >= 100) {
+            className = 'score-complete';
+            text = `${score}% ✅`;
         } else if (score >= 90) {
             className = 'score-complete';
-            text = `${correctCount}/100 points (${score}%) ✅`;
+            text = `${score}% ✅`;
         } else if (score >= 70) {
             className = 'score-high';
-            text = `${correctCount}/100 points (${score}%) 🔥`;
+            text = `${score}% 🔥`;
         } else if (score >= 50) {
             className = 'score-medium';
-            text = `${correctCount}/100 points (${score}%) ⚡`;
+            text = `${score}% ⚡`;
         } else if (score >= 30) {
             className = 'score-low';
-            text = `${correctCount}/100 points (${score}%) 📚`;
+            text = `${score}% 📚`;
         } else {
             className = 'score-very-low';
-            text = `${correctCount}/100 points (${score}%) 🌱`;
+            text = `${score}% 🌱`;
         }
 
         return { className, text };
