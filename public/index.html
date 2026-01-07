@@ -7,8 +7,8 @@
     <title>LexyBooster - Language Learning & SRS</title>
     <meta name="description" content="Master languages with spaced repetition, gamification & streak tracking. Learn German, Spanish, French, and more!">
     <!-- Version: v5.4.23 -->
-    <!-- CommitHash: 7687ff2 -->
-    <!-- Commit: 🐛 FIX: Handle non-existent translation tables gracefully -->
+    <!-- CommitHash: c1636b0 -->
+    <!-- Commit: 🐛 FIX: Add try-catch for second table check in word-sets endpoint -->
 
     <!-- Favicon -->
     <link rel="icon" type="image/png" sizes="32x32" href="/icons/icon-72x72.png">
@@ -606,12 +606,12 @@
                 <!-- CSV Template Download -->
                 <div class="template-download">
                     <p>
-                        <strong>📥 Download CSV template:</strong>
+                        <strong data-i18n="downloadCSVTemplateTitle">📥 Download CSV template:</strong>
                     </p>
-                    <button id="downloadTemplateBtn" class="action-btn secondary-btn">
+                    <button id="downloadTemplateBtn" class="action-btn secondary-btn" data-i18n="downloadCSVTemplate">
                         📄 Download CSV Template
                     </button>
-                    <p>
+                    <p data-i18n="templateContainsHeaders">
                         Template contains correct column headers and examples
                     </p>
                 </div>
@@ -621,13 +621,13 @@
                 <div class="import-options">
                     <div class="import-card">
                         <h3 data-i18n="fromCSVFile">From CSV File</h3>
-                        <p>Upload CSV file with columns: Word, Example, Translation, Example Translation</p>
+                        <p data-i18n="uploadCSVFileDesc">Upload CSV file with columns: Word, Example, Translation, Example Translation</p>
                         <input type="file" id="csvInput" accept=".csv" style="display: none;">
                         <button id="csvImportBtn" class="action-btn" data-i18n="selectFile">Select File</button>
                     </div>
                     <div class="import-card">
                         <h3 data-i18n="fromGoogleSheets">From Google Sheets</h3>
-                        <p>Paste link to public Google spreadsheet</p>
+                        <p data-i18n="pasteGoogleSheetsLink">Paste link to public Google spreadsheet</p>
                         <input type="text" id="googleSheetsUrl" placeholder="https://docs.google.com/spreadsheets/...">
                         <button id="googleImportBtn" class="action-btn" data-i18n="import">Импорт</button>
                     </div>
@@ -667,8 +667,8 @@
                             <button id="reverseMultipleChoiceBtn" class="mode-btn"><span data-i18n="reverseChoice">Обратный выбор</span><br><small>(target → native)</small></button>
                             <button id="wordBuildingBtn" class="mode-btn"><span data-i18n="wordBuilding">Word Building</span><br><small>from letters</small></button>
                             <button id="typingBtn" class="mode-btn"><span data-i18n="typing">Ввод с клавиатуры</span><br><small>(native → target)</small></button>
-                            <button id="survivalBtn" class="mode-btn survival-mode"><span data-i18n="survivalMode" data-i18n="survivalMode">Режим выживания</span><br><small>5 sec per answer, up to 3 errors</small></button>
-                            <button id="complexModeBtn" class="mode-btn complex-mode"><span data-i18n="complexMode" data-i18n="complexMode">Комплексный режим</span><br><small>all types in sequence</small></button>
+                            <button id="survivalBtn" class="mode-btn survival-mode"><span data-i18n="survivalMode" data-i18n="survivalMode">Режим выживания</span><br><small data-i18n="survivalModeDesc">5 sec per answer, up to 3 errors</small></button>
+                            <button id="complexModeBtn" class="mode-btn complex-mode"><span data-i18n="complexMode" data-i18n="complexMode">Комплексный режим</span><br><small data-i18n="complexModeDesc">all types in sequence</small></button>
                         </div>
                     </div>
                     <div id="quizArea" class="quiz-area hidden">
@@ -763,7 +763,7 @@
                 <div id="gamificationHeader" class="gamification-header-container" style="margin-bottom: 20px;"></div>
 
                 <div style="display: flex; align-items: center; gap: 12px; margin-bottom: 16px;">
-                    <h2 style="margin: 0;">Statistics</h2>
+                    <h2 style="margin: 0;" data-i18n="statistics">Statistics</h2>
                     <a href="srs-explanation.html" target="_blank" class="help-link" title="How does the spaced repetition system work?">
                         ℹ️ How it works
                     </a>
@@ -812,14 +812,14 @@
 
                     <div class="export-section">
                         <h3 data-i18n="exportData">Export Data</h3>
-                        <button id="exportStudyingBtn" class="export-btn">Export Learning Words</button>
-                        <button id="exportReviewBtn" class="export-btn">Export Review Words</button>
-                        <button id="exportLearnedBtn" class="export-btn">Export Learned Words</button>
-                        <button id="exportAllBtn" class="export-btn">Export All Words</button>
+                        <button id="exportStudyingBtn" class="export-btn" data-i18n="exportLearningWords">Export Learning Words</button>
+                        <button id="exportReviewBtn" class="export-btn" data-i18n="exportReviewWords">Export Review Words</button>
+                        <button id="exportLearnedBtn" class="export-btn" data-i18n="exportLearnedWords">Export Learned Words</button>
+                        <button id="exportAllBtn" class="export-btn" data-i18n="exportAllWords">Export All Words</button>
                     </div>
                     <div class="word-lists">
                         <div class="list-section">
-                            <h3>Learning Words (<span id="studyingListCount">0</span>)</h3>
+                            <h3><span data-i18n="learningWords">Learning Words</span> (<span id="studyingListCount">0</span>)</h3>
                             <div id="studyingList" class="word-list"></div>
                         </div>
                         <div class="list-section">
@@ -833,15 +833,15 @@
                     </div>
                     <!-- Analytics Section -->
                     <div class="analytics-section">
-                        <h3>📊 Learning Analytics</h3>
+                        <h3 data-i18n="learningAnalytics">📊 Learning Analytics</h3>
 
                         <!-- Learning Progress Chart -->
                         <div class="progress-chart-container">
                             <div class="chart-header">
-                                <div class="chart-title">Learning Progress Chart</div>
+                                <div class="chart-title" data-i18n="learningProgressChart">Learning Progress Chart</div>
                                 <div class="chart-period-selector">
-                                    <button class="period-btn active" data-period="week">Week</button>
-                                    <button class="period-btn" data-period="month">Month</button>
+                                    <button class="period-btn active" data-period="week" data-i18n="week">Week</button>
+                                    <button class="period-btn" data-period="month" data-i18n="month">Month</button>
                                     <button class="period-btn" data-period="year">Year</button>
                                 </div>
                             </div>
