@@ -49,6 +49,58 @@ git push origin develop
 
 ---
 
+## 🔢 Version Management
+
+### CRITICAL: Always Bump Version Before Commit
+
+**Before every commit, you MUST:**
+
+1. **Check the previous commit version:**
+```bash
+git log -1 --format=%B
+# Look for version pattern like "v5.1.2" or "VERSION: Bump to v5.1.2"
+```
+
+2. **Increment the version:**
+   - Bug fixes: `5.1.2` → `5.1.3` (patch)
+   - New features: `5.1.2` → `5.2.0` (minor)
+   - Breaking changes: `5.1.2` → `6.0.0` (major)
+
+3. **Include version in commit message:**
+```bash
+git commit -m "🔖 VERSION: Bump to v5.1.3
+
+feat: your actual change description
+
+🤖 Generated with [Claude Code](https://claude.com/claude-code)
+
+Co-Authored-By: Claude Sonnet 4.5 <noreply@anthropic.com>"
+```
+
+**Example Workflow:**
+```bash
+# Check previous version
+git log -1 --format=%B
+# Shows: "🔖 VERSION: Bump to v5.4.16"
+
+# Your new version should be v5.4.17
+git commit -m "🔖 VERSION: Bump to v5.4.17
+
+🐛 FIX: Fix translation loading bug
+
+🤖 Generated with [Claude Code](https://claude.com/claude-code)
+
+Co-Authored-By: Claude Sonnet 4.5 <noreply@anthropic.com>"
+```
+
+**Why This Matters:**
+- Maintains consistent version history
+- Makes rollbacks easier
+- Tracks deployment progression
+- Required for production releases
+
+---
+
 ## 🚀 Deployment Workflow
 
 ### After Pushing to develop:
@@ -76,6 +128,7 @@ railway run npm run db:migrate:users
 4. **Never assume Railway CLI is logged in** - Remind user to `railway login`
 5. **Always read files before editing** - Use Read tool first
 6. **NEVER test locally** - All testing ONLY on Railway production environment
+7. **ALWAYS check and bump version before commit** - Use `git log -1` to check previous commit message for version (e.g., v5.1.2), then increment it (e.g., v5.1.3) in your commit message
 
 ---
 
@@ -85,6 +138,7 @@ Before every commit:
 - [ ] Read relevant code before making changes
 - [ ] Use TodoWrite for multi-step tasks
 - [ ] Test changes (minimum: syntax check)
+- [ ] **Check previous commit version and bump it** ← CRITICAL! (e.g., 5.1.2 → 5.1.3)
 - [ ] Commit with descriptive message
 - [ ] **Push to `develop` branch** ← CRITICAL!
 - [ ] Create clear manual instructions if needed
@@ -186,6 +240,7 @@ npm run test:e2e:production:report
 ## 🎯 Summary
 
 **MOST IMPORTANT:**
+- ✅ **ALWAYS check and bump version** (use `git log -1` before commit)
 - ✅ **ALWAYS `git push origin develop`** (never main by default)
 - ✅ **ALL testing ONLY on Railway** (never locally)
 - ✅ Use Read/Edit/Write tools (not bash cat/sed/echo)
@@ -195,13 +250,24 @@ npm run test:e2e:production:report
 
 **Default Git Commands:**
 ```bash
+# Check previous version
+git log -1 --format=%B
+
+# Stage and commit with bumped version
 git add .
-git commit -m "feat: your message"
+git commit -m "🔖 VERSION: Bump to v5.x.x
+
+feat: your message
+
+🤖 Generated with [Claude Code](https://claude.com/claude-code)
+
+Co-Authored-By: Claude Sonnet 4.5 <noreply@anthropic.com>"
+
 git push origin develop  # ← ALWAYS develop!
 ```
 
 ---
 
-**Version:** 1.0
-**Last Updated:** December 30, 2025
+**Version:** 1.1
+**Last Updated:** January 6, 2026
 **For:** Claude Code AI Agents
