@@ -12,7 +12,7 @@ class LanguageLearningApp {
     calculateWordScore(word) {
         // correctCount is the earned points (0-100)
         // totalPoints is always 100 (fixed maximum)
-        const correctCount = word.correctcount || word.correctCount || 0;
+        const correctCount = word.correct_count || word.correctcount || word.correctCount || 0;
 
         // Score IS the percentage (correctCount out of 100)
         return Math.min(100, Math.max(0, correctCount));
@@ -21,7 +21,7 @@ class LanguageLearningApp {
     // Get score display with progress percentage and points
     getScoreDisplay(score, word) {
         let className, text;
-        const correctCount = word.correctcount || word.correctCount || 0;
+        const correctCount = word.correct_count || word.correctcount || word.correctCount || 0;
 
         if (score >= 100) {
             className = 'score-complete';
