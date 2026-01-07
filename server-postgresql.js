@@ -3015,7 +3015,7 @@ app.get('/api/word-sets/:setId', async (req, res) => {
             // Determine target language from parameters
             if (native_lang) {
                 const nativeLangFull = langMap[native_lang] || native_lang;
-                const validTargetLanguages = ['english', 'spanish', 'russian', 'french', 'italian', 'portuguese',
+                const validTargetLanguages = ['english', 'german', 'spanish', 'russian', 'french', 'italian', 'portuguese',
                                              'chinese', 'arabic', 'turkish', 'ukrainian', 'polish',
                                              'romanian', 'serbian', 'swahili', 'japanese', 'korean', 'hindi'];
                 if (nativeLangFull !== wordSet.source_language && validTargetLanguages.includes(nativeLangFull)) {
@@ -3132,7 +3132,7 @@ app.get('/api/word-sets/:setId', async (req, res) => {
                 const nativeLangFull = langMap[native_lang] || native_lang;
 
                 // List of languages that have target_translations tables (these are real target languages)
-                const validTargetLanguages = ['english', 'spanish', 'russian', 'french', 'italian', 'portuguese',
+                const validTargetLanguages = ['english', 'german', 'spanish', 'russian', 'french', 'italian', 'portuguese',
                                              'chinese', 'arabic', 'turkish', 'ukrainian', 'polish',
                                              'romanian', 'serbian', 'swahili', 'japanese', 'korean', 'hindi'];
 
