@@ -3056,14 +3056,21 @@ app.get('/api/word-sets/:setId', async (req, res) => {
             const posColumn = hasSourcePos ? 'sw.pos' : 'NULL';
 
             // Check which translation table to use
-            const checkResult = await db.query(`
-                SELECT COUNT(*) as count
-                FROM ${baseTranslationTableName}
-                WHERE source_lang = $1
-                LIMIT 1
-            `, [sourceLangCode]);
+            let useBaseTable = false;
+            try {
+                const checkResult = await db.query(`
+                    SELECT COUNT(*) as count
+                    FROM ${baseTranslationTableName}
+                    WHERE source_lang = $1
+                    LIMIT 1
+                `, [sourceLangCode]);
+                useBaseTable = checkResult.rows[0].count > 0;
+            } catch (err) {
+                // Base table doesn't exist, will use _from_{sourceLangCode} format
+                logger.info(`[WORD-SETS] Base table ${baseTranslationTableName} not found, using _from_${sourceLangCode} format`);
+                useBaseTable = false;
+            }
 
-            const useBaseTable = checkResult.rows[0].count > 0;
             const translationTableName = useBaseTable
                 ? baseTranslationTableName
                 : `${baseTranslationTableName}_from_${sourceLangCode}`;
