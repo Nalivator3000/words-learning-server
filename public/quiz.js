@@ -20,7 +20,16 @@ class QuizManager {
         // Get words proportionally from all statuses (studying, review_1, review_3, etc.)
         // This ensures variety and prevents seeing the same words repeatedly
         // Words are distributed based on the proportion of each status in the user's vocabulary
-        let words = await database.getProportionalWords(questionCount);
+        // Request extra words to compensate for words without translations
+        const requestCount = Math.min(questionCount * 2, 50); // Request 2x words, max 50
+        let words = await database.getProportionalWords(requestCount);
+
+        // Filter out words with missing translations
+        // (Some words may not have translations in the database yet)
+        words = words.filter(word => word.translation && word.translation.trim() !== '');
+
+        // Take only the requested number of words
+        words = words.slice(0, questionCount);
 
         if (words.length === 0) {
             throw new Error(i18n.t('no_words_to_study'));
