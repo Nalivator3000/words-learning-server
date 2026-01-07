@@ -2859,6 +2859,8 @@ app.get('/api/word-sets', async (req, res) => {
             const parts = languagePair.split('-');
             if (parts.length >= 2) {
                 const learningLanguage = parts[0]; // FIRST part is the language being learned
+                const nativeLanguage = parts[1]; // SECOND part is the user's native language
+
                 // Map short codes to full language names
                 const langMap = {
                     'ar': 'arabic',
@@ -2880,11 +2882,35 @@ app.get('/api/word-sets', async (req, res) => {
                     'uk': 'ukrainian',
                     'zh': 'chinese'
                 };
+
                 const fullLanguageName = langMap[learningLanguage] || learningLanguage;
+                const fullNativeName = langMap[nativeLanguage] || nativeLanguage;
+
+                // Filter by source language
                 query += ` AND source_language = $${paramIndex}`;
                 params.push(fullLanguageName);
                 paramIndex++;
-                logger.info(`[WORD-SETS] languagePair=${languagePair} → showing ${fullLanguageName} word sets`);
+
+                // For multi-directional languages (like Hindi → English vs Hindi → German),
+                // filter by title pattern to match the target language
+                const nativeNameCapitalized = fullNativeName.charAt(0).toUpperCase() + fullNativeName.slice(1);
+
+                // Logic:
+                // - If title contains "→ German", it's for German speakers
+                // - If title contains "→ English", it's for English speakers
+                // - If title has NO arrow (→), it's default (usually English)
+                if (nativeLanguage === 'en') {
+                    // English: show sets WITHOUT arrow OR with "→ English"
+                    query += ` AND (title NOT LIKE '%→%' OR title LIKE $${paramIndex})`;
+                    params.push(`%→ ${nativeNameCapitalized}%`);
+                } else {
+                    // Other languages: show ONLY sets with "→ TargetLanguage"
+                    query += ` AND title LIKE $${paramIndex}`;
+                    params.push(`%→ ${nativeNameCapitalized}%`);
+                }
+                paramIndex++;
+
+                logger.info(`[WORD-SETS] languagePair=${languagePair} → showing ${fullLanguageName} word sets for ${fullNativeName} speakers (title filter for: ${nativeNameCapitalized})`);
             }
         } else if (sourceLang) {
             query += ` AND source_language = $${paramIndex}`;
