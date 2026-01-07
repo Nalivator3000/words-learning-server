@@ -870,11 +870,25 @@ class WordListsUI {
 
     async viewWordSet(setId) {
         try {
-            // Build URL with native language parameter if available
+            // Build URL with language pair parameters if available
             let url = `/api/word-sets/${setId}`;
-            if (this.languagePair && this.languagePair.toLanguage) {
-                url += `?native_lang=${this.languagePair.toLanguage}`;
+            const params = new URLSearchParams();
+
+            if (this.languagePair) {
+                if (this.languagePair.fromLanguage && this.languagePair.toLanguage) {
+                    const langPairCode = `${this.languagePair.fromLanguage}-${this.languagePair.toLanguage}`;
+                    params.append('languagePair', langPairCode);
+                }
+                if (this.languagePair.toLanguage) {
+                    params.append('native_lang', this.languagePair.toLanguage);
+                }
             }
+
+            if (params.toString()) {
+                url += `?${params.toString()}`;
+            }
+
+            console.log(`📖 [WORD-SETS] Fetching word set ${setId} from: ${url}`);
 
             const response = await fetch(url, {
                 cache: 'no-cache',
