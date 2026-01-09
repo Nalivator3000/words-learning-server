@@ -13359,6 +13359,8 @@ app.get('/api/words/random-proportional/:count', async (req, res) => {
         const { userId, languagePairId } = req.query;
         const totalWords = parseInt(count);
 
+        logger.info(`[PROPORTIONAL] Request: count=${count}, userId=${userId}, languagePairId=${languagePairId}`);
+
         // Get language pair to determine source language
         const langPairResult = await db.query(
             'SELECT from_lang, to_lang FROM language_pairs WHERE id = $1 AND user_id = $2',
@@ -13366,6 +13368,7 @@ app.get('/api/words/random-proportional/:count', async (req, res) => {
         );
 
         if (langPairResult.rows.length === 0) {
+            logger.warn(`[PROPORTIONAL] Language pair not found: id=${languagePairId}, userId=${userId}`);
             return res.status(404).json({ error: 'Language pair not found' });
         }
 
@@ -13373,6 +13376,8 @@ app.get('/api/words/random-proportional/:count', async (req, res) => {
         const targetLanguageCode = langPairResult.rows[0].to_lang;
         const sourceLanguage = LANG_CODE_TO_FULL_NAME[sourceLanguageCode] || sourceLanguageCode;
         const targetLanguage = LANG_CODE_TO_FULL_NAME[targetLanguageCode] || targetLanguageCode;
+
+        logger.info(`[PROPORTIONAL] Languages: source=${sourceLanguageCode}->${sourceLanguage}, target=${targetLanguageCode}->${targetLanguage}`);
 
         // FIX: Don't use language fallback - table selection logic below will handle it
         // Previously this code would fallback to Russian for languages like Spanish/German
@@ -13390,6 +13395,9 @@ app.get('/api/words/random-proportional/:count', async (req, res) => {
         `;
         const countsResult = await db.query(countsQuery, [parseInt(userId), parseInt(languagePairId), sourceLanguage]);
 
+        logger.info(`[PROPORTIONAL] Counts query params: userId=${userId}, languagePairId=${languagePairId}, sourceLanguage=${sourceLanguage}`);
+        logger.info(`[PROPORTIONAL] Status counts result: ${JSON.stringify(countsResult.rows)}`);
+
         // Calculate total available words and proportions
         const statusCounts = {};
         let totalAvailable = 0;
@@ -13399,7 +13407,10 @@ app.get('/api/words/random-proportional/:count', async (req, res) => {
             totalAvailable += parseInt(row.count);
         });
 
+        logger.info(`[PROPORTIONAL] Total available words: ${totalAvailable}`);
+
         if (totalAvailable === 0) {
+            logger.warn(`[PROPORTIONAL] No words available for quiz`);
             return res.json([]);
         }
 
@@ -13506,6 +13517,8 @@ app.get('/api/words/random-proportional/:count', async (req, res) => {
 
                 const wordsResult = await db.query(wordsQuery, queryParams);
 
+                logger.info(`[PROPORTIONAL] Status '${status}': requested ${allocation}, got ${wordsResult.rows.length} words`);
+
                 // Set defaults for missing translations
                 wordsResult.rows.forEach(word => {
                     if (!word.translation) word.translation = '';
@@ -13522,6 +13535,7 @@ app.get('/api/words/random-proportional/:count', async (req, res) => {
             [allWords[i], allWords[j]] = [allWords[j], allWords[i]];
         }
 
+        logger.info(`[PROPORTIONAL] Returning ${allWords.length} words total`);
         res.json(allWords);
     } catch (err) {
         console.error('Proportional random words error:', err);

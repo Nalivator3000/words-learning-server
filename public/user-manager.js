@@ -419,7 +419,8 @@ class UserManager {
     }
 
     getLessonSize() {
-        return this.currentLanguagePair ? this.currentLanguagePair.lesson_size : 10;
+        // Support both camelCase (from API) and snake_case (from DB) naming
+        return this.currentLanguagePair ? (this.currentLanguagePair.lessonSize || this.currentLanguagePair.lesson_size || 10) : 10;
     }
 
     async setLessonSize(size) {
