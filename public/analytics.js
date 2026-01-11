@@ -324,27 +324,28 @@ class Analytics {
 
         const avgDailyMinutes = Math.floor(weekMinutes / 7);
 
+        const t = (key, fallback) => (typeof i18n !== 'undefined' && i18n.t) ? i18n.t(key) : fallback;
         container.innerHTML = `
             <div class="study-time-cards">
                 <div class="time-card">
                     <div class="time-icon">⏱️</div>
                     <div class="time-value">${todayMinutes} min</div>
-                    <div class="time-label">Today</div>
+                    <div class="time-label">${t('today', 'Today')}</div>
                 </div>
                 <div class="time-card">
                     <div class="time-icon">📅</div>
                     <div class="time-value">${weekMinutes} min</div>
-                    <div class="time-label">This Week</div>
+                    <div class="time-label">${t('this_week', 'This Week')}</div>
                 </div>
                 <div class="time-card">
                     <div class="time-icon">📈</div>
                     <div class="time-value">${avgDailyMinutes} min</div>
-                    <div class="time-label">Average per Day</div>
+                    <div class="time-label">${t('average_per_day', 'Average per Day')}</div>
                 </div>
                 <div class="time-card highlight">
                     <div class="time-icon">🕐</div>
                     <div class="time-value">${totalHours}h ${totalMinutes}m</div>
-                    <div class="time-label">Total Time</div>
+                    <div class="time-label">${t('total_time', 'Total Time')}</div>
                 </div>
             </div>
             <div class="time-insight">
@@ -355,28 +356,30 @@ class Analytics {
 
     // Get exercise type label
     getExerciseTypeLabel(type) {
+        const t = (key, fallback) => (typeof i18n !== 'undefined' && i18n.t) ? i18n.t(key) : fallback;
         const labels = {
-            'multiple_choice': 'Multiple Choice',
-            'word_building': 'Word Building',
-            'typing': 'Typing',
-            'flashcard': 'Flashcards',
-            'listening': 'Listening'
+            'multiple_choice': t('multiple_choice', 'Multiple Choice'),
+            'word_building': t('word_building', 'Word Building'),
+            'typing': t('typing', 'Typing'),
+            'flashcard': t('flashcards', 'Flashcards'),
+            'listening': t('listening', 'Listening')
         };
         return labels[type] || type;
     }
 
     // Get study time insight message
     getStudyTimeInsight(todayMinutes, avgDailyMinutes) {
+        const t = (key, fallback) => (typeof i18n !== 'undefined' && i18n.t) ? i18n.t(key) : fallback;
         if (todayMinutes === 0) {
-            return '💭 <strong>Start studying today!</strong> Just 15 minutes a day will help you achieve great results.';
+            return t('study_insight_start', '💭 <strong>Start studying today!</strong> Just 15 minutes a day will help you achieve great results.');
         }
         if (todayMinutes >= avgDailyMinutes * 1.5) {
-            return '🎉 <strong>Great work!</strong> You studied more than usual today!';
+            return t('study_insight_great', '🎉 <strong>Great work!</strong> You studied more than usual today!');
         }
         if (todayMinutes < avgDailyMinutes * 0.5 && avgDailyMinutes > 0) {
-            return '⚡ <strong>A bit more!</strong> Try to reach your average.';
+            return t('study_insight_more', '⚡ <strong>A bit more!</strong> Try to reach your average.');
         }
-        return '✨ <strong>Good pace!</strong> Keep it up!';
+        return t('study_insight_good', '✨ <strong>Good pace!</strong> Keep it up!');
     }
 
     // Practice specific difficult word

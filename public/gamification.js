@@ -196,57 +196,58 @@ class Gamification {
 
         const { level, totalXP, currentLevelXP, xpForNextLevel, progress, currentStreak, longestStreak, totalWordsLearned, totalQuizzesCompleted } = stats;
 
+        const t = (key, fallback) => (typeof i18n !== 'undefined' && i18n.t) ? i18n.t(key) : fallback;
         containerElement.innerHTML = `
             <div class="gamification-stats">
                 <!-- Streak Section -->
                 <section class="stats-section">
-                    <h2>🔥 Streaks</h2>
+                    <h2>🔥 ${t('streaks', 'Streaks')}</h2>
                     <div class="streak-cards">
                         <div class="streak-card">
                             <div class="streak-icon">🔥</div>
                             <div class="streak-value">${currentStreak}</div>
-                            <div class="streak-label">Current Streak</div>
+                            <div class="streak-label">${t('current_streak', 'Current Streak')}</div>
                         </div>
                         <div class="streak-card">
                             <div class="streak-icon">⭐</div>
                             <div class="streak-value">${longestStreak}</div>
-                            <div class="streak-label">Record</div>
+                            <div class="streak-label">${t('record', 'Record')}</div>
                         </div>
                     </div>
                 </section>
 
                 <!-- Activity Calendar -->
                 <section class="stats-section">
-                    <h2>📅 Activity</h2>
+                    <h2>📅 ${t('activity', 'Activity')}</h2>
                     <div id="activity-calendar"></div>
                 </section>
 
                 <!-- Achievement Stats -->
                 <section class="stats-section">
-                    <h2>🏆 Statistics</h2>
+                    <h2>🏆 ${t('statistics', 'Statistics')}</h2>
                     <div class="achievement-stats">
                         <div class="stat-item">
                             <span class="stat-icon">📚</span>
                             <span class="stat-value">${totalWordsLearned}</span>
-                            <span class="stat-label">Words Learned</span>
+                            <span class="stat-label">${t('words_learned', 'Words Learned')}</span>
                         </div>
                         <div class="stat-item">
                             <span class="stat-icon">✅</span>
                             <span class="stat-value">${totalQuizzesCompleted}</span>
-                            <span class="stat-label">Exercises Completed</span>
+                            <span class="stat-label">${t('exercises_completed', 'Exercises Completed')}</span>
                         </div>
                     </div>
                 </section>
 
                 <!-- Achievements Section -->
                 <section class="stats-section">
-                    <h2>🏅 Achievements</h2>
+                    <h2>🏅 ${t('achievements', 'Achievements')}</h2>
                     <div id="achievements-container"></div>
                 </section>
 
                 <!-- XP History -->
                 <section class="stats-section">
-                    <h2>📜 XP History</h2>
+                    <h2>📜 ${t('xp_history', 'XP History')}</h2>
                     <div id="xp-log-container"></div>
                 </section>
             </div>
@@ -266,6 +267,7 @@ class Gamification {
 
     // Render activity calendar (GitHub-style heatmap)
     renderActivityCalendar(containerElement, activityData) {
+        const t = (key, fallback) => (typeof i18n !== 'undefined' && i18n.t) ? i18n.t(key) : fallback;
         const today = new Date();
         const startDate = new Date(today);
         startDate.setDate(today.getDate() - 364); // Last 365 days
@@ -314,13 +316,13 @@ class Gamification {
         calendarHTML += '</div>';
         calendarHTML += `
             <div class="heatmap-legend">
-                <span>Less</span>
+                <span>${t('less', 'Less')}</span>
                 <div class="legend-box level-0"></div>
                 <div class="legend-box level-1"></div>
                 <div class="legend-box level-2"></div>
                 <div class="legend-box level-3"></div>
                 <div class="legend-box level-4"></div>
-                <span>More</span>
+                <span>${t('more', 'More')}</span>
             </div>
         `;
 
