@@ -13,6 +13,7 @@ class UserManager {
             if (savedUser) {
                 this.currentUser = JSON.parse(savedUser);
                 await this.loadUserLanguagePairs();
+                await this.loadUserSettings(); // Load settings including interface language
                 this.hideAuthModal();
                 this.showUserInterface();
 
@@ -288,6 +289,40 @@ class UserManager {
             this.showUserInterface();
         } catch (error) {
             console.error('Error loading language pairs:', error);
+        }
+    }
+
+    async loadUserSettings() {
+        if (!this.currentUser) return;
+
+        try {
+            const response = await fetch(`${this.apiUrl}/api/settings/${this.currentUser.id}`);
+
+            if (!response.ok) {
+                console.warn('Failed to load user settings, using defaults');
+                return;
+            }
+
+            const settings = await response.json();
+
+            // Apply interface language from user settings (server settings take priority)
+            if (settings.language) {
+                const currentLang = typeof i18n !== 'undefined' ? i18n.getCurrentLanguage() : localStorage.getItem('uiLanguage');
+                if (currentLang !== settings.language) {
+                    console.log(`🌐 Applying user interface language from settings: ${settings.language}`);
+                    localStorage.setItem('uiLanguage', settings.language);
+
+                    // Update i18n if available
+                    if (typeof i18n !== 'undefined' && i18n.setLanguage) {
+                        await i18n.setLanguage(settings.language);
+                    }
+                }
+            }
+
+            // Store settings for later use
+            this.userSettings = settings;
+        } catch (error) {
+            console.error('Error loading user settings:', error);
         }
     }
 
