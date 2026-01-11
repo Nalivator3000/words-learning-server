@@ -45,14 +45,17 @@ class SurvivalMode {
         // Hide other interfaces
         document.getElementById('studyModeSelect').style.display = 'none';
         document.getElementById('quizArea').classList.add('hidden');
-        
+
         // Show survival interface
         document.getElementById('survivalArea').classList.remove('hidden');
-        
+
+        // Hide version info during quiz
+        document.getElementById('versionInfo').style.display = 'none';
+
         // Hide end game buttons
         document.getElementById('survivalRestart').classList.add('hidden');
         document.getElementById('survivalExit').classList.add('hidden');
-        
+
         // Clear feedback
         document.getElementById('survivalFeedback').textContent = '';
         document.getElementById('survivalFeedback').className = 'survival-feedback';

@@ -1096,11 +1096,13 @@ schreiben,Sie schreibt einen Brief.,Писать,Она пишет письmо.`
     showQuizInterface() {
         document.getElementById('studyModeSelect').style.display = 'none';
         document.getElementById('quizArea').classList.remove('hidden');
+        document.getElementById('versionInfo').style.display = 'none';
     }
 
     showReviewInterface() {
         document.getElementById('reviewModeSelect').style.display = 'none';
         document.getElementById('reviewQuizArea').classList.remove('hidden');
+        document.getElementById('versionInfo').style.display = 'none';
     }
 
     renderQuestion(quizData) {
@@ -1178,6 +1180,11 @@ schreiben,Sie schreibt einen Brief.,Писать,Она пишет письmо.`
             input.autocorrect = 'off';
             input.autocapitalize = 'off';
             input.spellcheck = false;
+            // Additional attributes to prevent mobile autofill/password managers
+            input.name = 'quiz-answer-' + Date.now();
+            input.setAttribute('data-form-type', 'other');
+            input.setAttribute('data-lpignore', 'true'); // LastPass
+            input.setAttribute('data-1p-ignore', 'true'); // 1Password
             input.onkeypress = (e) => {
                 if (e.key === 'Enter') {
                     this.handleEnterPress(input);
@@ -1292,6 +1299,11 @@ schreiben,Sie schreibt einen Brief.,Писать,Она пишет письmо.`
             input.autocorrect = 'off';
             input.autocapitalize = 'off';
             input.spellcheck = false;
+            // Additional attributes to prevent mobile autofill/password managers
+            input.name = 'quiz-answer-' + Date.now();
+            input.setAttribute('data-form-type', 'other');
+            input.setAttribute('data-lpignore', 'true'); // LastPass
+            input.setAttribute('data-1p-ignore', 'true'); // 1Password
             input.onkeypress = (e) => {
                 if (e.key === 'Enter') {
                     this.handleReviewEnterPress(input);
@@ -1728,13 +1740,13 @@ schreiben,Sie schreibt einen Brief.,Писать,Она пишет письmо.`
         document.getElementById('studyModeSelect').style.display = 'block';
         document.getElementById('quizArea').classList.add('hidden');
         document.getElementById('survivalArea').classList.add('hidden');
-        // Nav always visible now
+        document.getElementById('versionInfo').style.display = 'block';
     }
 
     resetReviewInterface() {
         document.getElementById('reviewModeSelect').style.display = 'block';
         document.getElementById('reviewQuizArea').classList.add('hidden');
-        // Nav always visible now
+        document.getElementById('versionInfo').style.display = 'block';
     }
 
     async deleteWord(wordId) {
@@ -2105,6 +2117,11 @@ schreiben,Sie schreibt einen Brief.,Писать,Она пишет письmо.`
         wordInput.autocorrect = 'off';
         wordInput.autocapitalize = 'off';
         wordInput.spellcheck = false;
+        // Additional attributes to prevent mobile autofill/password managers
+        wordInput.name = 'quiz-word-build-' + Date.now();
+        wordInput.setAttribute('data-form-type', 'other');
+        wordInput.setAttribute('data-lpignore', 'true'); // LastPass
+        wordInput.setAttribute('data-1p-ignore', 'true'); // 1Password
 
         // Prevent mobile keyboard from appearing automatically
         wordInput.readOnly = true;
