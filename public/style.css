@@ -3944,6 +3944,11 @@ input:focus, textarea:focus, select:focus {
         flex-direction: column;
         position: relative;
         box-shadow: none;
+        /* Remove border/background on mobile */
+        background: transparent;
+        border: none;
+        border-radius: 0;
+        backdrop-filter: none;
     }
 
     /* When nav is hidden during quiz, use more space */
@@ -4107,17 +4112,16 @@ input:focus, textarea:focus, select:focus {
         margin-bottom: 0;
         display: flex;
         flex-direction: column;
-        justify-content: space-between;
         flex: 1 1 auto;
         min-height: 0;
         overflow: hidden;
+        gap: 12px;
     }
 
     .word-building-input {
         padding: 12px 16px;
         font-size: 18px;
         max-width: 100%;
-        margin-bottom: 0;
         min-height: 48px;
         flex-shrink: 0;
     }
@@ -4126,46 +4130,48 @@ input:focus, textarea:focus, select:focus {
         margin-bottom: 0;
     }
 
-    /* Letter tiles - larger, centered */
+    /* Letter tiles - centered, don't overlap input */
     .letter-tiles {
-        gap: clamp(6px, 2vw, 10px);
+        gap: clamp(8px, 2.5vw, 12px);
         max-width: 100%;
-        padding: 8px 0;
+        padding: 0;
         margin: 0;
         flex: 1 1 auto;
         min-height: 0;
         align-content: center;
         justify-content: center;
+        overflow: hidden;
     }
 
     .letter-tile {
-        /* Larger tiles that use available space */
-        width: clamp(44px, 12vw, 56px);
-        height: clamp(44px, 12vw, 56px);
-        font-size: clamp(18px, 5vw, 24px);
+        /* Larger tiles */
+        width: clamp(46px, 12vw, 54px);
+        height: clamp(46px, 12vw, 54px);
+        font-size: clamp(18px, 5vw, 22px);
         padding: 0;
         box-shadow: none !important;
     }
 
-    /* Word building controls - full width buttons */
+    /* Word building controls - equal width buttons */
     .word-building-controls {
-        gap: 10px;
+        gap: 8px;
         margin-top: auto !important;
         margin-bottom: 0 !important;
-        padding: 8px 0 0 0 !important;
+        padding: 0 !important;
         display: flex;
-        justify-content: center;
-        align-items: center;
+        justify-content: stretch;
+        align-items: stretch;
         flex-wrap: nowrap;
         flex-shrink: 0;
     }
 
     .word-building-controls .clear-word-btn,
     .word-building-controls .action-btn {
-        padding: 14px 20px !important;
+        padding: 14px 16px !important;
         font-size: 16px !important;
         min-height: 50px;
-        flex: 1 1 auto;
+        flex: 1 1 0;
+        max-width: none;
     }
 
     .letter-btn {
