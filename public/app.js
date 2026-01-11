@@ -1175,16 +1175,19 @@ schreiben,Sie schreibt einen Brief.,Писать,Она пишет письmо.`
             input.className = 'text-input';
             input.placeholder = i18n.t('enterAnswer');
             input.dataset.enterPressed = 'false';
-            // Disable browser autofill/autocomplete
-            input.autocomplete = 'off';
+            // Disable browser autofill/autocomplete - use 'one-time-code' to prevent iOS account suggestions
+            input.autocomplete = 'one-time-code';
             input.autocorrect = 'off';
             input.autocapitalize = 'off';
             input.spellcheck = false;
+            input.inputMode = 'text';
             // Additional attributes to prevent mobile autofill/password managers
             input.name = 'quiz-answer-' + Date.now();
+            input.id = 'quiz-input-' + Date.now();
             input.setAttribute('data-form-type', 'other');
             input.setAttribute('data-lpignore', 'true'); // LastPass
             input.setAttribute('data-1p-ignore', 'true'); // 1Password
+            input.setAttribute('aria-autocomplete', 'none');
             input.onkeypress = (e) => {
                 if (e.key === 'Enter') {
                     this.handleEnterPress(input);
@@ -1294,16 +1297,19 @@ schreiben,Sie schreibt einen Brief.,Писать,Она пишет письmо.`
             input.className = 'text-input';
             input.placeholder = i18n.t('enterAnswer');
             input.dataset.enterPressed = 'false';
-            // Disable browser autofill/autocomplete
-            input.autocomplete = 'off';
+            // Disable browser autofill/autocomplete - use 'one-time-code' to prevent iOS account suggestions
+            input.autocomplete = 'one-time-code';
             input.autocorrect = 'off';
             input.autocapitalize = 'off';
             input.spellcheck = false;
+            input.inputMode = 'text';
             // Additional attributes to prevent mobile autofill/password managers
             input.name = 'quiz-answer-' + Date.now();
+            input.id = 'quiz-input-' + Date.now();
             input.setAttribute('data-form-type', 'other');
             input.setAttribute('data-lpignore', 'true'); // LastPass
             input.setAttribute('data-1p-ignore', 'true'); // 1Password
+            input.setAttribute('aria-autocomplete', 'none');
             input.onkeypress = (e) => {
                 if (e.key === 'Enter') {
                     this.handleReviewEnterPress(input);
@@ -2112,16 +2118,18 @@ schreiben,Sie schreibt einen Brief.,Писать,Она пишет письmо.`
         wordInput.className = 'word-building-input';
         wordInput.placeholder = i18n.t('buildTheWord');
         wordInput.dataset.enterPressed = 'false';
-        // Disable browser autofill/autocomplete
-        wordInput.autocomplete = 'off';
+        // Disable browser autofill/autocomplete - use 'one-time-code' to prevent iOS account suggestions
+        wordInput.autocomplete = 'one-time-code';
         wordInput.autocorrect = 'off';
         wordInput.autocapitalize = 'off';
         wordInput.spellcheck = false;
         // Additional attributes to prevent mobile autofill/password managers
         wordInput.name = 'quiz-word-build-' + Date.now();
+        wordInput.id = 'quiz-word-build-input-' + Date.now();
         wordInput.setAttribute('data-form-type', 'other');
         wordInput.setAttribute('data-lpignore', 'true'); // LastPass
         wordInput.setAttribute('data-1p-ignore', 'true'); // 1Password
+        wordInput.setAttribute('aria-autocomplete', 'none');
 
         // Prevent mobile keyboard from appearing automatically
         wordInput.readOnly = true;
