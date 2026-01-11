@@ -3992,9 +3992,9 @@ input:focus, textarea:focus, select:focus {
         padding: 0;
         display: flex;
         flex-direction: column;
-        justify-content: flex-start;
+        justify-content: space-between;
         align-items: stretch;
-        gap: 4px;
+        gap: 8px;
         overflow: hidden;
         flex: 1 1 auto;
         min-height: 0;
@@ -4102,23 +4102,23 @@ input:focus, textarea:focus, select:focus {
         margin: 0 !important;
     }
 
-    /* Word building mobile - compact layout */
-    /* Word building mobile - FIT TO SCREEN */
+    /* Word building mobile - USE FULL HEIGHT */
     .word-building-area {
         margin-bottom: 0;
         display: flex;
         flex-direction: column;
+        justify-content: space-between;
         flex: 1 1 auto;
         min-height: 0;
         overflow: hidden;
     }
 
     .word-building-input {
-        padding: 6px 10px;
-        font-size: 15px;
+        padding: 12px 16px;
+        font-size: 18px;
         max-width: 100%;
-        margin-bottom: 6px;
-        min-height: 36px;
+        margin-bottom: 0;
+        min-height: 48px;
         flex-shrink: 0;
     }
 
@@ -4126,33 +4126,33 @@ input:focus, textarea:focus, select:focus {
         margin-bottom: 0;
     }
 
-    /* Letter tiles - adaptive size */
+    /* Letter tiles - larger, centered */
     .letter-tiles {
-        gap: clamp(4px, 1.5vw, 6px);
+        gap: clamp(6px, 2vw, 10px);
         max-width: 100%;
-        padding: 0;
-        margin-bottom: 6px;
+        padding: 8px 0;
+        margin: 0;
         flex: 1 1 auto;
         min-height: 0;
         align-content: center;
+        justify-content: center;
     }
 
     .letter-tile {
-        /* Adaptive tile size based on viewport */
-        width: clamp(36px, 10vw, 46px);
-        height: clamp(36px, 10vw, 46px);
-        font-size: clamp(14px, 4vw, 18px);
+        /* Larger tiles that use available space */
+        width: clamp(44px, 12vw, 56px);
+        height: clamp(44px, 12vw, 56px);
+        font-size: clamp(18px, 5vw, 24px);
         padding: 0;
         box-shadow: none !important;
-        flex-shrink: 0;
     }
 
-    /* Word building controls - compact row */
+    /* Word building controls - full width buttons */
     .word-building-controls {
-        gap: 6px;
-        margin-top: 6px !important;
+        gap: 10px;
+        margin-top: auto !important;
         margin-bottom: 0 !important;
-        padding: 0 !important;
+        padding: 8px 0 0 0 !important;
         display: flex;
         justify-content: center;
         align-items: center;
@@ -4162,11 +4162,10 @@ input:focus, textarea:focus, select:focus {
 
     .word-building-controls .clear-word-btn,
     .word-building-controls .action-btn {
-        padding: 10px 14px !important;
-        font-size: 14px !important;
-        min-height: 40px;
+        padding: 14px 20px !important;
+        font-size: 16px !important;
+        min-height: 50px;
         flex: 1 1 auto;
-        max-width: 120px;
     }
 
     .letter-btn {
