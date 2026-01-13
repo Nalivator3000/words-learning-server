@@ -4107,7 +4107,7 @@ input:focus, textarea:focus, select:focus {
         margin: 0 !important;
     }
 
-    /* Word building mobile - USE FULL HEIGHT */
+    /* Word building mobile - ADAPTIVE LAYOUT */
     .word-building-area {
         margin-bottom: 0;
         display: flex;
@@ -4115,7 +4115,6 @@ input:focus, textarea:focus, select:focus {
         flex: 1 1 auto;
         min-height: 0;
         overflow: visible;
-        gap: 8px;
     }
 
     .word-building-input {
@@ -4124,15 +4123,16 @@ input:focus, textarea:focus, select:focus {
         max-width: 100%;
         min-height: 44px;
         flex-shrink: 0;
+        margin-bottom: 8px;
     }
 
     .word-building-input:disabled {
         margin-bottom: 0;
     }
 
-    /* Letter tiles - fit all rows on screen */
+    /* Letter tiles - adaptive size 40-64px based on available space */
     .letter-tiles {
-        gap: clamp(6px, 1.5vw, 8px);
+        gap: clamp(6px, 2vw, 10px);
         max-width: 100%;
         padding: 0;
         margin: 0;
@@ -4144,34 +4144,45 @@ input:focus, textarea:focus, select:focus {
     }
 
     .letter-tile {
-        /* Compact tiles to fit 3-4 rows */
-        width: clamp(40px, 11vw, 48px);
-        height: clamp(40px, 11vw, 48px);
-        font-size: clamp(16px, 4.5vw, 20px);
+        /* Adaptive tiles: 40px min, 64px max, scales with viewport */
+        width: clamp(40px, 13vw, 64px);
+        height: clamp(40px, 13vw, 64px);
+        font-size: clamp(16px, 5vw, 26px);
         padding: 0;
         box-shadow: none !important;
     }
 
-    /* Word building controls - equal width buttons at bottom */
+    /* Word building controls - FIXED AT BOTTOM */
     .word-building-controls {
+        position: fixed;
+        bottom: calc(60px + env(safe-area-inset-bottom, 0px));
+        left: var(--space-2);
+        right: var(--space-2);
         gap: 8px;
-        margin-top: 8px !important;
-        margin-bottom: 0 !important;
-        padding: 0 !important;
+        margin: 0 !important;
+        padding: 8px !important;
         display: flex;
         justify-content: stretch;
         align-items: stretch;
         flex-wrap: nowrap;
-        flex-shrink: 0;
+        z-index: 100;
+        background: rgba(17, 24, 39, 0.95);
+        backdrop-filter: blur(10px);
+        border-radius: var(--radius-xl);
     }
 
     .word-building-controls .clear-word-btn,
     .word-building-controls .action-btn {
-        padding: 12px 14px !important;
-        font-size: 15px !important;
-        min-height: 46px;
+        padding: 14px 16px !important;
+        font-size: 16px !important;
+        min-height: 50px;
         flex: 1 1 0;
         max-width: none;
+    }
+
+    /* Add padding to answer-area to account for fixed controls */
+    .answer-area:has(.word-building-area) {
+        padding-bottom: 70px;
     }
 
     .letter-btn {
@@ -4282,6 +4293,12 @@ input:focus, textarea:focus, select:focus {
 
     .section {
         padding: var(--space-4);
+        /* Remove border/background on mobile for cleaner look */
+        background: transparent;
+        border: none;
+        border-radius: 0;
+        box-shadow: none;
+        backdrop-filter: none;
     }
 
     /* Compact section header when quiz is active */
