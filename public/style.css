@@ -279,12 +279,11 @@
 
 /* Main sections */
 [data-theme="dark"] .section {
-    background: rgba(17, 24, 39, 0.85);
-    backdrop-filter: blur(12px) saturate(150%);
-    -webkit-backdrop-filter: blur(12px) saturate(150%);
-    border: 1px solid rgba(255, 255, 255, 0.1);
-    box-shadow: 0 8px 32px rgba(0, 0, 0, 0.3),
-                inset 0 1px 0 rgba(255, 255, 255, 0.1);
+    background: transparent;
+    backdrop-filter: none;
+    -webkit-backdrop-filter: none;
+    border: none;
+    box-shadow: none;
 }
 
 [data-theme="dark"] .section h2 {
@@ -1906,13 +1905,13 @@ body.quiz-active .user-menu {
 
 /* Enhanced Sections */
 .section {
-    background: rgba(255, 255, 255, 0.95);
-    backdrop-filter: blur(20px);
-    border: 1px solid rgba(255, 255, 255, 0.3);
-    border-radius: var(--radius-3xl);
+    background: transparent;
+    backdrop-filter: none;
+    border: none;
+    border-radius: 0;
     padding: var(--space-10);
     margin-bottom: var(--space-8);
-    box-shadow: var(--shadow-3d-xl);
+    box-shadow: none;
     display: none;
     position: relative;
     overflow: hidden;
@@ -1921,14 +1920,7 @@ body.quiz-active .user-menu {
 }
 
 .section::before {
-    content: '';
-    position: absolute;
-    top: 0;
-    left: 0;
-    right: 0;
-    height: 4px;
-    background: var(--gradient-primary);
-    z-index: 1;
+    display: none;
 }
 
 .section.active {
@@ -3999,11 +3991,11 @@ input:focus, textarea:focus, select:focus {
         padding: 0;
         display: flex;
         flex-direction: column;
-        justify-content: space-between;
+        justify-content: flex-start;
         align-items: stretch;
         gap: 8px;
         overflow: hidden;
-        flex: 1 1 auto;
+        flex: 0 0 auto;
         min-height: 0;
     }
 
@@ -4039,14 +4031,14 @@ input:focus, textarea:focus, select:focus {
         display: none;
     }
 
-    /* Compact action buttons */
+    /* Compact action buttons - always at bottom */
     #nextBtn,
     #finishStudyBtn,
     #reviewNextBtn,
     #finishReviewBtn {
         position: relative;
         min-height: 44px;
-        margin: 4px 0 0 0;
+        margin: auto 0 0 0;
         padding: 10px var(--space-3);
         font-size: 15px;
         font-weight: 600;
@@ -4308,7 +4300,8 @@ input:focus, textarea:focus, select:focus {
         flex-shrink: 0;
     }
 
-    .section {
+    .section,
+    [data-theme="dark"] .section {
         padding: var(--space-4);
         /* Remove border/background on mobile for cleaner look */
         background: transparent !important;
