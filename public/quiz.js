@@ -47,16 +47,19 @@ class QuizManager {
                 question = await this.createReverseMultipleChoiceQuestion(word, words);
             } else if (quizType === 'word_building') {
                 question = this.createWordBuildingQuestion(word);
+                if (!question) continue; // Skip words too long for word building
             } else if (quizType === 'typing') {
                 question = this.createTypingQuestion(word);
             } else if (quizType === 'complex') {
                 // For complex mode, we'll create all 4 types for each word
                 const multipleQ = await this.createMultipleChoiceQuestion(word, words);
                 const reverseQ = await this.createReverseMultipleChoiceQuestion(word, words);
-                const buildingQ = this.createWordBuildingQuestion(word);
+                const buildingQ = this.createWordBuildingQuestion(word); // May be null for long words
                 const typingQ = this.createTypingQuestion(word);
 
-                this.questions.push(multipleQ, reverseQ, buildingQ, typingQ);
+                // Filter out null questions (e.g., word building for long words)
+                const questions = [multipleQ, reverseQ, buildingQ, typingQ].filter(q => q !== null);
+                this.questions.push(...questions);
                 continue; // Skip the normal push below
             }
             this.questions.push(question);
@@ -126,6 +129,11 @@ class QuizManager {
     }
 
     createWordBuildingQuestion(word) {
+        // Skip words longer than 25 characters - they don't fit well in word building UI
+        if (word.word.length > 25) {
+            return null;
+        }
+
         // Create shuffled letters for the word (without extra letters)
         const letters = word.word.toLowerCase().split('');
 
@@ -483,6 +491,10 @@ class QuizManager {
 
     isQuizComplete() {
         return this.currentQuestionIndex >= this.questions.length;
+    }
+
+    isLastQuestion() {
+        return this.currentQuestionIndex >= this.questions.length - 1;
     }
 
     getQuizResults() {

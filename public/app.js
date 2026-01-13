@@ -1387,12 +1387,8 @@ schreiben,Sie schreibt einen Brief.,Писать,Она пишет письmо.`
             });
         }
 
-        // On last question, automatically finish after a short delay
-        if (quizManager.isQuizComplete()) {
-            setTimeout(() => this.finishStudy(), 1500);
-        } else {
-            this.showNextButton();
-        }
+        // On last question, show finish button
+        this.showNextButton();
     }
 
     async skipMultipleChoice() {
@@ -1428,7 +1424,7 @@ schreiben,Sie schreibt einen Brief.,Писать,Она пишет письmо.`
             skipBtn.classList.remove('show-answer-btn');
             skipBtn.classList.add('action-btn');
 
-            if (quizManager.isQuizComplete()) {
+            if (quizManager.isLastQuestion()) {
                 skipBtn.textContent = i18n.t('finish');
                 skipBtn.onclick = () => this.finishStudy();
             } else {
@@ -1462,14 +1458,10 @@ schreiben,Sie schreibt einen Brief.,Писать,Она пишет письmо.`
             buttonContainer.querySelectorAll('button').forEach(btn => btn.disabled = true);
         }
 
-        // On last question, automatically finish after a short delay
-        if (quizManager.isQuizComplete()) {
-            setTimeout(() => this.finishStudy(), 1500);
-        } else {
-            this.showNextButton();
-            // Keep focus on input for Enter key to work for next question
-            inputEl.focus();
-        }
+        // Show next/finish button
+        this.showNextButton();
+        // Keep focus on input for Enter key to work for next question
+        inputEl.focus();
     }
 
     async handleReviewMultipleChoice(answer, buttonEl) {
@@ -1503,12 +1495,8 @@ schreiben,Sie schreibt einen Brief.,Писать,Она пишет письmо.`
             });
         }
 
-        // On last question, automatically finish after a short delay
-        if (quizManager.isQuizComplete()) {
-            setTimeout(() => this.finishReview(), 1500);
-        } else {
-            this.showReviewNextButton();
-        }
+        // Show next/finish button
+        this.showReviewNextButton();
     }
 
     async skipReviewMultipleChoice() {
@@ -1544,7 +1532,7 @@ schreiben,Sie schreibt einen Brief.,Писать,Она пишет письmо.`
             skipBtn.classList.remove('show-answer-btn');
             skipBtn.classList.add('action-btn');
 
-            if (quizManager.isQuizComplete()) {
+            if (quizManager.isLastQuestion()) {
                 skipBtn.textContent = i18n.t('finish');
                 skipBtn.onclick = () => this.finishReview();
             } else {
@@ -1578,14 +1566,10 @@ schreiben,Sie schreibt einen Brief.,Писать,Она пишет письmо.`
             buttonContainer.querySelectorAll('button').forEach(btn => btn.disabled = true);
         }
 
-        // On last question, automatically finish after a short delay
-        if (quizManager.isQuizComplete()) {
-            setTimeout(() => this.finishReview(), 1500);
-        } else {
-            this.showReviewNextButton();
-            // Keep focus on input for Enter key to work for next question
-            inputEl.focus();
-        }
+        // Show next/finish button
+        this.showReviewNextButton();
+        // Keep focus on input for Enter key to work for next question
+        inputEl.focus();
     }
 
     showAnswerFeedback(result, feedbackId) {
@@ -1654,9 +1638,20 @@ schreiben,Sie schreibt einen Brief.,Писать,Она пишет письmо.`
         const nextBtn = document.getElementById('nextBtn');
         const finishBtn = document.getElementById('finishStudyBtn');
 
-        if (quizManager.isQuizComplete()) {
+        // Always hide both first, then show the appropriate one
+        nextBtn.classList.add('hidden');
+        finishBtn.classList.add('hidden');
+
+        // Also hide any transformed skip buttons in the answer area
+        const answerArea = document.getElementById('answerArea');
+        if (answerArea) {
+            answerArea.querySelectorAll('.action-btn').forEach(btn => {
+                btn.style.display = 'none';
+            });
+        }
+
+        if (quizManager.isLastQuestion()) {
             // On last question, show finish button instead of next
-            nextBtn.classList.add('hidden');
             finishBtn.classList.remove('hidden');
 
             // Scroll to show the button on mobile
@@ -1664,7 +1659,6 @@ schreiben,Sie schreibt einen Brief.,Писать,Она пишет письmо.`
         } else {
             // On regular questions, show next button
             nextBtn.classList.remove('hidden');
-            finishBtn.classList.add('hidden');
 
             // Scroll to show the button on mobile
             this.scrollToButton(nextBtn);
@@ -1675,9 +1669,20 @@ schreiben,Sie schreibt einen Brief.,Писать,Она пишет письmо.`
         const nextBtn = document.getElementById('reviewNextBtn');
         const finishBtn = document.getElementById('finishReviewBtn');
 
-        if (quizManager.isQuizComplete()) {
+        // Always hide both first, then show the appropriate one
+        nextBtn.classList.add('hidden');
+        finishBtn.classList.add('hidden');
+
+        // Also hide any transformed skip buttons in the answer area
+        const answerArea = document.getElementById('reviewAnswerArea');
+        if (answerArea) {
+            answerArea.querySelectorAll('.action-btn').forEach(btn => {
+                btn.style.display = 'none';
+            });
+        }
+
+        if (quizManager.isLastQuestion()) {
             // On last question, show finish button instead of next
-            nextBtn.classList.add('hidden');
             finishBtn.classList.remove('hidden');
 
             // Scroll to show the button on mobile
@@ -1685,7 +1690,6 @@ schreiben,Sie schreibt einen Brief.,Писать,Она пишет письmо.`
         } else {
             // On regular questions, show next button
             nextBtn.classList.remove('hidden');
-            finishBtn.classList.add('hidden');
 
             // Scroll to show the button on mobile
             this.scrollToButton(nextBtn);
@@ -2161,8 +2165,8 @@ schreiben,Sie schreibt einen Brief.,Писать,Она пишет письmо.`
         const letterTiles = document.createElement('div');
         letterTiles.className = 'letter-tiles';
 
-        // Add scrollable class for many letters (>20)
-        if (question.letters.length > 20) {
+        // Add scrollable class for many letters (>25)
+        if (question.letters.length > 25) {
             letterTiles.classList.add('many-letters');
         }
 
@@ -2356,14 +2360,10 @@ schreiben,Sie schreibt einen Brief.,Писать,Она пишет письmо.`
         const tiles = wordInput.parentElement.querySelector('.letter-tiles');
         tiles.style.display = 'none';
 
-        // On last question, automatically finish after a short delay
-        if (quizManager.isQuizComplete()) {
-            setTimeout(() => this.finishStudy(), 1500);
-        } else {
-            this.showNextButton();
-        }
+        // Show next/finish button
+        this.showNextButton();
     }
-    
+
     async skipWordBuilding(wordInput, question) {
         // Submit empty answer to mark as skipped
         const result = await quizManager.checkAnswer('__SKIP__');
@@ -2399,7 +2399,7 @@ schreiben,Sie schreibt einen Brief.,Писать,Она пишет письmо.`
             skipBtn.classList.remove('show-answer-btn');
             skipBtn.classList.add('action-btn');
 
-            if (quizManager.isQuizComplete()) {
+            if (quizManager.isLastQuestion()) {
                 skipBtn.textContent = i18n.t('finish');
                 skipBtn.onclick = () => this.finishStudy();
             } else {
