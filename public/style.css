@@ -4410,44 +4410,7 @@ input:focus, textarea:focus, select:focus {
         margin-top: 0;
     }
 
-    /* Burger menu removed - bottom nav always visible on mobile */
-
-    /* Keep bottom nav always visible on mobile */
-    /* Quiz takes full height minus bottom nav */
-    .quiz-area {
-        max-height: calc(100dvh - 120px);
-        padding-bottom: calc(env(safe-area-inset-bottom, 0px) + 100px) !important;
-        overflow-y: auto;
-        display: flex;
-        flex-direction: column;
-    }
-
-    /* Ensure quiz buttons are always visible and accessible */
-    .quiz-area #nextBtn,
-    .quiz-area #finishStudyBtn,
-    .quiz-area .action-btn {
-        margin-top: auto;
-        margin-bottom: var(--space-4);
-        flex-shrink: 0;
-    }
-
-    /* Make quiz content scrollable but keep buttons at bottom */
-    .quiz-area .answer-area {
-        flex: 1 1 auto;
-        overflow-y: auto;
-        margin-bottom: var(--space-4);
-    }
-
-    .quiz-area .feedback {
-        flex-shrink: 0;
-        margin-bottom: var(--space-2);
-    }
-
-    .quiz-area .question,
-    .quiz-area .counter,
-    .quiz-area .progress-bar {
-        flex-shrink: 0;
-    }
+    /* Quiz styles moved to earlier media query block */
 
 /* Touch device optimizations */
 @media (hover: none) and (pointer: coarse) {
