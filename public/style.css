@@ -3932,7 +3932,8 @@ input:focus, textarea:focus, select:focus {
         font-size: var(--text-3xl);
     }
     /* Quiz/Exercise mobile optimization - FIT TO SCREEN, NO SCROLL */
-    .quiz-area {
+    .quiz-area,
+    [data-theme="dark"] .quiz-area {
         padding: var(--space-2);
         padding-bottom: 0;
         min-height: 0;
@@ -3943,12 +3944,13 @@ input:focus, textarea:focus, select:focus {
         display: flex;
         flex-direction: column;
         position: relative;
-        box-shadow: none;
-        /* Remove border/background on mobile */
-        background: transparent;
-        border: none;
-        border-radius: 0;
-        backdrop-filter: none;
+        /* Remove ALL borders/background on mobile */
+        background: transparent !important;
+        border: none !important;
+        border-radius: 0 !important;
+        box-shadow: none !important;
+        backdrop-filter: none !important;
+        -webkit-backdrop-filter: none !important;
     }
 
     /* When nav is hidden during quiz, use more space */
