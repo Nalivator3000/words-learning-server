@@ -1,4 +1,4 @@
-/* LexyBooster v5.4.28 - Fix example column names for _from_XX tables */
+/* LexyBooster v5.4.42 - Transparent quiz background */
 @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&display=swap');
 
 :root {
@@ -644,9 +644,9 @@
 
 /* Dark theme for quiz components */
 [data-theme="dark"] .quiz-container {
-    background: rgba(17, 24, 39, 0.85);
-    backdrop-filter: blur(12px) saturate(150%);
-    -webkit-backdrop-filter: blur(12px) saturate(150%);
+    background: transparent;
+    backdrop-filter: none;
+    -webkit-backdrop-filter: none;
 }
 
 [data-theme="dark"] .quiz-area {

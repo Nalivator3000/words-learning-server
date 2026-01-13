@@ -6,9 +6,9 @@
     <meta name="google" content="notranslate">
     <title>LexyBooster - Language Learning & SRS</title>
     <meta name="description" content="Master languages with spaced repetition, gamification & streak tracking. Learn German, Spanish, French, and more!">
-    <!-- Version: v5.4.42 -->
-    <!-- CommitHash: e9dc389 -->
-    <!-- Commit: 🐛 FIX: Skip long words (>25 chars) in word building quiz -->
+    <!-- Version: v5.4.43 -->
+    <!-- CommitHash: c325efd -->
+    <!-- Commit: 🎨 FIX: Remove quiz-area background completely -->
 
     <!-- Favicon -->
     <link rel="icon" type="image/png" sizes="32x32" href="/icons/icon-72x72.png">
@@ -249,8 +249,8 @@
                         document.getElementById('cssVersion').textContent = cssVersion;
 
                         // If cached CSS is old, force reload
-                        if (cssVersion !== 'v5.4.28') {
-                            console.warn('⚠️ OLD CSS DETECTED:', cssVersion, '!== v5.4.28');
+                        if (cssVersion !== 'v5.4.42') {
+                            console.warn('⚠️ OLD CSS DETECTED:', cssVersion, '!== v5.4.42');
                             console.warn('🔄 Clearing cache and reloading...');
 
                             if ('serviceWorker' in navigator) {
