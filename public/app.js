@@ -2160,7 +2160,12 @@ schreiben,Sie schreibt einen Brief.,Писать,Она пишет письmо.`
         // Letter tiles
         const letterTiles = document.createElement('div');
         letterTiles.className = 'letter-tiles';
-        
+
+        // Add scrollable class for many letters (>20)
+        if (question.letters.length > 20) {
+            letterTiles.classList.add('many-letters');
+        }
+
         question.letters.forEach((letter, index) => {
             const tile = document.createElement('button');
             tile.className = 'letter-tile';

@@ -4152,6 +4152,21 @@ input:focus, textarea:focus, select:focus {
         box-shadow: none !important;
     }
 
+    /* Many letters (>20) - enable scroll and smaller tiles */
+    .letter-tiles.many-letters {
+        overflow-y: auto;
+        overflow-x: hidden;
+        align-content: flex-start;
+        padding: 4px 0;
+        -webkit-overflow-scrolling: touch;
+    }
+
+    .letter-tiles.many-letters .letter-tile {
+        width: clamp(36px, 10vw, 44px);
+        height: clamp(36px, 10vw, 44px);
+        font-size: clamp(14px, 4vw, 18px);
+    }
+
     /* Word building controls - FIXED AT BOTTOM */
     .word-building-controls {
         position: fixed;
