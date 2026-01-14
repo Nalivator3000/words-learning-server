@@ -129,6 +129,9 @@ class LanguageLearningApp {
             }
         });
 
+        // Touch handler for showing/hiding nav during quiz
+        this.setupQuizTouchHandler();
+
         // Navigation
         document.getElementById('homeBtn').addEventListener('click', () => this.showSection('home'));
         document.getElementById('importBtn').addEventListener('click', () => this.showSection('import'));
@@ -1097,12 +1100,16 @@ schreiben,Sie schreibt einen Brief.,Писать,Она пишет письmо.`
         document.getElementById('studyModeSelect').style.display = 'none';
         document.getElementById('quizArea').classList.remove('hidden');
         document.getElementById('versionInfo').style.display = 'none';
+        // Hide navigation to maximize quiz space on mobile
+        document.body.classList.add('quiz-active');
     }
 
     showReviewInterface() {
         document.getElementById('reviewModeSelect').style.display = 'none';
         document.getElementById('reviewQuizArea').classList.remove('hidden');
         document.getElementById('versionInfo').style.display = 'none';
+        // Hide navigation to maximize quiz space on mobile
+        document.body.classList.add('quiz-active');
     }
 
     renderQuestion(quizData) {
@@ -1751,12 +1758,18 @@ schreiben,Sie schreibt einen Brief.,Писать,Она пишет письmо.`
         document.getElementById('quizArea').classList.add('hidden');
         document.getElementById('survivalArea').classList.add('hidden');
         document.getElementById('versionInfo').style.display = 'block';
+        // Restore navigation visibility
+        document.body.classList.remove('quiz-active');
+        document.body.classList.remove('menu-visible');
     }
 
     resetReviewInterface() {
         document.getElementById('reviewModeSelect').style.display = 'block';
         document.getElementById('reviewQuizArea').classList.add('hidden');
         document.getElementById('versionInfo').style.display = 'block';
+        // Restore navigation visibility
+        document.body.classList.remove('quiz-active');
+        document.body.classList.remove('menu-visible');
     }
 
     async deleteWord(wordId) {
@@ -2509,6 +2522,42 @@ schreiben,Sie schreibt einen Brief.,Писать,Она пишет письmо.`
             }
         }, 150);
         */
+    }
+
+    setupQuizTouchHandler() {
+        let touchStartY = 0;
+        let touchEndY = 0;
+
+        // Handle touch on the entire document during quiz
+        document.addEventListener('touchstart', (e) => {
+            if (!document.body.classList.contains('quiz-active')) return;
+            touchStartY = e.changedTouches[0].screenY;
+        }, { passive: true });
+
+        document.addEventListener('touchend', (e) => {
+            if (!document.body.classList.contains('quiz-active')) return;
+            touchEndY = e.changedTouches[0].screenY;
+            const swipeDistance = touchEndY - touchStartY;
+
+            // Swipe down (pull from top) - show menu
+            if (swipeDistance > 50 && touchStartY < 100) {
+                document.body.classList.add('menu-visible');
+            }
+            // Swipe up - hide menu
+            else if (swipeDistance < -50) {
+                document.body.classList.remove('menu-visible');
+            }
+        }, { passive: true });
+
+        // Also allow clicking on top area to toggle menu
+        document.addEventListener('click', (e) => {
+            if (!document.body.classList.contains('quiz-active')) return;
+
+            // Click on top 60px area to toggle menu
+            if (e.clientY < 60 && !e.target.closest('.choice-btn') && !e.target.closest('.action-btn')) {
+                document.body.classList.toggle('menu-visible');
+            }
+        });
     }
 
     shouldShowAudioButton(text) {
