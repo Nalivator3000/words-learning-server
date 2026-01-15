@@ -7,8 +7,8 @@
     <title>LexyBooster - Language Learning & SRS</title>
     <meta name="description" content="Master languages with spaced repetition, gamification & streak tracking. Learn German, Spanish, French, and more!">
     <!-- Version: v5.4.43 -->
-    <!-- CommitHash: 6ef8877 -->
-    <!-- Commit: ✨ IMPROVE: Auto-hide navigation during quiz for more space -->
+    <!-- CommitHash: 03b0087 -->
+    <!-- Commit: 🐛 FIX: Prevent input field jump on mobile after answer submit -->
 
     <!-- Favicon -->
     <link rel="icon" type="image/png" sizes="32x32" href="/icons/icon-72x72.png">
@@ -249,8 +249,8 @@
                         document.getElementById('cssVersion').textContent = cssVersion;
 
                         // If cached CSS is old, force reload
-                        if (cssVersion !== 'v5.4.42') {
-                            console.warn('⚠️ OLD CSS DETECTED:', cssVersion, '!== v5.4.42');
+                        if (cssVersion !== 'v5.4.43') {
+                            console.warn('⚠️ OLD CSS DETECTED:', cssVersion, '!== v5.4.43');
                             console.warn('🔄 Clearing cache and reloading...');
 
                             if ('serviceWorker' in navigator) {
@@ -672,13 +672,18 @@
                         </div>
                     </div>
                     <div id="quizArea" class="quiz-area hidden">
-                        <div class="progress-bar">
-                            <div id="progressFill" class="progress-fill"></div>
+                        <div class="quiz-content">
+                            <div class="progress-bar">
+                                <div id="progressFill" class="progress-fill"></div>
+                            </div>
+                            <div id="questionCounter" class="counter">Вопрос 1 из 10</div>
+                            <div id="questionText" class="question"></div>
+                            <div id="answerArea" class="answer-area"></div>
                         </div>
-                        <div id="questionCounter" class="counter">Вопрос 1 из 10</div>
-                        <div id="questionText" class="question"></div>
-                        <div id="answerArea" class="answer-area"></div>
-                        <div id="feedback" class="feedback"></div>
+                        <div class="quiz-action-area">
+                            <div id="feedback" class="feedback"></div>
+                            <button id="quizActionBtn" class="action-btn" data-i18n="skip">Пропустить</button>
+                        </div>
                         <button id="nextBtn" class="action-btn hidden" data-i18n="next">Далее</button>
                         <button id="finishStudyBtn" class="action-btn hidden" data-i18n="finish">Завершить</button>
                     </div>
@@ -743,13 +748,18 @@
                         <button id="startReviewBtn" class="action-btn" data-i18n="startReview">Начать повторение</button>
                     </div>
                     <div id="reviewQuizArea" class="quiz-area hidden">
-                        <div class="progress-bar">
-                            <div id="reviewProgressFill" class="progress-fill"></div>
+                        <div class="quiz-content">
+                            <div class="progress-bar">
+                                <div id="reviewProgressFill" class="progress-fill"></div>
+                            </div>
+                            <div id="reviewQuestionCounter" class="counter">Вопрос 1 из 10</div>
+                            <div id="reviewQuestionText" class="question"></div>
+                            <div id="reviewAnswerArea" class="answer-area"></div>
                         </div>
-                        <div id="reviewQuestionCounter" class="counter">Вопрос 1 из 10</div>
-                        <div id="reviewQuestionText" class="question"></div>
-                        <div id="reviewAnswerArea" class="answer-area"></div>
-                        <div id="reviewFeedback" class="feedback"></div>
+                        <div class="quiz-action-area">
+                            <div id="reviewFeedback" class="feedback"></div>
+                            <button id="reviewActionBtn" class="action-btn" data-i18n="skip">Пропустить</button>
+                        </div>
                         <button id="reviewNextBtn" class="action-btn hidden" data-i18n="next">Далее</button>
                         <button id="finishReviewBtn" class="action-btn hidden" data-i18n="finish">Завершить</button>
                     </div>
