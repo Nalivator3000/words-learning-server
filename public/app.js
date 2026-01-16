@@ -2436,9 +2436,17 @@ schreiben,Sie schreibt einen Brief.,Писать,Она пишет письmо.`
             if (!document.body.classList.contains('quiz-active')) return;
 
             // Click on top 60px area to toggle menu
-            if (e.clientY < 60 && !e.target.closest('.choice-btn') && !e.target.closest('.action-btn')) {
+            if (e.clientY < 60 && !e.target.closest('.choice-btn') && !e.target.closest('.action-btn') && !e.target.closest('.quiz-menu-toggle')) {
                 document.body.classList.toggle('menu-visible');
             }
+        });
+
+        // Quiz menu toggle button (hamburger)
+        document.querySelectorAll('.quiz-menu-toggle').forEach(btn => {
+            btn.addEventListener('click', (e) => {
+                e.stopPropagation();
+                document.body.classList.toggle('menu-visible');
+            });
         });
     }
 

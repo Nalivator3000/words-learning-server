@@ -6755,6 +6755,62 @@ body.quiz-active.menu-visible .survival-area {
     max-height: calc(100dvh - 120px);
 }
 
+/* Quiz Menu Toggle (Hamburger) Button */
+.quiz-menu-toggle {
+    display: none;
+    position: absolute;
+    top: 12px;
+    left: 12px;
+    width: 36px;
+    height: 36px;
+    padding: 8px;
+    background: rgba(255, 255, 255, 0.1);
+    border: none;
+    border-radius: 8px;
+    cursor: pointer;
+    z-index: 100;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    gap: 4px;
+    transition: background 0.2s ease;
+}
+
+.quiz-menu-toggle:hover {
+    background: rgba(255, 255, 255, 0.2);
+}
+
+.quiz-menu-toggle:active {
+    background: rgba(255, 255, 255, 0.25);
+}
+
+.quiz-menu-toggle span {
+    display: block;
+    width: 18px;
+    height: 2px;
+    background: var(--text-secondary, rgba(255, 255, 255, 0.7));
+    border-radius: 1px;
+    transition: transform 0.2s ease, opacity 0.2s ease;
+}
+
+/* Show hamburger button only during quiz on mobile */
+body.quiz-active .quiz-menu-toggle {
+    display: flex;
+}
+
+/* Animate to X when menu is visible */
+body.quiz-active.menu-visible .quiz-menu-toggle span:nth-child(1) {
+    transform: rotate(45deg) translate(4px, 4px);
+}
+
+body.quiz-active.menu-visible .quiz-menu-toggle span:nth-child(2) {
+    opacity: 0;
+}
+
+body.quiz-active.menu-visible .quiz-menu-toggle span:nth-child(3) {
+    transform: rotate(-45deg) translate(4px, -4px);
+}
+
 /* Review Notification (Demo Account) */
 .review-notification {
     background: linear-gradient(135deg, #fbbf24 0%, #f59e0b 100%);

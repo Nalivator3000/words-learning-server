@@ -7,8 +7,8 @@
     <title>LexyBooster - Language Learning & SRS</title>
     <meta name="description" content="Master languages with spaced repetition, gamification & streak tracking. Learn German, Spanish, French, and more!">
     <!-- Version: v5.4.43 -->
-    <!-- CommitHash: 73dea70 -->
-    <!-- Commit: 🎨 FIX: Remove excessive space between quiz options and action button -->
+    <!-- CommitHash: 889f2c6 -->
+    <!-- Commit: 🐛 FIX: Remove fixed positioning from word building controls on mobile -->
 
     <!-- Favicon -->
     <link rel="icon" type="image/png" sizes="32x32" href="/icons/icon-72x72.png">
@@ -672,6 +672,11 @@
                         </div>
                     </div>
                     <div id="quizArea" class="quiz-area hidden">
+                        <button class="quiz-menu-toggle" aria-label="Menu">
+                            <span></span>
+                            <span></span>
+                            <span></span>
+                        </button>
                         <div class="quiz-content">
                             <div class="progress-bar">
                                 <div id="progressFill" class="progress-fill"></div>
@@ -688,6 +693,11 @@
                     
                     <!-- Survival Mode Area -->
                     <div id="survivalArea" class="survival-area hidden">
+                        <button class="quiz-menu-toggle" aria-label="Menu">
+                            <span></span>
+                            <span></span>
+                            <span></span>
+                        </button>
                         <div class="survival-stats">
                             <div class="survival-stat">
                                 <span class="stat-label" data-i18n="score">Счёт:</span>
@@ -746,6 +756,11 @@
                         <button id="startReviewBtn" class="action-btn" data-i18n="startReview">Начать повторение</button>
                     </div>
                     <div id="reviewQuizArea" class="quiz-area hidden">
+                        <button class="quiz-menu-toggle" aria-label="Menu">
+                            <span></span>
+                            <span></span>
+                            <span></span>
+                        </button>
                         <div class="quiz-content">
                             <div class="progress-bar">
                                 <div id="reviewProgressFill" class="progress-fill"></div>
