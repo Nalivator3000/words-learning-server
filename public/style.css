@@ -4196,36 +4196,24 @@ input:focus, textarea:focus, select:focus {
         font-size: clamp(14px, 4vw, 18px);
     }
 
-    /* Word building controls - FIXED AT BOTTOM */
+    /* Word building controls - normal flow */
     .word-building-controls {
-        position: fixed;
-        bottom: calc(60px + env(safe-area-inset-bottom, 0px));
-        left: var(--space-2);
-        right: var(--space-2);
         gap: 8px;
-        margin: 0 !important;
-        padding: 8px !important;
+        margin-top: var(--space-3) !important;
+        padding: 0 !important;
         display: flex;
-        justify-content: stretch;
+        justify-content: center;
         align-items: stretch;
         flex-wrap: nowrap;
-        z-index: 100;
-        background: transparent;
-        border-radius: var(--radius-xl);
     }
 
     .word-building-controls .clear-word-btn,
     .word-building-controls .action-btn {
-        padding: 14px 16px !important;
+        padding: 12px 20px !important;
         font-size: 16px !important;
-        min-height: 50px;
+        min-height: 48px;
         flex: 1 1 0;
-        max-width: none;
-    }
-
-    /* Add padding to answer-area to account for fixed controls */
-    .answer-area:has(.word-building-area) {
-        padding-bottom: 70px;
+        max-width: 160px;
     }
 
     .letter-btn {
