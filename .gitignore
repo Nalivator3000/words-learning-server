@@ -24,6 +24,18 @@ app-release*.apk
 app-release*.aab
 android/
 .bubblewrap/
+
+# iOS build files (generated on Mac)
+ios/
+ios-icons/
+*.xcworkspace
+*.xcodeproj
+Pods/
+Podfile.lock
+*.ipa
+*.mobileprovision
+
+# Test results
 test-results/
 playwright-report/
 logs/

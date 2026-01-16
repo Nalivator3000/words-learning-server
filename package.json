@@ -51,7 +51,16 @@
     "db:migrate:progress": "node migrations/run-progress-migration.js",
     "db:migrate:users": "node migrations/migrate-existing-users.js",
     "db:create-word-sets": "node scripts/create-word-sets-from-source.js",
-    "worker": "node worker-translation.js"
+    "worker": "node worker-translation.js",
+    "generate:ios-icons": "node scripts/generate-ios-icons.js",
+    "cap:init": "npx cap init LexyBooster com.lexybooster.app --web-dir=public",
+    "cap:add:ios": "npx cap add ios",
+    "cap:sync": "npx cap sync",
+    "cap:sync:ios": "npx cap sync ios",
+    "cap:open:ios": "npx cap open ios",
+    "cap:run:ios": "npx cap run ios",
+    "ios:build": "npm run cap:sync:ios && npm run cap:open:ios",
+    "ios:setup": "npm run cap:add:ios && npm run generate:ios-icons && npm run cap:sync:ios"
   },
   "dependencies": {
     "@google-cloud/text-to-speech": "^6.4.0",

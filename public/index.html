@@ -7,8 +7,8 @@
     <title>LexyBooster - Language Learning & SRS</title>
     <meta name="description" content="Master languages with spaced repetition, gamification & streak tracking. Learn German, Spanish, French, and more!">
     <!-- Version: v5.4.43 -->
-    <!-- CommitHash: 7691eed -->
-    <!-- Commit: ✨ ADD: Hamburger menu button in quiz mode -->
+    <!-- CommitHash: c42839d -->
+    <!-- Commit: 🔄 CHANGE: Replace hamburger with scroll-based menu in quiz -->
 
     <!-- Favicon -->
     <link rel="icon" type="image/png" sizes="32x32" href="/icons/icon-72x72.png">
@@ -42,33 +42,28 @@
     <script src="https://accounts.google.com/gsi/client" async defer></script>
 
     <script>
-        // CRITICAL FIX: Unregister ALL Service Workers and clear ALL caches
-        // This is a one-time emergency fix to restore login functionality
+        // Register Service Worker for PWA/TWA support
         if ('serviceWorker' in navigator) {
-            // Unregister all Service Workers
-            navigator.serviceWorker.getRegistrations().then(registrations => {
-                for (let registration of registrations) {
-                    console.log('🗑️ EMERGENCY: Unregistering Service Worker:', registration.scope);
-                    registration.unregister();
-                }
-            });
+            window.addEventListener('load', () => {
+                navigator.serviceWorker.register('/service-worker.js')
+                    .then(registration => {
+                        console.log('✅ Service Worker registered:', registration.scope);
 
-            // Clear all caches
-            caches.keys().then(cacheNames => {
-                return Promise.all(
-                    cacheNames.map(cacheName => {
-                        console.log('🗑️ EMERGENCY: Deleting cache:', cacheName);
-                        return caches.delete(cacheName);
+                        // Check for updates
+                        registration.addEventListener('updatefound', () => {
+                            const newWorker = registration.installing;
+                            newWorker.addEventListener('statechange', () => {
+                                if (newWorker.state === 'installed' && navigator.serviceWorker.controller) {
+                                    showUpdateNotification(newWorker);
+                                }
+                            });
+                        });
                     })
-                );
-            }).then(() => {
-                console.log('✅ EMERGENCY: All Service Workers and caches cleared');
+                    .catch(error => {
+                        console.error('❌ Service Worker registration failed:', error);
+                    });
             });
         }
-
-        // Service Worker is DISABLED until cache issues are resolved
-        // Users will get fresh files directly from server
-        console.log('⚠️ Service Worker is disabled - all requests go directly to server');
 
         // Show update notification banner with auto-update
         function showUpdateNotification(newWorker) {
