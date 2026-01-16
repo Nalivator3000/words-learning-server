@@ -2408,46 +2408,42 @@ schreiben,Sie schreibt einen Brief.,Писать,Она пишет письmо.`
 
     setupQuizTouchHandler() {
         let touchStartY = 0;
-        let touchEndY = 0;
+        let lastScrollY = 0;
 
-        // Handle touch on the entire document during quiz
+        // Handle touch-based scroll detection for quiz menu visibility
         document.addEventListener('touchstart', (e) => {
-            if (!document.body.classList.contains('quiz-active')) return;
             touchStartY = e.changedTouches[0].screenY;
         }, { passive: true });
 
-        document.addEventListener('touchend', (e) => {
+        document.addEventListener('touchmove', (e) => {
             if (!document.body.classList.contains('quiz-active')) return;
-            touchEndY = e.changedTouches[0].screenY;
-            const swipeDistance = touchEndY - touchStartY;
 
-            // Swipe down (pull from top) - show menu
-            if (swipeDistance > 50 && touchStartY < 100) {
+            const currentY = e.changedTouches[0].screenY;
+            const deltaY = currentY - touchStartY;
+
+            // Scroll up (finger moves down) - show menu
+            if (deltaY > 30) {
                 document.body.classList.add('menu-visible');
             }
-            // Swipe up - hide menu
-            else if (swipeDistance < -50) {
+            // Scroll down (finger moves up) - hide menu
+            else if (deltaY < -30) {
                 document.body.classList.remove('menu-visible');
             }
         }, { passive: true });
 
-        // Also allow clicking on top area to toggle menu
-        document.addEventListener('click', (e) => {
+        // Mouse wheel support for desktop
+        document.addEventListener('wheel', (e) => {
             if (!document.body.classList.contains('quiz-active')) return;
 
-            // Click on top 60px area to toggle menu
-            if (e.clientY < 60 && !e.target.closest('.choice-btn') && !e.target.closest('.action-btn') && !e.target.closest('.quiz-menu-toggle')) {
-                document.body.classList.toggle('menu-visible');
+            // Scroll up - show menu
+            if (e.deltaY < -30) {
+                document.body.classList.add('menu-visible');
             }
-        });
-
-        // Quiz menu toggle button (hamburger)
-        document.querySelectorAll('.quiz-menu-toggle').forEach(btn => {
-            btn.addEventListener('click', (e) => {
-                e.stopPropagation();
-                document.body.classList.toggle('menu-visible');
-            });
-        });
+            // Scroll down - hide menu
+            else if (e.deltaY > 30) {
+                document.body.classList.remove('menu-visible');
+            }
+        }, { passive: true });
     }
 
     shouldShowAudioButton(text) {
