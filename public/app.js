@@ -1245,7 +1245,7 @@ schreiben,Sie schreibt einen Brief.,Писать,Она пишет письmо.`
             btn.onclick = isReview ? () => this.nextReviewQuestion() : () => this.nextQuestion();
         } else if (mode === 'finish') {
             btn.textContent = i18n.t('finish');
-            btn.onclick = isReview ? () => this.finishReview() : () => this.finishStudy();
+            btn.onclick = isReview ? () => this.finishReview() : () => this.finishQuiz();
         }
     }
 
@@ -1616,7 +1616,7 @@ schreiben,Sie schreibt einen Brief.,Писать,Она пишет письmо.`
             this.renderQuestion(this.currentQuizData);
         } else {
             // Quiz is complete
-            this.finishStudy();
+            this.finishQuiz();
         }
     }
 
