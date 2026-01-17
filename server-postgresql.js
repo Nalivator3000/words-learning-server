@@ -3088,7 +3088,8 @@ app.get('/api/word-sets/:setId', async (req, res) => {
             const translationTableName = useBaseTable
                 ? baseTranslationTableName
                 : `${baseTranslationTableName}_from_${sourceLangCode}`;
-            const exampleTranslationColumnActual = exampleTranslationColumn;
+            // For _from_XX tables, example column is 'example_native', for base tables it's 'example_XX'
+            const exampleTranslationColumnActual = useBaseTable ? exampleTranslationColumn : 'example_native';
 
             logger.info(`[WORD-SETS] Loading ${itemsCheckResult.rows[0].count} specific words with translations from ${translationTableName}`);
 
@@ -3251,8 +3252,8 @@ app.get('/api/word-sets/:setId', async (req, res) => {
 
             logger.info(`[WORD-SETS] Loading set ${setId} with source=${wordSet.source_language} (${sourceLanguageCode}), target=${targetLang} (${targetLangCode}), table=${translationTableName}`);
 
-            // Use different column names depending on table type
-            const exampleTranslationColumnActual = exampleTranslationColumn;
+            // For _from_XX tables, example column is 'example_native', for base tables it's 'example_XX'
+            const exampleTranslationColumnActual = useBaseTable ? exampleTranslationColumn : 'example_native';
 
             const wordsResult = await db.query(`
                 SELECT
