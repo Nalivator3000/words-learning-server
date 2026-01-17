@@ -4423,49 +4423,7 @@ input:focus, textarea:focus, select:focus {
         min-height: 70px;
     }
 
-    /* Hide header during quiz on mobile for maximum space */
-    body.quiz-active .app-header {
-        position: fixed;
-        top: 0;
-        left: 0;
-        right: 0;
-        z-index: 1000;
-        transform: translateY(-100%);
-        transition: transform 0.3s ease;
-        pointer-events: none;
-        visibility: hidden;
-        opacity: 0;
-        margin: 0;
-        padding-top: 0;
-    }
-
-    /* Show header when toggled */
-    body.quiz-active.menu-visible .app-header {
-        /* Add safe space for mobile browser chrome + extra padding */
-        top: max(env(safe-area-inset-top), 8px);
-        padding-top: 12px;
-        transform: translateY(0);
-        pointer-events: auto;
-        visibility: visible;
-        opacity: 1;
-    }
-
-    /* Move quiz area up when header is hidden */
-    body.quiz-active .container {
-        padding-top: 0 !important;
-    }
-
-    /* Restore container padding when menu is visible */
-    body.quiz-active.menu-visible .container {
-        padding-top: 0 !important;
-    }
-
-    /* Push section content down when menu is visible */
-    body.quiz-active.menu-visible .section {
-        margin-top: 0;
-    }
-
-    /* Quiz styles moved to earlier media query block */
+    /* Quiz styles moved to global quiz-active section at end of file */
 
 /* Touch device optimizations */
 @media (hover: none) and (pointer: coarse) {
@@ -6715,13 +6673,41 @@ input:focus, textarea:focus, select:focus {
         width: 40px;
     }
 }
-/* Hide bottom navigation during quiz */
+
+/* ============================================
+   Quiz Mode - Hidden menu by default, shown on scroll up
+   ============================================ */
+
+/* Hide app header (top logo) during quiz */
+body.quiz-active .app-header {
+    display: none;
+}
+
+/* Hide bottom navigation during quiz - completely hidden by default */
 body.quiz-active .header-nav {
+    position: fixed;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    background: rgba(255, 255, 255, 0.95);
+    backdrop-filter: blur(20px);
+    -webkit-backdrop-filter: blur(20px);
+    border-top: 1px solid rgba(0, 0, 0, 0.1);
+    box-shadow: 0 -2px 10px rgba(0, 0, 0, 0.1);
+    padding: var(--space-1) var(--space-2) calc(var(--space-1) + env(safe-area-inset-bottom, 0));
     transform: translateY(100%);
     transition: transform 0.3s ease;
     pointer-events: none;
     visibility: hidden;
     opacity: 0;
+    z-index: 1000;
+}
+
+/* Dark theme support for quiz nav */
+[data-theme="dark"] body.quiz-active .header-nav {
+    background: rgba(17, 24, 39, 0.98);
+    border-top-color: rgba(255, 255, 255, 0.1);
+    box-shadow: 0 -2px 10px rgba(0, 0, 0, 0.3);
 }
 
 /* Show bottom navigation when menu is visible during quiz */
@@ -6732,27 +6718,37 @@ body.quiz-active.menu-visible .header-nav {
     opacity: 1;
 }
 
-/* Adjust quiz-area height when both header and bottom nav are hidden */
-body.quiz-active .quiz-area {
-    /* Full viewport height when both header and bottom nav are hidden */
-    max-height: calc(100dvh - env(safe-area-inset-top, 0px) - env(safe-area-inset-bottom, 0px));
-    margin-top: 0;
+/* Quiz container padding when menu hidden */
+body.quiz-active .container {
+    padding-top: env(safe-area-inset-top, 0) !important;
+    padding-bottom: env(safe-area-inset-bottom, 0) !important;
 }
 
-/* When menu is visible during quiz - restore normal height calculation */
+/* Adjust quiz-area height when menu is hidden */
+body.quiz-active .quiz-area {
+    max-height: calc(100dvh - env(safe-area-inset-top, 0px) - env(safe-area-inset-bottom, 0px));
+    margin-top: 0;
+    padding-bottom: env(safe-area-inset-bottom, 8px);
+    transition: max-height 0.3s ease, padding-bottom 0.3s ease;
+}
+
+/* When menu is visible during quiz - make room for bottom nav */
 body.quiz-active.menu-visible .quiz-area {
-    /* Account for: header (~60px) + bottom nav (~60px) + padding */
-    max-height: calc(100dvh - 120px);
+    max-height: calc(100dvh - env(safe-area-inset-top, 0px) - 70px);
+    padding-bottom: calc(70px + env(safe-area-inset-bottom, 0px));
 }
 
 /* Same for survival area */
 body.quiz-active .survival-area {
     max-height: calc(100dvh - env(safe-area-inset-top, 0px) - env(safe-area-inset-bottom, 0px));
     margin-top: 0;
+    padding-bottom: env(safe-area-inset-bottom, 8px);
+    transition: max-height 0.3s ease, padding-bottom 0.3s ease;
 }
 
 body.quiz-active.menu-visible .survival-area {
-    max-height: calc(100dvh - 120px);
+    max-height: calc(100dvh - env(safe-area-inset-top, 0px) - 70px);
+    padding-bottom: calc(70px + env(safe-area-inset-bottom, 0px));
 }
 
 /* Review Notification (Demo Account) */
