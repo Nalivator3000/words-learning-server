@@ -2833,8 +2833,8 @@ schreiben,Sie schreibt einen Brief.,Писать,Она пишет письmо.`
             const result = await userManager.createLanguagePair(fromLang, toLang, name);
             console.log('Language pair created successfully:', result);
             this.renderLanguagePairs();
-            // Also reload full data to be sure
-            await this.loadData();
+            // Reload stats for the new language pair
+            await this.updateStats();
         } catch (error) {
             console.error('Error creating language pair:', error);
             alert(i18n?.t('error_creating_pair') || 'Error creating language pair: ' + error.message);
