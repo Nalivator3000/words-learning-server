@@ -4171,7 +4171,7 @@ input:focus, textarea:focus, select:focus {
         flex-direction: column;
         flex: 1 1 auto;
         min-height: 0;
-        overflow: visible;
+        overflow: hidden;
     }
 
     .word-building-input {
@@ -4197,7 +4197,9 @@ input:focus, textarea:focus, select:focus {
         min-height: 0;
         align-content: center;
         justify-content: center;
-        overflow: visible;
+        overflow-y: auto;
+        overflow-x: hidden;
+        -webkit-overflow-scrolling: touch;
     }
 
     .letter-tile {
@@ -4224,7 +4226,7 @@ input:focus, textarea:focus, select:focus {
         font-size: clamp(14px, 4vw, 18px);
     }
 
-    /* Word building controls - normal flow */
+    /* Word building controls - normal flow, MUST stay visible */
     .word-building-controls {
         gap: 8px;
         margin-top: var(--space-3) !important;
@@ -4233,6 +4235,7 @@ input:focus, textarea:focus, select:focus {
         justify-content: center;
         align-items: stretch;
         flex-wrap: nowrap;
+        flex-shrink: 0;
     }
 
     .word-building-controls .clear-word-btn,
