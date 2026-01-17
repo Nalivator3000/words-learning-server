@@ -2861,8 +2861,9 @@ app.get('/api/word-sets', async (req, res) => {
                 const learningLanguage = parts[0]; // FIRST part is the language being learned
                 const nativeLanguage = parts[1]; // SECOND part is the user's native language
 
-                // Map short codes to full language names
+                // Map short codes and full names to normalized language names
                 const langMap = {
+                    // Short codes
                     'ar': 'arabic',
                     'de': 'german',
                     'en': 'english',
@@ -2880,11 +2881,30 @@ app.get('/api/word-sets', async (req, res) => {
                     'sw': 'swahili',
                     'tr': 'turkish',
                     'uk': 'ukrainian',
-                    'zh': 'chinese'
+                    'zh': 'chinese',
+                    // Full names (case-insensitive via toLowerCase)
+                    'arabic': 'arabic',
+                    'german': 'german',
+                    'english': 'english',
+                    'spanish': 'spanish',
+                    'french': 'french',
+                    'hindi': 'hindi',
+                    'italian': 'italian',
+                    'japanese': 'japanese',
+                    'korean': 'korean',
+                    'polish': 'polish',
+                    'portuguese': 'portuguese',
+                    'romanian': 'romanian',
+                    'russian': 'russian',
+                    'serbian': 'serbian',
+                    'swahili': 'swahili',
+                    'turkish': 'turkish',
+                    'ukrainian': 'ukrainian',
+                    'chinese': 'chinese'
                 };
 
-                const fullLanguageName = langMap[learningLanguage] || learningLanguage;
-                const fullNativeName = langMap[nativeLanguage] || nativeLanguage;
+                const fullLanguageName = langMap[learningLanguage.toLowerCase()] || learningLanguage.toLowerCase();
+                const fullNativeName = langMap[nativeLanguage.toLowerCase()] || nativeLanguage.toLowerCase();
 
                 // Filter by source language
                 query += ` AND source_language = $${paramIndex}`;
@@ -2898,16 +2918,10 @@ app.get('/api/word-sets', async (req, res) => {
                 // Logic:
                 // - If title contains "→ German", it's for German speakers
                 // - If title contains "→ English", it's for English speakers
-                // - If title has NO arrow (→), it's default (usually English)
-                if (nativeLanguage === 'en') {
-                    // English: show sets WITHOUT arrow OR with "→ English"
-                    query += ` AND (title NOT LIKE '%→%' OR title LIKE $${paramIndex})`;
-                    params.push(`%→ ${nativeNameCapitalized}%`);
-                } else {
-                    // Other languages: show ONLY sets with "→ TargetLanguage"
-                    query += ` AND title LIKE $${paramIndex}`;
-                    params.push(`%→ ${nativeNameCapitalized}%`);
-                }
+                // - If title has NO arrow (→), it's universal/default for all speakers
+                // Show sets WITHOUT arrow (universal) OR with specific "→ TargetLanguage"
+                query += ` AND (title NOT LIKE '%→%' OR title LIKE $${paramIndex})`;
+                params.push(`%→ ${nativeNameCapitalized}%`);
                 paramIndex++;
 
                 logger.info(`[WORD-SETS] languagePair=${languagePair} → showing ${fullLanguageName} word sets for ${fullNativeName} speakers (title filter for: ${nativeNameCapitalized})`);
