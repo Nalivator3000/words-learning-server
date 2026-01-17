@@ -1358,8 +1358,13 @@ class WordListsUI {
         }
     }
 
-    async refresh() {
+    async refresh(languagePairId = null) {
         try {
+            // If new language pair ID provided, update and reload language pair info
+            if (languagePairId && languagePairId !== this.languagePairId) {
+                this.languagePairId = languagePairId;
+                await this.loadLanguagePair();
+            }
             await this.loadWordLists();
             this.render();
         } catch (error) {

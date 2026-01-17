@@ -2693,6 +2693,11 @@ schreiben,Sie schreibt einen Brief.,Писать,Она пишет письmо.`
             await userManager.setActiveLanguagePair(pairId);
             this.renderLanguagePairs();
             await this.updateStats();
+
+            // Refresh Word Lists UI with the new language pair
+            if (window.wordListsUI && window.wordListsUI.initialized) {
+                await window.wordListsUI.refresh(pairId);
+            }
         } catch (error) {
             console.error('Error selecting language pair:', error);
             alert(i18n?.t('error_selecting_pair') || 'Error selecting language pair');
