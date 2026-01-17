@@ -2725,7 +2725,7 @@ schreiben,Sie schreibt einen Brief.,Писать,Она пишет письmо.`
 
         // Create a better dialog for language selection
         const dialogHtml = `
-            <div id="languagePairDialog" class="auth-modal">
+            <div id="languagePairDialog" class="auth-modal active">
                 <div class="auth-content">
                     <h2>${t('create_language_pair', 'Create Language Pair')}</h2>
                     <div class="auth-form active">
