@@ -6707,92 +6707,84 @@ input:focus, textarea:focus, select:focus {
 
 /* ============================================
    Quiz Mode - Hidden menu by default, shown on scroll up
+   Only for mobile screens (max-width: 768px)
    ============================================ */
 
-/* Hide app header container during quiz but keep nav accessible */
-body.quiz-active .app-header {
-    position: fixed;
-    top: -100px;
-    left: 0;
-    right: 0;
-    z-index: -1;
-    opacity: 0;
-    pointer-events: none;
-}
+@media (max-width: 768px) {
+    /* Hide header title during quiz */
+    body.quiz-active .app-header {
+        position: static;
+        background: transparent;
+        border: none;
+        box-shadow: none;
+        padding: 0;
+        margin: 0;
+        min-height: 0;
+        height: 0;
+        overflow: visible;
+    }
 
-/* Hide header title during quiz */
-body.quiz-active .header-left {
-    display: none;
-}
+    body.quiz-active .header-left {
+        display: none;
+    }
 
-/* Bottom navigation during quiz - hidden by default, shown on scroll up */
-body.quiz-active .header-nav {
-    position: fixed !important;
-    bottom: 0 !important;
-    left: 0 !important;
-    right: 0 !important;
-    top: auto !important;
-    width: 100% !important;
-    background: rgba(255, 255, 255, 0.95);
-    backdrop-filter: blur(20px);
-    -webkit-backdrop-filter: blur(20px);
-    border-top: 1px solid rgba(0, 0, 0, 0.1);
-    box-shadow: 0 -2px 10px rgba(0, 0, 0, 0.1);
-    padding: var(--space-2) var(--space-2) calc(var(--space-2) + env(safe-area-inset-bottom, 0));
-    transform: translateY(100%);
-    transition: transform 0.3s ease, opacity 0.3s ease;
-    pointer-events: none;
-    opacity: 0;
-    z-index: 1000;
-    margin: 0;
-    border-radius: 0;
-}
+    /* Bottom navigation during quiz - hidden by default, shown on scroll up */
+    body.quiz-active .header-nav {
+        position: fixed !important;
+        bottom: 0 !important;
+        left: 0 !important;
+        right: 0 !important;
+        top: auto !important;
+        width: 100% !important;
+        height: auto !important;
+        background: rgba(255, 255, 255, 0.95) !important;
+        backdrop-filter: blur(20px) !important;
+        -webkit-backdrop-filter: blur(20px) !important;
+        border-top: 1px solid rgba(0, 0, 0, 0.1) !important;
+        box-shadow: 0 -2px 10px rgba(0, 0, 0, 0.1) !important;
+        padding: var(--space-2) var(--space-2) calc(var(--space-2) + env(safe-area-inset-bottom, 0)) !important;
+        transform: translateY(100%);
+        transition: transform 0.3s ease, opacity 0.3s ease;
+        pointer-events: none;
+        opacity: 0;
+        z-index: 10000 !important;
+        margin: 0 !important;
+        border-radius: 0 !important;
+    }
 
-/* Dark theme support for quiz nav */
-[data-theme="dark"] body.quiz-active .header-nav {
-    background: rgba(17, 24, 39, 0.98);
-    border-top-color: rgba(255, 255, 255, 0.1);
-    box-shadow: 0 -2px 10px rgba(0, 0, 0, 0.3);
-}
+    /* Dark theme support for quiz nav */
+    [data-theme="dark"] body.quiz-active .header-nav {
+        background: rgba(17, 24, 39, 0.98) !important;
+        border-top-color: rgba(255, 255, 255, 0.1) !important;
+        box-shadow: 0 -2px 10px rgba(0, 0, 0, 0.3) !important;
+    }
 
-/* Show bottom navigation when menu is visible during quiz */
-body.quiz-active.menu-visible .header-nav {
-    transform: translateY(0);
-    pointer-events: auto;
-    opacity: 1;
-}
+    /* Show bottom navigation when menu is visible during quiz */
+    body.quiz-active.menu-visible .header-nav {
+        transform: translateY(0) !important;
+        pointer-events: auto !important;
+        opacity: 1 !important;
+    }
 
-/* Quiz container padding when menu hidden */
-body.quiz-active .container {
-    padding-top: env(safe-area-inset-top, 0) !important;
-    padding-bottom: env(safe-area-inset-bottom, 0) !important;
-}
+    /* Quiz container padding when menu hidden */
+    body.quiz-active .container {
+        padding-top: env(safe-area-inset-top, 0) !important;
+        padding-bottom: env(safe-area-inset-bottom, 0) !important;
+    }
 
-/* Adjust quiz-area height when menu is hidden */
-body.quiz-active .quiz-area {
-    max-height: calc(100dvh - env(safe-area-inset-top, 0px) - env(safe-area-inset-bottom, 0px));
-    margin-top: 0;
-    padding-bottom: env(safe-area-inset-bottom, 8px);
-    transition: max-height 0.3s ease, padding-bottom 0.3s ease;
-}
+    /* Adjust quiz-area height when menu is hidden */
+    body.quiz-active .quiz-area {
+        max-height: calc(100dvh - env(safe-area-inset-top, 0px) - env(safe-area-inset-bottom, 0px));
+        margin-top: 0;
+        padding-bottom: env(safe-area-inset-bottom, 8px);
+        transition: max-height 0.3s ease, padding-bottom 0.3s ease;
+    }
 
-/* When menu is visible during quiz - make room for bottom nav */
-body.quiz-active.menu-visible .quiz-area {
-    max-height: calc(100dvh - env(safe-area-inset-top, 0px) - 70px);
-    padding-bottom: calc(70px + env(safe-area-inset-bottom, 0px));
-}
-
-/* Same for survival area */
-body.quiz-active .survival-area {
-    max-height: calc(100dvh - env(safe-area-inset-top, 0px) - env(safe-area-inset-bottom, 0px));
-    margin-top: 0;
-    padding-bottom: env(safe-area-inset-bottom, 8px);
-    transition: max-height 0.3s ease, padding-bottom 0.3s ease;
-}
-
-body.quiz-active.menu-visible .survival-area {
-    max-height: calc(100dvh - env(safe-area-inset-top, 0px) - 70px);
-    padding-bottom: calc(70px + env(safe-area-inset-bottom, 0px));
+    /* When menu is visible during quiz - make room for bottom nav */
+    body.quiz-active.menu-visible .quiz-area {
+        max-height: calc(100dvh - env(safe-area-inset-top, 0px) - 70px);
+        padding-bottom: calc(70px + env(safe-area-inset-bottom, 0px));
+    }
 }
 
 /* Review Notification (Demo Account) */
