@@ -13647,7 +13647,11 @@ app.post('/api/words', async (req, res) => {
     try {
         const { word, translation, example, exampleTranslation, userId, languagePairId, isCustom, source, notes, tags } = req.body;
 
+        logger.info(`[ADD WORD] Received request: word="${word}", translation="${translation}", userId=${userId}, languagePairId=${languagePairId}`);
+        logger.info(`[ADD WORD] Full body:`, JSON.stringify(req.body));
+
         if (!word || !translation) {
+            logger.error(`[ADD WORD] Missing word or translation: word="${word}", translation="${translation}"`);
             res.status(400).json({ error: 'Word and translation are required' });
             return;
         }
