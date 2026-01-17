@@ -1,7 +1,7 @@
 // Service Worker for Words Learning App
-// Version 5.6.3 - Fix quiz progress update missing userId/languagePairId
+// Version 5.6.4 - Fix POST requests being intercepted and broken
 
-const CACHE_VERSION = 'v5.6.3';
+const CACHE_VERSION = 'v5.6.4';
 const CACHE_NAME = `words-learning-${CACHE_VERSION}`;
 
 // Files to cache for offline use
@@ -97,7 +97,14 @@ self.addEventListener('fetch', (event) => {
         return;
     }
 
-    // API requests: Network-first strategy
+    // IMPORTANT: Let POST/PUT/DELETE requests pass through directly without any modification
+    // Service Worker should NOT intercept write operations to avoid body/header issues
+    if (request.method !== 'GET') {
+        console.log(`🔄 Service Worker: Passing through ${request.method} request:`, url.pathname);
+        return; // Don't call event.respondWith - let browser handle it directly
+    }
+
+    // API requests: Network-first strategy (GET only now)
     if (isApiRequest(url.pathname)) {
         event.respondWith(networkFirstStrategy(request));
         return;
