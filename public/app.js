@@ -2464,29 +2464,35 @@ schreiben,Sie schreibt einen Brief.,Писать,Она пишет письmо.`
             const touchEndY = e.changedTouches[0].screenY;
             const deltaY = touchEndY - touchStartY;
 
-            // Swipe down (finger moves down) - show menu
+            // Swipe down (finger moves down) - toggle menu
             if (deltaY > 50) {
-                document.body.classList.add('menu-visible');
+                document.body.classList.toggle('menu-visible');
             }
-            // Swipe up (finger moves up) - hide menu
-            else if (deltaY < -50) {
-                document.body.classList.remove('menu-visible');
-            }
+            // Swipe up does nothing - allows scrolling quiz content without hiding menu
         }, { passive: true });
 
-        // Mouse wheel support for desktop
+        // Mouse wheel support for desktop - scroll up toggles menu
         document.addEventListener('wheel', (e) => {
             if (!document.body.classList.contains('quiz-active')) return;
 
-            // Scroll up - show menu
+            // Scroll up - toggle menu
             if (e.deltaY < -30) {
-                document.body.classList.add('menu-visible');
+                document.body.classList.toggle('menu-visible');
             }
-            // Scroll down - hide menu
-            else if (e.deltaY > 30) {
+            // Scroll down does nothing
+        }, { passive: true });
+
+        // Tap on quiz area hides menu (if visible)
+        document.addEventListener('click', (e) => {
+            if (!document.body.classList.contains('quiz-active')) return;
+            if (!document.body.classList.contains('menu-visible')) return;
+
+            // If click is not on the menu itself, hide menu
+            const headerNav = document.querySelector('.header-nav');
+            if (headerNav && !headerNav.contains(e.target)) {
                 document.body.classList.remove('menu-visible');
             }
-        }, { passive: true });
+        });
     }
 
     shouldShowAudioButton(text) {
