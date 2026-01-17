@@ -1,7 +1,7 @@
 // Service Worker for Words Learning App
-// Version 5.6.0 - Fix login page cache issue by unregistering old SW
+// Version 5.6.1 - Fix Daily Goals stats not updating
 
-const CACHE_VERSION = 'v5.6.0';
+const CACHE_VERSION = 'v5.6.1';
 const CACHE_NAME = `words-learning-${CACHE_VERSION}`;
 
 // Files to cache for offline use
