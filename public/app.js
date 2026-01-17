@@ -1087,6 +1087,8 @@ schreiben,Sie schreibt einen Brief.,Писать,Она пишет письmо.`
         document.getElementById('versionInfo').style.display = 'none';
         // Hide navigation to maximize quiz space on mobile
         document.body.classList.add('quiz-active');
+        // Move header-nav to body for proper fixed positioning
+        this.moveNavForQuiz();
     }
 
     showReviewInterface() {
@@ -1095,6 +1097,29 @@ schreiben,Sie schreibt einen Brief.,Писать,Она пишет письmо.`
         document.getElementById('versionInfo').style.display = 'none';
         // Hide navigation to maximize quiz space on mobile
         document.body.classList.add('quiz-active');
+        // Move header-nav to body for proper fixed positioning
+        this.moveNavForQuiz();
+    }
+
+    // Move header-nav out of app-header for quiz mode (fixes fixed positioning issue)
+    moveNavForQuiz() {
+        const headerNav = document.querySelector('.header-nav');
+        if (headerNav && !headerNav.dataset.movedForQuiz) {
+            headerNav.dataset.movedForQuiz = 'true';
+            headerNav.dataset.originalParent = headerNav.parentElement.className;
+            document.body.appendChild(headerNav);
+        }
+    }
+
+    // Restore header-nav to original position
+    restoreNavFromQuiz() {
+        const headerNav = document.querySelector('.header-nav');
+        const appHeader = document.querySelector('.app-header');
+        if (headerNav && headerNav.dataset.movedForQuiz && appHeader) {
+            delete headerNav.dataset.movedForQuiz;
+            delete headerNav.dataset.originalParent;
+            appHeader.appendChild(headerNav);
+        }
     }
 
     renderQuestion(quizData) {
@@ -1675,6 +1700,8 @@ schreiben,Sie schreibt einen Brief.,Писать,Она пишет письmо.`
         // Restore navigation visibility
         document.body.classList.remove('quiz-active');
         document.body.classList.remove('menu-visible');
+        // Restore header-nav to original position
+        this.restoreNavFromQuiz();
     }
 
     resetReviewInterface() {
@@ -1684,6 +1711,8 @@ schreiben,Sie schreibt einen Brief.,Писать,Она пишет письmо.`
         // Restore navigation visibility
         document.body.classList.remove('quiz-active');
         document.body.classList.remove('menu-visible');
+        // Restore header-nav to original position
+        this.restoreNavFromQuiz();
     }
 
     async deleteWord(wordId) {

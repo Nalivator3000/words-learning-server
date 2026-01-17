@@ -6712,25 +6712,13 @@ input:focus, textarea:focus, select:focus {
    ============================================ */
 
 @media (max-width: 768px) {
-    /* Make app-header invisible but keep it in flow so header-nav can escape */
+    /* Hide app-header during quiz (header-nav is moved to body via JS) */
     body.quiz-active .app-header {
-        visibility: hidden !important;
-        height: 0 !important;
-        min-height: 0 !important;
-        padding: 0 !important;
-        margin: 0 !important;
-        border: none !important;
-        overflow: visible !important;
-    }
-
-    /* Hide header title */
-    body.quiz-active .header-left {
         display: none !important;
     }
 
     /* Bottom navigation during quiz - hidden by default, shown on swipe down */
     body.quiz-active .header-nav {
-        visibility: visible !important;
         position: fixed !important;
         bottom: 0 !important;
         left: 0 !important;
