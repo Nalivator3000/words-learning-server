@@ -382,6 +382,34 @@
     border-bottom-color: rgba(255, 255, 255, 0.1);
 }
 
+/* Settings groups dark theme */
+[data-theme="dark"] .settings-group {
+    background: rgba(17, 24, 39, 0.85);
+    backdrop-filter: blur(12px) saturate(150%);
+    -webkit-backdrop-filter: blur(12px) saturate(150%);
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    box-shadow: 0 8px 32px rgba(0, 0, 0, 0.3),
+                inset 0 1px 0 rgba(255, 255, 255, 0.1);
+}
+
+[data-theme="dark"] .settings-group:hover {
+    background: rgba(31, 41, 55, 0.9);
+    border-color: rgba(139, 92, 246, 0.3);
+}
+
+[data-theme="dark"] .settings-group h3 {
+    color: var(--neutral-100);
+}
+
+[data-theme="dark"] .settings-group label {
+    color: var(--neutral-200);
+}
+
+[data-theme="dark"] .settings-group label:hover {
+    background: rgba(255, 255, 255, 0.05);
+    color: var(--primary-300);
+}
+
 /* List sections and word lists dark theme */
 [data-theme="dark"] .list-section {
     background: rgba(31, 41, 55, 0.7);
