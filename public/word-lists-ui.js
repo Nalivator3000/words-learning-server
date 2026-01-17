@@ -988,6 +988,16 @@ class WordListsUI {
         console.log(`🔘 Found ${addButtons.length} single word buttons in modal`);
 
         addButtons.forEach((button, index) => {
+            // Store data attributes before any manipulation
+            const wordData = {
+                word: button.getAttribute('data-word'),
+                translation: button.getAttribute('data-translation'),
+                example: button.getAttribute('data-example'),
+                exampleTranslation: button.getAttribute('data-example-translation')
+            };
+
+            console.log(`🔘 Button ${index + 1} original data:`, wordData);
+
             // Remove any existing listeners by cloning
             const newButton = button.cloneNode(true);
             button.parentNode.replaceChild(newButton, button);
@@ -995,18 +1005,11 @@ class WordListsUI {
             console.log(`🔘 Attaching listener to button ${index + 1}`);
             newButton.addEventListener('click', async (e) => {
                 console.log('🖱️ Single word button clicked!');
+                console.log('📝 Using stored word data:', wordData);
                 e.preventDefault();
                 e.stopPropagation();
 
                 const btn = e.currentTarget;
-                const wordData = {
-                    word: btn.getAttribute('data-word'),
-                    translation: btn.getAttribute('data-translation'),
-                    example: btn.getAttribute('data-example'),
-                    exampleTranslation: btn.getAttribute('data-example-translation')
-                };
-
-                console.log('📝 Word data:', wordData);
 
                 // Disable button while processing
                 btn.disabled = true;
