@@ -192,19 +192,26 @@ class APIDatabase {
     async updateWordProgress(wordId, isCorrect, quizType) {
         const { userId, languagePairId } = this.getUserContext();
 
+        console.log('📊 updateWordProgress called:', { wordId, isCorrect, quizType, userId, languagePairId });
+        console.log('📊 userId type:', typeof userId, 'value:', userId);
+        console.log('📊 languagePairId type:', typeof languagePairId, 'value:', languagePairId);
+
         if (!userId || !languagePairId) {
             console.error('❌ updateWordProgress: missing context', { userId, languagePairId });
             return { success: false, error: 'Missing user context' };
         }
 
+        const requestBody = {
+            correct: isCorrect,
+            questionType: quizType,
+            userId: userId,
+            languagePairId: languagePairId
+        };
+        console.log('📊 Request body:', JSON.stringify(requestBody));
+
         return await this.apiRequest(`/api/words/${wordId}/progress`, {
             method: 'PUT',
-            body: JSON.stringify({
-                correct: isCorrect,
-                questionType: quizType,
-                userId: userId,
-                languagePairId: languagePairId
-            })
+            body: JSON.stringify(requestBody)
         });
     }
 

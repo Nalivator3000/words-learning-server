@@ -2868,14 +2868,13 @@ schreiben,Sie schreibt einen Brief.,Писать,Она пишет письmо.`
             const user = userManager.getCurrentUser();
             if (!user) return;
 
-            const response = await fetch(`/api/daily-goals/${user.id}`);
+            const response = await fetch(`/api/gamification/daily-goals/${user.id}`);
             if (!response.ok) return;
 
-            const goals = await response.json();
+            const goal = await response.json();
 
-            // Set input values if goals exist
-            if (goals && goals.length > 0) {
-                const goal = goals[0]; // Assuming single row with all goals
+            // Set input values if goal exists
+            if (goal) {
                 if (goal.xp_goal) document.getElementById('dailyXPGoalInput').value = goal.xp_goal;
                 if (goal.words_goal) document.getElementById('dailyWordsGoalInput').value = goal.words_goal;
                 if (goal.quizzes_goal) document.getElementById('dailyExercisesGoalInput').value = goal.quizzes_goal;
