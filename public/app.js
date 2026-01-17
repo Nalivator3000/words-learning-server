@@ -2423,25 +2423,24 @@ schreiben,Sie schreibt einen Brief.,Писать,Она пишет письmо.`
 
     setupQuizTouchHandler() {
         let touchStartY = 0;
-        let lastScrollY = 0;
 
-        // Handle touch-based scroll detection for quiz menu visibility
+        // Handle touch-based swipe detection for quiz menu visibility
         document.addEventListener('touchstart', (e) => {
             touchStartY = e.changedTouches[0].screenY;
         }, { passive: true });
 
-        document.addEventListener('touchmove', (e) => {
+        document.addEventListener('touchend', (e) => {
             if (!document.body.classList.contains('quiz-active')) return;
 
-            const currentY = e.changedTouches[0].screenY;
-            const deltaY = currentY - touchStartY;
+            const touchEndY = e.changedTouches[0].screenY;
+            const deltaY = touchEndY - touchStartY;
 
-            // Scroll up (finger moves down) - show menu
-            if (deltaY > 30) {
+            // Swipe down (finger moves down) - show menu
+            if (deltaY > 50) {
                 document.body.classList.add('menu-visible');
             }
-            // Scroll down (finger moves up) - hide menu
-            else if (deltaY < -30) {
+            // Swipe up (finger moves up) - hide menu
+            else if (deltaY < -50) {
                 document.body.classList.remove('menu-visible');
             }
         }, { passive: true });
