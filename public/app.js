@@ -1237,8 +1237,15 @@ schreiben,Sie schreibt einen Brief.,Писать,Она пишет письmо.`
                         isReview ? this.showReviewAnswer(input) : this.showAnswer(input);
                     }
                 };
-            } else {
+            } else if (question?.type === 'multipleChoice' || question?.type === 'reverseMultipleChoice') {
                 btn.onclick = isReview ? () => this.skipReviewMultipleChoice() : () => this.skipMultipleChoice();
+            } else {
+                // Default fallback for any other typing-like question types
+                btn.onclick = () => {
+                    const answerAreaId = isReview ? 'reviewAnswerArea' : 'answerArea';
+                    const input = document.querySelector(`#${answerAreaId} .text-input`) || document.querySelector(`#${answerAreaId} input`);
+                    if (input) isReview ? this.showReviewAnswer(input) : this.showAnswer(input);
+                };
             }
         } else if (mode === 'next') {
             btn.textContent = i18n.t('next');
