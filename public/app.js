@@ -2466,10 +2466,12 @@ schreiben,Sie schreibt einen Brief.,Писать,Она пишет письmо.`
         if (!currentPair) return false;
 
         // Get full language name from code (e.g., 'de' -> 'German', 'ru' -> 'Russian')
+        // fromLanguage = language being studied (e.g., 'de')
+        // toLanguage = native language (e.g., 'ru')
         const targetLanguageName = languageManager ?
-            languageManager.getLanguageNameFromCode(currentPair.toLanguage) : null;
-        const sourceLanguageName = languageManager ?
             languageManager.getLanguageNameFromCode(currentPair.fromLanguage) : null;
+        const sourceLanguageName = languageManager ?
+            languageManager.getLanguageNameFromCode(currentPair.toLanguage) : null;
 
         // Check if text is in the target (studying) language - show audio button
         const isTargetLanguage = targetLanguageName && languageManager ?

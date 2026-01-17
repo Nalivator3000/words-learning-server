@@ -289,7 +289,20 @@
       "Bash(export ANDROID_HOME=\"C:/Users/Nalivator3000/AppData/Local/Android/Sdk\")",
       "Bash(yes:*)",
       "Bash(node /tmp/build-twa.js:*)",
-      "Read(//tmp/claude/c--Users-Nalivator3000-words-learning-server/tasks/**)"
+      "Read(//tmp/claude/c--Users-Nalivator3000-words-learning-server/tasks/**)",
+      "Bash(./gradlew.bat assembleRelease:*)",
+      "Bash(java:*)",
+      "Bash(\"$HOME/.bubblewrap/jdk/jdk-17.0.11+9/bin/java\" -version)",
+      "Bash(export JAVA_HOME=\"$HOME/.bubblewrap/jdk/jdk-17.0.11+9\")",
+      "Bash(export PATH=\"$JAVA_HOME/bin:$PATH\")",
+      "Bash(export JAVA_HOME=\"C:/Users/Nalivator3000/.bubblewrap/jdk/jdk-17.0.11+9\")",
+      "Bash(export GRADLE_OPTS=\"-Xmx512m\")",
+      "Bash(./gradlew.bat bundleRelease:*)",
+      "Bash(export ANDROID_HOME=\"C:/Users/Nalivator3000/.bubblewrap/android_sdk\")",
+      "Bash(\"$JAVA_HOME/bin/jarsigner\" -verify \"c:/Users/Nalivator3000/words-learning-server/releases/lexybooster-v5.4.43.aab\")",
+      "Bash(\"$JAVA_HOME/bin/jarsigner\" -verbose -sigalg SHA256withRSA -digestalg SHA-256 -keystore \"C:/Users/Nalivator3000/Claude/LexyBooster/lexybooster-release-key.jks\" -storepass \"LexyBooster2024!\" \"c:/Users/Nalivator3000/words-learning-server/releases/lexybooster-v5.4.43.aab\" \"lexibooster-upload\")",
+      "Bash(\"$JAVA_HOME/bin/jarsigner\" -verbose -sigalg SHA256withRSA -digestalg SHA-256 -keystore \"C:/Users/Nalivator3000/lexibooster-upload-new.jks\" -storepass \"LexiBooster2025!\" -keypass \"LexiBooster2025!\" \"c:/Users/Nalivator3000/words-learning-server/releases/lexybooster-v5.4.43.aab\" \"lexibooster-upload\")",
+      "Bash(\"C:/Users/Nalivator3000/.bubblewrap/jdk/jdk-17.0.11+9/bin/jarsigner\" -verify \"c:/Users/Nalivator3000/words-learning-server/releases/lexybooster-v5.4.43.aab\")"
     ],
     "deny": [
       "Bash(git push origin main:*)",
@@ -299,7 +312,7 @@
     ],
     "ask": [],
     "additionalDirectories": [
-      "C:\\Users\\Nalivator3000\\words-learning-server\\public"
+      "C:\\Users\\Nalivator3000\\Claude\\LexyBooster"
     ]
   }
 }

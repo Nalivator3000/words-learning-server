@@ -697,8 +697,10 @@ class LanguageManager {
         }
 
         // Get both languages from the pair
-        const targetLangCode = languagePair.to_lang || languagePair.toLanguage; // Language being studied (e.g., 'de')
-        const sourceLangCode = languagePair.from_lang || languagePair.fromLanguage; // Native language (e.g., 'ru')
+        // from_lang = language being studied (e.g., 'de' for German)
+        // to_lang = native language (e.g., 'ru' for Russian)
+        const targetLangCode = languagePair.from_lang || languagePair.fromLanguage; // Language being studied
+        const sourceLangCode = languagePair.to_lang || languagePair.toLanguage; // Native language
 
         const targetLangName = this.getLanguageNameFromCode(targetLangCode);
         const sourceLangName = this.getLanguageNameFromCode(sourceLangCode);
