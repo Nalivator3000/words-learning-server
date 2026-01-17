@@ -30,23 +30,40 @@ git push  # May push to wrong branch
 
 ---
 
-## 📋 Standard Git Workflow
+## 📋 Standard Git Workflow (Pull-Reapply-Push)
+
+### 🔴 CRITICAL: After EVERY Change - Immediately Push to develop
+
+After completing any code change, you MUST immediately push to develop using this workflow:
 
 ```bash
-# 1. Stage changes
-git add .
+# 1. Remember what files you changed and what changes you made
+#    (Keep track of your edits before any git operations!)
 
-# 2. Commit with descriptive message
-git commit -m "feat: descriptive message
+# 2. Stash your local changes temporarily
+git stash
+
+# 3. Pull latest from develop to get other agents' changes
+git pull origin develop
+
+# 4. Apply your stashed changes back
+git stash pop
+
+# 5. If conflicts occur after stash pop:
+#    - Read the conflicted files
+#    - Re-apply your changes manually using Edit tool
+#    - Make sure not to overwrite other agents' work
+
+# 6. Stage, commit and push
+git add .
+git commit -m "🔖 VERSION: Bump to vX.X.X
+
+feat: your descriptive message
 
 🤖 Generated with [Claude Code](https://claude.com/claude-code)
 
 Co-Authored-By: Claude Sonnet 4.5 <noreply@anthropic.com>"
 
-# 3. ALWAYS pull before push (critical when multiple agents work in parallel)
-git pull origin develop
-
-# 4. Resolve conflicts if any, then push
 git push origin develop
 ```
 
@@ -54,36 +71,73 @@ git push origin develop
 
 ## 🔄 CRITICAL: Multiple Agents Working in Parallel
 
-### ⚠️ ALWAYS Pull Before Push
+### ⚠️ Pull-Reapply-Push Strategy (Prevents Conflicts!)
 
-When multiple AI agents work on the same project simultaneously, you MUST follow this workflow:
+When multiple AI agents work on the same project simultaneously, you MUST follow this **Pull-Reapply-Push** workflow:
 
 ```bash
-# Before EVERY push, ALWAYS do:
-git pull origin develop
+# STEP 1: Before making changes, remember current state
+git status
+git log -1 --format=%B  # Check current version
 
-# If there are conflicts:
-# 1. Git will show conflict markers in files
-# 2. Resolve conflicts manually (read files, edit to merge changes)
-# 3. Stage resolved files: git add .
-# 4. Complete merge: git commit (or use the merge commit message)
+# STEP 2: Make your code changes using Edit/Write tools
+# ... your changes ...
 
-# Then push:
+# STEP 3: Before committing - CRITICAL SEQUENCE:
+git stash                    # Save your changes temporarily
+git pull origin develop      # Get latest from other agents
+git stash pop                # Re-apply your changes on top
+
+# STEP 4: Handle any conflicts
+# If "CONFLICT" appears:
+#   - Use Read tool to see the conflicted file
+#   - Use Edit tool to manually merge changes
+#   - Keep BOTH your changes AND other agents' changes
+#   - git add <resolved-files>
+
+# STEP 5: Commit and push immediately
+git add .
+git commit -m "🔖 VERSION: Bump to vX.X.X
+
+your message
+
+🤖 Generated with [Claude Code](https://claude.com/claude-code)
+
+Co-Authored-By: Claude Sonnet 4.5 <noreply@anthropic.com>"
+
 git push origin develop
 ```
 
-**Why This is CRITICAL:**
-- Multiple agents may push commits while you're working
-- Pushing without pulling first will fail with "rejected - non-fast-forward"
-- You'll lose context of what other agents changed
-- May cause deployment issues if changes conflict
+### Why Pull-Reapply-Push?
 
-**Best Practice:**
-1. `git fetch origin develop` - Check for new commits
-2. `git log HEAD..origin/develop` - See what changed
-3. `git pull origin develop` - Merge changes
-4. Resolve any conflicts
-5. `git push origin develop` - Push your work
+| Problem | Solution |
+|---------|----------|
+| Agent A and Agent B both edit files | Stash → Pull → Pop ensures you see Agent B's changes first |
+| Merge conflicts on push | Conflicts happen locally during `stash pop`, easier to resolve |
+| Lost changes from other agents | You always pull before committing, so you see everything |
+| "rejected - non-fast-forward" errors | Never happens because you always have latest code |
+
+### Conflict Resolution Example:
+
+```bash
+# After git stash pop, you see:
+# CONFLICT (content): Merge conflict in public/app.js
+
+# 1. Read the file to see conflict markers
+# 2. You'll see:
+#    <<<<<<< Updated upstream
+#    (other agent's code)
+#    =======
+#    (your stashed code)
+#    >>>>>>> Stashed changes
+
+# 3. Use Edit tool to keep BOTH changes (merge them properly)
+# 4. Remove conflict markers
+# 5. git add public/app.js
+# 6. Continue with commit and push
+```
+
+**Golden Rule:** After EVERY code change → immediately do Pull-Reapply-Push → never leave uncommitted changes!
 
 ---
 
@@ -178,10 +232,15 @@ Before every commit:
 - [ ] Use TodoWrite for multi-step tasks
 - [ ] Test changes (minimum: syntax check)
 - [ ] **Check previous commit version and bump it** ← CRITICAL! (e.g., 5.4.23 → 5.4.24)
-- [ ] Commit with descriptive message
-- [ ] **ALWAYS pull before push: `git pull origin develop`** ← CRITICAL when multiple agents work!
-- [ ] **Push to `develop` branch: `git push origin develop`** ← CRITICAL!
-- [ ] Create clear manual instructions if needed
+
+**After EVERY code change - Pull-Reapply-Push:**
+- [ ] `git stash` - Save your changes
+- [ ] `git pull origin develop` - Get latest from other agents
+- [ ] `git stash pop` - Re-apply your changes
+- [ ] Resolve conflicts if any (keep BOTH your and others' changes!)
+- [ ] `git add .` - Stage all changes
+- [ ] `git commit -m "..."` - Commit with version bump
+- [ ] `git push origin develop` - Push immediately!
 - [ ] Verify no sensitive data in commits
 
 ---
@@ -281,20 +340,29 @@ npm run test:e2e:production:report
 
 **MOST IMPORTANT:**
 - ✅ **ALWAYS check and bump version** (use `git log -1` before commit)
-- ✅ **ALWAYS pull before push** (`git pull origin develop` - critical with multiple agents!)
+- ✅ **ALWAYS use Pull-Reapply-Push** (stash → pull → pop → commit → push)
 - ✅ **ALWAYS `git push origin develop`** (never main by default)
+- ✅ **Push IMMEDIATELY after every change** (don't accumulate changes!)
 - ✅ **ALL testing ONLY on Railway** (never locally)
 - ✅ Use Read/Edit/Write tools (not bash cat/sed/echo)
-- ✅ Create documentation for complex changes
-- ✅ Test before committing
 - ✅ Never commit sensitive data
 
-**Default Git Commands:**
+**Default Git Commands (Pull-Reapply-Push):**
 ```bash
-# Check previous version
+# 1. Check previous version
 git log -1 --format=%B
 
-# Stage and commit with bumped version
+# 2. Make your code changes with Edit/Write tools
+# ... your changes ...
+
+# 3. CRITICAL: Pull-Reapply-Push sequence
+git stash                    # Save changes
+git pull origin develop      # Get other agents' work
+git stash pop                # Re-apply your changes
+
+# 4. If conflicts - resolve them keeping BOTH changes
+
+# 5. Stage and commit with bumped version
 git add .
 git commit -m "🔖 VERSION: Bump to v5.x.x
 
@@ -304,18 +372,16 @@ feat: your message
 
 Co-Authored-By: Claude Sonnet 4.5 <noreply@anthropic.com>"
 
-# CRITICAL: Always pull before push (especially when multiple agents work in parallel)
-git pull origin develop
-
-# Then push
+# 6. Push immediately
 git push origin develop  # ← ALWAYS develop!
 ```
 
 ---
 
-**Version:** 1.2
-**Last Updated:** January 7, 2026
+**Version:** 1.3
+**Last Updated:** January 11, 2026
 **For:** Claude Code AI Agents
 **Changelog:**
+- v1.3: Introduced Pull-Reapply-Push strategy (stash → pull → pop → push) to prevent conflicts between parallel agents
 - v1.2: Added critical guidelines for multiple agents working in parallel (ALWAYS pull before push)
 - v1.1: Initial version management and deployment guidelines

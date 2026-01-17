@@ -2460,18 +2460,28 @@ schreiben,Sie schreibt einen Brief.,Писать,Она пишет письmо.`
         if (!this.audioManager.isAvailable()) {
             return false;
         }
-        
+
         // Get current language pair
         const currentPair = userManager ? userManager.getCurrentLanguagePair() : null;
         if (!currentPair) return false;
-        
-        // Use language manager to detect if this text should have audio
-        const isNativeLanguage = languageManager ? 
-            languageManager.detectNativeLanguage(text, currentPair.toLanguage) : false;
-        
-        // Show audio button for studying language (foreign language)
-        // Don't show for native language translations
-        return !isNativeLanguage;
+
+        // Get full language name from code (e.g., 'de' -> 'German', 'ru' -> 'Russian')
+        const targetLanguageName = languageManager ?
+            languageManager.getLanguageNameFromCode(currentPair.toLanguage) : null;
+        const sourceLanguageName = languageManager ?
+            languageManager.getLanguageNameFromCode(currentPair.fromLanguage) : null;
+
+        // Check if text is in the target (studying) language - show audio button
+        const isTargetLanguage = targetLanguageName && languageManager ?
+            languageManager.detectLanguage(text, targetLanguageName) : false;
+
+        // Check if text is in the source (native) language - don't show audio button
+        const isSourceLanguage = sourceLanguageName && languageManager ?
+            languageManager.detectLanguage(text, sourceLanguageName) : false;
+
+        // Show audio button for target language (the language being studied)
+        // Don't show for source language translations
+        return isTargetLanguage && !isSourceLanguage;
     }
 
     createAudioButton(text, className = 'audio-btn') {

@@ -696,14 +696,37 @@ class LanguageManager {
             return 'en-US'; // Default fallback
         }
 
-        // ALWAYS use the studying language (from_lang) from user's language pair
-        // User is learning this language, so we pronounce words in this language
-        const studyingLangCode = languagePair.from_lang || languagePair.fromLanguage;
-        const studyingLang = this.getLanguageNameFromCode(studyingLangCode);
-        const audioCode = this.getAudioCode(studyingLang);
+        // Get both languages from the pair
+        const targetLangCode = languagePair.to_lang || languagePair.toLanguage; // Language being studied (e.g., 'de')
+        const sourceLangCode = languagePair.from_lang || languagePair.fromLanguage; // Native language (e.g., 'ru')
+
+        const targetLangName = this.getLanguageNameFromCode(targetLangCode);
+        const sourceLangName = this.getLanguageNameFromCode(sourceLangCode);
+
+        // Detect which language the text is in
+        const isTargetLanguage = targetLangName && this.detectLanguage(text, targetLangName);
+        const isSourceLanguage = sourceLangName && this.detectLanguage(text, sourceLangName);
+
+        // Use target language (the one being studied) if text matches it, otherwise use source
+        let audioLangName;
+
+        if (isTargetLanguage && !isSourceLanguage) {
+            // Text is in target language (e.g., German word) - pronounce in target language
+            audioLangName = targetLangName;
+        } else if (isSourceLanguage && !isTargetLanguage) {
+            // Text is in source language (e.g., Russian translation) - pronounce in source language
+            audioLangName = sourceLangName;
+        } else {
+            // Default to target language (the language being studied)
+            audioLangName = targetLangName;
+        }
+
+        const audioCode = this.getAudioCode(audioLangName);
 
         console.log(`🔊 TTS for "${text}"`);
-        console.log(`   User is studying: ${studyingLang} (${studyingLangCode})`);
+        console.log(`   Target language: ${targetLangName} (${targetLangCode})`);
+        console.log(`   Source language: ${sourceLangName} (${sourceLangCode})`);
+        console.log(`   Detected: isTarget=${isTargetLanguage}, isSource=${isSourceLanguage}`);
         console.log(`   Using voice: ${audioCode}`);
 
         return audioCode;
