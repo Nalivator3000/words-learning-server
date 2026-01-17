@@ -2332,8 +2332,12 @@ schreiben,Sie schreibt einen Brief.,Писать,Она пишет письmо.`
             buttonContainer.querySelectorAll('button').forEach(btn => btn.disabled = true);
         }
 
-        // Record as incorrect answer
-        await database.updateWordProgress(question.wordId, false, question.type);
+        // Record as incorrect answer (don't block UI if this fails)
+        try {
+            await database.updateWordProgress(question.wordId, false, question.type);
+        } catch (e) {
+            console.error('Failed to update word progress:', e);
+        }
 
         // Show feedback
         const feedback = `Правильный ответ: ${question.correctAnswer}`;
@@ -2367,8 +2371,12 @@ schreiben,Sie schreibt einen Brief.,Писать,Она пишет письmо.`
             buttonContainer.querySelectorAll('button').forEach(btn => btn.disabled = true);
         }
 
-        // Record as incorrect answer
-        await database.updateWordProgress(question.wordId, false, question.type);
+        // Record as incorrect answer (don't block UI if this fails)
+        try {
+            await database.updateWordProgress(question.wordId, false, question.type);
+        } catch (e) {
+            console.error('Failed to update word progress:', e);
+        }
 
         // Show feedback
         const feedback = `Правильный ответ: ${question.correctAnswer}`;
