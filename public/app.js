@@ -2588,8 +2588,8 @@ schreiben,Sie schreibt einen Brief.,Писать,Она пишет письmо.`
         const lessonSize = userManager.getLessonSize();
         document.getElementById('lessonSizeInput').value = lessonSize;
 
-        // Load daily goals
-        await this.loadDailyGoals();
+        // Load daily goals for settings page inputs
+        await this.loadDailyGoalsSettings();
     }
 
     renderLanguagePairs() {
@@ -2854,7 +2854,7 @@ schreiben,Sie schreibt einen Brief.,Писать,Она пишет письmо.`
         }
     }
 
-    async loadDailyGoals() {
+    async loadDailyGoalsSettings() {
         try {
             const user = userManager.getCurrentUser();
             if (!user) return;
@@ -2872,7 +2872,7 @@ schreiben,Sie schreibt einen Brief.,Писать,Она пишет письmо.`
                 if (goal.quizzes_goal) document.getElementById('dailyExercisesGoalInput').value = goal.quizzes_goal;
             }
         } catch (error) {
-            console.error('Error loading daily goals:', error);
+            console.error('Error loading daily goals settings:', error);
         }
     }
 
