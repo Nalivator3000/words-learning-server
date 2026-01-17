@@ -6706,29 +6706,43 @@ input:focus, textarea:focus, select:focus {
    Quiz Mode - Hidden menu by default, shown on scroll up
    ============================================ */
 
-/* Hide app header (top logo) during quiz */
+/* Hide app header container during quiz but keep nav accessible */
 body.quiz-active .app-header {
+    position: fixed;
+    top: -100px;
+    left: 0;
+    right: 0;
+    z-index: -1;
+    opacity: 0;
+    pointer-events: none;
+}
+
+/* Hide header title during quiz */
+body.quiz-active .header-left {
     display: none;
 }
 
-/* Hide bottom navigation during quiz - completely hidden by default */
+/* Bottom navigation during quiz - hidden by default, shown on scroll up */
 body.quiz-active .header-nav {
-    position: fixed;
-    bottom: 0;
-    left: 0;
-    right: 0;
+    position: fixed !important;
+    bottom: 0 !important;
+    left: 0 !important;
+    right: 0 !important;
+    top: auto !important;
+    width: 100% !important;
     background: rgba(255, 255, 255, 0.95);
     backdrop-filter: blur(20px);
     -webkit-backdrop-filter: blur(20px);
     border-top: 1px solid rgba(0, 0, 0, 0.1);
     box-shadow: 0 -2px 10px rgba(0, 0, 0, 0.1);
-    padding: var(--space-1) var(--space-2) calc(var(--space-1) + env(safe-area-inset-bottom, 0));
+    padding: var(--space-2) var(--space-2) calc(var(--space-2) + env(safe-area-inset-bottom, 0));
     transform: translateY(100%);
-    transition: transform 0.3s ease;
+    transition: transform 0.3s ease, opacity 0.3s ease;
     pointer-events: none;
-    visibility: hidden;
     opacity: 0;
     z-index: 1000;
+    margin: 0;
+    border-radius: 0;
 }
 
 /* Dark theme support for quiz nav */
@@ -6742,7 +6756,6 @@ body.quiz-active .header-nav {
 body.quiz-active.menu-visible .header-nav {
     transform: translateY(0);
     pointer-events: auto;
-    visibility: visible;
     opacity: 1;
 }
 
