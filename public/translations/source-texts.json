@@ -615,6 +615,22 @@
     "sw": "Pakua Kiolezo cha CSV",
     "fr": "Télécharger le modèle CSV"
   },
+  "select": {
+    "en": "Select",
+    "ru": "Выбрать",
+    "de": "Auswählen",
+    "pl": "Wybierz",
+    "ar": "اختر",
+    "tr": "Seç",
+    "ro": "Selectează",
+    "sr": "Изабери",
+    "uk": "Вибрати",
+    "it": "Seleziona",
+    "es": "Seleccionar",
+    "pt": "Selecionar",
+    "sw": "Chagua",
+    "fr": "Sélectionner"
+  },
   "selectFile": {
     "en": "Select File",
     "ru": "Выбрать файл",
