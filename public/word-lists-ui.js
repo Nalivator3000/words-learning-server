@@ -977,12 +977,23 @@ class WordListsUI {
     }
 
     attachSingleWordButtonListeners() {
-        const addButtons = document.querySelectorAll('.add-single-word-btn');
-        console.log(`🔘 Found ${addButtons.length} single word buttons`);
+        // Only attach to buttons inside the modal to avoid duplicates
+        const modal = document.getElementById('wordListModal');
+        if (!modal) {
+            console.error('❌ Modal not found for attaching button listeners');
+            return;
+        }
+
+        const addButtons = modal.querySelectorAll('.add-single-word-btn');
+        console.log(`🔘 Found ${addButtons.length} single word buttons in modal`);
 
         addButtons.forEach((button, index) => {
+            // Remove any existing listeners by cloning
+            const newButton = button.cloneNode(true);
+            button.parentNode.replaceChild(newButton, button);
+
             console.log(`🔘 Attaching listener to button ${index + 1}`);
-            button.addEventListener('click', async (e) => {
+            newButton.addEventListener('click', async (e) => {
                 console.log('🖱️ Single word button clicked!');
                 e.preventDefault();
                 e.stopPropagation();
@@ -1269,9 +1280,13 @@ class WordListsUI {
     }
 
     escapeHtml(text) {
-        const div = document.createElement('div');
-        div.textContent = text;
-        return div.innerHTML;
+        if (!text) return '';
+        return String(text)
+            .replace(/&/g, '&amp;')
+            .replace(/</g, '&lt;')
+            .replace(/>/g, '&gt;')
+            .replace(/"/g, '&quot;')
+            .replace(/'/g, '&#39;');
     }
 
     async addSingleWordToUserDictionary(wordData) {
