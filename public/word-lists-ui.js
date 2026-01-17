@@ -206,10 +206,20 @@ class WordListsUI {
                 url += `&theme=${this.currentFilter.theme}`;
             }
 
+            // Add cache-busting parameter
+            const separator = url.includes('?') ? '&' : '?';
+            url += `${separator}_t=${Date.now()}`;
+
             console.log(`📋 [WORD-SETS] Fetching from URL: ${url}`);
             console.log(`📋 [WORD-SETS] Language pair code: ${langPairCode}`);
 
-            const response = await fetch(url);
+            const response = await fetch(url, {
+                cache: 'no-cache',
+                headers: {
+                    'Cache-Control': 'no-cache',
+                    'Pragma': 'no-cache'
+                }
+            });
             console.log(`📋 [WORD-SETS] Response status: ${response.status} ${response.statusText}`);
             console.log(`📋 [WORD-SETS] Response ok: ${response.ok}`);
 
