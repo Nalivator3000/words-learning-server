@@ -4455,6 +4455,7 @@ input:focus, textarea:focus, select:focus {
     }
 
     /* Quiz styles moved to global quiz-active section at end of file */
+}
 
 /* Touch device optimizations */
 @media (hover: none) and (pointer: coarse) {
