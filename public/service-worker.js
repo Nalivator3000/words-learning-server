@@ -1,7 +1,7 @@
 // Service Worker for Words Learning App
-// Version 5.6.2 - Fix Daily Goals quiz count for wrong answers
+// Version 5.6.3 - Fix quiz progress update missing userId/languagePairId
 
-const CACHE_VERSION = 'v5.6.2';
+const CACHE_VERSION = 'v5.6.3';
 const CACHE_NAME = `words-learning-${CACHE_VERSION}`;
 
 // Files to cache for offline use

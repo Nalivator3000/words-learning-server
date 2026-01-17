@@ -13876,11 +13876,8 @@ app.put('/api/words/:id/progress', async (req, res) => {
         const sourceWordId = parseInt(req.params.id); // Now represents source_word_id
         const { correct, questionType, userId, languagePairId } = req.body;
 
-        // Debug logging for tracking the issue
-        logger.debug(`📊 Progress update request: wordId=${sourceWordId}, userId=${userId}, languagePairId=${languagePairId}, body=${JSON.stringify(req.body)}`);
-
         if (!userId || !languagePairId) {
-            logger.warn(`⚠️ Missing userId or languagePairId: userId=${userId}, languagePairId=${languagePairId}, body=${JSON.stringify(req.body)}`);
+            logger.warn(`⚠️ Progress update missing context: wordId=${sourceWordId}, userId=${userId}, languagePairId=${languagePairId}`);
             return res.status(400).json({ error: 'userId and languagePairId are required' });
         }
 
