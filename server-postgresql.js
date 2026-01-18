@@ -4835,22 +4835,50 @@ app.get('/api/universal-collections/:collectionId', async (req, res) => {
             return res.status(400).json({ error: `Unsupported native language: ${native_lang}` });
         }
 
+        // Get full source language name for table
+        const sourceLangFullName = langMap[source_lang] || source_lang;
+        const sourceTableName = `source_words_${sourceLangFullName}`;
+        const baseTranslationTableName = `target_translations_${targetLangTable}`;
+
+        // Check if base table has translations for this source language
+        let useBaseTable = false;
+        try {
+            const checkResult = await db.query(`
+                SELECT COUNT(*) as count
+                FROM ${baseTranslationTableName}
+                WHERE source_lang = $1
+                LIMIT 1
+            `, [source_lang]);
+            useBaseTable = checkResult.rows[0].count > 0;
+        } catch (err) {
+            useBaseTable = false;
+        }
+
+        const translationTableName = useBaseTable
+            ? baseTranslationTableName
+            : `${baseTranslationTableName}_from_${source_lang}`;
+
+        // Determine example columns based on source language and table type
+        const hasSourceExample = SOURCE_LANGUAGES_WITH_EXAMPLES.includes(sourceLangFullName);
+        const exampleSourceColumn = hasSourceExample ? `sw.example_${source_lang}` : `''`;
+        const exampleTranslationColumn = useBaseTable ? `tt.example_${native_lang}` : 'tt.example_native';
+
         // Get source words and translations
         const words = await db.query(`
             SELECT
                 sw.id,
                 sw.word as source_word,
                 sw.level,
-                sw.example_de,
+                ${exampleSourceColumn} as example_source,
                 tt.translation as native_translation,
-                tt.example_native,
+                COALESCE(${exampleTranslationColumn}, '') as example_native,
                 cw.order_index
             FROM universal_collection_words cw
-            JOIN source_words_${source_lang === 'de' ? 'german' : source_lang} sw ON cw.source_word_id = sw.id
-            LEFT JOIN target_translations_${targetLangTable} tt ON tt.source_word_id = sw.id AND tt.source_lang = $1
+            JOIN ${sourceTableName} sw ON cw.source_word_id = sw.id
+            LEFT JOIN ${translationTableName} tt ON tt.source_word_id = sw.id ${useBaseTable ? 'AND tt.source_lang = $1' : ''}
             WHERE cw.collection_id = $2
             ORDER BY cw.order_index
-        `, [source_lang, parseInt(collectionId)]);
+        `, useBaseTable ? [source_lang, parseInt(collectionId)] : [parseInt(collectionId)]);
 
         res.json({
             ...collectionData,
@@ -4907,18 +4935,46 @@ app.post('/api/universal-collections/:collectionId/import', async (req, res) => 
             return res.status(400).json({ error: `Unsupported native language: ${native_lang}` });
         }
 
+        // Get full source language name for table
+        const sourceLangFullName = langMap[source_lang] || source_lang;
+        const sourceTableName = `source_words_${sourceLangFullName}`;
+        const baseTranslationTableName = `target_translations_${targetLangTable}`;
+
+        // Check if base table has translations for this source language
+        let useBaseTable = false;
+        try {
+            const checkResult = await db.query(`
+                SELECT COUNT(*) as count
+                FROM ${baseTranslationTableName}
+                WHERE source_lang = $1
+                LIMIT 1
+            `, [source_lang]);
+            useBaseTable = checkResult.rows[0].count > 0;
+        } catch (err) {
+            useBaseTable = false;
+        }
+
+        const translationTableName = useBaseTable
+            ? baseTranslationTableName
+            : `${baseTranslationTableName}_from_${source_lang}`;
+
+        // Determine example columns based on source language and table type
+        const hasSourceExample = SOURCE_LANGUAGES_WITH_EXAMPLES.includes(sourceLangFullName);
+        const exampleSourceColumn = hasSourceExample ? `sw.example_${source_lang}` : `''`;
+        const exampleTranslationColumn = useBaseTable ? `tt.example_${native_lang}` : 'tt.example_native';
+
         // Get words with translations
         const words = await db.query(`
             SELECT
                 sw.word as source_word,
                 tt.translation as native_translation,
-                sw.example_de,
-                tt.example_native
+                ${exampleSourceColumn} as example_source,
+                COALESCE(${exampleTranslationColumn}, '') as example_native
             FROM universal_collection_words cw
-            JOIN source_words_${source_lang === 'de' ? 'german' : source_lang} sw ON cw.source_word_id = sw.id
-            LEFT JOIN target_translations_${targetLangTable} tt ON tt.source_word_id = sw.id AND tt.source_lang = $1
+            JOIN ${sourceTableName} sw ON cw.source_word_id = sw.id
+            LEFT JOIN ${translationTableName} tt ON tt.source_word_id = sw.id ${useBaseTable ? 'AND tt.source_lang = $1' : ''}
             WHERE cw.collection_id = $2
-        `, [source_lang, parseInt(collectionId)]);
+        `, useBaseTable ? [source_lang, parseInt(collectionId)] : [parseInt(collectionId)]);
 
         if (words.rows.length === 0) {
             return res.status(404).json({ error: 'No words found in collection' });
@@ -4946,7 +5002,7 @@ app.post('/api/universal-collections/:collectionId/import', async (req, res) => 
                             languagePairId,
                             word.source_word,
                             word.native_translation,
-                            word.example_de || '',
+                            word.example_source || '',
                             word.example_native || ''
                         ]
                     );
