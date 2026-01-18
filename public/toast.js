@@ -24,6 +24,9 @@ class ToastManager {
      * @param {object} options - Additional options (icon, action, etc.)
      */
     show(message, type = 'info', duration = 4000, options = {}) {
+        // Debug logging
+        console.log('🍞 Toast.show called:', { message, type, duration, messageType: typeof message });
+
         // Limit max toasts
         if (this.toasts.length >= this.maxToasts) {
             this.removeOldest();
@@ -52,6 +55,9 @@ class ToastManager {
         const toast = document.createElement('div');
         toast.className = `toast toast-${type}`;
 
+        // Ensure message is a string and not empty
+        const safeMessage = (message !== null && message !== undefined) ? String(message) : 'Notification';
+
         // Icon based on type
         const icons = {
             success: '✓',
@@ -66,7 +72,7 @@ class ToastManager {
             <div class="toast-icon">${icon}</div>
             <div class="toast-content">
                 ${options.title ? `<div class="toast-title">${options.title}</div>` : ''}
-                <div class="toast-message">${message}</div>
+                <div class="toast-message">${safeMessage}</div>
             </div>
             ${options.action ? `<button class="toast-action">${options.action}</button>` : ''}
             <button class="toast-close">✕</button>
