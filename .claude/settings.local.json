@@ -302,7 +302,16 @@
       "Bash(\"$JAVA_HOME/bin/jarsigner\" -verify \"c:/Users/Nalivator3000/words-learning-server/releases/lexybooster-v5.4.43.aab\")",
       "Bash(\"$JAVA_HOME/bin/jarsigner\" -verbose -sigalg SHA256withRSA -digestalg SHA-256 -keystore \"C:/Users/Nalivator3000/Claude/LexyBooster/lexybooster-release-key.jks\" -storepass \"LexyBooster2024!\" \"c:/Users/Nalivator3000/words-learning-server/releases/lexybooster-v5.4.43.aab\" \"lexibooster-upload\")",
       "Bash(\"$JAVA_HOME/bin/jarsigner\" -verbose -sigalg SHA256withRSA -digestalg SHA-256 -keystore \"C:/Users/Nalivator3000/lexibooster-upload-new.jks\" -storepass \"LexiBooster2025!\" -keypass \"LexiBooster2025!\" \"c:/Users/Nalivator3000/words-learning-server/releases/lexybooster-v5.4.43.aab\" \"lexibooster-upload\")",
-      "Bash(\"C:/Users/Nalivator3000/.bubblewrap/jdk/jdk-17.0.11+9/bin/jarsigner\" -verify \"c:/Users/Nalivator3000/words-learning-server/releases/lexybooster-v5.4.43.aab\")"
+      "Bash(\"C:/Users/Nalivator3000/.bubblewrap/jdk/jdk-17.0.11+9/bin/jarsigner\" -verify \"c:/Users/Nalivator3000/words-learning-server/releases/lexybooster-v5.4.43.aab\")",
+      "Bash(\"C:/Users/Nalivator3000/.bubblewrap/jdk/jdk-17.0.11+9/bin/jarsigner\" -verbose -sigalg SHA256withRSA -digestalg SHA-256 -keystore \"C:/Users/Nalivator3000/lexibooster-upload-new.jks\" -storepass \"LexiBooster2025!\" -keypass \"LexiBooster2025!\" \"c:/Users/Nalivator3000/words-learning-server/releases/lexybooster-v5.4.43.aab\" \"lexibooster-upload\")",
+      "Bash(unzip:*)",
+      "Bash(\"C:/Users/Nalivator3000/.bubblewrap/android_sdk/build-tools/34.0.0/aapt2\" dump badging \"c:/Users/Nalivator3000/words-learning-server/releases/lexybooster-v5.4.43.aab\")",
+      "Bash(\"C:/Users/Nalivator3000/.bubblewrap/jdk/jdk-17.0.11+9/bin/jarsigner\" -verbose -sigalg SHA256withRSA -digestalg SHA-256 -keystore \"C:/Users/Nalivator3000/lexibooster-upload-new.jks\" -storepass \"LexiBooster2025!\" -keypass \"LexiBooster2025!\" \"c:/Users/Nalivator3000/words-learning-server/releases/lexibooster-v5.4.43-1046.aab\" \"lexibooster-upload\")",
+      "Bash(\"C:/Users/Nalivator3000/.bubblewrap/jdk/jdk-17.0.11+9/bin/jarsigner\" -verbose -sigalg SHA256withRSA -digestalg SHA-256 -keystore \"C:/Users/Nalivator3000/lexibooster-upload-new.jks\" -storepass \"LexiBooster2025!\" -keypass \"LexiBooster2025!\" \"c:/Users/Nalivator3000/words-learning-server/releases/lexibooster-v5.4.43-5443.aab\" \"lexibooster-upload\")",
+      "Bash(\"C:/Users/Nalivator3000/.bubblewrap/jdk/jdk-17.0.11+9/bin/jarsigner\" -verbose -sigalg SHA256withRSA -digestalg SHA-256 -keystore \"C:/Users/Nalivator3000/lexibooster-upload-new.jks\" -storepass \"LexiBooster2025!\" -keypass \"LexiBooster2025!\" \"c:/Users/Nalivator3000/words-learning-server/releases/lexibooster-v5.4.43-5444.aab\" \"lexibooster-upload\")",
+      "Bash(node backup-user.js:*)",
+      "Bash(node check-spanish-word-sets.js:*)",
+      "Bash(git show:*)"
     ],
     "deny": [
       "Bash(git push origin main:*)",

@@ -3449,15 +3449,9 @@ app.post('/api/word-sets/:setId/import', importLimiter, async (req, res) => {
             'sr': 'serbian', 'sw': 'swahili'
         };
 
-        const { from_lang, to_lang } = pairResult.rows[0];
-        const target_language = langCodeToName[to_lang] || to_lang;
-        const baseTranslationTableName = `target_translations_${target_language}`;
+        const { from_lang: rawFromLang, to_lang: rawToLang } = pairResult.rows[0];
 
-        // IMPORTANT: source_language_for_progress should be from_lang (the language user learns FROM)
-        // This is different from word_set.source_language (the language of the words in the set)
-        const sourceLanguageForProgress = langCodeToName[from_lang] || from_lang;
-
-        // Map full language name back to code for example column
+        // Normalize language codes - handle both ISO codes (es) and full names (spanish)
         const langNameToCode = {
             'german': 'de', 'english': 'en', 'spanish': 'es', 'french': 'fr',
             'russian': 'ru', 'italian': 'it', 'portuguese': 'pt', 'chinese': 'zh',
@@ -3465,6 +3459,17 @@ app.post('/api/word-sets/:setId/import', importLimiter, async (req, res) => {
             'turkish': 'tr', 'ukrainian': 'uk', 'polish': 'pl', 'romanian': 'ro',
             'serbian': 'sr', 'swahili': 'sw'
         };
+
+        // Convert to ISO code if full name was stored
+        const from_lang = langNameToCode[rawFromLang.toLowerCase()] || rawFromLang;
+        const to_lang = langNameToCode[rawToLang.toLowerCase()] || rawToLang;
+
+        const target_language = langCodeToName[to_lang] || to_lang;
+        const baseTranslationTableName = `target_translations_${target_language}`;
+
+        // IMPORTANT: source_language_for_progress should be from_lang (the language user learns FROM)
+        // This is different from word_set.source_language (the language of the words in the set)
+        const sourceLanguageForProgress = langCodeToName[from_lang] || from_lang;
 
         // Example column should match the SOURCE language of the word set, not from_lang
         const sourceLangCode = langNameToCode[source_language] || source_language.substring(0, 2);
@@ -9380,7 +9385,7 @@ app.post('/api/word-lists/:id/import', async (req, res) => {
             return res.status(404).json({ error: 'Language pair not found' });
         }
 
-        const { from_lang, to_lang } = langPair.rows[0];
+        const { from_lang: rawFromLang, to_lang: rawToLang } = langPair.rows[0];
 
         // Get collection info
         const collection = await db.query(
@@ -9402,6 +9407,19 @@ app.post('/api/word-lists/:id/import', async (req, res) => {
             'tr': 'turkish', 'uk': 'ukrainian', 'pl': 'polish', 'ro': 'romanian',
             'sr': 'serbian', 'sw': 'swahili'
         };
+
+        // Normalize language codes - handle both ISO codes (es) and full names (spanish)
+        const langNameToCode = {
+            'german': 'de', 'english': 'en', 'spanish': 'es', 'french': 'fr',
+            'russian': 'ru', 'italian': 'it', 'portuguese': 'pt', 'chinese': 'zh',
+            'japanese': 'ja', 'korean': 'ko', 'hindi': 'hi', 'arabic': 'ar',
+            'turkish': 'tr', 'ukrainian': 'uk', 'polish': 'pl', 'romanian': 'ro',
+            'serbian': 'sr', 'swahili': 'sw'
+        };
+
+        // Convert to ISO code if full name was stored
+        const from_lang = langNameToCode[rawFromLang.toLowerCase()] || rawFromLang;
+        const to_lang = langNameToCode[rawToLang.toLowerCase()] || rawToLang;
 
         const sourceLanguageFullName = langCodeToName[source_lang] || source_lang;
         const targetLanguageFullName = langCodeToName[to_lang] || to_lang;
