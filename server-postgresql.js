@@ -3502,7 +3502,8 @@ app.post('/api/word-sets/:setId/import', importLimiter, async (req, res) => {
         logger.info(`[IMPORT] Importing set ${setId} for user ${userId}, from ${from_lang} to ${to_lang}, word_set.source_language=${source_language}, progress.source_language=${sourceLanguageForProgress}, translation table: ${translationTableName}`);
 
         // Use different column names depending on table type
-        const exampleTranslationColumnActual = exampleTranslationColumn;
+        // For _from_XX tables, example column is 'example_native', for base tables it's 'example_XX'
+        const exampleTranslationColumnActual = useBaseTable ? exampleTranslationColumn : 'example_native';
 
         // Get all words from the source table with their translations
         let wordsResult;
