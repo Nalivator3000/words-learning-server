@@ -9321,6 +9321,8 @@ app.get('/api/word-lists/:id', async (req, res) => {
 
         // Build language table mapping
         const targetLangTable = native_lang ? LANG_CODE_TO_FULL_NAME[native_lang] : null;
+        const sourceLangFullName = LANG_CODE_TO_FULL_NAME[source_lang] || source_lang;
+        const sourceTableName = `source_words_${sourceLangFullName}`;
 
         if (!targetLangTable) {
             // No native language specified or not supported, return without translations
@@ -9339,20 +9341,44 @@ app.get('/api/word-lists/:id', async (req, res) => {
             });
         }
 
+        const baseTranslationTableName = `target_translations_${targetLangTable}`;
+
+        // Check if base table has translations for this source language
+        let useBaseTable = false;
+        try {
+            const checkResult = await db.query(`
+                SELECT COUNT(*) as count
+                FROM ${baseTranslationTableName}
+                WHERE source_lang = $1
+                LIMIT 1
+            `, [source_lang]);
+            useBaseTable = checkResult.rows[0].count > 0;
+        } catch (err) {
+            useBaseTable = false;
+        }
+
+        const translationTableName = useBaseTable
+            ? baseTranslationTableName
+            : `${baseTranslationTableName}_from_${source_lang}`;
+
+        // Determine example column based on source language
+        const hasSourceExample = SOURCE_LANGUAGES_WITH_EXAMPLES.includes(sourceLangFullName);
+        const exampleSourceColumn = hasSourceExample ? `sw.example_${source_lang}` : `''`;
+
         // Get words with translations
         const words = await db.query(`
             SELECT
                 sw.id,
                 sw.word,
                 tt.translation,
-                sw.example_de as example,
+                ${exampleSourceColumn} as example,
                 cw.order_index
             FROM universal_collection_words cw
-            JOIN source_words_${source_lang === 'de' ? 'german' : source_lang} sw ON cw.source_word_id = sw.id
-            LEFT JOIN target_translations_${targetLangTable} tt ON tt.source_word_id = sw.id AND tt.source_lang = $1
+            JOIN ${sourceTableName} sw ON cw.source_word_id = sw.id
+            LEFT JOIN ${translationTableName} tt ON tt.source_word_id = sw.id ${useBaseTable ? 'AND tt.source_lang = $1' : ''}
             WHERE cw.collection_id = $2
             ORDER BY cw.order_index
-        `, [source_lang, parseInt(id)]);
+        `, useBaseTable ? [source_lang, parseInt(id)] : [parseInt(id)]);
 
         // Transform to match old API format for frontend compatibility
         res.json({
