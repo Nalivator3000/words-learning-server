@@ -13193,6 +13193,7 @@ app.get('/api/words', async (req, res) => {
             // If source doesn't have examples, use _from_XX format
             if (!SOURCE_LANGUAGES_WITH_EXAMPLES.includes(sourceLanguage)) {
                 translationTableName = `target_translations_${targetLanguage}_from_${sourceLanguageCode}`;
+                useNativeExampleColumn = true; // _from_XX tables use example_native
                 logger.info(`[WORDS API] Source language ${sourceLanguage} has no examples, using: ${translationTableName}`);
             } else {
                 // Use base target_translations_XXX format
@@ -13208,9 +13209,9 @@ app.get('/api/words', async (req, res) => {
             : `''`;
 
         // For translation example column:
-        // - If using _from_XX with source=en, use example_native
+        // - If using _from_XX tables, use example_native
         // - Otherwise use example_XX where XX is target language
-        const exampleTranslationColumn = (useNativeExampleColumn && sourceLanguageCode === 'en')
+        const exampleTranslationColumn = useNativeExampleColumn
             ? `COALESCE(tt.example_native, '')`
             : `COALESCE(tt.example_${targetLanguageCode}, '')`;
 
