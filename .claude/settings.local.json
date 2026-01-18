@@ -311,7 +311,9 @@
       "Bash(\"C:/Users/Nalivator3000/.bubblewrap/jdk/jdk-17.0.11+9/bin/jarsigner\" -verbose -sigalg SHA256withRSA -digestalg SHA-256 -keystore \"C:/Users/Nalivator3000/lexibooster-upload-new.jks\" -storepass \"LexiBooster2025!\" -keypass \"LexiBooster2025!\" \"c:/Users/Nalivator3000/words-learning-server/releases/lexibooster-v5.4.43-5444.aab\" \"lexibooster-upload\")",
       "Bash(node backup-user.js:*)",
       "Bash(node check-spanish-word-sets.js:*)",
-      "Bash(git show:*)"
+      "Bash(git show:*)",
+      "Bash(node -e \"\nconst { Pool } = require\\(''pg''\\);\nconst pool = new Pool\\({ connectionString: ''postgresql://postgres:uPGJKLcZLFGTZeRbnzPOVTlzWRObbnKO@mainline.proxy.rlwy.net:54625/railway'' }\\);\n\nasync function run\\(\\) {\n    // First check current state\n    const check = await pool.query\\(\\\\`\n        SELECT id, user_id, name, from_lang, to_lang \n        FROM language_pairs \n        WHERE LOWER\\(from_lang\\) IN \\(''german'', ''russian'', ''english'', ''spanish'', ''french'', ''italian'', ''portuguese'', ''polish'', ''arabic'', ''turkish'', ''romanian'', ''serbian'', ''ukrainian'', ''swahili'', ''chinese'', ''japanese'', ''korean'', ''hindi''\\)\n           OR LOWER\\(to_lang\\) IN \\(''german'', ''russian'', ''english'', ''spanish'', ''french'', ''italian'', ''portuguese'', ''polish'', ''arabic'', ''turkish'', ''romanian'', ''serbian'', ''ukrainian'', ''swahili'', ''chinese'', ''japanese'', ''korean'', ''hindi''\\)\n    \\\\`\\);\n    \n    console.log\\(''Records with full language names:'', check.rows.length\\);\n    if \\(check.rows.length > 0\\) {\n        console.log\\(check.rows\\);\n    }\n    \n    await pool.end\\(\\);\n}\nrun\\(\\);\n\")",
+      "Bash(copy:*)"
     ],
     "deny": [
       "Bash(git push origin main:*)",
@@ -321,7 +323,7 @@
     ],
     "ask": [],
     "additionalDirectories": [
-      "C:\\Users\\Nalivator3000\\Claude\\LexyBooster"
+      "c:\\Users\\Nalivator3000\\words-learning-server"
     ]
   }
 }

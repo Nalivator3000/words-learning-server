@@ -40,3 +40,7 @@ test-results/
 playwright-report/
 logs/
 cache/
+
+# Archive for temp files (not committed)
+_archive/
+*.backup
