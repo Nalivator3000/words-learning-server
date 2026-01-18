@@ -4,7 +4,7 @@
 // Safe i18n helper that returns fallback if i18n not available
 const _t = (key, params, fallback) => {
     if (window.i18n && typeof window.i18n.t === 'function') {
-        const result = window._t(key, params);
+        const result = window.i18n.t(key, params);
         return result || fallback || key;
     }
     return fallback || key;
