@@ -3576,11 +3576,11 @@ input:focus, textarea:focus, select:focus {
 @media (min-width: 1024px) {
     .container {
         max-width: 1200px;
-        padding: var(--space-8);
+        padding: var(--space-6);
     }
 
     .section {
-        padding: var(--space-16);
+        padding: var(--space-8);
     }
 
     .stats-grid {
@@ -3595,13 +3595,24 @@ input:focus, textarea:focus, select:focus {
 
     .mode-grid {
         grid-template-columns: repeat(3, 1fr);
-        gap: var(--space-8);
+        gap: var(--space-6);
+    }
+
+    /* Compact quiz layout for 1080p screens */
+    #studySection,
+    #reviewSection {
+        padding: var(--space-4) var(--space-8);
+    }
+
+    #studySection h2,
+    #reviewSection h2 {
+        margin-bottom: var(--space-4);
+        font-size: var(--text-2xl);
     }
 
     .quiz-area {
-        padding: var(--space-8);
+        padding: var(--space-4);
         max-width: 700px;
-        /* Prevent stretching on desktop */
         flex: 0 0 auto;
         height: auto !important;
         min-height: auto !important;
@@ -3612,28 +3623,80 @@ input:focus, textarea:focus, select:focus {
     }
 
     .quiz-action-area {
-        margin-top: var(--space-4);
+        margin-top: var(--space-3);
         flex: 0 0 auto;
     }
 
     .answer-area {
-        margin-bottom: var(--space-4);
+        margin-bottom: var(--space-3);
         flex: 0 0 auto;
     }
 
-    /* Prevent section from stretching quiz */
     #studySection .quiz-container,
     #reviewSection .quiz-container {
         display: block;
     }
 
+    /* Compact quiz elements */
+    .progress-bar {
+        margin-bottom: var(--space-3);
+        height: 6px;
+    }
+
+    .counter {
+        margin-bottom: var(--space-3);
+        font-size: var(--text-base);
+    }
+
     .question {
-        font-size: var(--text-4xl);
+        font-size: var(--text-2xl);
+        margin-bottom: var(--space-4);
     }
 
     .answer-options {
         grid-template-columns: repeat(2, 1fr);
-        gap: var(--space-6);
+        gap: var(--space-3);
+    }
+
+    .answer-option {
+        padding: var(--space-3) var(--space-4);
+        min-height: 52px;
+        font-size: var(--text-base);
+    }
+
+    .feedback {
+        padding: var(--space-3) var(--space-4);
+        margin-bottom: var(--space-2);
+    }
+
+    /* Compact word-building for desktop */
+    .word-building-area {
+        margin-bottom: var(--space-4);
+    }
+
+    .word-building-input {
+        padding: var(--space-3);
+        margin-bottom: var(--space-4);
+        font-size: var(--text-lg);
+    }
+
+    .letter-tiles {
+        gap: var(--space-2);
+        margin-bottom: var(--space-4);
+    }
+
+    .letter-tile {
+        width: 44px;
+        height: 44px;
+        font-size: var(--text-lg);
+    }
+
+    .word-building-controls {
+        gap: var(--space-3);
+    }
+
+    .word-building-controls button {
+        padding: var(--space-2) var(--space-4);
     }
 
     .header-user {
