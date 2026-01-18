@@ -12608,7 +12608,8 @@ async function getWordsWithProgress(userId, languagePairId, sourceLanguage, sour
         ? baseTranslationTableName
         : `${baseTranslationTableName}_from_${sourceLanguageCode}`;
 
-    const exampleTranslationColumnActual = `example_${targetLanguageCode}`;
+    // For _from_XX tables, example column is 'example_native', for base tables it's 'example_XX'
+    const exampleTranslationColumnActual = useBaseTable ? `example_${targetLanguageCode}` : 'example_native';
     const exampleSourceColumn = hasSourceExample ? `sw.example_${sourceLanguageCode}` : `''`;
 
     logger.info(`[GET-WORDS-WITH-PROGRESS] Using translation table: ${translationTableName} (useBaseTable: ${useBaseTable})`);
@@ -13514,7 +13515,8 @@ app.get('/api/words/random-proportional/:count', async (req, res) => {
         logger.info(`[RANDOM-PROPORTIONAL] Using translation table: ${translationTableName} (useBaseTable: ${useBaseTable})`);
 
         // Use different column names depending on table type
-        const exampleTranslationColumnActual = `example_${targetLanguageCode}`;
+        // For _from_XX tables, example column is 'example_native', for base tables it's 'example_XX'
+        const exampleTranslationColumnActual = useBaseTable ? `example_${targetLanguageCode}` : 'example_native';
         const exampleSourceColumn = hasSourceExample ? `sw.example_${sourceLanguageCode}` : `''`;
 
         for (const [status, allocation] of Object.entries(statusAllocations)) {
