@@ -1085,20 +1085,29 @@ schreiben,Sie schreibt einen Brief.,Писать,Она пишет письmо.`
         document.getElementById('studyModeSelect').style.display = 'none';
         document.getElementById('quizArea').classList.remove('hidden');
         document.getElementById('versionInfo').style.display = 'none';
-        // Hide navigation to maximize quiz space on mobile
-        document.body.classList.add('quiz-active');
-        // Move header-nav to body for proper fixed positioning
-        this.moveNavForQuiz();
+        // Hide navigation to maximize quiz space on mobile only (phones with small screens)
+        if (this.isMobilePhone()) {
+            document.body.classList.add('quiz-active');
+            // Move header-nav to body for proper fixed positioning
+            this.moveNavForQuiz();
+        }
     }
 
     showReviewInterface() {
         document.getElementById('reviewModeSelect').style.display = 'none';
         document.getElementById('reviewQuizArea').classList.remove('hidden');
         document.getElementById('versionInfo').style.display = 'none';
-        // Hide navigation to maximize quiz space on mobile
-        document.body.classList.add('quiz-active');
-        // Move header-nav to body for proper fixed positioning
-        this.moveNavForQuiz();
+        // Hide navigation to maximize quiz space on mobile only (phones with small screens)
+        if (this.isMobilePhone()) {
+            document.body.classList.add('quiz-active');
+            // Move header-nav to body for proper fixed positioning
+            this.moveNavForQuiz();
+        }
+    }
+
+    // Check if device is a mobile phone (small screen)
+    isMobilePhone() {
+        return window.innerWidth <= 480;
     }
 
     // Move header-nav out of app-header for quiz mode (fixes fixed positioning issue)

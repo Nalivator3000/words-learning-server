@@ -6733,10 +6733,10 @@ input:focus, textarea:focus, select:focus {
 
 /* ============================================
    Quiz Mode - Hidden menu by default, shown on scroll up
-   Only for mobile screens (max-width: 768px)
+   Only for small mobile phones (max-width: 480px)
    ============================================ */
 
-@media (max-width: 768px) {
+@media (max-width: 480px) {
     /* Hide app-header during quiz (header-nav is moved to body via JS) */
     body.quiz-active .app-header {
         display: none !important;
