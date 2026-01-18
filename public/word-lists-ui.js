@@ -1,6 +1,15 @@
 // Word Lists UI - Browse and import curated word collections
 // Displays lists by category, difficulty, topic, and language
 
+// Safe i18n helper that returns fallback if i18n not available
+const _t = (key, params, fallback) => {
+    if (window.i18n && typeof window.i18n.t === 'function') {
+        const result = window._t(key, params);
+        return result || fallback || key;
+    }
+    return fallback || key;
+};
+
 class WordListsUI {
     constructor() {
         this.userId = null;
@@ -48,8 +57,8 @@ class WordListsUI {
         const themeKey = `topic_${theme.toLowerCase().replace(/\s+/g, '_')}`;
 
         // Build translated title
-        const translatedLang = i18n.t(langKey) || sourceLang;
-        const translatedTheme = i18n.t(themeKey) || theme;
+        const translatedLang = _t(langKey) || sourceLang;
+        const translatedTheme = _t(themeKey) || theme;
 
         // If has part number, append it
         if (partNumber) {
@@ -70,9 +79,9 @@ class WordListsUI {
 
         const [, level, theme] = match;
         const themeKey = `topic_${theme.toLowerCase().replace(/\s+/g, '_')}`;
-        const translatedTheme = i18n.t(themeKey) || theme;
+        const translatedTheme = _t(themeKey) || theme;
 
-        return `${level} ${i18n.t('level')} ${i18n.t('vocabulary')}: ${translatedTheme}`;
+        return `${level} ${_t('level')} ${_t('vocabulary')}: ${translatedTheme}`;
     }
 
     async init(userId, languagePairId) {
@@ -492,7 +501,7 @@ class WordListsUI {
 
                 <div class="list-card-body">
                     <h4 class="list-title">${this.translateSetTitle(set)}</h4>
-                    <p class="list-description">${this.translateSetDescription(set) || i18n.t('no_description') || 'No description'}</p>
+                    <p class="list-description">${this.translateSetDescription(set) || _t('no_description') || 'No description'}</p>
 
                     <div class="word-preview" data-set-id="${set.id}">
                         <div class="preview-loading">Loading preview...</div>
@@ -790,8 +799,8 @@ class WordListsUI {
                                             data-translation="${this.escapeHtml(word.translation || '')}"
                                             data-example="${this.escapeHtml(word.example || '')}"
                                             data-example-translation="${this.escapeHtml(word.exampletranslation || word.exampleTranslation || '')}"
-                                            title="${i18n.t('add_to_dictionary') || 'Add to dictionary'}"
-                                            aria-label="${i18n.t('add_to_dictionary') || 'Add to dictionary'}">
+                                            title="${_t('add_to_dictionary') || 'Add to dictionary'}"
+                                            aria-label="${_t('add_to_dictionary') || 'Add to dictionary'}">
                                         +
                                     </button>
                                 </div>
@@ -959,8 +968,8 @@ class WordListsUI {
                                         data-translation="${this.escapeHtml(word.translation || '')}"
                                         data-example="${this.escapeHtml(word.example || '')}"
                                         data-example-translation="${this.escapeHtml(word.exampletranslation || word.exampleTranslation || '')}"
-                                        title="${i18n.t('add_to_dictionary') || 'Add to dictionary'}"
-                                        aria-label="${i18n.t('add_to_dictionary') || 'Add to dictionary'}">
+                                        title="${_t('add_to_dictionary') || 'Add to dictionary'}"
+                                        aria-label="${_t('add_to_dictionary') || 'Add to dictionary'}">
                                     +
                                 </button>
                             </div>
@@ -1123,24 +1132,19 @@ class WordListsUI {
 
             if (result.imported > 0 && result.skipped > 0) {
                 messageKey = 'import_success_partial';
-                message = window.i18n ?
-                    window.i18n.t('import_success_partial', { imported: result.imported, skipped: result.skipped }) :
-                    `Imported ${result.imported} new words (${result.skipped} already in your collection)`;
+                message = _t('import_success_partial', { imported: result.imported, skipped: result.skipped },
+                    `Imported ${result.imported} new words (${result.skipped} already in your collection)`);
             } else if (result.imported > 0) {
                 messageKey = 'import_success';
-                message = window.i18n ?
-                    window.i18n.t('import_success', { count: result.imported }) :
-                    `Successfully imported ${result.imported} words!`;
+                message = _t('import_success', { count: result.imported },
+                    `Successfully imported ${result.imported} words!`);
             } else if (result.skipped > 0) {
                 messageKey = 'import_already_in_collection';
-                message = window.i18n ?
-                    window.i18n.t('import_already_in_collection', { count: result.skipped }) :
-                    `All ${result.skipped} words from this set are already in your collection`;
+                message = _t('import_already_in_collection', { count: result.skipped },
+                    `All ${result.skipped} words from this set are already in your collection`);
             } else {
                 messageKey = 'import_no_words';
-                message = window.i18n ?
-                    window.i18n.t('import_no_words') :
-                    'No words to import from this set';
+                message = _t('import_no_words', null, 'No words to import from this set');
             }
 
             console.log('💬 Success message:', message);
@@ -1233,9 +1237,7 @@ class WordListsUI {
 
         let detailsText = '';
         if (importResult && importResult.imported > 0) {
-            detailsText = window.i18n ?
-                window.i18n.t('import_new_words', { count: importResult.imported }) :
-                `+${importResult.imported} new words`;
+            detailsText = _t('import_new_words', { count: importResult.imported }, `+${importResult.imported} new words`);
         }
         if (importResult && importResult.skipped > 0) {
             const skippedText = `(${importResult.skipped} already in collection)`;
@@ -1340,7 +1342,8 @@ class WordListsUI {
             if (response.ok) {
                 console.log('✅ Word added successfully! Updating stats...');
                 if (window.showToast) {
-                    showToast(i18n.t('word_added_successfully') || 'Word added successfully!', 'success');
+                    const msg = _t('word_added_successfully', null, 'Word added successfully!');
+                    showToast(msg, 'success');
                 }
 
                 // Update stats counters
