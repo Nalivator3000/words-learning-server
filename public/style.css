@@ -3601,6 +3601,17 @@ input:focus, textarea:focus, select:focus {
     .quiz-area {
         padding: var(--space-12);
         max-width: 700px;
+        /* Don't stretch on desktop - keep content compact */
+        height: auto;
+        min-height: auto;
+    }
+
+    .quiz-content {
+        flex: 0 0 auto;
+    }
+
+    .quiz-action-area {
+        margin-top: var(--space-6);
     }
 
     .question {
@@ -3636,6 +3647,20 @@ input:focus, textarea:focus, select:focus {
 
     .mode-grid {
         grid-template-columns: repeat(2, 1fr);
+    }
+
+    /* Keep quiz area compact on tablet */
+    .quiz-area {
+        height: auto;
+        min-height: auto;
+    }
+
+    .quiz-content {
+        flex: 0 0 auto;
+    }
+
+    .quiz-action-area {
+        margin-top: var(--space-6);
     }
 }
 
