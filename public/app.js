@@ -2662,10 +2662,15 @@ schreiben,Sie schreibt einen Brief.,Писать,Она пишет письmо.`
             const item = document.createElement('div');
             item.className = `language-pair-item ${pair.active ? 'active' : ''}`;
 
+            // Use i18n to get localized language names
+            const pairName = (window.i18n && window.i18n.formatLanguagePair)
+                ? window.i18n.formatLanguagePair(pair.fromLanguage, pair.toLanguage)
+                : pair.name;
+
             item.innerHTML = `
                 <div class="language-pair-info">
-                    <div class="language-pair-name">${pair.name}</div>
-                    <div class="language-pair-stats">${pair.fromLanguage} → ${pair.toLanguage}</div>
+                    <div class="language-pair-name">${pairName}</div>
+                    <div class="language-pair-stats">${pair.fromLanguage.toUpperCase()} → ${pair.toLanguage.toUpperCase()}</div>
                 </div>
                 <div class="language-pair-controls">
                     ${!pair.active ? `<button class="select-btn" data-pair-id="${pair.id}" data-i18n="select">Select</button>` : ''}
@@ -2748,7 +2753,10 @@ schreiben,Sie schreibt einen Brief.,Писать,Она пишет письmо.`
             await userManager.deleteLanguagePair(pairId);
             this.renderLanguagePairs();
             await this.updateStats();
-            alert(`Language pair "${pair.name}" deleted successfully.`);
+            const deletedPairName = (window.i18n && window.i18n.formatLanguagePair)
+                ? window.i18n.formatLanguagePair(pair.fromLanguage, pair.toLanguage)
+                : pair.name;
+            alert(`Language pair "${deletedPairName}" deleted successfully.`);
         } catch (error) {
             console.error('Error deleting language pair:', error);
             alert(error.message || i18n?.t('error_deleting_pair') || 'Error deleting language pair');

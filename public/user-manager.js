@@ -109,7 +109,10 @@ class UserManager {
             if (this.isDemoUser()) {
                 userInfoEl.textContent = this.currentUser.name;
                 if (this.currentLanguagePair) {
-                    userInfoEl.textContent += ` (${this.currentLanguagePair.name})`;
+                    const pairName = (window.i18n && window.i18n.formatLanguagePair)
+                        ? window.i18n.formatLanguagePair(this.currentLanguagePair.fromLanguage, this.currentLanguagePair.toLanguage)
+                        : this.currentLanguagePair.name;
+                    userInfoEl.textContent += ` (${pairName})`;
                 }
                 userInfoEl.style.display = '';
             } else {

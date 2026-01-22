@@ -291,6 +291,47 @@ class I18nManager {
         const translatedKeys = Object.keys(this.translations[lang] || {}).length;
         return totalKeys > 0 ? Math.round((translatedKeys / totalKeys) * 100) : 0;
     }
+
+    /**
+     * Get localized language name by language code
+     * @param {string} langCode - Language code (en, de, es, fr, ru, etc.)
+     * @returns {string} Localized language name
+     */
+    getLanguageName(langCode) {
+        const langMap = {
+            'en': 'lang_english',
+            'de': 'lang_german',
+            'es': 'lang_spanish',
+            'fr': 'lang_french',
+            'ru': 'lang_russian',
+            'uk': 'lang_ukrainian',
+            'pt': 'lang_portuguese',
+            'it': 'lang_italian',
+            'zh': 'lang_chinese',
+            'ja': 'lang_japanese',
+            'ko': 'lang_korean'
+        };
+
+        const translationKey = langMap[langCode];
+        if (translationKey) {
+            return this.t(translationKey);
+        }
+
+        // Fallback to uppercase code if no translation exists
+        return langCode.toUpperCase();
+    }
+
+    /**
+     * Format a language pair for display
+     * @param {string} fromLang - Source language code
+     * @param {string} toLang - Target language code
+     * @returns {string} Formatted language pair (e.g. "German → Russian")
+     */
+    formatLanguagePair(fromLang, toLang) {
+        const fromName = this.getLanguageName(fromLang);
+        const toName = this.getLanguageName(toLang);
+        return `${fromName} → ${toName}`;
+    }
 }
 
 // Create global instance

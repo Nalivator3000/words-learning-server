@@ -253,7 +253,17 @@ class WordListsUI {
         const container = document.getElementById('wordListsContent');
         if (!container) return;
 
-        const languageName = this.languagePair ? this.languagePair.name : 'Loading...';
+        // Use i18n to get localized language names instead of the stored name
+        let languageName = 'Loading...';
+        if (this.languagePair) {
+            const fromLang = this.languagePair.fromLanguage;
+            const toLang = this.languagePair.toLanguage;
+            if (window.i18n && fromLang && toLang) {
+                languageName = window.i18n.formatLanguagePair(fromLang, toLang);
+            } else {
+                languageName = this.languagePair.name;
+            }
+        }
         const fromLang = (this.languagePair && this.languagePair.fromLanguage) ? this.languagePair.fromLanguage.toUpperCase() : '';
 
         container.innerHTML = `
